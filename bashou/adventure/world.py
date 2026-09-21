@@ -1,0 +1,140 @@
+"""Chapters, forks, paths, events and checkpoints. No drawing here: the rules only, easy to test.
+
+A chapter is a few legs. Each leg starts at a fork (the checkpoint) where you pick a topic, then a
+path of segments ends with that topic's boss. Beat it: new checkpoint, the topic levels up. Lose (a
+boss question, or all your hearts): back to the checkpoint, and you may pick another path.
+"""
+
+import random
+
+SEGMENT = 40.0          # world units between two events
+HEARTS = 3
+
+# topic: (name, home biome, boss)
+TOPICS = {
+    "bash": ("Bash", "meadow", "Bash Beast"),
+    "linux": ("Linux", "dungeon", "Kernel Warden"),
+    "python": ("Python", "forest", "Coil Serpent"),
+    "rust": ("Rust", "sand", "Oxide Crab"),
+    "c": ("C", "dungeon", "Segfault Golem"),
+    "debian": ("Debian", "hills", "Swirl Wraith"),
+    "rocky": ("Rocky Linux", "hills", "Stone Titan"),
+    "cicd": ("CI/CD", "water", "Pipeline Hydra"),
+}
+
+CHAPTERS = [
+    {"title": "The Sleepy Meadow", "home": "meadow", "legs": 2, "segments": 3,
+     "intro": "Your pet stretches, looks at the road, then at you. An adventure starts."},
+    {"title": "Dunes of Deprecation", "home": "sand", "legs": 3, "segments": 4,
+     "intro": "Old tools lie half-buried in the sand. Some still bite."},
+    {"title": "The Dungeon of Daemons", "home": "dungeon", "legs": 3, "segments": 5,
+     "intro": "Deep below, processes that never die guard the way."},
+]
+PLACES = ["Marsh of Merge Conflicts", "Hills of Hanging Processes", "Lake of Lost Packets",
+          "Forest of Forgotten Branches", "Caves of Core Dumps", "Desert of Dangling Pointers"]
+
+
+def chapter(n):
+    """Chapter n (1-based): the first ones are written, then they're generated."""
+    if n <= len(CHAPTERS):
+        return CHAPTERS[n - 1]
+    rng = random.Random(f"chapter:{n}")
+    return {"title": f"{rng.choice(PLACES)} ({n})", "home": rng.choice(["meadow", "hills", "forest", "sand", "water", "dungeon"]),
+            "legs": 3, "segments": min(8, 4 + n // 3), "intro": "A new road, a new quest. Your pet is ready."}
+
+
+def new():
+    return {"chapter": 1, "leg": 0, "topic": None, "segment": 0, "distance": 0.0, "leg_start": 0.0,
+            "hearts": HEARTS, "levels": {}, "seen": [], "bosses": [], "walked": 0.0, "phase": "intro",
+            "flawless": True, "chapters_done": 0}
+
+
+def level(adv, topic):
+    """The level of the next path on a topic: 1 the first time, then +1 per boss beaten."""
+    return adv["levels"].get(topic, 0) + 1
+
+
+def fork_options(adv):
+    """The paths offered at this fork: 2 in the first chapter, 3 later. Same fork, same choice."""
+    rng = random.Random(f"fork:{adv['chapter']}:{adv['leg']}")
+    return rng.sample(sorted(TOPICS), 2 if adv["chapter"] == 1 else 3)
+
+
+def events(adv):
+    """Events along the current path (one per segment), then the boss."""
+    ch = chapter(adv["chapter"])
+    rng = random.Random(f"path:{adv['chapter']}:{adv['leg']}:{adv['topic']}")
+    kinds = ["monster"] + [rng.choice(["monster", "monster", "chest", "rest"]) for _ in range(ch["segments"] - 1)]
+    return kinds + ["boss"]
+
+
+def next_event_at(adv):
+    return adv["leg_start"] + (adv["segment"] + 1) * SEGMENT
+
+
+def biome(adv, distance=None):
+    """The chapter's biome for the first segment of a leg, then the path topic's own."""
+    d = adv["distance"] if distance is None else distance
+    if adv["topic"] is None or d - adv["leg_start"] < SEGMENT * 0.8:
+        return chapter(adv["chapter"])["home"]
+    return TOPICS[adv["topic"]][1]
+
+
+def choose(adv, topic):
+    adv.update(topic=topic, segment=0, phase="walk", flawless=True)
+
+
+def walk(adv, units):
+    """Walk forward, up to the next event. Returns the event reached, or None."""
+    target = next_event_at(adv)
+    step = min(units, target - adv["distance"])
+    adv["distance"] += step
+    adv["walked"] += step
+    if adv["distance"] >= target - 1e-9:
+        kind = events(adv)[adv["segment"]]
+        adv["phase"] = kind
+        return kind
+    return None
+
+
+def event_done(adv):
+    """After a monster, chest or rest: on to the next segment."""
+    adv["segment"] += 1
+    adv["phase"] = "walk"
+
+
+def lose_heart(adv):
+    """A wrong answer to a monster. Returns True when that was the last heart (back to the checkpoint)."""
+    adv["hearts"] -= 1
+    adv["flawless"] = False
+    if adv["hearts"] <= 0:
+        back_to_checkpoint(adv)
+        return True
+    return False
+
+
+def back_to_checkpoint(adv):
+    adv.update(distance=adv["leg_start"], topic=None, segment=0, hearts=HEARTS, phase="fork")
+
+
+def boss_won(adv):
+    """A new checkpoint: the topic levels up, next leg (or the chapter is done)."""
+    topic = adv["topic"]
+    adv["levels"][topic] = adv["levels"].get(topic, 0) + 1
+    adv["bosses"].append({"topic": topic, "level": adv["levels"][topic], "flawless": adv["flawless"]})
+    adv.update(leg=adv["leg"] + 1, leg_start=adv["distance"], topic=None, segment=0, hearts=HEARTS)
+    if adv["leg"] >= chapter(adv["chapter"])["legs"]:
+        adv["phase"] = "chapter_end"
+        adv["chapters_done"] += 1
+    else:
+        adv["phase"] = "fork"
+
+
+def next_chapter(adv):
+    adv.update(chapter=adv["chapter"] + 1, leg=0, leg_start=adv["distance"], phase="intro")
+
+
+def boss_questions(adv):
+    """3 questions at level 1, one more per level (the last leg of a chapter: one more still)."""
+    last = adv["leg"] == chapter(adv["chapter"])["legs"] - 1
+    return 2 + level(adv, adv["topic"]) + last

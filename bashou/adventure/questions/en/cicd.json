@@ -1,0 +1,262 @@
+[
+ {
+  "id": "cicd-1-01",
+  "level": 1,
+  "q": "What does CI stand for?",
+  "choices": [
+   "Continuous Integration",
+   "Code Inspection",
+   "Container Image",
+   "Central Infrastructure"
+  ],
+  "answer": 0,
+  "explain": "Build and test every change automatically."
+ },
+ {
+  "id": "cicd-1-02",
+  "level": 1,
+  "q": "What usually starts a CI pipeline?",
+  "choices": [
+   "A push or a pull request",
+   "A reboot",
+   "A cron on your laptop",
+   "Opening the IDE"
+  ],
+  "answer": 0,
+  "explain": "Also schedules and manual runs."
+ },
+ {
+  "id": "cicd-1-03",
+  "level": 1,
+  "q": "What is a pipeline stage/job?",
+  "choices": [
+   "A step like build, test or deploy",
+   "A git branch",
+   "A Docker image",
+   "A server"
+  ],
+  "answer": 0,
+  "explain": "Jobs can run in parallel or depend on each other."
+ },
+ {
+  "id": "cicd-1-04",
+  "level": 1,
+  "q": "Which file configures GitHub Actions?",
+  "choices": [
+   ".github/workflows/*.yml",
+   ".gitlab-ci.yml",
+   "Jenkinsfile",
+   ".travis.yml"
+  ],
+  "answer": 0,
+  "explain": "GitLab uses .gitlab-ci.yml, Jenkins a Jenkinsfile."
+ },
+ {
+  "id": "cicd-1-05",
+  "level": 1,
+  "q": "What is an artifact?",
+  "choices": [
+   "A file produced by a job and kept",
+   "A bug",
+   "An old commit",
+   "A secret"
+  ],
+  "answer": 0,
+  "explain": "Binaries, reports, packages…"
+ },
+ {
+  "id": "cicd-1-06",
+  "level": 1,
+  "q": "Where should passwords for a pipeline live?",
+  "choices": [
+   "In the CI's secret storage",
+   "In the YAML file",
+   "In the README",
+   "In a commit message"
+  ],
+  "answer": 0,
+  "explain": "They're masked in logs and never committed."
+ },
+ {
+  "id": "cicd-1-07",
+  "level": 1,
+  "q": "What does CD stand for?",
+  "choices": [
+   "Continuous Delivery or Deployment",
+   "Code Deploy only",
+   "Compact Disc",
+   "Central Docs"
+  ],
+  "answer": 0,
+  "explain": "Delivery: ready to release; deployment: released automatically."
+ },
+ {
+  "id": "cicd-1-08",
+  "level": 1,
+  "q": "Why run tests in CI and not only locally?",
+  "choices": [
+   "Same clean environment for every change",
+   "It's faster than local",
+   "Local tests are forbidden",
+   "To use more servers"
+  ],
+  "answer": 0,
+  "explain": "It catches \"works on my machine\"."
+ },
+ {
+  "id": "cicd-1-09",
+  "level": 1,
+  "q": "What does a red (failed) pipeline on a merge request mean?",
+  "choices": [
+   "Don't merge until it's fixed",
+   "Merge quickly",
+   "The server is down",
+   "Nothing"
+  ],
+  "answer": 0,
+  "explain": "Protected branches can require a green pipeline."
+ },
+ {
+  "id": "cicd-1-10",
+  "level": 1,
+  "q": "What is YAML?",
+  "choices": [
+   "A text format for configuration",
+   "A programming language",
+   "A container",
+   "A test framework"
+  ],
+  "answer": 0,
+  "explain": "Indentation matters, like in Python."
+ },
+ {
+  "id": "cicd-2-01",
+  "level": 2,
+  "q": "Why pin an action to a commit SHA?",
+  "choices": [
+   "A tag can be moved to other code; a commit can't",
+   "It's faster",
+   "Tags don't work",
+   "To save space"
+  ],
+  "answer": 0,
+  "explain": "Bashou's own CI does this."
+ },
+ {
+  "id": "cicd-2-02",
+  "level": 2,
+  "q": "What is a runner?",
+  "choices": [
+   "The machine that executes the jobs",
+   "A test type",
+   "A deploy script",
+   "A git hook"
+  ],
+  "answer": 0,
+  "explain": "Hosted by the CI service or your own."
+ },
+ {
+  "id": "cicd-2-03",
+  "level": 2,
+  "q": "What is a matrix build?",
+  "choices": [
+   "The same job over several versions or systems",
+   "A job with many steps",
+   "A diagram of stages",
+   "A parallel deploy"
+  ],
+  "answer": 0,
+  "explain": "e.g. Python 3.9 and 3.13."
+ },
+ {
+  "id": "cicd-2-04",
+  "level": 2,
+  "q": "What is caching dependencies for?",
+  "choices": [
+   "Faster pipelines",
+   "Safer secrets",
+   "Smaller artifacts",
+   "Fewer tests"
+  ],
+  "answer": 0,
+  "explain": "Keyed by the lock file's hash."
+ },
+ {
+  "id": "cicd-2-05",
+  "level": 2,
+  "q": "What is blue-green deployment?",
+  "choices": [
+   "Two environments, switch traffic to the new one",
+   "Deploying on two clouds",
+   "Color-coded logs",
+   "Deploying twice"
+  ],
+  "answer": 0,
+  "explain": "Rollback = switch back."
+ },
+ {
+  "id": "cicd-2-06",
+  "level": 2,
+  "q": "What is a canary release?",
+  "choices": [
+   "Sending a small part of users to the new version first",
+   "A release with a bird logo",
+   "A test in staging",
+   "A nightly build"
+  ],
+  "answer": 0,
+  "explain": "Watch the metrics, then widen."
+ },
+ {
+  "id": "cicd-2-07",
+  "level": 2,
+  "q": "What should `permissions:` in a GitHub workflow be?",
+  "choices": [
+   "As small as the job needs",
+   "write-all",
+   "Unset, always",
+   "admin"
+  ],
+  "answer": 0,
+  "explain": "Least privilege for the token."
+ },
+ {
+  "id": "cicd-2-08",
+  "level": 2,
+  "q": "What does a `needs:` (or `dependencies`) key do?",
+  "choices": [
+   "Runs a job after others succeed",
+   "Installs packages",
+   "Marks a job optional",
+   "Sets secrets"
+  ],
+  "answer": 0,
+  "explain": "Builds a graph of jobs."
+ },
+ {
+  "id": "cicd-2-09",
+  "level": 2,
+  "q": "What is infrastructure as code?",
+  "choices": [
+   "Servers and config described in versioned files",
+   "Code running on servers",
+   "Writing servers in C",
+   "Documentation of servers"
+  ],
+  "answer": 0,
+  "explain": "Terraform, Ansible, …"
+ },
+ {
+  "id": "cicd-2-10",
+  "level": 2,
+  "q": "What is a rollback?",
+  "choices": [
+   "Going back to the previous working version",
+   "Deleting the repo",
+   "Retrying the tests",
+   "Scaling down"
+  ],
+  "answer": 0,
+  "explain": "Plan it before you need it."
+ }
+]

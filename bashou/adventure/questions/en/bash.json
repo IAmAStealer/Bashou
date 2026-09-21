@@ -1,0 +1,288 @@
+[
+ {
+  "id": "bash-1-01",
+  "level": 1,
+  "q": "Which command shows the folder you are in?",
+  "choices": [
+   "pwd",
+   "ls",
+   "cd",
+   "whoami"
+  ],
+  "answer": 0,
+  "explain": "pwd = print working directory."
+ },
+ {
+  "id": "bash-1-02",
+  "level": 1,
+  "q": "How do you go back to your home folder?",
+  "choices": [
+   "cd",
+   "cd /",
+   "home",
+   "ls ~"
+  ],
+  "answer": 0,
+  "explain": "cd with no argument goes home (same as cd ~)."
+ },
+ {
+  "id": "bash-1-03",
+  "level": 1,
+  "q": "Which command lists hidden files too?",
+  "choices": [
+   "ls -a",
+   "ls -l",
+   "ls -h",
+   "ls -r"
+  ],
+  "answer": 0,
+  "explain": "-a shows every file, including names starting with a dot."
+ },
+ {
+  "id": "bash-1-04",
+  "level": 1,
+  "q": "What does `mkdir -p a/b/c` do?",
+  "choices": [
+   "Creates a, b and c as needed",
+   "Fails if a doesn't exist",
+   "Creates only c",
+   "Deletes a/b/c"
+  ],
+  "answer": 0,
+  "explain": "-p creates the missing parents and doesn't complain if they exist."
+ },
+ {
+  "id": "bash-1-05",
+  "level": 1,
+  "q": "Which symbol sends a command's output to a file, replacing it?",
+  "choices": [
+   ">",
+   ">>",
+   "|",
+   "<"
+  ],
+  "answer": 0,
+  "explain": "> overwrites the file; >> appends to it."
+ },
+ {
+  "id": "bash-1-06",
+  "level": 1,
+  "q": "What does `|` do between two commands?",
+  "choices": [
+   "Sends the output of the first into the second",
+   "Runs them at the same time, unrelated",
+   "Runs the second only if the first fails",
+   "Writes the output to a file"
+  ],
+  "answer": 0,
+  "explain": "A pipe connects stdout of the left command to stdin of the right one."
+ },
+ {
+  "id": "bash-1-07",
+  "level": 1,
+  "q": "Which key completes a command or file name?",
+  "choices": [
+   "Tab",
+   "Ctrl+C",
+   "Enter",
+   "Esc"
+  ],
+  "answer": 0,
+  "explain": "Tab completes; press it twice to see all the choices."
+ },
+ {
+  "id": "bash-1-08",
+  "level": 1,
+  "q": "How do you see the manual of a command?",
+  "choices": [
+   "man ls",
+   "help ls",
+   "ls --manual",
+   "info-ls"
+  ],
+  "answer": 0,
+  "explain": "man opens the manual page; q quits it."
+ },
+ {
+  "id": "bash-1-09",
+  "level": 1,
+  "q": "What does `$?` hold right after a command?",
+  "choices": [
+   "Its exit code",
+   "Its process ID",
+   "Its output",
+   "The last argument"
+  ],
+  "answer": 0,
+  "explain": "0 means success, anything else is an error."
+ },
+ {
+  "id": "bash-1-10",
+  "level": 1,
+  "q": "Which command prints a text?",
+  "choices": [
+   "echo",
+   "print",
+   "say",
+   "cat"
+  ],
+  "answer": 0,
+  "explain": "echo prints its arguments; cat prints files."
+ },
+ {
+  "id": "bash-1-11",
+  "level": 1,
+  "q": "What does `rm -r folder` do?",
+  "choices": [
+   "Deletes the folder and everything in it",
+   "Renames the folder",
+   "Only deletes empty folders",
+   "Moves it to the trash"
+  ],
+  "answer": 0,
+  "explain": "rm has no trash: -r deletes recursively, for good."
+ },
+ {
+  "id": "bash-1-12",
+  "level": 1,
+  "q": "How do you run the previous command again?",
+  "choices": [
+   "!!",
+   "$$",
+   "..",
+   "!?"
+  ],
+  "answer": 0,
+  "explain": "!! expands to the last command (sudo !! reruns it with sudo)."
+ },
+ {
+  "id": "bash-2-01",
+  "level": 2,
+  "q": "What does `cmd 2>&1` do?",
+  "choices": [
+   "Sends errors where the normal output goes",
+   "Runs cmd twice",
+   "Hides all output",
+   "Sends output to file 1"
+  ],
+  "answer": 0,
+  "explain": "2 is stderr, 1 is stdout: 2>&1 merges them."
+ },
+ {
+  "id": "bash-2-02",
+  "level": 2,
+  "q": "What is `$(date)` inside a command?",
+  "choices": [
+   "The output of date, inserted there",
+   "A variable named date",
+   "The date in seconds",
+   "A comment"
+  ],
+  "answer": 0,
+  "explain": "$( ) is command substitution."
+ },
+ {
+  "id": "bash-2-03",
+  "level": 2,
+  "q": "Which loop runs for each .log file?",
+  "choices": [
+   "for f in *.log; do …; done",
+   "while f in *.log; do …",
+   "loop *.log { … }",
+   "foreach f (*.log)"
+  ],
+  "answer": 0,
+  "explain": "The glob *.log expands to the matching file names."
+ },
+ {
+  "id": "bash-2-04",
+  "level": 2,
+  "q": "What does `set -e` do in a script?",
+  "choices": [
+   "Stops the script at the first failing command",
+   "Prints each command",
+   "Exports every variable",
+   "Enables extended globs"
+  ],
+  "answer": 0,
+  "explain": "set -e exits on error; set -x prints each command."
+ },
+ {
+  "id": "bash-2-05",
+  "level": 2,
+  "q": "How do you read a file line by line safely?",
+  "choices": [
+   "while IFS= read -r line; do …; done < file",
+   "for line in $(cat file)",
+   "cat file | for line",
+   "read file line"
+  ],
+  "answer": 0,
+  "explain": "for over $(cat) splits on spaces, not lines."
+ },
+ {
+  "id": "bash-2-06",
+  "level": 2,
+  "q": "What does `&&` do in `make && ./app`?",
+  "choices": [
+   "Runs ./app only if make succeeded",
+   "Runs both at the same time",
+   "Runs ./app only if make failed",
+   "Pipes make into ./app"
+  ],
+  "answer": 0,
+  "explain": "&& continues on success, || on failure."
+ },
+ {
+  "id": "bash-2-07",
+  "level": 2,
+  "q": "Why quote \"$var\"?",
+  "choices": [
+   "So spaces in it don't split it into several words",
+   "To make it read-only",
+   "To export it",
+   "It's never needed"
+  ],
+  "answer": 0,
+  "explain": "Unquoted variables are split on spaces and expanded as globs."
+ },
+ {
+  "id": "bash-2-08",
+  "level": 2,
+  "q": "Which command makes a script runnable?",
+  "choices": [
+   "chmod +x script.sh",
+   "run script.sh",
+   "exec script.sh",
+   "chown +x script.sh"
+  ],
+  "answer": 0,
+  "explain": "The x permission lets you run it with ./script.sh."
+ },
+ {
+  "id": "bash-2-09",
+  "level": 2,
+  "q": "What does `<<EOF` start?",
+  "choices": [
+   "A heredoc: lines until EOF are the input",
+   "An end of file",
+   "A comparison",
+   "A background job"
+  ],
+  "answer": 0,
+  "explain": "Handy to feed several lines to a command."
+ },
+ {
+  "id": "bash-2-10",
+  "level": 2,
+  "q": "What does `jobs` show?",
+  "choices": [
+   "Commands running in the background of this shell",
+   "Every process on the machine",
+   "Scheduled cron jobs",
+   "Your job title"
+  ],
+  "answer": 0,
+  "explain": "fg brings one back, bg resumes it in the background."
+ }
+]

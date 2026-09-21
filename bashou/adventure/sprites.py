@@ -74,3 +74,69 @@ def hero(form):
         return rows[1:] + ["." * 17]              # and bob up a pixel
 
     return [base, step(-1), base, step(1)], palette
+
+
+# --- things on the road (drawn from their bottom center by scene.blit) ------------------------
+
+TOPIC_COLORS = {
+    "bash": ((90, 200, 110), (40, 120, 60)), "linux": ((240, 200, 70), (150, 110, 30)),
+    "python": ((80, 140, 220), (240, 210, 80)), "rust": ((220, 110, 60), (130, 60, 30)),
+    "c": ((150, 160, 190), (80, 90, 120)), "debian": ((215, 30, 90), (120, 20, 50)),
+    "rocky": ((60, 180, 140), (30, 100, 80)), "cicd": ((170, 110, 230), (90, 50, 140)),
+}
+
+MONSTER = [
+    "....aaaaa....",
+    "..aaoooooaa..",
+    ".aoooooooooa.",
+    ".aowmoooowmo.",
+    "aoowwoooowwoa",
+    "aooooommooooa",
+    "aooooooooooooa"[:13],
+    ".aaoooooooaa.",
+    "...aa...aa...",
+]
+
+BOSS = [
+    "..h.........h.......",
+    "..hh...hh...hh......"[:20],
+    "...hhhhhhhhhh.......",
+    "..aaaaaaaaaaaa......",
+    ".aoooooooooooooa....",
+    "aooowwoooooowwooa...",
+    "aoowmmwooooowmmwooa.",
+    "aooowwoooooowwoooa..",
+    "aoooooooooooooooooa.",
+    "aooottttttttttoooa..",
+    "aooottTttTttTtooooa.",
+    ".aooooooooooooooa...",
+    "..aoooooooooooooa...",
+    ".aaooaaaaaaaooaa....",
+    "aooa........aooa....",
+    "aaa..........aaa....",
+]
+
+
+def symmetric(rows):
+    """Rows trimmed to their left part and mirrored, so every boss stays symmetric."""
+    half = [r[: (len(r) + 1) // 2] for r in rows]
+    return [h + h[:-1][::-1] for h in half]
+
+
+def monster(topic):
+    body, dark = TOPIC_COLORS.get(topic, TOPIC_COLORS["bash"])
+    return symmetric(MONSTER), {"a": dark, "o": body, "w": (255, 255, 255), "m": (25, 25, 25)}
+
+
+def boss(topic):
+    body, dark = TOPIC_COLORS.get(topic, TOPIC_COLORS["bash"])
+    return symmetric(BOSS), {"a": dark, "o": body, "w": (255, 255, 255), "m": (200, 30, 40),
+                             "t": (250, 250, 250), "T": (255, 255, 255), "h": (240, 210, 90)}
+
+
+CHEST = ([".aaaaaaa.", "aYyyyyyYa", "aaaaYaaaa", "ayyyyyyya", "ayyyyyyya", "aaaaaaaaa"],
+         {"a": (110, 70, 35), "y": (175, 120, 60), "Y": (240, 200, 80)})
+CAMPFIRE = (["...Y...", "..YOY..", ".YORY..", "..ORO..", "bbbbbbb", ".b.b.b."],
+            {"Y": (255, 230, 120), "O": (255, 150, 40), "R": (220, 70, 30), "b": (110, 75, 45)})
+SIGNPOST = (["aaaaaaaaa", "ayyyyyyya", "aaaaaaaaa", "....b....", "....b....", "....b....", "...bbb..."],
+            {"a": (120, 80, 40), "y": (220, 180, 110), "b": (100, 70, 40)})

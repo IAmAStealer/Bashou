@@ -1,0 +1,262 @@
+[
+ {
+  "id": "c-1-01",
+  "level": 1,
+  "q": "Which function prints formatted text?",
+  "choices": [
+   "printf",
+   "print",
+   "echo",
+   "cout"
+  ],
+  "answer": 0,
+  "explain": "#include <stdio.h> first."
+ },
+ {
+  "id": "c-1-02",
+  "level": 1,
+  "q": "What does every C program start from?",
+  "choices": [
+   "main",
+   "start",
+   "init",
+   "run"
+  ],
+  "answer": 0,
+  "explain": "int main(void) or int main(int argc, char **argv)."
+ },
+ {
+  "id": "c-1-03",
+  "level": 1,
+  "q": "How do you compile hello.c with gcc?",
+  "choices": [
+   "gcc hello.c -o hello",
+   "gcc run hello.c",
+   "cc --build hello",
+   "make hello.c"
+  ],
+  "answer": 0,
+  "explain": "Then run ./hello."
+ },
+ {
+  "id": "c-1-04",
+  "level": 1,
+  "q": "What ends a string in C?",
+  "choices": [
+   "A zero byte '\\0'",
+   "A newline",
+   "Its length field",
+   "A space"
+  ],
+  "answer": 0,
+  "explain": "strlen counts until the zero byte."
+ },
+ {
+  "id": "c-1-05",
+  "level": 1,
+  "q": "What is `int *p`?",
+  "choices": [
+   "A pointer to an int",
+   "An int multiplied",
+   "An array of ints",
+   "A constant int"
+  ],
+  "answer": 0,
+  "explain": "*p reads the int it points to."
+ },
+ {
+  "id": "c-1-06",
+  "level": 1,
+  "q": "What does `&x` give?",
+  "choices": [
+   "The address of x",
+   "x and 1",
+   "A copy of x",
+   "A reference-counted x"
+  ],
+  "answer": 0,
+  "explain": "Pointers hold addresses."
+ },
+ {
+  "id": "c-1-07",
+  "level": 1,
+  "q": "Which function allocates memory on the heap?",
+  "choices": [
+   "malloc",
+   "new",
+   "alloc",
+   "heap"
+  ],
+  "answer": 0,
+  "explain": "Every malloc needs a free."
+ },
+ {
+  "id": "c-1-08",
+  "level": 1,
+  "q": "What does `#include` do?",
+  "choices": [
+   "Pastes another file (a header) here",
+   "Links a library",
+   "Imports a module at run time",
+   "Defines a macro"
+  ],
+  "answer": 0,
+  "explain": "The preprocessor runs before the compiler."
+ },
+ {
+  "id": "c-1-09",
+  "level": 1,
+  "q": "What does main returning 0 mean?",
+  "choices": [
+   "Success",
+   "Failure",
+   "Nothing",
+   "Restart"
+  ],
+  "answer": 0,
+  "explain": "The shell sees it as $?."
+ },
+ {
+  "id": "c-1-10",
+  "level": 1,
+  "q": "Which flag turns on common warnings with gcc?",
+  "choices": [
+   "-Wall",
+   "-W0",
+   "-warn",
+   "-O2"
+  ],
+  "answer": 0,
+  "explain": "Add -Wextra too, and fix them all."
+ },
+ {
+  "id": "c-2-01",
+  "level": 2,
+  "q": "What is a segfault?",
+  "choices": [
+   "Touching memory you're not allowed to",
+   "A disk error",
+   "A syntax error",
+   "Integer overflow"
+  ],
+  "answer": 0,
+  "explain": "Often a NULL or dangling pointer."
+ },
+ {
+  "id": "c-2-02",
+  "level": 2,
+  "q": "What does `free(p)` twice cause?",
+  "choices": [
+   "Undefined behavior (double free)",
+   "Nothing",
+   "A compile error",
+   "The memory is freed twice as fast"
+  ],
+  "answer": 0,
+  "explain": "Set p = NULL after free."
+ },
+ {
+  "id": "c-2-03",
+  "level": 2,
+  "q": "Why is `gets()` banned?",
+  "choices": [
+   "It can't limit the input size: buffer overflow",
+   "It's slow",
+   "It's deprecated for style",
+   "It only reads one char"
+  ],
+  "answer": 0,
+  "explain": "Use fgets(buf, size, stdin)."
+ },
+ {
+  "id": "c-2-04",
+  "level": 2,
+  "q": "What does `static` on a function do?",
+  "choices": [
+   "Keeps it private to its file",
+   "Makes it faster",
+   "Runs it once",
+   "Stores it on the heap"
+  ],
+  "answer": 0,
+  "explain": "On a local variable, it keeps its value between calls."
+ },
+ {
+  "id": "c-2-05",
+  "level": 2,
+  "q": "What is `sizeof(char)`?",
+  "choices": [
+   "1",
+   "2",
+   "4",
+   "Depends on the string"
+  ],
+  "answer": 0,
+  "explain": "Always 1 by definition."
+ },
+ {
+  "id": "c-2-06",
+  "level": 2,
+  "q": "Which tool finds memory errors at run time?",
+  "choices": [
+   "valgrind",
+   "gdb only",
+   "strace",
+   "lint"
+  ],
+  "answer": 0,
+  "explain": "Or build with -fsanitize=address."
+ },
+ {
+  "id": "c-2-07",
+  "level": 2,
+  "q": "What does `volatile` tell the compiler?",
+  "choices": [
+   "The value can change outside the program's view",
+   "Cache it",
+   "Make it constant",
+   "Put it in a register"
+  ],
+  "answer": 0,
+  "explain": "For hardware registers and signal handlers."
+ },
+ {
+  "id": "c-2-08",
+  "level": 2,
+  "q": "What is a header guard for?",
+  "choices": [
+   "Including a header only once",
+   "Protecting secrets",
+   "Faster compiling of main",
+   "Checking types"
+  ],
+  "answer": 0,
+  "explain": "#ifndef X / #define X / #endif, or #pragma once."
+ },
+ {
+  "id": "c-2-09",
+  "level": 2,
+  "q": "What does `argv[0]` hold?",
+  "choices": [
+   "The program's name",
+   "The first argument",
+   "The argument count",
+   "The environment"
+  ],
+  "answer": 0,
+  "explain": "Arguments start at argv[1]; argc counts them all."
+ },
+ {
+  "id": "c-2-10",
+  "level": 2,
+  "q": "What does `make` read?",
+  "choices": [
+   "A Makefile",
+   "CMakeLists.txt directly",
+   "package.json",
+   "build.ninja only"
+  ],
+  "answer": 0,
+  "explain": "Rules: target: dependencies, then a tab and commands."
+ }
+]

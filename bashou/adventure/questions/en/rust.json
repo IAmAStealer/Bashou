@@ -1,0 +1,262 @@
+[
+ {
+  "id": "rust-1-01",
+  "level": 1,
+  "q": "Which tool builds and runs Rust projects?",
+  "choices": [
+   "cargo",
+   "rustpm",
+   "make",
+   "rustc run"
+  ],
+  "answer": 0,
+  "explain": "cargo new, cargo build, cargo run, cargo test."
+ },
+ {
+  "id": "rust-1-02",
+  "level": 1,
+  "q": "How do you make a variable changeable?",
+  "choices": [
+   "let mut x = 1;",
+   "var x = 1;",
+   "let x = mut 1;",
+   "mut x = 1;"
+  ],
+  "answer": 0,
+  "explain": "Variables are immutable by default."
+ },
+ {
+  "id": "rust-1-03",
+  "level": 1,
+  "q": "Which macro prints a line?",
+  "choices": [
+   "println!",
+   "print()",
+   "echo!",
+   "console.log"
+  ],
+  "answer": 0,
+  "explain": "The ! marks a macro."
+ },
+ {
+  "id": "rust-1-04",
+  "level": 1,
+  "q": "What is `Option<T>`?",
+  "choices": [
+   "Either Some(value) or None",
+   "A config file",
+   "A pointer",
+   "An error type only"
+  ],
+  "answer": 0,
+  "explain": "Rust has no null: Option makes absence explicit."
+ },
+ {
+  "id": "rust-1-05",
+  "level": 1,
+  "q": "What is `Result<T, E>` for?",
+  "choices": [
+   "A value or an error",
+   "Test results",
+   "A tuple of two values",
+   "Async results only"
+  ],
+  "answer": 0,
+  "explain": "Ok(value) or Err(error); ? passes errors up."
+ },
+ {
+  "id": "rust-1-06",
+  "level": 1,
+  "q": "What does `&x` create?",
+  "choices": [
+   "A reference (a borrow) to x",
+   "A copy of x",
+   "A pointer you must free",
+   "The address as a number"
+  ],
+  "answer": 0,
+  "explain": "Borrowing lets you use a value without taking it."
+ },
+ {
+  "id": "rust-1-07",
+  "level": 1,
+  "q": "Which file describes a cargo project?",
+  "choices": [
+   "Cargo.toml",
+   "package.json",
+   "Makefile",
+   "rust.yaml"
+  ],
+  "answer": 0,
+  "explain": "Name, version, dependencies…"
+ },
+ {
+  "id": "rust-1-08",
+  "level": 1,
+  "q": "How does a Rust function return a value without `return`?",
+  "choices": [
+   "The last expression, without ;",
+   "It can't",
+   "With yield",
+   "With => at the end"
+  ],
+  "answer": 0,
+  "explain": "A trailing ; turns it into a statement returning ()."
+ },
+ {
+  "id": "rust-1-09",
+  "level": 1,
+  "q": "What does `cargo check` do?",
+  "choices": [
+   "Checks the code compiles, without building a binary",
+   "Runs the tests",
+   "Formats the code",
+   "Checks for updates"
+  ],
+  "answer": 0,
+  "explain": "Faster than cargo build while you write."
+ },
+ {
+  "id": "rust-1-10",
+  "level": 1,
+  "q": "Which keyword matches a value against patterns?",
+  "choices": [
+   "match",
+   "switch",
+   "case",
+   "select"
+  ],
+  "answer": 0,
+  "explain": "match must cover every case."
+ },
+ {
+  "id": "rust-2-01",
+  "level": 2,
+  "q": "How many mutable borrows of a value can exist at once?",
+  "choices": [
+   "One",
+   "Any number",
+   "Two",
+   "None, ever"
+  ],
+  "answer": 0,
+  "explain": "One &mut, or any number of &, never both."
+ },
+ {
+  "id": "rust-2-02",
+  "level": 2,
+  "q": "What does the `?` operator do?",
+  "choices": [
+   "Returns the error early, or unwraps the value",
+   "Makes a value optional",
+   "Prints the value",
+   "Ignores the error"
+  ],
+  "answer": 0,
+  "explain": "Works on Result and Option in functions returning them."
+ },
+ {
+  "id": "rust-2-03",
+  "level": 2,
+  "q": "When is a value dropped (freed)?",
+  "choices": [
+   "When its owner goes out of scope",
+   "When the GC runs",
+   "At program exit",
+   "When you call free()"
+  ],
+  "answer": 0,
+  "explain": "Ownership replaces a garbage collector."
+ },
+ {
+  "id": "rust-2-04",
+  "level": 2,
+  "q": "What does `#[derive(Debug)]` give a struct?",
+  "choices": [
+   "Printing with {:?}",
+   "A debugger",
+   "Faster debug builds",
+   "Logging"
+  ],
+  "answer": 0,
+  "explain": "derive writes trait implementations for you."
+ },
+ {
+  "id": "rust-2-05",
+  "level": 2,
+  "q": "Which trait allows `.clone()`?",
+  "choices": [
+   "Clone",
+   "Copy",
+   "Dup",
+   "Borrow"
+  ],
+  "answer": 0,
+  "explain": "Copy is for cheap bit copies like integers."
+ },
+ {
+  "id": "rust-2-06",
+  "level": 2,
+  "q": "What is a lifetime like `'a`?",
+  "choices": [
+   "How long a reference stays valid",
+   "A thread's duration",
+   "A timeout",
+   "A variable's age"
+  ],
+  "answer": 0,
+  "explain": "The compiler checks references don't outlive their data."
+ },
+ {
+  "id": "rust-2-07",
+  "level": 2,
+  "q": "How do you share data between threads safely?",
+  "choices": [
+   "Arc<Mutex<T>>",
+   "Rc<RefCell<T>>",
+   "static mut",
+   "&mut T"
+  ],
+  "answer": 0,
+  "explain": "Arc counts owners across threads; Mutex guards access."
+ },
+ {
+  "id": "rust-2-08",
+  "level": 2,
+  "q": "What does `unwrap()` do on None or Err?",
+  "choices": [
+   "Panics",
+   "Returns 0",
+   "Returns an empty value",
+   "Retries"
+  ],
+  "answer": 0,
+  "explain": "Fine in tests; prefer ? or match in real code."
+ },
+ {
+  "id": "rust-2-09",
+  "level": 2,
+  "q": "What is `impl Trait for Type`?",
+  "choices": [
+   "Implementing a trait's methods for a type",
+   "Inheriting a class",
+   "Importing a type",
+   "A generic type alias"
+  ],
+  "answer": 0,
+  "explain": "Traits are like interfaces."
+ },
+ {
+  "id": "rust-2-10",
+  "level": 2,
+  "q": "Which command runs the tests?",
+  "choices": [
+   "cargo test",
+   "cargo run --tests",
+   "rustc --test-all",
+   "cargo check --test"
+  ],
+  "answer": 0,
+  "explain": "Tests are functions marked #[test]."
+ }
+]

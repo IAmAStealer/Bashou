@@ -1,0 +1,262 @@
+[
+ {
+  "id": "debian-1-01",
+  "level": 1,
+  "q": "Which command installs a package on Debian?",
+  "choices": [
+   "apt install name",
+   "dnf install name",
+   "pacman -S name",
+   "yum get name"
+  ],
+  "answer": 0,
+  "explain": "Use sudo; apt update first."
+ },
+ {
+  "id": "debian-1-02",
+  "level": 1,
+  "q": "What does `apt update` do?",
+  "choices": [
+   "Refreshes the list of available packages",
+   "Upgrades every package",
+   "Updates apt itself only",
+   "Reboots"
+  ],
+  "answer": 0,
+  "explain": "apt upgrade then installs the new versions."
+ },
+ {
+  "id": "debian-1-03",
+  "level": 1,
+  "q": "What is a .deb file?",
+  "choices": [
+   "A Debian package",
+   "A disk image",
+   "A config file",
+   "A kernel"
+  ],
+  "answer": 0,
+  "explain": "Installed with apt install ./file.deb."
+ },
+ {
+  "id": "debian-1-04",
+  "level": 1,
+  "q": "Where are the package sources listed?",
+  "choices": [
+   "/etc/apt/sources.list(.d)",
+   "/etc/yum.repos.d",
+   "/var/lib/dpkg/sources",
+   "/usr/apt"
+  ],
+  "answer": 0,
+  "explain": "Each line (or .sources file) is a repository."
+ },
+ {
+  "id": "debian-1-05",
+  "level": 1,
+  "q": "Which Debian branch is meant for servers?",
+  "choices": [
+   "stable",
+   "rolling",
+   "latest",
+   "sid"
+  ],
+  "answer": 0,
+  "explain": "testing and unstable (sid) come before it."
+ },
+ {
+  "id": "debian-1-06",
+  "level": 1,
+  "q": "How do you remove a package and its config?",
+  "choices": [
+   "apt purge name",
+   "apt remove --all name",
+   "dpkg -d name",
+   "apt delete name"
+  ],
+  "answer": 0,
+  "explain": "apt remove keeps the config files."
+ },
+ {
+  "id": "debian-1-07",
+  "level": 1,
+  "q": "Which command searches packages?",
+  "choices": [
+   "apt search word",
+   "apt find word",
+   "dpkg -s word",
+   "apt look word"
+  ],
+  "answer": 0,
+  "explain": "apt show name gives the details."
+ },
+ {
+  "id": "debian-1-08",
+  "level": 1,
+  "q": "What does `dpkg -l` show?",
+  "choices": [
+   "Installed packages",
+   "Disk layout",
+   "Package logs",
+   "Locked files"
+  ],
+  "answer": 0,
+  "explain": "dpkg is the low-level tool under apt."
+ },
+ {
+  "id": "debian-1-09",
+  "level": 1,
+  "q": "Debian releases are named after…",
+  "choices": [
+   "Toy Story characters",
+   "Planets",
+   "Cities",
+   "Birds"
+  ],
+  "answer": 0,
+  "explain": "Bookworm, Trixie, Forky…"
+ },
+ {
+  "id": "debian-1-10",
+  "level": 1,
+  "q": "How do you remove packages nobody needs anymore?",
+  "choices": [
+   "apt autoremove",
+   "apt clean",
+   "apt purge --all",
+   "dpkg --prune"
+  ],
+  "answer": 0,
+  "explain": "apt clean empties the downloaded package cache."
+ },
+ {
+  "id": "debian-2-01",
+  "level": 2,
+  "q": "Which command shows why a package is installed?",
+  "choices": [
+   "apt-cache rdepends --installed name",
+   "apt why name",
+   "dpkg --why name",
+   "apt reason name"
+  ],
+  "answer": 0,
+  "explain": "aptitude why is another way."
+ },
+ {
+  "id": "debian-2-02",
+  "level": 2,
+  "q": "How do you keep a package at its version?",
+  "choices": [
+   "apt-mark hold name",
+   "apt freeze name",
+   "dpkg --lock name",
+   "apt pin name now"
+  ],
+  "answer": 0,
+  "explain": "apt-mark unhold releases it."
+ },
+ {
+  "id": "debian-2-03",
+  "level": 2,
+  "q": "What does `unattended-upgrades` do?",
+  "choices": [
+   "Installs security updates automatically",
+   "Upgrades to the next release",
+   "Removes old kernels only",
+   "Backs up the system"
+  ],
+  "answer": 0,
+  "explain": "Configured in /etc/apt/apt.conf.d/."
+ },
+ {
+  "id": "debian-2-04",
+  "level": 2,
+  "q": "What is apt pinning?",
+  "choices": [
+   "Choosing which repository wins for a package",
+   "Locking the screen",
+   "Pinning a CPU",
+   "Signing packages"
+  ],
+  "answer": 0,
+  "explain": "In /etc/apt/preferences.d/."
+ },
+ {
+  "id": "debian-2-05",
+  "level": 2,
+  "q": "How do you reconfigure an installed package?",
+  "choices": [
+   "dpkg-reconfigure name",
+   "apt config name",
+   "dpkg --setup name",
+   "apt reinstall --config"
+  ],
+  "answer": 0,
+  "explain": "e.g. dpkg-reconfigure tzdata."
+ },
+ {
+  "id": "debian-2-06",
+  "level": 2,
+  "q": "How does apt trust a repository?",
+  "choices": [
+   "Its signing key (signed-by)",
+   "Its HTTPS certificate only",
+   "Its IP address",
+   "It trusts every repo"
+  ],
+  "answer": 0,
+  "explain": "Keys live in /etc/apt/keyrings or /usr/share/keyrings."
+ },
+ {
+  "id": "debian-2-07",
+  "level": 2,
+  "q": "What is `sid`?",
+  "choices": [
+   "Debian's unstable branch",
+   "The next stable release",
+   "A package format",
+   "The installer"
+  ],
+  "answer": 0,
+  "explain": "sid is always unstable; testing becomes the next stable."
+ },
+ {
+  "id": "debian-2-08",
+  "level": 2,
+  "q": "Where does dpkg keep its database?",
+  "choices": [
+   "/var/lib/dpkg",
+   "/etc/dpkg",
+   "/usr/share/dpkg",
+   "/var/cache/apt"
+  ],
+  "answer": 0,
+  "explain": "Don't edit it by hand."
+ },
+ {
+  "id": "debian-2-09",
+  "level": 2,
+  "q": "What does `apt full-upgrade` allow that upgrade doesn't?",
+  "choices": [
+   "Removing packages to finish the upgrade",
+   "Upgrading the kernel",
+   "Downloading faster",
+   "Skipping signatures"
+  ],
+  "answer": 0,
+  "explain": "Used for release upgrades."
+ },
+ {
+  "id": "debian-2-10",
+  "level": 2,
+  "q": "How do you list the files a package installed?",
+  "choices": [
+   "dpkg -L name",
+   "apt files name",
+   "dpkg -f name",
+   "apt show --files name"
+  ],
+  "answer": 0,
+  "explain": "dpkg -S /path does the reverse: which package owns a file."
+ }
+]

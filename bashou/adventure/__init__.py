@@ -1,30 +1,36 @@
-"""`bashou adventure`: your starter walks into the world, seen from behind."""
+"""`bashou adventure`: your starter walks into the world, seen from behind.
+
+Screens (phases): intro → fork → walk → monster / chest / rest → … → boss → fork → … → chapter end.
+The rules live in world.py; this file draws and reads keys.
+"""
 
 import os
+import random
 import select
 import sys
 import termios
 import time
 import tty
 
-from .. import progress, state
+from .. import progress, render, state
 from ..i18n import _
-from . import canvas, scene, sprites
+from . import canvas, quiz, scene, sprites, world
 
 ESC = "\x1b"
 FPS = 15
 SPEED = 5.0                    # world units per second while walking
+BOSS_SECONDS = 20
 QUIT_KEYS = ("s", "S", "q", "Q", ESC, "\x03", "\x04")
-BIOME_ORDER = ["meadow", "hills", "forest", "sand", "water", "dungeon"]
-BIOME_LENGTH = 60
-
-
-def default():
-    return {"distance": 0.0}
+UP, DOWN, LEFT, RIGHT = "\x1b[A", "\x1b[B", "\x1b[D", "\x1b[C"
+ENTER = ("\r", "\n")
+PANEL_BG, PANEL_FG, ACCENT, GOOD, BAD = (28, 28, 40), (235, 235, 240), (150, 190, 230), (130, 210, 130), (240, 110, 110)
 
 
 def load():
-    return {**default(), **(state.load().get("adventure") or {})}
+    adv = state.load().get("adventure") or {}
+    if "chapter" not in adv:                       # a walk from the first preview: keep the meters
+        adv = {**world.new(), "walked": adv.get("distance", 0.0)}
+    return {**world.new(), **adv}
 
 
 def save(adv):
@@ -37,18 +43,26 @@ def biome_name(biome):
             "water": _("Lake"), "dungeon": _("Dungeon")}[biome]
 
 
-def biome_at(distance):
-    return BIOME_ORDER[int(distance // BIOME_LENGTH) % len(BIOME_ORDER)]
+def topic_name(topic):
+    return world.TOPICS[topic][0]
 
 
 class Game:
-    def __init__(self, cols, rows):
+    def __init__(self, cols, rows, rng=random):
         self.adv = load()
+        self.rng = rng
         s = state.load()
         self.frames, self.palette = sprites.hero(progress.current(s, "starter")[0])
         self.walk_until = 0.0
         self.auto = False
         self.quit = False
+        self.choice = 0                 # highlighted fork path or answer
+        self.question = None            # the question on screen
+        self.result = None              # (good?, lines) after an answer
+        self.boss = None                # {"left": questions left, "total", "deadline"}
+        self.panel_rect = None
+        if self.adv["phase"] in ("monster", "boss", "chest", "rest"):
+            self.start_event(self.adv["phase"], time.time())   # an event you quit in: start it again
         self.resize(cols, rows)
 
     def resize(self, cols, rows):
@@ -56,34 +70,270 @@ class Game:
         self.canvas = canvas.Canvas(cols, (rows - 1) * 2)
         self.scale = 2 if self.canvas.h >= 40 else 1
 
+    # --- rules ---------------------------------------------------------------------------------
+
+    def start_event(self, kind, now):
+        adv = self.adv
+        self.choice, self.result = 0, None
+        if kind == "monster":
+            self.question = self.ask()
+        elif kind == "boss":
+            total = world.boss_questions(adv)
+            self.boss = {"left": total, "total": total}
+            self.question = self.ask(boss=True, now=now)
+        elif kind == "chest":
+            healed = adv["hearts"] < world.HEARTS
+            adv["hearts"] = min(world.HEARTS, adv["hearts"] + 1)
+            self.result = (True, [_("A chest! Inside: a heart. ♥ +1") if healed else
+                                  _("A chest! Inside: a shiny pebble. Your pet looks very proud.")])
+        elif kind == "rest":
+            adv["hearts"] = world.HEARTS
+            self.result = (True, [_("A campfire. Your pet naps a little: hearts full again.")])
+
+    def ask(self, boss=False, now=0.0):
+        adv = self.adv
+        q = quiz.pick(adv["topic"], world.level(adv, adv["topic"]), adv["seen"], self.rng)
+        adv["seen"] = (adv["seen"] + [q["id"]])[-400:]
+        if boss:
+            self.boss["deadline"] = now + BOSS_SECONDS
+        return q
+
+    def answer(self, i, now):
+        adv, q = self.adv, self.question
+        right = i == q["answer"]
+        explain = [f"{q['choices'][q['answer']]}: {q['explain']}"]
+        if adv["phase"] == "monster":
+            if right:
+                self.result = (True, [_("Right! The monster runs away.")] + explain)
+            elif world.lose_heart(adv):
+                self.result = (False, [_("Wrong… and that was your last heart.")] + explain
+                               + [_("Back to the last checkpoint: you can pick another path.")])
+            else:
+                self.result = (False, [_("Wrong! ♥ -1")] + explain)
+        else:
+            self.boss_answer(right, explain, now)
+        self.question = None
+
+    def boss_answer(self, right, explain, now):
+        adv = self.adv
+        topic = adv["topic"]
+        if not right:
+            name = _(world.TOPICS[topic][2])
+            world.back_to_checkpoint(adv)
+            self.result = (False, [_("The {boss} wins this time.").format(boss=name)] + explain
+                           + [_("Back to the last checkpoint. Bosses are there to make it stick!")])
+            save(adv)
+            return
+        self.boss["left"] -= 1
+        if self.boss["left"] > 0:
+            self.result = (True, [_("Hit! {n} to go.").format(n=self.boss["left"])] + explain)
+            return
+        name = _(world.TOPICS[topic][2])
+        world.boss_won(adv)
+        self.result = (True, [_("Victory! The {boss} is defeated.").format(boss=name),
+                              _("Checkpoint saved. {topic} is now level {level}.").format(
+                                  topic=topic_name(topic), level=world.level(adv, topic))])
+        self.boss = None
+        save(adv)
+
+    def close_result(self, now):
+        adv = self.adv
+        self.result = None
+        if adv["phase"] in ("monster", "chest", "rest"):
+            world.event_done(adv)
+        elif adv["phase"] == "boss" and self.boss:            # next boss question
+            self.question = self.ask(boss=True, now=now)
+
+    # --- input -----------------------------------------------------------------------------------
+
     def key(self, k, now):
+        adv = self.adv
         if k in QUIT_KEYS:
             self.quit = True
-        elif k in ("\x1b[A", "w", "W", "k"):
-            self.walk_until = now + 0.3            # key repeat keeps it going while held
-        elif k == " ":
-            self.auto = not self.auto
+            return
+        if self.result:
+            if k in ENTER or k == " ":
+                self.close_result(now)
+            return
+        phase = adv["phase"]
+        if phase == "intro" and (k in ENTER or k == " "):
+            adv["phase"] = "fork"
+        elif phase == "fork":
+            options = world.fork_options(adv)
+            if k in (LEFT, UP, "h"):
+                self.choice = (self.choice - 1) % len(options)
+            elif k in (RIGHT, DOWN, "l"):
+                self.choice = (self.choice + 1) % len(options)
+            elif k.isdigit() and 1 <= int(k) <= len(options):
+                self.choice = int(k) - 1
+            elif k in ENTER:
+                world.choose(adv, options[self.choice])
+                self.choice = 0
+                save(adv)
+        elif phase in ("monster", "boss") and self.question:
+            n = len(self.question["choices"])
+            if k in (UP, "k"):
+                self.choice = (self.choice - 1) % n
+            elif k in (DOWN, "j"):
+                self.choice = (self.choice + 1) % n
+            elif k.lower() in "abcd" and k:
+                self.answer("abcd".index(k.lower()), now)
+            elif k in "1234" and k:
+                self.answer(int(k) - 1, now)
+            elif k in ENTER:
+                self.answer(self.choice, now)
+        elif phase == "walk":
+            if k in (UP, "w", "W", "k"):
+                self.walk_until = now + 0.3            # key repeat keeps it going while held
+            elif k == " ":
+                self.auto = not self.auto
+        elif phase == "chapter_end" and k in ENTER:
+            world.next_chapter(self.adv)
+            save(self.adv)
 
     def walking(self, now):
-        return self.auto or now < self.walk_until
+        return self.adv["phase"] == "walk" and (self.auto or now < self.walk_until)
 
     def update(self, dt, now):
+        adv = self.adv
         if self.walking(now):
-            self.adv["distance"] += SPEED * dt
+            event = world.walk(adv, SPEED * dt)
+            if event:
+                self.auto = False
+                self.start_event(event, now)
+        if adv["phase"] == "boss" and self.question and now > self.boss["deadline"]:
+            q = self.question
+            self.question = None
+            self.boss_answer(False, [_("Too slow!"), f"{q['choices'][q['answer']]}: {q['explain']}"], now)
 
-    def draw(self, t):
-        c = self.canvas
-        d = self.adv["distance"]
-        scene.draw(c, biome_at(d), d, t)
-        step = int(d * 1.5) % len(self.frames) if self.walking(time.time()) else 0
+    # --- drawing ---------------------------------------------------------------------------------
+
+    def draw(self, t, now):
+        adv, c = self.adv, self.canvas
+        d = adv["distance"]
+        scene.draw(c, world.biome(adv), d, t)
+        lines = self.panel(now)
+        rect = self.panel_box(lines)
+        step = int(adv["walked"] * 1.5) % len(self.frames) if self.walking(now) else 0
         w, h = 17 * self.scale, 12 * self.scale
         c.sprite(self.frames[step], self.palette, (c.w - w) // 2, c.h - h - 1, self.scale)
-        return c.render()
+        self.draw_ahead(t, (rect[0] - 1) * 2 if rect else None)
+        if rect != self.panel_rect and self.panel_rect:
+            self.forget(self.panel_rect)                     # repaint what the old panel covered
+        self.panel_rect = rect
+        return c.render() + self.panel_text(lines, rect)
+
+    def draw_ahead(self, t, room=None):
+        """What waits on the road: the next event growing as you come closer, or the signpost.
+        With a box on screen (`room` = pixel rows free above it), it stands in the space left."""
+        adv = self.adv
+        phase = adv["phase"]
+        if phase in ("fork", "intro"):
+            kind, rel = "fork", 6.0
+        elif phase == "walk":
+            kind = world.events(adv)[adv["segment"]]
+            rel = world.next_event_at(adv) - adv["distance"] + 3
+        elif phase in ("monster", "boss", "chest", "rest"):
+            kind, rel = phase, 3.0 if phase != "boss" else 2.2
+        else:
+            return
+        if rel > scene.FAR:
+            return
+        rows, palette = {
+            "monster": lambda: sprites.monster(adv["topic"]), "boss": lambda: sprites.boss(adv["topic"]),
+            "chest": lambda: sprites.CHEST, "rest": lambda: sprites.CAMPFIRE, "fork": lambda: sprites.SIGNPOST,
+        }[kind]()
+        bob = 1 if kind in ("monster", "boss") and int(t * 3) % 2 else 0
+        if room:
+            share = {"boss": 0.9, "monster": 0.6}.get(kind, 0.4)
+            scale = max(1.0, min(room * share / len(rows), self.canvas.w * 0.5 / len(rows[0])))
+            scene.blit(self.canvas, rows, palette, self.canvas.w / 2, room - 1 - bob, scale)
+            return
+        horizon = int(self.canvas.h * 0.38)
+        y = horizon + scene.CAMERA / rel
+        near = (y - horizon) / (self.canvas.h - horizon)
+        scale = near * (3.0 if kind == "boss" else 2.0) * self.scale
+        scene.blit(self.canvas, rows, palette, self.canvas.w / 2, min(y, self.canvas.h - 12 * self.scale - 2) - bob, scale)
+
+    def panel(self, now):
+        """Lines of the box over the sky: (text, color) pairs."""
+        adv = self.adv
+        phase = adv["phase"]
+        if self.result:
+            good, texts = self.result
+            return ([(texts[0], GOOD if good else BAD)] + [(t, PANEL_FG) for t in texts[1:]]
+                    + [("", PANEL_FG), (_("Enter: continue"), ACCENT)])
+        if phase == "intro":
+            ch = world.chapter(adv["chapter"])
+            return [(_("Chapter {n}: {title}").format(n=adv["chapter"], title=_(ch["title"])), ACCENT),
+                    (_(ch["intro"]), PANEL_FG), ("", PANEL_FG), (_("Enter: set off · s: save & quit"), ACCENT)]
+        if phase == "fork":
+            out = [(_("The road splits. Which way?"), ACCENT)]
+            for i, topic in enumerate(world.fork_options(adv)):
+                mark = "▶ " if i == self.choice else "  "
+                out.append((f"{mark}{i + 1}. {topic_name(topic)} · "
+                            + _("level {n}").format(n=world.level(adv, topic)), ACCENT if i == self.choice else PANEL_FG))
+            return out + [("", PANEL_FG), (_("←/→ choose · Enter: go · s: save & quit"), ACCENT)]
+        if phase in ("monster", "boss") and self.question:
+            q = self.question
+            if phase == "boss":
+                left = max(0.0, self.boss["deadline"] - now)
+                bar = "█" * int(left) + "░" * (BOSS_SECONDS - int(left))
+                head = [(_("{boss} · {n}/{total}").format(boss=_(world.TOPICS[adv["topic"]][2]),
+                                                           n=self.boss["total"] - self.boss["left"] + 1,
+                                                           total=self.boss["total"]), BAD),
+                        (f"⏳ {bar} {int(left)}s", BAD if left < 6 else ACCENT)]
+            else:
+                head = [(_("A wild {topic} monster asks:").format(topic=topic_name(adv["topic"])), ACCENT)]
+            out = head + [(q["q"], PANEL_FG), ("", PANEL_FG)]
+            for i, choice in enumerate(q["choices"]):
+                mark = "▶ " if i == self.choice else "  "
+                out.append((f"{mark}{'ABCD'[i]}. {choice}", ACCENT if i == self.choice else PANEL_FG))
+            return out
+        if phase == "chapter_end":
+            nxt = world.chapter(adv["chapter"] + 1)
+            return [(_("Chapter {n} complete!").format(n=adv["chapter"]), GOOD),
+                    (_("A new quest calls you, hero: {title}.").format(title=_(nxt["title"])), PANEL_FG),
+                    ("", PANEL_FG), (_("Enter: accept · s: save & quit"), ACCENT)]
+        return []
+
+    def panel_box(self, lines):
+        if not lines:
+            return None
+        width = min(self.cols - 4, 76)
+        wrapped = [(part, color) for text, color in lines
+                   for part in (render.wrap(text, width - 4, 3) if text else [""])]
+        top = max(1, self.rows - 2 - len(wrapped))          # just above the status line
+        return (top, (self.cols - width) // 2 + 1, width, wrapped)
+
+    def panel_text(self, lines, rect):
+        if not rect:
+            return ""
+        top, left, width, wrapped = rect
+        bg = "48;2;%d;%d;%d" % PANEL_BG
+        out = [f"{ESC}[{top};{left}H{ESC}[{bg};38;2;%d;%d;%dm╭{'─' * (width - 2)}╮" % ACCENT]
+        for i, (text, color) in enumerate(wrapped):
+            pad = width - 4 - render.width(text)
+            out.append(f"{ESC}[{top + 1 + i};{left}H{ESC}[{bg};38;2;%d;%d;%dm│ " % ACCENT
+                       + f"{ESC}[38;2;%d;%d;%dm{text}{' ' * pad}" % color
+                       + f"{ESC}[38;2;%d;%d;%dm │" % ACCENT)
+        out.append(f"{ESC}[{top + 1 + len(wrapped)};{left}H{ESC}[{bg};38;2;%d;%d;%dm╰{'─' * (width - 2)}╯" % ACCENT)
+        return "".join(out) + f"{ESC}[0m"
+
+    def forget(self, rect):
+        top, left, width, wrapped = rect
+        for line in range(top - 1, top + len(wrapped) + 1):
+            for col in range(left - 1, left - 1 + width):
+                self.canvas.shown.pop((line, col), None)
 
     def hud(self):
-        d = self.adv["distance"]
-        text = (f" {biome_name(biome_at(d))} · {int(d)} m   "
-                + _("↑ walk · space: auto-walk · s: save & quit"))
+        adv = self.adv
+        hearts = "♥" * adv["hearts"] + "♡" * (world.HEARTS - adv["hearts"])
+        where = biome_name(world.biome(adv))
+        path = f" · {topic_name(adv['topic'])} " + _("level {n}").format(n=world.level(adv, adv["topic"])) \
+            if adv["topic"] else ""
+        keys = _("↑ walk · space: auto · s: save & quit") if adv["phase"] == "walk" else _("s: save & quit")
+        text = f" {_('Chapter {n}').format(n=adv['chapter'])} · {where}{path} · {hearts} · {int(adv['walked'])} m   {keys}"
         return f"{ESC}[{self.rows};1H{ESC}[0m{ESC}[2K{text[:self.cols - 1]}"
 
 
@@ -94,8 +344,8 @@ def main():
     fd = sys.stdin.fileno()
     old = termios.tcgetattr(fd)
     size = os.get_terminal_size()
-    if size.columns < 40 or size.lines < 16:
-        print(_("Make the terminal a bit bigger for the adventure (40×16 at least)."))
+    if size.columns < 50 or size.lines < 20:
+        print(_("Make the terminal a bit bigger for the adventure (50×20 at least)."))
         return 1
     game = Game(size.columns, size.lines)
     out = sys.stdout
@@ -111,12 +361,12 @@ def main():
                 out.write(f"{ESC}[2J")
             game.update(now - last, now)
             last = now
-            out.write(game.draw(now - start) + game.hud())
+            out.write(game.draw(now - start, now) + game.hud())
             out.flush()
             if select.select([fd], [], [], 1 / FPS)[0]:
                 data = os.read(fd, 32).decode(errors="ignore")
                 for k in split_keys(data):
-                    game.key(k, now)
+                    game.key(k, time.time())
     except KeyboardInterrupt:
         pass
     finally:
@@ -124,8 +374,8 @@ def main():
         termios.tcsetattr(fd, termios.TCSADRAIN, old)
         out.write(f"{ESC}[0m{ESC}[?25h{ESC}[?1049l")
         out.flush()
-    print("  " + _("Adventure saved ({m} m walked). Come back with: bashou adventure").format(
-        m=int(game.adv["distance"])))
+    print("  " + _("Adventure saved: chapter {n}, {m} m walked. Come back with: bashou adventure").format(
+        n=game.adv["chapter"], m=int(game.adv["walked"])))
     return 0
 
 

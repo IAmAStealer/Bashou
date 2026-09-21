@@ -120,7 +120,9 @@ class BubbleTest(TempState):
     def run_commands(self, n):
         with open(self.pet.events, "a") as f:
             f.write("".join(f"0\t    {i}  true\n" for i in range(n)))
+        mine = list(self.pet.notes)
         self.pet.read_events()
+        self.pet.notes = mine                    # not the notes those commands earned (Night owl after midnight…)
         self.pet.update_bubble()
 
     def test_bubble_stays_for_several_commands(self):

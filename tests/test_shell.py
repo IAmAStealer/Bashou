@@ -270,13 +270,16 @@ class AdventureShellTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             sh = Shell(tmp, ["python3", "-m", "bashou", "adventure"], state={"starter": "pebble"})
             try:
-                self.assertTrue(sh.expect(b"save & quit"))
-                sh.send(" ", 1.5)                        # auto-walk
+                self.assertTrue(sh.expect(b"The Sleepy Meadow"))
+                sh.send("\r", 0.5)                        # set off
+                self.assertTrue(sh.expect(b"The road splits"))
+                sh.send("\r", 0.5)                        # first path
+                sh.send(" ", 1.5)                         # auto-walk
                 sh.send("s", 0)
                 self.assertTrue(sh.expect(b"Adventure saved"))
                 self.assertNotIn(b"Traceback", sh.out)
                 self.assertIn(b"\x1b[?1049l", sh.out)    # the normal screen is back
-                self.assertGreater(sh.state()["adventure"]["distance"], 2)
+                self.assertGreater(sh.state()["adventure"]["walked"], 2)
             finally:
                 sh.close()
 

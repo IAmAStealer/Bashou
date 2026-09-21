@@ -1,0 +1,288 @@
+[
+ {
+  "id": "python-1-01",
+  "level": 1,
+  "q": "How do you print hello in Python 3?",
+  "choices": [
+   "print(\"hello\")",
+   "echo \"hello\"",
+   "print \"hello\"",
+   "puts(\"hello\")"
+  ],
+  "answer": 0,
+  "explain": "print is a function since Python 3."
+ },
+ {
+  "id": "python-1-02",
+  "level": 1,
+  "q": "Which type is `[1, 2, 3]`?",
+  "choices": [
+   "list",
+   "tuple",
+   "set",
+   "array"
+  ],
+  "answer": 0,
+  "explain": "Lists use [ ], tuples ( ), sets { }."
+ },
+ {
+  "id": "python-1-03",
+  "level": 1,
+  "q": "What does `len(\"bash\")` return?",
+  "choices": [
+   "4",
+   "3",
+   "5",
+   "\"bash\""
+  ],
+  "answer": 0,
+  "explain": "len counts the characters."
+ },
+ {
+  "id": "python-1-04",
+  "level": 1,
+  "q": "How do you start a comment?",
+  "choices": [
+   "#",
+   "//",
+   "--",
+   "/*"
+  ],
+  "answer": 0,
+  "explain": "Everything after # on the line is ignored."
+ },
+ {
+  "id": "python-1-05",
+  "level": 1,
+  "q": "What marks a block (the body of an if or a loop)?",
+  "choices": [
+   "Indentation",
+   "Braces { }",
+   "begin/end",
+   "Semicolons"
+  ],
+  "answer": 0,
+  "explain": "Four spaces per level is the convention."
+ },
+ {
+  "id": "python-1-06",
+  "level": 1,
+  "q": "Which keyword defines a function?",
+  "choices": [
+   "def",
+   "func",
+   "function",
+   "fn"
+  ],
+  "answer": 0,
+  "explain": "def name(args): then an indented body."
+ },
+ {
+  "id": "python-1-07",
+  "level": 1,
+  "q": "What is `3 // 2`?",
+  "choices": [
+   "1",
+   "1.5",
+   "2",
+   "Error"
+  ],
+  "answer": 0,
+  "explain": "// is integer (floor) division; / gives 1.5."
+ },
+ {
+  "id": "python-1-08",
+  "level": 1,
+  "q": "How do you get the first item of a list `xs`?",
+  "choices": [
+   "xs[0]",
+   "xs[1]",
+   "xs.first",
+   "first(xs)"
+  ],
+  "answer": 0,
+  "explain": "Indexes start at 0; xs[-1] is the last one."
+ },
+ {
+  "id": "python-1-09",
+  "level": 1,
+  "q": "Which value means \"nothing\"?",
+  "choices": [
+   "None",
+   "null",
+   "nil",
+   "undefined"
+  ],
+  "answer": 0,
+  "explain": "Compare with `is None`."
+ },
+ {
+  "id": "python-1-10",
+  "level": 1,
+  "q": "How do you install a package for your user?",
+  "choices": [
+   "pip install --user name",
+   "apt install python-name only",
+   "python get name",
+   "import --install name"
+  ],
+  "answer": 0,
+  "explain": "Better: a virtual environment (python3 -m venv)."
+ },
+ {
+  "id": "python-1-11",
+  "level": 1,
+  "q": "What does `for x in range(3)` loop over?",
+  "choices": [
+   "0, 1, 2",
+   "1, 2, 3",
+   "0, 1, 2, 3",
+   "3 only"
+  ],
+  "answer": 0,
+  "explain": "range stops before its end."
+ },
+ {
+  "id": "python-1-12",
+  "level": 1,
+  "q": "How do you read a whole file?",
+  "choices": [
+   "open(\"f\").read()",
+   "read(\"f\")",
+   "file(\"f\").all()",
+   "cat(\"f\")"
+  ],
+  "answer": 0,
+  "explain": "Better with `with open(\"f\") as fh:` so it closes."
+ },
+ {
+  "id": "python-2-01",
+  "level": 2,
+  "q": "What does `with open(\"f\") as fh:` guarantee?",
+  "choices": [
+   "The file is closed after the block, even on error",
+   "The file exists",
+   "The file is read-only",
+   "Nothing more than open()"
+  ],
+  "answer": 0,
+  "explain": "It's a context manager."
+ },
+ {
+  "id": "python-2-02",
+  "level": 2,
+  "q": "What is `[x * 2 for x in xs]`?",
+  "choices": [
+   "A list comprehension",
+   "A generator function",
+   "A dict",
+   "A syntax error"
+  ],
+  "answer": 0,
+  "explain": "Same with ( ) gives a lazy generator."
+ },
+ {
+  "id": "python-2-03",
+  "level": 2,
+  "q": "Which is immutable?",
+  "choices": [
+   "tuple",
+   "list",
+   "dict",
+   "set"
+  ],
+  "answer": 0,
+  "explain": "Tuples can be dict keys; lists can't."
+ },
+ {
+  "id": "python-2-04",
+  "level": 2,
+  "q": "What does `*args` receive?",
+  "choices": [
+   "Extra positional arguments, as a tuple",
+   "Keyword arguments",
+   "A pointer",
+   "Only the first argument"
+  ],
+  "answer": 0,
+  "explain": "**kwargs receives extra keyword arguments as a dict."
+ },
+ {
+  "id": "python-2-05",
+  "level": 2,
+  "q": "How do you catch an error?",
+  "choices": [
+   "try: … except ValueError: …",
+   "catch ValueError: …",
+   "on error: …",
+   "if error: …"
+  ],
+  "answer": 0,
+  "explain": "Catch the specific exception, not everything."
+ },
+ {
+  "id": "python-2-06",
+  "level": 2,
+  "q": "What does `if __name__ == \"__main__\":` check?",
+  "choices": [
+   "The file is run directly, not imported",
+   "Python 3 is used",
+   "The main thread runs",
+   "The module is named main"
+  ],
+  "answer": 0,
+  "explain": "Code under it doesn't run on import."
+ },
+ {
+  "id": "python-2-07",
+  "level": 2,
+  "q": "What is a virtual environment for?",
+  "choices": [
+   "Separate packages per project",
+   "Running Python in a VM",
+   "Faster code",
+   "Hiding code"
+  ],
+  "answer": 0,
+  "explain": "python3 -m venv .venv, then source .venv/bin/activate."
+ },
+ {
+  "id": "python-2-08",
+  "level": 2,
+  "q": "What does `dict.get(\"k\", 0)` return if k is missing?",
+  "choices": [
+   "0",
+   "None",
+   "KeyError",
+   "\"k\""
+  ],
+  "answer": 0,
+  "explain": "Square brackets would raise KeyError."
+ },
+ {
+  "id": "python-2-09",
+  "level": 2,
+  "q": "Which runs a shell command safely?",
+  "choices": [
+   "subprocess.run([\"ls\", \"-l\"])",
+   "os.system(\"ls -l \" + user_input)",
+   "eval(\"ls -l\")",
+   "exec(\"ls\")"
+  ],
+  "answer": 0,
+  "explain": "A list of arguments: no shell, no injection."
+ },
+ {
+  "id": "python-2-10",
+  "level": 2,
+  "q": "What does `yield` make a function?",
+  "choices": [
+   "A generator",
+   "A coroutine only",
+   "A class",
+   "Faster"
+  ],
+  "answer": 0,
+  "explain": "It produces values one at a time, lazily."
+ }
+]
