@@ -80,6 +80,47 @@ def swap(pet):
     print(f"  {STAGES[pet][progress.stage(s, pet) - 1]} is now your pet.")
 
 
+def dev(args):
+    """Testing helpers. Every change first backs up state.json next to it."""
+    import shutil
+    import time
+    from . import challenges
+
+    if args.action == "restore":
+        backups = sorted(state.DATA.glob("state.json.bak-*"))
+        if not backups:
+            print("  No backup.")
+            return
+        shutil.copy(backups[-1], state.STATE)
+        print(f"  Restored {backups[-1].name}")
+        return
+    if state.STATE.exists():
+        backup = state.DATA / f"state.json.bak-{time.strftime('%Y%m%d-%H%M%S')}-{time.time_ns() % 1000:03d}"
+        shutil.copy(state.STATE, backup)
+        print(f"  {DIM}backup: {backup}{RESET}")
+    with state.locked() as s:
+        if args.action == "unlock-all":
+            s["pets"] = [pet for pet, _ in ROSTER]
+            print("  All 16 pets unlocked.")
+        elif args.action == "stage":
+            fam = [a.id for a in achievements.family(args.pet)]
+            keep = fam[:{1: 0, 2: 2, 3: len(fam)}[args.stage]]
+            s["achievements"] = [a for a in s["achievements"] if a not in fam] + keep
+            if args.pet not in s["pets"]:
+                s["pets"].append(args.pet)
+            print(f"  {STAGES[args.pet][args.stage - 1]} (stage {args.stage}).")
+        elif args.action == "stage-all":
+            for pet, _ in ROSTER:
+                fam = [a.id for a in achievements.family(pet)]
+                keep = fam[:{1: 0, 2: 2, 3: len(fam)}[args.stage]]
+                s["achievements"] = [a for a in s["achievements"] if a not in fam] + keep
+            print(f"  Every pet at stage {args.stage}.")
+        elif args.action == "threat":
+            ch = challenges.BY_ID.get(args.pet) or challenges.ALL[0]
+            s["threat"] = {"challenge": ch.id, "until": time.time() + 600}
+            print(f"  A {ch.threat} is waiting: bashou fight")
+
+
 def main():
     parser = argparse.ArgumentParser(prog="bashou", description="A pet that grows as you learn bash.")
     sub = parser.add_subparsers(dest="cmd")
@@ -93,6 +134,10 @@ def main():
     br.add_argument("pattern", nargs="?", default="box", choices=list(breathe.PATTERNS))
     br.add_argument("-n", "--cycles", type=int, default=4)
     sub.add_parser("stats", help="breathing stats")
+    dv = sub.add_parser("dev", help="testing helpers (back up state first)")
+    dv.add_argument("action", choices=["unlock-all", "stage", "stage-all", "threat", "restore"])
+    dv.add_argument("pet", nargs="?", help="pet (stage) or challenge id (threat)")
+    dv.add_argument("stage", nargs="?", type=int, choices=[1, 2, 3], default=3)
     sub.add_parser("on", help="show the pet (shell function)")
     sub.add_parser("off", help="hide the pet (shell function)")
     args = parser.parse_args()
@@ -110,5 +155,9 @@ def main():
         breathe.breathe(args.pattern, args.cycles)
     elif args.cmd == "stats":
         breathe.stats()
+    elif args.cmd == "dev":
+        if args.action == "stage-all" and args.pet:
+            args.stage = int(args.pet)
+        dev(args)
     else:
         level()

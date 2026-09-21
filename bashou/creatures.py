@@ -82,7 +82,7 @@ CAT = Pet(
     },
 )
 
-# Every pet in board order. Pets without art yet reuse the cat until they are drawn.
+# Every pet in board order.
 ROSTER = [
     ("cat", "Cat"), ("frog", "Frog"), ("turtle", "Turtle"), ("mushroom", "Mushroom"),
     ("slime", "Slime"), ("sofa", "Living sofa"), ("octopus", "Octopus"), ("dragon", "Dragon"),
@@ -268,7 +268,234 @@ awwaawwaawwaawa
     },
 )
 
-PETS = {p.id: p for p in (CAT, FROG, TURTLE, MUSHROOM, FOX, OWL, GHOST)}
+SLIME = Pet(
+    id="slime", name="Slime",
+    base=sprite("""
+.......a.........
+......aoa........
+.....awooa.......
+....awooooa......
+...awooooooa.....
+..aoooooooooa....
+.aooomooomoooa...
+.aooomooomoooa...
+.aopoooqooopoa...
+.aoooooooooooa...
+..aoooooooooa....
+...aaaaaaaaa.....
+"""),
+    palette={"a": (50, 150, 130), "o": (110, 215, 185), "w": (230, 255, 245), "m": (25, 25, 25), "p": (255, 160, 170), "q": (40, 100, 85)},
+    poses={
+        "inhale": pixels("10,1,a 10,2,o 10,12,o 10,13,a 11,2,a 11,12,a"),
+        "closed": pixels("6,5,o 6,9,o 7,4,q 7,5,q 7,9,q 7,10,q"),
+        "left": pixels("6,5,o 7,5,o 6,4,m 7,4,m 6,9,o 7,9,o 6,8,m 7,8,m"),
+        "right": pixels("6,5,o 7,5,o 6,6,m 7,6,m 6,9,o 7,9,o 6,10,m 7,10,m"),
+    },
+)
+
+SOFA = Pet(
+    id="sofa", name="Living sofa",
+    base=sprite("""
+.................
+.................
+..aaaaaaaaaaa....
+.aoooooooooooa...
+.aoooomomooooa...
+.aoooomomooooa...
+.aoooooqoooooa...
+aoacccccccccaoa..
+aoaclllllllcaoa..
+aoaaaaaaaaaaaoa..
+aoooooooooooooa..
+.kk.........kk...
+"""),
+    palette={"a": (140, 50, 60), "o": (205, 85, 95), "c": (235, 200, 150), "l": (250, 225, 185), "m": (25, 25, 25), "q": (110, 35, 45), "k": (90, 60, 40)},
+    poses={
+        "inhale": pixels("7,4,l 7,5,l 7,6,l 7,7,l 7,8,l 7,9,l 7,10,l"),
+        "closed": pixels("4,6,o 4,8,o"),
+        "left": pixels("4,6,o 5,6,o 4,8,o 5,8,o 4,5,m 5,5,m 4,7,m 5,7,m"),
+        "right": pixels("4,6,o 5,6,o 4,8,o 5,8,o 4,7,m 5,7,m 4,9,m 5,9,m"),
+    },
+)
+
+OCTOPUS = Pet(
+    id="octopus", name="Octopus",
+    base=sprite("""
+.....aaaaa.......
+...aaoooooaa.....
+..aoowwoooooa....
+.aoowooooooooa...
+.aoomooooomooa...
+.aoomooooomooa...
+.aopoooqooopoa...
+..aoooooooooa....
+.aoa.aoaoa.aoa...
+ao...ao.oa...oa..
+.a....a.a....a...
+.................
+"""),
+    palette={"a": (110, 65, 150), "o": (180, 125, 220), "w": (235, 220, 255), "m": (25, 25, 25), "p": (255, 160, 170), "q": (80, 40, 110)},
+    poses={
+        "inhale": pixels("7,1,a 7,2,o 7,12,o 7,13,a"),
+        "closed": pixels("4,4,o 4,10,o 5,3,q 5,4,q 5,10,q 5,11,q"),
+        "left": pixels("4,4,o 5,4,o 4,3,m 5,3,m 4,10,o 5,10,o 4,9,m 5,9,m"),
+        "right": pixels("4,4,o 5,4,o 4,5,m 5,5,m 4,10,o 5,10,o 4,11,m 5,11,m"),
+    },
+)
+
+DRAGON = Pet(
+    id="dragon", name="Dragon",
+    base=sprite("""
+..y.......y......
+..yaaaaaaay......
+.aoooooooooa.....
+.aomwooowmoa.....
+.aommooommoa.....
+.aooononoooa.....
+..aoooooooa......
+v.aocccccoa.v....
+vvaocccccoavv....
+.vaocccccoav...ay
+..aoooooooa.aooa.
+..ll.aaa.ll.aaa..
+"""),
+    palette={"a": (45, 115, 70), "o": (90, 180, 100), "c": (240, 220, 140), "y": (250, 230, 170), "m": (25, 25, 25), "w": (255, 255, 255), "n": (35, 85, 50), "v": (130, 90, 190), "l": (250, 230, 170)},
+    poses={
+        "inhale": pixels("6,1,a 6,2,o 6,10,o 6,11,a"),
+        "closed": pixels("3,3,o 3,4,o 3,8,o 3,9,o"),
+        "left": pixels("3,3,w 3,4,m 3,8,w 3,9,m"),
+        "tail_up": pixels("8,15,a 8,16,y 9,15,o 9,16,a"),
+    },
+)
+
+MOLE = Pet(
+    id="mole", name="Mole",
+    base=sprite("""
+.................
+.................
+....aaaaaaa......
+..aaoooooooaa....
+.aoooooooooooa...
+.aoomooooomooa...
+aooooccnccooooa..
+aooocccccccoooa..
+llooooqoqooooll..
+lllooooooooolll..
+.aoooooooooooa...
+..aaaaaaaaaaa....
+"""),
+    palette={"a": (80, 60, 55), "o": (125, 100, 90), "c": (215, 190, 170), "n": (255, 140, 160), "m": (25, 25, 25), "l": (250, 200, 190), "q": (70, 50, 45)},
+    poses={
+        "inhale": pixels("4,0,a 4,1,o 4,13,o 4,14,a"),
+        "closed": pixels("5,3,m 5,11,m"),
+        "left": pixels("5,4,o 5,3,m 5,10,o 5,9,m"),
+        "right": pixels("5,4,o 5,5,m 5,10,o 5,11,m"),
+    },
+)
+
+SNAKE = Pet(
+    id="snake", name="Snake",
+    base=sprite("""
+......aaaa.......
+.....aoooooa.....
+....aomoooomoa...
+....aoooooooooa..
+.....aopooopaa...
+......aaoooaa....
+....aaaoooaaaa...
+...aoooooooooooa.
+..aollllllllllloa
+..aaoooooooooooa.
+.aoooooooooooooa.
+..aaaaaaaaaaaaa..
+"""),
+    palette={"a": (50, 110, 50), "o": (120, 190, 80), "l": (215, 230, 140), "m": (25, 25, 25), "p": (255, 160, 170), "r": (230, 70, 80)},
+    poses={
+        "inhale": pixels("10,0,a 10,15,o 10,16,a"),
+        "closed": pixels("2,6,o 2,11,o 3,6,a 3,11,a"),
+        "left": pixels("2,6,o 2,5,m 2,11,o 2,10,m"),
+        "right": pixels("2,6,o 2,7,m 2,11,o 2,12,m"),
+        "tail_up": pixels("4,14,r 4,15,r 5,15,r"),
+    },
+)
+
+SPIDER = Pet(
+    id="spider", name="Spider",
+    base=sprite("""
+.................
+.................
+.a...aaaaaaa...a.
+.a..aoooooooa..a.
+..aaoowwowwooaa..
+aa.aoowmomwooa.aa
+..aaoooooooooaa..
+.a.aoopoqopooa.a.
+a..aoooooooooa..a
+.aa.aaoooooaa.aa.
+a....aaaaaaa....a
+.................
+"""),
+    palette={"a": (140, 115, 185), "o": (95, 72, 130), "w": (255, 255, 255), "m": (25, 25, 25), "p": (255, 160, 170), "q": (40, 25, 55)},
+    poses={
+        "inhale": pixels("3,3,a 3,4,o 3,12,o 3,13,a"),
+        "closed": pixels("4,6,o 4,7,o 4,9,o 4,10,o 5,6,m 5,7,m 5,9,m 5,10,m"),
+        "left": pixels("5,7,w 5,6,m"),
+        "right": pixels("5,9,w 5,10,m"),
+    },
+)
+
+ANT = Pet(
+    id="ant", name="Ant",
+    base=sprite("""
+..a...a..........
+...a.a...........
+..aaaaa..........
+.aoooooa.........
+.aomoooa...aaaa..
+.aooooqa.aaooooa.
+..aaaaaaaoooooooa
+....a.aooaooooooa
+...a..a.aa.aaaaa.
+..a..a...a..a..a.
+.........a...a..a
+.................
+"""),
+    palette={"a": (110, 40, 35), "o": (190, 75, 60), "m": (25, 25, 25), "q": (80, 25, 20)},
+    poses={
+        "inhale": pixels("4,10,a 4,15,a"),
+        "closed": pixels("4,3,q 4,4,q"),
+        "left": pixels("4,3,o 4,2,m"),
+        "right": pixels("4,3,o 4,4,m"),
+    },
+)
+
+AXOLOTL = Pet(
+    id="axolotl", name="Axolotl",
+    base=sprite("""
+.................
+....aaaaaaa......
+gg.aoooooooa.gg..
+..aoooooooooa....
+gg.aomooomoa.gg..
+..aoomooomooa....
+g..aopoqopoa..g..
+...aoooooooa....a
+...accccccca...ao
+..aocccccccoa.ao.
+..lao.ooo.oal..oa
+...aa.....aa.....
+"""),
+    palette={"a": (220, 110, 150), "o": (255, 175, 200), "c": (255, 225, 230), "g": (200, 70, 130), "m": (25, 25, 25), "p": (255, 120, 150), "q": (170, 60, 100), "l": (255, 175, 200)},
+    poses={
+        "inhale": pixels("8,2,a 8,3,o 8,11,o 8,12,a"),
+        "closed": pixels("4,5,o 4,9,o 5,4,q 5,5,q 5,9,q 5,10,q"),
+        "left": pixels("4,5,o 5,5,o 4,4,m 5,4,m 4,9,o 5,9,o 4,8,m 5,8,m"),
+        "right": pixels("4,5,o 5,5,o 4,6,m 5,6,m 4,9,o 5,9,o 4,10,m 5,10,m"),
+    },
+)
+
+PETS = {p.id: p for p in (CAT, FROG, TURTLE, MUSHROOM, SLIME, SOFA, OCTOPUS, DRAGON,
+                         FOX, OWL, MOLE, SNAKE, GHOST, SPIDER, ANT, AXOLOTL)}
 
 
 def get(pet_id):
