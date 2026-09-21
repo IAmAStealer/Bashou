@@ -284,6 +284,26 @@ class AdventureShellTest(unittest.TestCase):
                 sh.close()
 
 
+    def test_chest_opens_a_shell_and_comes_back(self):
+        adv = {"chapter": 1, "leg": 0, "topic": "bash", "segment": 1, "distance": 80.0, "leg_start": 0.0,
+               "phase": "chest", "walked": 80.0}
+        with tempfile.TemporaryDirectory() as tmp:
+            sh = Shell(tmp, ["python3", "-m", "bashou", "adventure"], state={"starter": "pebble", "adventure": adv})
+            try:
+                self.assertTrue(sh.expect(b"shell trick"))
+                sh.send("\r", 0)
+                self.assertTrue(sh.expect(b"arena $"))              # a real shell in the sandbox
+                sh.send("flee\n", 0)
+                self.assertTrue(sh.expect(b"stays shut"))           # back in the game
+                sh.send("\r", 0.3)
+                sh.send("s", 0)
+                self.assertTrue(sh.expect(b"Adventure saved"))
+                self.assertNotIn(b"Traceback", sh.out)
+                self.assertEqual(sh.state()["adventure"]["segment"], 2)   # the chest is behind us
+            finally:
+                sh.close()
+
+
 class SecurityShellTest(unittest.TestCase):
     def test_solve_a_security_challenge(self):
         with tempfile.TemporaryDirectory() as tmp:

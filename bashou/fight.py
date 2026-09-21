@@ -135,7 +135,9 @@ def cmd_answer(base, value):
     meta = load_meta(base)
     ch = challenges.BY_ID[meta["challenge"]]
     if not ch.check(Path(base) / "arena", meta, value):
-        if ch.kind == "security":
+        if ch.kind == "trial":
+            print(BAD + "✗ " + _("Not yet: the chest is still locked.") + f"{RESET} {DIM}(hint · task · flee){RESET}")
+        elif ch.kind == "security":
             print(BAD + "✗ " + _("Not quite. Keep looking.") + f"{RESET} {DIM}(hint · task · flee){RESET}")
         else:
             print(BAD + "✗ " + _("Not quite. The {threat} shrugs it off.").format(threat=_(ch.threat))
@@ -153,7 +155,7 @@ def cmd_hint(base):
     meta = load_meta(base)
     ch = challenges.BY_ID[meta["challenge"]]
     i = min(meta.get("hints", 0), len(ch.hints) - 1)
-    print(f"{ACCENT}💡 {_(ch.hints[i])}{RESET}")
+    print(f"{ACCENT}💡 {ch.hint_text(i, meta)}{RESET}")
     meta["hints"] = i + 1
     (Path(base) / "meta.json").write_text(json.dumps(meta))
     return 0
@@ -176,14 +178,14 @@ def banner(ch, task):
             "  flee             " + _("run away (the threat will come back)") + "\n")
 
 
-def arena(ch, intro):
+def arena(ch, intro, rng=None):
     """Run the sandbox bash for `ch`. `intro(task_text)` is printed first. Returns (won, notes)."""
     base = Path(tempfile.mkdtemp(prefix="bashou-arena-"))
     work = base / "arena"
     work.mkdir()
     meta = {"challenge": ch.id, "hints": 0}
     try:
-        meta.update(ch.setup(work, random.Random()))
+        meta.update(ch.setup(work, rng or random.Random()))
         (base / "meta.json").write_text(json.dumps(meta))
         (base / "arena.rc").write_text(RC)
         print(intro(ch.task_text(meta)))

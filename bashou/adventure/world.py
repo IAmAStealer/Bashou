@@ -46,7 +46,7 @@ def chapter(n):
 def new():
     return {"chapter": 1, "leg": 0, "topic": None, "segment": 0, "distance": 0.0, "leg_start": 0.0,
             "hearts": HEARTS, "levels": {}, "seen": [], "bosses": [], "walked": 0.0, "phase": "intro",
-            "flawless": True, "chapters_done": 0}
+            "flawless": True, "chapters_done": 0, "trials": []}
 
 
 def level(adv, topic):

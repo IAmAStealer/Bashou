@@ -133,6 +133,34 @@ class GameTest(unittest.TestCase):
         self.assertEqual((adv["chapter"], adv["leg"], adv["phase"]), (2, 0, "intro"))
         self.assertEqual(len(world.fork_options(adv)), 3)
 
+    def test_chest_is_a_shell_trial(self):
+        g = self.game
+        self.go("\r", "\r")
+        g.adv["phase"] = "chest"
+        g.start_event("chest", 0)
+        self.assertEqual(g.trial.kind, "trial")
+        self.assertEqual(g.trial.level, 1)                          # chapter 1: easy ones
+        self.assertTrue(any("shell trick" in text for text, _ in g.panel(0)))
+        g.key("\r", 0)
+        self.assertIs(g.pending_trial, g.trial)                     # main() opens the shell
+        g.adv["hearts"] = 2
+        g.trial_done(True, ["🏆 Something"])
+        self.assertEqual(g.adv["hearts"], 3)
+        self.assertIn(g.trial.id, g.adv["trials"])
+        self.assertIn("🏆 Something", g.result[1])
+        g.close_result(0)
+        self.assertEqual(g.adv["phase"], "walk")
+
+    def test_leave_a_chest(self):
+        g = self.game
+        self.go("\r", "\r")
+        g.adv["phase"] = "chest"
+        g.start_event("chest", 0)
+        g.key(" ", 0)
+        self.assertIsNone(g.pending_trial)
+        g.close_result(0)
+        self.assertEqual(g.adv["phase"], "walk")
+
     def test_old_save_keeps_its_meters(self):
         with state.locked() as s:
             s["adventure"] = {"distance": 42.0}

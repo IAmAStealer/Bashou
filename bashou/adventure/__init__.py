@@ -11,8 +11,9 @@ import sys
 import termios
 import time
 import tty
+from pathlib import Path
 
-from .. import progress, render, state
+from .. import challenges, fight, progress, render, state
 from ..i18n import _
 from . import canvas, quiz, scene, sprites, world
 
@@ -61,6 +62,8 @@ class Game:
         self.result = None              # (good?, lines) after an answer
         self.boss = None                # {"left": questions left, "total", "deadline"}
         self.panel_rect = None
+        self.trial = None               # the chest's shell trial
+        self.pending_trial = None       # set when you open it: main() runs the sandbox shell
         if self.adv["phase"] in ("monster", "boss", "chest", "rest"):
             self.start_event(self.adv["phase"], time.time())   # an event you quit in: start it again
         self.resize(cols, rows)
@@ -82,13 +85,43 @@ class Game:
             self.boss = {"left": total, "total": total}
             self.question = self.ask(boss=True, now=now)
         elif kind == "chest":
-            healed = adv["hearts"] < world.HEARTS
-            adv["hearts"] = min(world.HEARTS, adv["hearts"] + 1)
-            self.result = (True, [_("A chest! Inside: a heart. ♥ +1") if healed else
-                                  _("A chest! Inside: a shiny pebble. Your pet looks very proud.")])
+            self.trial = self.pick_trial()
         elif kind == "rest":
             adv["hearts"] = world.HEARTS
             self.result = (True, [_("A campfire. Your pet naps a little: hearts full again.")])
+
+    def pick_trial(self):
+        """A shell trial for this chapter's level, one you haven't opened yet if possible."""
+        adv = self.adv
+        lvl = min(3, adv["chapter"])
+        pool = [t for t in challenges.TRIALS if t.level == lvl and t.available()]
+        fresh = [t for t in pool if t.id not in adv["trials"]]
+        return self.rng.choice(fresh or pool)
+
+    def trial_seed(self):
+        return f"{self.trial.id}:{self.adv['walked']:.1f}"
+
+    def trial_meta(self):
+        """Placeholders of the chest's task, so the box shows the same names as the shell will."""
+        if getattr(self, "_meta_for", None) != self.trial.id:
+            import tempfile
+            with tempfile.TemporaryDirectory() as tmp:
+                self._meta = self.trial.setup(Path(tmp), random.Random(self.trial_seed()))
+            self._meta_for = self.trial.id
+        return self._meta
+
+    def trial_done(self, won, notes):
+        adv = self.adv
+        if won:
+            if self.trial.id not in adv["trials"]:
+                adv["trials"].append(self.trial.id)
+            healed = adv["hearts"] < world.HEARTS
+            adv["hearts"] = min(world.HEARTS, adv["hearts"] + 1)
+            self.result = (True, [_("The chest opens! Inside: a heart. ♥ +1") if healed else
+                                  _("The chest opens! Inside: a shiny pebble. Your pet looks very proud.")] + notes)
+        else:
+            self.result = (False, [_("The chest stays shut. Maybe next time.")] + notes)
+        save(adv)
 
     def ask(self, boss=False, now=0.0):
         adv = self.adv
@@ -187,6 +220,11 @@ class Game:
                 self.walk_until = now + 0.3            # key repeat keeps it going while held
             elif k == " ":
                 self.auto = not self.auto
+        elif phase == "chest" and not self.result:
+            if k in ENTER:
+                self.pending_trial = self.trial
+            elif k == " ":
+                self.result = (False, [_("You leave the chest behind.")])
         elif phase == "chapter_end" and k in ENTER:
             world.next_chapter(self.adv)
             save(self.adv)
@@ -290,6 +328,10 @@ class Game:
                 mark = "▶ " if i == self.choice else "  "
                 out.append((f"{mark}{'ABCD'[i]}. {choice}", ACCENT if i == self.choice else PANEL_FG))
             return out
+        if phase == "chest" and self.trial:
+            return [(_("A locked chest! It opens with a shell trick:"), ACCENT),
+                    (self.trial.task_text(self.trial_meta()), PANEL_FG), ("", PANEL_FG),
+                    (_("Enter: open it (a real shell opens) · space: leave it"), ACCENT)]
         if phase == "chapter_end":
             nxt = world.chapter(adv["chapter"] + 1)
             return [(_("Chapter {n} complete!").format(n=adv["chapter"]), GOOD),
@@ -361,6 +403,9 @@ def main():
                 out.write(f"{ESC}[2J")
             game.update(now - last, now)
             last = now
+            if game.pending_trial:
+                run_trial(game, fd, old, out)
+                continue
             out.write(game.draw(now - start, now) + game.hud())
             out.flush()
             if select.select([fd], [], [], 1 / FPS)[0]:
@@ -377,6 +422,29 @@ def main():
     print("  " + _("Adventure saved: chapter {n}, {m} m walked. Come back with: bashou adventure").format(
         n=game.adv["chapter"], m=int(game.adv["walked"])))
     return 0
+
+
+def run_trial(game, fd, old, out):
+    """Leave the game screen for a real sandbox shell, then come back where we were."""
+    trial, game.pending_trial = game.pending_trial, None
+    termios.tcsetattr(fd, termios.TCSADRAIN, old)
+    out.write(f"{ESC}[0m{ESC}[?25h{ESC}[?1049l")
+    out.flush()
+    won, notes = fight.arena(trial, lambda task: trial_intro(task), random.Random(game.trial_seed()))
+    tty.setcbreak(fd)
+    out.write(f"{ESC}[?1049h{ESC}[?25l{ESC}[2J")
+    game.canvas.shown = {}                     # the whole screen is drawn again
+    game.trial_done(won, notes)
+
+
+def trial_intro(task):
+    b, d, r = "\033[1m", "\033[2m", "\033[0m"
+    return (f"\n{b}🧰 " + _("A locked chest!") + f"{r}\n\n{task}\n\n"
+            f"{d}" + _("A real shell, in a sandbox folder. Commands:") + f"{r}\n"
+            "  answer           " + _("check (answer <value> when there's a question)") + "\n"
+            "  hint             " + _("get a hint") + "\n"
+            "  task             " + _("show the task again") + "\n"
+            "  flee             " + _("leave the chest and go back to the adventure") + "\n")
 
 
 def split_keys(data):

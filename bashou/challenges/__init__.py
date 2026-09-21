@@ -9,6 +9,13 @@ from dataclasses import dataclass, field
 from typing import Callable, Optional
 
 
+def fill(text, meta):
+    """Put meta["args"] into {placeholders}, leaving other braces alone (awk '{print $1}')."""
+    for key, value in meta.get("args", {}).items():
+        text = text.replace("{" + key + "}", str(value))
+    return text
+
+
 @dataclass
 class Challenge:
     id: str
@@ -31,7 +38,11 @@ class Challenge:
 
     def task_text(self, meta):
         from ..i18n import _
-        return _(self.task).format(**meta.get("args", {}))
+        return fill(_(self.task), meta)
+
+    def hint_text(self, i, meta):
+        from ..i18n import _
+        return fill(_(self.hints[i]), meta)
 
     def used_by(self, analysis):
         return self.uses(analysis) if self.uses else bool(analysis.tools & set(self.tools))
@@ -45,9 +56,10 @@ class Challenge:
         return all(shutil.which(t) for t in (self.requires or [self.tool]))
 
 
-from . import find, grep, awk, pipe, ps, sed, security, uniq  # noqa: E402
+from . import find, grep, awk, pipe, ps, sed, security, trials, uniq  # noqa: E402
 
 ALL = [grep.CHALLENGE, awk.CHALLENGE, find.CHALLENGE, uniq.CHALLENGE, sed.CHALLENGE, ps.CHALLENGE,
        pipe.CHALLENGE]              # fights, sent as threats
 SECURITY = security.SECURITY        # `bashou security`, in order
-BY_ID = {c.id: c for c in ALL + SECURITY}
+TRIALS = trials.TRIALS              # locked chests in `bashou adventure`
+BY_ID = {c.id: c for c in ALL + SECURITY + TRIALS}

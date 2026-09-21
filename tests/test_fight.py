@@ -24,6 +24,20 @@ SOLUTIONS = {
     "recent_change": ("find site -type f -mmin -10", None),
     "cron_backdoor": ("grep -rh '| *sh' etc/cron.d | grep -oE 'https?://[^/]+' | cut -d/ -f3", None),
     "suid_file": ("find bin -perm -4000 -type f", None),
+    # adventure chests
+    "trial_dirs": ("mkdir -p {x}", r"folders (\S+)"),
+    "trial_note": ("echo {x} > map.txt", r"the word (\w+)"),
+    "trial_move": ("mv key.txt chest/", None),
+    "trial_copy": ("cp -r scroll backup", None),
+    "trial_rename": ("mv rusty_sword.txt shiny_sword.txt", None),
+    "trial_clean": ("rm *.tmp", None),
+    "trial_spell": ("chmod u+x spell.sh && ./spell.sh > /dev/null", None),
+    "trial_link": ("ln -s camp/tent home", None),
+    "trial_journal": ("echo rested >> journal.txt", None),
+    "trial_gems": ("find cave -name '*.gem' | wc -l", None),
+    "trial_loot": ("tar czf loot.tar.gz loot", None),
+    "trial_letter": ("sed -i 's/dragon/friend/g' letter.txt", None),
+    "trial_scrolls": ("grep -rl treasure library", None),
 }
 
 
@@ -32,7 +46,7 @@ class ChallengeTest(unittest.TestCase):
         self.assertEqual(set(SOLUTIONS), set(challenges.BY_ID))
 
     def test_reference_solutions(self):
-        for ch in challenges.ALL + challenges.SECURITY:
+        for ch in challenges.ALL + challenges.SECURITY + challenges.TRIALS:
             if not ch.available():
                 continue
             for seed in range(3):
@@ -71,6 +85,21 @@ class ChallengeTest(unittest.TestCase):
             self.assertFalse(fight.used_tool(base, ch))
             log.write_text(log.read_text() + "0\t    3  grep -c ERROR app.log | head\n")
             self.assertTrue(fight.used_tool(base, ch))
+
+
+class TrialTest(unittest.TestCase):
+    def test_doing_nothing_fails(self):
+        for ch in challenges.TRIALS:
+            with tempfile.TemporaryDirectory() as tmp:
+                meta = ch.setup(Path(tmp), random.Random(0))
+                self.assertFalse(ch.check(Path(tmp), meta, ""), ch.id)
+
+    def test_hints_show_the_real_names(self):
+        ch = challenges.BY_ID["trial_dirs"]
+        meta = ch.setup(Path("."), random.Random(0))
+        self.assertIn(meta["args"]["path"], ch.hint_text(1, meta))
+        awk = challenges.BY_ID["failed_logins"]
+        self.assertIn("{print $(NF-3)}", awk.hint_text(1, {}))     # other braces untouched
 
 
 class SecurityTest(unittest.TestCase):
