@@ -19,6 +19,7 @@ ACTIONS = {
     3: "dance, sparkle",
 }
 SLEEP_AFTER = (5 * 60, 15 * 60)    # idle seconds before falling asleep, drawn at random
+SWIM_EVERY = 12000                 # ms between two tail strokes of a swimming pet
 
 
 class Behavior:
@@ -53,16 +54,17 @@ class Behavior:
         elif ms >= self.end:
             self.next_mood(ms)
         has = pet.poses.__contains__
+        breathes = pet.idle == "breathe"
         poses, text = [], ""
         mood = self.mood
 
         if mood == "sleep":
-            if ms % 16000 < 7000:
+            if breathes and ms % 16000 < 7000:
                 poses.append("inhale")
             poses.append("closed")
             text = ["", "z", "z Z"][ms // 2500 % 3]
         else:
-            if ms % 10000 < 4000:
+            if breathes and ms % 10000 < 4000:
                 poses.append("inhale")
             if mood == "awake":
                 if self.rng.randrange(40) == 0:
@@ -90,10 +92,11 @@ class Behavior:
                 text = ["✦", " ✧", "✦ ✧", "  ✦"][ms // 500 % 4]
         if ms < self.tail_end:
             poses.append("tail_up")
-        if has("swim_up") and mood != "sleep":      # a tadpole's tail never stops: mid, up, mid, down
-            phase = ms // 1200 % 4    # slow: 1.2 s per position, not to distract
-            if phase % 2:
-                poses.append("swim_up" if phase == 1 else "swim_down")
+        if pet.idle == "swim" and mood != "sleep":
+            # One slow stroke (up, mid, down), then a long glide, not to distract.
+            stroke = ms % SWIM_EVERY // 1500
+            if stroke in (0, 2):
+                poses.append("swim_up" if stroke == 0 else "swim_down")
         if ms < self.fidget_end and mood == "awake":
             poses.append("fidget")
         if threat and mood != "sleep":

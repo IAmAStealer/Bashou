@@ -33,6 +33,7 @@ class Pet:
     stages: dict = field(default_factory=dict)   # stage number -> extra pixels (cumulative)
     z_at: tuple = (0, 13)       # terminal row / column of the 3-cell particle spot (z, ♪, ✦)
     unlock: str = ""            # human hint shown on the board
+    idle: str = "breathe"       # what it does when nothing happens: "breathe" (inhale) or "swim" (swim_up/down)
 
     @property
     def width(self):
@@ -820,12 +821,12 @@ aooloooooooatttt.
         # Swimming: the tail sways a row up, back, a row down, back; the tip moves, the root stays.
         "swim_up": pixels("6,14,t 6,15,t 7,16,. 8,15,. 8,14,t"),
         "swim_down": pixels("7,15,. 7,16,. 8,16,t 9,14,t 9,15,t"),
-        "inhale": pixels("2,5,a 2,6,a 2,7,a 3,5,o 3,6,o 3,7,o"),
         "closed": pixels("5,3,o 5,4,o 6,3,a 6,4,a"),
         "left": pixels("6,3,m 6,4,w"),
         "right": pixels("5,4,m 6,4,w"),
     },
     z_at=(0, 12),
+    idle="swim",
 )
 
 # Pets whose first stage is another animal: the sprite of each stage.

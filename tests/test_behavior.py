@@ -35,13 +35,16 @@ class BehaviorTest(unittest.TestCase):
         self.assertGreaterEqual(b.sleep_after, 5 * 60_000)
         self.assertLessEqual(b.sleep_after, 15 * 60_000)
 
-    def test_tadpole_tail_sways_up_and_down(self):
+    def test_tadpole_swims_instead_of_breathing(self):
         b = Behavior(random.Random(4))
 
         def tail(ms):
             poses = b.frame(ms, creatures.TADPOLE)[0]
+            self.assertNotIn("inhale", poses)
             return "up" if "swim_up" in poses else "down" if "swim_down" in poses else "mid"
-        self.assertEqual([tail(ms) for ms in range(0, 9600, 1200)], ["mid", "up", "mid", "down"] * 2)
+        # One slow stroke, then a long glide, again and again.
+        self.assertEqual([tail(ms) for ms in range(0, 24000, 1500)],
+                         (["up", "mid", "down"] + ["mid"] * 5) * 2)
 
     def test_every_pet_can_do_everything(self):
         for pet in creatures.PETS.values():

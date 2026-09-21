@@ -23,7 +23,8 @@ class CreaturesTest(unittest.TestCase):
 
     def test_every_pet_blinks_looks_and_fidgets(self):
         for pet in creatures.PETS.values():
-            for pose in ("inhale", "closed", "left", "right", "fidget"):
+            idle = ("inhale",) if pet.idle == "breathe" else ("swim_up", "swim_down")
+            for pose in (*idle, "closed", "left", "right", "fidget"):
                 self.assertIn(pose, pet.poses, f"{pet.id} has no {pose}")
 
     def test_roster_has_stage_names(self):
