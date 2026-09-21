@@ -22,7 +22,12 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Unit and shell tests
-        run: python -m unittest -v
+        run: |
+          python -m unittest -v 2> tests.log && exit 0
+          cat tests.log
+          # Failures as an annotation too: visible on the run's summary page.
+          python -c "import sys; t = open('tests.log').read(); t = t[t.find('====='):][:6000] or t[-6000:]; print('::error title=Tests failed::' + t.replace('%', '%25').replace('\r', '').replace('\n', '%0A'))"
+          exit 1
 
   security:
     runs-on: ubuntu-latest
