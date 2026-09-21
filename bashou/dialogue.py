@@ -149,6 +149,29 @@ INVITES = {
 }
 
 
+# A first look at a tool, before its fight can come (see fight.to_discover).
+DISCOVER = {
+    "awk": ["Meet awk: `awk '{print $1}' file` prints the first word of each line.",
+            "awk splits lines into columns: $1, $2… `awk -F, '{print $2}' data.csv` for CSV."],
+    "uniq": ["`sort file | uniq -c` counts how many times each line appears."],
+    "sed": ["sed replaces text: `sed 's/old/new/g' file` (add -i to edit the file)."],
+    "|": ["Pipes chain commands: `ls | wc -l` counts the files here."],
+    "find": ["`find . -name '*.log'` looks for files in every folder below."],
+    "ps": ["`ps aux` lists every running process with its PID."],
+}
+
+
+def discover(state, rng):
+    from . import fight
+    tools = [t for t in fight.to_discover(state) if t in DISCOVER]
+    if not tools:
+        return None
+    from .adventure import lessons
+    tool = rng.choice(tools)
+    taught = any(le["tool"] == tool for le in lessons.LESSONS)
+    return _(rng.choice(DISCOVER[tool])) + (" " + _("(bashou adventure teaches it too)") if taught else "")
+
+
 def invite(state, rng):
     """Suggest a mode you haven't tried yet (None once you tried them all)."""
     todo = [mode for mode, tried in (("adventure", state.get("adventure")), ("security", state.get("security")))
@@ -165,7 +188,7 @@ def line(state, pet, rng=random):
     earned = set(state["achievements"])
     traits = [t for trait, lines in TRAITS.items() if trait in earned for t in lines]
     pools = [(hint(state, pet, rng), 4), (rng.choice(TIPS[pet]), 4),
-             (rng.choice(traits + PERSONAL[pet]), 2), (invite(state, rng), 3)]
+             (rng.choice(traits + PERSONAL[pet]), 2), (invite(state, rng), 3), (discover(state, rng), 4)]
     pools = [(text, w) for text, w in pools if text]
     text = rng.choices([t for t, w in pools], [w for t, w in pools])[0]
     return f"{_(VOICE[pet])} {_(text)}"

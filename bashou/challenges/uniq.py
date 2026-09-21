@@ -14,7 +14,7 @@ def setup(work, rng):
 
 
 CHALLENGE = Challenge(
-    id="uniq_swarm", pet="sofa", tools=("uniq",), threat="Echo Swarm",
+    level=2, id="uniq_swarm", pet="sofa", tools=("uniq",), threat="Echo Swarm",
     task="The Echo Swarm repeats itself endlessly.\n"
          "Which IP address appears most often in visitors.txt?",
     hints=["uniq only merges adjacent lines, so sort first. `uniq -c` counts them.",

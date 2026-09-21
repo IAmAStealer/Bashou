@@ -38,6 +38,9 @@ SOLUTIONS = {
     "trial_loot": ("tar czf loot.tar.gz loot", None),
     "trial_letter": ("sed -i 's/dragon/friend/g' letter.txt", None),
     "trial_scrolls": ("grep -rl treasure library", None),
+    "trial_awk_names": ("awk '{{print $1}}' people.txt > names.txt", None),
+    "trial_awk_sum": ("awk '{{s += $2}} END {{print s}}' prices.txt", None),
+    "trial_pipe_cities": ("awk '{{print $3}}' people.txt | sort -u | wc -l", None),
 }
 
 
@@ -117,6 +120,36 @@ class SecurityTest(unittest.TestCase):
         s = state.default()
         s["challenges"] = [c.id for c in challenges.ALL]
         self.assertIsNone(fight.maybe_threat(s, ThreatTest.Always(), 1_800_000_000))
+
+
+class OrderTest(unittest.TestCase):
+    """The Knot Eel came to a beginner: it needs pipes, uniq and more (owner's bug report)."""
+
+    def test_beginners_get_level_1_fights_only(self):
+        s = state.default()
+        ready = {ch.id for ch in challenges.ALL if fight.ready(s, ch)}
+        self.assertEqual(ready, {"grep_hydra", "find_wraith", "ps_phantom"})
+
+    def test_harder_fights_after_their_tool_and_their_basics(self):
+        s = state.default()
+        s["tools"]["awk"] = 1
+        self.assertFalse(fight.ready(s, challenges.BY_ID["awk_golem"]))        # grep fight first
+        s["challenges"].append("grep_hydra")
+        self.assertTrue(fight.ready(s, challenges.BY_ID["awk_golem"]))
+        eel = challenges.BY_ID["pipe_eel"]
+        s["challenges"].append("uniq_swarm")
+        self.assertFalse(fight.ready(s, eel))                                  # never piped 3 commands
+        s["adventure"] = {"lessons": ["pipes"]}                                # the owl's lesson counts
+        self.assertTrue(fight.ready(s, eel))
+
+    def test_pets_hint_the_tool_before_its_fight(self):
+        from bashou import dialogue
+        s = state.default()
+        s["challenges"] = ["grep_hydra", "find_wraith", "ps_phantom"]
+        self.assertIn("awk", fight.to_discover(s))
+        said = " ".join(dialogue.discover(s, random.Random(i)) or "" for i in range(30))
+        self.assertIn("awk '{print $1}'", said)
+        self.assertIn("adventure teaches it", said)
 
 
 class ThreatTest(unittest.TestCase):

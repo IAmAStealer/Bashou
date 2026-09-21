@@ -31,6 +31,7 @@ class Challenge:
     requires: list = field(default_factory=list)   # executables needed on this system
     level: int = 1            # 1 easy, 2 medium, 3 hard
     kind: str = "fight"       # "fight": sent as a threat; "security": picked in `bashou security`
+    after: tuple = ()         # fights to beat before this one comes (beginners first)
 
     @property
     def tool(self):

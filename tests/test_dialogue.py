@@ -19,7 +19,7 @@ class DialogueTest(unittest.TestCase):
         for pet, _ in ROSTER:
             for _ in range(50):
                 text = dialogue.line(s, pet, rng)
-                self.assertLessEqual(render.width(text), 90, text)
+                self.assertLessEqual(render.width(text), 130, text)     # bubbles wrap on up to 4 lines
                 self.assertNotIn("\n", text)
 
     def test_hint_points_to_the_family_first(self):

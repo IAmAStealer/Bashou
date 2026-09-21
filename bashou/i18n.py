@@ -78,7 +78,7 @@ def messages():
         found += _calls(path)
     for a in achievements.ALL:
         found += [a.name, a.how]
-    for table in (dialogue.TIPS, dialogue.PERSONAL, dialogue.TRAITS, dialogue.INVITES):
+    for table in (dialogue.TIPS, dialogue.PERSONAL, dialogue.TRAITS, dialogue.INVITES, dialogue.DISCOVER):
         for lines in table.values():
             found += lines
     found += dialogue.TYPO_FIX + dialogue.TYPO_NONE + list(dialogue.VOICE.values())
@@ -90,6 +90,9 @@ def messages():
         found += names
     found += list(behavior.ACTIONS.values())
     from . import progress
+    from .adventure import lessons
+    for lesson in lessons.LESSONS:
+        found += [lesson["title"]] + [text for text, example in lesson["pages"]]
     found += list(progress.CONSTRUCT_NAMES.values()) + [how for rule, how in progress.STATE_PETS.values()]
     for ch in challenges.ALL + challenges.SECURITY + challenges.TRIALS:
         found += [ch.threat, ch.task, *ch.hints]

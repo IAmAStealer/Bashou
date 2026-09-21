@@ -15,7 +15,8 @@ from pathlib import Path
 
 from .. import challenges, fight, progress, render, state
 from ..i18n import _
-from . import canvas, quiz, scene, sprites, world
+from .. import creatures
+from . import canvas, lessons, quiz, scene, sprites, world
 
 ESC = "\x1b"
 FPS = 15
@@ -66,7 +67,8 @@ class Game:
         self.panel_rect = None
         self.trial = None               # the chest's shell trial
         self.pending_trial = None       # set when you open it: main() runs the sandbox shell
-        if self.adv["phase"] in ("monster", "boss", "chest", "rest"):
+        self.page = 0                   # lesson page
+        if self.adv["phase"] in ("monster", "boss", "chest", "rest", "lesson"):
             self.start_event(self.adv["phase"], time.time())   # an event you quit in: start it again
         self.resize(cols, rows)
 
@@ -88,6 +90,8 @@ class Game:
             self.question = self.ask(boss=True, now=now)
         elif kind == "chest":
             self.trial = self.pick_trial()
+        elif kind == "lesson":
+            self.page = 0
         elif kind == "rest":
             adv["hearts"] = world.HEARTS
             self.result = (True, [_("A campfire. Your pet naps a little: hearts full again.")])
@@ -95,8 +99,14 @@ class Game:
     def pick_trial(self):
         """A shell trial for this chapter's level, one you haven't opened yet if possible."""
         adv = self.adv
+        taught = lessons.BY_ID.get(adv.get("path_lesson") or "")
+        if taught and taught["id"] in adv["lessons"]:        # just learned: practice it now
+            pool = [t for t in challenges.TRIALS if taught["tool"] in t.tools and t.available()]
+            fresh = [t for t in pool if t.id not in adv["trials"]]
+            if pool:
+                return self.rng.choice(fresh or pool)
         lvl = min(3, adv["chapter"])
-        pool = [t for t in challenges.TRIALS if t.level == lvl and t.available()]
+        pool = [t for t in challenges.TRIALS if t.level == lvl and not t.tools and t.available()]
         fresh = [t for t in pool if t.id not in adv["trials"]]
         return self.rng.choice(fresh or pool)
 
@@ -173,7 +183,7 @@ class Game:
     def close_result(self, now):
         adv = self.adv
         self.result = None
-        if adv["phase"] in ("monster", "chest", "rest"):
+        if adv["phase"] in ("monster", "chest", "rest", "lesson"):
             world.event_done(adv)
         elif adv["phase"] == "boss" and self.boss:            # next boss question
             self.question = self.ask(boss=True, now=now)
@@ -221,6 +231,13 @@ class Game:
                 self.walk_until = now + 0.3            # key repeat keeps it going while held
             elif k == " ":
                 self.auto = not self.auto
+        elif phase == "lesson" and (k in ENTER or k == " "):
+            lesson = lessons.BY_ID[adv["path_lesson"]]
+            self.page += 1
+            if self.page >= len(lesson["pages"]):
+                if lesson["id"] not in adv["lessons"]:
+                    adv["lessons"].append(lesson["id"])
+                self.result = (True, [_("The owl nods: now try it, the next chest uses it.")] + save(adv))
         elif phase == "chest" and not self.result:
             if k in ENTER:
                 self.pending_trial = self.trial
@@ -272,7 +289,7 @@ class Game:
         elif phase == "walk":
             kind = world.events(adv)[adv["segment"]]
             rel = world.next_event_at(adv) - adv["distance"] + 3
-        elif phase in ("monster", "boss", "chest", "rest"):
+        elif phase in ("monster", "boss", "chest", "rest", "lesson"):
             kind, rel = phase, 3.0 if phase != "boss" else 2.2
         else:
             return
@@ -281,6 +298,7 @@ class Game:
         rows, palette = {
             "monster": lambda: sprites.monster(adv["topic"]), "boss": lambda: sprites.boss(adv["topic"]),
             "chest": lambda: sprites.CHEST, "rest": lambda: sprites.CAMPFIRE, "fork": lambda: sprites.SIGNPOST,
+            "lesson": lambda: (creatures.OWL.base, creatures.OWL.palette),
         }[kind]()
         bob = 1 if kind in ("monster", "boss") and int(t * 3) % 2 else 0
         if room:
@@ -329,6 +347,13 @@ class Game:
                 mark = "▶ " if i == self.choice else "  "
                 out.append((f"{mark}{'ABCD'[i]}. {choice}", ACCENT if i == self.choice else PANEL_FG))
             return out
+        if phase == "lesson":
+            lesson = lessons.BY_ID[adv["path_lesson"]]
+            text, example = lesson["pages"][min(self.page, len(lesson["pages"]) - 1)]
+            return [(_("🦉 The Sage Owl teaches: {title} ({n}/{total})").format(
+                        title=_(lesson["title"]), n=self.page + 1, total=len(lesson["pages"])), ACCENT),
+                    (_(text), PANEL_FG), ("", PANEL_FG), (f"  $ {example}", GOOD), ("", PANEL_FG),
+                    (_("Enter: next"), ACCENT)]
         if phase == "chest" and self.trial:
             return [(_("A locked chest! It opens with a shell trick:"), ACCENT),
                     (self.trial.task_text(self.trial_meta()), PANEL_FG), ("", PANEL_FG),

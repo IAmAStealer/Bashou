@@ -15,6 +15,8 @@ permissions:
 jobs:
   checks:
     uses: ./.github/workflows/ci.yml
+    permissions:
+      contents: write  # ci.yml's own release job needs it (skipped here)
 
   release:
     needs: checks

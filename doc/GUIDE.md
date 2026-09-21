@@ -101,9 +101,9 @@ Every push runs the tests (Python 3.9 and 3.13) and the security checks:
   the whole history), **CodeQL** (GitHub code scanning, also weekly).
 - The GitHub Actions are pinned to a commit, and Dependabot proposes their updates.
 
-A release is made from *Actions → Release → Run workflow* with a version number. The workflow runs
-every check first and only then creates the `vX.Y.Z` tag and the GitHub release. Pets only offer
-these tags, never a plain commit on `main`.
+To release, push a commit to `main` whose message has a line `release: v1.2.3`. Once the tests and
+security checks pass, CI creates the `v1.2.3` tag and the GitHub release (*Actions → Release → Run
+workflow* does the same by hand). Pets only offer these tags, never a plain commit on `main`.
 
 ## Contributing
 

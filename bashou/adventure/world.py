@@ -7,6 +7,8 @@ boss question, or all your hearts): back to the checkpoint, and you may pick ano
 
 import random
 
+from . import lessons
+
 SEGMENT = 40.0          # world units between two events
 HEARTS = 3
 
@@ -46,7 +48,7 @@ def chapter(n):
 def new():
     return {"chapter": 1, "leg": 0, "topic": None, "segment": 0, "distance": 0.0, "leg_start": 0.0,
             "hearts": HEARTS, "levels": {}, "seen": [], "bosses": [], "walked": 0.0, "phase": "intro",
-            "flawless": True, "chapters_done": 0, "trials": []}
+            "flawless": True, "chapters_done": 0, "trials": [], "lessons": []}
 
 
 def level(adv, topic):
@@ -65,7 +67,17 @@ def events(adv):
     ch = chapter(adv["chapter"])
     rng = random.Random(f"path:{adv['chapter']}:{adv['leg']}:{adv['topic']}")
     kinds = ["monster"] + [rng.choice(["monster", "monster", "chest", "rest"]) for _ in range(ch["segments"] - 1)]
+    if lesson(adv) and len(kinds) >= 3:
+        kinds[1:3] = ["lesson", "chest"]                  # learn it, then use it right away
     return kinds + ["boss"]
+
+
+def lesson(adv):
+    """The lesson waiting on this path: fixed when the path is chosen, so the road doesn't change."""
+    if adv.get("path_lesson") is None and adv["topic"]:
+        found = lessons.next_for(adv["topic"], adv.get("lessons", []))
+        adv["path_lesson"] = found["id"] if found else ""
+    return adv.get("path_lesson") or None
 
 
 def next_event_at(adv):
@@ -81,7 +93,8 @@ def biome(adv, distance=None):
 
 
 def choose(adv, topic):
-    adv.update(topic=topic, segment=0, phase="walk", flawless=True)
+    adv.update(topic=topic, segment=0, phase="walk", flawless=True, path_lesson=None)
+    lesson(adv)
 
 
 def walk(adv, units):
@@ -114,7 +127,7 @@ def lose_heart(adv):
 
 
 def back_to_checkpoint(adv):
-    adv.update(distance=adv["leg_start"], topic=None, segment=0, hearts=HEARTS, phase="fork")
+    adv.update(distance=adv["leg_start"], topic=None, segment=0, hearts=HEARTS, phase="fork", path_lesson=None)
 
 
 def boss_won(adv):

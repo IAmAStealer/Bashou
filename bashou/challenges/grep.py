@@ -16,7 +16,7 @@ def setup(work, rng):
 
 
 CHALLENGE = Challenge(
-    id="grep_hydra", pet="mole", tools=("grep", "egrep", "rg"), threat="Log Hydra",
+    level=1, id="grep_hydra", pet="mole", tools=("grep", "egrep", "rg"), threat="Log Hydra",
     task="The Log Hydra grows a head for every [ERROR] line in app.log.\n"
          "How many lines contain [ERROR]? (lowercase \"error\" doesn't count)",
     hints=["grep can count matching lines by itself: look at `grep -c`.",

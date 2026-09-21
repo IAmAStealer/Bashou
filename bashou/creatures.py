@@ -90,7 +90,7 @@ STAGES = {
     "bat": ("Batling", "Bat", "Night bat"),
     "gremlin": ("Gremlin", "Reformed gremlin", "Shell guardian"),
     "snail": ("Wanderer", "Knight snail", "Paladin snail"),
-    "frog": ("Tadpole", "Frog", "Frog prince"),
+    "frog": ("Froglet", "Frog", "Frog prince"),
     "turtle": ("Hatchling", "Turtle", "Elder turtle"),
     "mushroom": ("Spore", "Mushroom", "Glowshroom"),
     "slime": ("Droplet", "Slime", "King slime"),
@@ -781,28 +781,20 @@ bbbbbbbbbbbbbbb..
 
 BAT = Pet(
     id="bat", name="Bat",
-    base=sprite("""
-.................
-.....a.....a.....
-W....aa...aa....W
-WW..aoooooooa..WW
-WWWaoooeoeoooaWWW
-WWWaoowmomwooaWWW
-WWWWaoooooooaWWWW
-.WWWaopowopoaWWW.
-.W.WaoooooooaW.W.
-....WaaoooaaW....
-......a.a.a......
-.................
-"""),
-    palette={"W": (70, 55, 95), "a": (90, 75, 120), "o": (125, 105, 160), "m": (25, 25, 25), "w": (255, 255, 255), "p": (255, 170, 190), "e": (245, 225, 245)},
+    base=[h + h[:8][::-1] for h in [
+        ".........", "...a.....", "...aa....", "...aoaaaa", "W..aooooo", "WV.aowwoo",
+        "WVVaowmoo", "WVVVapoon", "WWVVaoeee", ".W.W.aeee", ".....aooo", "......a..",
+    ]],
+    palette={"a": (90, 75, 120), "o": (140, 120, 180), "e": (205, 190, 230), "w": (255, 255, 255),
+             "m": (25, 25, 25), "p": (255, 165, 190), "n": (70, 45, 70), "W": (70, 55, 95), "V": (115, 95, 150)},
     poses={
-        "inhale": pixels("7,0,W 7,16,W"),
-        "closed": pixels("4,7,o 4,9,o 5,7,a 5,9,a"),
-        "left": pixels("5,6,m 5,7,w"),
-        "right": pixels("5,9,w 5,10,m"),
-        "fidget": pixels("2,0,. 2,16,. 3,0,. 3,16,. 8,1,. 8,15,."),
+        "inhale": pixels("3,0,W 3,16,W"),
+        "closed": pixels("5,5,o 5,6,o 5,10,o 5,11,o 6,5,a 6,6,a 6,10,a 6,11,a"),
+        "left": pixels("6,5,m 6,6,w 6,10,m 6,11,w"),
+        "right": pixels("6,5,w 6,6,m 6,10,w 6,11,m"),
+        "fidget": pixels("4,0,. 5,0,. 9,1,W 4,16,. 5,16,. 9,15,W"),
     },
+    z_at=(0, 14),
 )
 
 # Starters: chosen once, they level up with every 5 achievements and change shape at levels 4 and 7.

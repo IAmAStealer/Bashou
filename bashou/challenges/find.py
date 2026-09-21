@@ -24,7 +24,7 @@ def setup(work, rng):
 
 
 CHALLENGE = Challenge(
-    id="find_wraith", pet="fox", tools=("find",), threat="Maze Wraith",
+    level=1, id="find_wraith", pet="fox", tools=("find",), threat="Maze Wraith",
     task="The Maze Wraith hides in backup files.\n"
          "How many regular files ending in .bak are there in maze/, at any depth?\n"
          "(Careful: some directories are named *.bak too.)",

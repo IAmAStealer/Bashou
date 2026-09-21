@@ -58,6 +58,28 @@ def remaining(s):
     return [c for c in challenges.ALL if c.id not in s["challenges"] and c.available()]
 
 
+def learned(s, tool):
+    """You've met a tool: used it at least once, or had its lesson in `bashou adventure`."""
+    lessons = (s.get("adventure") or {}).get("lessons", [])
+    if tool == "|":
+        return s["constructs"].get("pipe3", 0) > 0 or "pipes" in lessons
+    return s["tools"].get(tool, 0) > 0 or tool in lessons
+
+
+def ready(s, ch):
+    """Beginners first: level 1 fights come anytime; harder ones once you've met their tool and
+    beaten the fights they build on (the Knot Eel needed pipes and uniq nobody had shown you)."""
+    if not all(a in s["challenges"] for a in ch.after):
+        return False
+    return ch.level == 1 or any(learned(s, t) for t in ch.tools)
+
+
+def to_discover(s):
+    """Tools of the next fights you can't get yet only because you haven't met them."""
+    return [ch.tool for ch in remaining(s)
+            if not ready(s, ch) and all(a in s["challenges"] for a in ch.after)]
+
+
 def threats_per_day(s):
     """About 3 a day at first, 1 later, fewer when the bank runs low, none when it's empty."""
     return max(1, min(3, 3 - level(s) // 3)) * min(1, len(remaining(s)) / 5)
@@ -82,7 +104,7 @@ def maybe_threat(s, rng=random, now=None):
         s["threat_day"] = {"date": today, "count": 0}
     if s["threat_day"]["count"] >= threats_per_day(s) or now - s["last_threat"] < 2 * 3600:
         return None
-    pool = remaining(s)
+    pool = [ch for ch in remaining(s) if ready(s, ch)]
     if not pool or rng.random() > 1 / 120:                 # one chance in 120 per 30 s at the prompt
         return None
     ch = rng.choice(pool)

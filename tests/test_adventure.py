@@ -180,6 +180,26 @@ class GameTest(unittest.TestCase):
         for aid in ("first_steps", "checkpoint", "flawless"):
             self.assertIn(aid, s["achievements"])
 
+    def test_owl_lesson_then_its_chest(self):
+        """awk was asked before anyone showed it: the Sage Owl teaches it first (owner's bug report)."""
+        g = self.game
+        g.adv["phase"] = "fork"
+        world.choose(g.adv, "bash")
+        self.assertEqual(world.events(g.adv)[1:3], ["lesson", "chest"])
+        g.adv["segment"] = 1
+        self.assertEqual(self.walk_to_event(), "lesson")
+        lesson = adventure.lessons.BY_ID[g.adv["path_lesson"]]
+        for _ in lesson["pages"]:
+            self.assertTrue(any("Sage Owl" in text for text, _ in g.panel(0)))
+            g.key("\r", 0)
+        self.assertIn(lesson["id"], g.adv["lessons"])
+        g.close_result(0)
+        self.assertEqual(self.walk_to_event(), "chest")
+        self.assertIn(lesson["tool"], g.trial.tools)                  # practice what you just learned
+        world.back_to_checkpoint(g.adv)
+        world.choose(g.adv, "bash")
+        self.assertNotEqual(g.adv["path_lesson"], lesson["id"])        # the next lesson, not the same
+
     def test_old_save_keeps_its_meters(self):
         with state.locked() as s:
             s["adventure"] = {"distance": 42.0}

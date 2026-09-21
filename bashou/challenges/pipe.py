@@ -19,7 +19,7 @@ def setup(work, rng):
 
 
 CHALLENGE = Challenge(
-    id="pipe_eel", pet="octopus", tools=("|",), threat="Knot Eel",
+    level=3, after=("grep_hydra", "uniq_swarm"), id="pipe_eel", pet="octopus", tools=("|",), threat="Knot Eel",
     task="The Knot Eel ties commands into knots. Untie it with one pipeline of at least 3 commands.\n"
          "In access.log (ip, method, page, status), how many different IPs got a 404 status?",
     hints=["One small step per command, joined with |: keep the 404 lines, keep the IP, drop duplicates, count.",

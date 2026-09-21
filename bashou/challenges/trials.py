@@ -11,9 +11,10 @@ from . import Challenge
 NAMES = ["amber", "birch", "cobalt", "dune", "ember", "fern", "glade", "harbor", "iris", "juniper"]
 
 
-def trial(id, level, task, hints, setup, verify, requires=()):
-    return Challenge(id=id, pet="", tools=(), threat="Locked chest", task=task, hints=hints, setup=setup,
-                     verify=verify, requires=list(requires) or ["ls"], level=level, kind="trial")
+def trial(id, level, task, hints, setup, verify, requires=(), teaches=()):
+    """`teaches`: the tool it practices; the chest right after that tool's lesson picks it."""
+    return Challenge(id=id, pet="", tools=tuple(teaches), threat="Locked chest", task=task, hints=hints,
+                     setup=setup, verify=verify, requires=list(requires) or ["ls"], level=level, kind="trial")
 
 
 # --- level 1 ------------------------------------------------------------------------------------
@@ -194,4 +195,41 @@ SCROLLS = trial("trial_scrolls", 3, "One scroll in library/ talks about the trea
                 scrolls_setup, lambda w, m, v: v.strip().rsplit("/", 1)[-1] == m["answer"], requires=["grep"])
 
 
-TRIALS = [DIRS, NOTE, MOVE, COPY, RENAME, CLEAN, SPELL, LINK, JOURNAL, GEMS, LOOT, LETTER, SCROLLS]
+# --- after a lesson ----------------------------------------------------------------------------
+
+def people_setup(work, rng):
+    names = rng.sample(["ada", "linus", "grace", "ken", "dennis", "margaret", "alan", "barbara"], 6)
+    cities = ["paris", "lyon", "brest", "nantes"]
+    rows = [(n, rng.randint(18, 70), rng.choice(cities)) for n in names]
+    (work / "people.txt").write_text("".join(f"{n} {a} {c}\n" for n, a, c in rows))
+    return {"names": [r[0] for r in rows], "cities": len({r[2] for r in rows})}
+
+
+NAMES_COL = trial("trial_awk_names", 2, "people.txt has a name, an age and a city per line. Make names.txt with "
+                  "only the names, one per line.",
+                  ["awk '{print $1}' prints the first field; > writes it to a file.",
+                   "Try: awk '{print $1}' people.txt > names.txt"],
+                  people_setup, lambda w, m, v: (w / "names.txt").is_file()
+                  and (w / "names.txt").read_text().split() == m["names"], requires=["awk"], teaches=["awk"])
+
+
+def prices_setup(work, rng):
+    items = rng.sample(["apple", "bread", "cheese", "milk", "tea", "rice", "soap"], 5)
+    prices = [rng.randint(1, 20) for _ in items]
+    (work / "prices.txt").write_text("".join(f"{i} {p}\n" for i, p in zip(items, prices)))
+    return {"answer": sum(prices)}
+
+
+PRICES = trial("trial_awk_sum", 2, "prices.txt has an item and a price per line. What's the total? Then: answer <number>",
+               ["awk can add up a column in a variable and print it in END.",
+                "Try: awk '{s += $2} END {print s}' prices.txt"],
+               prices_setup, lambda w, m, v: v.strip() == str(m["answer"]), requires=["awk"], teaches=["awk"])
+
+CITIES = trial("trial_pipe_cities", 2, "How many different cities are in people.txt (3rd column)? Then: answer <number>",
+               ["Keep the city column, remove duplicates, count the lines: three commands joined with |.",
+                "Try: awk '{print $3}' people.txt | sort -u | wc -l"],
+               people_setup, lambda w, m, v: v.strip() == str(m["cities"]), requires=["sort", "wc"], teaches=["|"])
+
+
+TRIALS = [DIRS, NOTE, MOVE, COPY, RENAME, CLEAN, SPELL, LINK, JOURNAL, GEMS, LOOT, LETTER, SCROLLS,
+          NAMES_COL, PRICES, CITIES]

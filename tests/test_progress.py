@@ -20,7 +20,7 @@ class ProgressTest(unittest.TestCase):
         notes = self.run_cmd("ls")
         self.assertIn("frog", self.s["pets"])
         self.assertEqual(len(notes), 1)
-        self.assertIn("Tadpole", notes[0])
+        self.assertIn("Froglet", notes[0])
 
     def test_tool_pet_needs_successes(self):
         self.run_cmd("find . -name x", status=1, times=20)
