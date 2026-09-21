@@ -25,7 +25,7 @@ art/fox/32/base.png
 art/fox/32/closed.png
 ```
 
-**Pets:** `bat frog turtle mushroom slime sofa octopus dragon fox owl mole snake ghost spider ant
+**Pets:** `bat tadpole frog turtle mushroom slime sofa octopus dragon fox owl mole snake ghost spider ant
 axolotl gremlin`, and the starters' forms: `kitten cat lion seedling sprout tree pebble golem crystal`.
 For a brand new pet, open an issue first so we can agree on how it's unlocked.
 

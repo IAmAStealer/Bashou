@@ -90,7 +90,7 @@ STAGES = {
     "bat": ("Batling", "Bat", "Night bat"),
     "gremlin": ("Gremlin", "Reformed gremlin", "Shell guardian"),
     "snail": ("Wanderer", "Knight snail", "Paladin snail"),
-    "frog": ("Froglet", "Frog", "Frog prince"),
+    "frog": ("Tadpole", "Frog", "Frog prince"),
     "turtle": ("Hatchling", "Turtle", "Elder turtle"),
     "mushroom": ("Spore", "Mushroom", "Glowshroom"),
     "slime": ("Droplet", "Slime", "King slime"),
@@ -797,6 +797,43 @@ BAT = Pet(
     z_at=(0, 14),
 )
 
+TADPOLE = Pet(
+    id="tadpole", name="Tadpole",
+    base=sprite("""
+.................
+.................
+.................
+....aaaaa........
+..aaoooooaa......
+.aowwoooooaa.....
+.aowmooooooat...t
+aoooooooooooattt.
+aooloooooooatttt.
+.aollloooooat..tt
+..aallllaaa......
+....aaaaa........
+"""),
+    palette={"a": (40, 72, 48), "o": (78, 112, 72), "l": (140, 170, 110), "t": (105, 145, 98),
+             "w": (255, 255, 255), "m": (25, 25, 25)},
+    poses={
+        "fidget": pixels("6,16,. 7,16,t 9,15,. 9,16,. 8,16,t 6,14,t"),
+        "inhale": pixels("2,5,a 2,6,a 2,7,a 3,5,o 3,6,o 3,7,o"),
+        "closed": pixels("5,3,o 5,4,o 6,3,a 6,4,a"),
+        "left": pixels("6,3,m 6,4,w"),
+        "right": pixels("5,4,m 6,4,w"),
+    },
+    z_at=(0, 12),
+)
+
+# Pets whose first stage is another animal: the sprite of each stage.
+FORMS = {"frog": ("tadpole", "frog", "frog")}
+
+
+def form(pet_id, stage):
+    """The sprite id of a pet at a stage."""
+    return FORMS.get(pet_id, (pet_id,) * 3)[stage - 1]
+
+
 # Starters: chosen once, they level up with every 5 achievements and change shape at levels 4 and 7.
 STARTERS = {
     "cat": ("kitten", "cat", "lion"),
@@ -812,7 +849,7 @@ STARTER_BLURBS = {
 }
 
 PETS = {p.id: p for p in (KITTEN, CAT, LION, SEEDLING, SPROUT, TREE, PEBBLE, GOLEM, CRYSTAL,
-                         BAT, FROG, TURTLE, MUSHROOM, SLIME, SOFA, OCTOPUS, DRAGON,
+                         BAT, TADPOLE, FROG, TURTLE, MUSHROOM, SLIME, SOFA, OCTOPUS, DRAGON,
                          FOX, OWL, MOLE, SNAKE, GHOST, SPIDER, ANT, AXOLOTL, GREMLIN, SNAIL)}
 
 

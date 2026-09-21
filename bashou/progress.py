@@ -4,6 +4,7 @@ from . import achievements, safety
 from .achievements import Ctx
 from .analyze import analyze
 from .behavior import ACTIONS
+from . import creatures
 from .creatures import FORM_NAMES, STAGES, STARTERS
 from .i18n import _
 
@@ -78,7 +79,7 @@ def current(state, who=None):
         sprite = STARTERS[line][form - 1]
         return sprite, form, _(FORM_NAMES[sprite]), line
     st = stage(state, who)
-    return who, st, _(STAGES[who][st - 1]), who
+    return creatures.form(who, st), st, _(STAGES[who][st - 1]), who
 
 
 def record(state, status, line, today, hour):

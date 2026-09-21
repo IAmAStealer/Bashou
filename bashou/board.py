@@ -99,9 +99,9 @@ class Board:
         drawn = pet_id in creatures.PETS
         out = []
         if drawn:
-            pet = creatures.PETS[pet_id]
-            shown = pet if unlocked else silhouette(pet)
             stage = progress.stage(self.s, pet_id) if unlocked else 1
+            pet = creatures.PETS[creatures.form(pet_id, stage)]
+            shown = pet if unlocked else silhouette(pet)
             cells = [[True] * pet.width for _ in range(len(pet.base) // 2)]
             poses = ["inhale"] if self.breath else []
             out += render.lines(shown, poses, cells, stage)
