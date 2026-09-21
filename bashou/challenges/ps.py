@@ -1,6 +1,8 @@
 import os
 import signal
 import subprocess
+import time
+from pathlib import Path
 
 from . import Challenge
 
@@ -11,6 +13,14 @@ def setup(work, rng):
     out = subprocess.run(["bash", "-c", f"(exec -a {name} sleep 3600) </dev/null >/dev/null 2>&1 & echo $!"],
                          capture_output=True, text=True)
     pid = int(out.stdout)
+    # `$!` comes back before the subshell has exec'd: wait until the process shows its name.
+    for _ in range(100):
+        try:
+            if Path(f"/proc/{pid}/cmdline").read_bytes().startswith(name.encode()):
+                break
+        except OSError:
+            pass
+        time.sleep(0.02)
     return {"args": {"name": name}, "answer": pid, "pid": pid}
 
 
