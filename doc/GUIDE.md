@@ -71,11 +71,25 @@ bashou config bubble default    # back to the default (5-10)
 | Setting | Default | What it does |
 |---|---|---|
 | `bubble` | `5-10` | How many commands a speech bubble (tips, hints, achievements) stays on screen. When another message is waiting, the current one closes after 2 commands. |
-| `updates` | `on` | Once a day, your pet looks for a new version on GitHub (a `git fetch` of the install folder, nothing about you is sent) and tells you in a bubble. `bashou update` installs it; running pets switch to it by themselves. |
+| `updates` | `on` | Once a day, your pet looks for a new release on GitHub (a `git fetch` of the install folder, nothing about you is sent) and tells you in a bubble. `bashou update` installs it; running pets switch to it by themselves. |
 
 Settings are saved in `~/.local/share/bashou/state.json` (only the ones you changed) and apply to
 every terminal right away. `bashou reset` keeps your language but resets settings. The language is
 chosen with `bashou language`.
+
+## Releases and security checks
+
+Every push runs the tests (Python 3.9 and 3.13) and the security checks:
+
+- **Standard library only**: a test fails on any third-party import, network module, `eval`/`exec`,
+  `pickle`, `os.system` or `shell=True`. Nothing to `pip install`, so no dependency to trust.
+- **Bandit** (Python security linter), **ShellCheck** (the bash loader), **Gitleaks** (secrets in
+  the whole history), **CodeQL** (GitHub code scanning, also weekly).
+- The GitHub Actions are pinned to a commit, and Dependabot proposes their updates.
+
+A release is made from *Actions → Release → Run workflow* with a version number. The workflow runs
+every check first and only then creates the `vX.Y.Z` tag and the GitHub release. Pets only offer
+these tags, never a plain commit on `main`.
 
 ## Privacy
 

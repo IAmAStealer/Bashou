@@ -1,7 +1,7 @@
-"""New versions: a daily `git fetch` of the install folder, and `bashou update` to pull them.
+"""New versions: a daily `git fetch` of the install folder, and `bashou update` to install them.
 
 Installs are a git clone, so no HTTP code here and nothing about you is sent: git only asks
-GitHub for new commits. The pet restarts itself once the new code is on disk.
+GitHub for new release tags. The pet restarts itself once the new code is on disk.
 """
 
 import subprocess
@@ -20,14 +20,32 @@ def git(*args, timeout=20):
                           timeout=timeout, stdin=subprocess.DEVNULL)
 
 
-def behind():
-    """Commits on GitHub not installed yet, or None when unknown (not a clone, offline…)."""
+def latest():
+    """Newest release tag (vX.Y.Z) after a fetch, or None (not a clone, offline, no release yet).
+
+    Releases are tagged by the Release workflow only after every CI check passed, so pets never
+    offer a random commit from main.
+    """
     try:
-        if not (ROOT / ".git").exists() or git("fetch", "--quiet").returncode:
+        if not (ROOT / ".git").exists() or git("fetch", "--quiet", "--tags", "--force").returncode:
             return None
-        out = git("rev-list", "--count", "HEAD..@{upstream}")
-        return int(out.stdout) if out.returncode == 0 else None
-    except (OSError, subprocess.SubprocessError, ValueError):
+        tags = git("tag", "--list", "v*.*.*", "--sort=-v:refname").stdout.split()
+        return tags[0] if tags else None
+    except (OSError, subprocess.SubprocessError):
+        return None
+
+
+def installed(tag):
+    """True if this install already contains `tag`."""
+    return git("merge-base", "--is-ancestor", tag, "HEAD").returncode == 0
+
+
+def available():
+    """The release to install, or None."""
+    tag = latest()
+    try:
+        return tag if tag and not installed(tag) else None
+    except (OSError, subprocess.SubprocessError):
         return None
 
 
@@ -41,20 +59,16 @@ def due(now=None):
         return True
 
 
-def note(count):
-    if not count:
-        return None
-    return "🆕 " + _("A new Bashou is out ({n} change(s)) → bashou update").format(n=count)
+def note(tag):
+    return "🆕 " + _("Bashou {version} is out → bashou update").format(version=tag) if tag else None
 
 
 def check():
     """Fetch, remember the result for `bashou`, and return the bubble text (or None)."""
-    count = behind()
-    if count is None:
-        return None
+    tag = available()
     with state.locked() as s:
-        s["update_behind"] = count
-    return note(count)
+        s["update_available"] = tag or ""
+    return note(tag)
 
 
 def run():
@@ -62,22 +76,20 @@ def run():
     if not (ROOT / ".git").exists():
         print("  " + _("This copy of Bashou isn't a git clone, so it can't update itself."))
         return 1
-    before = git("rev-parse", "HEAD").stdout.strip()
-    try:
-        out = git("pull", "--ff-only", "--quiet", timeout=120)
-    except subprocess.TimeoutExpired:
-        out = None
-    if not out or out.returncode:
-        print("  " + _("Update failed:") + " " + (out.stderr.strip() if out else "timeout"))
-        return 1
+    tag = available()
     with state.locked() as s:
-        s["update_behind"] = 0
-    changes = git("log", "--oneline", "--no-merges", f"{before}..HEAD").stdout.strip()
-    if not changes:
+        s["update_available"] = ""
+    if not tag:
         print("  " + _("Bashou is already up to date."))
         return 0
-    print("  " + _("Updated! What's new:"))
-    for line in changes.splitlines()[:15]:
-        print("    " + line.split(" ", 1)[1])
+    before = git("rev-parse", "HEAD").stdout.strip()
+    out = git("-c", "advice.detachedHead=false", "checkout", "--quiet", tag, timeout=60)
+    if out.returncode:
+        print("  " + _("Update failed:") + " " + out.stderr.strip())
+        return 1
+    print("  " + _("Updated to {version}! What's new:").format(version=tag))
+    changes = git("log", "--format=%s", "--no-merges", f"{before}..HEAD").stdout.splitlines()
+    for line in changes[:15]:
+        print("    " + line)
     print("  " + _("Your pets switch to the new version by themselves."))
     return 0

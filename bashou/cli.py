@@ -38,8 +38,8 @@ def level():
     width = max(len(label) for label, value in rows)
     for label, value in rows:
         print(f"  {BOLD}{label:<{width}}{RESET} : {value}")
-    if s["update_behind"]:
-        print(f"\n  🆕 {DIM}" + _("A new Bashou is out: bashou update") + RESET)
+    if s["update_available"]:
+        print(f"\n  🆕 {DIM}" + _("Bashou {version} is out: bashou update").format(version=s["update_available"]) + RESET)
 
 
 def hint(s, pet):

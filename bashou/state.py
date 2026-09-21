@@ -30,7 +30,7 @@ def default():
         "threat_day": {"date": "", "count": 0},
         "last_threat": 0,
         "update_checked": 0,   # last time a terminal looked for a new version
-        "update_behind": 0,    # new commits on GitHub at that check
+        "update_available": "",  # newest release tag not installed yet, at that check
         "settings": {},     # `bashou config`, only what differs from SETTINGS
     }
 

@@ -34,22 +34,38 @@ class UpdateTest(unittest.TestCase):
         state.DATA, state.STATE, update.ROOT = self.saved
         self.tmp.cleanup()
 
-    def publish(self, message):
+    def publish(self, message, tag=None):
         (self.dev / "a").write_text(message)
         git(self.dev, "commit", "-qam", message)
         git(self.dev, "push", "-q", "origin", "HEAD:main")
+        if tag:
+            git(self.dev, "tag", tag)
+            git(self.dev, "push", "-q", "origin", tag)
 
-    def test_new_version_is_announced_then_pulled(self):
+    def test_only_releases_are_offered(self):
+        """A commit on main isn't a release: CI hasn't vouched for it."""
+        self.publish("Work in progress")
+        self.assertIsNone(update.check())
+        self.assertEqual(state.load()["update_available"], "")
+
+    def test_new_release_is_announced_then_installed(self):
         self.assertIsNone(update.check())                 # up to date: nothing to say
-        self.publish("Faster pets")
-        self.assertIn("bashou update", update.check())
-        self.assertEqual(state.load()["update_behind"], 1)
+        self.publish("Faster pets", tag="v0.2.0")
+        self.publish("Half done")                          # after the release, not released
+        self.assertIn("v0.2.0", update.check())
+        self.assertEqual(state.load()["update_available"], "v0.2.0")
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
             self.assertEqual(update.run(), 0)
         self.assertIn("Faster pets", out.getvalue())
         self.assertEqual((update.ROOT / "a").read_text(), "Faster pets")
-        self.assertEqual(state.load()["update_behind"], 0)
+        self.assertEqual(state.load()["update_available"], "")
+        self.assertIsNone(update.check())                 # installed now
+
+    def test_newest_version_wins(self):
+        self.publish("One", tag="v0.9.0")
+        self.publish("Two", tag="v0.10.0")                 # version order, not text order
+        self.assertEqual(update.available(), "v0.10.0")
 
     def test_once_a_day_and_can_be_turned_off(self):
         self.assertTrue(update.due(now=1_000_000))
@@ -61,7 +77,7 @@ class UpdateTest(unittest.TestCase):
 
     def test_not_a_clone(self):
         update.ROOT = Path(self.tmp.name) / "nowhere"
-        self.assertIsNone(update.behind())
+        self.assertIsNone(update.latest())
         with contextlib.redirect_stdout(io.StringIO()):
             self.assertEqual(update.run(), 1)
 

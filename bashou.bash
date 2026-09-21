@@ -16,7 +16,7 @@ _bashou_log() {
   local status=$?
   if [[ -n $BASHOU_PID && -n $_bashou_hc && $HISTCMD != "$_bashou_hc" ]]; then
     printf '%s\t' "$status" >> "$_bashou_events"
-    HISTTIMEFORMAT= history 1 >> "$_bashou_events"
+    HISTTIMEFORMAT='' history 1 >> "$_bashou_events"
   fi
   _bashou_hc=$HISTCMD
   # Poke the pet so it redraws now (PS0 erased it). If it died, bring it back (3 tries max).
@@ -75,11 +75,12 @@ _bashou_complete() {
     3:dev:threat)     words=$_bashou_challenges ;;
     4:dev:stage)      words="1 2 3" ;;
   esac
-  COMPREPLY=($(compgen -W "$words" -- "$cur"))
+  mapfile -t COMPREPLY < <(compgen -W "$words" -- "$cur")
 }
 complete -F _bashou_complete bashou
 
 [[ ${PROMPT_COMMAND[0]} == _bashou_log* ]] || PROMPT_COMMAND="_bashou_log${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
+# shellcheck disable=SC2016  # expanded later, by bash, each time PS0 is shown
 [[ $PS0 == *_bashou_ps0* ]] || PS0='$(_bashou_ps0)'"$PS0"
 trap 'bashou off' EXIT
 
