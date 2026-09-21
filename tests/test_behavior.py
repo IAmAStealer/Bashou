@@ -35,6 +35,11 @@ class BehaviorTest(unittest.TestCase):
         self.assertGreaterEqual(b.sleep_after, 5 * 60_000)
         self.assertLessEqual(b.sleep_after, 15 * 60_000)
 
+    def test_tadpole_tail_keeps_moving(self):
+        b = Behavior(random.Random(4))
+        swims = {"swim" in b.frame(ms, creatures.TADPOLE)[0] for ms in range(0, 3000, 250)}
+        self.assertEqual(swims, {True, False})
+
     def test_every_pet_can_do_everything(self):
         for pet in creatures.PETS.values():
             b = Behavior(random.Random(2))

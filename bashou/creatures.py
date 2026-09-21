@@ -817,6 +817,7 @@ aooloooooooatttt.
              "w": (255, 255, 255), "m": (25, 25, 25)},
     poses={
         "fidget": pixels("6,16,. 7,16,t 9,15,. 9,16,. 8,16,t 6,14,t"),
+        "swim": pixels("6,16,. 5,15,t 9,16,. 10,15,t"),
         "inhale": pixels("2,5,a 2,6,a 2,7,a 3,5,o 3,6,o 3,7,o"),
         "closed": pixels("5,3,o 5,4,o 6,3,a 6,4,a"),
         "left": pixels("6,3,m 6,4,w"),
