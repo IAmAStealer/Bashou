@@ -7,7 +7,8 @@ from bashou.creatures import ROSTER
 
 class DialogueTest(unittest.TestCase):
     def test_every_pet_has_a_voice_and_tips(self):
-        for pet, _ in ROSTER:
+        from bashou.creatures import STARTERS
+        for pet in [p for p, _ in ROSTER] + list(STARTERS):
             self.assertIn(pet, dialogue.VOICE)
             self.assertGreaterEqual(len(dialogue.TIPS[pet]), 3)
             self.assertIn(pet, dialogue.PERSONAL)

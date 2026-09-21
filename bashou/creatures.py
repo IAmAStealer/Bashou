@@ -4,7 +4,7 @@ A sprite is a grid of palette keys ('.' is transparent). A pose is a list of
 (row, col, key) pixels painted over the base grid.
 """
 
-from dataclasses import dataclass, field, replace
+from dataclasses import dataclass, field
 
 
 def sprite(text, width=17):
@@ -42,7 +42,6 @@ class Pet:
 CAT = Pet(
     id="cat",
     name="Cat",
-    unlock="your first friend",
     base=[
         "...a......a......",
         "..apa....apa.....",
@@ -62,13 +61,6 @@ CAT = Pet(
         "p": (255, 176, 166), "n": (190, 100, 100), "g": (150, 210, 110), "m": (25, 25, 25),
         "w": (255, 255, 255), "r": (220, 70, 80), "R": (165, 45, 60), "y": (250, 210, 70),
         "Y": (205, 150, 30), "b": (110, 170, 255),
-    },
-    stages={
-        2: pixels("7,1,R 7,2,r 7,3,r 7,4,r 7,5,r 7,6,r 7,7,r 7,8,r 7,9,r 7,10,r 7,11,r 7,12,R "
-                  "8,9,r 8,10,r 9,10,R"),
-        3: pixels("7,1,R 7,2,r 7,3,r 7,4,r 7,5,r 7,6,r 7,7,r 7,8,r 7,9,r 7,10,r 7,11,r 7,12,R "
-                  "8,9,r 8,10,r 9,10,R "
-                  "0,5,y 0,8,y 1,5,y 1,6,y 1,7,y 1,8,y 2,5,Y 2,6,b 2,7,b 2,8,Y"),
     },
     poses={
         "fidget": pixels("0,3,. 0,2,a"),
@@ -515,11 +507,242 @@ g..aopoqopoa..g..
     },
 )
 
-# Placeholders until their art is drawn.
-KITTEN, LION = replace(CAT, id="kitten"), replace(CAT, id="lion")
-SEEDLING, SPROUT, TREE = (replace(CAT, id=i) for i in ("seedling", "sprout", "tree"))
-PEBBLE, GOLEM, CRYSTAL = (replace(CAT, id=i) for i in ("pebble", "golem", "crystal"))
-BAT = replace(CAT, id="bat")
+KITTEN = Pet(
+    id="kitten", name="Kitten",
+    base=sprite("""
+.................
+.................
+.................
+.................
+.a.......a.......
+.paaaaaaap.......
+aoooooooooa......
+aogwooowgoa......
+aogmooomgoa.a....
+aopoonoopoa.a....
+.aocccccoa.a.....
+.aaaaaaaaa.......
+"""),
+    palette={"a": (214, 140, 40), "o": (245, 167, 52), "c": (255, 236, 205), "p": (255, 176, 166), "n": (190, 100, 100), "g": (150, 210, 110), "m": (25, 25, 25), "w": (255, 255, 255)},
+    poses={
+        "inhale": pixels("10,0,a 10,1,o 10,9,o 10,10,a"),
+        "closed": pixels("7,2,o 7,3,o 7,7,o 7,8,o 8,2,a 8,3,a 8,7,a 8,8,a"),
+        "left": pixels("8,2,m 8,3,g"),
+        "right": pixels("8,7,g 8,8,m"),
+        "fidget": pixels("4,1,. 4,0,a"),
+        "tail_up": pixels("10,11,. 9,12,. 7,12,a 6,12,a"),
+    },
+)
+
+LION = Pet(
+    id="lion", name="Lion",
+    base=sprite("""
+...NNNNNNNNN.....
+..NMMMMMMMMMN....
+.NMMaoooooaMMN...
+NMMaogwowgoaMMN..
+NMMaogmomgoaMMN..
+NMMaooonoooaMMN..
+.NMMacncncaMMN..N
+..NMMacccaMMN...M
+...aoooooooa...a.
+..aoocccccooa.a..
+.aoocccccccooaa..
+.lla.aaaaa.all...
+"""),
+    palette={"a": (214, 140, 40), "o": (245, 167, 52), "l": (255, 196, 110), "c": (255, 236, 205), "n": (190, 100, 100), "g": (150, 210, 110), "m": (25, 25, 25), "w": (255, 255, 255), "M": (165, 90, 35), "N": (200, 115, 40)},
+    poses={
+        "inhale": pixels("8,2,a 8,3,o 8,11,o 8,12,a"),
+        "closed": pixels("3,5,o 3,6,o 3,8,o 3,9,o 4,5,a 4,6,a 4,8,a 4,9,a"),
+        "left": pixels("4,5,m 4,6,g 4,8,m 4,9,g"),
+        "right": pixels("4,5,g 4,6,m 4,8,g 4,9,m"),
+        "fidget": pixels("0,3,. 0,11,. 2,0,N 2,14,N"),
+        "tail_up": pixels("5,16,N 6,16,M 7,16,a 8,15,."),
+    },
+)
+
+SEEDLING = Pet(
+    id="seedling", name="Seedling",
+    base=sprite("""
+.................
+.................
+.................
+.LL...LL.........
+LlLL.LLlL........
+.LLLgLLL.........
+....g............
+..aaaaa..........
+.aoooooa.........
+aomooomoa........
+aoponopoa........
+.aaaaaaa.........
+"""),
+    palette={"a": (140, 95, 55), "o": (205, 155, 100), "L": (80, 160, 75), "l": (150, 210, 110), "g": (60, 120, 55), "m": (25, 25, 25), "p": (255, 160, 150), "n": (120, 70, 40)},
+    poses={
+        "inhale": pixels("8,0,a 8,1,o 8,7,o 8,8,a"),
+        "closed": pixels("9,2,n 9,3,n 9,5,n 9,6,n"),
+        "left": pixels("9,2,o 9,1,m 9,6,o 9,5,m"),
+        "right": pixels("9,2,o 9,3,m 9,6,o 9,7,m"),
+        "fidget": pixels("3,1,. 3,2,. 2,1,L 2,2,L"),
+    },
+)
+
+SPROUT = Pet(
+    id="sprout", name="Sprout",
+    base=sprite("""
+...LL...LL.......
+..LlLL.LLlL......
+.LlllL.LlllL.....
+.LLLLLgLLLLL.....
+..LL..g..LL......
+......g..........
+...aaaaaaa.......
+..aoooooooa......
+.aomooooomoa.....
+.aopoonoopoa.....
+..aoooooooa......
+...aaaaaaa.......
+"""),
+    palette={"a": (140, 95, 55), "o": (205, 155, 100), "L": (80, 160, 75), "l": (150, 210, 110), "g": (60, 120, 55), "m": (25, 25, 25), "p": (255, 160, 150), "n": (120, 70, 40)},
+    poses={
+        "inhale": pixels("7,1,a 7,2,o 7,10,o 7,11,a"),
+        "closed": pixels("8,2,n 8,3,n 8,9,n 8,10,n"),
+        "left": pixels("8,3,o 8,2,m 8,9,o 8,8,m"),
+        "right": pixels("8,3,o 8,4,m 8,9,o 8,10,m"),
+        "fidget": pixels("0,3,. 0,9,. 1,2,. 1,10,."),
+    },
+)
+
+TREE = Pet(
+    id="tree", name="Tree spirit",
+    base=sprite("""
+....ddddddd......
+..ddLLLLLLLdd....
+.dLLlLLfLLlLLd...
+dLLlLLLLLLLlLLd..
+dLLLLfLLLfLLLLd..
+.ddLLLLLLLLLdd...
+...dtTTTTTtd.....
+g..tTmTTTmTt..g..
+.g.tpTTnTTpt.g...
+..gtTTTTTTTtg....
+...tTTTTTTTt.....
+..ttt.ttt.ttt....
+"""),
+    palette={"L": (80, 160, 75), "l": (150, 210, 110), "g": (60, 120, 55), "m": (25, 25, 25), "p": (255, 160, 150), "n": (120, 70, 40), "d": (50, 115, 60), "t": (125, 85, 50), "T": (170, 120, 75), "f": (255, 200, 220)},
+    poses={
+        "inhale": pixels("0,3,d 0,11,d 5,1,d 5,13,d"),
+        "closed": pixels("7,5,t 7,4,t 7,9,t 7,10,t"),
+        "left": pixels("7,5,T 7,4,m 7,9,T 7,8,m"),
+        "right": pixels("7,5,T 7,6,m 7,9,T 7,10,m"),
+        "fidget": pixels("9,2,. 9,12,. 6,0,g 6,14,g"),
+    },
+)
+
+PEBBLE = Pet(
+    id="pebble", name="Pebble",
+    base=sprite("""
+.................
+.................
+.................
+.................
+.................
+.................
+...aaaaa.........
+.aaololoaa.......
+aoooooooooa......
+aomooooomoa......
+aopoonoopoa......
+.aaaaaaaaa.......
+"""),
+    palette={"a": (85, 90, 100), "o": (140, 145, 155), "l": (185, 190, 200), "m": (25, 25, 25), "p": (255, 160, 170), "n": (60, 60, 70)},
+    poses={
+        "inhale": pixels("7,0,a 7,10,a"),
+        "closed": pixels("9,2,n 9,1,n 9,8,n 9,9,n"),
+        "left": pixels("9,2,o 9,1,m 9,8,o 9,7,m"),
+        "right": pixels("9,2,o 9,3,m 9,8,o 9,9,m"),
+        "fidget": pixels("6,3,. 6,8,a"),
+    },
+)
+
+GOLEM = Pet(
+    id="golem", name="Rock golem",
+    base=sprite("""
+....GGGGG........
+...aGGoGGa.......
+..aoooooooa......
+..aomooomoa......
+..aoooooooa......
+..aoponopoa......
+aaaoooooooaaa....
+aoaoooooooaoa....
+aoaoooooooaoa....
+.a.aoooooa.a.....
+...aoaaaoa.......
+..aaa...aaa......
+"""),
+    palette={"a": (85, 90, 100), "o": (140, 145, 155), "G": (110, 165, 80), "m": (25, 25, 25), "p": (255, 160, 170), "n": (60, 60, 70)},
+    poses={
+        "inhale": pixels("5,0,a 5,1,a 5,11,a 5,12,a"),
+        "closed": pixels("3,4,n 3,3,n 3,8,n 3,9,n"),
+        "left": pixels("3,4,o 3,3,m 3,8,o 3,7,m"),
+        "right": pixels("3,4,o 3,5,m 3,8,o 3,9,m"),
+        "fidget": pixels("0,6,p"),
+    },
+)
+
+CRYSTAL = Pet(
+    id="crystal", name="Crystal golem",
+    base=sprite("""
+C......c......C..
+cC...aCcCa...Cc..
+cc..aoooooa..cc..
+.a.aoooooooa.a...
+ac.aomooomoa.ca..
+aCaaoooooooaaCa..
+aooaoponopoaooa..
+aooaoooooooaooa..
+.a.aoooooooa.a...
+...aoocccooa.....
+...aoaaaaaoa.....
+..aaa.....aaa....
+"""),
+    palette={"a": (85, 90, 100), "o": (140, 145, 155), "m": (25, 25, 25), "p": (255, 160, 170), "n": (60, 60, 70), "c": (110, 215, 235), "C": (200, 245, 255)},
+    poses={
+        "inhale": pixels("9,6,C 9,7,C 9,8,C"),
+        "closed": pixels("4,5,n 4,4,n 4,9,n 4,10,n"),
+        "left": pixels("4,5,o 4,4,m 4,9,o 4,8,m"),
+        "right": pixels("4,5,o 4,6,m 4,9,o 4,10,m"),
+        "fidget": pixels("0,0,c 1,0,C 0,14,c 1,14,C 1,7,C 1,8,c"),
+    },
+    z_at=(0, 10),
+)
+
+BAT = Pet(
+    id="bat", name="Bat",
+    base=sprite("""
+.................
+.....a.....a.....
+W....aa...aa....W
+WW..aoooooooa..WW
+WWWaoooeoeoooaWWW
+WWWaoowmomwooaWWW
+WWWWaoooooooaWWWW
+.WWWaopowopoaWWW.
+.W.WaoooooooaW.W.
+....WaaoooaaW....
+......a.a.a......
+.................
+"""),
+    palette={"W": (70, 55, 95), "a": (90, 75, 120), "o": (125, 105, 160), "m": (25, 25, 25), "w": (255, 255, 255), "p": (255, 170, 190), "e": (245, 225, 245)},
+    poses={
+        "inhale": pixels("7,0,W 7,16,W"),
+        "closed": pixels("4,7,o 4,9,o 5,7,a 5,9,a"),
+        "left": pixels("5,6,m 5,7,w"),
+        "right": pixels("5,9,w 5,10,m"),
+        "fidget": pixels("2,0,. 2,16,. 3,0,. 3,16,. 8,1,. 8,15,."),
+    },
+)
 
 # Starters: chosen once, they level up with every 5 achievements and change shape at levels 4 and 7.
 STARTERS = {

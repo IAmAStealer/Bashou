@@ -97,5 +97,27 @@ class CliBugs(TempState):
         self.assertEqual(state.load()["active"], "starter")
 
 
+class BoardTest(TempState):
+    def test_starter_row_navigation(self):
+        from bashou.board import Board
+        board = Board()
+        self.assertEqual(board.ids[board.pos], "starter")    # active pet is selected first
+        board.key("down")
+        self.assertEqual(board.ids[board.pos], "bat")
+        board.key("up")
+        self.assertEqual(board.ids[board.pos], "starter")
+        board.key("up")                                      # wraps to the last row, first column
+        self.assertEqual(board.ids[board.pos], "ghost")
+
+    def test_pick_the_starter_back(self):
+        from bashou.board import Board
+        with state.locked() as s:
+            s["starter"], s["pets"], s["active"] = "pebble", ["fox"], "fox"
+        board = Board()
+        board.pos = 0
+        self.assertFalse(board.key("enter"))
+        self.assertEqual(state.load()["active"], "starter")
+
+
 if __name__ == "__main__":
     unittest.main()
