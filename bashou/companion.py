@@ -29,7 +29,7 @@ class Companion:
         self.erase_file = state.CACHE / f"erase.{shell}"
         self.offset = 0
         self.notes = []            # notifications waiting for the bubble
-        self.bubble = None         # (text, until_ms)
+        self.bubble = None         # (text, commands run since shown, commands it stays)
         self.drawn = None          # (erase sequence of what is on screen)
         self.last_key = None
         self.tick = 0
@@ -82,6 +82,8 @@ class Companion:
         now = datetime.datetime.now()
         with state.locked() as s:
             for status, command in records:
+                if self.bubble:
+                    self.bubble = (self.bubble[0], self.bubble[1] + 1, self.bubble[2])
                 self.notes += progress.record(s, status, command, now.date().isoformat(), now.hour)
                 if status == 127:
                     self.laugh_at_typo(s, command)
@@ -161,17 +163,23 @@ class Companion:
                 erase += render.erase([[True] * bw] * 3, 2, bx)
         return "".join(out), erase
 
-    def draw(self, ms):
-        if self.bubble and ms >= self.bubble[1]:
-            self.bubble = None
+    def update_bubble(self):
+        """A bubble stays for a few commands (`bashou config bubble`), 2 at most when another note waits."""
+        if self.bubble:
+            text, shown, stays = self.bubble
+            if shown >= (min(stays, 2) if self.notes else stays):
+                self.bubble = None
         if not self.bubble and self.notes:
-            self.bubble = (self.notes.pop(0), ms + 5000)
+            self.bubble = (self.notes.pop(0), 0, random.randint(*state.setting(state.load(), "bubble")))
+
+    def draw(self, ms):
+        self.update_bubble()
 
         poses, z = self.behavior.frame(ms, self.pet, self.threat, ms - self.last_activity())
         cols = os.get_terminal_size(1).columns
         if cols < self.pet.width + 20:
             return
-        key = (tuple(poses), z, cols, self.bubble, self.pet.id, self.stage)
+        key = (tuple(poses), z, cols, self.bubble and self.bubble[0], self.pet.id, self.stage)
         if key == self.last_key and self.tick % 8:
             return
         self.last_key = key

@@ -29,7 +29,27 @@ def default():
         "threat": None,     # {"challenge", "until"} while a threat waits for you
         "threat_day": {"date": "", "count": 0},
         "last_threat": 0,
+        "settings": {},     # `bashou config`, only what differs from SETTINGS
     }
+
+
+# name: (default (low, high), help)
+SETTINGS = {
+    "bubble": ((5, 10), "commands a speech bubble stays on screen (e.g. 5-10, or 3)"),
+}
+
+
+def setting(state, name):
+    return tuple(state.get("settings", {}).get(name, SETTINGS[name][0]))
+
+
+def parse_range(text):
+    """"5-10" or "3" -> (low, high); ValueError if not 1 <= low <= high."""
+    low, _, high = text.partition("-")
+    low, high = int(low), int(high or low)
+    if not 1 <= low <= high:
+        raise ValueError(text)
+    return low, high
 
 
 def load():

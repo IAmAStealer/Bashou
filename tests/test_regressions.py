@@ -97,6 +97,49 @@ class CliBugs(TempState):
         self.assertEqual(state.load()["active"], "starter")
 
 
+class BubbleTest(TempState):
+    def setUp(self):
+        super().setUp()
+        from bashou.companion import Companion
+        self.pet = Companion(os.getpid())
+        self.pet.events = state.DATA / "events.test"
+
+    def run_commands(self, n):
+        with open(self.pet.events, "a") as f:
+            f.write("".join(f"0\t    {i}  true\n" for i in range(n)))
+        self.pet.read_events()
+        self.pet.update_bubble()
+
+    def test_bubble_stays_for_several_commands(self):
+        """Talk and hints vanished after 5 s, before you could read them."""
+        self.pet.notes = ["hello"]
+        self.pet.update_bubble()
+        self.run_commands(4)
+        self.assertEqual(self.pet.bubble[0], "hello")
+        self.run_commands(6)
+        self.assertNotEqual((self.pet.bubble or [""])[0], "hello")
+
+    def test_waiting_note_shortens_the_bubble(self):
+        self.pet.notes = ["first"]
+        self.pet.update_bubble()
+        self.pet.notes.append("second")
+        self.run_commands(2)
+        self.assertEqual(self.pet.bubble[0], "second")
+
+
+class ConfigTest(TempState):
+    def test_bubble_setting(self):
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(cli.config("bubble", "3"), 0)
+            self.assertEqual(state.setting(state.load(), "bubble"), (3, 3))
+            self.assertEqual(cli.config("bubble", "8-4"), 1)          # refused, unchanged
+            self.assertEqual(cli.config("bubble", "nope"), 1)
+            self.assertEqual(state.setting(state.load(), "bubble"), (3, 3))
+            self.assertEqual(cli.config("bubble", "default"), 0)
+            self.assertEqual(state.setting(state.load(), "bubble"), (5, 10))
+            self.assertEqual(cli.config("volume", "3"), 1)
+
+
 class BoardTest(TempState):
     def test_starter_row_navigation(self):
         from bashou.board import Board
