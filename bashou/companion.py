@@ -194,6 +194,10 @@ class Companion:
 
 
 def main():
+    # Started from .bashrc before job control is on, so we'd share the shell's process group
+    # and die on every Ctrl+C at the prompt. Leave the group, and ignore SIGINT anyway.
+    os.setpgrp()
+    signal.signal(signal.SIGINT, signal.SIG_IGN)
     signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))
     Companion(int(sys.argv[1])).run()
 
