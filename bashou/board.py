@@ -18,7 +18,7 @@ DIM, BOLD, RESET, REV = f"{ESC}[2m", f"{ESC}[1m", f"{ESC}[0m", f"{ESC}[7m"
 ACCENT = f"{ESC}[38;2;150;190;230m"
 KEYS = {"\x1b[A": "up", "\x1b[B": "down", "\x1b[C": "right", "\x1b[D": "left",
         "k": "up", "j": "down", "l": "right", "h": "left", "\r": "enter", "\n": "enter",
-        "q": "quit", "\x1b": "quit"}
+        "q": "quit", "\x1b": "quit", "\x04": "quit", "\x03": "quit"}
 
 
 def hint(s, pet):

@@ -58,7 +58,7 @@ def pick(draw, count, keys=KEYS, start=0):
             if key in ("\r", "\n"):
                 chosen = pos
                 break
-            if key in ("q", "\x1b"):
+            if key in ("q", "\x1b", "\x04", "\x03"):   # also Ctrl+D, Ctrl+C
                 break
             pos = (pos + keys.get(key, 0)) % count
     finally:

@@ -199,6 +199,30 @@ class FirstLaunchTest(unittest.TestCase):
                 sh.close()
 
 
+class QuitTest(unittest.TestCase):
+    def run_and_press(self, key):
+        with tempfile.TemporaryDirectory() as tmp:
+            sh = Shell(tmp, ["python3", "-m", "bashou", "swap"])
+            try:
+                sh.read(1.5)
+                sh.send(key, 1.5)
+                pid, status = os.waitpid(sh.pid, os.WNOHANG)
+                return sh.out, pid
+            finally:
+                sh.close()
+
+    def test_ctrl_c_on_the_board_is_quiet(self):
+        """Ctrl+C on `bashou swap` printed a Python traceback."""
+        out, pid = self.run_and_press("\x03")
+        self.assertNotIn(b"Traceback", out)
+        self.assertNotEqual(pid, 0)                     # it exited
+
+    def test_ctrl_d_closes_the_board(self):
+        out, pid = self.run_and_press("\x04")
+        self.assertNotIn(b"Traceback", out)
+        self.assertNotEqual(pid, 0)
+
+
 class ArenaShellTest(unittest.TestCase):
     def test_no_fight_without_a_threat(self):
         """`bashou fight` only works once the pet announced a threat."""
