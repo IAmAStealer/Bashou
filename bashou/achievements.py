@@ -133,6 +133,21 @@ ALL = [
     A("investigator", "gremlin", "Investigator", "solve 6 security challenges",
       state=lambda s: len(s.get("security", [])) >= 6),
 
+    # Knight snail: bashou adventure (and the file basics its chests teach)
+    A("builder", "snail", "Builder", "create nested folders with `mkdir -p`", cmd=lambda c: c.flag("mkdir", "p", ("--parents",))),
+    A("copycat", "snail", "Copycat", "copy a folder with `cp -r`", cmd=lambda c: c.flag("cp", "rRa", ("--recursive", "--archive"))),
+    A("shortcut", "snail", "Shortcut", "make a symbolic link with `ln -s`", cmd=lambda c: c.flag("ln", "s", ("--symbolic",))),
+    A("first_steps", "snail", "First steps", "walk 100 m in `bashou adventure`",
+      state=lambda s: adv(s).get("walked", 0) >= 100),
+    A("checkpoint", "snail", "Checkpoint", "beat a boss in `bashou adventure`", state=lambda s: len(adv(s).get("bosses", [])) >= 1),
+    A("polyglot", "snail", "Polyglot", "beat bosses of 3 different topics",
+      state=lambda s: len({b["topic"] for b in adv(s).get("bosses", [])}) >= 3),
+    A("scholar", "snail", "Scholar", "reach level 3 in a topic", state=lambda s: max(adv(s).get("levels", {0: 0}).values(), default=0) >= 2),
+    A("flawless", "snail", "Flawless", "beat a boss without losing a heart on the way",
+      state=lambda s: any(b.get("flawless") for b in adv(s).get("bosses", []))),
+    A("locksmith", "snail", "Locksmith", "open 5 chests", state=lambda s: len(adv(s).get("trials", [])) >= 5),
+    A("questmaster", "snail", "Questmaster", "finish chapter 3", state=lambda s: adv(s).get("chapters_done", 0) >= 3),
+
     # Dragon: fights
     A("warrior", "dragon", "Warrior", "win a fight", state=lambda s: s["fights_won"] >= 1),
     A("veteran", "dragon", "Veteran", "win 10 fights", state=lambda s: s["fights_won"] >= 10),
@@ -186,7 +201,7 @@ BY_ID = {a.id: a for a in ALL}
 
 
 # How hard an achievement is to learn: hints suggest the easiest ones left first.
-EASY = {"historian", "loop", "ranges", "capture", "tally", "unique", "plumber", "inspector", "checksum",
+EASY = {"builder", "copycat", "historian", "loop", "ranges", "capture", "tally", "unique", "plumber", "inspector", "checksum",
         "tight", "digger", "census", "global"}
 HARD = {"nested", "substitute", "pruner", "scribe", "accountant", "parallel", "null", "mapper", "follow",
         "summary", "filter"}
@@ -195,6 +210,10 @@ HARD = {"nested", "substitute", "pruner", "scribe", "accountant", "parallel", "n
 def difficulty(a):
     """1 easy, 2 medium, 3 hard."""
     return 1 if a.id in EASY else 3 if a.id in HARD else 2
+
+
+def adv(state):
+    return state.get("adventure") or {}
 
 
 def family(pet):

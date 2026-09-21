@@ -14,7 +14,7 @@ from pathlib import Path
 
 ART = Path(__file__).resolve().parent.parent / "art"
 SIZES = (16, 32, 64)
-POSES = ("base", "inhale", "closed", "left", "right", "fidget")
+POSES = ("base", "inhale", "closed", "left", "right", "fidget", "back")
 MAX_COLORS = 24
 
 

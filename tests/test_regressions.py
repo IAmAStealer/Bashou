@@ -238,9 +238,9 @@ class BoardTest(TempState):
         self.assertEqual(board.ids[board.pos], "starter")
         board.key("up")                                      # wraps to the last row, first column
         self.assertEqual(board.ids[board.pos], "gremlin")
-        board.pos = board.ids.index("spider")
-        board.key("down")                                    # nothing below: the last row's pet
-        self.assertEqual(board.ids[board.pos], "gremlin")
+        board.pos = board.ids.index("axolotl")
+        board.key("down")                                    # nothing below: the last row's last pet
+        self.assertEqual(board.ids[board.pos], "snail")
         board.key("down")
         self.assertEqual(board.ids[board.pos], "starter")
 

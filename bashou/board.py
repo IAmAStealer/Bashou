@@ -22,6 +22,8 @@ KEYS = {"\x1b[A": "up", "\x1b[B": "down", "\x1b[C": "right", "\x1b[D": "left",
 
 
 def hint(s, pet):
+    if pet in progress.STATE_PETS:
+        return _(progress.STATE_PETS[pet][1])
     if pet in progress.CONSTRUCT_PETS:
         construct, needed = progress.CONSTRUCT_PETS[pet]
         return f"{s['constructs'].get(construct, 0)}/{needed} × " + _(progress.CONSTRUCT_NAMES[construct])

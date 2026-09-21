@@ -25,6 +25,14 @@ A pixel-art pet that lives in the top-right corner of your terminal and grows as
   file, an encoded note, brute-force attempts in an `auth.log`, a defaced website, a cron backdoor, a
   SUID program. Each one runs in a sandbox folder with fake, harmless data. Solving them evolves the
   Gremlin into a Shell guardian.
+- **Adventure.** `bashou adventure`: your starter walks into the world, seen from behind, through
+  meadows, hills, forests, deserts, lakes and dungeons. The road splits into topics (Bash, Linux,
+  Python, Rust, C, Debian, Rocky Linux, CI/CD): monsters ask a question (wrong: ♥ -1), locked chests
+  open with a real shell trick in a sandbox (`mkdir -p`, `mv`, `chmod`, `tar`…), campfires heal, and
+  each path ends with a boss: timed questions (20 s each). Beat it and it's a checkpoint, the topic
+  levels up (harder questions next time). Lose and you go back to the last checkpoint, where you can
+  pick another path. Finish a chapter and a new quest starts. `s` saves and quits at any time.
+  Finishing chapter 1 brings the Knight snail, and its achievements follow your adventure.
 - **Typos.** On `command not found` your pet laughs kindly and suggests the command you meant.
 - **Pick your pet** on the board with `bashou swap`.
 - **Pets talk.** Every 10–20 minutes your pet gives a tip for its tool, a hint toward your next
@@ -56,6 +64,7 @@ bashou stats            # commands, top tools, constructs, streaks
 bashou config           # list settings (see Configuration)
 bashou update           # get the new version from GitHub
 bashou security         # security challenges (bashou security 3 starts the third)
+bashou adventure        # walk into the world with your starter (s: save & quit)
 bashou reset            # start over with a new starter (asks first, keeps a backup)
 ```
 
@@ -98,8 +107,9 @@ these tags, never a plain commit on `main`.
 
 ## Contributing
 
-Pixel art and security challenges are welcome as pull requests: see
-[pixel art](contributing/pixel-art.md) and [security challenges](contributing/security-challenges.md).
+Pixel art, security challenges and adventure questions are welcome as pull requests: see
+[pixel art](contributing/pixel-art.md), [security challenges](contributing/security-challenges.md) and
+[adventure questions](contributing/questions.md).
 
 ## Privacy
 

@@ -161,6 +161,25 @@ class GameTest(unittest.TestCase):
         g.close_result(0)
         self.assertEqual(g.adv["phase"], "walk")
 
+    def test_first_chapter_brings_the_snail(self):
+        g = self.game
+        g.adv.update(phase="fork", walked=150.0)
+        for _ in range(world.chapter(1)["legs"]):
+            world.choose(g.adv, world.fork_options(g.adv)[0])
+            g.adv["segment"] = len(world.events(g.adv)) - 1
+            g.adv["phase"] = "boss"
+            g.start_event("boss", 0)
+            for _ in range(world.boss_questions(g.adv)):
+                g.answer(g.question["answer"], 0)
+                g.close_result(0) if g.adv["phase"] == "boss" else None
+        text = " ".join(g.result[1])
+        self.assertEqual(g.adv["phase"], "chapter_end")
+        self.assertIn("New pet: Wanderer", text)
+        s = state.load()
+        self.assertIn("snail", s["pets"])
+        for aid in ("first_steps", "checkpoint", "flawless"):
+            self.assertIn(aid, s["achievements"])
+
     def test_old_save_keeps_its_meters(self):
         with state.locked() as s:
             s["adventure"] = {"distance": 42.0}

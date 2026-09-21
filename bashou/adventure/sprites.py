@@ -97,26 +97,6 @@ MONSTER = [
     "...aa...aa...",
 ]
 
-BOSS = [
-    "..h.........h.......",
-    "..hh...hh...hh......"[:20],
-    "...hhhhhhhhhh.......",
-    "..aaaaaaaaaaaa......",
-    ".aoooooooooooooa....",
-    "aooowwoooooowwooa...",
-    "aoowmmwooooowmmwooa.",
-    "aooowwoooooowwoooa..",
-    "aoooooooooooooooooa.",
-    "aooottttttttttoooa..",
-    "aooottTttTttTtooooa.",
-    ".aooooooooooooooa...",
-    "..aoooooooooooooa...",
-    ".aaooaaaaaaaooaa....",
-    "aooa........aooa....",
-    "aaa..........aaa....",
-]
-
-
 def symmetric(rows):
     """Rows trimmed to their left part and mirrored, so every boss stays symmetric."""
     half = [r[: (len(r) + 1) // 2] for r in rows]
@@ -128,15 +108,68 @@ def monster(topic):
     return symmetric(MONSTER), {"a": dark, "o": body, "w": (255, 255, 255), "m": (25, 25, 25)}
 
 
-def boss(topic):
-    body, dark = TOPIC_COLORS.get(topic, TOPIC_COLORS["bash"])
-    return symmetric(BOSS), {"a": dark, "o": body, "w": (255, 255, 255), "m": (200, 30, 40),
-                             "t": (250, 250, 250), "T": (255, 255, 255), "h": (240, 210, 90)}
-
-
 CHEST = ([".aaaaaaa.", "aYyyyyyYa", "aaaaYaaaa", "ayyyyyyya", "ayyyyyyya", "aaaaaaaaa"],
          {"a": (110, 70, 35), "y": (175, 120, 60), "Y": (240, 200, 80)})
 CAMPFIRE = (["...Y...", "..YOY..", ".YORY..", "..ORO..", "bbbbbbb", ".b.b.b."],
             {"Y": (255, 230, 120), "O": (255, 150, 40), "R": (220, 70, 30), "b": (110, 75, 45)})
 SIGNPOST = (["aaaaaaaaa", "ayyyyyyya", "aaaaaaaaa", "....b....", "....b....", "....b....", "...bbb..."],
             {"a": (120, 80, 40), "y": (220, 180, 110), "b": (100, 70, 40)})
+
+
+def half(rows):
+    """Rows from their left half (10 columns, the 10th is the middle): 19 wide, symmetric."""
+    return [r + r[:9][::-1] for r in rows]
+
+
+# topic: (rows, palette). Our own designs.
+BOSSES = {
+    "bash": (half([
+        "..h.......", "..hh......", "...hhggggg", "..gggggggg", ".gggwwwggg", ".ggwwmwggg",
+        ".gggwwwggg", ".ggggggggg", "..gdtdtdtd", "..gddddddd", "...ggggggg", ".GGggg$ggg",
+        "GGGggggggg", ".G.ggggggg", "...gg.....", "..ggg.....",
+    ]), {"h": (230, 220, 190), "g": (80, 170, 90), "G": (50, 120, 60), "w": (255, 255, 255),
+         "m": (200, 40, 40), "d": (40, 30, 30), "t": (250, 250, 240), "$": (250, 220, 90)}),
+    "linux": (half([
+        "......rrrr", ".....rrrrr", "....ssssss", "...sbbbbbb", "...bbwwwbb", "..bbwmwwbb",
+        "..bbwwwwbb", "..bbbwyyyy", ".bbbwwwwww", "sbbwwwwwww", "sbbwwwwwww", "s.bbwwwwww",
+        "..bbbwwwww", "...bbbbbbb", "...yyy....", "..yyyy....",
+    ]), {"r": (210, 50, 50), "s": (170, 175, 190), "b": (35, 35, 45), "w": (240, 240, 245),
+         "m": (25, 25, 25), "y": (245, 190, 40)}),
+    "python": ([
+        "......bbbbb........", ".....bbbbbbb.......", "....bbwmbwmbb......", "....bbbbbbbbb......",
+        ".....bbbrrbb.......", "......bbbb.........", ".......bbb.........", "........bbb........",
+        "..yyyyyy..bbb......", ".yybbbbyyy.bbb.....", "yybb..bbbyy.bbb....", "yb......bbyy.bb....",
+        "yb.......bbyybb....", ".yb......bbbbyy....", "..yyyyyyyyyyyy.....", "...yyyyyyyyyy......",
+    ], {"b": (70, 125, 200), "y": (240, 205, 70), "w": (255, 255, 255), "m": (25, 25, 25), "r": (220, 60, 70)}),
+    "rust": (half([
+        "..oo......", ".oooo.....", "oo.oo.....", "oo.oo.....", ".ooo......", "..oo..w.w.",
+        "..oo..m.m.", "...ooooooo", "..oooooooo", ".ooooddddd", "oooooooooo", ".o.ooooooo",
+        "o.o.oooooo", "...o.o.o.o", "..o.o.o.o.", "..........",
+    ]), {"o": (220, 105, 55), "d": (150, 60, 30), "w": (255, 255, 255), "m": (25, 25, 25)}),
+    "c": (half([
+        "....aaaaaa", "...aooooo0", "...aoylooo", "...aooooo0", "...aaoooaa", ".aaaoooooo",
+        "aooaoo#ooo", "aooaoo##oo", "aoaoooo#oo", ".aaooooooo", "..aooooooo", "..aooaaaao",
+        "..aooa....", "..aooa....", ".aaooa....", ".aaaaa....",
+    ]), {"a": (80, 85, 100), "o": (140, 145, 160), "0": (140, 145, 160), "y": (120, 230, 255),
+         "l": (230, 250, 255), "#": (40, 40, 50)}),
+    "debian": (half([
+        "......pppp", "....pppPPP", "...ppPPppp", "..pPPpp...", "..pPp..www", ".pPp..wmww",
+        ".pPp..wwww", ".pPp...ppp", ".pPpp..ppP", "..pPPpppPP", "...ppPPPPp", "....pppppp",
+        ".....pp.pp", "....p..p..", "...p..p...", "..........",
+    ]), {"p": (215, 30, 90), "P": (150, 20, 60), "w": (255, 255, 255), "m": (25, 25, 25)}),
+    "rocky": (half([
+        "........gg", ".......ggg", "......tttt", ".....ttttt", "....tttwwt", "...tttwmwt",
+        "..tttttwwt", "..TtttTTTT", ".TTtttTttt", "TTTtttTttt", "TT.tttTTTT", "...ttttttt",
+        "...ttt.ttt", "...ttt.ttt", "..TTTT.TTT", "..........",
+    ]), {"g": (110, 200, 110), "t": (60, 170, 135), "T": (35, 110, 90), "w": (255, 255, 255), "m": (25, 25, 25)}),
+    "cicd": ([
+        ".vv.......vv....vv.", "vwmv.....vwmv..vwmv", "vvvv.....vvvv..vvvv", ".vv.......vv....vv.",
+        ".vv.......vv...vv..", "..vv......vv...vv..", "...vv.....vv..vv...", "....vv....vv.vv....",
+        ".....vvvvvvvvvv....", "....vVVVVVVVVVVv...", "...vVVVVVVVVVVVVv..", "...vVVVVVVVVVVVVv..",
+        "....vVVVVVVVVVVv...", ".....vvvvvvvvvv....", ".....vv......vv....", "....vvv......vvv...",
+    ], {"v": (150, 95, 215), "V": (185, 140, 240), "w": (255, 255, 255), "m": (25, 25, 25)}),
+}
+
+
+def boss(topic):
+    return BOSSES.get(topic, BOSSES["bash"])

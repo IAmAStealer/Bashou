@@ -35,8 +35,10 @@ def load():
 
 
 def save(adv):
+    """Save, and return the achievements and pets it earned (🏆 / 🎉 lines)."""
     with state.locked() as s:
         s["adventure"] = adv
+        return progress.check(s)
 
 
 def biome_name(biome):
@@ -121,7 +123,7 @@ class Game:
                                   _("The chest opens! Inside: a shiny pebble. Your pet looks very proud.")] + notes)
         else:
             self.result = (False, [_("The chest stays shut. Maybe next time.")] + notes)
-        save(adv)
+        self.result = (self.result[0], self.result[1] + save(adv))
 
     def ask(self, boss=False, now=0.0):
         adv = self.adv
@@ -163,11 +165,10 @@ class Game:
             return
         name = _(world.TOPICS[topic][2])
         world.boss_won(adv)
+        self.boss = None
         self.result = (True, [_("Victory! The {boss} is defeated.").format(boss=name),
                               _("Checkpoint saved. {topic} is now level {level}.").format(
-                                  topic=topic_name(topic), level=world.level(adv, topic))])
-        self.boss = None
-        save(adv)
+                                  topic=topic_name(topic), level=world.level(adv, topic))] + save(adv))
 
     def close_result(self, now):
         adv = self.adv
@@ -415,12 +416,14 @@ def main():
     except KeyboardInterrupt:
         pass
     finally:
-        save(game.adv)
+        notes = save(game.adv)
         termios.tcsetattr(fd, termios.TCSADRAIN, old)
         out.write(f"{ESC}[0m{ESC}[?25h{ESC}[?1049l")
         out.flush()
     print("  " + _("Adventure saved: chapter {n}, {m} m walked. Come back with: bashou adventure").format(
         n=game.adv["chapter"], m=int(game.adv["walked"])))
+    for note in notes:
+        print(f"  {note}")
     return 0
 
 

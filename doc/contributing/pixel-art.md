@@ -39,6 +39,7 @@ alive with all of them:
 | `closed.png` | eyes closed (blinking and sleeping) |
 | `left.png` / `right.png` | looking left / right (move the pupils) |
 | `fidget.png` | a small movement: ear twitch, tail flick, a wing… |
+| `back.png` | seen from behind, for `bashou adventure` (only starters walk there for now) |
 
 ## Rules
 

@@ -29,6 +29,14 @@ CONSTRUCT_PETS = {"octopus": ("pipe3", 10), "gremlin": ("risky", 5)}
 CONSTRUCT_NAMES = {"pipe3": "3-command pipes", "risky": "risky commands"}
 
 
+def adventure(state):
+    return state.get("adventure") or {}
+
+
+# pet: (rule on the state, how to get it)
+STATE_PETS = {"snail": (lambda s: adventure(s).get("chapters_done", 0) >= 1, "finish chapter 1 of bashou adventure")}
+
+
 def unlock(state, pet, reason):
     if pet in state["pets"]:
         return []
@@ -113,6 +121,9 @@ def check(state, earned=()):
     for pet, (construct, needed) in CONSTRUCT_PETS.items():
         if state["constructs"].get(construct, 0) >= needed:
             notes += unlock(state, pet, f"{needed} × " + _(CONSTRUCT_NAMES[construct]))
+    for pet, (rule, how) in STATE_PETS.items():
+        if rule(state):
+            notes += unlock(state, pet, _(how))
     for pet, (tools, needed) in TOOL_PETS.items():
         if tool_uses(state, tools) >= needed:
             notes += unlock(state, pet, f"{needed} × {min(tools)}")

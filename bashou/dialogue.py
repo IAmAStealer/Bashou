@@ -13,7 +13,7 @@ from .analyze import analyze
 from .i18n import _
 
 VOICE = {
-    "cat": "Mrrp.", "sprout": "*rustle*", "pebble": "*clack*", "bat": "*flap*", "gremlin": "Hehehe.", "frog": "Ribbit.", "turtle": "…", "mushroom": "*puff*", "slime": "Blub.",
+    "cat": "Mrrp.", "sprout": "*rustle*", "pebble": "*clack*", "bat": "*flap*", "gremlin": "Hehehe.", "snail": "*slow bow*", "frog": "Ribbit.", "turtle": "…", "mushroom": "*puff*", "slime": "Blub.",
     "sofa": "*creak*", "octopus": "Glub!", "dragon": "Rawr!", "fox": "*sniff*", "owl": "Hoo.",
     "mole": "*dig dig*", "snake": "Sss…", "ghost": "Boo~", "spider": "*tik-tik*", "ant": "*click*",
     "axolotl": "*wiggle*",
@@ -29,6 +29,9 @@ TIPS = {
     "pebble": ["`ls -lah` shows hidden files with human sizes.", "`du -sh *` : how big is each folder?",
                "`df -h` : how full are your disks?", "`ln -s target link` makes a shortcut.",
                "`chmod 644 file` : rw for you, read for others."],
+    "snail": ["`mkdir -p a/b/c` builds a whole path at once.", "`cp -r src dst` copies a folder and its content.",
+              "`ln -s target name` makes a shortcut.", "`mv old new` renames; `mv file dir/` moves.",
+              "Onward! `bashou adventure` has more roads to walk."],
     "gremlin": ["Before running a script from the web: download, read, then run.",
                 "`sha256sum file` shows a checksum: compare it with the one on the website.",
                 "`chmod u+x script.sh` is enough to run it. No need for 777.",
@@ -83,6 +86,7 @@ EXAMPLES = {
     "field_reader": "awk -F: '{print $1}' /etc/passwd", "accountant": "awk '{s+=$1} END {print s}' f",
     "scribe": "awk '{printf \"%-10s %s\\n\", $1, $2}' f",
     "digger": "grep -rn TODO .", "regex": "grep -E 'cat|dog' f", "context": "grep -C2 error log",
+    "builder": "mkdir -p camp/tent/bed", "copycat": "cp -r notes notes.bak", "shortcut": "ln -s ~/projects p",
     "inspector": "less install.sh", "checksum": "sha256sum install.sh",
     "save_first": "curl -fsSLo install.sh https://example.com/install.sh", "tight": "chmod u+x install.sh",
     "in_place": "sed -i 's/old/new/' f", "global": "sed 's/a/b/g' f", "printer": "sed -n '1,5p' f",
@@ -110,7 +114,8 @@ TRAITS = {
 PERSONAL = {
     "cat": ["I'll just sit on your keyboard… no? Fine."], "sprout": ["Water me with commands."],
     "pebble": ["I'm a rock. You can count on me."], "bat": ["I like the terminal after dark."],
-    "gremlin": ["Run it! What could go wrong? …Just kidding. Read it first."], "frog": ["Hop hop. What's next?"],
+    "gremlin": ["Run it! What could go wrong? …Just kidding. Read it first."],
+    "snail": ["Slowly but surely, hero.", "Every checkpoint is a small victory."], "frog": ["Hop hop. What's next?"],
     "turtle": ["Slow and steady. No rush."], "mushroom": ["Loops make me grow."],
     "slime": ["I can take the shape of any output."], "sofa": ["Sit down. Relax. Run a command."],
     "octopus": ["Eight arms, eight pipes."], "dragon": ["I guard your shell."],

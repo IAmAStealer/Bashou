@@ -90,7 +90,7 @@ def messages():
         found += names
     found += list(behavior.ACTIONS.values())
     from . import progress
-    found += list(progress.CONSTRUCT_NAMES.values())
+    found += list(progress.CONSTRUCT_NAMES.values()) + [how for rule, how in progress.STATE_PETS.values()]
     for ch in challenges.ALL + challenges.SECURITY + challenges.TRIALS:
         found += [ch.threat, ch.task, *ch.hints]
     return list(dict.fromkeys(found))
