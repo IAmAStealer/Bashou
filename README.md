@@ -41,6 +41,8 @@ bashou off / on         # hide / show the pet
 bashou stats            # commands, top tools, constructs, streaks
 ```
 
+Tab completion works for commands, pet names and `dev` arguments.
+
 ## Privacy
 
 Bashou reads each new history entry to count tools and constructs, then throws it away.

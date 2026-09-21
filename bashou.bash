@@ -47,6 +47,27 @@ bashou() {
   esac
 }
 
+# Tab completion. Static lists (no Python on Tab); tests/test_completion.py keeps them in sync.
+_bashou_commands="level pets achievements fight talk swap stats dev on off"
+_bashou_pets="cat frog turtle mushroom slime sofa octopus dragon fox owl mole snake ghost spider ant axolotl"
+_bashou_dev="unlock-all stage stage-all threat restore"
+_bashou_challenges="grep_hydra awk_golem find_wraith uniq_swarm sed_serpent ps_phantom"
+
+_bashou_complete() {
+  local cur=${COMP_WORDS[COMP_CWORD]} words
+  case "$COMP_CWORD:${COMP_WORDS[1]}:${COMP_WORDS[2]}" in
+    1:*)              words=$_bashou_commands ;;
+    2:swap:*)         words=$_bashou_pets ;;
+    2:dev:*)          words=$_bashou_dev ;;
+    3:dev:stage)      words=$_bashou_pets ;;
+    3:dev:stage-all)  words="1 2 3" ;;
+    3:dev:threat)     words=$_bashou_challenges ;;
+    4:dev:stage)      words="1 2 3" ;;
+  esac
+  COMPREPLY=($(compgen -W "$words" -- "$cur"))
+}
+complete -F _bashou_complete bashou
+
 [[ ${PROMPT_COMMAND[0]} == _bashou_log* ]] || PROMPT_COMMAND="_bashou_log${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
 [[ $PS0 == *_bashou_ps0* ]] || PS0='$(_bashou_ps0)'"$PS0"
 trap 'bashou off' EXIT
