@@ -118,6 +118,27 @@ class RemoteScriptTest(unittest.TestCase):
         self.assertIn("sudo", dialogue.risky("cat", "curl u | sudo sh"))
 
 
+class HintTest(unittest.TestCase):
+    def test_beginners_get_easy_hints(self):
+        """The Pebble suggested `awk '{printf "%-10s %s\\n", $1, $2}'` to someone with 12 commands."""
+        s = state.default()
+        rng = random.Random(0)
+        easy = {a.name for a in achievements.ALL if a.id in achievements.EASY}
+        for _ in range(100):
+            text = dialogue.hint(s, "pebble", rng)
+            self.assertTrue(any(f"({name})" in text for name in easy), text)
+
+    def test_harder_hints_come_later(self):
+        s = state.default()
+        s["achievements"] = [a.id for a in achievements.ALL if achievements.difficulty(a) < 3]
+        text = dialogue.hint(s, "pebble", random.Random(0))
+        self.assertTrue(any(f"({a.name})" in text for a in achievements.ALL if a.id in achievements.HARD), text)
+
+    def test_every_difficulty_id_exists(self):
+        for aid in achievements.EASY | achievements.HARD:
+            self.assertIn(aid, achievements.BY_ID)
+
+
 class GremlinTest(unittest.TestCase):
     def test_risky_commands_attract_the_gremlin(self):
         s = state.default()

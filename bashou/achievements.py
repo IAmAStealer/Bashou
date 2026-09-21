@@ -181,5 +181,17 @@ ALL = [
 BY_ID = {a.id: a for a in ALL}
 
 
+# How hard an achievement is to learn: hints suggest the easiest ones left first.
+EASY = {"historian", "loop", "ranges", "capture", "tally", "unique", "plumber", "inspector", "checksum",
+        "tight", "digger", "census", "global"}
+HARD = {"nested", "substitute", "pruner", "scribe", "accountant", "parallel", "null", "mapper", "follow",
+        "summary", "filter"}
+
+
+def difficulty(a):
+    """1 easy, 2 medium, 3 hard."""
+    return 1 if a.id in EASY else 3 if a.id in HARD else 2
+
+
 def family(pet):
     return [a for a in ALL if a.pet == pet]

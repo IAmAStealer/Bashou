@@ -121,13 +121,14 @@ PERSONAL = {
 
 
 def hint(state, pet, rng):
-    """Next achievement of this pet's family, or any one left, with an example."""
+    """Next achievement of this pet's family, or any one left (the easiest first), with an example."""
     earned = set(state["achievements"])
     todo = [a for a in achievements.family(pet) if a.id not in earned and not a.state]
     todo = todo or [a for a in achievements.ALL if a.id not in earned and not a.state]
     if not todo:
         return None
-    a = rng.choice(todo)
+    easiest = min(map(achievements.difficulty, todo))
+    a = rng.choice([a for a in todo if achievements.difficulty(a) == easiest])
     example = EXAMPLES.get(a.id)
     if example:
         return _("Try `{example}` ({name})").format(example=example.replace(chr(10), " ⏎ "), name=_(a.name))
