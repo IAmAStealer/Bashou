@@ -8,10 +8,11 @@ import os
 import random
 import signal
 import sys
+import threading
 import time
 from pathlib import Path
 
-from . import creatures, dialogue, fight, i18n, progress, render, state
+from . import creatures, dialogue, fight, i18n, progress, render, state, update
 from .behavior import Behavior
 from .analyze import parse_log
 
@@ -144,6 +145,16 @@ class Companion:
         self.talk_at = ms + random.randint(10, 20) * 60_000
         self.notes.append(dialogue.line(state.load(), self.voice))
 
+    def check_update(self):
+        """Once a day, in the background (git may take a while): a bubble if a new version is out."""
+        try:
+            if update.due():
+                note = update.check()
+                if note:
+                    self.notes.append(note)
+        except Exception:
+            log_error()
+
     def check_threat(self):
         with state.locked() as s:
             note = fight.maybe_threat(s)
@@ -216,6 +227,8 @@ class Companion:
             self.reload_pet()
         if self.tick % 120 == 60:
             self.check_threat()
+        if self.tick == 80:              # 20 s after the start, not to slow down the first prompt
+            threading.Thread(target=self.check_update, daemon=True).start()
         if self.busy:
             self.busy, self.last_key, self.drawn = False, None, None
             self.last_command = now_ms()

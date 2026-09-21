@@ -42,6 +42,7 @@ bashou swap             # board to pick your pet (or: bashou swap fox)
 bashou off / on         # hide / show the pet
 bashou stats            # commands, top tools, constructs, streaks
 bashou config           # list settings (see Configuration)
+bashou update           # get the new version from GitHub
 bashou reset            # start over with a new starter (asks first, keeps a backup)
 ```
 
@@ -62,6 +63,7 @@ bashou config bubble default    # back to the default (5-10)
 | Setting | Default | What it does |
 |---|---|---|
 | `bubble` | `5-10` | How many commands a speech bubble (tips, hints, achievements) stays on screen. When another message is waiting, the current one closes after 2 commands. |
+| `updates` | `on` | Once a day, your pet looks for a new version on GitHub (a `git fetch` of the install folder, nothing about you is sent) and tells you in a bubble. `bashou update` installs it; running pets switch to it by themselves. |
 
 Settings are saved in `~/.local/share/bashou/state.json` (only the ones you changed) and apply to
 every terminal right away. `bashou reset` keeps your language but resets settings. The language is

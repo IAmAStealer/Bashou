@@ -25,7 +25,8 @@ class Shell:
         self.data, self.cache = self.tmp / "data", self.tmp / "cache"
         self.data.mkdir(exist_ok=True)
         if state is not False:                           # False: first launch, no save yet
-            base = {"language": "en", "starter": "cat", "active": "starter", **(state or {})}
+            base = {"language": "en", "starter": "cat", "active": "starter",
+                    "settings": {"updates": "off"}, **(state or {})}
             (self.data / "state.json").write_text(json.dumps(base))
         rc = self.tmp / "rc"
         rc.write_text(f"PS1='$ '\nHISTFILE={self.tmp}/hist\nHISTCONTROL=ignoreboth\n"

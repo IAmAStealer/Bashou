@@ -38,6 +38,8 @@ def level():
     width = max(len(label) for label, value in rows)
     for label, value in rows:
         print(f"  {BOLD}{label:<{width}}{RESET} : {value}")
+    if s["update_behind"]:
+        print(f"\n  🆕 {DIM}" + _("A new Bashou is out: bashou update") + RESET)
 
 
 def hint(s, pet):
@@ -134,27 +136,26 @@ def config(name, value):
     if not name:
         s = state.load()
         for key, (default, text) in state.SETTINGS.items():
-            low, high = state.setting(s, key)
-            print(f"  {BOLD}{key}{RESET} {low}-{high}  {DIM}{_(text)} · " + _("default") + f" {default[0]}-{default[1]}{RESET}")
+            print(f"  {BOLD}{key}{RESET} {state.show(state.setting(s, key))}  "
+                  f"{DIM}{_(text)} · " + _("default") + f" {state.show(default)}{RESET}")
         return 0
     if name not in state.SETTINGS:
         print("  " + _("Unknown setting: {name}").format(name=name))
         return 1
     if value is None:
-        low, high = state.setting(state.load(), name)
-        print(f"  {name} {low}-{high}")
+        print(f"  {name} {state.show(state.setting(state.load(), name))}")
         return 0
     try:
-        new = None if value == "default" else state.parse_range(value)
+        new = None if value == "default" else state.parse(name, value)
     except ValueError:
-        print("  " + _("Expected a number or a range like 5-10, got {value}").format(value=value))
+        print("  " + _("Not a valid value for {name}: {value}").format(name=name, value=value))
         return 1
     with state.locked() as s:
         s.setdefault("settings", {}).pop(name, None)
-        if new:
-            s["settings"][name] = list(new)
-        low, high = state.setting(s, name)
-    print(f"  {name} {low}-{high}")
+        if new is not None:
+            s["settings"][name] = new
+        shown = state.show(state.setting(s, name))
+    print(f"  {name} {shown}")
     return 0
 
 
@@ -246,6 +247,7 @@ def main():
     dv.add_argument("stage", nargs="?", type=int, choices=[1, 2, 3], default=3)
     sub.add_parser("start", help="choose your starter (once)")
     sub.add_parser("language", help="choose the language")
+    sub.add_parser("update", help="get the new version from GitHub")
     cf = sub.add_parser("config", help="settings, e.g. bashou config bubble 5-10")
     cf.add_argument("name", nargs="?")
     cf.add_argument("value", nargs="?")
@@ -263,6 +265,9 @@ def main():
         s = state.load()
         name, voice = progress.current(s)[2:]
         print(f"  {BOLD}{name}{RESET}: {dialogue.line(s, voice)}")
+    elif args.cmd == "update":
+        from . import update
+        raise SystemExit(update.run())
     elif args.cmd == "config":
         raise SystemExit(config(args.name, args.value))
     elif args.cmd == "language":

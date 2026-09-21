@@ -18,6 +18,7 @@ You need bash and python3 (already there on most Linux systems).
 ```bash
 bashou          # see how your pet is doing
 bashou -h       # all commands
+bashou update   # get the new version (your pet tells you when there is one)
 ```
 
 ## Uninstall

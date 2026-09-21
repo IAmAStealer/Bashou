@@ -29,6 +29,8 @@ def default():
         "threat": None,     # {"challenge", "until"} while a threat waits for you
         "threat_day": {"date": "", "count": 0},
         "last_threat": 0,
+        "update_checked": 0,   # last time a terminal looked for a new version
+        "update_behind": 0,    # new commits on GitHub at that check
         "settings": {},     # `bashou config`, only what differs from SETTINGS
     }
 
@@ -36,11 +38,26 @@ def default():
 # name: (default (low, high), help)
 SETTINGS = {
     "bubble": ((5, 10), "commands a speech bubble stays on screen (e.g. 5-10, or 3)"),
+    "updates": ("on", "look for a new version once a day (on/off)"),
 }
 
 
 def setting(state, name):
-    return tuple(state.get("settings", {}).get(name, SETTINGS[name][0]))
+    value = state.get("settings", {}).get(name, SETTINGS[name][0])
+    return tuple(value) if isinstance(value, (list, tuple)) else value
+
+
+def show(value):
+    return f"{value[0]}-{value[1]}" if isinstance(value, tuple) else value
+
+
+def parse(name, text):
+    """Check a new value against the setting's kind; ValueError if it doesn't fit."""
+    if isinstance(SETTINGS[name][0], tuple):
+        return list(parse_range(text))
+    if text not in ("on", "off"):
+        raise ValueError(text)
+    return text
 
 
 def parse_range(text):

@@ -159,6 +159,9 @@ class ConfigTest(TempState):
             self.assertEqual(cli.config("bubble", "default"), 0)
             self.assertEqual(state.setting(state.load(), "bubble"), (5, 10))
             self.assertEqual(cli.config("volume", "3"), 1)
+            self.assertEqual(cli.config("updates", "maybe"), 1)
+            self.assertEqual(cli.config("updates", "off"), 0)
+            self.assertEqual(state.setting(state.load(), "updates"), "off")
 
 
 class BoardTest(TempState):
