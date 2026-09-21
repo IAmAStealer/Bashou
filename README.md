@@ -12,6 +12,9 @@ A pixel-art pet that lives in the top-right corner of your terminal and grows as
   `awk -F`, `sort -rn`, a heredoc…): 2 of them evolve it, all of them make it legendary.
   Evolved pets learn new actions: washing, humming, tail flicks, then dancing and sparkles.
 - **Pick your pet** on a 4×4 board with `bashou swap`.
+- **Pets talk.** Every 10–20 minutes your pet gives a tip for its tool, a hint toward your next
+  achievement (with an example command), or a line shaped by your achievements (win fights and it
+  gets bolder). `bashou talk` asks it right away.
 - **Threats.** A few times a day a threat shows up (« ⚠ A Log Hydra is coming! Use `grep` to fight
   it »). `bashou fight` drops you in a sandbox bash with random data: solve the task with the named
   tool, `answer` it, and the threat's pet joins you. `hint` helps, `flee` runs away. See [PLAN.md](PLAN.md).
@@ -32,6 +35,7 @@ bashou level            # commands run, next unlock
 bashou pets             # your collection
 bashou achievements     # what you earned, and what to try next
 bashou fight            # enter the arena (any time, or when a threat shows up)
+bashou talk             # your pet says something useful
 bashou swap             # board to pick your pet (or: bashou swap fox)
 bashou off / on         # hide / show the pet
 bashou breathe [box|478|calm] [-n cycles]   # guided breathing

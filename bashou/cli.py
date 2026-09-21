@@ -128,6 +128,7 @@ def main():
     sub.add_parser("pets", help="your collection")
     sub.add_parser("achievements", help="what you earned and what to try next")
     sub.add_parser("fight", help="enter the arena")
+    sub.add_parser("talk", help="your pet says something useful")
     sw = sub.add_parser("swap", help="change your active pet")
     sw.add_argument("pet", nargs="?")
     br = sub.add_parser("breathe", help="guided breathing")
@@ -146,6 +147,11 @@ def main():
         pets()
     elif args.cmd == "achievements":
         achievements_list()
+    elif args.cmd == "talk":
+        from . import dialogue
+        s = state.load()
+        pet = s["active"]
+        print(f"  {BOLD}{STAGES[pet][progress.stage(s, pet) - 1]}{RESET}: {dialogue.line(s, pet)}")
     elif args.cmd == "fight":
         from . import fight
         fight.run()

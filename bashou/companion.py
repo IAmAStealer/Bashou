@@ -5,11 +5,12 @@ Started by bashou.bash as `python3 -m bashou.companion <shell pid>` with stdout 
 
 import datetime
 import os
+import random
 import signal
 import sys
 import time
 
-from . import creatures, fight, progress, render, state
+from . import creatures, dialogue, fight, progress, render, state
 from .behavior import Behavior
 from .analyze import parse_log
 
@@ -40,6 +41,7 @@ class Companion:
         self.threat = False
         self.behavior = Behavior(now=now_ms())
         self.last_command = now_ms()
+        self.talk_at = now_ms() + random.randint(3, 8) * 60_000
 
     # --- shell ------------------------------------------------------------
 
@@ -108,6 +110,13 @@ class Companion:
         except OSError:
             typed = 0
         return max(self.last_command, typed)
+
+    def maybe_talk(self, ms):
+        """Every 10-20 minutes at the prompt, the pet says something (if awake and nothing else to say)."""
+        if ms < self.talk_at or self.notes or self.bubble or self.behavior.mood == "sleep":
+            return
+        self.talk_at = ms + random.randint(10, 20) * 60_000
+        self.notes.append(dialogue.line(state.load(), self.pet.id))
 
     def check_threat(self):
         with state.locked() as s:
@@ -184,6 +193,7 @@ class Companion:
                 if self.busy:
                     self.busy, self.last_key, self.drawn = False, None, None
                     self.last_command = now_ms()
+                self.maybe_talk(now_ms())
                 self.draw(now_ms())
         finally:
             for f in (self.events, self.erase_file):
