@@ -73,11 +73,30 @@ def erase(cells, row, col):
     return "".join(out)
 
 
-def bubble(text, max_width):
-    """Three lines of a speech bubble pointing right, and its width."""
-    while width(text) > max_width - 5 and len(text) > 1:
-        text = text[:-2] + "…"
-    w = width(text)
-    return ["╭" + "─" * (w + 2) + "╮ ",
-            "│ " + text + " │◂",
-            "╰" + "─" * (w + 2) + "╯ "], w + 5
+def wrap(text, w, max_lines):
+    """Split on spaces into lines of at most `w` columns; the last kept line ends with … if cut."""
+    lines, cur = [], ""
+    for word in text.split(" "):
+        while width(word) > w:                           # a word longer than the bubble
+            word = word[:-2] + "…"
+        if cur and width(cur) + 1 + width(word) > w:
+            lines.append(cur)
+            cur = word
+        else:
+            cur = f"{cur} {word}" if cur else word
+    lines.append(cur)
+    if len(lines) > max_lines:
+        lines = lines[:max_lines]
+        last = lines[-1]
+        while width(last) > w - 1:
+            last = last[:-1]
+        lines[-1] = last + "…"
+    return lines
+
+
+def bubble(text, max_width, max_lines=4):
+    """A speech bubble pointing right (wrapped on up to `max_lines` lines), and its width."""
+    rows = wrap(text, max(4, max_width - 5), max_lines)
+    w = max(width(r) for r in rows)
+    body = ["│ " + r + " " * (w - width(r)) + " │" + ("◂" if i == 0 else " ") for i, r in enumerate(rows)]
+    return ["╭" + "─" * (w + 2) + "╮ ", *body, "╰" + "─" * (w + 2) + "╯ "], w + 5

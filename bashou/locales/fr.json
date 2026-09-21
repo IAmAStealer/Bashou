@@ -319,6 +319,10 @@
  "*tik-tik*": "",
  "*click*": "",
  "*wiggle*": "",
+ "Careful! That ran a script from the internet unread. Download it, read it, then run it.": "",
+ "A download piped into a shell runs whatever the server sends. Save it first: curl -fsSLo install.sh URL && less install.sh": "",
+ "Did you read that script first? Whoever controls the URL controls your shell.": "",
+ "…and with sudo, it could change anything on your machine.": "",
  "Bat": "",
  "Frog": "",
  "Turtle": "",
@@ -382,6 +386,7 @@
  "breathe, blink, fidget, look around, sleep": "",
  "wash, hum, flick its tail": "",
  "dance, sparkle": "",
+ "3-command pipes": "",
  "Log Hydra": "",
  "The Log Hydra grows a head for every [ERROR] line in app.log.\nHow many lines contain [ERROR]? (lowercase \"error\" doesn't count)": "",
  "grep can count matching lines by itself: look at `grep -c`.": "",
@@ -405,5 +410,9 @@
  "Process Phantom": "",
  "A Process Phantom named {name} haunts this machine.\nWhat is its PID?": "",
  "`ps aux` lists every process with its PID in the 2nd column; filter it with grep.": "",
- "Try: pgrep -f phantom   or   ps aux | grep phantom": ""
+ "Try: pgrep -f phantom   or   ps aux | grep phantom": "",
+ "Knot Eel": "",
+ "The Knot Eel ties commands into knots. Untie it with one pipeline of at least 3 commands.\nIn access.log (ip, method, page, status), how many different IPs got a 404 status?": "",
+ "One small step per command, joined with |: keep the 404 lines, keep the IP, drop duplicates, count.": "",
+ "Try: grep ' 404$' access.log | cut -d' ' -f1 | sort -u | wc -l": ""
 }

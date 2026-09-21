@@ -53,6 +53,7 @@ class Companion:
         self.last_command = now_ms()
         self.talk_at = now_ms() + random.randint(3, 8) * 60_000
         self.typo_at = 0
+        self.warn_at = 0
 
     # --- shell ------------------------------------------------------------
 
@@ -96,6 +97,7 @@ class Companion:
                 self.notes += progress.record(s, status, command, now.date().isoformat(), now.hour)
                 if status == 127:
                     self.laugh_at_typo(s, command)
+                self.warn_remote_script(command)
 
     def events_size(self):
         try:
@@ -138,6 +140,17 @@ class Companion:
             self.typo_at = ms + 60_000
             self.notes.insert(0, line)
 
+    def warn_remote_script(self, command):
+        """`curl … | sh`: a safety warning, shown right away (at most once every 5 minutes)."""
+        ms = now_ms()
+        if ms < self.warn_at:
+            return
+        line = dialogue.remote_script(self.voice, command)
+        if line:
+            self.warn_at = ms + 5 * 60_000
+            self.notes.insert(0, line)
+            self.bubble = None
+
     def maybe_talk(self, ms):
         """Every 10-20 minutes at the prompt, the pet says something (if awake and nothing else to say)."""
         if ms < self.talk_at or self.notes or self.bubble or self.behavior.mood == "sleep":
@@ -179,7 +192,7 @@ class Companion:
             if bx >= 1:
                 for i, line in enumerate(lines):
                     out.append(f"{ESC}[{i + 2};{bx}H{ESC}[38;2;150;190;230m{line}{ESC}[0m")
-                erase += render.erase([[True] * bw] * 3, 2, bx)
+                erase += render.erase([[True] * bw] * len(lines), 2, bx)
         return "".join(out), erase
 
     def update_bubble(self):

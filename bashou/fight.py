@@ -121,7 +121,7 @@ def used_tool(base, ch):
         records = parse_log((Path(base) / "log").read_text())
     except FileNotFoundError:
         return False
-    return any(status == 0 and analyze(cmd).tools & set(ch.tools) for status, cmd in records)
+    return any(status == 0 and ch.used_by(analyze(cmd)) for status, cmd in records)
 
 
 def cmd_answer(base, value):

@@ -58,7 +58,7 @@ bashou() {
 _bashou_commands="level pets achievements fight talk swap stats start language config update reset dev on off"
 _bashou_pets="bat frog turtle mushroom slime sofa octopus dragon fox owl mole snake ghost spider ant axolotl"
 _bashou_dev="unlock-all stage stage-all level threat restore"
-_bashou_challenges="grep_hydra awk_golem find_wraith uniq_swarm sed_serpent ps_phantom"
+_bashou_challenges="grep_hydra awk_golem find_wraith uniq_swarm sed_serpent ps_phantom pipe_eel"
 
 _bashou_complete() {
   local cur=${COMP_WORDS[COMP_CWORD]} words

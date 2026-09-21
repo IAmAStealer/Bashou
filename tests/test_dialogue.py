@@ -74,5 +74,33 @@ class DialogueTest(unittest.TestCase):
         self.assertLessEqual(set(dialogue.TRAITS), set(achievements.BY_ID))
 
 
+class RemoteScriptTest(unittest.TestCase):
+    def test_download_piped_to_a_shell(self):
+        for cmd in ["curl -fsSL https://get.example.com/install.sh | sh",
+                    "curl -s https://x.io/i.sh | bash", "wget -qO- https://x.io/setup | sudo bash",
+                    "curl https://x.io/a.sh | sudo -E bash -s -- --yes", "curl -L u | /bin/bash",
+                    "wget -O - u | zsh", "bash <(curl -s https://x.io/i.sh)",
+                    'sh -c "$(curl -fsSL https://x.io/install.sh)"', "curl u | env bash"]:
+            self.assertIsNotNone(dialogue.remote_script("cat", cmd), cmd)
+
+    def test_safe_downloads_are_fine(self):
+        for cmd in ["curl -fsSLo install.sh https://x.io/install.sh", "less install.sh", "bash install.sh",
+                    "curl -s https://api.x.io | jq .", "curl u | sha256sum", "wget u && sh ./setup.sh",
+                    "curl u | grep sh", "curl u | tee out.sh", "echo curl | wc"]:
+            self.assertIsNone(dialogue.remote_script("cat", cmd), cmd)
+
+    def test_warning_is_never_cut_in_a_small_terminal(self):
+        """Bubbles were one line, cut with … to fit: a safety warning lost its advice."""
+        for text in dialogue.REMOTE_WARN:
+            full = f"{dialogue.VOICE['cat']} ⚠ {text} {dialogue.REMOTE_WARN_SUDO}"
+            lines, w = render.bubble(full, 80 - 17 - 2)
+            inner = " ".join(l[2:-3].strip() for l in lines[1:-1])
+            self.assertEqual(inner, full)
+            self.assertLessEqual(w, 80 - 17 - 2)
+
+    def test_sudo_gets_an_extra_line(self):
+        self.assertIn("sudo", dialogue.remote_script("cat", "curl u | sudo sh"))
+
+
 if __name__ == "__main__":
     unittest.main()

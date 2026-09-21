@@ -15,6 +15,7 @@ SOLUTIONS = {
     "uniq_swarm": ("sort visitors.txt | uniq -c | sort -rn | head -1 | awk '{{print $2}}'", None),
     "sed_serpent": ("sed -i 's/teh/the/g; s/Teh/The/g' letter.txt", None),
     "ps_phantom": ("pgrep -f '^{x}'", r"named (phantom-\w+)"),
+    "pipe_eel": ("grep ' 404$' access.log | cut -d' ' -f1 | sort -u | wc -l", None),
 }
 
 
@@ -44,6 +45,15 @@ class ChallengeTest(unittest.TestCase):
                     finally:
                         if ch.cleanup:
                             ch.cleanup(meta)
+
+    def test_the_pipe_eel_needs_a_real_pipeline(self):
+        with tempfile.TemporaryDirectory() as base:
+            ch = challenges.BY_ID["pipe_eel"]
+            log = Path(base) / "log"
+            log.write_text("0\t    1  grep 404 access.log | wc -l\n")          # only 2 commands
+            self.assertFalse(fight.used_tool(base, ch))
+            log.write_text(log.read_text() + "0\t    2  grep ' 404$' access.log | cut -d' ' -f1 | sort -u\n")
+            self.assertTrue(fight.used_tool(base, ch))
 
     def test_the_tool_is_required(self):
         with tempfile.TemporaryDirectory() as base:

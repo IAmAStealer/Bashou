@@ -43,6 +43,9 @@ def level():
 
 
 def hint(s, pet):
+    if pet in progress.CONSTRUCT_PETS:
+        construct, needed = progress.CONSTRUCT_PETS[pet]
+        return f"{s['constructs'].get(construct, 0)}/{needed} × " + _(progress.CONSTRUCT_NAMES[construct])
     for count, p in progress.MILESTONES:
         if p == pet:
             return _("{count} commands").format(count=f"{count:,}")

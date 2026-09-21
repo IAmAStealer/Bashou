@@ -82,11 +82,14 @@ def messages():
         for lines in table.values():
             found += lines
     found += dialogue.TYPO_FIX + dialogue.TYPO_NONE + list(dialogue.VOICE.values())
+    found += dialogue.REMOTE_WARN + [dialogue.REMOTE_WARN_SUDO]
     found += list(creatures.NAMES.values()) + list(creatures.FORM_NAMES.values())
     found += list(creatures.STARTER_BLURBS.values())
     for names in creatures.STAGES.values():
         found += names
     found += list(behavior.ACTIONS.values())
+    from . import progress
+    found += list(progress.CONSTRUCT_NAMES.values())
     for ch in challenges.ALL:
         found += [ch.threat, ch.task, *ch.hints]
     return list(dict.fromkeys(found))

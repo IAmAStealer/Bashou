@@ -24,6 +24,11 @@ TOOL_PETS = {
 }
 
 
+# pet: (construct, lines needed); "pipe3" = a line chaining 3+ commands with |
+CONSTRUCT_PETS = {"octopus": ("pipe3", 10)}
+CONSTRUCT_NAMES = {"pipe3": "3-command pipes"}
+
+
 def unlock(state, pet, reason):
     if pet in state["pets"]:
         return []
@@ -103,6 +108,9 @@ def check(state, earned=()):
     for count, pet in MILESTONES:
         if state["commands"] >= count:
             notes += unlock(state, pet, _("{count} commands").format(count=f"{count:,}"))
+    for pet, (construct, needed) in CONSTRUCT_PETS.items():
+        if state["constructs"].get(construct, 0) >= needed:
+            notes += unlock(state, pet, f"{needed} × " + _(CONSTRUCT_NAMES[construct]))
     for pet, (tools, needed) in TOOL_PETS.items():
         if tool_uses(state, tools) >= needed:
             notes += unlock(state, pet, f"{needed} × {min(tools)}")

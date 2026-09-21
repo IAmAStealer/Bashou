@@ -6,6 +6,7 @@ Personality = the pet's own voice + traits from the achievements you earned
 
 import difflib
 import random
+import re
 import shutil
 
 from . import achievements
@@ -152,6 +153,30 @@ TYPO_FIX = ["Hehe, `{typo}`? I think you meant `{fix}`.", "`{typo}`… so close!
             "*giggles* `{fix}` has fewer typos than `{typo}`."]
 TYPO_NONE = ["`{typo}`? Never heard of it. Hehe.", "`{typo}` isn't a command… yet.",
              "*tilts head* `{typo}`?"]
+
+
+# A download run straight by a shell: `curl … | sh`, `wget -O- … | sudo bash`,
+# `bash <(curl …)`, `sh -c "$(curl …)"`.
+REMOTE_SCRIPT = re.compile(r"""
+    \b(curl|wget)\b[^|;&]*\|\s*(sudo\s+(-\S+\s+)*)?(env\s+)?\S*?\b(ba|z|da|k|fi)?sh\b
+  | \b(ba|z|da|k)?sh\s+(-\S+\s+)*(<\(|["']?\$\()\s*(curl|wget)\b
+""", re.X)
+
+REMOTE_WARN = ["Careful! That ran a script from the internet unread. Download it, read it, then run it.",
+               "A download piped into a shell runs whatever the server sends. "
+               "Save it first: curl -fsSLo install.sh URL && less install.sh",
+               "Did you read that script first? Whoever controls the URL controls your shell."]
+REMOTE_WARN_SUDO = "…and with sudo, it could change anything on your machine."
+
+
+def remote_script(pet, command, rng=random):
+    """A warning when a downloaded script goes straight into a shell, else None."""
+    if not REMOTE_SCRIPT.search(command):
+        return None
+    text = "⚠ " + _(rng.choice(REMOTE_WARN))
+    if re.search(r"\bsudo\b", command):
+        text += " " + _(REMOTE_WARN_SUDO)
+    return f"{_(VOICE[pet])} {text}"
 
 
 def typo(state, pet, command, rng=random):
