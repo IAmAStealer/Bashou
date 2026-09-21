@@ -1,0 +1,31 @@
+import os
+import signal
+import subprocess
+
+from . import Challenge
+
+
+def setup(work, rng):
+    name = f"phantom-{rng.randrange(16 ** 4):04x}"
+    # Detached from Python; cleanup() kills it when the arena closes.
+    out = subprocess.run(["bash", "-c", f"(exec -a {name} sleep 3600) </dev/null >/dev/null 2>&1 & echo $!"],
+                         capture_output=True, text=True)
+    pid = int(out.stdout)
+    return {"task": f"A Process Phantom named {name} haunts this machine.\n"
+                    f"What is its PID?",
+            "answer": pid, "pid": pid}
+
+
+def cleanup(meta):
+    try:
+        os.kill(meta["pid"], signal.SIGTERM)
+    except (OSError, KeyError):
+        pass
+
+
+CHALLENGE = Challenge(
+    id="ps_phantom", pet="ghost", tools=("ps", "pgrep", "pidof"), threat="Process Phantom",
+    hints=["`ps aux` lists every process with its PID in the 2nd column; filter it with grep.",
+           "Try: pgrep -f phantom   or   ps aux | grep phantom"],
+    setup=setup, cleanup=cleanup, requires=["ps"],
+)

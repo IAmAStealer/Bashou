@@ -1,0 +1,212 @@
+"""The arena: a bash sub-shell in a sandbox folder where you beat a threat with a real tool.
+
+`bashou fight` runs `run()`. Inside the arena, the shell functions `answer`, `hint` and
+`task` call back into this module (`python3 -m bashou.fight answer <base> <value>`).
+"""
+
+import datetime
+import json
+import os
+import random
+import shutil
+import subprocess
+import sys
+import tempfile
+import time
+from pathlib import Path
+
+from . import challenges, progress, state
+from .analyze import analyze, parse_log
+
+BOLD, DIM, RESET = "\033[1m", "\033[2m", "\033[0m"
+ACCENT, GOOD, BAD = "\033[38;2;150;190;230m", "\033[38;2;130;210;120m", "\033[38;2;240;110;110m"
+WIN, FLEE = 42, 3          # exit codes of the arena shell (Ctrl-D is a flee)
+THREAT_MINUTES = 10
+
+RC = r"""
+[[ -f ~/.bash_aliases ]] && source ~/.bash_aliases
+PS1='\[\e[38;2;240;110;110m\]⚔ arena\[\e[0m\] \W \$ '
+HISTFILE=$BASHOU_ARENA/history
+_arena_log() {
+  local s=$?
+  if [[ -n $_arena_hc && $HISTCMD != "$_arena_hc" ]]; then
+    printf '%s\t' "$s" >> "$BASHOU_ARENA/log"
+    HISTTIMEFORMAT= history 1 >> "$BASHOU_ARENA/log"
+  fi
+  _arena_hc=$HISTCMD
+  return "$s"
+}
+PROMPT_COMMAND=_arena_log
+_arena() { PYTHONPATH=$BASHOU_SRC python3 -m bashou.fight "$@" "$BASHOU_ARENA"; }
+answer() { _arena answer "$*" && exit 42; }
+hint() { _arena hint; }
+task() { _arena task; }
+flee() { exit 3; }
+cd "$BASHOU_ARENA/arena"
+"""
+
+
+# --- threats ---------------------------------------------------------------
+
+def level(s):
+    return len(s["pets"]) + sum(progress.stage(s, p) - 1 for p in s["pets"])
+
+
+def remaining(s):
+    return [c for c in challenges.ALL if c.id not in s["challenges"] and c.available()]
+
+
+def threats_per_day(s):
+    """About 3 a day at first, 1 later, fewer when the bank runs low, none when it's empty."""
+    return max(1, min(3, 3 - level(s) // 3)) * min(1, len(remaining(s)) / 5)
+
+
+def active_threat(s, now=None):
+    t = s.get("threat")
+    if t and t["until"] > (now or time.time()):
+        return t
+    return None
+
+
+def maybe_threat(s, rng=random, now=None):
+    """Called under the lock from the companion. Returns a notification or None."""
+    now = now or time.time()
+    if s.get("threat") and s["threat"]["until"] <= now:
+        s["threat"] = None                                 # it left
+    if s.get("threat"):
+        return None
+    today = datetime.date.fromtimestamp(now).isoformat()
+    if s["threat_day"]["date"] != today:
+        s["threat_day"] = {"date": today, "count": 0}
+    if s["threat_day"]["count"] >= threats_per_day(s) or now - s["last_threat"] < 2 * 3600:
+        return None
+    pool = remaining(s)
+    if not pool or rng.random() > 1 / 120:                 # one chance in 120 per 30 s at the prompt
+        return None
+    ch = rng.choice(pool)
+    s["threat"] = {"challenge": ch.id, "until": now + THREAT_MINUTES * 60}
+    s["threat_day"]["count"] += 1
+    s["last_threat"] = now
+    return f"⚠ A {ch.threat} is coming! Use `{ch.tool}` to fight it → bashou fight"
+
+
+# --- arena -----------------------------------------------------------------
+
+def pick(s):
+    t = active_threat(s)
+    if t and t["challenge"] in challenges.BY_ID:
+        return challenges.BY_ID[t["challenge"]], True
+    pool = remaining(s) or [c for c in challenges.ALL if c.available()]
+    return random.choice(pool), False
+
+
+def load_meta(base):
+    return json.loads((Path(base) / "meta.json").read_text())
+
+
+def used_tool(base, ch):
+    try:
+        records = parse_log((Path(base) / "log").read_text())
+    except FileNotFoundError:
+        return False
+    return any(status == 0 and analyze(cmd).tools & set(ch.tools) for status, cmd in records)
+
+
+def cmd_answer(base, value):
+    meta = load_meta(base)
+    ch = challenges.BY_ID[meta["challenge"]]
+    if not ch.check(Path(base) / "arena", meta, value):
+        print(f"{BAD}✗ Not quite. The {ch.threat} shrugs it off.{RESET} {DIM}(hint · task · flee){RESET}")
+        return 1
+    if not used_tool(base, ch):
+        print(f"{ACCENT}✓ Right answer, but only `{ch.tool}` can hurt the {ch.threat}. "
+              f"Solve it with {ch.tool} (a successful command), then answer again.{RESET}")
+        return 1
+    return 0
+
+
+def cmd_hint(base):
+    meta = load_meta(base)
+    ch = challenges.BY_ID[meta["challenge"]]
+    i = min(meta.get("hints", 0), len(ch.hints) - 1)
+    print(f"{ACCENT}💡 {ch.hints[i]}{RESET}")
+    meta["hints"] = i + 1
+    (Path(base) / "meta.json").write_text(json.dumps(meta))
+    return 0
+
+
+def cmd_task(base):
+    print(load_meta(base)["task"])
+    return 0
+
+
+def banner(ch, task):
+    return (f"\n{BAD}{BOLD}⚔ The {ch.threat} attacks!{RESET}  Use {BOLD}{ch.tool}{RESET} to fight it.\n\n"
+            f"{task}\n\n"
+            f"{DIM}You're in a sandbox folder with a real bash. Commands:{RESET}\n"
+            f"  answer <value>   strike   {DIM}(needs a successful {ch.tool} command first){RESET}\n"
+            f"  hint             get a hint\n"
+            f"  task             show the task again\n"
+            f"  flee             run away (the threat will come back)\n")
+
+
+def run():
+    s = state.load()
+    ch, is_threat = pick(s)
+    base = Path(tempfile.mkdtemp(prefix="bashou-arena-"))
+    work = base / "arena"
+    work.mkdir()
+    meta = {"challenge": ch.id, "hints": 0}
+    try:
+        meta.update(ch.setup(work, random.Random()))
+        (base / "meta.json").write_text(json.dumps(meta))
+        (base / "arena.rc").write_text(RC)
+        print(banner(ch, meta["task"]))
+        env = {**os.environ, "BASHOU_ARENA": str(base),
+               "BASHOU_SRC": str(Path(__file__).resolve().parent.parent)}
+        code = subprocess.run(["bash", "--rcfile", str(base / "arena.rc"), "-i"], env=env).returncode
+        try:
+            records = parse_log((base / "log").read_text())
+        except FileNotFoundError:
+            records = []
+    finally:
+        if ch.cleanup:
+            ch.cleanup(meta)
+        shutil.rmtree(base, ignore_errors=True)
+
+    won = code == WIN
+    notes = []
+    now = datetime.datetime.now()
+    with state.locked() as s:
+        for status, cmd in records:                        # arena commands count too
+            notes += progress.record(s, status, cmd, now.date().isoformat(), now.hour)
+        if won:
+            s["fights_won"] += 1
+            if ch.id not in s["challenges"]:
+                s["challenges"].append(ch.id)
+            if s.get("threat") and s["threat"]["challenge"] == ch.id:
+                s["threat"] = None
+            notes += progress.unlock(s, ch.pet, f"beat the {ch.threat}")
+            notes += progress.check(s)
+    if won:
+        print(f"\n{GOOD}{BOLD}✨ You beat the {ch.threat}!{RESET}")
+    else:
+        print(f"\n{DIM}You fled. The {ch.threat} will be back.{RESET}")
+    for note in notes:
+        print(f"  {note}")
+    print()
+
+
+def main():
+    cmd = sys.argv[1] if len(sys.argv) > 1 else "run"
+    if cmd == "answer":
+        sys.exit(cmd_answer(sys.argv[3], sys.argv[2]))
+    if cmd == "hint":
+        sys.exit(cmd_hint(sys.argv[2]))
+    if cmd == "task":
+        sys.exit(cmd_task(sys.argv[2]))
+    run()
+
+
+if __name__ == "__main__":
+    main()
