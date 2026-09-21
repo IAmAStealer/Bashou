@@ -48,6 +48,12 @@ Tab completion works for commands, pet names and `dev` arguments.
 Bashou reads each new history entry to count tools and constructs, then throws it away.
 Only counters are kept, in `~/.local/share/bashou/state.json`.
 
+## Tests
+
+```bash
+python3 -m unittest            # ~25 s; tests/test_shell.py drives a real bash on a pty
+```
+
 ## License
 
 MIT
