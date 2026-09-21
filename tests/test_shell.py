@@ -24,7 +24,8 @@ class Shell:
         self.tmp = Path(tmp)
         self.data, self.cache = self.tmp / "data", self.tmp / "cache"
         rc = self.tmp / "rc"
-        rc.write_text(f"PS1='$ '\nHISTFILE={self.tmp}/hist\nsource {ROOT}/bashou.bash\n")
+        rc.write_text(f"PS1='$ '\nHISTFILE={self.tmp}/hist\nHISTCONTROL=ignoreboth\n"
+                      f"source {ROOT}/bashou.bash\n")
         env = {**os.environ, "BASHOU_DATA": str(self.data), "BASHOU_CACHE": str(self.cache),
                "PYTHONPATH": str(ROOT), "TERM": "xterm-256color"}
         argv = cmd or ["bash", "--rcfile", str(rc), "-i"]
@@ -116,6 +117,23 @@ class ShellTest(unittest.TestCase):
         after = self.sh.out[start:]
         self.assertIn(erase, after)
         self.assertLess(after.index(erase), after.index(b"OUT_42"))
+
+    def test_pet_comes_back_right_after_any_command(self):
+        """The pet stayed erased up to 2 s, or longer after commands history skips (duplicates)."""
+        self.sh.send("true\n", 2)
+        start = len(self.sh.out)
+        self.sh.send("true\n", 0.6)                     # duplicate: not logged, no event
+        self.assertIn(b"38;2;245;167;52", self.sh.out[start:])   # cat fur color: redrawn
+
+    def test_dead_pet_is_restarted(self):
+        """If the pet process dies, the next prompt starts a new one."""
+        pet = int(self.sh.value("BASHOU_PID"))
+        os.kill(pet, signal.SIGKILL)
+        time.sleep(0.2)
+        self.sh.send("true\n", 1.5)
+        new = int(self.sh.value("BASHOU_PID"))
+        self.assertNotEqual(new, pet)
+        self.assertTrue(alive(new))
 
     def test_exit_cleans_up(self):
         """On exit the pet stops and removes its events/erase files."""

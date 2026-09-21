@@ -8,6 +8,7 @@ _bashou_data=${BASHOU_DATA:-$HOME/.local/share/bashou}
 _bashou_events=$_bashou_data/events.$$
 _bashou_erase=${BASHOU_CACHE:-$HOME/.cache/bashou}/erase.$$
 mkdir -p "$_bashou_data"
+_bashou_restarts=0
 
 # Log each new history entry as "status<TAB>history line". No fork: builtins only.
 # $HISTCMD only moves when a command is added, so empty Enters are not counted.
@@ -18,6 +19,11 @@ _bashou_log() {
     HISTTIMEFORMAT= history 1 >> "$_bashou_events"
   fi
   _bashou_hc=$HISTCMD
+  # Poke the pet so it redraws now (PS0 erased it). If it died, bring it back (3 tries max).
+  if [[ -n $BASHOU_PID ]] && ! kill -USR1 "$BASHOU_PID" 2>/dev/null && (( _bashou_restarts++ < 3 )); then
+    BASHOU_PID=
+    bashou on
+  fi
   return "$status"
 }
 
@@ -39,7 +45,8 @@ bashou() {
       ;;
     on)
       [[ -z $BASHOU_PID ]] || return 0
-      { PYTHONPATH=$BASHOU_DIR python3 -m bashou.companion "$$" </dev/null 2>/dev/null & } 2>/dev/null
+      # SIGUSR1 ignored until Python installs its handler (the default action would kill it).
+      { (trap '' USR1; PYTHONPATH=$BASHOU_DIR exec python3 -m bashou.companion "$$") </dev/null 2>/dev/null & } 2>/dev/null
       BASHOU_PID=$!
       disown "$BASHOU_PID"
       ;;

@@ -156,7 +156,6 @@ class Companion:
         if cols < self.pet.width + 20:
             return
         key = (tuple(poses), z, cols, self.bubble, self.pet.id, self.stage)
-        self.tick += 1
         if key == self.last_key and self.tick % 8:
             return
         self.last_key = key
@@ -173,34 +172,56 @@ class Companion:
 
     # --- main loop --------------------------------------------------------
 
+    def step(self):
+        if not self.at_prompt():
+            self.busy = True
+            return
+        # A new event (or the prompt's SIGUSR1) means a command ran and PS0 erased us.
+        if self.events_size() != self.offset:
+            self.busy = True
+        if self.busy or self.tick % 4 == 0:
+            self.read_events()
+            self.reload_pet()
+        if self.tick % 120 == 60:
+            self.check_threat()
+        if self.busy:
+            self.busy, self.last_key, self.drawn = False, None, None
+            self.last_command = now_ms()
+        self.maybe_talk(now_ms())
+        self.draw(now_ms())
+
     def run(self):
         state.CACHE.mkdir(parents=True, exist_ok=True)
+        errors = 0
         try:
             while self.alive():
                 time.sleep(TICK)
-                if not self.at_prompt():
-                    self.busy = True
-                    continue
-                # A new event means a command ran (and PS0 erased us), even one too quick to see.
-                size = self.events_size()
-                if size != self.offset:
-                    self.busy = True
-                if self.busy or self.tick % 4 == 0:
-                    self.read_events()
-                    self.reload_pet()
-                if self.tick % 120 == 60:
-                    self.check_threat()
-                if self.busy:
-                    self.busy, self.last_key, self.drawn = False, None, None
-                    self.last_command = now_ms()
-                self.maybe_talk(now_ms())
-                self.draw(now_ms())
+                self.tick += 1
+                try:
+                    self.step()
+                    errors = 0
+                except Exception:
+                    # Never let one bad frame kill the pet: log it and keep going.
+                    errors += 1
+                    log_error()
+                    if errors >= 20:
+                        raise
         finally:
             for f in (self.events, self.erase_file):
                 try:
                     f.unlink()
                 except FileNotFoundError:
                     pass
+
+def log_error():
+    """Append the traceback to ~/.cache/bashou/errors.log (kept small)."""
+    import traceback
+    log = state.CACHE / "errors.log"
+    try:
+        old = log.read_text()[-20000:] if log.exists() else ""
+        log.write_text(old + f"--- {datetime.datetime.now():%F %T}\n{traceback.format_exc()}")
+    except OSError:
+        pass
 
 
 def main():
@@ -209,7 +230,10 @@ def main():
     os.setpgrp()
     signal.signal(signal.SIGINT, signal.SIG_IGN)
     signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))
-    Companion(int(sys.argv[1])).run()
+    companion = Companion(int(sys.argv[1]))
+    # The prompt sends SIGUSR1 after every command: redraw right away.
+    signal.signal(signal.SIGUSR1, lambda *_: setattr(companion, "busy", True))
+    companion.run()
 
 
 if __name__ == "__main__":
