@@ -96,6 +96,11 @@ A release is made from *Actions → Release → Run workflow* with a version num
 every check first and only then creates the `vX.Y.Z` tag and the GitHub release. Pets only offer
 these tags, never a plain commit on `main`.
 
+## Contributing
+
+Pixel art and security challenges are welcome as pull requests: see
+[pixel art](contributing/pixel-art.md) and [security challenges](contributing/security-challenges.md).
+
 ## Privacy
 
 Bashou reads each new history entry to count tools and constructs, then throws it away.

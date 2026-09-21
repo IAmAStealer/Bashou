@@ -4,6 +4,8 @@ about: Suggest a small investigation for `bashou security`
 labels: challenge
 ---
 
+<!-- Guide: doc/contributing/security-challenges.md -->
+
 **What the player investigates** (the story, in one or two sentences):
 
 **Files in the sandbox** (fake logs, configs…):
