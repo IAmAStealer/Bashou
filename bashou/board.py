@@ -8,7 +8,7 @@ import tty
 
 from . import achievements, creatures, progress, render, state
 from .behavior import ACTIONS
-from .creatures import ROSTER, STAGES
+from .creatures import FORM_NAMES, ROSTER, STAGES, STARTERS
 
 ESC = "\x1b"
 COLS = 4
@@ -38,7 +38,7 @@ def silhouette(pet):
 class Board:
     def __init__(self):
         self.s = state.load()
-        ids = [pet for pet, _ in ROSTER]
+        ids = ["starter"] + [pet for pet, _ in ROSTER]   # starter on its own row, then the 4×4 grid
         self.ids = ids
         self.pos = ids.index(self.s["active"]) if self.s["active"] in ids else 0
         self.breath = False
@@ -46,8 +46,12 @@ class Board:
 
     def tile(self, i):
         pet = self.ids[i]
-        unlocked = pet in self.s["pets"]
-        if unlocked:
+        unlocked = pet in self.s["pets"] or pet == "starter"
+        if pet == "starter":
+            lvl = progress.starter_level(self.s)
+            name = progress.current(self.s, "starter")[2]
+            top = f"Lv {lvl}" + ("  ●" if self.s["active"] == "starter" else "")
+        elif unlocked:
             st = progress.stage(self.s, pet)
             name = STAGES[pet][st - 1]
             top = "★" * st + "☆" * (3 - st) + ("  ●" if pet == self.s["active"] else "")
@@ -59,8 +63,25 @@ class Board:
                 f"{style} {name:<{TILE_W - 2}} {RESET}",
                 ""]
 
+    def starter_preview(self):
+        s = self.s
+        sprite, form, name, _ = progress.current(s, "starter")
+        pet = creatures.get(sprite)
+        cells = [[True] * pet.width for _ in range(len(pet.base) // 2)]
+        out = render.lines(pet, ["inhale"] if self.breath else [], cells) + [""]
+        lvl = progress.starter_level(s)
+        out.append(f"{BOLD}{name}{RESET}  level {lvl}/{progress.MAX_LEVEL}")
+        if lvl < progress.MAX_LEVEL:
+            per = progress.ACHIEVEMENTS_PER_LEVEL
+            out.append(f"{DIM}{per - len(s['achievements']) % per} achievement(s) to level {lvl + 1}{RESET}")
+        forms = STARTERS[s["starter"] or "cat"]
+        out.append(f"{DIM}{' → '.join(FORM_NAMES[f] for f in forms)}  (shape changes at levels 4 and 7){RESET}")
+        return out
+
     def preview(self):
         pet_id = self.ids[self.pos]
+        if pet_id == "starter":
+            return self.starter_preview()
         unlocked = pet_id in self.s["pets"]
         drawn = pet_id in creatures.PETS
         out = []
@@ -94,8 +115,9 @@ class Board:
         cols = os.get_terminal_size().columns
         grid = [f"{BOLD}Bashou{RESET} {DIM}· {len(self.s['pets'])}/{len(self.ids)} pets · "
                 f"arrows/hjkl · Enter: pick · q: quit{RESET}", ""]
-        for row in range(len(self.ids) // COLS):
-            tiles = [self.tile(row * COLS + c) for c in range(COLS)]
+        grid += self.tile(0)
+        for row in range((len(self.ids) - 1) // COLS):
+            tiles = [self.tile(1 + row * COLS + c) for c in range(COLS)]
             for line in range(TILE_H):
                 grid.append("".join(t[line] if t[line] else " " * TILE_W for t in tiles))
         grid.append(self.message)
@@ -115,16 +137,16 @@ class Board:
     def key(self, k):
         n, size = self.pos, len(self.ids)
         if k == "up":
-            self.pos = (n - COLS) % size
+            self.pos = 0 if 1 <= n <= COLS else (n - COLS if n else size - COLS)
         elif k == "down":
-            self.pos = (n + COLS) % size
+            self.pos = 1 if n == 0 else (n + COLS if n + COLS < size else 0)
         elif k == "left":
             self.pos = (n - 1) % size
         elif k == "right":
             self.pos = (n + 1) % size
         elif k == "enter":
             pet = self.ids[n]
-            if pet not in self.s["pets"]:
+            if pet != "starter" and pet not in self.s["pets"]:
                 self.message = f"{DIM}Not unlocked yet: {hint(self.s, pet)}{RESET}"
                 return True
             with state.locked() as s:
@@ -155,8 +177,7 @@ class Board:
             termios.tcsetattr(fd, termios.TCSADRAIN, old)
             sys.stdout.write(f"{ESC}[?25h{ESC}[?1049l")
             sys.stdout.flush()
-        pet = self.s["active"]
-        print(f"  {STAGES[pet][progress.stage(self.s, pet) - 1]} is your pet.")
+        print(f"  {progress.current(self.s)[2]} is your pet.")
 
 
 def main():

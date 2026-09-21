@@ -79,10 +79,10 @@ def nested_subst(line):
 
 A = Achievement
 ALL = [
-    # Cat: habits
-    A("night_owl", "cat", "Night owl", "run a command between midnight and 5 am", cmd=lambda c: c.hour < 5),
-    A("streak7", "cat", "Streak", "use the terminal 7 days in a row", state=lambda s: streak(s["days"]) >= 7),
-    A("explorer", "cat", "Explorer", "use 20 different tools", state=lambda s: len(s["tools"]) >= 20),
+    # Bat: habits
+    A("night_owl", "bat", "Night owl", "run a command between midnight and 5 am", cmd=lambda c: c.hour < 5),
+    A("streak7", "bat", "Streak", "use the terminal 7 days in a row", state=lambda s: streak(s["days"]) >= 7),
+    A("explorer", "bat", "Explorer", "use 20 different tools", state=lambda s: len(s["tools"]) >= 20),
 
     # Frog: volume
     A("sprinter", "frog", "Sprinter", "run 100 commands in one day", state=lambda s: s["today"]["count"] >= 100),

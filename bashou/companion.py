@@ -35,7 +35,8 @@ class Companion:
         self.tick = 0
         self.busy = True
         self.state_mtime = 0
-        self.pet = creatures.get(state.load()["active"])
+        sprite, _, _, self.voice = progress.current(state.load())
+        self.pet = creatures.get(sprite)
         self.cells = render.mask(self.pet)
         self.stage = 1
         self.threat = False
@@ -100,10 +101,11 @@ class Companion:
             return
         self.state_mtime = mtime
         s = state.load()
-        pet = creatures.get(s["active"])
-        if pet.id != self.pet.id:
-            self.pet, self.cells = pet, render.mask(pet)
-        self.stage = self.behavior.stage = progress.stage(s, s["active"])
+        sprite, stage, _, self.voice = progress.current(s)
+        if sprite != self.pet.id:
+            self.pet = creatures.get(sprite)
+            self.cells = render.mask(self.pet)
+        self.stage = self.behavior.stage = stage
         self.threat = bool(fight.active_threat(s))
 
     def last_activity(self):
@@ -119,7 +121,7 @@ class Companion:
         ms = now_ms()
         if ms < self.typo_at:
             return
-        line = dialogue.typo(s, self.pet.id, command)
+        line = dialogue.typo(s, self.voice, command)
         if line:
             self.typo_at = ms + 60_000
             self.notes.insert(0, line)
@@ -129,7 +131,7 @@ class Companion:
         if ms < self.talk_at or self.notes or self.bubble or self.behavior.mood == "sleep":
             return
         self.talk_at = ms + random.randint(10, 20) * 60_000
-        self.notes.append(dialogue.line(state.load(), self.pet.id))
+        self.notes.append(dialogue.line(state.load(), self.voice))
 
     def check_threat(self):
         with state.locked() as s:

@@ -94,7 +94,7 @@ class CliBugs(TempState):
         board.pos = board.ids.index("dragon")
         self.assertTrue(board.key("enter"))              # board stays open
         self.assertIn("Not unlocked", board.message)
-        self.assertEqual(state.load()["active"], "cat")
+        self.assertEqual(state.load()["active"], "starter")
 
 
 if __name__ == "__main__":

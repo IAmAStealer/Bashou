@@ -19,8 +19,9 @@ def default():
         "constructs": {},   # construct -> uses
         "days": [],         # ISO dates with at least one command
         "today": {"date": "", "count": 0},
-        "pets": ["cat"],
-        "active": "cat",
+        "starter": None,    # "cat", "sprout" or "pebble", chosen once (`bashou start`)
+        "pets": [],         # collection pets unlocked
+        "active": "starter",
         "achievements": [],
         "fights_won": 0,
         "challenges": [],   # challenges beaten
@@ -35,7 +36,18 @@ def load():
         data = json.loads(STATE.read_text())
     except (FileNotFoundError, json.JSONDecodeError):
         return default()
-    return {**default(), **data}
+    return migrate({**default(), **data})
+
+
+def migrate(state):
+    """Saves from before starters had the cat in the collection: it becomes the starter."""
+    if state["starter"] is None and "cat" in state["pets"]:
+        state["starter"] = "cat"
+    if "cat" in state["pets"]:
+        state["pets"].remove("cat")
+    if state["active"] == "cat":
+        state["active"] = "starter"
+    return state
 
 
 def save(state):

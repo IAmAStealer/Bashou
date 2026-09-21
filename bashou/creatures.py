@@ -4,7 +4,7 @@ A sprite is a grid of palette keys ('.' is transparent). A pose is a list of
 (row, col, key) pixels painted over the base grid.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 
 def sprite(text, width=17):
@@ -85,7 +85,7 @@ CAT = Pet(
 
 # Every pet in board order.
 ROSTER = [
-    ("cat", "Cat"), ("frog", "Frog"), ("turtle", "Turtle"), ("mushroom", "Mushroom"),
+    ("bat", "Bat"), ("frog", "Frog"), ("turtle", "Turtle"), ("mushroom", "Mushroom"),
     ("slime", "Slime"), ("sofa", "Living sofa"), ("octopus", "Octopus"), ("dragon", "Dragon"),
     ("fox", "Fox"), ("owl", "Owl"), ("mole", "Mole"), ("snake", "Snake"),
     ("ghost", "Ghost"), ("spider", "Spider"), ("ant", "Ant"), ("axolotl", "Axolotl"),
@@ -94,7 +94,7 @@ NAMES = dict(ROSTER)
 
 # Names of the three stages: unlocked, evolved (2 achievements), legendary (whole family).
 STAGES = {
-    "cat": ("Cat", "Scarf cat", "Cat king"),
+    "bat": ("Batling", "Bat", "Night bat"),
     "frog": ("Tadpole", "Frog", "Frog prince"),
     "turtle": ("Hatchling", "Turtle", "Elder turtle"),
     "mushroom": ("Spore", "Mushroom", "Glowshroom"),
@@ -515,9 +515,30 @@ g..aopoqopoa..g..
     },
 )
 
-PETS = {p.id: p for p in (CAT, FROG, TURTLE, MUSHROOM, SLIME, SOFA, OCTOPUS, DRAGON,
+# Placeholders until their art is drawn.
+KITTEN, LION = replace(CAT, id="kitten"), replace(CAT, id="lion")
+SEEDLING, SPROUT, TREE = (replace(CAT, id=i) for i in ("seedling", "sprout", "tree"))
+PEBBLE, GOLEM, CRYSTAL = (replace(CAT, id=i) for i in ("pebble", "golem", "crystal"))
+BAT = replace(CAT, id="bat")
+
+# Starters: chosen once, they level up with every 5 achievements and change shape at levels 4 and 7.
+STARTERS = {
+    "cat": ("kitten", "cat", "lion"),
+    "sprout": ("seedling", "sprout", "tree"),
+    "pebble": ("pebble", "golem", "crystal"),
+}
+FORM_NAMES = {"kitten": "Kitten", "cat": "Cat", "lion": "Lion", "seedling": "Seedling", "sprout": "Sprout",
+              "tree": "Tree spirit", "pebble": "Pebble", "golem": "Rock golem", "crystal": "Crystal golem"}
+STARTER_BLURBS = {
+    "cat": "Curious and cuddly. Knows every shortcut of your shell.",
+    "sprout": "Calm and patient. Grows scripts from tiny seeds.",
+    "pebble": "Solid and loyal. Knows the filesystem rock by rock.",
+}
+
+PETS = {p.id: p for p in (KITTEN, CAT, LION, SEEDLING, SPROUT, TREE, PEBBLE, GOLEM, CRYSTAL,
+                         BAT, FROG, TURTLE, MUSHROOM, SLIME, SOFA, OCTOPUS, DRAGON,
                          FOX, OWL, MOLE, SNAKE, GHOST, SPIDER, ANT, AXOLOTL)}
 
 
 def get(pet_id):
-    return PETS.get(pet_id, CAT)
+    return PETS.get(pet_id, KITTEN)

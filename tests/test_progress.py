@@ -14,7 +14,9 @@ class ProgressTest(unittest.TestCase):
         return notes
 
     def test_command_milestone(self):
-        self.assertEqual(self.run_cmd("ls", times=49), [])
+        self.assertEqual(self.run_cmd("ls", times=9), [])
+        self.assertIn("Batling", self.run_cmd("ls")[0])
+        self.assertEqual(self.run_cmd("ls", times=39), [])
         notes = self.run_cmd("ls")
         self.assertIn("frog", self.s["pets"])
         self.assertEqual(len(notes), 1)
@@ -68,3 +70,31 @@ class ProgressTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class StarterTest(unittest.TestCase):
+    def test_levels_and_forms(self):
+        s = state.default()
+        s["starter"] = "pebble"
+        self.assertEqual((progress.starter_level(s), progress.starter_form(s)), (1, 1))
+        self.assertEqual(progress.current(s)[:3], ("pebble", 1, "Pebble"))
+        s["achievements"] = [f"a{i}" for i in range(15)]
+        self.assertEqual((progress.starter_level(s), progress.starter_form(s)), (4, 2))
+        self.assertEqual(progress.current(s)[2], "Rock golem")
+        s["achievements"] = [f"a{i}" for i in range(99)]
+        self.assertEqual(progress.starter_level(s), progress.MAX_LEVEL)
+        self.assertEqual(progress.current(s)[:3], ("crystal", 3, "Crystal golem"))
+
+    def test_level_up_and_evolution_notes(self):
+        s = state.default()
+        s["starter"] = "cat"
+        s["achievements"] = [f"a{i}" for i in range(4)]
+        notes = progress.check(s, [a for a in __import__("bashou").achievements.ALL[:1]])
+        self.assertIn("⬆ Kitten reached level 2!", notes)
+        s["achievements"] = [f"a{i}" for i in range(14)]
+        notes = progress.check(s, [a for a in __import__("bashou").achievements.ALL[:1]])
+        self.assertTrue(any(n.startswith("✨ Kitten evolved into Cat!") for n in notes), notes)
+
+    def test_old_saves_keep_the_cat_as_starter(self):
+        s = state.migrate({**state.default(), "pets": ["cat", "fox"], "active": "cat"})
+        self.assertEqual((s["starter"], s["pets"], s["active"]), ("cat", ["fox"], "starter"))

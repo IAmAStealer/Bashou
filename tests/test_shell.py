@@ -20,9 +20,13 @@ ROOT = Path(__file__).resolve().parent.parent
 class Shell:
     """An interactive bash that sources bashou.bash, with its own data folders."""
 
-    def __init__(self, tmp, cmd=None):
+    def __init__(self, tmp, cmd=None, state=None):
         self.tmp = Path(tmp)
         self.data, self.cache = self.tmp / "data", self.tmp / "cache"
+        self.data.mkdir(exist_ok=True)
+        if state is not False:                           # False: first launch, no save yet
+            base = {"starter": "cat", "active": "starter", **(state or {})}
+            (self.data / "state.json").write_text(json.dumps(base))
         rc = self.tmp / "rc"
         rc.write_text(f"PS1='$ '\nHISTFILE={self.tmp}/hist\nHISTCONTROL=ignoreboth\n"
                       f"source {ROOT}/bashou.bash\n")
@@ -148,11 +152,38 @@ class ShellTest(unittest.TestCase):
         self.assertEqual(list(self.sh.data.glob("events.*")), [])
 
 
+class FirstLaunchTest(unittest.TestCase):
+    def test_first_launch_asks_for_a_starter(self):
+        """No save yet: the picker opens, Enter picks, then the pet appears."""
+        with tempfile.TemporaryDirectory() as tmp:
+            sh = Shell(tmp, state=False)
+            try:
+                sh.read(2.5)
+                self.assertIn(b"Choose your starter", sh.out)
+                sh.send("\x1b[C", 0.3)                   # → Seedling
+                sh.send("\r", 2.5)
+                self.assertEqual(sh.state()["starter"], "sprout")
+                self.assertTrue(alive(int(sh.value("BASHOU_PID"))))
+            finally:
+                sh.close()
+
+
 class ArenaShellTest(unittest.TestCase):
-    def test_ctrl_d_in_the_arena_is_a_flee(self):
-        """Ctrl-D after a successful command used to exit with 0 and count as a win."""
+    def test_no_fight_without_a_threat(self):
+        """`bashou fight` only works once the pet announced a threat."""
         with tempfile.TemporaryDirectory() as tmp:
             sh = Shell(tmp, ["python3", "-m", "bashou", "fight"])
+            try:
+                sh.read(2)
+                self.assertIn(b"No threat around", sh.out)
+            finally:
+                sh.close()
+
+    def test_ctrl_d_in_the_arena_is_a_flee(self):
+        """Ctrl-D after a successful command used to exit with 0 and count as a win."""
+        threat = {"threat": {"challenge": "grep_hydra", "until": time.time() + 600}}
+        with tempfile.TemporaryDirectory() as tmp:
+            sh = Shell(tmp, ["python3", "-m", "bashou", "fight"], state=threat)
             try:
                 sh.read(2)
                 sh.send("true\n", 0.5)

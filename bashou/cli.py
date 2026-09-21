@@ -3,7 +3,7 @@
 import argparse
 
 from . import achievements, progress, state
-from .creatures import NAMES, ROSTER, STAGES
+from .creatures import FORM_NAMES, NAMES, ROSTER, STAGES, STARTERS
 
 BOLD, DIM, RESET = "\033[1m", "\033[2m", "\033[0m"
 
@@ -13,8 +13,21 @@ def progress_bar(done, total, width=20):
     return "█" * filled + "░" * (width - filled)
 
 
+def starter_line(s):
+    """"Cat · level 5 ███░ 2/5 achievements to level 6" for the chosen starter."""
+    if not s["starter"]:
+        return f"{DIM}no starter yet: bashou start{RESET}"
+    lvl, per = progress.starter_level(s), progress.ACHIEVEMENTS_PER_LEVEL
+    name = progress.current(s, "starter")[2]
+    if lvl == progress.MAX_LEVEL:
+        return f"{name} · level {lvl} (max)"
+    done = len(s["achievements"]) % per
+    return f"{name} · level {lvl} {progress_bar(done, per, 10)} {done}/{per} achievements to level {lvl + 1}"
+
+
 def level():
     s = state.load()
+    print(f"  {BOLD}Starter{RESET} : {starter_line(s)}")
     print(f"  {BOLD}Commands{RESET}: {s['commands']:,}")
     print(f"  {BOLD}Pets{RESET}    : {len(s['pets'])}/{len(ROSTER)}")
     nxt = progress.next_milestone(s)
@@ -40,6 +53,8 @@ def stars(s, pet):
 
 def pets():
     s = state.load()
+    active = " ← active" if s["active"] == "starter" else ""
+    print(f"  {BOLD}Starter{RESET} {starter_line(s)}{DIM}{active}{RESET}\n")
     for pet, _ in ROSTER:
         if pet in s["pets"]:
             active = " ← active" if pet == s["active"] else ""
@@ -52,7 +67,8 @@ def pets():
 def achievements_list():
     s = state.load()
     earned = set(s["achievements"])
-    print(f"  {len(earned)}/{len(achievements.ALL)} achievements · 2 evolve a pet, all of its family make it legendary\n")
+    print(f"  {len(earned)}/{len(achievements.ALL)} achievements · 2 evolve a pet, all of its family make it legendary")
+    print(f"  {DIM}Every {progress.ACHIEVEMENTS_PER_LEVEL} achievements also level up your starter.{RESET}\n")
     for pet, _ in ROSTER:
         fam = achievements.family(pet)
         got = sum(a.id in earned for a in fam)
@@ -72,12 +88,14 @@ def swap(pet):
         board.main()
         return
     pet = pet.lower()
-    if pet not in s["pets"]:
+    if pet in ("starter", s["starter"]):
+        pet = "starter"
+    elif pet not in s["pets"]:
         print(f"  {pet}: not unlocked yet.")
         return
     with state.locked() as s:
         s["active"] = pet
-    print(f"  {STAGES[pet][progress.stage(s, pet) - 1]} is now your pet.")
+    print(f"  {progress.current(s)[2]} is now your pet.")
 
 
 def plural(n, word):
@@ -106,6 +124,34 @@ def stats():
         print(f"\n  {BOLD}Constructs{RESET}   " + "  ".join(f"{name} {DIM}{n}{RESET}" for name, n in used))
 
 
+def backup():
+    import shutil
+    import time
+    if state.STATE.exists():
+        path = state.DATA / f"state.json.bak-{time.strftime('%Y%m%d-%H%M%S')}-{time.time_ns() % 1000:03d}"
+        shutil.copy(state.STATE, path)
+        print(f"  {DIM}backup: {path}{RESET}")
+
+
+def reset():
+    """Start over: new starter, empty collection. Asks first, keeps a backup."""
+    import sys
+    from . import starter
+    print(f"  {BOLD}Reset Bashou?{RESET} Your starter, pets, achievements and counters start over.")
+    try:
+        answer = input("  Type `reset` to confirm: ")
+    except EOFError:
+        answer = ""
+    if answer.strip() != "reset":
+        print("  Nothing changed.")
+        return 1
+    backup()
+    with state.locked() as s:
+        s.clear()
+        s.update(state.default())
+    return starter.main() if sys.stdin.isatty() else 0
+
+
 def dev(args):
     """Testing helpers. Every change first backs up state.json next to it."""
     import shutil
@@ -120,10 +166,7 @@ def dev(args):
         shutil.copy(backups[-1], state.STATE)
         print(f"  Restored {backups[-1].name}")
         return
-    if state.STATE.exists():
-        backup = state.DATA / f"state.json.bak-{time.strftime('%Y%m%d-%H%M%S')}-{time.time_ns() % 1000:03d}"
-        shutil.copy(state.STATE, backup)
-        print(f"  {DIM}backup: {backup}{RESET}")
+    backup()
     with state.locked() as s:
         if args.action == "unlock-all":
             s["pets"] = [pet for pet, _ in ROSTER]
@@ -141,6 +184,10 @@ def dev(args):
                 keep = fam[:{1: 0, 2: 2, 3: len(fam)}[args.stage]]
                 s["achievements"] = [a for a in s["achievements"] if a not in fam] + keep
             print(f"  Every pet at stage {args.stage}.")
+        elif args.action == "level":
+            n = max(1, min(progress.MAX_LEVEL, int(args.pet or 1)))
+            s["achievements"] = [a.id for a in achievements.ALL][:(n - 1) * progress.ACHIEVEMENTS_PER_LEVEL]
+            print(f"  Starter at level {n}: {progress.current(s, 'starter')[2]}.")
         elif args.action == "threat":
             ch = challenges.BY_ID.get(args.pet) or challenges.ALL[0]
             s["threat"] = {"challenge": ch.id, "until": time.time() + 600}
@@ -159,9 +206,11 @@ def main():
     sw.add_argument("pet", nargs="?")
     sub.add_parser("stats", help="your terminal stats: commands, tools, streaks")
     dv = sub.add_parser("dev", help="testing helpers (back up state first)")
-    dv.add_argument("action", choices=["unlock-all", "stage", "stage-all", "threat", "restore"])
-    dv.add_argument("pet", nargs="?", help="pet (stage) or challenge id (threat)")
+    dv.add_argument("action", choices=["unlock-all", "stage", "stage-all", "level", "threat", "restore"])
+    dv.add_argument("pet", nargs="?", help="pet (stage), level 1-9 (level) or challenge id (threat)")
     dv.add_argument("stage", nargs="?", type=int, choices=[1, 2, 3], default=3)
+    sub.add_parser("start", help="choose your starter (once)")
+    sub.add_parser("reset", help="start over with a new starter")
     sub.add_parser("on", help="show the pet (shell function)")
     sub.add_parser("off", help="hide the pet (shell function)")
     args = parser.parse_args()
@@ -173,8 +222,8 @@ def main():
     elif args.cmd == "talk":
         from . import dialogue
         s = state.load()
-        pet = s["active"]
-        print(f"  {BOLD}{STAGES[pet][progress.stage(s, pet) - 1]}{RESET}: {dialogue.line(s, pet)}")
+        _, _, name, voice = progress.current(s)
+        print(f"  {BOLD}{name}{RESET}: {dialogue.line(s, voice)}")
     elif args.cmd == "fight":
         from . import fight
         fight.run()
@@ -182,6 +231,11 @@ def main():
         swap(args.pet)
     elif args.cmd == "stats":
         stats()
+    elif args.cmd == "start":
+        from . import starter
+        raise SystemExit(starter.main())
+    elif args.cmd == "reset":
+        raise SystemExit(reset())
     elif args.cmd == "dev":
         if args.action == "stage-all" and args.pet:
             args.stage = int(args.pet)

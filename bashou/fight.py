@@ -49,7 +49,8 @@ cd "$BASHOU_ARENA/arena"
 # --- threats ---------------------------------------------------------------
 
 def level(s):
-    return len(s["pets"]) + sum(progress.stage(s, p) - 1 for p in s["pets"])
+    return (len(s["pets"]) + sum(progress.stage(s, p) - 1 for p in s["pets"])
+            + progress.starter_level(s) - 1)
 
 
 def remaining(s):
@@ -87,17 +88,26 @@ def maybe_threat(s, rng=random, now=None):
     s["threat"] = {"challenge": ch.id, "until": now + THREAT_MINUTES * 60}
     s["threat_day"]["count"] += 1
     s["last_threat"] = now
+    return announcement(s, now)
+
+
+def announcement(s, now=None):
+    """What the pet says about the waiting threat, or None."""
+    t = active_threat(s, now)
+    if not t or t["challenge"] not in challenges.BY_ID:
+        return None
+    ch = challenges.BY_ID[t["challenge"]]
     return f"⚠ A {ch.threat} is coming! Use `{ch.tool}` to fight it → bashou fight"
 
 
 # --- arena -----------------------------------------------------------------
 
 def pick(s):
+    """The challenge of the threat your pet announced, or None: no threat, no fight."""
     t = active_threat(s)
     if t and t["challenge"] in challenges.BY_ID:
-        return challenges.BY_ID[t["challenge"]], True
-    pool = remaining(s) or [c for c in challenges.ALL if c.available()]
-    return random.choice(pool), False
+        return challenges.BY_ID[t["challenge"]]
+    return None
 
 
 def load_meta(base):
@@ -152,7 +162,10 @@ def banner(ch, task):
 
 def run():
     s = state.load()
-    ch, is_threat = pick(s)
+    ch = pick(s)
+    if not ch:
+        print(f"{DIM}No threat around. Your pet will warn you when one comes.{RESET}")
+        return
     base = Path(tempfile.mkdtemp(prefix="bashou-arena-"))
     work = base / "arena"
     work.mkdir()

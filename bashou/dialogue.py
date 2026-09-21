@@ -12,7 +12,7 @@ from . import achievements
 from .analyze import analyze
 
 VOICE = {
-    "cat": "Mrrp.", "frog": "Ribbit.", "turtle": "…", "mushroom": "*puff*", "slime": "Blub.",
+    "cat": "Mrrp.", "sprout": "*rustle*", "pebble": "*clack*", "bat": "*flap*", "frog": "Ribbit.", "turtle": "…", "mushroom": "*puff*", "slime": "Blub.",
     "sofa": "*creak*", "octopus": "Glub!", "dragon": "Rawr!", "fox": "*sniff*", "owl": "Hoo.",
     "mole": "*dig dig*", "snake": "Sss…", "ghost": "Boo~", "spider": "*tik-tik*", "ant": "*click*",
     "axolotl": "*wiggle*",
@@ -22,6 +22,14 @@ TIPS = {
     "cat": ["Ctrl+R searches your history as you type.", "`cd -` jumps back to the previous folder.",
             "`sudo !!` reruns the last command with sudo.", "Ctrl+A / Ctrl+E: start / end of the line.",
             "Ctrl+W deletes the word before the cursor."],
+    "sprout": ["Start scripts with `#!/usr/bin/env bash`.", "`set -euo pipefail` stops a script on errors.",
+               "`chmod +x script.sh` makes it runnable.", "Functions: greet() { echo \"hi $1\"; }",
+               "`bash -x script.sh` shows each line as it runs."],
+    "pebble": ["`ls -lah` shows hidden files with human sizes.", "`du -sh *` : how big is each folder?",
+               "`df -h` : how full are your disks?", "`ln -s target link` makes a shortcut.",
+               "`chmod 644 file` : rw for you, read for others."],
+    "bat": ["`ctrl+L` clears the screen, like `clear`.", "`tail -f log` watches a file live.",
+            "`nohup cmd &` keeps it running after you leave.", "`man -k word` searches every manual."],
     "frog": ["`!$` is the last argument of the previous command.", "`fc` opens the last command in your editor.",
              "`history | grep ssh` finds that command from last week.", "Press Ctrl+R again for older matches."],
     "turtle": ["`watch -n 5 df -h` reruns a command every 5 s.", "`time make` tells how long it took.",
@@ -35,7 +43,7 @@ TIPS = {
              "sort -t, -k3 -n sorts a CSV by its 3rd column.", "`uniq -d` shows only the duplicates."],
     "octopus": ["cmd 2>&1 | less pages the errors too.", "cmd | tee out.txt shows AND saves.",
                 "`set -o pipefail`: a pipe fails if any part fails.", "cmd |& grep x also pipes stderr."],
-    "dragon": ["`bashou fight`: the arena is always open.", "Stuck in the arena? Type `hint`.",
+    "dragon": ["When a threat shows up, `bashou fight` opens the arena.", "Stuck in the arena? Type `hint`.",
                "A threat you ignore comes back later."],
     "fox": ["find . -name '*.log' -mtime +7 : week-old logs.", "find . -type f -size +100M : big files.",
             "find . -name '*.tmp' -delete cleans up.", "find . -newer ref.txt : changed since ref.txt."],
@@ -92,7 +100,8 @@ TRAITS = {
 }
 
 PERSONAL = {
-    "cat": ["I'll just sit on your keyboard… no? Fine."], "frog": ["Hop hop. What's next?"],
+    "cat": ["I'll just sit on your keyboard… no? Fine."], "sprout": ["Water me with commands."],
+    "pebble": ["I'm a rock. You can count on me."], "bat": ["I like the terminal after dark."], "frog": ["Hop hop. What's next?"],
     "turtle": ["Slow and steady. No rush."], "mushroom": ["Loops make me grow."],
     "slime": ["I can take the shape of any output."], "sofa": ["Sit down. Relax. Run a command."],
     "octopus": ["Eight arms, eight pipes."], "dragon": ["I guard your shell."],
@@ -118,7 +127,11 @@ def hint(state, pet, rng):
 
 
 def line(state, pet, rng=random):
-    """One thing for `pet` to say, with its voice."""
+    """One thing for `pet` to say, with its voice. A waiting threat comes first."""
+    from . import fight
+    threat = fight.announcement(state)
+    if threat:
+        return f"{VOICE[pet]} {threat}"
     earned = set(state["achievements"])
     traits = [t for trait, lines in TRAITS.items() if trait in earned for t in lines]
     pools = [(hint(state, pet, rng), 4), (rng.choice(TIPS[pet]), 4),
