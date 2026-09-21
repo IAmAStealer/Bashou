@@ -27,7 +27,6 @@ def default():
         "threat": None,     # {"challenge", "until"} while a threat waits for you
         "threat_day": {"date": "", "count": 0},
         "last_threat": 0,
-        "breathe": [],      # breathing sessions
     }
 
 

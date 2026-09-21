@@ -72,7 +72,7 @@ EXAMPLES = {
     "placeholder": "ls | xargs -I{} echo {}", "parallel": "ls | xargs -P4 -n1 echo",
     "null": "find . -print0 | xargs -0 ls", "raw": "jq -r '.name' f.json",
     "selector": "jq '.[] | select(.ok)' f.json", "mapper": "jq 'map(.id)' f.json",
-    "zen": "bashou breathe", "warrior": "bashou fight",
+    "warrior": "bashou fight",
 }
 
 # Trait (an achievement you earned) -> lines any pet may say.
@@ -81,7 +81,7 @@ TRAITS = {
     "veteran": ["Ten fights won. The threats fear us now."],
     "legend": ["Legends don't wait for threats. They hunt them."],
     "night_owl": ["Late again? I like the quiet.", "The prompt glows nicer at night."],
-    "zen": ["Breathe in… and out. `bashou breathe`?"],
+    "explorer": ["So many tools already. What's next, `man -k`?"],
     "streak7": ["Another day together. Keep the streak!"],
     "sprinter": ["So many commands today. Coffee break?"],
     "plumber": ["Pipes are the best toys."],

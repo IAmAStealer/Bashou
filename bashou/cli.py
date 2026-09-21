@@ -2,7 +2,7 @@
 
 import argparse
 
-from . import achievements, breathe, progress, state
+from . import achievements, progress, state
 from .creatures import NAMES, ROSTER, STAGES
 
 BOLD, DIM, RESET = "\033[1m", "\033[2m", "\033[0m"
@@ -104,10 +104,6 @@ def stats():
     used = [(names.get(k, k), v) for k, v in sorted(s["constructs"].items(), key=lambda kv: -kv[1])]
     if used:
         print(f"\n  {BOLD}Constructs{RESET}   " + "  ".join(f"{name} {DIM}{n}{RESET}" for name, n in used))
-    if s["breathe"]:
-        total = sum(b["seconds"] for b in s["breathe"])
-        print(f"\n  {BOLD}Breathing{RESET}    {len(s['breathe'])} sessions, {total // 60} min "
-              f"{DIM}(streak: {plural(breathe.streak({b['date'] for b in s['breathe']}), 'day')}){RESET}")
 
 
 def dev(args):
@@ -161,9 +157,6 @@ def main():
     sub.add_parser("talk", help="your pet says something useful")
     sw = sub.add_parser("swap", help="change your active pet")
     sw.add_argument("pet", nargs="?")
-    br = sub.add_parser("breathe", help="guided breathing")
-    br.add_argument("pattern", nargs="?", default="box", choices=list(breathe.PATTERNS))
-    br.add_argument("-n", "--cycles", type=int, default=4)
     sub.add_parser("stats", help="your terminal stats: commands, tools, streaks")
     dv = sub.add_parser("dev", help="testing helpers (back up state first)")
     dv.add_argument("action", choices=["unlock-all", "stage", "stage-all", "threat", "restore"])
@@ -187,8 +180,6 @@ def main():
         fight.run()
     elif args.cmd == "swap":
         swap(args.pet)
-    elif args.cmd == "breathe":
-        breathe.breathe(args.pattern, args.cycles)
     elif args.cmd == "stats":
         stats()
     elif args.cmd == "dev":

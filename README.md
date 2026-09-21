@@ -38,8 +38,7 @@ bashou fight            # enter the arena (any time, or when a threat shows up)
 bashou talk             # your pet says something useful
 bashou swap             # board to pick your pet (or: bashou swap fox)
 bashou off / on         # hide / show the pet
-bashou breathe [box|478|calm] [-n cycles]   # guided breathing
-bashou stats            # commands, top tools, streaks, breathing
+bashou stats            # commands, top tools, constructs, streaks
 ```
 
 ## Privacy
