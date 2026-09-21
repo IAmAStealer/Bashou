@@ -57,7 +57,7 @@ EXAMPLES = {
     "historian": "history | tail", "loop": "for f in *; do echo $f; done",
     "reader": "while read -r l; do echo $l; done < file", "ranges": "for i in {1..3}; do echo $i; done",
     "capture": "echo \"today: $(date +%A)\"", "nested": "echo $(basename $(pwd))",
-    "substitute": "diff <(ls /bin) <(ls /usr/bin)", "here": "cat <<EOF\nhi\nEOF",
+    "substitute": "diff <(ls /bin) <(ls /usr/bin)", "here": "cat <<EOF > note.txt\nhello\nEOF",
     "tally": "sort file | uniq -c", "ranking": "du -s * | sort -rn", "unique": "sort -u file",
     "plumber": "ps aux | grep bash | wc -l", "pipeline": "cat f | tr A-Z a-z | sort | uniq -c | sort -rn",
     "tee_time": "ls | tee list.txt", "merge": "make 2>&1 | less",
@@ -109,8 +109,8 @@ def hint(state, pet, rng):
         return None
     a = rng.choice(todo)
     example = EXAMPLES.get(a.id)
-    if example and "\n" not in example:
-        return f"Try `{example}` ({a.name})"
+    if example:
+        return f"Try `{example.replace(chr(10), ' ⏎ ')}` ({a.name})"
     return f"Next: {a.how} ({a.name})"
 
 

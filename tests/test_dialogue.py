@@ -37,6 +37,19 @@ class DialogueTest(unittest.TestCase):
         self.assertTrue(any("claws" in t or "threats around" in t for t in said))
         self.assertFalse(any("Late again" in t or "nicer at night" in t for t in said))
 
+    def test_every_command_achievement_has_an_example(self):
+        # Night owl is about the time, not a command.
+        missing = [a.id for a in achievements.ALL if a.cmd and a.id not in dialogue.EXAMPLES and a.id != "night_owl"]
+        self.assertEqual(missing, [])
+
+    def test_examples_earn_their_achievement(self):
+        from bashou import progress
+        for a in achievements.ALL:
+            if a.cmd and a.id in dialogue.EXAMPLES:
+                s = state.default()
+                progress.record(s, 0, dialogue.EXAMPLES[a.id], "2026-09-21", 3 if a.id == "night_owl" else 14)
+                self.assertIn(a.id, s["achievements"], dialogue.EXAMPLES[a.id])
+
     def test_examples_match_real_achievements(self):
         self.assertLessEqual(set(dialogue.EXAMPLES), set(achievements.BY_ID))
         self.assertLessEqual(set(dialogue.TRAITS), set(achievements.BY_ID))
