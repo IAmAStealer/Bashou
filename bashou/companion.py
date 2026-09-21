@@ -42,6 +42,7 @@ class Companion:
         self.behavior = Behavior(now=now_ms())
         self.last_command = now_ms()
         self.talk_at = now_ms() + random.randint(3, 8) * 60_000
+        self.typo_at = 0
 
     # --- shell ------------------------------------------------------------
 
@@ -81,6 +82,8 @@ class Companion:
         with state.locked() as s:
             for status, command in records:
                 self.notes += progress.record(s, status, command, now.date().isoformat(), now.hour)
+                if status == 127:
+                    self.laugh_at_typo(s, command)
 
     def events_size(self):
         try:
@@ -110,6 +113,16 @@ class Companion:
         except OSError:
             typed = 0
         return max(self.last_command, typed)
+
+    def laugh_at_typo(self, s, command):
+        """`command not found`: a kind joke, at most once a minute."""
+        ms = now_ms()
+        if ms < self.typo_at:
+            return
+        line = dialogue.typo(s, self.pet.id, command)
+        if line:
+            self.typo_at = ms + 60_000
+            self.notes.insert(0, line)
 
     def maybe_talk(self, ms):
         """Every 10-20 minutes at the prompt, the pet says something (if awake and nothing else to say)."""

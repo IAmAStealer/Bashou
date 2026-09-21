@@ -21,6 +21,11 @@ class CreaturesTest(unittest.TestCase):
             keys |= {k for px in [*pet.poses.values(), *pet.stages.values()] for _, _, k in px} - {"."}
             self.assertLessEqual(keys, set(pet.palette), pet.id)
 
+    def test_every_pet_blinks_looks_and_fidgets(self):
+        for pet in creatures.PETS.values():
+            for pose in ("inhale", "closed", "left", "right", "fidget"):
+                self.assertIn(pose, pet.poses, f"{pet.id} has no {pose}")
+
     def test_roster_has_stage_names(self):
         self.assertEqual(len(ROSTER), 16)
         self.assertEqual({p for p, _ in ROSTER}, set(STAGES))

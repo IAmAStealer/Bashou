@@ -14,7 +14,7 @@ MOODS = {
     3: [("dance", 2, (5, 9)), ("sparkle", 2, (6, 12))],
 }
 ACTIONS = {
-    1: "breathe, blink, sleep, look around",
+    1: "breathe, blink, fidget, look around, sleep",
     2: "wash, hum, flick its tail",
     3: "dance, sparkle",
 }
@@ -27,6 +27,7 @@ class Behavior:
         self.stage = 1
         self.mood, self.end = "awake", now + 20000
         self.tail_end = 0
+        self.fidget_end = 0
         self.sleep_after = self.rng.randint(*SLEEP_AFTER) * 1000
 
     def moods(self):
@@ -68,6 +69,9 @@ class Behavior:
                     poses.append("closed")
                 if self.stage >= 2 and ms >= self.tail_end and self.rng.randrange(80) == 0:
                     self.tail_end = ms + 1500
+                # Small relaxing movement (ear twitch, head in the shell…) every ~15 s.
+                if ms >= self.fidget_end and self.rng.randrange(60) == 0:
+                    self.fidget_end = ms + 900
             elif mood == "look":
                 poses.append("right" if ms // 1500 % 2 else "left")
             elif mood == "wash":
@@ -86,6 +90,8 @@ class Behavior:
                 text = ["✦", " ✧", "✦ ✧", "  ✦"][ms // 500 % 4]
         if ms < self.tail_end:
             poses.append("tail_up")
+        if ms < self.fidget_end and mood == "awake":
+            poses.append("fidget")
         if threat and mood != "sleep":
             text = "⚠" if ms // 1000 % 2 else ""
         return poses, text

@@ -50,6 +50,24 @@ class DialogueTest(unittest.TestCase):
                 progress.record(s, 0, dialogue.EXAMPLES[a.id], "2026-09-21", 3 if a.id == "night_owl" else 14)
                 self.assertIn(a.id, s["achievements"], dialogue.EXAMPLES[a.id])
 
+    def test_typo_suggests_the_closest_command(self):
+        s = state.default()
+        for typed, fix in (("gerp foo file", "grep"), ("sl -la", "ls"), ("pyhton3 x.py", "python3")):
+            text = dialogue.typo(s, "cat", typed, random.Random(0))
+            self.assertIn(f"`{fix}`", text, typed)
+            self.assertIn(f"`{typed.split()[0]}`", text)
+        text = dialogue.typo(s, "fox", "zzqxv", random.Random(0))
+        self.assertIn("`zzqxv`", text)
+        self.assertTrue(text.startswith("*sniff*"))
+
+    def test_typo_learns_your_tools(self):
+        s = state.default()
+        s["tools"] = {"kubectl": 30}
+        self.assertIn("`kubectl`", dialogue.typo(s, "cat", "kubctl get pods", random.Random(0)))
+
+    def test_no_typo_joke_for_real_commands(self):
+        self.assertIsNone(dialogue.typo(state.default(), "cat", "ls /nope", random.Random(0)))
+
     def test_examples_match_real_achievements(self):
         self.assertLessEqual(set(dialogue.EXAMPLES), set(achievements.BY_ID))
         self.assertLessEqual(set(dialogue.TRAITS), set(achievements.BY_ID))

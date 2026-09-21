@@ -4,9 +4,12 @@ Personality = the pet's own voice + traits from the achievements you earned
 (win a fight and your pets get bolder, run commands at 3 am and they get nocturnal…).
 """
 
+import difflib
 import random
+import shutil
 
 from . import achievements
+from .analyze import analyze
 
 VOICE = {
     "cat": "Mrrp.", "frog": "Ribbit.", "turtle": "…", "mushroom": "*puff*", "slime": "Blub.",
@@ -123,3 +126,30 @@ def line(state, pet, rng=random):
     pools = [(text, w) for text, w in pools if text]
     text = rng.choices([t for t, _ in pools], [w for _, w in pools])[0]
     return f"{VOICE[pet]} {text}"
+
+
+COMMON = ("ls cd cat grep find awk sed sort uniq head tail less more echo printf pwd mkdir rmdir rm cp mv "
+          "touch chmod chown ln ps kill top htop df du free tar gzip zip unzip curl wget ssh scp git make "
+          "python3 pip vim nano man which whereis history clear exit sudo apt xargs jq tr cut wc tee diff "
+          "strace watch time date cal file stat env export source alias type").split()
+
+TYPO_FIX = ["Hehe, `{typo}`? I think you meant `{fix}`.", "`{typo}`… so close! `{fix}`?",
+            "Fat paws again? `{typo}` → `{fix}`", "I won't tell anyone about `{typo}`. Try `{fix}`.",
+            "*giggles* `{fix}` has fewer typos than `{typo}`."]
+TYPO_NONE = ["`{typo}`? Never heard of it. Hehe.", "`{typo}` isn't a command… yet.",
+             "*tilts head* `{typo}`?"]
+
+
+def typo(state, pet, command, rng=random):
+    """A kind laugh at a "command not found", with the closest real command if there is one."""
+    names = [name for name, _ in analyze(command).commands]
+    unknown = [n for n in names if not shutil.which(n) and n not in COMMON]
+    if not unknown:
+        return None
+    word = unknown[0]
+    candidates = sorted(set(COMMON) | set(state["tools"]))
+    # Swapped letters first (`sl` → `ls`): too short for difflib to score well.
+    close = [c for c in candidates if len(c) == len(word) and sorted(c) == sorted(word)][:1]
+    close = close or difflib.get_close_matches(word, candidates, n=1, cutoff=0.6)
+    template = rng.choice(TYPO_FIX if close else TYPO_NONE)
+    return f"{VOICE[pet]} " + template.format(typo=word[:20], fix=close[0] if close else "")
