@@ -31,5 +31,6 @@ Your progress stays in `~/.local/share/bashou` (delete it too to forget everythi
 ## More
 
 The [guide](doc/GUIDE.md) explains pets, achievements, fights and translations.
+[How it started](doc/STORY.md): fully vibecoded for testing, a single Rust binary is the goal.
 
 MIT license.
