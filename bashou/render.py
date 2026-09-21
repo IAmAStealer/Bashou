@@ -28,6 +28,12 @@ def mask(pet):
     zr, zc = pet.z_at
     for c in range(zc, min(zc + 3, pet.width)):
         rows[zr][c] = True
+    # Enter on an empty line scrolls the screen without erasing us: the old picture moves up a row.
+    # Painting every cell above the pet (up to the top of the screen) covers those copies.
+    for c in range(pet.width):
+        low = max((r for r in range(len(rows)) if rows[r][c]), default=-1)
+        for r in range(low):
+            rows[r][c] = True
     return rows
 
 

@@ -98,6 +98,18 @@ class CliBugs(TempState):
         self.assertEqual(state.load()["active"], "starter")
 
 
+class ScrollTrailTest(unittest.TestCase):
+    def test_cells_above_the_pet_are_painted(self):
+        """Enter on an empty line scrolled the pet up without erasing it: the Pebble left stripes above it."""
+        from bashou import creatures, render
+        for pet in creatures.PETS.values():
+            cells = render.mask(pet)
+            for r in range(1, len(cells)):
+                for c, on in enumerate(cells[r]):
+                    if on:
+                        self.assertTrue(cells[r - 1][c], f"{pet.id}: row {r - 1}, col {c} left transparent")
+
+
 class BubbleTest(TempState):
     def setUp(self):
         super().setUp()

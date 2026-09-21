@@ -192,9 +192,10 @@ class Companion:
             lines, bw = render.bubble(self.bubble[0], x - 2)
             bx = x - bw
             if bx >= 1:
+                out.append(f"{ESC}[1;{bx}H" + " " * bw)     # a scrolled-up copy of the top border
                 for i, line in enumerate(lines):
                     out.append(f"{ESC}[{i + 2};{bx}H{ESC}[38;2;150;190;230m{line}{ESC}[0m")
-                erase += render.erase([[True] * bw] * len(lines), 2, bx)
+                erase += render.erase([[True] * bw] * (len(lines) + 1), 1, bx)
         return "".join(out), erase
 
     def update_bubble(self):
