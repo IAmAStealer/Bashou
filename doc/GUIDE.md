@@ -21,7 +21,7 @@ A pixel-art pet that lives in the top-right corner of your terminal and grows as
 - **Threats.** A few times a day your pet warns you that a threat is coming (« ⚠ A Log Hydra is coming! Use `grep` to fight
   it »). `bashou fight` drops you in a sandbox bash with random data: solve the task with the named
   tool, `answer` it, and the threat's pet joins you. `hint` helps, `flee` runs away. No threat, no
-  fight: the arena only opens after your pet's warning. See [PLAN.md](PLAN.md).
+  fight: the arena only opens after your pet's warning.
 
 ## Install
 
@@ -41,10 +41,31 @@ bashou talk             # your pet says something useful
 bashou swap             # board to pick your pet (or: bashou swap fox)
 bashou off / on         # hide / show the pet
 bashou stats            # commands, top tools, constructs, streaks
+bashou config           # list settings (see Configuration)
 bashou reset            # start over with a new starter (asks first, keeps a backup)
 ```
 
 Tab completion works for commands, pet names and `dev` arguments.
+
+## Configuration
+
+`bashou config` lists the settings with their current value and default.
+
+```bash
+bashou config                   # list all settings
+bashou config bubble            # show one
+bashou config bubble 3-8        # a speech bubble stays for 3 to 8 commands (random in the range)
+bashou config bubble 5          # always 5 commands
+bashou config bubble default    # back to the default (5-10)
+```
+
+| Setting | Default | What it does |
+|---|---|---|
+| `bubble` | `5-10` | How many commands a speech bubble (tips, hints, achievements) stays on screen. When another message is waiting, the current one closes after 2 commands. |
+
+Settings are saved in `~/.local/share/bashou/state.json` (only the ones you changed) and apply to
+every terminal right away. `bashou reset` keeps your language but resets settings. The language is
+chosen with `bashou language`.
 
 ## Privacy
 

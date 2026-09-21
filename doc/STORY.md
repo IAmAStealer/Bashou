@@ -12,8 +12,7 @@ up now and then, and you would fight them with real commands in a sandbox. The p
 
 This version is **100% vibecoded** with [Claude Code](https://claude.com/claude-code), for testing
 purposes. The owner gave the ideas, playtested, and reported bugs. Claude wrote the Python code,
-the pixel art, the tests and the docs. The session log is in [JOURNAL.md](JOURNAL.md), and the
-original plan is in [PLAN.md](PLAN.md).
+the pixel art, the tests and the docs.
 
 Expect rough edges: it's a playground to find out whether the idea is fun.
 
