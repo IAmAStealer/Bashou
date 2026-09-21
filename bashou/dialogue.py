@@ -10,6 +10,7 @@ import shutil
 
 from . import achievements
 from .analyze import analyze
+from .i18n import _
 
 VOICE = {
     "cat": "Mrrp.", "sprout": "*rustle*", "pebble": "*clack*", "bat": "*flap*", "frog": "Ribbit.", "turtle": "…", "mushroom": "*puff*", "slime": "Blub.",
@@ -122,8 +123,8 @@ def hint(state, pet, rng):
     a = rng.choice(todo)
     example = EXAMPLES.get(a.id)
     if example:
-        return f"Try `{example.replace(chr(10), ' ⏎ ')}` ({a.name})"
-    return f"Next: {a.how} ({a.name})"
+        return _("Try `{example}` ({name})").format(example=example.replace(chr(10), " ⏎ "), name=_(a.name))
+    return _("Next: {how} ({name})").format(how=_(a.how), name=_(a.name))
 
 
 def line(state, pet, rng=random):
@@ -131,14 +132,14 @@ def line(state, pet, rng=random):
     from . import fight
     threat = fight.announcement(state)
     if threat:
-        return f"{VOICE[pet]} {threat}"
+        return f"{_(VOICE[pet])} {threat}"
     earned = set(state["achievements"])
     traits = [t for trait, lines in TRAITS.items() if trait in earned for t in lines]
     pools = [(hint(state, pet, rng), 4), (rng.choice(TIPS[pet]), 4),
              (rng.choice(traits + PERSONAL[pet]), 2)]
     pools = [(text, w) for text, w in pools if text]
-    text = rng.choices([t for t, _ in pools], [w for _, w in pools])[0]
-    return f"{VOICE[pet]} {text}"
+    text = rng.choices([t for t, w in pools], [w for t, w in pools])[0]
+    return f"{_(VOICE[pet])} {_(text)}"
 
 
 COMMON = ("ls cd cat grep find awk sed sort uniq head tail less more echo printf pwd mkdir rmdir rm cp mv "
@@ -155,7 +156,7 @@ TYPO_NONE = ["`{typo}`? Never heard of it. Hehe.", "`{typo}` isn't a command… 
 
 def typo(state, pet, command, rng=random):
     """A kind laugh at a "command not found", with the closest real command if there is one."""
-    names = [name for name, _ in analyze(command).commands]
+    names = [name for name, args in analyze(command).commands]
     unknown = [n for n in names if not shutil.which(n) and n not in COMMON]
     if not unknown:
         return None
@@ -165,4 +166,4 @@ def typo(state, pet, command, rng=random):
     close = [c for c in candidates if len(c) == len(word) and sorted(c) == sorted(word)][:1]
     close = close or difflib.get_close_matches(word, candidates, n=1, cutoff=0.6)
     template = rng.choice(TYPO_FIX if close else TYPO_NONE)
-    return f"{VOICE[pet]} " + template.format(typo=word[:20], fix=close[0] if close else "")
+    return f"{_(VOICE[pet])} " + _(template).format(typo=word[:20], fix=close[0] if close else "")

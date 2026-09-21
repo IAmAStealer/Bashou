@@ -33,7 +33,7 @@ class ChallengeTest(unittest.TestCase):
                     try:
                         cmd, pattern = SOLUTIONS[ch.id]
                         if pattern:
-                            cmd = cmd.format(x=re.search(pattern, meta["task"]).group(1))
+                            cmd = cmd.format(x=re.search(pattern, ch.task_text(meta)).group(1))
                         else:
                             cmd = cmd.format()
                         out = subprocess.run(["bash", "-c", cmd], cwd=work, capture_output=True,

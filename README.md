@@ -36,6 +36,7 @@ echo 'source ~/Bashou/bashou.bash' >> ~/.bashrc
 
 ```bash
 bashou start            # choose your starter (first launch does it for you)
+bashou language         # choose the language (asked once at first launch)
 bashou level            # starter level, commands run, next unlock
 bashou pets             # your collection
 bashou achievements     # what you earned, and what to try next
@@ -54,10 +55,22 @@ Tab completion works for commands, pet names and `dev` arguments.
 Bashou reads each new history entry to count tools and constructs, then throws it away.
 Only counters are kept, in `~/.local/share/bashou/state.json`.
 
+## Translations
+
+English is the source language. Translations live in `bashou/locales/<lang>.json`, keyed by the
+English text; an empty value falls back to English, so a language can ship half-done.
+
+```bash
+python3 -m bashou.i18n         # add new messages (empty) to every catalog, show progress
+```
+
+Keep the `{placeholders}` as they are. To add a language, add it to `LANGUAGES` in `bashou/i18n.py`
+and run the command above.
+
 ## Tests
 
 ```bash
-python3 -m unittest            # ~25 s; tests/test_shell.py drives a real bash on a pty
+python3 -m unittest            # ~45 s; tests/test_shell.py drives a real bash on a pty
 ```
 
 ## License

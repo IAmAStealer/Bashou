@@ -25,7 +25,7 @@ class Shell:
         self.data, self.cache = self.tmp / "data", self.tmp / "cache"
         self.data.mkdir(exist_ok=True)
         if state is not False:                           # False: first launch, no save yet
-            base = {"starter": "cat", "active": "starter", **(state or {})}
+            base = {"language": "en", "starter": "cat", "active": "starter", **(state or {})}
             (self.data / "state.json").write_text(json.dumps(base))
         rc = self.tmp / "rc"
         rc.write_text(f"PS1='$ '\nHISTFILE={self.tmp}/hist\nHISTCONTROL=ignoreboth\n"
@@ -154,15 +154,34 @@ class ShellTest(unittest.TestCase):
 
 class FirstLaunchTest(unittest.TestCase):
     def test_first_launch_asks_for_a_starter(self):
-        """No save yet: the picker opens, Enter picks, then the pet appears."""
+        """No save yet: language, then starter, then the pet appears."""
         with tempfile.TemporaryDirectory() as tmp:
             sh = Shell(tmp, state=False)
             try:
                 sh.read(2.5)
+                self.assertIn(b"Language", sh.out)
+                sh.send("\r", 1.5)                       # English
                 self.assertIn(b"Choose your starter", sh.out)
                 sh.send("\x1b[C", 0.3)                   # → Seedling
                 sh.send("\r", 2.5)
                 self.assertEqual(sh.state()["starter"], "sprout")
+                self.assertEqual(sh.state()["language"], "en")
+                self.assertTrue(alive(int(sh.value("BASHOU_PID"))))
+            finally:
+                sh.close()
+
+
+    def test_old_save_is_asked_the_language_once(self):
+        """Saves from before languages keep their starter and only get the language screen."""
+        with tempfile.TemporaryDirectory() as tmp:
+            sh = Shell(tmp, state={"language": None})
+            try:
+                sh.read(2.5)
+                self.assertIn(b"Language", sh.out)
+                sh.send("\x1b[B", 0.3)                   # ↓ Français
+                sh.send("\r", 2.5)
+                self.assertNotIn(b"Choose your starter", sh.out)
+                self.assertEqual(sh.state()["language"], "fr")
                 self.assertTrue(alive(int(sh.value("BASHOU_PID"))))
             finally:
                 sh.close()

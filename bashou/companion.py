@@ -10,7 +10,7 @@ import signal
 import sys
 import time
 
-from . import creatures, dialogue, fight, progress, render, state
+from . import creatures, dialogue, fight, i18n, progress, render, state
 from .behavior import Behavior
 from .analyze import parse_log
 
@@ -100,6 +100,7 @@ class Companion:
         if mtime == self.state_mtime:
             return
         self.state_mtime = mtime
+        i18n.use(None)                 # `bashou language` may have changed it
         s = state.load()
         sprite, stage, _, self.voice = progress.current(s)
         if sprite != self.pet.id:

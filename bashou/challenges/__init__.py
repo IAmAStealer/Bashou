@@ -15,8 +15,9 @@ class Challenge:
     pet: str                  # pet unlocked by winning
     tools: tuple              # the first is the one named; any of them counts
     threat: str               # name of the attacking threat
+    task: str                 # what to do, with {placeholders} filled from meta["args"]
     hints: list
-    setup: Callable           # (work_dir, rng) -> meta dict with "task" (and usually "answer")
+    setup: Callable           # (work_dir, rng) -> meta dict with "args" (and usually "answer")
     verify: Optional[Callable] = None   # (work_dir, meta, value) -> bool; default: value == answer
     cleanup: Optional[Callable] = None  # (meta) -> None
     requires: list = field(default_factory=list)   # executables needed on this system
@@ -24,6 +25,10 @@ class Challenge:
     @property
     def tool(self):
         return self.tools[0]
+
+    def task_text(self, meta):
+        from ..i18n import _
+        return _(self.task).format(**meta.get("args", {}))
 
     def check(self, work, meta, value):
         if self.verify:

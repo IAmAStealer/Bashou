@@ -3,7 +3,8 @@
 import argparse
 
 from . import achievements, progress, state
-from .creatures import FORM_NAMES, NAMES, ROSTER, STAGES, STARTERS
+from .creatures import NAMES, ROSTER, STAGES
+from .i18n import _
 
 BOLD, DIM, RESET = "\033[1m", "\033[2m", "\033[0m"
 
@@ -16,31 +17,33 @@ def progress_bar(done, total, width=20):
 def starter_line(s):
     """"Cat · level 5 ███░ 2/5 achievements to level 6" for the chosen starter."""
     if not s["starter"]:
-        return f"{DIM}no starter yet: bashou start{RESET}"
+        return DIM + _("no starter yet: bashou start") + RESET
     lvl, per = progress.starter_level(s), progress.ACHIEVEMENTS_PER_LEVEL
     name = progress.current(s, "starter")[2]
     if lvl == progress.MAX_LEVEL:
-        return f"{name} · level {lvl} (max)"
+        return _("{name} · level {level} (max)").format(name=name, level=lvl)
     done = len(s["achievements"]) % per
-    return f"{name} · level {lvl} {progress_bar(done, per, 10)} {done}/{per} achievements to level {lvl + 1}"
+    return _("{name} · level {level} {bar} {done}/{per} achievements to level {next}").format(
+        name=name, level=lvl, bar=progress_bar(done, per, 10), done=done, per=per, next=lvl + 1)
 
 
 def level():
     s = state.load()
-    print(f"  {BOLD}Starter{RESET} : {starter_line(s)}")
-    print(f"  {BOLD}Commands{RESET}: {s['commands']:,}")
-    print(f"  {BOLD}Pets{RESET}    : {len(s['pets'])}/{len(ROSTER)}")
+    rows = [(_("Starter"), starter_line(s)), (_("Commands"), f"{s['commands']:,}"),
+            (_("Pets"), f"{len(s['pets'])}/{len(ROSTER)}")]
     nxt = progress.next_milestone(s)
     if nxt:
         count, pet = nxt
-        print(f"  {BOLD}Next{RESET}    : {progress_bar(s['commands'], count)} "
-              f"{s['commands']:,}/{count:,} → {NAMES[pet]}")
+        rows.append((_("Next"), f"{progress_bar(s['commands'], count)} {s['commands']:,}/{count:,} → {_(NAMES[pet])}"))
+    width = max(len(label) for label, value in rows)
+    for label, value in rows:
+        print(f"  {BOLD}{label:<{width}}{RESET} : {value}")
 
 
 def hint(s, pet):
     for count, p in progress.MILESTONES:
         if p == pet:
-            return f"{count:,} commands"
+            return _("{count} commands").format(count=f"{count:,}")
     if pet in progress.TOOL_PETS:
         tools, needed = progress.TOOL_PETS[pet]
         return f"{progress.tool_uses(s, tools)}/{needed} × {min(tools)}"
@@ -53,12 +56,12 @@ def stars(s, pet):
 
 def pets():
     s = state.load()
-    active = " ← active" if s["active"] == "starter" else ""
-    print(f"  {BOLD}Starter{RESET} {starter_line(s)}{DIM}{active}{RESET}\n")
-    for pet, _ in ROSTER:
+    active = " ← " + _("active") if s["active"] == "starter" else ""
+    print(f"  {BOLD}{_('Starter')}{RESET} {starter_line(s)}{DIM}{active}{RESET}\n")
+    for pet, rule in ROSTER:
         if pet in s["pets"]:
-            active = " ← active" if pet == s["active"] else ""
-            name = STAGES[pet][progress.stage(s, pet) - 1]
+            active = " ← " + _("active") if pet == s["active"] else ""
+            name = _(STAGES[pet][progress.stage(s, pet) - 1])
             print(f"  {stars(s, pet)} {name}{DIM}{active}{RESET}")
         else:
             print(f"  {DIM}☆☆☆ ???  ({hint(s, pet)}){RESET}")
@@ -67,18 +70,20 @@ def pets():
 def achievements_list():
     s = state.load()
     earned = set(s["achievements"])
-    print(f"  {len(earned)}/{len(achievements.ALL)} achievements · 2 evolve a pet, all of its family make it legendary")
-    print(f"  {DIM}Every {progress.ACHIEVEMENTS_PER_LEVEL} achievements also level up your starter.{RESET}\n")
-    for pet, _ in ROSTER:
+    print("  " + _("{n} achievements · 2 evolve a pet, all of its family make it legendary").format(
+        n=f"{len(earned)}/{len(achievements.ALL)}"))
+    print(f"  {DIM}" + _("Every {n} achievements also level up your starter.").format(
+        n=progress.ACHIEVEMENTS_PER_LEVEL) + f"{RESET}\n")
+    for pet, rule in ROSTER:
         fam = achievements.family(pet)
         got = sum(a.id in earned for a in fam)
-        title = STAGES[pet][progress.stage(s, pet) - 1] if pet in s["pets"] else "???"
+        title = _(STAGES[pet][progress.stage(s, pet) - 1]) if pet in s["pets"] else "???"
         print(f"  {BOLD}{title}{RESET} {DIM}{got}/{len(fam)}{RESET}")
         for a in fam:
             if a.id in earned:
-                print(f"    🏆 {a.name} {DIM}· {a.how}{RESET}")
+                print(f"    🏆 {_(a.name)} {DIM}· {_(a.how)}{RESET}")
             else:
-                print(f"    {DIM}·  {a.name} · {a.how}{RESET}")
+                print(f"    {DIM}·  {_(a.name)} · {_(a.how)}{RESET}")
 
 
 def swap(pet):
@@ -91,37 +96,37 @@ def swap(pet):
     if pet in ("starter", s["starter"]):
         pet = "starter"
     elif pet not in s["pets"]:
-        print(f"  {pet}: not unlocked yet.")
+        print("  " + _("{pet}: not unlocked yet.").format(pet=pet))
         return
     with state.locked() as s:
         s["active"] = pet
-    print(f"  {progress.current(s)[2]} is now your pet.")
-
-
-def plural(n, word):
-    return f"{n} {word}" + ("" if n == 1 else "s")
+    print("  " + _("{name} is now your pet.").format(name=progress.current(s)[2]))
 
 
 def stats():
     s = state.load()
     days = s["days"]
-    print(f"  {BOLD}Commands{RESET}     {s['commands']:,}  {DIM}({s['today']['count']} today){RESET}")
-    print(f"  {BOLD}Active days{RESET}  {len(days)}  {DIM}(streak: {plural(achievements.streak(days), 'day')}){RESET}")
-    print(f"  {BOLD}Pets{RESET}         {len(s['pets'])}/{len(ROSTER)}   "
-          f"{BOLD}Achievements{RESET} {len(s['achievements'])}/{len(achievements.ALL)}   "
-          f"{BOLD}Fights won{RESET} {s['fights_won']}")
+    labels = [_("Commands"), _("Active days"), _("Pets")]
+    w = max(map(len, labels)) + 2
+    print(f"  {BOLD}{labels[0]:<{w}}{RESET}{s['commands']:,}  {DIM}("
+          + _("{n} today").format(n=s["today"]["count"]) + f"){RESET}")
+    print(f"  {BOLD}{labels[1]:<{w}}{RESET}{len(days)}  {DIM}("
+          + _("streak: {n} day(s)").format(n=achievements.streak(days)) + f"){RESET}")
+    print(f"  {BOLD}{labels[2]:<{w}}{RESET}{len(s['pets'])}/{len(ROSTER)}   "
+          f"{BOLD}{_('Achievements')}{RESET} {len(s['achievements'])}/{len(achievements.ALL)}   "
+          f"{BOLD}{_('Fights won')}{RESET} {s['fights_won']}")
     top = sorted(s["tools"].items(), key=lambda kv: -kv[1])[:8]
     if top:
         width = max(len(t) for t, _ in top)
         most = top[0][1]
-        print(f"\n  {BOLD}Top tools{RESET}")
+        print(f"\n  {BOLD}{_('Top tools')}{RESET}")
         for tool, n in top:
             print(f"    {tool:<{width}} {progress_bar(n, most, 16)} {n:,}")
-    names = {"pipe3": "3+ stage pipes", "subst": "$( ) captures", "procsub": "<( ) substitutions",
-             "loop": "loops", "heredoc": "heredocs", "stderr": "2>&1 merges", "tee": "tee"}
+    names = {"pipe3": _("3+ stage pipes"), "subst": _("$( ) captures"), "procsub": _("<( ) substitutions"),
+             "loop": _("loops"), "heredoc": _("heredocs"), "stderr": _("2>&1 merges"), "tee": "tee"}
     used = [(names.get(k, k), v) for k, v in sorted(s["constructs"].items(), key=lambda kv: -kv[1])]
     if used:
-        print(f"\n  {BOLD}Constructs{RESET}   " + "  ".join(f"{name} {DIM}{n}{RESET}" for name, n in used))
+        print(f"\n  {BOLD}{_('Constructs')}{RESET}   " + "  ".join(f"{name} {DIM}{n}{RESET}" for name, n in used))
 
 
 def backup():
@@ -130,25 +135,26 @@ def backup():
     if state.STATE.exists():
         path = state.DATA / f"state.json.bak-{time.strftime('%Y%m%d-%H%M%S')}-{time.time_ns() % 1000:03d}"
         shutil.copy(state.STATE, path)
-        print(f"  {DIM}backup: {path}{RESET}")
+        print(f"  {DIM}" + _("backup: {path}").format(path=path) + RESET)
 
 
 def reset():
     """Start over: new starter, empty collection. Asks first, keeps a backup."""
     import sys
     from . import starter
-    print(f"  {BOLD}Reset Bashou?{RESET} Your starter, pets, achievements and counters start over.")
+    print(f"  {BOLD}{_('Reset Bashou?')}{RESET} " + _("Your starter, pets, achievements and counters start over."))
     try:
-        answer = input("  Type `reset` to confirm: ")
+        answer = input("  " + _("Type `reset` to confirm: "))
     except EOFError:
         answer = ""
     if answer.strip() != "reset":
-        print("  Nothing changed.")
+        print("  " + _("Nothing changed."))
         return 1
     backup()
     with state.locked() as s:
         s.clear()
-        s.update(state.default())
+        language = s.get("language")
+        s.update(state.default(), language=language)     # keep the language
     return starter.main() if sys.stdin.isatty() else 0
 
 
@@ -179,7 +185,7 @@ def dev(args):
                 s["pets"].append(args.pet)
             print(f"  {STAGES[args.pet][args.stage - 1]} (stage {args.stage}).")
         elif args.action == "stage-all":
-            for pet, _ in ROSTER:
+            for pet, rule in ROSTER:
                 fam = [a.id for a in achievements.family(pet)]
                 keep = fam[:{1: 0, 2: 2, 3: len(fam)}[args.stage]]
                 s["achievements"] = [a for a in s["achievements"] if a not in fam] + keep
@@ -210,6 +216,7 @@ def main():
     dv.add_argument("pet", nargs="?", help="pet (stage), level 1-9 (level) or challenge id (threat)")
     dv.add_argument("stage", nargs="?", type=int, choices=[1, 2, 3], default=3)
     sub.add_parser("start", help="choose your starter (once)")
+    sub.add_parser("language", help="choose the language")
     sub.add_parser("reset", help="start over with a new starter")
     sub.add_parser("on", help="show the pet (shell function)")
     sub.add_parser("off", help="hide the pet (shell function)")
@@ -222,8 +229,11 @@ def main():
     elif args.cmd == "talk":
         from . import dialogue
         s = state.load()
-        _, _, name, voice = progress.current(s)
+        name, voice = progress.current(s)[2:]
         print(f"  {BOLD}{name}{RESET}: {dialogue.line(s, voice)}")
+    elif args.cmd == "language":
+        from . import starter
+        raise SystemExit(starter.language_main())
     elif args.cmd == "fight":
         from . import fight
         fight.run()

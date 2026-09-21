@@ -19,6 +19,7 @@ def default():
         "constructs": {},   # construct -> uses
         "days": [],         # ISO dates with at least one command
         "today": {"date": "", "count": 0},
+        "language": None,   # "en", "fr"…, asked once at first launch (`bashou language`)
         "starter": None,    # "cat", "sprout" or "pebble", chosen once (`bashou start`)
         "pets": [],         # collection pets unlocked
         "active": "starter",

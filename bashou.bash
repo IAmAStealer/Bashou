@@ -55,7 +55,7 @@ bashou() {
 }
 
 # Tab completion. Static lists (no Python on Tab); tests/test_completion.py keeps them in sync.
-_bashou_commands="level pets achievements fight talk swap stats start reset dev on off"
+_bashou_commands="level pets achievements fight talk swap stats start language reset dev on off"
 _bashou_pets="bat frog turtle mushroom slime sofa octopus dragon fox owl mole snake ghost spider ant axolotl"
 _bashou_dev="unlock-all stage stage-all level threat restore"
 _bashou_challenges="grep_hydra awk_golem find_wraith uniq_swarm sed_serpent ps_phantom"
@@ -81,11 +81,11 @@ complete -F _bashou_complete bashou
 trap 'bashou off' EXIT
 
 # First time: choose a starter (builtins only to check, Python only for the picker).
-_bashou_has_starter() {
+_bashou_ready() {
   local s
   [[ -r $_bashou_data/state.json ]] && IFS= read -rd '' s < "$_bashou_data/state.json"
-  [[ $s == *'"starter": "'* || $s == *'"cat"'* ]]
+  [[ $s == *'"language": "'* ]] && [[ $s == *'"starter": "'* || $s == *'"cat"'* ]]
 }
-if _bashou_has_starter || bashou start; then
+if _bashou_ready || bashou start; then
   bashou on
 fi

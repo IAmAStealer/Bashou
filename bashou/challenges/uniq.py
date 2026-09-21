@@ -10,13 +10,13 @@ def setup(work, rng):
     lines = [ip for ip, n in counts.items() for _ in range(n)]
     rng.shuffle(lines)
     (work / "visitors.txt").write_text("\n".join(lines) + "\n")
-    return {"task": "The Echo Swarm repeats itself endlessly.\n"
-                    "Which IP address appears most often in visitors.txt?",
-            "answer": top}
+    return {"answer": top}
 
 
 CHALLENGE = Challenge(
     id="uniq_swarm", pet="sofa", tools=("uniq",), threat="Echo Swarm",
+    task="The Echo Swarm repeats itself endlessly.\n"
+         "Which IP address appears most often in visitors.txt?",
     hints=["uniq only merges adjacent lines, so sort first. `uniq -c` counts them.",
            "Try: sort visitors.txt | uniq -c | sort -rn | head -1"],
     setup=setup,

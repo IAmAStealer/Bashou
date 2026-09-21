@@ -5,6 +5,7 @@ from .achievements import Ctx
 from .analyze import analyze
 from .behavior import ACTIONS
 from .creatures import FORM_NAMES, STAGES, STARTERS
+from .i18n import _
 
 # Total commands run -> pet unlocked.
 MILESTONES = [(10, "bat"), (50, "frog"), (200, "turtle"), (500, "mushroom"), (1000, "slime"),
@@ -27,7 +28,8 @@ def unlock(state, pet, reason):
     if pet in state["pets"]:
         return []
     state["pets"].append(pet)
-    return [f"🎉 New pet: {STAGES[pet][stage(state, pet) - 1]}! ({reason}) · bashou swap"]
+    return ["🎉 " + _("New pet: {name}! ({reason}) · bashou swap").format(
+        name=_(STAGES[pet][stage(state, pet) - 1]), reason=reason)]
 
 
 def tool_uses(state, tools):
@@ -61,9 +63,9 @@ def current(state, who=None):
         line = state["starter"] or "cat"
         form = starter_form(state)
         sprite = STARTERS[line][form - 1]
-        return sprite, form, FORM_NAMES[sprite], line
+        return sprite, form, _(FORM_NAMES[sprite]), line
     st = stage(state, who)
-    return who, st, STAGES[who][st - 1], who
+    return who, st, _(STAGES[who][st - 1]), who
 
 
 def record(state, status, line, today, hour):
@@ -97,25 +99,26 @@ def check(state, earned=()):
     for a in earned:
         if a.id not in state["achievements"]:
             state["achievements"].append(a.id)
-            notes.append(f"🏆 {a.name}: {a.how}")
+            notes.append(f"🏆 {_(a.name)}: {_(a.how)}")
     for count, pet in MILESTONES:
         if state["commands"] >= count:
-            notes += unlock(state, pet, f"{count:,} commands")
+            notes += unlock(state, pet, _("{count} commands").format(count=f"{count:,}"))
     for pet, (tools, needed) in TOOL_PETS.items():
         if tool_uses(state, tools) >= needed:
             notes += unlock(state, pet, f"{needed} × {min(tools)}")
     if state["starter"] and starter_level(state) > level_before:
         line = STARTERS[state["starter"]]
-        old, new = FORM_NAMES[line[form_before - 1]], FORM_NAMES[line[starter_form(state) - 1]]
+        old, new = _(FORM_NAMES[line[form_before - 1]]), _(FORM_NAMES[line[starter_form(state) - 1]])
         if starter_form(state) > form_before:
-            notes.append(f"✨ {old} evolved into {new}! New: {ACTIONS[starter_form(state)]}")
+            notes.append("✨ " + _("{old} evolved into {new}! New: {actions}").format(
+                old=old, new=new, actions=_(ACTIONS[starter_form(state)])))
         else:
-            notes.append(f"⬆ {new} reached level {starter_level(state)}!")
+            notes.append("⬆ " + _("{name} reached level {level}!").format(name=new, level=starter_level(state)))
     for pet in STAGES:
         now = stage(state, pet)
         if now > before[pet] and pet in state["pets"]:
-            notes.append(f"✨ {STAGES[pet][before[pet] - 1]} evolved into {STAGES[pet][now - 1]}! "
-                         f"New: {ACTIONS[now]}")
+            notes.append("✨ " + _("{old} evolved into {new}! New: {actions}").format(
+                old=_(STAGES[pet][before[pet] - 1]), new=_(STAGES[pet][now - 1]), actions=_(ACTIONS[now])))
     return notes
 
 

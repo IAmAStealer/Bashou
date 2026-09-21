@@ -17,6 +17,7 @@ from pathlib import Path
 
 from . import challenges, progress, state
 from .analyze import analyze, parse_log
+from .i18n import _
 
 BOLD, DIM, RESET = "\033[1m", "\033[2m", "\033[0m"
 ACCENT, GOOD, BAD = "\033[38;2;150;190;230m", "\033[38;2;130;210;120m", "\033[38;2;240;110;110m"
@@ -97,7 +98,8 @@ def announcement(s, now=None):
     if not t or t["challenge"] not in challenges.BY_ID:
         return None
     ch = challenges.BY_ID[t["challenge"]]
-    return f"⚠ A {ch.threat} is coming! Use `{ch.tool}` to fight it → bashou fight"
+    return "⚠ " + _("A {threat} is coming! Use `{tool}` to fight it → bashou fight").format(
+        threat=_(ch.threat), tool=ch.tool)
 
 
 # --- arena -----------------------------------------------------------------
@@ -126,11 +128,13 @@ def cmd_answer(base, value):
     meta = load_meta(base)
     ch = challenges.BY_ID[meta["challenge"]]
     if not ch.check(Path(base) / "arena", meta, value):
-        print(f"{BAD}✗ Not quite. The {ch.threat} shrugs it off.{RESET} {DIM}(hint · task · flee){RESET}")
+        print(BAD + "✗ " + _("Not quite. The {threat} shrugs it off.").format(threat=_(ch.threat))
+              + f"{RESET} {DIM}(hint · task · flee){RESET}")
         return 1
     if not used_tool(base, ch):
-        print(f"{ACCENT}✓ Right answer, but only `{ch.tool}` can hurt the {ch.threat}. "
-              f"Solve it with {ch.tool} (a successful command), then answer again.{RESET}")
+        print(ACCENT + "✓ " + _("Right answer, but only `{tool}` can hurt the {threat}. "
+                                "Solve it with {tool} (a successful command), then answer again.")
+              .format(tool=ch.tool, threat=_(ch.threat)) + RESET)
         return 1
     return 0
 
@@ -139,32 +143,34 @@ def cmd_hint(base):
     meta = load_meta(base)
     ch = challenges.BY_ID[meta["challenge"]]
     i = min(meta.get("hints", 0), len(ch.hints) - 1)
-    print(f"{ACCENT}💡 {ch.hints[i]}{RESET}")
+    print(f"{ACCENT}💡 {_(ch.hints[i])}{RESET}")
     meta["hints"] = i + 1
     (Path(base) / "meta.json").write_text(json.dumps(meta))
     return 0
 
 
 def cmd_task(base):
-    print(load_meta(base)["task"])
+    meta = load_meta(base)
+    print(challenges.BY_ID[meta["challenge"]].task_text(meta))
     return 0
 
 
 def banner(ch, task):
-    return (f"\n{BAD}{BOLD}⚔ The {ch.threat} attacks!{RESET}  Use {BOLD}{ch.tool}{RESET} to fight it.\n\n"
-            f"{task}\n\n"
-            f"{DIM}You're in a sandbox folder with a real bash. Commands:{RESET}\n"
-            f"  answer <value>   strike   {DIM}(needs a successful {ch.tool} command first){RESET}\n"
-            f"  hint             get a hint\n"
-            f"  task             show the task again\n"
-            f"  flee             run away (the threat will come back)\n")
+    return (f"\n{BAD}{BOLD}⚔ " + _("The {threat} attacks!").format(threat=_(ch.threat)) + f"{RESET}  "
+            + _("Use {tool} to fight it.").format(tool=f"{BOLD}{ch.tool}{RESET}") + f"\n\n{task}\n\n"
+            f"{DIM}" + _("You're in a sandbox folder with a real bash. Commands:") + f"{RESET}\n"
+            "  answer <value>   " + _("strike") + f"   {DIM}("
+            + _("needs a successful {tool} command first").format(tool=ch.tool) + f"){RESET}\n"
+            "  hint             " + _("get a hint") + "\n"
+            "  task             " + _("show the task again") + "\n"
+            "  flee             " + _("run away (the threat will come back)") + "\n")
 
 
 def run():
     s = state.load()
     ch = pick(s)
     if not ch:
-        print(f"{DIM}No threat around. Your pet will warn you when one comes.{RESET}")
+        print(DIM + _("No threat around. Your pet will warn you when one comes.") + RESET)
         return
     base = Path(tempfile.mkdtemp(prefix="bashou-arena-"))
     work = base / "arena"
@@ -174,7 +180,7 @@ def run():
         meta.update(ch.setup(work, random.Random()))
         (base / "meta.json").write_text(json.dumps(meta))
         (base / "arena.rc").write_text(RC)
-        print(banner(ch, meta["task"]))
+        print(banner(ch, ch.task_text(meta)))
         env = {**os.environ, "BASHOU_ARENA": str(base),
                "BASHOU_SRC": str(Path(__file__).resolve().parent.parent)}
         code = subprocess.run(["bash", "--rcfile", str(base / "arena.rc"), "-i"], env=env).returncode
@@ -199,12 +205,12 @@ def run():
                 s["challenges"].append(ch.id)
             if s.get("threat") and s["threat"]["challenge"] == ch.id:
                 s["threat"] = None
-            notes += progress.unlock(s, ch.pet, f"beat the {ch.threat}")
+            notes += progress.unlock(s, ch.pet, _("beat the {threat}").format(threat=_(ch.threat)))
             notes += progress.check(s)
     if won:
-        print(f"\n{GOOD}{BOLD}✨ You beat the {ch.threat}!{RESET}")
+        print(f"\n{GOOD}{BOLD}✨ " + _("You beat the {threat}!").format(threat=_(ch.threat)) + RESET)
     else:
-        print(f"\n{DIM}You fled. The {ch.threat} will be back.{RESET}")
+        print(f"\n{DIM}" + _("You fled. The {threat} will be back.").format(threat=_(ch.threat)) + RESET)
     for note in notes:
         print(f"  {note}")
     print()
