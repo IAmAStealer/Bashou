@@ -15,6 +15,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+TIMEOUT = 10
 
 
 class Shell:
@@ -56,15 +57,40 @@ class Shell:
         os.write(self.fd, text.encode())
         self.read(wait)
 
+    def expect(self, pattern, start=0, timeout=TIMEOUT):
+        """Read until `pattern` shows up after byte `start` (True), or the timeout (False).
+
+        Waiting for what we expect, not a fixed time: CI machines are slower than ours.
+        """
+        end = time.time() + timeout
+        while pattern not in self.out[start:] and time.time() < end:
+            self.read(0.1)
+        return pattern in self.out[start:]
+
     def value(self, name):
         """Print a shell variable through a marker and read it back."""
-        self.send(f'echo "@@{name}=${name}@@"\n', 0.7)
-        marker = f"@@{name}=".encode()
-        chunk = self.out[self.out.rindex(marker) + len(marker):]
-        return chunk[:chunk.index(b"@@")].decode()
+        start = len(self.out)
+        # "@@V""=" on the command line, "@@V=" only in the printed output.
+        os.write(self.fd, f'echo "@@V""=${name}@@"\n'.encode())
+        if not self.expect(b"@@V=", start) or not self.expect(b"@@", self.out.index(b"@@V=", start) + 4):
+            raise AssertionError(f"no value for {name}")
+        rest = self.out[self.out.index(b"@@V=", start) + 4:]
+        return rest[:rest.index(b"@@")].decode()
 
     def state(self):
         return json.loads((self.data / "state.json").read_text())
+
+    def wait_state(self, check, timeout=TIMEOUT):
+        """Wait until check(state) is true (the pet saves about once a second)."""
+        end = time.time() + timeout
+        while time.time() < end:
+            try:
+                if check(self.state()):
+                    return True
+            except (OSError, ValueError, KeyError):
+                pass
+            self.read(0.2)
+        return False
 
     def close(self):
         try:
@@ -87,10 +113,16 @@ class ShellTest(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.sh = Shell(self.tmp.name)
-        self.sh.read(2)                                  # rc, first prompt, pet starts
+        self.sh.read(1)
+        self.sh.expect(b"38;2;245;167;52")              # the cat is drawn: rc read, pet started
 
     def tearDown(self):
-        pid = self.sh.value("BASHOU_PID") if alive(self.sh.pid) else ""
+        pid = ""
+        if os.waitpid(self.sh.pid, os.WNOHANG)[0] == 0:  # the shell still runs
+            try:
+                pid = self.sh.value("BASHOU_PID")
+            except (AssertionError, OSError):
+                pass
         self.sh.close()
         if pid.isdigit() and alive(int(pid)):
             os.kill(int(pid), signal.SIGTERM)
@@ -110,15 +142,17 @@ class ShellTest(unittest.TestCase):
         self.sh.send("true\n", 0.3)
         for _ in range(5):
             self.sh.send("\n", 0.2)
-        self.sh.send("true 2\n", 2.5)                    # the pet reads events about once a second
-        self.assertEqual(self.sh.state()["commands"], 2)
+        self.sh.send("true 2\n")
+        self.assertTrue(self.sh.wait_state(lambda s: s["commands"] == 2))
+        self.sh.read(1.5)
+        self.assertEqual(self.sh.state()["commands"], 2)       # and not more
 
     def test_pet_is_erased_before_command_output(self):
         """The pet must be wiped (PS0) before a command prints, or it scrolls into the history."""
-        self.sh.read(1.5)
         erase = next(self.sh.cache.glob("erase.*")).read_bytes()
         start = len(self.sh.out)
-        self.sh.send('echo "OUT_$((40 + 2))"\n', 1)
+        self.sh.send('echo "OUT_$((40 + 2))"\n', 0)
+        self.assertTrue(self.sh.expect(b"OUT_42", start))
         after = self.sh.out[start:]
         self.assertIn(erase, after)
         self.assertLess(after.index(erase), after.index(b"OUT_42"))
@@ -127,8 +161,8 @@ class ShellTest(unittest.TestCase):
         """The pet stayed erased up to 2 s, or longer after commands history skips (duplicates)."""
         self.sh.send("true\n", 2)
         start = len(self.sh.out)
-        self.sh.send("true\n", 0.6)                     # duplicate: not logged, no event
-        self.assertIn(b"38;2;245;167;52", self.sh.out[start:])   # cat fur color: redrawn
+        self.sh.send("true\n", 0)                       # duplicate: not logged, no event
+        self.assertTrue(self.sh.expect(b"38;2;245;167;52", start, timeout=3))   # cat fur color: redrawn
 
     def test_dead_pet_is_restarted(self):
         """If the pet process dies, the next prompt starts a new one."""
@@ -137,25 +171,30 @@ class ShellTest(unittest.TestCase):
         time.sleep(0.2)
         self.sh.send("true\n", 1.5)
         new = int(self.sh.value("BASHOU_PID"))
+        end = time.time() + TIMEOUT
+        while not alive(new) and time.time() < end:
+            time.sleep(0.1)
         self.assertNotEqual(new, pet)
         self.assertTrue(alive(new))
 
     def test_bubble_stays_across_commands(self):
         """Bubbles vanished after one command; typo jokes were limited to one a minute (`whih` got none)."""
-        self.sh.send("sl\n", 2)
+        start = len(self.sh.out)
+        self.sh.send("sl\n", 0)
+        self.assertTrue(self.sh.expect(b"`ls`", start))
         for _ in range(3):
             start = len(self.sh.out)
-            self.sh.send("true\n", 1.5)
-            self.assertIn(b"`ls`", self.sh.out[start:])      # redrawn after each command
+            self.sh.send("true\n", 0)
+            self.assertTrue(self.sh.expect(b"`ls`", start, timeout=4))   # redrawn after each command
         start = len(self.sh.out)
-        self.sh.send("whih\n", 2)
-        self.assertIn(b"`which`", self.sh.out[start:])
+        self.sh.send("whih\n", 0)
+        self.assertTrue(self.sh.expect(b"`which`", start))
 
     def test_exit_cleans_up(self):
         """On exit the pet stops and removes its events/erase files."""
         pet = int(self.sh.value("BASHOU_PID"))
         self.sh.send("exit\n", 0.5)
-        for _ in range(40):
+        for _ in range(TIMEOUT * 10):
             if not alive(pet):
                 break
             time.sleep(0.1)
@@ -170,13 +209,12 @@ class FirstLaunchTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             sh = Shell(tmp, state=False)
             try:
-                sh.read(2.5)
-                self.assertIn(b"Language", sh.out)
-                sh.send("\r", 1.5)                       # English
-                self.assertIn(b"Choose your starter", sh.out)
+                self.assertTrue(sh.expect(b"Language"))
+                sh.send("\r", 0)                         # English
+                self.assertTrue(sh.expect(b"Choose your starter"))
                 sh.send("\x1b[C", 0.3)                   # → Seedling
-                sh.send("\r", 2.5)
-                self.assertEqual(sh.state()["starter"], "sprout")
+                sh.send("\r", 0)
+                self.assertTrue(sh.wait_state(lambda s: s["starter"] == "sprout"))
                 self.assertEqual(sh.state()["language"], "en")
                 self.assertTrue(alive(int(sh.value("BASHOU_PID"))))
             finally:
@@ -188,12 +226,12 @@ class FirstLaunchTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             sh = Shell(tmp, state={"language": None})
             try:
-                sh.read(2.5)
-                self.assertIn(b"Language", sh.out)
+                self.assertTrue(sh.expect(b"Language"))
                 sh.send("\x1b[B", 0.3)                   # ↓ Français
-                sh.send("\r", 2.5)
+                sh.send("\r", 0)
+                self.assertTrue(sh.wait_state(lambda s: s["language"] == "fr"))
+                self.assertTrue(sh.expect(b"38;2;245;167;52"))          # straight to the pet
                 self.assertNotIn(b"Choose your starter", sh.out)
-                self.assertEqual(sh.state()["language"], "fr")
                 self.assertTrue(alive(int(sh.value("BASHOU_PID"))))
             finally:
                 sh.close()
@@ -204,9 +242,13 @@ class QuitTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             sh = Shell(tmp, ["python3", "-m", "bashou", "swap"])
             try:
-                sh.read(1.5)
-                sh.send(key, 1.5)
-                pid, status = os.waitpid(sh.pid, os.WNOHANG)
+                self.assertTrue(sh.expect(b"Bashou"))           # the board is up
+                sh.send(key, 0)
+                end = time.time() + TIMEOUT
+                pid = 0
+                while not pid and time.time() < end:
+                    sh.read(0.1)
+                    pid, status = os.waitpid(sh.pid, os.WNOHANG)
                 return sh.out, pid
             finally:
                 sh.close()
@@ -228,11 +270,11 @@ class SecurityShellTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             sh = Shell(tmp, ["python3", "-m", "bashou", "security", "2"])
             try:
-                sh.read(2)
+                self.assertTrue(sh.expect(b"arena $"))           # the sandbox prompt
                 self.assertIn(b"Encoded note", sh.out)
-                sh.send('answer "$(base64 -d note.txt | cut -d\' \' -f2)"\n', 3)
-                self.assertIn(b"Solved", sh.out)
-                self.assertEqual(sh.state()["security"], ["encoded_note"])
+                sh.send('answer "$(base64 -d note.txt | cut -d\' \' -f2)"\n', 0)
+                self.assertTrue(sh.expect(b"Solved"))
+                self.assertTrue(sh.wait_state(lambda s: s["security"] == ["encoded_note"]))
             finally:
                 sh.close()
 
@@ -243,8 +285,7 @@ class ArenaShellTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             sh = Shell(tmp, ["python3", "-m", "bashou", "fight"])
             try:
-                sh.read(2)
-                self.assertIn(b"No threat around", sh.out)
+                self.assertTrue(sh.expect(b"No threat around"))
             finally:
                 sh.close()
 
@@ -254,10 +295,12 @@ class ArenaShellTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             sh = Shell(tmp, ["python3", "-m", "bashou", "fight"], state=threat)
             try:
-                sh.read(2)
-                sh.send("true\n", 0.5)
-                sh.send("\x04", 2)
-                self.assertIn(b"You fled", sh.out)
+                self.assertTrue(sh.expect(b"arena $"))
+                start = len(sh.out)
+                sh.send("true\n", 0)
+                self.assertTrue(sh.expect(b"arena $", start))
+                sh.send("\x04", 0)
+                self.assertTrue(sh.expect(b"You fled"))
                 self.assertEqual(sh.state()["fights_won"], 0)
             finally:
                 sh.close()
