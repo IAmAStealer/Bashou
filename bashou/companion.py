@@ -39,6 +39,7 @@ class Companion:
         self.stage = 1
         self.threat = False
         self.behavior = Behavior(now=now_ms())
+        self.last_command = now_ms()
 
     # --- shell ------------------------------------------------------------
 
@@ -100,6 +101,14 @@ class Companion:
         self.stage = self.behavior.stage = progress.stage(s, s["active"])
         self.threat = bool(fight.active_threat(s))
 
+    def last_activity(self):
+        """Last command, or last key typed: the kernel updates the terminal's atime on input."""
+        try:
+            typed = int(os.fstat(1).st_atime * 1000)
+        except OSError:
+            typed = 0
+        return max(self.last_command, typed)
+
     def check_threat(self):
         with state.locked() as s:
             note = fight.maybe_threat(s)
@@ -133,7 +142,7 @@ class Companion:
         if not self.bubble and self.notes:
             self.bubble = (self.notes.pop(0), ms + 5000)
 
-        poses, z = self.behavior.frame(ms, self.pet, self.threat)
+        poses, z = self.behavior.frame(ms, self.pet, self.threat, ms - self.last_activity())
         cols = os.get_terminal_size(1).columns
         if cols < self.pet.width + 20:
             return
@@ -174,6 +183,7 @@ class Companion:
                     self.check_threat()
                 if self.busy:
                     self.busy, self.last_key, self.drawn = False, None, None
+                    self.last_command = now_ms()
                 self.draw(now_ms())
         finally:
             for f in (self.events, self.erase_file):

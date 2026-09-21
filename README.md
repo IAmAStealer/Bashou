@@ -2,7 +2,8 @@
 
 A pixel-art pet that lives in the top-right corner of your terminal and grows as you learn bash.
 
-- It breathes, sleeps, washes, looks around, and flicks its tail, but only while you're at the prompt.
+- It breathes, blinks and looks around while you're at the prompt, and falls asleep when the terminal
+  has been idle for 5–15 minutes.
   It's erased before each command, so it never ends up in your scrollback.
 - **Every command counts.** Milestones (50, 200, 500… commands) unlock new pets.
 - **New tools unlock pets too.** Use `find`, `awk`, `grep`, `sed`, `ps`, `xargs`, `jq` or `strace`
