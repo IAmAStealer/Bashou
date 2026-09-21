@@ -265,6 +265,22 @@ class QuitTest(unittest.TestCase):
         self.assertNotEqual(pid, 0)
 
 
+class AdventureShellTest(unittest.TestCase):
+    def test_walk_then_save_and_quit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            sh = Shell(tmp, ["python3", "-m", "bashou", "adventure"], state={"starter": "pebble"})
+            try:
+                self.assertTrue(sh.expect(b"save & quit"))
+                sh.send(" ", 1.5)                        # auto-walk
+                sh.send("s", 0)
+                self.assertTrue(sh.expect(b"Adventure saved"))
+                self.assertNotIn(b"Traceback", sh.out)
+                self.assertIn(b"\x1b[?1049l", sh.out)    # the normal screen is back
+                self.assertGreater(sh.state()["adventure"]["distance"], 2)
+            finally:
+                sh.close()
+
+
 class SecurityShellTest(unittest.TestCase):
     def test_solve_a_security_challenge(self):
         with tempfile.TemporaryDirectory() as tmp:

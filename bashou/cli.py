@@ -253,6 +253,7 @@ def main():
     sub.add_parser("start", help="choose your starter (once)")
     sub.add_parser("language", help="choose the language")
     sub.add_parser("update", help="get the new version from GitHub")
+    sub.add_parser("adventure", help="walk into the world with your starter")
     sc = sub.add_parser("security", help="security challenges, easy to hard")
     sc.add_argument("which", nargs="?", help="number or id (see the list)")
     cf = sub.add_parser("config", help="settings, e.g. bashou config bubble 5-10")
@@ -272,6 +273,9 @@ def main():
         s = state.load()
         name, voice = progress.current(s)[2:]
         print(f"  {BOLD}{name}{RESET}: {dialogue.line(s, voice)}")
+    elif args.cmd == "adventure":
+        from . import adventure
+        raise SystemExit(adventure.main())
     elif args.cmd == "security":
         from . import security
         raise SystemExit(security.run(args.which))

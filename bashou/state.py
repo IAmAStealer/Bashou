@@ -27,6 +27,7 @@ def default():
         "fights_won": 0,
         "challenges": [],   # challenges beaten
         "security": [],     # security challenges solved (`bashou security`)
+        "adventure": None,  # `bashou adventure` progress (see bashou/adventure)
         "threat": None,     # {"challenge", "until"} while a threat waits for you
         "threat_day": {"date": "", "count": 0},
         "last_threat": 0,

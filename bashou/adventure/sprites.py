@@ -1,0 +1,76 @@
+"""The hero seen from behind (one per starter form), in the creatures.py format."""
+
+from .. import creatures
+
+
+def mirrored(halves):
+    """Rows from their left half (9 columns, the 9th is the middle): symmetric sprites stay symmetric."""
+    return [h + h[:8][::-1] for h in halves]
+
+
+def with_pixels(rows, changes):
+    rows = [list(r) for r in rows]
+    for r, c, ch in changes:
+        rows[r][c] = ch
+    return ["".join(r) for r in rows]
+
+
+TAIL = [(7, 8, "a"), (8, 8, "a"), (9, 8, "a"), (10, 8, "a")]
+
+BACK = {
+    "kitten": with_pixels(mirrored([
+        ".........", ".........", ".........", "....a....", "...aoa...", "...aoaaaa",
+        "..aoooooo", "..aoooooo", "...aaoooo", "...aooooo", "..aoooooo", "...aaa...",
+    ]), [(6, 8, "a"), (8, 8, "a"), (9, 8, "a"), (10, 8, "a")]),
+    "cat": with_pixels(mirrored([
+        "...a.....", "..apa....", "..aooaaaa", ".aooooooo", ".aooooooo", "aoooaoooo",
+        "aoooooooo", ".aaoooooo", ".aoooaooo", "aoooooooo", "aoooooooo", ".aaaa....",
+    ]), TAIL + [(6, 8, "l")]),
+    "lion": with_pixels(mirrored([
+        "....NNNNN", "..NNMMMMM", ".NMMMMMMM", "NMMMMMMMM", "NMMMMMMMM", "NMMMMMMMM",
+        ".NMMMMMMM", "..NNMMMMM", "...aooooo", "..aoooooo", ".aooooooo", ".lla.....",
+    ]), [(8, 8, "a"), (9, 8, "a"), (10, 8, "a"), (11, 8, "M")]),
+    "seedling": mirrored([
+        ".........", ".........", ".........", "...LL....", "..LlLL...", "...LLLL.g",
+        "........g", ".....aaaa", "....aoooo", "...aooooo", "...aooooo", "....aaaaa",
+    ]),
+    "sprout": mirrored([
+        "...LL....", "..LlLL...", ".LlllL...", ".LLLLLLLg", "..LL....g", "........g",
+        "...aaaaaa", "..aoooooo", ".aooooooo", ".aooooooo", "..aoooooo", "...aaaaaa",
+    ]),
+    "tree": mirrored([
+        "....ddddd", "..ddLLLLL", ".dLLlLLfL", "dLLlLLLLL", "dLLLLfLLL", ".ddLLLLLL",
+        "...dtTTTT", "...tTTTTT", "...tTTtTT", "...tTTTTT", "...tTtTTT", "..ttt.ttt",
+    ]),
+    "pebble": mirrored([
+        ".........", ".........", ".........", ".........", ".........", ".........",
+        "....aaaaa", "..aaolooo", ".aooooooo", ".aooooloo", ".aooooooo", "..aaaaaaa",
+    ]),
+    "golem": mirrored([
+        "......GGG", ".....aGGG", "....aoooo", "....aoooo", "....aoooo", "....aoooo",
+        "..aaaoooo", "..aoaoooo", "..aoaoooo", "...a.aooo", ".....aoaa", "....aaa..",
+    ]),
+    "crystal": mirrored([
+        ".C......c", ".cC...aCc", ".cc..aooo", "..a.aoooo", ".ac.aoooo", ".aCaaoooo",
+        ".aooaoooo", ".aooaoooo", "..a.aoooo", "....aoocc", "....aoaaa", "...aaa...",
+    ]),
+}
+
+
+def hero(form):
+    """(frames, palette): the back view, then a step with each side (feet lifted, body up a pixel)."""
+    base = BACK.get(form, BACK["kitten"])
+    palette = creatures.get(form).palette
+    low = max(i for i, row in enumerate(base) if row.strip("."))
+    has_feet = "." in base[low].strip(".")
+
+    def step(side):
+        rows = [row for row in base]
+        if has_feet:                              # lift one foot
+            row = list(rows[low])
+            for c in (range(0, 8) if side < 0 else range(9, 17)):
+                row[c] = "."
+            rows[low] = "".join(row)
+        return rows[1:] + ["." * 17]              # and bob up a pixel
+
+    return [base, step(-1), base, step(1)], palette
