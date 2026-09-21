@@ -90,8 +90,10 @@ class Behavior:
                 text = ["✦", " ✧", "✦ ✧", "  ✦"][ms // 500 % 4]
         if ms < self.tail_end:
             poses.append("tail_up")
-        if has("swim") and mood != "sleep" and ms // 600 % 2:     # a tadpole's tail never stops
-            poses.append("swim")
+        if has("swim_up") and mood != "sleep":      # a tadpole's tail never stops: mid, up, mid, down
+            phase = ms // 1200 % 4    # slow: 1.2 s per position, not to distract
+            if phase % 2:
+                poses.append("swim_up" if phase == 1 else "swim_down")
         if ms < self.fidget_end and mood == "awake":
             poses.append("fidget")
         if threat and mood != "sleep":
