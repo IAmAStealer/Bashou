@@ -26,10 +26,10 @@ class DialogueTest(unittest.TestCase):
         s = state.default()
         text = dialogue.hint(s, "fox", random.Random(1))
         fox = [a.name for a in achievements.family("fox") if not a.state]
-        self.assertTrue(any(f"({name})" in text for name in fox), text)
+        self.assertTrue(any(f"(achv: {name})" in text for name in fox), text)
         s["achievements"] = [a.id for a in achievements.family("fox")]
         text = dialogue.hint(s, "fox", random.Random(1))
-        self.assertFalse(any(f"({name})" in text for name in fox), text)
+        self.assertFalse(any(f"(achv: {name})" in text for name in fox), text)
 
     def test_traits_come_from_achievements(self):
         s = state.default()
@@ -126,13 +126,13 @@ class HintTest(unittest.TestCase):
         easy = {a.name for a in achievements.ALL if a.id in achievements.EASY}
         for _ in range(100):
             text = dialogue.hint(s, "pebble", rng)
-            self.assertTrue(any(f"({name})" in text for name in easy), text)
+            self.assertTrue(any(f"(achv: {name})" in text for name in easy), text)
 
     def test_harder_hints_come_later(self):
         s = state.default()
         s["achievements"] = [a.id for a in achievements.ALL if achievements.difficulty(a) < 3]
         text = dialogue.hint(s, "pebble", random.Random(0))
-        self.assertTrue(any(f"({a.name})" in text for a in achievements.ALL if a.id in achievements.HARD), text)
+        self.assertTrue(any(f"(achv: {a.name})" in text for a in achievements.ALL if a.id in achievements.HARD), text)
 
     def test_every_difficulty_id_exists(self):
         for aid in achievements.EASY | achievements.HARD:

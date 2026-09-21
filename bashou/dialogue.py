@@ -137,8 +137,8 @@ def hint(state, pet, rng):
     a = rng.choice([a for a in todo if achievements.difficulty(a) == easiest])
     example = EXAMPLES.get(a.id)
     if example:
-        return _("Try `{example}` ({name})").format(example=example.replace(chr(10), " ⏎ "), name=_(a.name))
-    return _("Next: {how} ({name})").format(how=_(a.how), name=_(a.name))
+        return _("Try `{example}` (achv: {name})").format(example=example.replace(chr(10), " ⏎ "), name=_(a.name))
+    return _("Next: {how} (achv: {name})").format(how=_(a.how), name=_(a.name))
 
 
 INVITES = {
