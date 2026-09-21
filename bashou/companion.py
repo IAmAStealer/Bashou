@@ -9,6 +9,7 @@ import random
 import signal
 import sys
 import time
+from pathlib import Path
 
 from . import creatures, dialogue, fight, i18n, progress, render, state
 from .behavior import Behavior
@@ -16,6 +17,12 @@ from .analyze import parse_log
 
 ESC = "\x1b"
 TICK = 0.25
+SOURCE = Path(__file__).resolve().parent
+
+
+def code_version():
+    """Newest mtime of our source files: it changes on `git pull` or an edit."""
+    return max(p.stat().st_mtime for p in SOURCE.rglob("*.py"))
 
 
 def now_ms():
@@ -23,11 +30,12 @@ def now_ms():
 
 
 class Companion:
-    def __init__(self, shell):
+    def __init__(self, shell, offset=0):
         self.shell = shell
         self.events = state.DATA / f"events.{shell}"
         self.erase_file = state.CACHE / f"erase.{shell}"
-        self.offset = 0
+        self.offset = offset       # bytes of the events file already counted
+        self.code = code_version()
         self.notes = []            # notifications waiting for the bubble
         self.bubble = None         # (text, commands run since shown, commands it stays)
         self.drawn = None          # (erase sequence of what is on screen)
@@ -211,8 +219,27 @@ class Companion:
         if self.busy:
             self.busy, self.last_key, self.drawn = False, None, None
             self.last_command = now_ms()
+        if self.tick % 20 == 10 and self.code_changed():
+            self.read_events()
+            self.restart()
         self.maybe_talk(now_ms())
         self.draw(now_ms())
+
+    def code_changed(self):
+        """True once the source changed and has been quiet for 2 s (not in the middle of a save)."""
+        try:
+            newest = code_version()
+        except (OSError, ValueError):
+            return False
+        return newest != self.code and time.time() - newest > 2
+
+    def restart(self):
+        """Run the new code in this same process (same PID, so the shell still knows us)."""
+        if self.drawn:
+            os.write(1, (ESC + "7" + self.drawn + ESC + "8").encode())
+        # A handler doesn't survive exec, an ignored signal does: no SIGUSR1 death in between.
+        signal.signal(signal.SIGUSR1, signal.SIG_IGN)
+        os.execv(sys.executable, [sys.executable, "-m", "bashou.companion", str(self.shell), str(self.offset)])
 
     def run(self):
         state.CACHE.mkdir(parents=True, exist_ok=True)
@@ -254,7 +281,7 @@ def main():
     os.setpgrp()
     signal.signal(signal.SIGINT, signal.SIG_IGN)
     signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))
-    companion = Companion(int(sys.argv[1]))
+    companion = Companion(int(sys.argv[1]), int(sys.argv[2]) if len(sys.argv) > 2 else 0)
     # The prompt sends SIGUSR1 after every command: redraw right away.
     signal.signal(signal.SIGUSR1, lambda *_: setattr(companion, "busy", True))
     companion.run()

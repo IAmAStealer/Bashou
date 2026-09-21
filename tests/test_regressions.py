@@ -127,6 +127,27 @@ class BubbleTest(TempState):
         self.assertEqual(self.pet.bubble[0], "second")
 
 
+class CodeUpdateTest(TempState):
+    def test_pet_notices_new_code(self):
+        """A pet started before an update kept running the old code (the starter stayed a cat)."""
+        from bashou import companion
+        src = Path(self.tmp.name) / "src"
+        src.mkdir()
+        (src / "a.py").write_text("")
+        old = companion.SOURCE
+        companion.SOURCE = src
+        try:
+            pet = companion.Companion(os.getpid(), offset=42)
+            self.assertEqual(pet.offset, 42)                 # handed over, so nothing counts twice
+            self.assertFalse(pet.code_changed())
+            os.utime(src / "a.py", (time.time(), time.time() + 5))
+            self.assertFalse(pet.code_changed())             # still being saved: wait
+            os.utime(src / "a.py", (time.time() - 10, time.time() - 10))
+            self.assertTrue(pet.code_changed())
+        finally:
+            companion.SOURCE = old
+
+
 class ConfigTest(TempState):
     def test_bubble_setting(self):
         with contextlib.redirect_stdout(io.StringIO()):
