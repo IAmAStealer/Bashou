@@ -80,6 +80,36 @@ def swap(pet):
     print(f"  {STAGES[pet][progress.stage(s, pet) - 1]} is now your pet.")
 
 
+def plural(n, word):
+    return f"{n} {word}" + ("" if n == 1 else "s")
+
+
+def stats():
+    s = state.load()
+    days = s["days"]
+    print(f"  {BOLD}Commands{RESET}     {s['commands']:,}  {DIM}({s['today']['count']} today){RESET}")
+    print(f"  {BOLD}Active days{RESET}  {len(days)}  {DIM}(streak: {plural(achievements.streak(days), 'day')}){RESET}")
+    print(f"  {BOLD}Pets{RESET}         {len(s['pets'])}/{len(ROSTER)}   "
+          f"{BOLD}Achievements{RESET} {len(s['achievements'])}/{len(achievements.ALL)}   "
+          f"{BOLD}Fights won{RESET} {s['fights_won']}")
+    top = sorted(s["tools"].items(), key=lambda kv: -kv[1])[:8]
+    if top:
+        width = max(len(t) for t, _ in top)
+        most = top[0][1]
+        print(f"\n  {BOLD}Top tools{RESET}")
+        for tool, n in top:
+            print(f"    {tool:<{width}} {progress_bar(n, most, 16)} {n:,}")
+    names = {"pipe3": "3+ stage pipes", "subst": "$( ) captures", "procsub": "<( ) substitutions",
+             "loop": "loops", "heredoc": "heredocs", "stderr": "2>&1 merges", "tee": "tee"}
+    used = [(names.get(k, k), v) for k, v in sorted(s["constructs"].items(), key=lambda kv: -kv[1])]
+    if used:
+        print(f"\n  {BOLD}Constructs{RESET}   " + "  ".join(f"{name} {DIM}{n}{RESET}" for name, n in used))
+    if s["breathe"]:
+        total = sum(b["seconds"] for b in s["breathe"])
+        print(f"\n  {BOLD}Breathing{RESET}    {len(s['breathe'])} sessions, {total // 60} min "
+              f"{DIM}(streak: {plural(breathe.streak({b['date'] for b in s['breathe']}), 'day')}){RESET}")
+
+
 def dev(args):
     """Testing helpers. Every change first backs up state.json next to it."""
     import shutil
@@ -134,7 +164,7 @@ def main():
     br = sub.add_parser("breathe", help="guided breathing")
     br.add_argument("pattern", nargs="?", default="box", choices=list(breathe.PATTERNS))
     br.add_argument("-n", "--cycles", type=int, default=4)
-    sub.add_parser("stats", help="breathing stats")
+    sub.add_parser("stats", help="your terminal stats: commands, tools, streaks")
     dv = sub.add_parser("dev", help="testing helpers (back up state first)")
     dv.add_argument("action", choices=["unlock-all", "stage", "stage-all", "threat", "restore"])
     dv.add_argument("pet", nargs="?", help="pet (stage) or challenge id (threat)")
@@ -160,7 +190,7 @@ def main():
     elif args.cmd == "breathe":
         breathe.breathe(args.pattern, args.cycles)
     elif args.cmd == "stats":
-        breathe.stats()
+        stats()
     elif args.cmd == "dev":
         if args.action == "stage-all" and args.pet:
             args.stage = int(args.pet)

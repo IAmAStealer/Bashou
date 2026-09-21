@@ -58,16 +58,3 @@ def streak(days):
         count += 1
         day -= timedelta(days=1)
     return count
-
-
-def stats():
-    log = state.load()["breathe"]
-    if not log:
-        print("No session yet. Run `bashou breathe` to start.")
-        return
-    total = sum(s["seconds"] for s in log)
-    days = {s["date"] for s in log}
-    print(f"  Sessions      : {len(log)}")
-    print(f"  Total time    : {total // 60} min {total % 60} s")
-    print(f"  Active days   : {len(days)}")
-    print(f"  Current streak: {streak(days)} day(s)")

@@ -39,7 +39,7 @@ bashou talk             # your pet says something useful
 bashou swap             # board to pick your pet (or: bashou swap fox)
 bashou off / on         # hide / show the pet
 bashou breathe [box|478|calm] [-n cycles]   # guided breathing
-bashou stats            # breathing stats
+bashou stats            # commands, top tools, streaks, breathing
 ```
 
 ## Privacy
