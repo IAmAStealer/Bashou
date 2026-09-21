@@ -26,4 +26,10 @@ bashou -h       # all commands
 sed -i '/\.bashou\/bashou\.bash/d' ~/.bashrc && rm -rf ~/.bashou
 ```
 
+Your progress stays in `~/.local/share/bashou` (delete it too to forget everything).
+
+## More
+
+The [guide](doc/GUIDE.md) explains pets, achievements, fights and translations.
+
 MIT license.
