@@ -22,7 +22,7 @@ from .i18n import _
 BOLD, DIM, RESET = "\033[1m", "\033[2m", "\033[0m"
 ACCENT, GOOD, BAD = "\033[38;2;150;190;230m", "\033[38;2;130;210;120m", "\033[38;2;240;110;110m"
 WIN, FLEE = 42, 3          # exit codes of the arena shell (Ctrl-D is a flee)
-THREAT_MINUTES = 10
+THREAT_MINUTES = 30
 
 RC = r"""
 [[ -f ~/.bash_aliases ]] && source ~/.bash_aliases
@@ -100,6 +100,13 @@ def announcement(s, now=None):
     ch = challenges.BY_ID[t["challenge"]]
     return "⚠ " + _("A {threat} is coming! Use `{tool}` to fight it → bashou fight").format(
         threat=_(ch.threat), tool=ch.tool)
+
+
+def gone(challenge_id):
+    """What the pet says when a threat got tired of waiting."""
+    ch = challenges.BY_ID.get(challenge_id)
+    name = _(ch.threat) if ch else "?"
+    return "💨 " + _("The {threat} got tired of waiting and left. It'll be back!").format(threat=name)
 
 
 # --- arena -----------------------------------------------------------------

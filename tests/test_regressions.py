@@ -177,6 +177,38 @@ class ResumeTest(TempState):
             state.CACHE = old
 
 
+class ThreatBubbleTest(TempState):
+    def setUp(self):
+        super().setUp()
+        from bashou import companion
+        with state.locked() as s:
+            s["starter"] = "pebble"
+            s["threat"] = {"challenge": "grep_hydra", "until": time.time() + 600}
+        self.pet = companion.Companion(os.getpid())
+        self.pet.reload_pet()
+        self.pet.notes.append(fight.announcement(state.load()))
+        self.pet.update_bubble()
+
+    def end_threat(self, won=False):
+        time.sleep(0.01)                                   # a new mtime for the state file
+        with state.locked() as s:
+            s["threat"] = None
+            s["fights_won"] += won
+        self.pet.reload_pet()
+        self.pet.update_bubble()
+
+    def test_announcement_leaves_with_the_threat(self):
+        """The Log Hydra's bubble stayed up for 1h40 after it left: `bashou fight` said no threat."""
+        self.assertIn("Log Hydra is coming", self.pet.bubble[0])
+        self.end_threat()
+        self.assertNotIn("is coming", self.pet.bubble[0])
+        self.assertIn("got tired of waiting", self.pet.bubble[0])
+
+    def test_no_goodbye_after_a_win(self):
+        self.end_threat(won=True)
+        self.assertIsNone(self.pet.bubble)
+
+
 class ConfigTest(TempState):
     def test_bubble_setting(self):
         with contextlib.redirect_stdout(io.StringIO()):

@@ -16,6 +16,7 @@ from pathlib import Path
 from . import creatures, dialogue, fight, i18n, progress, render, state, update
 from .behavior import Behavior
 from .analyze import parse_log
+from .i18n import _
 
 ESC = "\x1b"
 TICK = 0.25
@@ -46,11 +47,13 @@ class Companion:
         self.tick = 0
         self.busy = True
         self.state_mtime = 0
-        sprite, _, _, self.voice = progress.current(state.load())
+        sprite, self.voice = progress.current(state.load())[::3]
         self.pet = creatures.get(sprite)
         self.cells = render.mask(self.pet)
         self.stage = 1
         self.threat = False
+        self.threat_text = self.threat_id = None     # the waiting threat's announcement
+        self.fights_won = 0
         self.behavior = Behavior(now=now_ms())
         self.last_command = now_ms()
         self.talk_at = now_ms() + random.randint(3, 8) * 60_000
@@ -117,12 +120,29 @@ class Companion:
         self.state_mtime = mtime
         i18n.use(None)                 # `bashou language` may have changed it
         s = state.load()
-        sprite, stage, _, self.voice = progress.current(s)
+        sprite, stage, name, self.voice = progress.current(s)
         if sprite != self.pet.id:
             self.pet = creatures.get(sprite)
             self.cells = render.mask(self.pet)
         self.stage = self.behavior.stage = stage
-        self.threat = bool(fight.active_threat(s))
+        threat = fight.active_threat(s)
+        if self.threat and not threat:
+            self.threat_ended(s)
+        self.threat = bool(threat)
+        if threat:
+            self.threat_text, self.threat_id = fight.announcement(s), threat["challenge"]
+        self.fights_won = s["fights_won"]
+
+    def threat_ended(self, s):
+        """Take the announcement down: it stayed up long after the threat was gone (commands over ssh
+        don't count here). Unless you just won, the pet tells you it left."""
+        text = self.threat_text or "\0"
+        if self.bubble and text in self.bubble[0]:
+            self.bubble = None
+        self.notes = [n for n in self.notes if text not in n]
+        if s["fights_won"] <= self.fights_won:
+            self.say_now(f"{_(dialogue.VOICE[self.voice])} {fight.gone(self.threat_id)}")
+        self.threat_text = self.threat_id = None
 
     def last_activity(self):
         """Last command, or last key typed: the kernel updates the terminal's atime on input."""
@@ -262,7 +282,8 @@ class Companion:
             return False
         return newest != self.code and time.time() - newest > 2
 
-    HANDOVER = ("offset", "bubble", "notes", "talk_at", "warn_at")
+    HANDOVER = ("offset", "bubble", "notes", "talk_at", "warn_at", "threat", "threat_text", "threat_id",
+                "fights_won")
 
     def restart(self):
         """Run the new code in this same process (same PID, so the shell still knows us).

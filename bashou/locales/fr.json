@@ -50,6 +50,7 @@
  "Try `{example}` ({name})": "",
  "run away (the threat will come back)": "",
  "A {threat} is coming! Use `{tool}` to fight it → bashou fight": "",
+ "The {threat} got tired of waiting and left. It'll be back!": "",
  "show the task again": "",
  "No threat around. Your pet will warn you when one comes.": "",
  "Not quite. Keep looking.": "",
