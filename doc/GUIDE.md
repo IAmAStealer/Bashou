@@ -14,7 +14,15 @@ A pixel-art pet that lives in the top-right corner of your terminal and grows as
 - **Achievements evolve your pets.** Each pet has a family of achievements (`find -exec`,
   `awk -F`, `sort -rn`, a heredoc…): 2 of them evolve it, all of them make it legendary.
   Evolved pets learn new actions: washing, humming, tail flicks, then dancing and sparkles.
-- **Pick your pet** on a 4×4 board with `bashou swap`.
+- **Pipes.** Chain 3 commands with `|` ten times, or beat the Knot Eel in the arena, and the
+  Octopus joins you.
+- **Safety.** Your pet warns you right away about risky commands: a download piped into a shell
+  (`curl … | sh`), `chmod 777`, skipped HTTPS checks (`curl -k`), `rm -r` on `/` or `~`,
+  `StrictHostKeyChecking=no`, `sudo pip install`, `sshpass -p`. Five of them attract the **Gremlin**,
+  which evolves as you pick up safe habits (reading a script before running it, checksums, `chmod u+x`)
+  and ends up a Shell guardian.
+- **Typos.** On `command not found` your pet laughs kindly and suggests the command you meant.
+- **Pick your pet** on the board with `bashou swap`.
 - **Pets talk.** Every 10–20 minutes your pet gives a tip for its tool, a hint toward your next
   achievement (with an example command), or a line shaped by your achievements (win fights and it
   gets bolder). `bashou talk` asks it right away.

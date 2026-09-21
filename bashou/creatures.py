@@ -81,12 +81,14 @@ ROSTER = [
     ("slime", "Slime"), ("sofa", "Living sofa"), ("octopus", "Octopus"), ("dragon", "Dragon"),
     ("fox", "Fox"), ("owl", "Owl"), ("mole", "Mole"), ("snake", "Snake"),
     ("ghost", "Ghost"), ("spider", "Spider"), ("ant", "Ant"), ("axolotl", "Axolotl"),
+    ("gremlin", "Gremlin"),
 ]
 NAMES = dict(ROSTER)
 
 # Names of the three stages: unlocked, evolved (2 achievements), legendary (whole family).
 STAGES = {
     "bat": ("Batling", "Bat", "Night bat"),
+    "gremlin": ("Gremlin", "Reformed gremlin", "Shell guardian"),
     "frog": ("Tadpole", "Frog", "Frog prince"),
     "turtle": ("Hatchling", "Turtle", "Elder turtle"),
     "mushroom": ("Spore", "Mushroom", "Glowshroom"),
@@ -718,6 +720,35 @@ aooaoooooooaooa..
     z_at=(0, 10),
 )
 
+GREMLIN = Pet(
+    id="gremlin", name="Gremlin",
+    base=sprite("""
+.................
+E...............E
+EE....ggggg....EE
+.EEE.ggggggg.EEE.
+..EEEgggggggEEE..
+....gYYgggYYg....
+....gYmgggmYg....
+....ggggngggg....
+....gwtwtwtwg....
+.....ggggggg.....
+....hh.ggg.hh....
+.................
+"""),
+    palette={"E": (70, 140, 70), "g": (110, 190, 90), "Y": (250, 220, 60), "m": (25, 25, 25),
+             "n": (60, 110, 55), "w": (255, 255, 255), "t": (70, 30, 30), "h": (90, 160, 75),
+             "p": (240, 120, 150)},
+    poses={
+        "inhale": pixels("0,0,E 0,16,E"),
+        "closed": pixels("5,5,g 5,6,g 5,10,g 5,11,g 6,5,n 6,6,n 6,10,n 6,11,n"),
+        "left": pixels("6,5,m 6,6,Y 6,10,m 6,11,Y"),
+        "right": pixels("6,5,Y 6,6,m 6,10,Y 6,11,m"),
+        "fidget": pixels("8,7,p 8,8,p 8,9,p 9,8,p"),
+    },
+)
+
+
 BAT = Pet(
     id="bat", name="Bat",
     base=sprite("""
@@ -760,7 +791,7 @@ STARTER_BLURBS = {
 
 PETS = {p.id: p for p in (KITTEN, CAT, LION, SEEDLING, SPROUT, TREE, PEBBLE, GOLEM, CRYSTAL,
                          BAT, FROG, TURTLE, MUSHROOM, SLIME, SOFA, OCTOPUS, DRAGON,
-                         FOX, OWL, MOLE, SNAKE, GHOST, SPIDER, ANT, AXOLOTL)}
+                         FOX, OWL, MOLE, SNAKE, GHOST, SPIDER, ANT, AXOLOTL, GREMLIN)}
 
 
 def get(pet_id):

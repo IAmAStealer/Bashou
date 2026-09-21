@@ -9,6 +9,8 @@ from dataclasses import dataclass
 from datetime import date, timedelta
 from typing import Callable, Optional
 
+from . import safety
+
 
 @dataclass
 class Ctx:
@@ -115,6 +117,17 @@ ALL = [
     A("pipeline", "octopus", "Pipeline", "chain 5 commands with pipes", cmd=lambda c: c.analysis.pipes >= 5),
     A("tee_time", "octopus", "Tee time", "split a stream with `tee`", cmd=lambda c: "tee" in c.analysis.constructs),
     A("merge", "octopus", "Merge", "send stderr into the pipe with `2>&1`", cmd=lambda c: "stderr" in c.analysis.constructs),
+
+    # Gremlin: shows up after risky commands, and evolves as you learn safe habits
+    A("inspector", "gremlin", "Inspector", "read a script before running it: `less install.sh`",
+      cmd=lambda c: c.arg(("less", "more", "cat", "head", "bat", "view", "vim", "nano"), r"\.sh$")),
+    A("checksum", "gremlin", "Checksum", "check a download with `sha256sum`",
+      cmd=lambda c: bool(c.args("sha256sum", "sha512sum", "shasum", "b2sum")) or c.arg("gpg", r"^--verify$")),
+    A("save_first", "gremlin", "Save first", "download to a file with `curl -o` or `wget`, not into a shell",
+      cmd=lambda c: (c.flag("curl", "oO", ("--output", "--remote-name")) or bool(c.args("wget")))
+      and not safety.risk(c.line)),
+    A("tight", "gremlin", "Tight", "set careful permissions: `chmod u+x` or `chmod 600`",
+      cmd=lambda c: c.arg("chmod", r"^(0?[67][0-5][0-5]|u\+r?w?x|go?-r?w?x?|o-r?w?x?)$")),
 
     # Dragon: fights
     A("warrior", "dragon", "Warrior", "win a fight", state=lambda s: s["fights_won"] >= 1),

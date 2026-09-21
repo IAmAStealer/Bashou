@@ -128,7 +128,8 @@ def stats():
         for tool, n in top:
             print(f"    {tool:<{width}} {progress_bar(n, most, 16)} {n:,}")
     names = {"pipe3": _("3+ stage pipes"), "subst": _("$( ) captures"), "procsub": _("<( ) substitutions"),
-             "loop": _("loops"), "heredoc": _("heredocs"), "stderr": _("2>&1 merges"), "tee": "tee"}
+             "loop": _("loops"), "heredoc": _("heredocs"), "stderr": _("2>&1 merges"), "tee": "tee",
+             "risky": _("risky commands")}
     used = [(names.get(k, k), v) for k, v in sorted(s["constructs"].items(), key=lambda kv: -kv[1])]
     if used:
         print(f"\n  {BOLD}{_('Constructs')}{RESET}   " + "  ".join(f"{name} {DIM}{n}{RESET}" for name, n in used))
@@ -209,7 +210,7 @@ def dev(args):
     with state.locked() as s:
         if args.action == "unlock-all":
             s["pets"] = [pet for pet, _ in ROSTER]
-            print("  All 16 pets unlocked.")
+            print(f"  All {len(ROSTER)} pets unlocked.")
         elif args.action == "stage":
             fam = [a.id for a in achievements.family(args.pet)]
             keep = fam[:{1: 0, 2: 2, 3: len(fam)}[args.stage]]

@@ -140,6 +140,17 @@ class ShellTest(unittest.TestCase):
         self.assertNotEqual(new, pet)
         self.assertTrue(alive(new))
 
+    def test_bubble_stays_across_commands(self):
+        """Bubbles vanished after one command; typo jokes were limited to one a minute (`whih` got none)."""
+        self.sh.send("sl\n", 2)
+        for _ in range(3):
+            start = len(self.sh.out)
+            self.sh.send("true\n", 1.5)
+            self.assertIn(b"`ls`", self.sh.out[start:])      # redrawn after each command
+        start = len(self.sh.out)
+        self.sh.send("whih\n", 2)
+        self.assertIn(b"`which`", self.sh.out[start:])
+
     def test_exit_cleans_up(self):
         """On exit the pet stops and removes its events/erase files."""
         pet = int(self.sh.value("BASHOU_PID"))

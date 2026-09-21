@@ -48,7 +48,12 @@ class Board:
         self.breath = False
         self.message = ""
 
+    def rows(self):
+        return -(-(len(self.ids) - 1) // COLS)          # the last row may be partly empty
+
     def tile(self, i):
+        if i >= len(self.ids):
+            return ["", "", ""]
         pet = self.ids[i]
         unlocked = pet in self.s["pets"] or pet == "starter"
         if pet == "starter":
@@ -123,7 +128,7 @@ class Board:
         grid = [f"{BOLD}Bashou{RESET} {DIM}· " + _("{n} pets · arrows/hjkl · Enter: pick · q: quit").format(
             n=f"{len(self.s['pets'])}/{len(self.ids)}") + RESET, ""]
         grid += self.tile(0)
-        for row in range((len(self.ids) - 1) // COLS):
+        for row in range(self.rows()):
             tiles = [self.tile(1 + row * COLS + c) for c in range(COLS)]
             for line in range(TILE_H):
                 grid.append("".join(t[line] if t[line] else " " * TILE_W for t in tiles))
@@ -143,10 +148,16 @@ class Board:
 
     def key(self, k):
         n, size = self.pos, len(self.ids)
+        last_row = 1 + (self.rows() - 1) * COLS
         if k == "up":
-            self.pos = 0 if 1 <= n <= COLS else (n - COLS if n else size - COLS)
+            self.pos = 0 if 1 <= n <= COLS else (n - COLS if n else last_row)
         elif k == "down":
-            self.pos = 1 if n == 0 else (n + COLS if n + COLS < size else 0)
+            if n == 0:
+                self.pos = 1
+            elif n + COLS < size:
+                self.pos = n + COLS
+            else:                                        # into the partial last row, or back to the starter
+                self.pos = size - 1 if n < last_row else 0
         elif k == "left":
             self.pos = (n - 1) % size
         elif k == "right":

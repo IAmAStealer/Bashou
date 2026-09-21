@@ -138,8 +138,7 @@ class CodeUpdateTest(TempState):
         old = companion.SOURCE
         companion.SOURCE = src
         try:
-            pet = companion.Companion(os.getpid(), offset=42)
-            self.assertEqual(pet.offset, 42)                 # handed over, so nothing counts twice
+            pet = companion.Companion(os.getpid())
             self.assertFalse(pet.code_changed())
             os.utime(src / "a.py", (time.time(), time.time() + 5))
             self.assertFalse(pet.code_changed())             # still being saved: wait
@@ -147,6 +146,23 @@ class CodeUpdateTest(TempState):
             self.assertTrue(pet.code_changed())
         finally:
             companion.SOURCE = old
+
+
+class ResumeTest(TempState):
+    def test_restart_keeps_the_bubble(self):
+        """Every code change restarted the pet and wiped the bubble after a few seconds."""
+        from bashou import companion
+        old = state.CACHE
+        state.CACHE = Path(self.tmp.name)
+        try:
+            pet = companion.Companion(os.getpid())
+            pet.offset, pet.bubble, pet.notes = 42, ("hello", 1, 7), ["next"]
+            pet.save_resume()
+            again = companion.Companion(os.getpid())
+            self.assertEqual((again.offset, again.bubble, again.notes), (42, ("hello", 1, 7), ["next"]))
+            self.assertFalse(again.resume_file.exists())    # used once
+        finally:
+            state.CACHE = old
 
 
 class ConfigTest(TempState):
@@ -175,7 +191,12 @@ class BoardTest(TempState):
         board.key("up")
         self.assertEqual(board.ids[board.pos], "starter")
         board.key("up")                                      # wraps to the last row, first column
-        self.assertEqual(board.ids[board.pos], "ghost")
+        self.assertEqual(board.ids[board.pos], "gremlin")
+        board.pos = board.ids.index("spider")
+        board.key("down")                                    # nothing below: the last row's pet
+        self.assertEqual(board.ids[board.pos], "gremlin")
+        board.key("down")
+        self.assertEqual(board.ids[board.pos], "starter")
 
     def test_pick_the_starter_back(self):
         from bashou.board import Board

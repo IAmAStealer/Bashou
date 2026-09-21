@@ -4,6 +4,7 @@ Started by bashou.bash as `python3 -m bashou.companion <shell pid>` with stdout 
 """
 
 import datetime
+import json
 import os
 import random
 import signal
@@ -31,11 +32,12 @@ def now_ms():
 
 
 class Companion:
-    def __init__(self, shell, offset=0):
+    def __init__(self, shell):
         self.shell = shell
         self.events = state.DATA / f"events.{shell}"
         self.erase_file = state.CACHE / f"erase.{shell}"
-        self.offset = offset       # bytes of the events file already counted
+        self.resume_file = state.CACHE / f"resume.{shell}"
+        self.offset = 0            # bytes of the events file already counted
         self.code = code_version()
         self.notes = []            # notifications waiting for the bubble
         self.bubble = None         # (text, commands run since shown, commands it stays)
@@ -52,8 +54,8 @@ class Companion:
         self.behavior = Behavior(now=now_ms())
         self.last_command = now_ms()
         self.talk_at = now_ms() + random.randint(3, 8) * 60_000
-        self.typo_at = 0
         self.warn_at = 0
+        self.resume()
 
     # --- shell ------------------------------------------------------------
 
@@ -97,7 +99,7 @@ class Companion:
                 self.notes += progress.record(s, status, command, now.date().isoformat(), now.hour)
                 if status == 127:
                     self.laugh_at_typo(s, command)
-                self.warn_remote_script(command)
+                self.warn_risky(command)
 
     def events_size(self):
         try:
@@ -131,25 +133,25 @@ class Companion:
         return max(self.last_command, typed)
 
     def laugh_at_typo(self, s, command):
-        """`command not found`: a kind joke, at most once a minute."""
-        ms = now_ms()
-        if ms < self.typo_at:
-            return
+        """`command not found`: a kind joke with the fix, every time, shown right away."""
         line = dialogue.typo(s, self.voice, command)
         if line:
-            self.typo_at = ms + 60_000
-            self.notes.insert(0, line)
+            self.say_now(line)
 
-    def warn_remote_script(self, command):
-        """`curl … | sh`: a safety warning, shown right away (at most once every 5 minutes)."""
+    def warn_risky(self, command):
+        """`curl … | sh`, `chmod 777`…: a safety warning, shown right away (at most once every 5 minutes)."""
         ms = now_ms()
         if ms < self.warn_at:
             return
-        line = dialogue.remote_script(self.voice, command)
+        line = dialogue.risky(self.voice, command)
         if line:
             self.warn_at = ms + 5 * 60_000
-            self.notes.insert(0, line)
-            self.bubble = None
+            self.say_now(line)
+
+    def say_now(self, line):
+        """Replace the bubble right away (the old one is dropped, not queued behind)."""
+        self.notes.insert(0, line)
+        self.bubble = None
 
     def maybe_talk(self, ms):
         """Every 10-20 minutes at the prompt, the pet says something (if awake and nothing else to say)."""
@@ -259,13 +261,35 @@ class Companion:
             return False
         return newest != self.code and time.time() - newest > 2
 
+    HANDOVER = ("offset", "bubble", "notes", "talk_at", "warn_at")
+
     def restart(self):
-        """Run the new code in this same process (same PID, so the shell still knows us)."""
+        """Run the new code in this same process (same PID, so the shell still knows us).
+
+        What must survive (events already counted, the bubble on screen, waiting notes) goes
+        through the resume file.
+        """
         if self.drawn:
             os.write(1, (ESC + "7" + self.drawn + ESC + "8").encode())
+        self.save_resume()
         # A handler doesn't survive exec, an ignored signal does: no SIGUSR1 death in between.
         signal.signal(signal.SIGUSR1, signal.SIG_IGN)
-        os.execv(sys.executable, [sys.executable, "-m", "bashou.companion", str(self.shell), str(self.offset)])
+        os.execv(sys.executable, [sys.executable, "-m", "bashou.companion", str(self.shell)])
+
+    def save_resume(self):
+        self.resume_file.write_text(json.dumps({k: getattr(self, k) for k in self.HANDOVER}))
+
+    def resume(self):
+        try:
+            saved = json.loads(self.resume_file.read_text())
+            self.resume_file.unlink()
+        except (OSError, ValueError):
+            return
+        for key in self.HANDOVER:
+            if key in saved:
+                setattr(self, key, saved[key])
+        if self.bubble:
+            self.bubble = tuple(self.bubble)
 
     def run(self):
         state.CACHE.mkdir(parents=True, exist_ok=True)
@@ -307,7 +331,7 @@ def main():
     os.setpgrp()
     signal.signal(signal.SIGINT, signal.SIG_IGN)
     signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))
-    companion = Companion(int(sys.argv[1]), int(sys.argv[2]) if len(sys.argv) > 2 else 0)
+    companion = Companion(int(sys.argv[1]))
     # The prompt sends SIGUSR1 after every command: redraw right away.
     signal.signal(signal.SIGUSR1, lambda *_: setattr(companion, "busy", True))
     companion.run()

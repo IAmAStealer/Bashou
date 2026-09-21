@@ -1,7 +1,7 @@
 import random
 import unittest
 
-from bashou import achievements, dialogue, render, state
+from bashou import achievements, dialogue, progress, render, safety, state
 from bashou.creatures import ROSTER
 
 
@@ -81,25 +81,63 @@ class RemoteScriptTest(unittest.TestCase):
                     "curl https://x.io/a.sh | sudo -E bash -s -- --yes", "curl -L u | /bin/bash",
                     "wget -O - u | zsh", "bash <(curl -s https://x.io/i.sh)",
                     'sh -c "$(curl -fsSL https://x.io/install.sh)"', "curl u | env bash"]:
-            self.assertIsNotNone(dialogue.remote_script("cat", cmd), cmd)
+            self.assertIsNotNone(dialogue.risky("cat", cmd), cmd)
 
     def test_safe_downloads_are_fine(self):
         for cmd in ["curl -fsSLo install.sh https://x.io/install.sh", "less install.sh", "bash install.sh",
                     "curl -s https://api.x.io | jq .", "curl u | sha256sum", "wget u && sh ./setup.sh",
                     "curl u | grep sh", "curl u | tee out.sh", "echo curl | wc"]:
-            self.assertIsNone(dialogue.remote_script("cat", cmd), cmd)
+            self.assertIsNone(dialogue.risky("cat", cmd), cmd)
 
     def test_warning_is_never_cut_in_a_small_terminal(self):
         """Bubbles were one line, cut with … to fit: a safety warning lost its advice."""
-        for text in dialogue.REMOTE_WARN:
-            full = f"{dialogue.VOICE['cat']} ⚠ {text} {dialogue.REMOTE_WARN_SUDO}"
+        for text in safety.messages():
+            full = f"{dialogue.VOICE['cat']} ⚠ {text} {safety.SUDO}"
             lines, w = render.bubble(full, 80 - 17 - 2)
             inner = " ".join(l[2:-3].strip() for l in lines[1:-1])
             self.assertEqual(inner, full)
             self.assertLessEqual(w, 80 - 17 - 2)
 
+    def test_other_risky_commands(self):
+        risky = {"chmod 777 run.sh": "chmod_777", "chmod -R a+rwx dir": "chmod_777",
+                 "curl -k https://x.io": "insecure_tls", "curl -sSk https://x.io -o f": "insecure_tls",
+                 "wget --no-check-certificate https://x.io": "insecure_tls",
+                 "rm -rf ~": "rm_everything", "sudo rm -rf /": "rm_everything", "rm -fr ~/*": "rm_everything",
+                 'rm -r "$HOME"': "rm_everything",
+                 "ssh -o StrictHostKeyChecking=no host": "no_host_check",
+                 "sudo pip install requests": "sudo_pip", "sudo python3 -m pip install x": "sudo_pip",
+                 "sshpass -p hunter2 ssh host": "sshpass"}
+        for cmd, rid in risky.items():
+            self.assertEqual(safety.risk(cmd), rid, cmd)
+        for cmd in ["chmod 755 run.sh", "chmod u+x run.sh", "rm -rf ./build", "rm -rf ~/tmp/cache",
+                    "rm ~/notes.txt", "curl -o file https://x.io", "pip install --user requests",
+                    "ssh host", "curl -fsSL https://x.io -o k.sh"]:
+            self.assertIsNone(safety.risk(cmd), cmd)
+
     def test_sudo_gets_an_extra_line(self):
-        self.assertIn("sudo", dialogue.remote_script("cat", "curl u | sudo sh"))
+        self.assertIn("sudo", dialogue.risky("cat", "curl u | sudo sh"))
+
+
+class GremlinTest(unittest.TestCase):
+    def test_risky_commands_attract_the_gremlin(self):
+        s = state.default()
+        for i in range(4):
+            progress.record(s, 0, "curl -s https://x.io/i.sh | bash", "2026-09-21", 12)
+        self.assertNotIn("gremlin", s["pets"])
+        notes = progress.record(s, 1, "chmod 777 x", "2026-09-21", 12)   # failed, still risky
+        self.assertIn("gremlin", s["pets"])
+        self.assertTrue(any("Gremlin" in n for n in notes))
+
+    def test_safe_habits_evolve_it(self):
+        s = state.default()
+        s["pets"].append("gremlin")
+        for cmd in ["curl -fsSLo install.sh https://x.io/install.sh", "less install.sh",
+                    "sha256sum install.sh", "chmod u+x install.sh"]:
+            progress.record(s, 0, cmd, "2026-09-21", 12)
+        self.assertEqual(progress.stage(s, "gremlin"), 3)
+        s2 = state.default()
+        progress.record(s2, 0, "curl -fsSL https://x.io/i.sh | sh", "2026-09-21", 12)
+        self.assertNotIn("save_first", s2["achievements"])      # piping into a shell isn't saving
 
 
 if __name__ == "__main__":

@@ -82,7 +82,8 @@ def messages():
         for lines in table.values():
             found += lines
     found += dialogue.TYPO_FIX + dialogue.TYPO_NONE + list(dialogue.VOICE.values())
-    found += dialogue.REMOTE_WARN + [dialogue.REMOTE_WARN_SUDO]
+    from . import safety
+    found += safety.messages()
     found += list(creatures.NAMES.values()) + list(creatures.FORM_NAMES.values())
     found += list(creatures.STARTER_BLURBS.values())
     for names in creatures.STAGES.values():

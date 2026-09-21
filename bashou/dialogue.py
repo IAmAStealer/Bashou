@@ -6,15 +6,14 @@ Personality = the pet's own voice + traits from the achievements you earned
 
 import difflib
 import random
-import re
 import shutil
 
-from . import achievements
+from . import achievements, safety
 from .analyze import analyze
 from .i18n import _
 
 VOICE = {
-    "cat": "Mrrp.", "sprout": "*rustle*", "pebble": "*clack*", "bat": "*flap*", "frog": "Ribbit.", "turtle": "…", "mushroom": "*puff*", "slime": "Blub.",
+    "cat": "Mrrp.", "sprout": "*rustle*", "pebble": "*clack*", "bat": "*flap*", "gremlin": "Hehehe.", "frog": "Ribbit.", "turtle": "…", "mushroom": "*puff*", "slime": "Blub.",
     "sofa": "*creak*", "octopus": "Glub!", "dragon": "Rawr!", "fox": "*sniff*", "owl": "Hoo.",
     "mole": "*dig dig*", "snake": "Sss…", "ghost": "Boo~", "spider": "*tik-tik*", "ant": "*click*",
     "axolotl": "*wiggle*",
@@ -30,6 +29,10 @@ TIPS = {
     "pebble": ["`ls -lah` shows hidden files with human sizes.", "`du -sh *` : how big is each folder?",
                "`df -h` : how full are your disks?", "`ln -s target link` makes a shortcut.",
                "`chmod 644 file` : rw for you, read for others."],
+    "gremlin": ["Before running a script from the web: download, read, then run.",
+                "`sha256sum file` shows a checksum: compare it with the one on the website.",
+                "`chmod u+x script.sh` is enough to run it. No need for 777.",
+                "`ls -l` shows who can read, write and run each file."],
     "bat": ["`ctrl+L` clears the screen, like `clear`.", "`tail -f log` watches a file live.",
             "`nohup cmd &` keeps it running after you leave.", "`man -k word` searches every manual."],
     "frog": ["`!$` is the last argument of the previous command.", "`fc` opens the last command in your editor.",
@@ -79,6 +82,8 @@ EXAMPLES = {
     "field_reader": "awk -F: '{print $1}' /etc/passwd", "accountant": "awk '{s+=$1} END {print s}' f",
     "scribe": "awk '{printf \"%-10s %s\\n\", $1, $2}' f",
     "digger": "grep -rn TODO .", "regex": "grep -E 'cat|dog' f", "context": "grep -C2 error log",
+    "inspector": "less install.sh", "checksum": "sha256sum install.sh",
+    "save_first": "curl -fsSLo install.sh https://example.com/install.sh", "tight": "chmod u+x install.sh",
     "in_place": "sed -i 's/old/new/' f", "global": "sed 's/a/b/g' f", "printer": "sed -n '1,5p' f",
     "census": "ps aux", "seeker": "pgrep -a bash", "signal": "kill -TERM <pid>",
     "filter": "strace -e trace=openat ls", "follow": "strace -f bash -c ls", "summary": "strace -c ls",
@@ -103,7 +108,8 @@ TRAITS = {
 
 PERSONAL = {
     "cat": ["I'll just sit on your keyboard… no? Fine."], "sprout": ["Water me with commands."],
-    "pebble": ["I'm a rock. You can count on me."], "bat": ["I like the terminal after dark."], "frog": ["Hop hop. What's next?"],
+    "pebble": ["I'm a rock. You can count on me."], "bat": ["I like the terminal after dark."],
+    "gremlin": ["Run it! What could go wrong? …Just kidding. Read it first."], "frog": ["Hop hop. What's next?"],
     "turtle": ["Slow and steady. No rush."], "mushroom": ["Loops make me grow."],
     "slime": ["I can take the shape of any output."], "sofa": ["Sit down. Relax. Run a command."],
     "octopus": ["Eight arms, eight pipes."], "dragon": ["I guard your shell."],
@@ -155,28 +161,12 @@ TYPO_NONE = ["`{typo}`? Never heard of it. Hehe.", "`{typo}` isn't a command… 
              "*tilts head* `{typo}`?"]
 
 
-# A download run straight by a shell: `curl … | sh`, `wget -O- … | sudo bash`,
-# `bash <(curl …)`, `sh -c "$(curl …)"`.
-REMOTE_SCRIPT = re.compile(r"""
-    \b(curl|wget)\b[^|;&]*\|\s*(sudo\s+(-\S+\s+)*)?(env\s+)?\S*?\b(ba|z|da|k|fi)?sh\b
-  | \b(ba|z|da|k)?sh\s+(-\S+\s+)*(<\(|["']?\$\()\s*(curl|wget)\b
-""", re.X)
-
-REMOTE_WARN = ["Careful! That ran a script from the internet unread. Download it, read it, then run it.",
-               "A download piped into a shell runs whatever the server sends. "
-               "Save it first: curl -fsSLo install.sh URL && less install.sh",
-               "Did you read that script first? Whoever controls the URL controls your shell."]
-REMOTE_WARN_SUDO = "…and with sudo, it could change anything on your machine."
-
-
-def remote_script(pet, command, rng=random):
-    """A warning when a downloaded script goes straight into a shell, else None."""
-    if not REMOTE_SCRIPT.search(command):
+def risky(pet, command, rng=random):
+    """A warning in the pet's voice when a command is risky (`curl … | sh`, `chmod 777`…), else None."""
+    parts = safety.warning(command, rng)
+    if not parts:
         return None
-    text = "⚠ " + _(rng.choice(REMOTE_WARN))
-    if re.search(r"\bsudo\b", command):
-        text += " " + _(REMOTE_WARN_SUDO)
-    return f"{_(VOICE[pet])} {text}"
+    return f"{_(VOICE[pet])} ⚠ " + " ".join(_(p) for p in parts)
 
 
 def typo(state, pet, command, rng=random):

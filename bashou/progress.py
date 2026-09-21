@@ -1,6 +1,6 @@
 """Turn analyzed commands into counters, unlocked pets and notifications."""
 
-from . import achievements
+from . import achievements, safety
 from .achievements import Ctx
 from .analyze import analyze
 from .behavior import ACTIONS
@@ -25,8 +25,8 @@ TOOL_PETS = {
 
 
 # pet: (construct, lines needed); "pipe3" = a line chaining 3+ commands with |
-CONSTRUCT_PETS = {"octopus": ("pipe3", 10)}
-CONSTRUCT_NAMES = {"pipe3": "3-command pipes"}
+CONSTRUCT_PETS = {"octopus": ("pipe3", 10), "gremlin": ("risky", 5)}
+CONSTRUCT_NAMES = {"pipe3": "3-command pipes", "risky": "risky commands"}
 
 
 def unlock(state, pet, reason):
@@ -82,6 +82,8 @@ def record(state, status, line, today, hour):
     if state["today"]["date"] != today:
         state["today"] = {"date": today, "count": 0}
     state["today"]["count"] += 1
+    if safety.risk(line):                   # counted even when it failed: it was risky anyway
+        state["constructs"]["risky"] = state["constructs"].get("risky", 0) + 1
     earned = []
     if status == 0:
         ctx = Ctx(analysis, line, hour)
