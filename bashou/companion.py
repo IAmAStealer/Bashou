@@ -53,6 +53,7 @@ class Companion:
         self.stage = 1
         self.threat = False
         self.threat_text = self.threat_id = None     # the waiting threat's announcement
+        self.threat_until = 0.0
         self.fights_won = 0
         self.behavior = Behavior(now=now_ms())
         self.last_command = now_ms()
@@ -115,8 +116,8 @@ class Companion:
             mtime = state.STATE.stat().st_mtime
         except FileNotFoundError:
             return
-        if mtime == self.state_mtime:
-            return
+        if mtime == self.state_mtime and not (self.threat and time.time() > self.threat_until):
+            return                     # (a threat that timed out doesn't touch the state file)
         self.state_mtime = mtime
         i18n.use(None)                 # `bashou language` may have changed it
         s = state.load()
@@ -130,7 +131,10 @@ class Companion:
             self.threat_ended(s)
         self.threat = bool(threat)
         if threat:
-            self.threat_text, self.threat_id = fight.announcement(s), threat["challenge"]
+            text = fight.announcement(s)
+            if threat["challenge"] != self.threat_id and text:
+                self.announce(text)    # every terminal says it: a lone ⚠ explained nothing
+            self.threat_text, self.threat_id, self.threat_until = text, threat["challenge"], threat["until"]
         self.fights_won = s["fights_won"]
 
     def threat_ended(self, s):
@@ -143,6 +147,10 @@ class Companion:
         if s["fights_won"] <= self.fights_won:
             self.say_now(f"{_(dialogue.VOICE[self.voice])} {fight.gone(self.threat_id)}")
         self.threat_text = self.threat_id = None
+
+    def announce(self, text):
+        if text not in self.notes and not (self.bubble and text in self.bubble[0]):
+            self.notes.append(text)
 
     def last_activity(self):
         """Last command, or last key typed: the kernel updates the terminal's atime on input."""
@@ -194,8 +202,7 @@ class Companion:
         with state.locked() as s:
             note = fight.maybe_threat(s)
         if note:
-            self.notes.append(note)
-            self.threat = True
+            self.state_mtime = 0           # reload_pet() announces it and blinks the ⚠
 
     # --- drawing ----------------------------------------------------------
 
@@ -283,7 +290,7 @@ class Companion:
         return newest != self.code and time.time() - newest > 2
 
     HANDOVER = ("offset", "bubble", "notes", "talk_at", "warn_at", "threat", "threat_text", "threat_id",
-                "fights_won")
+                "threat_until", "fights_won")
 
     def restart(self):
         """Run the new code in this same process (same PID, so the shell still knows us).

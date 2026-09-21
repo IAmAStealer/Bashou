@@ -9,7 +9,7 @@ import random
 
 from . import lessons
 
-SEGMENT = 40.0          # world units between two events
+SEGMENT = 12.0          # world units between two events: a short stroll, not a trek
 HEARTS = 3
 
 # topic: (name, home biome, boss)
@@ -66,7 +66,7 @@ def events(adv):
     """Events along the current path (one per segment), then the boss."""
     ch = chapter(adv["chapter"])
     rng = random.Random(f"path:{adv['chapter']}:{adv['leg']}:{adv['topic']}")
-    kinds = ["monster"] + [rng.choice(["monster", "monster", "chest", "rest"]) for _ in range(ch["segments"] - 1)]
+    kinds = ["monster"] + [rng.choice(["monster", "monster", "chest"]) for _ in range(ch["segments"] - 1)]
     if lesson(adv) and len(kinds) >= 3:
         kinds[1:3] = ["lesson", "chest"]                  # learn it, then use it right away
     return kinds + ["boss"]
@@ -100,7 +100,7 @@ def choose(adv, topic):
 def walk(adv, units):
     """Walk forward, up to the next event. Returns the event reached, or None."""
     target = next_event_at(adv)
-    step = min(units, target - adv["distance"])
+    step = max(0.0, min(units, target - adv["distance"]))   # max: saves from when paths were longer
     adv["distance"] += step
     adv["walked"] += step
     if adv["distance"] >= target - 1e-9:
@@ -111,13 +111,13 @@ def walk(adv, units):
 
 
 def event_done(adv):
-    """After a monster, chest or rest: on to the next segment."""
+    """After a monster, a chest or a lesson: on to the next segment."""
     adv["segment"] += 1
     adv["phase"] = "walk"
 
 
 def lose_heart(adv):
-    """A wrong answer to a monster. Returns True when that was the last heart (back to the checkpoint)."""
+    """A wrong answer (monster or boss). Returns True when that was the last heart (back to the checkpoint)."""
     adv["hearts"] -= 1
     adv["flawless"] = False
     if adv["hearts"] <= 0:

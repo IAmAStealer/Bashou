@@ -110,8 +110,6 @@ def monster(topic):
 
 CHEST = ([".aaaaaaa.", "aYyyyyyYa", "aaaaYaaaa", "ayyyyyyya", "ayyyyyyya", "aaaaaaaaa"],
          {"a": (110, 70, 35), "y": (175, 120, 60), "Y": (240, 200, 80)})
-CAMPFIRE = (["...Y...", "..YOY..", ".YORY..", "..ORO..", "bbbbbbb", ".b.b.b."],
-            {"Y": (255, 230, 120), "O": (255, 150, 40), "R": (220, 70, 30), "b": (110, 75, 45)})
 SIGNPOST = (["aaaaaaaaa", "ayyyyyyya", "aaaaaaaaa", "....b....", "....b....", "....b....", "...bbb..."],
             {"a": (120, 80, 40), "y": (220, 180, 110), "b": (100, 70, 40)})
 

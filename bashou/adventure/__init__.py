@@ -1,6 +1,6 @@
 """`bashou adventure`: your starter walks into the world, seen from behind.
 
-Screens (phases): intro → fork → walk → monster / chest / rest → … → boss → fork → … → chapter end.
+Screens (phases): intro → fork → walk → monster / chest / lesson → … → boss → fork → … → chapter end.
 The rules live in world.py; this file draws and reads keys.
 """
 
@@ -20,7 +20,7 @@ from . import canvas, lessons, quiz, scene, sprites, world
 
 ESC = "\x1b"
 FPS = 15
-SPEED = 5.0                    # world units per second while walking
+SPEED = 5.0                    # world units per second: the pet walks on its own between events
 BOSS_SECONDS = 20
 QUIT_KEYS = ("s", "S", "q", "Q", ESC, "\x03", "\x04")
 UP, DOWN, LEFT, RIGHT = "\x1b[A", "\x1b[B", "\x1b[D", "\x1b[C"
@@ -32,6 +32,8 @@ def load():
     adv = state.load().get("adventure") or {}
     if "chapter" not in adv:                       # a walk from the first preview: keep the meters
         adv = {**world.new(), "walked": adv.get("distance", 0.0)}
+    if adv.get("phase") == "rest":                 # campfires are gone
+        world.event_done(adv)
     return {**world.new(), **adv}
 
 
@@ -57,8 +59,6 @@ class Game:
         self.rng = rng
         s = state.load()
         self.frames, self.palette = sprites.hero(progress.current(s, "starter")[0])
-        self.walk_until = 0.0
-        self.auto = False
         self.quit = False
         self.choice = 0                 # highlighted fork path or answer
         self.question = None            # the question on screen
@@ -68,7 +68,7 @@ class Game:
         self.trial = None               # the chest's shell trial
         self.pending_trial = None       # set when you open it: main() runs the sandbox shell
         self.page = 0                   # lesson page
-        if self.adv["phase"] in ("monster", "boss", "chest", "rest", "lesson"):
+        if self.adv["phase"] in ("monster", "boss", "chest", "lesson"):
             self.start_event(self.adv["phase"], time.time())   # an event you quit in: start it again
         self.resize(cols, rows)
 
@@ -92,9 +92,6 @@ class Game:
             self.trial = self.pick_trial()
         elif kind == "lesson":
             self.page = 0
-        elif kind == "rest":
-            adv["hearts"] = world.HEARTS
-            self.result = (True, [_("A campfire. Your pet naps a little: hearts full again.")])
 
     def pick_trial(self):
         """A shell trial for this chapter's level, one you haven't opened yet if possible."""
@@ -164,7 +161,10 @@ class Game:
         topic = adv["topic"]
         if not right:
             name = _(world.TOPICS[topic][2])
-            world.back_to_checkpoint(adv)
+            if not world.lose_heart(adv):
+                self.result = (False, [_("The {boss} hits you! ♥ -1").format(boss=name)] + explain)
+                return
+            self.boss = None
             self.result = (False, [_("The {boss} wins this time.").format(boss=name)] + explain
                            + [_("Back to the last checkpoint. Bosses are there to make it stick!")])
             save(adv)
@@ -183,7 +183,7 @@ class Game:
     def close_result(self, now):
         adv = self.adv
         self.result = None
-        if adv["phase"] in ("monster", "chest", "rest", "lesson"):
+        if adv["phase"] in ("monster", "chest", "lesson"):
             world.event_done(adv)
         elif adv["phase"] == "boss" and self.boss:            # next boss question
             self.question = self.ask(boss=True, now=now)
@@ -226,11 +226,6 @@ class Game:
                 self.answer(int(k) - 1, now)
             elif k in ENTER:
                 self.answer(self.choice, now)
-        elif phase == "walk":
-            if k in (UP, "w", "W", "k"):
-                self.walk_until = now + 0.3            # key repeat keeps it going while held
-            elif k == " ":
-                self.auto = not self.auto
         elif phase == "lesson" and (k in ENTER or k == " "):
             lesson = lessons.BY_ID[adv["path_lesson"]]
             self.page += 1
@@ -248,14 +243,13 @@ class Game:
             save(self.adv)
 
     def walking(self, now):
-        return self.adv["phase"] == "walk" and (self.auto or now < self.walk_until)
+        return self.adv["phase"] == "walk"
 
     def update(self, dt, now):
         adv = self.adv
         if self.walking(now):
             event = world.walk(adv, SPEED * dt)
             if event:
-                self.auto = False
                 self.start_event(event, now)
         if adv["phase"] == "boss" and self.question and now > self.boss["deadline"]:
             q = self.question
@@ -267,7 +261,7 @@ class Game:
     def draw(self, t, now):
         adv, c = self.adv, self.canvas
         d = adv["distance"]
-        scene.draw(c, world.biome(adv), d, t)
+        scene.draw(c, world.biome(adv), d, t, 17 * self.scale)
         lines = self.panel(now)
         rect = self.panel_box(lines)
         step = int(adv["walked"] * 1.5) % len(self.frames) if self.walking(now) else 0
@@ -289,7 +283,7 @@ class Game:
         elif phase == "walk":
             kind = world.events(adv)[adv["segment"]]
             rel = world.next_event_at(adv) - adv["distance"] + 3
-        elif phase in ("monster", "boss", "chest", "rest", "lesson"):
+        elif phase in ("monster", "boss", "chest", "lesson"):
             kind, rel = phase, 3.0 if phase != "boss" else 2.2
         else:
             return
@@ -297,7 +291,7 @@ class Game:
             return
         rows, palette = {
             "monster": lambda: sprites.monster(adv["topic"]), "boss": lambda: sprites.boss(adv["topic"]),
-            "chest": lambda: sprites.CHEST, "rest": lambda: sprites.CAMPFIRE, "fork": lambda: sprites.SIGNPOST,
+            "chest": lambda: sprites.CHEST, "fork": lambda: sprites.SIGNPOST,
             "lesson": lambda: (creatures.OWL.base, creatures.OWL.palette),
         }[kind]()
         bob = 1 if kind in ("monster", "boss") and int(t * 3) % 2 else 0
@@ -400,7 +394,7 @@ class Game:
         where = biome_name(world.biome(adv))
         path = f" · {topic_name(adv['topic'])} " + _("level {n}").format(n=world.level(adv, adv["topic"])) \
             if adv["topic"] else ""
-        keys = _("↑ walk · space: auto · s: save & quit") if adv["phase"] == "walk" else _("s: save & quit")
+        keys = _("s: save & quit")
         text = f" {_('Chapter {n}').format(n=adv['chapter'])} · {where}{path} · {hearts} · {int(adv['walked'])} m   {keys}"
         return f"{ESC}[{self.rows};1H{ESC}[0m{ESC}[2K{text[:self.cols - 1]}"
 

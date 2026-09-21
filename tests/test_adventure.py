@@ -26,11 +26,11 @@ class SceneTest(unittest.TestCase):
             scene.draw(b, biome, 42.0, 1.0)
             self.assertEqual(a.px, b.px)
 
-    def test_walking_moves_the_ground(self):
+    def test_grass_sways(self):
         a, b = canvas.Canvas(60, 30), canvas.Canvas(60, 30)
-        scene.draw(a, "meadow", 10.0)
-        scene.draw(b, "meadow", 10.6)
-        self.assertNotEqual(a.px[25], b.px[25])
+        scene.draw(a, "meadow", 10.0, 0.0)
+        scene.draw(b, "meadow", 10.0, 1.0)
+        self.assertNotEqual(a.px, b.px)
 
     def test_every_hero_has_a_back_view(self):
         for form in ["kitten", "cat", "lion", "seedling", "sprout", "tree", "pebble", "golem", "crystal"]:
@@ -61,7 +61,6 @@ class GameTest(unittest.TestCase):
 
     def walk_to_event(self):
         g = self.game
-        g.key(" ", 0)                                     # auto-walk
         for _ in range(200):
             g.update(0.5, 0)
             if g.adv["phase"] != "walk":
@@ -112,15 +111,21 @@ class GameTest(unittest.TestCase):
         self.assertEqual(g.adv["leg_start"], g.adv["distance"])     # the new checkpoint
         self.assertEqual(adventure.load()["leg"], 1)                  # saved right away
 
-    def test_boss_timeout_is_a_defeat(self):
+    def test_boss_hits_take_a_heart_each(self):
         g = self.game
         self.go("\r", "\r")
         g.adv["segment"] = len(world.events(g.adv)) - 1
         self.walk_to_event()
-        g.update(0, 0 + adventure.BOSS_SECONDS + 1)
+        g.update(0, 0 + adventure.BOSS_SECONDS + 1)       # too slow: a hit, not a defeat
         self.assertFalse(g.result[0])
         self.assertIn("Too slow", " ".join(g.result[1]))
-        self.assertEqual((g.adv["phase"], g.adv["distance"]), ("fork", 0.0))
+        self.assertEqual((g.adv["phase"], g.adv["hearts"]), ("boss", 2))
+        g.close_result(0)
+        g.answer((g.question["answer"] + 1) % 4, 0)
+        g.close_result(0)
+        self.assertEqual(g.adv["hearts"], 1)
+        g.answer((g.question["answer"] + 1) % 4, 0)       # the last heart: back to the checkpoint
+        self.assertEqual((g.adv["phase"], g.adv["distance"], g.adv["hearts"]), ("fork", 0.0, 3))
 
     def test_chapter_end_and_new_quest(self):
         adv = world.new()

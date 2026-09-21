@@ -187,8 +187,7 @@ class ThreatBubbleTest(TempState):
             s["starter"] = "pebble"
             s["threat"] = {"challenge": "grep_hydra", "until": time.time() + 600}
         self.pet = companion.Companion(os.getpid())
-        self.pet.reload_pet()
-        self.pet.notes.append(fight.announcement(state.load()))
+        self.pet.reload_pet()                              # a terminal that didn't roll it announces it too
         self.pet.update_bubble()
 
     def end_threat(self, won=False):
@@ -205,6 +204,16 @@ class ThreatBubbleTest(TempState):
         self.end_threat()
         self.assertNotIn("is coming", self.pet.bubble[0])
         self.assertIn("got tired of waiting", self.pet.bubble[0])
+
+    def test_warning_goes_when_the_threat_times_out(self):
+        """The ⚠ stayed on with nothing written in the state file when the threat timed out."""
+        self.assertTrue(self.pet.threat)
+        self.pet.threat_until = time.time() - 1
+        with state.locked() as s:
+            s["threat"]["until"] = self.pet.threat_until
+        self.pet.state_mtime = state.STATE.stat().st_mtime  # as if already read
+        self.pet.reload_pet()
+        self.assertFalse(self.pet.threat)
 
     def test_no_goodbye_after_a_win(self):
         self.end_threat(won=True)
