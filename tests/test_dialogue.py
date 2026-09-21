@@ -139,6 +139,16 @@ class HintTest(unittest.TestCase):
             self.assertIn(aid, achievements.BY_ID)
 
 
+class InviteTest(unittest.TestCase):
+    def test_pets_invite_to_untried_modes(self):
+        s = state.default()
+        said = {dialogue.line(s, "pebble", random.Random(i)) for i in range(200)}
+        self.assertTrue(any("bashou adventure" in t for t in said))
+        s["adventure"], s["security"] = {"distance": 3}, ["hidden_file"]
+        said = {dialogue.line(s, "pebble", random.Random(i)) for i in range(200)}
+        self.assertFalse(any("bashou adventure" in t or "bashou security" in t for t in said))
+
+
 class GremlinTest(unittest.TestCase):
     def test_risky_commands_attract_the_gremlin(self):
         s = state.default()

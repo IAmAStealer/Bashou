@@ -78,7 +78,7 @@ def messages():
         found += _calls(path)
     for a in achievements.ALL:
         found += [a.name, a.how]
-    for table in (dialogue.TIPS, dialogue.PERSONAL, dialogue.TRAITS):
+    for table in (dialogue.TIPS, dialogue.PERSONAL, dialogue.TRAITS, dialogue.INVITES):
         for lines in table.values():
             found += lines
     found += dialogue.TYPO_FIX + dialogue.TYPO_NONE + list(dialogue.VOICE.values())

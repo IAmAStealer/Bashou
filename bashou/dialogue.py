@@ -136,6 +136,21 @@ def hint(state, pet, rng):
     return _("Next: {how} ({name})").format(how=_(a.how), name=_(a.name))
 
 
+INVITES = {
+    "adventure": ["Let's go on an adventure! `bashou adventure` (s to save & quit)",
+                  "I want to see the world. Take me with you: `bashou adventure`",
+                  "Grass, hills, dungeons… `bashou adventure` is waiting for us."],
+    "security": ["Feel like a detective? `bashou security` has small investigations."],
+}
+
+
+def invite(state, rng):
+    """Suggest a mode you haven't tried yet (None once you tried them all)."""
+    todo = [mode for mode, tried in (("adventure", state.get("adventure")), ("security", state.get("security")))
+            if not tried]
+    return rng.choice(INVITES[rng.choice(todo)]) if todo else None
+
+
 def line(state, pet, rng=random):
     """One thing for `pet` to say, with its voice. A waiting threat comes first."""
     from . import fight
@@ -145,7 +160,7 @@ def line(state, pet, rng=random):
     earned = set(state["achievements"])
     traits = [t for trait, lines in TRAITS.items() if trait in earned for t in lines]
     pools = [(hint(state, pet, rng), 4), (rng.choice(TIPS[pet]), 4),
-             (rng.choice(traits + PERSONAL[pet]), 2)]
+             (rng.choice(traits + PERSONAL[pet]), 2), (invite(state, rng), 3)]
     pools = [(text, w) for text, w in pools if text]
     text = rng.choices([t for t, w in pools], [w for t, w in pools])[0]
     return f"{_(VOICE[pet])} {_(text)}"
