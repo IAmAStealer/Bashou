@@ -16,6 +16,14 @@ SOLUTIONS = {
     "sed_serpent": ("sed -i 's/teh/the/g; s/Teh/The/g' letter.txt", None),
     "ps_phantom": ("pgrep -f '^{x}'", r"named (phantom-\w+)"),
     "pipe_eel": ("grep ' 404$' access.log | cut -d' ' -f1 | sort -u | wc -l", None),
+    # security
+    "hidden_file": ("cat .[!.]*", None),
+    "encoded_note": ("base64 -d note.txt | cut -d' ' -f2", None),
+    "failed_logins": ("grep 'Failed password' auth.log | awk '{{print $(NF-3)}}' | sort | uniq -c | sort -rn"
+                      " | head -1 | awk '{{print $2}}'", None),
+    "recent_change": ("find site -type f -mmin -10", None),
+    "cron_backdoor": ("grep -rh '| *sh' etc/cron.d | grep -oE 'https?://[^/]+' | cut -d/ -f3", None),
+    "suid_file": ("find bin -perm -4000 -type f", None),
 }
 
 
@@ -24,7 +32,7 @@ class ChallengeTest(unittest.TestCase):
         self.assertEqual(set(SOLUTIONS), set(challenges.BY_ID))
 
     def test_reference_solutions(self):
-        for ch in challenges.ALL:
+        for ch in challenges.ALL + challenges.SECURITY:
             if not ch.available():
                 continue
             for seed in range(3):
@@ -63,6 +71,23 @@ class ChallengeTest(unittest.TestCase):
             self.assertFalse(fight.used_tool(base, ch))
             log.write_text(log.read_text() + "0\t    3  grep -c ERROR app.log | head\n")
             self.assertTrue(fight.used_tool(base, ch))
+
+
+class SecurityTest(unittest.TestCase):
+    def test_the_busiest_ip_is_not_the_attacker(self):
+        """Counting every line gives the admin's IP (successful logins): you have to filter first."""
+        ch = challenges.BY_ID["failed_logins"]
+        for seed in range(5):
+            with tempfile.TemporaryDirectory() as tmp:
+                meta = ch.setup(Path(tmp), random.Random(seed))
+                cmd = "awk '{print $(NF-3)}' auth.log | sort | uniq -c | sort -rn | head -1 | awk '{print $2}'"
+                out = subprocess.run(["bash", "-c", cmd], cwd=tmp, capture_output=True, text=True).stdout.strip()
+                self.assertFalse(ch.check(Path(tmp), meta, out))
+
+    def test_security_is_never_sent_as_a_threat(self):
+        s = state.default()
+        s["challenges"] = [c.id for c in challenges.ALL]
+        self.assertIsNone(fight.maybe_threat(s, ThreatTest.Always(), 1_800_000_000))
 
 
 class ThreatTest(unittest.TestCase):

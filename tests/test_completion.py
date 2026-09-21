@@ -29,7 +29,8 @@ class CompletionTest(unittest.TestCase):
     def test_lists_match_the_code(self):
         from bashou import cli
         self.assertEqual(words("_bashou_pets"), [p for p, _ in ROSTER])
-        self.assertEqual(set(words("_bashou_challenges")), set(challenges.BY_ID))
+        self.assertEqual(set(words("_bashou_challenges")), {c.id for c in challenges.ALL})
+        self.assertEqual(words("_bashou_security"), [str(i) for i in range(1, len(challenges.SECURITY) + 1)])
         parser_src = Path(cli.__file__).read_text()
         commands = re.findall(r'sub\.add_parser\("([\w-]+)"', parser_src)
         self.assertEqual(set(words("_bashou_commands")), set(commands))
@@ -37,7 +38,7 @@ class CompletionTest(unittest.TestCase):
         self.assertEqual(words("_bashou_dev"), re.findall(r'"([\w-]+)"', dev))
 
     def test_completes(self):
-        self.assertEqual(complete("bashou s"), ["swap", "stats", "start"])
+        self.assertEqual(complete("bashou s"), ["swap", "stats", "start", "security"])
         self.assertEqual(complete("bashou swap st"), ["starter"])
         self.assertEqual(complete("bashou swap f"), ["frog", "fox"])
         self.assertEqual(complete("bashou dev st"), ["stage", "stage-all"])

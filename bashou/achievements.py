@@ -128,6 +128,10 @@ ALL = [
       and not safety.risk(c.line)),
     A("tight", "gremlin", "Tight", "set careful permissions: `chmod u+x` or `chmod 600`",
       cmd=lambda c: c.arg("chmod", r"^(0?[67][0-5][0-5]|u\+r?w?x|go?-r?w?x?|o-r?w?x?)$")),
+    A("first_flag", "gremlin", "First flag", "solve a security challenge: `bashou security`",
+      state=lambda s: len(s.get("security", [])) >= 1),
+    A("investigator", "gremlin", "Investigator", "solve 6 security challenges",
+      state=lambda s: len(s.get("security", [])) >= 6),
 
     # Dragon: fights
     A("warrior", "dragon", "Warrior", "win a fight", state=lambda s: s["fights_won"] >= 1),

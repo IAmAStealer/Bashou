@@ -22,10 +22,12 @@ class Challenge:
     cleanup: Optional[Callable] = None  # (meta) -> None
     uses: Optional[Callable] = None     # (analysis) -> bool: what must be used; default: one of `tools`
     requires: list = field(default_factory=list)   # executables needed on this system
+    level: int = 1            # 1 easy, 2 medium, 3 hard
+    kind: str = "fight"       # "fight": sent as a threat; "security": picked in `bashou security`
 
     @property
     def tool(self):
-        return self.tools[0]
+        return self.tools[0] if self.tools else ""
 
     def task_text(self, meta):
         from ..i18n import _
@@ -43,8 +45,9 @@ class Challenge:
         return all(shutil.which(t) for t in (self.requires or [self.tool]))
 
 
-from . import find, grep, awk, pipe, ps, sed, uniq  # noqa: E402
+from . import find, grep, awk, pipe, ps, sed, security, uniq  # noqa: E402
 
 ALL = [grep.CHALLENGE, awk.CHALLENGE, find.CHALLENGE, uniq.CHALLENGE, sed.CHALLENGE, ps.CHALLENGE,
-       pipe.CHALLENGE]
-BY_ID = {c.id: c for c in ALL}
+       pipe.CHALLENGE]              # fights, sent as threats
+SECURITY = security.SECURITY        # `bashou security`, in order
+BY_ID = {c.id: c for c in ALL + SECURITY}

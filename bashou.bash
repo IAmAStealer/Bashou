@@ -55,10 +55,11 @@ bashou() {
 }
 
 # Tab completion. Static lists (no Python on Tab); tests/test_completion.py keeps them in sync.
-_bashou_commands="level pets achievements fight talk swap stats start language config update reset dev on off"
+_bashou_commands="level pets achievements fight talk swap stats start language config update security reset dev on off"
 _bashou_pets="bat frog turtle mushroom slime sofa octopus dragon fox owl mole snake ghost spider ant axolotl gremlin"
 _bashou_dev="unlock-all stage stage-all level threat restore"
 _bashou_challenges="grep_hydra awk_golem find_wraith uniq_swarm sed_serpent ps_phantom pipe_eel"
+_bashou_security="1 2 3 4 5 6"
 
 _bashou_complete() {
   local cur=${COMP_WORDS[COMP_CWORD]} words
@@ -66,6 +67,7 @@ _bashou_complete() {
     1:*)              words=$_bashou_commands ;;
     2:swap:*)         words="starter $_bashou_pets" ;;
     2:config:*)       words="bubble updates" ;;
+    2:security:*)     words=$_bashou_security ;;
     3:config:bubble)  words="default" ;;
     3:config:updates) words="on off default" ;;
     2:dev:*)          words=$_bashou_dev ;;

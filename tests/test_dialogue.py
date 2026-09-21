@@ -155,7 +155,10 @@ class GremlinTest(unittest.TestCase):
         for cmd in ["curl -fsSLo install.sh https://x.io/install.sh", "less install.sh",
                     "sha256sum install.sh", "chmod u+x install.sh"]:
             progress.record(s, 0, cmd, "2026-09-21", 12)
-        self.assertEqual(progress.stage(s, "gremlin"), 3)
+        self.assertEqual(progress.stage(s, "gremlin"), 2)
+        s["security"] = [c.id for c in __import__("bashou.challenges").challenges.SECURITY]
+        progress.check(s)
+        self.assertEqual(progress.stage(s, "gremlin"), 3)          # guardian after the investigations
         s2 = state.default()
         progress.record(s2, 0, "curl -fsSL https://x.io/i.sh | sh", "2026-09-21", 12)
         self.assertNotIn("save_first", s2["achievements"])      # piping into a shell isn't saving

@@ -26,6 +26,7 @@ def default():
         "achievements": [],
         "fights_won": 0,
         "challenges": [],   # challenges beaten
+        "security": [],     # security challenges solved (`bashou security`)
         "threat": None,     # {"challenge", "until"} while a threat waits for you
         "threat_day": {"date": "", "count": 0},
         "last_threat": 0,

@@ -21,6 +21,10 @@ A pixel-art pet that lives in the top-right corner of your terminal and grows as
   `StrictHostKeyChecking=no`, `sudo pip install`, `sshpass -p`. Five of them attract the **Gremlin**,
   which evolves as you pick up safe habits (reading a script before running it, checksums, `chmod u+x`)
   and ends up a Shell guardian.
+- **Security challenges.** `bashou security` lists small investigations, easy to hard: a hidden
+  file, an encoded note, brute-force attempts in an `auth.log`, a defaced website, a cron backdoor, a
+  SUID program. Each one runs in a sandbox folder with fake, harmless data. Solving them evolves the
+  Gremlin into a Shell guardian.
 - **Typos.** On `command not found` your pet laughs kindly and suggests the command you meant.
 - **Pick your pet** on the board with `bashou swap`.
 - **Pets talk.** Every 10–20 minutes your pet gives a tip for its tool, a hint toward your next
@@ -51,6 +55,7 @@ bashou off / on         # hide / show the pet
 bashou stats            # commands, top tools, constructs, streaks
 bashou config           # list settings (see Configuration)
 bashou update           # get the new version from GitHub
+bashou security         # security challenges (bashou security 3 starts the third)
 bashou reset            # start over with a new starter (asks first, keeps a backup)
 ```
 

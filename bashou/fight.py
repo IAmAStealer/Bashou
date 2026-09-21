@@ -128,10 +128,13 @@ def cmd_answer(base, value):
     meta = load_meta(base)
     ch = challenges.BY_ID[meta["challenge"]]
     if not ch.check(Path(base) / "arena", meta, value):
-        print(BAD + "✗ " + _("Not quite. The {threat} shrugs it off.").format(threat=_(ch.threat))
-              + f"{RESET} {DIM}(hint · task · flee){RESET}")
+        if ch.kind == "security":
+            print(BAD + "✗ " + _("Not quite. Keep looking.") + f"{RESET} {DIM}(hint · task · flee){RESET}")
+        else:
+            print(BAD + "✗ " + _("Not quite. The {threat} shrugs it off.").format(threat=_(ch.threat))
+                  + f"{RESET} {DIM}(hint · task · flee){RESET}")
         return 1
-    if not used_tool(base, ch):
+    if ch.kind == "fight" and not used_tool(base, ch):   # investigations: any way you like
         print(ACCENT + "✓ " + _("Right answer, but only `{tool}` can hurt the {threat}. "
                                 "Solve it with {tool} (a successful command), then answer again.")
               .format(tool=ch.tool, threat=_(ch.threat)) + RESET)
@@ -166,12 +169,8 @@ def banner(ch, task):
             "  flee             " + _("run away (the threat will come back)") + "\n")
 
 
-def run():
-    s = state.load()
-    ch = pick(s)
-    if not ch:
-        print(DIM + _("No threat around. Your pet will warn you when one comes.") + RESET)
-        return
+def arena(ch, intro):
+    """Run the sandbox bash for `ch`. `intro(task_text)` is printed first. Returns (won, notes)."""
     base = Path(tempfile.mkdtemp(prefix="bashou-arena-"))
     work = base / "arena"
     work.mkdir()
@@ -180,7 +179,7 @@ def run():
         meta.update(ch.setup(work, random.Random()))
         (base / "meta.json").write_text(json.dumps(meta))
         (base / "arena.rc").write_text(RC)
-        print(banner(ch, ch.task_text(meta)))
+        print(intro(ch.task_text(meta)))
         env = {**os.environ, "BASHOU_ARENA": str(base),
                "BASHOU_SRC": str(Path(__file__).resolve().parent.parent)}
         code = subprocess.run(["bash", "--rcfile", str(base / "arena.rc"), "-i"], env=env).returncode
@@ -193,12 +192,22 @@ def run():
             ch.cleanup(meta)
         shutil.rmtree(base, ignore_errors=True)
 
-    won = code == WIN
     notes = []
     now = datetime.datetime.now()
     with state.locked() as s:
         for status, cmd in records:                        # arena commands count too
             notes += progress.record(s, status, cmd, now.date().isoformat(), now.hour)
+    return code == WIN, notes
+
+
+def run():
+    s = state.load()
+    ch = pick(s)
+    if not ch:
+        print(DIM + _("No threat around. Your pet will warn you when one comes.") + RESET)
+        return
+    won, notes = arena(ch, lambda task: banner(ch, task))
+    with state.locked() as s:
         if won:
             s["fights_won"] += 1
             if ch.id not in s["challenges"]:

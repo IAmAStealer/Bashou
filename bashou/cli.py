@@ -119,7 +119,8 @@ def stats():
           + _("streak: {n} day(s)").format(n=achievements.streak(days)) + f"){RESET}")
     print(f"  {BOLD}{labels[2]:<{w}}{RESET}{len(s['pets'])}/{len(ROSTER)}   "
           f"{BOLD}{_('Achievements')}{RESET} {len(s['achievements'])}/{len(achievements.ALL)}   "
-          f"{BOLD}{_('Fights won')}{RESET} {s['fights_won']}")
+          f"{BOLD}{_('Fights won')}{RESET} {s['fights_won']}   "
+          f"{BOLD}{_('Security')}{RESET} {len(s['security'])}")
     top = sorted(s["tools"].items(), key=lambda kv: -kv[1])[:8]
     if top:
         width = max(len(t) for t, _ in top)
@@ -252,6 +253,8 @@ def main():
     sub.add_parser("start", help="choose your starter (once)")
     sub.add_parser("language", help="choose the language")
     sub.add_parser("update", help="get the new version from GitHub")
+    sc = sub.add_parser("security", help="security challenges, easy to hard")
+    sc.add_argument("which", nargs="?", help="number or id (see the list)")
     cf = sub.add_parser("config", help="settings, e.g. bashou config bubble 5-10")
     cf.add_argument("name", nargs="?")
     cf.add_argument("value", nargs="?")
@@ -269,6 +272,9 @@ def main():
         s = state.load()
         name, voice = progress.current(s)[2:]
         print(f"  {BOLD}{name}{RESET}: {dialogue.line(s, voice)}")
+    elif args.cmd == "security":
+        from . import security
+        raise SystemExit(security.run(args.which))
     elif args.cmd == "update":
         from . import update
         raise SystemExit(update.run())

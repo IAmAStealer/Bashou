@@ -223,6 +223,20 @@ class QuitTest(unittest.TestCase):
         self.assertNotEqual(pid, 0)
 
 
+class SecurityShellTest(unittest.TestCase):
+    def test_solve_a_security_challenge(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            sh = Shell(tmp, ["python3", "-m", "bashou", "security", "2"])
+            try:
+                sh.read(2)
+                self.assertIn(b"Encoded note", sh.out)
+                sh.send('answer "$(base64 -d note.txt | cut -d\' \' -f2)"\n', 3)
+                self.assertIn(b"Solved", sh.out)
+                self.assertEqual(sh.state()["security"], ["encoded_note"])
+            finally:
+                sh.close()
+
+
 class ArenaShellTest(unittest.TestCase):
     def test_no_fight_without_a_threat(self):
         """`bashou fight` only works once the pet announced a threat."""
