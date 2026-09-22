@@ -39,6 +39,13 @@ _bashou_below() {
   printf '\e[%dB' "$lines"
 }
 
+# Ctrl+L too: clear the screen like readline does, then start below the pet (readline redraws the line).
+_bashou_clear() {
+  printf '\e[H\e[2J'
+  _bashou_below
+}
+bind -x '"\C-l": _bashou_clear' 2>/dev/null
+
 # Erase the pet before a command runs, so it never scrolls with the output.
 _bashou_ps0() {
   local seq

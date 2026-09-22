@@ -122,6 +122,11 @@ class ShellTest(unittest.TestCase):
         start = len(self.sh.out)
         self.sh.send("clear\n", wait=0.2)
         self.assertTrue(self.sh.expect(b"\x1b[6B", start))  # and after clear
+        self.sh.send("echo typed", 0.2)
+        start = len(self.sh.out)
+        self.sh.send("\x0c", 0)                               # Ctrl+L
+        self.assertTrue(self.sh.expect(b"\x1b[2J\x1b[6B", start))
+        self.assertTrue(self.sh.expect(b"echo typed", start))   # the line being typed stays
 
     def tearDown(self):
         pid = ""
