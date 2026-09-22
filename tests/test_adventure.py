@@ -1,6 +1,7 @@
 import random
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 from bashou import adventure, state
@@ -239,6 +240,23 @@ class QuizTest(unittest.TestCase):
             q = quiz.pick("linux", 1, [], random.Random(seed))
             original = next(o for o in quiz.bank("linux", "en") if o["id"] == q["id"])
             self.assertEqual(q["choices"][q["answer"]], original["choices"][original["answer"]])
+
+    def test_answers_about_optional_commands_declare_them(self):
+        from bashou import achievements, creatures
+        optional = {n for a in achievements.ALL for n in a.needs} | set(creatures.NEEDS.values())
+        for topic in world.TOPICS:
+            for q in quiz.bank(topic, "en"):
+                cmd = q["choices"][q["answer"]].split()[0]
+                if cmd in optional:
+                    self.assertIn(cmd, q.get("needs", []), q["id"])
+
+    def test_no_question_about_a_missing_command(self):
+        with mock.patch("bashou.adventure.quiz.installed", side_effect=lambda name: name != "systemctl"):
+            ids = {quiz.pick("linux", 2, [], random.Random(seed))["id"] for seed in range(200)}
+            self.assertNotIn("linux-2-01", ids)
+            self.assertIn("linux-2-02", ids)                             # journalctl is still there
+            ids = {quiz.pick("rocky", 1, [], random.Random(seed))["id"] for seed in range(200)}
+            self.assertNotIn("rocky-1-10", ids)
 
     def test_level_above_the_bank_uses_the_highest(self):
         self.assertEqual(quiz.pick("rust", 9, [], random.Random(0))["level"], quiz.max_level("rust"))

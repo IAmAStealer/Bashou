@@ -21,6 +21,10 @@ translation falls back to English.
 - `id`: `<topic>-<level>-<number>`, unique. `answer`: the index (0-3) of the right choice. The game
   shuffles the choices anyway, so the right one can stay first.
 - `explain`: one short sentence shown after the answer, right or wrong. It's what people remember.
+- `needs` (optional): commands the question is about that some systems don't have, e.g.
+  `"needs": ["systemctl"]`. It's skipped when none of them is installed. Required (a test checks)
+  when the right answer starts with an optional command: systemctl, journalctl, kubectl, dig, jq,
+  strace, rsync, free, watch…
 
 ## A good question
 

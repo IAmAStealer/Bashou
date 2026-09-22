@@ -88,6 +88,9 @@
    "top -m"
   ],
   "answer": 0,
+  "needs": [
+   "free"
+  ],
   "explain": "-h prints human sizes (M, G)."
  },
  {
@@ -166,6 +169,9 @@
    "svcadm"
   ],
   "answer": 0,
+  "needs": [
+   "systemctl"
+  ],
   "explain": "systemctl status/start/stop/enable name."
  },
  {
@@ -179,6 +185,9 @@
    "dmesg name"
   ],
   "answer": 0,
+  "needs": [
+   "journalctl"
+  ],
   "explain": "-f follows, -b limits to this boot."
  },
  {

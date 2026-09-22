@@ -257,6 +257,9 @@
    "chown +x script.sh"
   ],
   "answer": 0,
+  "needs": [
+   "chmod"
+  ],
   "explain": "The x permission lets you run it with ./script.sh."
  },
  {
