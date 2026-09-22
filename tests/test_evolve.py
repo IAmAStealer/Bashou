@@ -45,7 +45,8 @@ class EvolveCommandTest(TempState):
         self.assertEqual((s["evolving"], progress.current(s)[2]), ([], "Cat"))
 
     def test_nothing_waiting(self):
-        self.assertEqual(evolve.main(), 0)
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(evolve.main(), 0)
 
 
 class FormSwitchTest(TempState):
