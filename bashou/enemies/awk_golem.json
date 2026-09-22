@@ -1,0 +1,52 @@
+{
+ "name": "Ledger Golem",
+ "palette": {
+  "a": "#3b3630",
+  "o": "#8a8070",
+  "h": "#b3a993",
+  "s": "#5c554b",
+  "p": "#9d937f",
+  "m": "#1c1a17",
+  "y": "#ffb830",
+  "c": "#e8e0cc"
+ },
+ "base": [
+  "......aaaaa......",
+  ".....ahooooa.....",
+  "....ahooooooa....",
+  "....aaaoooaaa....",
+  "...aosyoooyssa...",
+  "....aoooooosa....",
+  ".hhhaomcmcmsahhh.",
+  "hhoooaooossaooohh",
+  "hooso.aaaaa.osooh",
+  "ooooo.......ooooo",
+  "oooos.......soooo",
+  ".sss.........sss."
+ ],
+ "poses": {
+  "inhale": {},
+  "closed": {
+   "4": "------s---s------"
+  },
+  "left": {
+   "4": "-----ys--ys------"
+  },
+  "right": {
+   "4": "------sy--sy-----"
+  },
+  "fidget": {
+   "5": "-hhh---------hhh-",
+   "6": "h-ooo-------ooo-h",
+   "7": "-o-s---------s-o-",
+   "8": "o--o---------o--o",
+   "9": "----s-------s----",
+   "10": ".sss.-------.sss.",
+   "11": "-...---------...-"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}
