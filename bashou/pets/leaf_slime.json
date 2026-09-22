@@ -17,10 +17,10 @@
   "..Lll.awooa......",
   "....awodooa......",
   "...awoodoooa.....",
-  "..adooodoooda....",
-  ".aoodmodomdooa...",
+  "..aodoodoodoa....",
   ".aooomodomoooa...",
-  ".aopoodqdoopoa...",
+  ".aooomdddmoooa...",
+  ".aopoooqooopoa...",
   ".aooooodoooooa...",
   "..aoooodooooa....",
   "...aaaaaaaaa....."
@@ -28,23 +28,22 @@
  "poses": {
   "fidget": {
    "0": "---L-L-----------",
-   "1": "---l-l-----------",
-   "2": "---d-------------"
+   "1": "---l-l-----------"
   },
   "inhale": {
    "10": "-ao---------oa---",
    "11": "--a---------a----"
   },
   "closed": {
-   "6": "-----o---o-------",
+   "6": "-----d---d-------",
    "7": "----qq---qq------"
   },
   "left": {
-   "6": "----mo--mo-------",
+   "6": "----md--md-------",
    "7": "----mo--mo-------"
   },
   "right": {
-   "6": "-----om--om------",
+   "6": "-----dm--dm------",
    "7": "-----om--om------"
   }
  },
