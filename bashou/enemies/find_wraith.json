@@ -1,0 +1,52 @@
+{
+ "name": "Maze Wraith",
+ "palette": {
+  "a": "#241e3a",
+  "v": "#4a3f78",
+  "k": "#0c0a14",
+  "b": "#8fe6ff",
+  "y": "#ffcf5a",
+  "Y": "#fff4c0",
+  "q": "#5a4c34",
+  "g": "#2e2a22",
+  "l": "#9a7a3c"
+ },
+ "base": [
+  ".......aaa.......",
+  ".....aavvvaa.....",
+  "....avvvvvvva....",
+  "...avvkkkkkvva...",
+  "...avkkkkkkkva...",
+  "...avkbkkkbkva...",
+  ".qqavkkkkkkkvva..",
+  ".q.avvkkkkkvvvva.",
+  "qqqavvvvvvvvvvvva",
+  "qgqavvvvvvvvvvva.",
+  "qqq.avv.vvv.vva..",
+  ".....v...v...v..."
+ ],
+ "poses": {
+  "inhale": {
+   "10": "-------v---v-----"
+  },
+  "closed": {
+   "5": "------k---k------"
+  },
+  "left": {
+   "5": "-----bk--bk------"
+  },
+  "right": {
+   "5": "------kb--kb-----"
+  },
+  "fidget": {
+   "5": "------y---y------",
+   "8": "-l---------------",
+   "9": "lYl--------------",
+   "10": "-l---------------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}
