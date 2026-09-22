@@ -127,9 +127,6 @@
    "launchctl"
   ],
   "answer": 0,
-  "needs": [
-   "systemctl"
-  ],
   "explain": "Same as on most modern distros."
  },
  {
