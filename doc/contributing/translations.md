@@ -61,7 +61,7 @@ search the code for the message to see where it's used (`grep -rn "the message" 
 the pull request. Some tips:
 
 - Pets talk to the player casually: in French, use `tu`, not `vous`.
-- Pet names and stage names (`Tadpole`, `Nine-tailed fox`) are names: translate them the way a game
+- Pet names and stage names (`Tadpole`, `Kitsune`) are names: translate them the way a game
   would.
 - `achievement`, `level`, `stage`, `threat`, `fight`: use the same word everywhere.
 

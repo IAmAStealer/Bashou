@@ -153,7 +153,7 @@ ALL = [
     A("investigator", "gremlin", "Investigator", "solve 6 security challenges",
       state=lambda s: len(s.get("security", [])) >= 6),
 
-    # Knight snail: bashou adventure (and the file basics its chests teach)
+    # Snail: bashou adventure (and the file basics its chests teach)
     A("builder", "snail", "Builder", "create nested folders with `mkdir -p`", cmd=lambda c: c.flag("mkdir", "p", ("--parents",))),
     A("copycat", "snail", "Copycat", "copy a folder with `cp -r`", cmd=lambda c: c.flag("cp", "rRa", ("--recursive", "--archive"))),
     A("shortcut", "snail", "Shortcut", "make a symbolic link with `ln -s`", cmd=lambda c: c.flag("ln", "s", ("--symbolic",))),

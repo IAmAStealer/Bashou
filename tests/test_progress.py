@@ -16,7 +16,7 @@ class ProgressTest(unittest.TestCase):
 
     def test_command_milestone(self):
         self.assertEqual(self.run_cmd("ls", times=9), [])
-        self.assertIn("Batling", self.run_cmd("ls")[0])
+        self.assertIn("Mouseling", self.run_cmd("ls")[0])
         self.assertEqual(self.run_cmd("ls", times=39), [])
         notes = self.run_cmd("ls")
         self.assertIn("frog", self.s["pets"])
@@ -48,9 +48,9 @@ class ProgressTest(unittest.TestCase):
         self.assertEqual(progress.stage(self.s, "fox"), 1)
         notes = self.run_cmd("find . -name '*.log' -exec rm {} +")
         self.assertIn("🏆 Executor: act on results with `find -exec`", notes)
-        self.assertIn("✨ Fox cub is evolving! Watch it: `bashou evolve`", notes)
+        self.assertIn("✨ Fennec is evolving! Watch it: `bashou evolve`", notes)
         self.assertEqual(progress.stage(self.s, "fox"), 2)
-        self.assertEqual(progress.current(self.s, "fox")[1:3], (2, "Fox cub"))   # new actions, old look until watched
+        self.assertEqual(progress.current(self.s, "fox")[1:3], (2, "Fennec"))   # new actions, old look until watched
         self.assertEqual(self.s["evolving"], [{"who": "fox", "from": 1, "to": 2}])
         progress.watched(self.s, "fox")
         self.assertEqual(progress.current(self.s, "fox")[2], "Fox")

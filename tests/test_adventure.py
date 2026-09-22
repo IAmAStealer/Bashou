@@ -179,7 +179,7 @@ class GameTest(unittest.TestCase):
                 g.close_result(0) if g.adv["phase"] == "boss" else None
         text = " ".join(g.result[1])
         self.assertEqual(g.adv["phase"], "chapter_end")
-        self.assertIn("New pet: Knight snail", text)                  # 3 achievements already: stage 2
+        self.assertIn("New pet: Snail", text)                  # 3 achievements already: stage 2
         s = state.load()
         self.assertIn("snail", s["pets"])
         for aid in ("first_steps", "checkpoint", "flawless"):

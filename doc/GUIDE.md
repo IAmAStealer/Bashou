@@ -22,11 +22,11 @@ A pixel-art pet that lives in the top-right corner of your terminal and grows as
   (`curl … | sh`), `chmod 777`, skipped HTTPS checks (`curl -k`), `rm -r` on `/` or `~`,
   `StrictHostKeyChecking=no`, `sudo pip install`, `sshpass -p`. Five of them attract the **Gremlin**,
   which evolves as you pick up safe habits (reading a script before running it, checksums, `chmod u+x`)
-  and ends up a Shell guardian.
+  and ends up an Orc.
 - **Security challenges.** `bashou security` lists small investigations, easy to hard: a hidden
   file, an encoded note, brute-force attempts in an `auth.log`, a defaced website, a cron backdoor, a
   SUID program. Each one runs in a sandbox folder with fake, harmless data. Solving them evolves the
-  Gremlin into a Shell guardian.
+  Gremlin into an Orc.
 - **Adventure.** `bashou adventure`: your starter walks into the world, seen from behind, through
   meadows, hills, forests, deserts, lakes and dungeons. The road splits into topics (Bash, Linux,
   Python, Rust, C, Debian, Rocky Linux, CI/CD): monsters ask a question (wrong: ♥ -1), locked chests
@@ -34,7 +34,7 @@ A pixel-art pet that lives in the top-right corner of your terminal and grows as
   back, and each path ends with a boss: timed questions (20 s each), each miss costs a heart. Beat it
   and it's a checkpoint, the topic levels up (harder questions next time). Lose your last heart and
   you go back to the last checkpoint, where you can pick another path. Finish a chapter and a new quest starts. `s` saves and quits at any time.
-  Finishing chapter 1 brings the Knight snail, and its achievements follow your adventure.
+  Finishing chapter 1 brings the Snail (a slug at first), and its achievements follow your adventure.
 - **Typos.** On `command not found` your pet laughs kindly and suggests the command you meant.
 - **Pick your pet** on the board with `bashou swap`.
 - **Pets talk.** Every 10–20 minutes your pet gives a tip for its tool, a hint toward your next
