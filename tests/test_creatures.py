@@ -78,5 +78,17 @@ class SymmetryTest(unittest.TestCase):
                 self.assertEqual(shape, shape[::-1], f"{pet_id} row {i}: {row}")
 
 
+class MovingPetTest(unittest.TestCase):
+    def test_the_sand_grain_is_never_in_two_places(self):
+        """The wind poses run on top of the breathing hop, which moved the grain too (owner's bug)."""
+        from bashou import render
+        pet = creatures.PETS["sand_grain"]
+        for pose in ("left", "right", "fidget"):
+            for poses in ([pose], ["inhale", pose]):
+                grid = render.grid(pet, poses)
+                grains = [(r, c) for r, row in enumerate(grid) for c, k in enumerate(row) if k == "l"]
+                self.assertEqual(len(grains), 1, f"{poses}: {grains}")
+
+
 if __name__ == "__main__":
     unittest.main()
