@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 from bashou import challenges
-from bashou.creatures import ROSTER
+from bashou.creatures import ROSTER, SECRET
 
 LOADER = Path(__file__).resolve().parent.parent / "bashou.bash"
 
@@ -28,7 +28,7 @@ echo "${{COMPREPLY[*]}}"
 class CompletionTest(unittest.TestCase):
     def test_lists_match_the_code(self):
         from bashou import cli
-        self.assertEqual(words("_bashou_pets"), [p for p, _ in ROSTER])
+        self.assertEqual(words("_bashou_pets"), [p for p, _ in ROSTER if p not in SECRET])   # no secret pet
         self.assertEqual(set(words("_bashou_challenges")), {c.id for c in challenges.ALL})
         self.assertEqual(words("_bashou_security"), [str(i) for i in range(1, len(challenges.SECURITY) + 1)])
         parser_src = Path(cli.__file__).read_text()

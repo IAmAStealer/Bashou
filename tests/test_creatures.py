@@ -58,7 +58,8 @@ class CreaturesTest(unittest.TestCase):
         self.assertIs(creatures.get("fox", "large"), creatures.PETS["fox"])
 
     def test_roster_has_stage_names(self):
-        self.assertEqual(len(ROSTER), 25)
+        from bashou.creatures import SECRET
+        self.assertEqual(len([p for p, _ in ROSTER if p not in SECRET]), 25)
         self.assertEqual({p for p, _ in ROSTER}, set(STAGES))
 
 

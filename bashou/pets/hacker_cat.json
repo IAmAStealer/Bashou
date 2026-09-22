@@ -1,0 +1,58 @@
+{
+ "name": "Hacker cat",
+ "palette": {
+  "a": "#14121a",
+  "k": "#2a2730",
+  "w": "#f2f0f4",
+  "c": "#35c8e8",
+  "C": "#ffffff",
+  "p": "#8a5ab8",
+  "P": "#c9a8e8",
+  "B": "#d8d4dc",
+  "r": "#e8708a",
+  "v": "#e850c8",
+  "b": "#5060f0",
+  "n": "#30c8f0",
+  "g": "#40d070",
+  "y": "#ffe850",
+  "o": "#ffa020",
+  "R": "#ff4040"
+ },
+ "base": [
+  "..a...........a..",
+  ".awa...ngy...awa.",
+  ".awwa.bngyo.awwa.",
+  ".awwavbngyoRawwa.",
+  "aakkkkbngyokkkkaa",
+  "akkccckkkkkccckka",
+  "akkcCckkkkkcCckka",
+  "akkkkkwwwwwkkkkka",
+  "akkkkwwpppwwkkkka",
+  "akkkkwwwrwwwkkkka",
+  "apppppppppppppppa",
+  ".aapppppBpppppaa."
+ ],
+ "poses": {
+  "inhale": {},
+  "closed": {
+   "5": "---kkk-----kkk---",
+   "6": "---kkk-----kkk---"
+  },
+  "left": {
+   "5": "---C-------C-----",
+   "6": "---Cc------Cc----"
+  },
+  "right": {
+   "5": "-----C-------C---",
+   "6": "----cC------cC---"
+  },
+  "fidget": {
+   "2": "------b---o------",
+   "9": "-------r-r-------"
+  }
+ },
+ "particles": [
+  0,
+  10
+ ]
+}

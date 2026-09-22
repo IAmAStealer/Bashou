@@ -62,7 +62,14 @@ STATE_PETS = {
     "frog": (lambda s: adventure(s).get("correct", 0) >= 20, "answer 20 questions right in bashou adventure"),
     "sofa": (lambda s: s.get("fights_lost", 0) >= 1, "lose (or flee) a fight: take a seat"),
     "dragon": (lambda s: s["fights_won"] >= 1, "win a fight: bashou fight"),
+    "cat": (lambda s: bool(achievements.secrets(s)), "???"),          # a secret finds you
 }
+
+
+def stars(state, pet):
+    """★ of a pet: how far along its forms it is (a pet with one form has one star)."""
+    forms = len(creatures.FORMS.get(pet, ("",) * 3))
+    return "★" * tier(state, pet, stage(state, pet)) + "☆" * (min(3, forms) - tier(state, pet, stage(state, pet)))
 
 
 def how_to_unlock(state, pet):
@@ -100,7 +107,8 @@ def stage(state, pet):
         return max(1, by_count, state.get("ladder_best", {}).get(pet, 1))
     earned = sum(a.id in state["achievements"] for a in achievements.family(pet))
     total = len(achievements.family(pet))
-    return 3 if total and earned == total else 2 if earned >= 2 else 1
+    forms = len(creatures.FORMS.get(pet, ("",) * 3))
+    return min(forms, 3 if total and earned == total else 2 if earned >= 2 else 1)
 
 
 ACHIEVEMENTS_PER_LEVEL = 5

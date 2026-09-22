@@ -67,6 +67,7 @@ class Achievement:
     cmd: Optional[Callable] = None
     state: Optional[Callable] = None
     needs: tuple = ()           # commands it needs (any one); hidden when none is installed
+    hidden: bool = False        # a secret: never listed or hinted before you earn it
 
     def available(self):
         return not self.needs or any(map(which.installed, self.needs))
@@ -276,6 +277,40 @@ ALL = [
 ]
 
 # Families about a command this system may not have: hints skip them when it's missing.
+# Secret achievements: security tools. Nothing announces them; they just pop up, and the first one
+# brings a pet that isn't on the board (see creatures.SECRET).
+def _uses(*names):
+    tools = set(names)
+    return lambda c: bool(c.analysis.tools & tools)
+
+
+SECRET = [
+    A("exploiter", "cat", "Exploiter", "run Metasploit", hidden=True,
+      cmd=_uses("msfconsole", "msfvenom", "msfdb", "searchsploit", "msfrpcd")),
+    A("auditor", "cat", "Auditor", "audit a machine with `lynis`", hidden=True, cmd=_uses("lynis", "chkrootkit", "rkhunter")),
+    A("sniffer", "cat", "Sniffer", "watch packets go by", hidden=True, cmd=_uses("wireshark", "tshark", "tcpdump", "termshark")),
+    A("cracker", "cat", "Cracker", "try passwords with John or hashcat", hidden=True,
+      cmd=_uses("john", "hashcat", "johnny", "zip2john", "ssh2john", "hashid")),
+    A("reverser", "cat", "Reverser", "take a binary apart", hidden=True,
+      cmd=_uses("ghidra", "ghidraRun", "radare2", "r2", "rizin", "jadx", "retdec-decompiler", "ida", "cutter",
+                "apktool", "dnSpy")),
+    A("mapper", "cat", "Mapper", "scan a network with `nmap`", hidden=True, cmd=_uses("nmap", "masscan", "zmap", "rustscan")),
+    A("web_scanner", "cat", "Web scanner", "scan a site with `nikto`", hidden=True,
+      cmd=_uses("nikto", "wpscan", "nuclei", "whatweb", "zaproxy")),
+    A("wardriver", "cat", "Wardriver", "listen to Wi-Fi with the aircrack suite", hidden=True,
+      cmd=_uses("aircrack-ng", "airodump-ng", "aireplay-ng", "airmon-ng", "wifite", "kismet", "reaver")),
+    A("interceptor", "cat", "Interceptor", "sit in the middle of the traffic", hidden=True,
+      cmd=_uses("burpsuite", "mitmproxy", "mitmdump", "bettercap", "ettercap", "responder")),
+    A("injector", "cat", "Injector", "test injections with `sqlmap`", hidden=True, cmd=_uses("sqlmap", "commix")),
+    A("bruteforcer", "cat", "Bruteforcer", "knock on every door", hidden=True,
+      cmd=_uses("hydra", "medusa", "patator", "crackmapexec", "netexec", "nxc")),
+    A("buster", "cat", "Buster", "look for hidden paths", hidden=True,
+      cmd=_uses("gobuster", "ffuf", "dirb", "dirbuster", "feroxbuster", "wfuzz")),
+    A("forensic", "cat", "Forensic", "dig into a dump or a firmware", hidden=True,
+      cmd=_uses("volatility", "volatility3", "vol.py", "binwalk", "autopsy", "foremost", "testdisk")),
+]
+ALL += SECRET
+
 FAMILY_NEEDS = {"spider": ("strace",), "axolotl": ("jq",), "whale": ("kubectl",), "bee": ("systemctl",),
                 "beaver": ("git",), "hedgehog": ("chmod",)}
 for _a in ALL:
@@ -307,7 +342,14 @@ def family(pet):
 
 
 def usable():
-    return [a for a in ALL if a.available()]
+    """Every achievement this system can earn and show: the secret ones don't count."""
+    return [a for a in ALL if a.available() and not a.hidden]
+
+
+def secrets(state):
+    """The secret achievements found so far."""
+    ids = set(state["achievements"])
+    return [a for a in ALL if a.hidden and a.id in ids]
 
 
 def earned(state):

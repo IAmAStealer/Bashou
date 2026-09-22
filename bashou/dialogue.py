@@ -17,7 +17,7 @@ VOICE = {
     "sofa": "*creak*", "octopus": "Glub!", "dragon": "Rawr!", "fox": "*sniff*", "owl": "Hoo.",
     "mole": "*dig dig*", "snake": "Sss…", "ghost": "Boo~", "spider": "*tik-tik*", "ant": "*click*",
     "axolotl": "*wiggle*", "beaver": "*chomp*", "squirrel": "*chitter*", "pigeon": "Coo.", "hedgehog": "*huff*",
-    "bee": "Bzz.", "whale": "*whoosh*", "meerkat": "*peek*",
+    "bee": "Bzz.", "whale": "*whoosh*", "meerkat": "*peek*", "cat": "*purr*",
 }
 
 TIPS = {
@@ -85,6 +85,10 @@ TIPS = {
               "kubectl logs -f pod : logs, live.", "kubectl config get-contexts : which cluster am I on?"],
     "meerkat": ["df -h : how full are the disks?", "du -sh * | sort -h : biggest last.",
                 "free -h : memory at a glance.", "watch -n 2 cmd : rerun it every 2 s."],
+    "cat": ["Only test what you're allowed to test. Written permission, always.",
+            "Read the man page before the exploit.", "Keep your notes: half of security is notes.",
+            "`nmap -sV host` tells you what's listening, and what version.",
+            "A lab at home beats someone else's server."],
 }
 
 # Achievement -> an example that earns it.
@@ -154,13 +158,15 @@ PERSONAL = {
     "pigeon": ["I always find my way home. Even through a tunnel."], "hedgehog": ["Not everyone gets to touch my files."],
     "bee": ["Every service in the hive has its job."], "whale": ["So many containers on my back."],
     "meerkat": ["I keep watch. Disks, memory, all of it."],
+    "cat": ["I saw what you ran. Your secret is safe with me.", "Curiosity, with permission.",
+            "Nice tools. Mind the scope."],
 }
 
 
 def hint(state, pet, rng):
     """Next achievement of this pet's family, or any one left (the easiest first), with an example."""
     earned = set(state["achievements"])
-    todo = [a for a in achievements.family(pet) if a.id not in earned and not a.state]
+    todo = [a for a in achievements.family(pet) if a.id not in earned and not a.state and not a.hidden]
     todo = todo or [a for a in achievements.usable() if a.id not in earned and not a.state]
     if not todo:
         return None

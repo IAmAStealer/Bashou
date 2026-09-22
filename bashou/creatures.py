@@ -89,20 +89,26 @@ ROSTER = [
     ("gremlin", "Gremlin"), ("snail", "Snail"),
     ("beaver", "Beaver"), ("squirrel", "Squirrel"), ("pigeon", "Pigeon"), ("hedgehog", "Hedgehog"),
     ("bee", "Bee"), ("whale", "Whale"), ("meerkat", "Meerkat"),
+    ("cat", "Hacker cat"),
 ]
 NAMES = dict(ROSTER)
 NEEDS = {"whale": "kubectl", "bee": "systemctl"}                   # pet -> the command it's about; hidden when it isn't installed
 
 
-def roster():
-    """The pets of this system, in board order."""
+SECRET = {"cat"}            # not on the board until you find it (secret achievements bring it)
+
+
+def roster(state=None):
+    """The pets of this system, in board order; a secret pet only once you have it."""
     from .which import installed
-    return [(pet, name) for pet, name in ROSTER if pet not in NEEDS or installed(NEEDS[pet])]
+    owned_pets = (state or {}).get("pets", ())
+    return [(pet, name) for pet, name in ROSTER
+            if (pet not in NEEDS or installed(NEEDS[pet])) and (pet not in SECRET or pet in owned_pets)]
 
 
 def owned(state):
     """Unlocked pets of this system (a Whale unlocked before kubectl was removed stays saved, not counted)."""
-    shown = dict(roster())
+    shown = dict(roster(state))
     return [pet for pet in state["pets"] if pet in shown]
 
 # Names of the three stages: unlocked, evolved (2 achievements), legendary (whole family).
@@ -130,6 +136,7 @@ STAGES = {
     "pigeon": ("Squab", "Pigeon", "Messenger"),
     "hedgehog": ("Hoglet", "Hedgehog", "Porcupine"),
     "bee": ("Brood", "Bee", "Queen bee"),
+    "cat": ("Hacker cat",),                      # secret, one form only
     "whale": ("Calf", "Whale", "Leviathan"),
     "meerkat": ("Pup", "Meerkat", "Sentinel"),
 }
@@ -159,6 +166,7 @@ FORMS = {
     "pigeon": ("squab", "pigeon", "messenger"),
     "hedgehog": ("hoglet", "hedgehog", "porcupine"),
     "bee": ("brood", "bee", "queen_bee"),
+    "cat": ("hacker_cat",),
     "slime": ("droplet", "slime", "leaf_slime", "fire_slime", "rock_slime", "cat_slime", "king_slime"),
     "mole": ("molekin", "mole", "mole_king"),
     "whale": ("calf", "whale", "leviathan"),

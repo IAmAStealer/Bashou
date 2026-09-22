@@ -39,8 +39,10 @@ class DialogueTest(unittest.TestCase):
         self.assertFalse(any("Late again" in t or "nicer at night" in t for t in said))
 
     def test_every_command_achievement_has_an_example(self):
-        # Night owl is about the time, not a command.
-        missing = [a.id for a in achievements.ALL if a.cmd and a.id not in dialogue.EXAMPLES and a.id != "night_owl"]
+        # Night owl is about the time, not a command. Secrets have no example: the pet never suggests
+        # running a security tool, and they are a surprise.
+        missing = [a.id for a in achievements.ALL
+                   if a.cmd and not a.hidden and a.id not in dialogue.EXAMPLES and a.id != "night_owl"]
         self.assertEqual(missing, [])
 
     def test_examples_earn_their_achievement(self):

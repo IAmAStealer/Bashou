@@ -44,7 +44,7 @@ def ladder_line(s):
 class Board:
     def __init__(self):
         self.s = state.load()
-        ids = ["starter"] + [pet for pet, rule in roster()]   # starter on its own row, then the 4×4 grid
+        ids = ["starter"] + [pet for pet, rule in roster(self.s)]   # starter on its own row, then the 4×4 grid
         self.ids = ids
         self.pos = ids.index(self.s["active"]) if self.s["active"] in ids else 0
         self.breath = False
@@ -66,8 +66,7 @@ class Board:
         elif unlocked:
             st = progress.stage(self.s, pet)
             name = progress.current(self.s, pet)[2]
-            t = progress.tier(self.s, pet, st)
-            top = "★" * t + "☆" * (3 - t) + ("  ●" if pet == self.s["active"] else "")
+            top = progress.stars(self.s, pet) + ("  ●" if pet == self.s["active"] else "")
         else:
             name, top = "???", "☆☆☆"
         name = name[:TILE_W - 2]

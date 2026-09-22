@@ -237,6 +237,8 @@ class DrawEverythingTest(TempState):
         s = state.load()
         s["starter"] = "star"
         for who in ["starter"] + list(creatures.NAMES):
+            if len(creatures.FORMS.get(who, ())) < 3:                  # a secret pet has one form only
+                continue
             for a, b in ((1, 2), (2, 3)):
                 self.assertTrue(evolve.scenes(s, {"who": who, "from": a, "to": b}), who)
 
