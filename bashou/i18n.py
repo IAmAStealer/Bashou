@@ -107,6 +107,10 @@ def messages():
     found += list(behavior.ACTIONS.values())
     from . import progress
     from .adventure import lessons
+    from .adventure import world
+    found += [boss for name, home, boss in world.TOPICS.values()] + world.PLACES + [world.NEW_ROAD]
+    for ch in world.CHAPTERS:
+        found += [ch["title"], ch["intro"]]
     for lesson in lessons.LESSONS:
         found += [lesson["title"]] + [text for text, example in lesson["pages"]]
     found += list(progress.CONSTRUCT_NAMES.values()) + [how for rule, how in progress.STATE_PETS.values()]

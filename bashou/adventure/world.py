@@ -36,13 +36,22 @@ PLACES = ["Marsh of Merge Conflicts", "Hills of Hanging Processes", "Lake of Los
           "Forest of Forgotten Branches", "Caves of Core Dumps", "Desert of Dangling Pointers"]
 
 
+NEW_ROAD = "A new road, a new quest. Your pet is ready."
+
+
+def title(ch):
+    """A chapter's title in your language: generated ones carry their number, "Lake of Lost Packets (5)"."""
+    from ..i18n import _
+    return f"{_(ch['title'])} ({ch['number']})" if "number" in ch else _(ch["title"])
+
+
 def chapter(n):
     """Chapter n (1-based): the first ones are written, then they're generated."""
     if n <= len(CHAPTERS):
         return CHAPTERS[n - 1]
     rng = random.Random(f"chapter:{n}")
-    return {"title": f"{rng.choice(PLACES)} ({n})", "home": rng.choice(["meadow", "hills", "forest", "sand", "water", "dungeon"]),
-            "legs": 3, "segments": min(8, 4 + n // 3), "intro": "A new road, a new quest. Your pet is ready."}
+    return {"title": rng.choice(PLACES), "number": n, "home": rng.choice(["meadow", "hills", "forest", "sand", "water", "dungeon"]),
+            "legs": 3, "segments": min(8, 4 + n // 3), "intro": NEW_ROAD}
 
 
 def new():

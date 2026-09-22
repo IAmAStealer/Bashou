@@ -316,7 +316,7 @@ class Game:
                     + [("", PANEL_FG), (_("Enter: continue"), ACCENT)])
         if phase == "intro":
             ch = world.chapter(adv["chapter"])
-            return [(_("Chapter {n}: {title}").format(n=adv["chapter"], title=_(ch["title"])), ACCENT),
+            return [(_("Chapter {n}: {title}").format(n=adv["chapter"], title=world.title(ch)), ACCENT),
                     (_(ch["intro"]), PANEL_FG), ("", PANEL_FG), (_("Enter: set off · s: save & quit"), ACCENT)]
         if phase == "fork":
             out = [(_("The road splits. Which way?"), ACCENT)]
@@ -355,7 +355,7 @@ class Game:
         if phase == "chapter_end":
             nxt = world.chapter(adv["chapter"] + 1)
             return [(_("Chapter {n} complete!").format(n=adv["chapter"]), GOOD),
-                    (_("A new quest calls you, hero: {title}.").format(title=_(nxt["title"])), PANEL_FG),
+                    (_("A new quest calls you, hero: {title}.").format(title=world.title(nxt)), PANEL_FG),
                     ("", PANEL_FG), (_("Enter: accept · s: save & quit"), ACCENT)]
         return []
 

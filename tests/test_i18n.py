@@ -36,6 +36,21 @@ class CatalogTest(unittest.TestCase):
         finally:
             i18n._cache.pop("fr")
 
+    def test_adventure_names_are_translatable(self):
+        """Boss names, chapter titles and places went through _() but weren't in the catalogs."""
+        from bashou.adventure import world
+        keys = set(i18n.messages())
+        self.assertIn("Kernel Warden", keys)
+        self.assertIn("The Sleepy Meadow", keys)
+        ch = world.chapter(9)
+        self.assertIn(ch["title"], keys)
+        i18n.use("fr")
+        i18n._cache["fr"] = {ch["title"]: "Lac des paquets perdus"}
+        try:
+            self.assertEqual(world.title(ch), "Lac des paquets perdus (9)")
+        finally:
+            i18n._cache.pop("fr")
+
     def test_catalogs_are_valid_json(self):
         for path in i18n.LOCALES.glob("*.json"):
             json.loads(path.read_text())
