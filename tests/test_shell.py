@@ -114,7 +114,7 @@ class ShellTest(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.sh = Shell(self.tmp.name)
         self.sh.read(1)
-        self.sh.expect(b"38;2;255;243;176")              # the pet is drawn: rc read, pet started
+        self.sh.expect(b"38;2;216;200;160")              # the pet is drawn: rc read, pet started
 
     def tearDown(self):
         pid = ""
@@ -162,7 +162,7 @@ class ShellTest(unittest.TestCase):
         self.sh.send("true\n", 2)
         start = len(self.sh.out)
         self.sh.send("true\n", 0)                       # duplicate: not logged, no event
-        self.assertTrue(self.sh.expect(b"38;2;255;243;176", start, timeout=3))   # stardust color: redrawn
+        self.assertTrue(self.sh.expect(b"38;2;216;200;160", start, timeout=3))   # stardust color: redrawn
 
     def test_dead_pet_is_restarted(self):
         """If the pet process dies, the next prompt starts a new one."""
@@ -230,7 +230,7 @@ class FirstLaunchTest(unittest.TestCase):
                 sh.send("\x1b[B", 0.3)                   # ↓ Français
                 sh.send("\r", 0)
                 self.assertTrue(sh.wait_state(lambda s: s["language"] == "fr"))
-                self.assertTrue(sh.expect(b"38;2;255;243;176"))          # straight to the pet
+                self.assertTrue(sh.expect(b"38;2;216;200;160"))          # straight to the pet
                 self.assertNotIn(b"Choose your starter", sh.out)
                 self.assertTrue(alive(int(sh.value("BASHOU_PID"))))
             finally:
