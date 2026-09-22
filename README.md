@@ -25,7 +25,7 @@ tokens spent to learn what a command does.
 - **`bashou adventure`**: a walk through 8 topics (bash, Linux, Python, Rust, C, Debian, Rocky Linux,
   CI/CD) with 166 questions, bosses, and chests that open with real commands.
 
-![bashou fight: your pet and its hearts face the Log Hydra, the task in a bubble, and the arena
+![bashou fight: a Planet and its hearts face the Log Hydra, the task in a bubble, and the arena
 shell below](doc/img/duel.svg)
 
 ## Discover pets
@@ -33,12 +33,12 @@ shell below](doc/img/duel.svg)
 Choose a starter: Stardust, Seedling or Pebble. It grows up to level 20 and changes shape along the
 way. What it becomes is for you to find out.
 
-25 more pets hide in your terminal, each with 3 forms. They come from what you do: a new tool used
-often enough, a long pipe, a risky command… The swap board shows only their silhouette until you
-meet them.
+25 more pets hide in your terminal, each with 3 forms. The first ones come quickly, just by using
+your terminal; the others come from what you do: a new tool used often enough, a long pipe, a risky
+command… The swap board shows only their silhouette until you meet them.
 
-![The three starters, Stardust, Seedling and Pebble, next to three dark silhouettes of pets still to
-discover](doc/img/pets.svg)
+![The three starters, Stardust, Seedling and Pebble, then the first pets you meet: a Mouseling after
+10 commands, a Tadpole after 50, a Hatchling after 200](doc/img/pets.svg)
 
 ## Install
 

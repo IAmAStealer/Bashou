@@ -172,7 +172,7 @@ def duel_shot():
         (base / "meta.json").write_text(json.dumps(meta))
         (base / "duel.json").write_text(json.dumps({"hearts": 2, "enemy": 2, "offset": 0, "event": "hit", "at": 0,
                                                     "said": "💥 grep hits the Log Hydra!"}))
-        fake = {**state.default(), "starter": "star"}                    # no spoiler: the first form
+        fake = {**state.default(), "starter": "star", "achievements": [f"a{i}" for i in range(40)]}   # a Planet
         with mock.patch.object(state, "load", return_value=fake):
             scene = duel.Scene(base, 0)
         body, _erase = scene.frame(s.cols + 1, 1.0)
@@ -188,16 +188,18 @@ def duel_shot():
 
 
 def pets_shot():
-    """The three starters you choose from, then pets to discover: silhouettes only, as on the board."""
-    from bashou.board import silhouette
-    shown = [(creatures.get(forms[0]), creatures.FORM_NAMES[forms[0]]) for forms in creatures.STARTERS.values()]
-    hidden = [(silhouette(creatures.get(creatures.form(p, 1))), "???") for p in ("fox", "octopus", "bat")]
-    per_row = 6
-    s = Screen(per_row * 19 + 1, 8)
-    for i, (pet, name) in enumerate(shown + hidden):
+    """The three starters you choose from, then the first pets you'll meet; the rest stays a surprise."""
+    from bashou import progress
+    shown = [(creatures.get(forms[0]), creatures.FORM_NAMES[forms[0]], "starter")
+             for forms in creatures.STARTERS.values()]
+    for count, pet in progress.MILESTONES[:3]:
+        shown.append((creatures.get(creatures.form(pet, 1)), creatures.STAGES[pet][0], f"{count} commands"))
+    s = Screen(len(shown) * 19 + 1, 9)
+    for i, (pet, name, how) in enumerate(shown):
         c = i * 19 + 2
         s.write("".join(f"\x1b[{1 + j};{c}H{line}" for j, line in enumerate(sprite(pet))))
-        s.write(f"\x1b[7;{c + (17 - len(name)) // 2}H\x1b[2m{name}\x1b[0m")
+        s.write(f"\x1b[7;{c + (17 - len(name)) // 2}H{name}")
+        s.write(f"\x1b[8;{c + (17 - len(how)) // 2}H\x1b[2m{how}\x1b[0m")
     return s.svg("Choose a starter, then discover 25 pets")
 
 
