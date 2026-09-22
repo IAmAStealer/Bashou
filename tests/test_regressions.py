@@ -255,6 +255,23 @@ class BoardTest(TempState):
         board.key("down")
         self.assertEqual(board.ids[board.pos], "starter")
 
+    @mock.patch("bashou.which.installed", return_value=True)
+    def test_board_fits_a_small_terminal(self, _):
+        """At 80×24 the preview went below the grid and ran off the screen."""
+        from bashou.board import COLS, Board
+        board = Board()
+        for pos in range(len(board.ids)):
+            board.pos = pos
+            grid, preview, side = board.layout(80, 24)
+            self.assertFalse(side)
+            self.assertLessEqual(len(grid) + 1 + len(preview), 24)
+            shown = (len(grid) - 5) // 2                             # pet rows on screen
+            if pos:
+                self.assertTrue(board.top <= (pos - 1) // COLS < board.top + shown, pos)
+        grid, preview, side = board.layout(140, 40)                   # big terminal: everything, side by side
+        self.assertTrue(side)
+        self.assertEqual(len(grid), 4 + board.rows() * 2 + 1)
+
     def test_pick_the_starter_back(self):
         from bashou.board import Board
         with state.locked() as s:

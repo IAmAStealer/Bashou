@@ -14,6 +14,7 @@ from .i18n import _
 ESC = "\x1b"
 COLS = 4
 TILE_W, TILE_H = 16, 2
+PREVIEW_SHORT = 9                  # sprite, blank line, name and next stage
 DIM, BOLD, RESET, REV = f"{ESC}[2m", f"{ESC}[1m", f"{ESC}[0m", f"{ESC}[7m"
 ACCENT = f"{ESC}[38;2;150;190;230m"
 KEYS = {"\x1b[A": "up", "\x1b[B": "down", "\x1b[C": "right", "\x1b[D": "left",
@@ -49,6 +50,7 @@ class Board:
         self.pos = ids.index(self.s["active"]) if self.s["active"] in ids else 0
         self.breath = False
         self.message = ""
+        self.top = 0                      # first pet row shown when the grid scrolls
 
     def rows(self):
         return -(-(len(self.ids) - 1) // COLS)          # the last row may be partly empty
@@ -124,19 +126,38 @@ class Board:
             out.append(f"{mark} {_(a.name)}" if a.id in earned else f"{DIM}{mark} {_(a.name)}: {_(a.how)}{RESET}")
         return out
 
-    def draw(self):
-        cols = os.get_terminal_size().columns
-        grid = [f"{BOLD}Bashou{RESET} {DIM}· " + _("{n} pets · arrows/hjkl · Enter: pick · q: quit").format(
-            n=f"{len(creatures.owned(self.s))}/{len(self.ids) - 1}") + RESET, ""]
-        grid += self.tile(0)
-        for row in range(self.rows()):
+    def layout(self, cols, lines):
+        """(grid lines, preview lines, preview on the side?) fitting a cols × lines terminal.
+        When it's too short, the preview keeps its sprite and name, and the grid scrolls."""
+        head = [f"{BOLD}Bashou{RESET} {DIM}· " + _("{n} pets · arrows/hjkl · Enter: pick · q: quit").format(
+            n=f"{len(creatures.owned(self.s))}/{len(self.ids) - 1}") + RESET, ""] + self.tile(0)
+        preview = self.preview()
+        side = cols >= COLS * TILE_W + 40
+        fixed = len(head) + 1                                         # + the message line
+        if side:
+            room = lines - fixed
+        else:
+            if fixed + self.rows() * TILE_H + 1 + len(preview) > lines:
+                preview = preview[:PREVIEW_SHORT]
+            room = lines - fixed - 1 - len(preview)
+        shown = max(1, min(self.rows(), room // TILE_H))
+        if self.pos:                                                  # keep the selected row in view
+            row = (self.pos - 1) // COLS
+            self.top = min(max(self.top, row - shown + 1), row)
+        self.top = max(0, min(self.top, self.rows() - shown))
+        grid = list(head)
+        for row in range(self.top, self.top + shown):
             tiles = [self.tile(1 + row * COLS + c) for c in range(COLS)]
             for line in range(TILE_H):
                 grid.append("".join(t[line] if t[line] else " " * TILE_W for t in tiles))
-        grid.append(self.message)
-        preview = self.preview()
+        more = shown < self.rows()
+        grid.append(self.message or (DIM + _("↑↓ more pets") + RESET if more else ""))
+        return grid, preview, side
+
+    def draw(self):
+        size = os.get_terminal_size()
+        grid, preview, side = self.layout(size.columns, size.lines)
         out = [f"{ESC}[H{ESC}[2J"]
-        side = cols >= COLS * TILE_W + 40
         for i, line in enumerate(grid):
             out.append(f"{ESC}[{i + 1};1H{line}")
         for i, line in enumerate(preview):
