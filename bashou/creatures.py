@@ -211,16 +211,18 @@ def get(pet_id, size="small"):
 
 
 def main():
-    """python3 -m bashou.creatures check | show <pet>"""
+    """python3 -m bashou.creatures check | show <pet> [pet...]"""
     from . import render
     args = sys.argv[1:]
-    if args[:1] == ["show"] and len(args) == 2:
-        pet = load(ART / f"{args[1]}.json")
-        cells = [[True] * pet.width for _ in range(len(pet.base) // 2)]
-        frames = [("base", [], 1)] + [(p, [p], 1) for p in pet.poses] + [(f"stage {n}", [], n) for n in pet.stages]
-        for name, poses, stage in frames:
-            print(name)
-            print("\n".join(render.lines(pet, poses, cells, stage)).replace(render.SKIP, " ") + "\n")
+    if args[:1] == ["show"] and len(args) > 1:
+        for pet_id in args[1:]:
+            pet = load(ART / f"{pet_id}.json")
+            cells = [[True] * pet.width for _ in range(len(pet.base) // 2)]
+            frames = [("base", [], 1)] + [(p, [p], 1) for p in pet.poses] + [(f"stage {n}", [], n) for n in pet.stages]
+            print(f"\033[1m{pet.name}\033[0m ({pet_id})")
+            for name, poses, stage in frames:
+                print(f"  \033[2m{name}\033[0m")
+                print("\n".join(render.lines(pet, poses, cells, stage)).replace(render.SKIP, " ") + "\n")
         return 0
     if args == ["check"]:
         enemies = sorted((ART.parent / "enemies").glob("*.json"))
