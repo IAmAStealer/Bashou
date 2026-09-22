@@ -96,7 +96,7 @@ class ProgressTest(unittest.TestCase):
             self.s["pets"] = ["whale", "fox"]                             # unlocked before kubectl was removed
             self.assertEqual(creatures.owned(self.s), ["fox"])
             self.assertEqual(achievements.family("whale"), [])
-            for pet in ("pigeon", "cat"):
+            for pet in ("pigeon", "star"):
                 for seed in range(30):
                     import random
                     self.assertNotIn("kubectl", dialogue.hint(self.s, pet, random.Random(seed)) or "")
@@ -137,27 +137,32 @@ class StarterTest(unittest.TestCase):
 
     def test_level_up_and_evolution_notes(self):
         s = state.default()
-        s["starter"] = "cat"
+        s["starter"] = "star"
         s["achievements"] = [f"a{i}" for i in range(4)]
         notes = progress.check(s, [a for a in __import__("bashou").achievements.ALL[:1]])
-        self.assertIn("⬆ Kitten reached level 2!", notes)
+        self.assertIn("⬆ Stardust reached level 2!", notes)
         s["achievements"] = [f"a{i}" for i in range(14)]
         notes = progress.check(s, [a for a in __import__("bashou").achievements.ALL[:1]])
-        self.assertIn("✨ Kitten is evolving! Watch it: `bashou evolve`", notes)
-        self.assertEqual(progress.current(s)[:3], ("kitten", 2, "Kitten"))
-        s["achievements"] = [f"a{i}" for i in range(29)]                   # to Lion before watching
+        self.assertIn("✨ Stardust is evolving! Watch it: `bashou evolve`", notes)
+        self.assertEqual(progress.current(s)[:3], ("stardust", 2, "Stardust"))
+        s["achievements"] = [f"a{i}" for i in range(29)]                   # to Star before watching
         progress.check(s, [a for a in __import__("bashou").achievements.ALL[:1]])
-        self.assertEqual(s["evolving"], [{"who": "starter", "from": 1, "to": 3}])   # one animation, Kitten → Lion
+        self.assertEqual(s["evolving"], [{"who": "starter", "from": 1, "to": 3}])   # one animation, Stardust → Star
 
     def test_pick_an_earlier_look(self):
         s = state.default()
-        s["starter"], s["achievements"] = "cat", [f"a{i}" for i in range(30)]
-        self.assertEqual(progress.current(s)[:3], ("lion", 3, "Lion"))
+        s["starter"], s["achievements"] = "star", [f"a{i}" for i in range(30)]
+        self.assertEqual(progress.current(s)[:3], ("star", 3, "Star"))
         s["looks"]["starter"] = 1
-        self.assertEqual(progress.current(s)[:3], ("kitten", 3, "Kitten"))       # a kitten that can dance
+        self.assertEqual(progress.current(s)[:3], ("stardust", 3, "Stardust"))   # stardust that can dance
         s["looks"]["starter"] = 9
         self.assertEqual(progress.look(s), 3)                                   # never beyond what's reached
 
     def test_old_saves_keep_the_cat_as_starter(self):
         s = state.migrate({**state.default(), "pets": ["cat", "fox"], "active": "cat"})
-        self.assertEqual((s["starter"], s["pets"], s["active"]), ("cat", ["fox"], "starter"))
+        self.assertEqual((s["starter"], s["pets"], s["active"]), ("star", ["fox"], "starter"))
+
+    def test_the_cat_starter_becomes_the_star(self):
+        s = state.migrate({**state.default(), "starter": "cat", "achievements": ["a"] * 20})
+        self.assertEqual(s["starter"], "star")
+        self.assertEqual(progress.current(s)[:3], ("comet", 2, "Comet"))

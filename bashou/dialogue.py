@@ -13,7 +13,7 @@ from .analyze import analyze
 from .i18n import _
 
 VOICE = {
-    "cat": "Mrrp.", "sprout": "*rustle*", "pebble": "*clack*", "bat": "*flap*", "gremlin": "Hehehe.", "snail": "*slow bow*", "frog": "Ribbit.", "turtle": "…", "mushroom": "*puff*", "slime": "Blub.",
+    "star": "*twinkle*", "sprout": "*rustle*", "pebble": "*clack*", "bat": "*flap*", "gremlin": "Hehehe.", "snail": "*slow bow*", "frog": "Ribbit.", "turtle": "…", "mushroom": "*puff*", "slime": "Blub.",
     "sofa": "*creak*", "octopus": "Glub!", "dragon": "Rawr!", "fox": "*sniff*", "owl": "Hoo.",
     "mole": "*dig dig*", "snake": "Sss…", "ghost": "Boo~", "spider": "*tik-tik*", "ant": "*click*",
     "axolotl": "*wiggle*", "beaver": "*chomp*", "squirrel": "*chitter*", "pigeon": "Coo.", "hedgehog": "*huff*",
@@ -21,7 +21,7 @@ VOICE = {
 }
 
 TIPS = {
-    "cat": ["Ctrl+R searches your history as you type.", "`cd -` jumps back to the previous folder.",
+    "star": ["Ctrl+R searches your history as you type.", "`cd -` jumps back to the previous folder.",
             "`sudo !!` reruns the last command with sudo.", "Ctrl+A / Ctrl+E: start / end of the line.",
             "Ctrl+W deletes the word before the cursor."],
     "sprout": ["Start scripts with `#!/usr/bin/env bash`.", "`set -euo pipefail` stops a script on errors.",
@@ -139,7 +139,7 @@ TRAITS = {
 }
 
 PERSONAL = {
-    "cat": ["I'll just sit on your keyboard… no? Fine."], "sprout": ["Water me with commands."],
+    "star": ["I'm made of stardust. And a bit of bash."], "sprout": ["Water me with commands."],
     "pebble": ["I'm a rock. You can count on me."], "bat": ["I like the terminal after dark."],
     "gremlin": ["Run it! What could go wrong? …Just kidding. Read it first."],
     "snail": ["Slowly but surely, hero.", "Every checkpoint is a small victory."], "frog": ["Hop hop. What's next?"],

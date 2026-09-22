@@ -108,7 +108,7 @@ def look(state, who=None):
 def sprite_of(state, who, form):
     """(sprite id, name) of a pet or the starter at a form."""
     if who_of(state, who) == "starter":
-        sprite = STARTERS[state["starter"] or "cat"][form - 1]
+        sprite = STARTERS[state["starter"] or "star"][form - 1]
         return sprite, _(FORM_NAMES[sprite])
     return creatures.form(who, form), _(STAGES[who][form - 1])
 
@@ -118,7 +118,7 @@ def current(state, who=None):
     The sprite and name follow the form shown (`look`), the actions the latest form."""
     who = who_of(state, who)
     sprite, name = sprite_of(state, who, look(state, who))
-    return sprite, reached(state, who), name, (state["starter"] or "cat") if who == "starter" else who
+    return sprite, reached(state, who), name, (state["starter"] or "star") if who == "starter" else who
 
 
 def evolve(state, who, old, new):

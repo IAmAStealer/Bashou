@@ -1,0 +1,49 @@
+{
+ "name": "Star",
+ "palette": {
+  "a": "#d99a00",
+  "o": "#ffd84a",
+  "y": "#fff0a0",
+  "w": "#ffffff",
+  "m": "#191919",
+  "p": "#ffa070"
+ },
+ "base": [
+  "........a........",
+  ".......aya.......",
+  "......aoyoa......",
+  "aaaaaaaoooaaaaaaa",
+  ".aoyoooooooooooa.",
+  "..aoomooooomooa..",
+  "...aopoomoopoa...",
+  "....aoooooooa....",
+  "...aooooaooooa...",
+  "..aoooa...aoooa..",
+  ".aooa.......aooa.",
+  ".aaa.........aaa."
+ ],
+ "poses": {
+  "inhale": {
+   "1": "--------w--------",
+   "2": "--------w--------",
+   "4": "---wy------------"
+  },
+  "closed": {
+   "5": "-----a-----a-----"
+  },
+  "left": {
+   "5": "----mo----mo-----"
+  },
+  "right": {
+   "5": "-----om----om----"
+  },
+  "fidget": {
+   "2": "--------------aa-",
+   "3": "---------------.."
+  }
+ },
+ "particles": [
+  0,
+  12
+ ]
+}

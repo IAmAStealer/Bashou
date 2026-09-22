@@ -20,7 +20,7 @@ def default():
         "days": [],         # ISO dates with at least one command
         "today": {"date": "", "count": 0},
         "language": None,   # "en", "fr"…, asked once at first launch (`bashou language`)
-        "starter": None,    # "cat", "sprout" or "pebble", chosen once (`bashou start`)
+        "starter": None,    # "star", "sprout" or "pebble", chosen once (`bashou start`)
         "pets": [],         # collection pets unlocked
         "active": "starter",
         "achievements": [],
@@ -82,9 +82,11 @@ def load():
 
 
 def migrate(state):
-    """Saves from before starters had the cat in the collection: it becomes the starter."""
+    """Old saves: the cat in the collection became the starter, and the cat starter became the star."""
     if state["starter"] is None and "cat" in state["pets"]:
-        state["starter"] = "cat"
+        state["starter"] = "star"
+    if state["starter"] == "cat":
+        state["starter"] = "star"
     if "cat" in state["pets"]:
         state["pets"].remove("cat")
     if state["active"] == "cat":

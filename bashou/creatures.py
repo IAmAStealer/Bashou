@@ -152,14 +152,14 @@ def form(pet_id, stage):
 
 # Starters: chosen once, they level up with every 5 achievements and change shape at levels 4 and 7.
 STARTERS = {
-    "cat": ("kitten", "cat", "lion"),
+    "star": ("stardust", "comet", "star"),
     "sprout": ("seedling", "sprout", "tree"),
     "pebble": ("pebble", "golem", "crystal"),
 }
-FORM_NAMES = {"kitten": "Kitten", "cat": "Cat", "lion": "Lion", "seedling": "Seedling", "sprout": "Sprout",
+FORM_NAMES = {"stardust": "Stardust", "comet": "Comet", "star": "Star", "seedling": "Seedling", "sprout": "Sprout",
               "tree": "Tree spirit", "pebble": "Pebble", "golem": "Rock golem", "crystal": "Crystal golem"}
 STARTER_BLURBS = {
-    "cat": "Curious and cuddly. Knows every shortcut of your shell.",
+    "star": "Bright and curious. Grows from a speck of dust into a star.",
     "sprout": "Calm and patient. Grows scripts from tiny seeds.",
     "pebble": "Solid and loyal. Knows the filesystem rock by rock.",
 }
@@ -168,7 +168,7 @@ PETS = {path.stem: load(path) for path in sorted(ART.glob("*.json"))}
 
 
 def get(pet_id):
-    return PETS.get(pet_id, PETS["kitten"])
+    return PETS.get(pet_id, PETS["stardust"])
 
 
 def main():

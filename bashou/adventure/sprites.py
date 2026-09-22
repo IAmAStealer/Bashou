@@ -15,21 +15,20 @@ def with_pixels(rows, changes):
     return ["".join(r) for r in rows]
 
 
-TAIL = [(7, 8, "a"), (8, 8, "a"), (9, 8, "a"), (10, 8, "a")]
 
 BACK = {
-    "kitten": with_pixels(mirrored([
-        ".........", ".........", ".........", "....a....", "...aoa...", "...aoaaaa",
-        "..aoooooo", "..aoooooo", "...aaoooo", "...aooooo", "..aoooooo", "...aaa...",
-    ]), [(6, 8, "a"), (8, 8, "a"), (9, 8, "a"), (10, 8, "a")]),
-    "cat": with_pixels(mirrored([
-        "...a.....", "..apa....", "..aooaaaa", ".aooooooo", ".aooooooo", "aoooaoooo",
-        "aoooooooo", ".aaoooooo", ".aoooaooo", "aoooooooo", "aoooooooo", ".aaaa....",
-    ]), TAIL + [(6, 8, "l")]),
-    "lion": with_pixels(mirrored([
-        "....NNNNN", "..NNMMMMM", ".NMMMMMMM", "NMMMMMMMM", "NMMMMMMMM", "NMMMMMMMM",
-        ".NMMMMMMM", "..NNMMMMM", "...aooooo", "..aoooooo", ".aooooooo", ".lla.....",
-    ]), [(8, 8, "a"), (9, 8, "a"), (10, 8, "a"), (11, 8, "M")]),
+    "stardust": mirrored([
+        ".........", ".........", ".........", ".........", ".......aa", ".....aaoo",
+        "....aoooo", "...aooooo", "...aooooo", "....aoooo", ".....aaoo", ".......aa",
+    ]),
+    "comet": mirrored([
+        "...u.....", "...ut..u.", "....tt.t.", ".....ttwt", "...aaawww", "..aoooooo",
+        ".aooooooo", ".aooooooo", ".aooooooo", "..aoooooo", "...aaaaaa", ".........",
+    ]),
+    "star": mirrored([
+        "........a", ".......ay", "......aoy", "aaaaaaaoo", ".aoyooooo", "..aoooooo",
+        "...aooooo", "....aoooo", "...aooooa", "..aoooa..", ".aooa....", ".aaa.....",
+    ]),
     "seedling": mirrored([
         ".........", ".........", ".........", "...LL....", "..LlLL...", "...LLLL.g",
         "........g", ".....aaaa", "....aoooo", "...aooooo", "...aooooo", "....aaaaa",
@@ -59,7 +58,7 @@ BACK = {
 
 def hero(form):
     """(frames, palette): the back view, then a step with each side (feet lifted, body up a pixel)."""
-    base = BACK.get(form, BACK["kitten"])
+    base = BACK.get(form, BACK["stardust"])
     palette = creatures.get(form).palette
     low = max(i for i, row in enumerate(base) if row.strip("."))
     has_feet = "." in base[low].strip(".")

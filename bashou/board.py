@@ -87,7 +87,7 @@ class Board:
             per = progress.ACHIEVEMENTS_PER_LEVEL
             out.append(DIM + _("{n} achievement(s) to level {level}").format(
                 n=per - len(s["achievements"]) % per, level=lvl + 1) + RESET)
-        forms = STARTERS[s["starter"] or "cat"]
+        forms = STARTERS[s["starter"] or "star"]
         out.append(DIM + " → ".join(_(FORM_NAMES[f]) for f in forms) + "  "
                    + _("(shape changes at levels 4 and 7)") + RESET)
         return out

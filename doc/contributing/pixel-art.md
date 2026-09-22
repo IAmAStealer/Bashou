@@ -75,7 +75,7 @@ art/fox/32/closed.png
 ```
 
 **Pets:** `bat tadpole frog turtle mushroom slime sofa octopus dragon fox owl mole snake ghost spider ant
-axolotl gremlin beaver squirrel pigeon hedgehog bee whale meerkat`, and the starters' forms: `kitten cat lion seedling sprout tree pebble golem crystal`.
+axolotl gremlin beaver squirrel pigeon hedgehog bee whale meerkat`, and the starters' forms: `stardust comet star seedling sprout tree pebble golem crystal`.
 For a brand new pet, open an issue first so we can agree on how it's unlocked.
 
 **Poses:** in PNG, every pose is a full image of the same size. Only `base` is required, but a pet feels

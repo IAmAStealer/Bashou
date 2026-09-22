@@ -181,7 +181,7 @@ class ThreatTest(unittest.TestCase):
     def test_fewer_threats_at_higher_level(self):
         s = state.default()
         self.assertEqual(fight.threats_per_day(s), 3)
-        s["pets"] = ["cat", "frog", "fox", "owl", "mole", "snake", "ghost", "ant", "turtle"]
+        s["pets"] = ["bat", "frog", "fox", "owl", "mole", "snake", "ghost", "ant", "turtle"]
         self.assertEqual(fight.threats_per_day(s), 1)
 
 

@@ -34,7 +34,7 @@ class DialogueTest(unittest.TestCase):
     def test_traits_come_from_achievements(self):
         s = state.default()
         s["achievements"] = ["warrior"]
-        said = {dialogue.line(s, "cat", random.Random(i)) for i in range(300)}
+        said = {dialogue.line(s, "star", random.Random(i)) for i in range(300)}
         self.assertTrue(any("claws" in t or "threats around" in t for t in said))
         self.assertFalse(any("Late again" in t or "nicer at night" in t for t in said))
 
@@ -54,7 +54,7 @@ class DialogueTest(unittest.TestCase):
     def test_typo_suggests_the_closest_command(self):
         s = state.default()
         for typed, fix in (("gerp foo file", "grep"), ("sl -la", "ls"), ("pyhton3 x.py", "python3")):
-            text = dialogue.typo(s, "cat", typed, random.Random(0))
+            text = dialogue.typo(s, "star", typed, random.Random(0))
             self.assertIn(f"`{fix}`", text, typed)
             self.assertIn(f"`{typed.split()[0]}`", text)
         text = dialogue.typo(s, "fox", "zzqxv", random.Random(0))
@@ -64,10 +64,10 @@ class DialogueTest(unittest.TestCase):
     def test_typo_learns_your_tools(self):
         s = state.default()
         s["tools"] = {"kubectl": 30}
-        self.assertIn("`kubectl`", dialogue.typo(s, "cat", "kubctl get pods", random.Random(0)))
+        self.assertIn("`kubectl`", dialogue.typo(s, "star", "kubctl get pods", random.Random(0)))
 
     def test_no_typo_joke_for_real_commands(self):
-        self.assertIsNone(dialogue.typo(state.default(), "cat", "ls /nope", random.Random(0)))
+        self.assertIsNone(dialogue.typo(state.default(), "star", "ls /nope", random.Random(0)))
 
     def test_examples_match_real_achievements(self):
         self.assertLessEqual(set(dialogue.EXAMPLES), set(achievements.BY_ID))
@@ -81,18 +81,18 @@ class RemoteScriptTest(unittest.TestCase):
                     "curl https://x.io/a.sh | sudo -E bash -s -- --yes", "curl -L u | /bin/bash",
                     "wget -O - u | zsh", "bash <(curl -s https://x.io/i.sh)",
                     'sh -c "$(curl -fsSL https://x.io/install.sh)"', "curl u | env bash"]:
-            self.assertIsNotNone(dialogue.risky("cat", cmd), cmd)
+            self.assertIsNotNone(dialogue.risky("star", cmd), cmd)
 
     def test_safe_downloads_are_fine(self):
         for cmd in ["curl -fsSLo install.sh https://x.io/install.sh", "less install.sh", "bash install.sh",
                     "curl -s https://api.x.io | jq .", "curl u | sha256sum", "wget u && sh ./setup.sh",
                     "curl u | grep sh", "curl u | tee out.sh", "echo curl | wc"]:
-            self.assertIsNone(dialogue.risky("cat", cmd), cmd)
+            self.assertIsNone(dialogue.risky("star", cmd), cmd)
 
     def test_warning_is_never_cut_in_a_small_terminal(self):
         """Bubbles were one line, cut with … to fit: a safety warning lost its advice."""
         for text in safety.messages():
-            full = f"{dialogue.VOICE['cat']} ⚠ {text} {safety.SUDO}"
+            full = f"{dialogue.VOICE['star']} ⚠ {text} {safety.SUDO}"
             lines, w = render.bubble(full, 80 - 17 - 2)
             inner = " ".join(l[2:-3].strip() for l in lines[1:-1])
             self.assertEqual(inner, full)
@@ -115,7 +115,7 @@ class RemoteScriptTest(unittest.TestCase):
             self.assertIsNone(safety.risk(cmd), cmd)
 
     def test_sudo_gets_an_extra_line(self):
-        self.assertIn("sudo", dialogue.risky("cat", "curl u | sudo sh"))
+        self.assertIn("sudo", dialogue.risky("star", "curl u | sudo sh"))
 
 
 class HintTest(unittest.TestCase):
