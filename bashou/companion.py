@@ -24,8 +24,8 @@ SOURCE = Path(__file__).resolve().parent
 
 
 def code_version():
-    """Newest mtime of our source files: it changes on `git pull` or an edit."""
-    return max(p.stat().st_mtime for p in SOURCE.rglob("*.py"))
+    """Newest mtime of our code and data (sprites, translations): it changes on an update or an edit."""
+    return max(p.stat().st_mtime for pattern in ("*.py", "*.json") for p in SOURCE.rglob(pattern))
 
 
 def now_ms():

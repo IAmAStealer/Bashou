@@ -177,6 +177,26 @@ class CodeUpdateTest(TempState):
             companion.SOURCE = old
 
 
+    def test_pet_notices_new_sprites_and_translations(self):
+        """An update that only changed JSON (sprites, locales) left running pets on the old ones."""
+        from bashou import companion
+        src = Path(self.tmp.name) / "src"
+        src.mkdir()
+        (src / "a.py").write_text("")
+        (src / "pet.json").write_text("{}")
+        past = time.time() - 100
+        for f in ("a.py", "pet.json"):
+            os.utime(src / f, (past, past))
+        old = companion.SOURCE
+        companion.SOURCE = src
+        try:
+            pet = companion.Companion(os.getpid())
+            os.utime(src / "pet.json", (past + 50, past + 50))
+            self.assertTrue(pet.code_changed())
+        finally:
+            companion.SOURCE = old
+
+
 class ResumeTest(TempState):
     def test_restart_keeps_the_bubble(self):
         """Every code change restarted the pet and wiped the bubble after a few seconds."""

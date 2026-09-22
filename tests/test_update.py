@@ -42,6 +42,16 @@ class UpdateTest(unittest.TestCase):
             git(self.dev, "tag", tag)
             git(self.dev, "push", "-q", "origin", tag)
 
+    def test_update_shows_the_changelog(self):
+        (self.dev / "CHANGELOG.md").write_text("# Changelog\n\n## v0.3.0 — 2026-10-01\n\n- Pets can swim\n")
+        git(self.dev, "add", "CHANGELOG.md")
+        self.publish("Internal refactor", tag="v0.3.0")
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            self.assertEqual(update.run(), 0)
+        self.assertIn("- Pets can swim", out.getvalue())
+        self.assertNotIn("Internal refactor", out.getvalue())
+
     def test_only_releases_are_offered(self):
         """A commit on main isn't a release: CI hasn't vouched for it."""
         self.publish("Work in progress")

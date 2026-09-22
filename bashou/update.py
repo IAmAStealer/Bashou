@@ -8,7 +8,7 @@ import subprocess
 import time
 from pathlib import Path
 
-from . import state
+from . import changelog, state
 from .i18n import _
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -88,8 +88,9 @@ def run():
         print("  " + _("Update failed:") + " " + out.stderr.strip())
         return 1
     print("  " + _("Updated to {version}! What's new:").format(version=tag))
-    changes = git("log", "--format=%s", "--no-merges", f"{before}..HEAD").stdout.splitlines()
-    for line in changes[:15]:
+    notes = changelog.notes(ROOT, tag)          # the release notes; commit subjects for old releases
+    changes = notes.splitlines() if notes else git("log", "--format=%s", "--no-merges", f"{before}..HEAD").stdout.splitlines()[:15]
+    for line in changes:
         print("    " + line)
     print("  " + _("Your pets switch to the new version by themselves."))
     return 0
