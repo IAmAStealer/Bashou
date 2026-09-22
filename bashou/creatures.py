@@ -150,6 +150,10 @@ FORMS = {
     "snake": ("snakelet", "snake", "basilisk"),
     "ghost": ("spirit", "wisp", "ghost"),
     "spider": ("spiderling", "spider", "tarantula"),
+    "ant": ("ant", "soldier_ant", "queen_ant"),
+    "axolotl": ("larva", "axolotl", "xolotl"),
+    "gremlin": ("gremlin", "goblin", "orc"),
+    "snail": ("slug", "snail", "gary"),
 }
 
 

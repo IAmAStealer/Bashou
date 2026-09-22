@@ -1,0 +1,49 @@
+{
+ "name": "Orc",
+ "palette": {
+  "o": "#5a7a4a",
+  "O": "#3e5a34",
+  "T": "#f0e8d0",
+  "r": "#e04030",
+  "m": "#191919",
+  "A": "#7a7a88",
+  "a": "#4a4a58",
+  "b": "#5a3a22",
+  "p": "#b03030"
+ },
+ "base": [
+  "....OOOOOOOOO....",
+  "...OoooooooooO...",
+  ".O.OOOoooooOOO.O.",
+  ".OOoorooooorooOO.",
+  "...ooooOOOoooo...",
+  "...oTooooooooTo..",
+  "...OTmmmmmmmTO...",
+  "....OoooooooO....",
+  ".AAaAAAAAAAAAaAA.",
+  ".oAAAAAbbbAAAAAo.",
+  ".o.bbbbbbbbbbb.o.",
+  "...OOO.....OOO..."
+ ],
+ "poses": {
+  "inhale": {
+   "8": "A---------------A"
+  },
+  "closed": {
+   "3": "-----O-----O-----"
+  },
+  "left": {
+   "3": "----ro----ro-----"
+  },
+  "right": {
+   "3": "-----or----or----"
+  },
+  "fidget": {
+   "6": "-------ppp-------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

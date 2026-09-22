@@ -1,0 +1,50 @@
+{
+ "name": "Queen ant",
+ "palette": {
+  "a": "#5a1e1a",
+  "o": "#a83a30",
+  "m": "#191919",
+  "q": "#401410",
+  "y": "#f0c030",
+  "w": "#c8d4e4",
+  "W": "#6a7688"
+ },
+ "base": [
+  "...y.y.y...w.....",
+  "...yyyyy..wWw....",
+  "..aaaaaaa.wWWw...",
+  ".aoooooooawWWWw..",
+  ".aomoooooaaaaaaa.",
+  ".aoooooqoaqqqqqqa",
+  "..aaaaaaaoooooooa",
+  "...a.a..aqqqqqqqa",
+  "..a..a..aoooooooa",
+  ".a..a...aqqqqqqqa",
+  "........aaooooooa",
+  "..........aaaaaa."
+ ],
+ "poses": {
+  "inhale": {
+   "9": "--------a--------",
+   "10": "-------a---------"
+  },
+  "closed": {
+   "4": "---q-------------"
+  },
+  "left": {
+   "4": "--mo-------------"
+  },
+  "right": {
+   "4": "---om------------"
+  },
+  "fidget": {
+   "0": "-----------.-----",
+   "1": "----------.w.----",
+   "2": "------------W.---"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

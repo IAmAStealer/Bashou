@@ -1,0 +1,55 @@
+{
+ "name": "Xolotl",
+ "palette": {
+  "a": "#dc6e96",
+  "o": "#ffafc8",
+  "c": "#ffe1e6",
+  "g": "#c84682",
+  "m": "#191919",
+  "p": "#ff7896",
+  "q": "#aa3c64",
+  "l": "#ffafc8",
+  "y": "#f0c030",
+  "f": "#3aa060",
+  "t": "#40c0c0"
+ },
+ "base": [
+  "..f.y.y.y.y.f....",
+  ".fffyyyyyyyfff...",
+  "ff.aotototota.ff.",
+  "..aoooooooooa....",
+  "ff.aomooomoa.ff..",
+  "..aoomooomooa....",
+  "f..aopoqopoa..f..",
+  "...aoyoyoyoa....a",
+  "...accccccca...ao",
+  "..aocccccccoa.ao.",
+  "..lao.ooo.oal..oa",
+  "...aa.....aa....."
+ ],
+ "poses": {
+  "inhale": {
+   "8": "--ao-------oa----"
+  },
+  "closed": {
+   "4": "-----o---o-------",
+   "5": "----qq--qq-------"
+  },
+  "left": {
+   "4": "----mo--mo-------",
+   "5": "----mo--mo-------"
+  },
+  "right": {
+   "4": "-----om--om------",
+   "5": "-----om--om------"
+  },
+  "fidget": {
+   "0": "--.---------.----",
+   "1": "f-------------f--"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

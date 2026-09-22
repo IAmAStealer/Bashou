@@ -1,0 +1,51 @@
+{
+ "name": "Gary",
+ "palette": {
+  "a": "#a03050",
+  "S": "#f080a0",
+  "s": "#c04070",
+  "b": "#8ab0d0",
+  "B": "#6a90b0",
+  "w": "#ffffff",
+  "m": "#191919",
+  "p": "#ffa0aa"
+ },
+ "base": [
+  "...........ww.ww.",
+  "...........wm.mw.",
+  "............b..b.",
+  "....aaaaa...b..b.",
+  "..aaSSSSSaa.bbbb.",
+  ".aSSsaaasSa.bbbb.",
+  ".aSsaSSasSa.bbpb.",
+  ".aSsaaSsSSa.bbbb.",
+  ".aSSsssSSa..bbb..",
+  "..aaSSSaa.bbbbb..",
+  "BBbbbbbbbbbbbbb..",
+  ".BBbbbbbbbbbbb..."
+ ],
+ "poses": {
+  "inhale": {
+   "2": "-----aaa---------",
+   "3": "-----SSS---------"
+  },
+  "closed": {
+   "0": "-----------BB-BB-",
+   "1": "------------w-w--"
+  },
+  "left": {
+   "1": "-----------mw-mw-"
+  },
+  "right": {
+   "1": "-----------wm-wm-"
+  },
+  "fidget": {
+   "6": "--------------p--",
+   "7": "-------------pp--"
+  }
+ },
+ "particles": [
+  0,
+  8
+ ]
+}
