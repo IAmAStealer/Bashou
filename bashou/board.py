@@ -8,7 +8,7 @@ import tty
 
 from . import achievements, creatures, progress, render, state
 from .behavior import ACTIONS
-from .creatures import FORM_NAMES, ROSTER, STAGES, STARTERS
+from .creatures import FORM_NAMES, STAGES, STARTERS, roster
 from .i18n import _
 
 ESC = "\x1b"
@@ -32,7 +32,7 @@ def hint(s, pet):
             return _("{count} commands").format(count=f"{s['commands']:,}/{count:,}")
     if pet in progress.TOOL_PETS:
         tools, needed = progress.TOOL_PETS[pet]
-        return f"{progress.tool_uses(s, tools)}/{needed} × {min(tools)}"
+        return f"{progress.tool_uses(s, tools)}/{needed} × {progress.tool_label(pet)}"
     return ""
 
 
@@ -44,7 +44,7 @@ def silhouette(pet):
 class Board:
     def __init__(self):
         self.s = state.load()
-        ids = ["starter"] + [pet for pet, rule in ROSTER]   # starter on its own row, then the 4×4 grid
+        ids = ["starter"] + [pet for pet, rule in roster()]   # starter on its own row, then the 4×4 grid
         self.ids = ids
         self.pos = ids.index(self.s["active"]) if self.s["active"] in ids else 0
         self.breath = False
@@ -127,7 +127,7 @@ class Board:
     def draw(self):
         cols = os.get_terminal_size().columns
         grid = [f"{BOLD}Bashou{RESET} {DIM}· " + _("{n} pets · arrows/hjkl · Enter: pick · q: quit").format(
-            n=f"{len(self.s['pets'])}/{len(self.ids)}") + RESET, ""]
+            n=f"{len(creatures.owned(self.s))}/{len(self.ids) - 1}") + RESET, ""]
         grid += self.tile(0)
         for row in range(self.rows()):
             tiles = [self.tile(1 + row * COLS + c) for c in range(COLS)]

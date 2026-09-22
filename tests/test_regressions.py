@@ -13,6 +13,7 @@ import random
 import tempfile
 import time
 import unittest
+from unittest import mock
 from pathlib import Path
 
 from bashou import challenges, cli, fight, state
@@ -237,7 +238,8 @@ class ConfigTest(TempState):
 
 
 class BoardTest(TempState):
-    def test_starter_row_navigation(self):
+    @mock.patch("bashou.which.installed", return_value=True)       # every pet, so the grid is fixed
+    def test_starter_row_navigation(self, _):
         from bashou.board import Board
         board = Board()
         self.assertEqual(board.ids[board.pos], "starter")    # active pet is selected first
@@ -246,10 +248,10 @@ class BoardTest(TempState):
         board.key("up")
         self.assertEqual(board.ids[board.pos], "starter")
         board.key("up")                                      # wraps to the last row, first column
-        self.assertEqual(board.ids[board.pos], "gremlin")
-        board.pos = board.ids.index("axolotl")
+        self.assertEqual(board.ids[board.pos], "meerkat")
+        board.pos = board.ids.index("whale")
         board.key("down")                                    # nothing below: the last row's last pet
-        self.assertEqual(board.ids[board.pos], "snail")
+        self.assertEqual(board.ids[board.pos], "meerkat")
         board.key("down")
         self.assertEqual(board.ids[board.pos], "starter")
 

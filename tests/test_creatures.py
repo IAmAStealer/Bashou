@@ -28,7 +28,7 @@ class CreaturesTest(unittest.TestCase):
                 self.assertIn(pose, pet.poses, f"{pet.id} has no {pose}")
 
     def test_roster_has_stage_names(self):
-        self.assertEqual(len(ROSTER), 18)
+        self.assertEqual(len(ROSTER), 25)
         self.assertEqual({p for p, _ in ROSTER}, set(STAGES))
 
 

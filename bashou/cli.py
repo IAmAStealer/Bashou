@@ -3,7 +3,7 @@
 import argparse
 
 from . import achievements, progress, state
-from .creatures import NAMES, ROSTER, STAGES
+from .creatures import NAMES, STAGES, owned, roster
 from .i18n import _
 
 BOLD, DIM, RESET = "\033[1m", "\033[2m", "\033[0m"
@@ -30,7 +30,7 @@ def starter_line(s):
 def level():
     s = state.load()
     rows = [(_("Starter"), starter_line(s)), (_("Commands"), f"{s['commands']:,}"),
-            (_("Pets"), f"{len(s['pets'])}/{len(ROSTER)}")]
+            (_("Pets"), f"{len(owned(s))}/{len(roster())}")]
     nxt = progress.next_milestone(s)
     if nxt:
         count, pet = nxt
@@ -53,7 +53,7 @@ def hint(s, pet):
             return _("{count} commands").format(count=f"{count:,}")
     if pet in progress.TOOL_PETS:
         tools, needed = progress.TOOL_PETS[pet]
-        return f"{progress.tool_uses(s, tools)}/{needed} × {min(tools)}"
+        return f"{progress.tool_uses(s, tools)}/{needed} × {progress.tool_label(pet)}"
     return ""
 
 
@@ -65,7 +65,7 @@ def pets():
     s = state.load()
     active = " ← " + _("active") if s["active"] == "starter" else ""
     print(f"  {BOLD}{_('Starter')}{RESET} {starter_line(s)}{DIM}{active}{RESET}\n")
-    for pet, rule in ROSTER:
+    for pet, rule in roster():
         if pet in s["pets"]:
             active = " ← " + _("active") if pet == s["active"] else ""
             name = _(STAGES[pet][progress.stage(s, pet) - 1])
@@ -78,10 +78,10 @@ def achievements_list():
     s = state.load()
     earned = set(s["achievements"])
     print("  " + _("{n} achievements · 2 evolve a pet, all of its family make it legendary").format(
-        n=f"{len(earned)}/{len(achievements.ALL)}"))
+        n=f"{len(achievements.earned(s))}/{len(achievements.usable())}"))
     print(f"  {DIM}" + _("Every {n} achievements also level up your starter.").format(
         n=progress.ACHIEVEMENTS_PER_LEVEL) + f"{RESET}\n")
-    for pet, rule in ROSTER:
+    for pet, rule in roster():
         fam = achievements.family(pet)
         got = sum(a.id in earned for a in fam)
         title = _(STAGES[pet][progress.stage(s, pet) - 1]) if pet in s["pets"] else "???"
@@ -119,8 +119,8 @@ def stats():
           + _("{n} today").format(n=s["today"]["count"]) + f"){RESET}")
     print(f"  {BOLD}{labels[1]:<{w}}{RESET}{len(days)}  {DIM}("
           + _("streak: {n} day(s)").format(n=achievements.streak(days)) + f"){RESET}")
-    print(f"  {BOLD}{labels[2]:<{w}}{RESET}{len(s['pets'])}/{len(ROSTER)}   "
-          f"{BOLD}{_('Achievements')}{RESET} {len(s['achievements'])}/{len(achievements.ALL)}   "
+    print(f"  {BOLD}{labels[2]:<{w}}{RESET}{len(owned(s))}/{len(roster())}   "
+          f"{BOLD}{_('Achievements')}{RESET} {len(achievements.earned(s))}/{len(achievements.usable())}   "
           f"{BOLD}{_('Fights won')}{RESET} {s['fights_won']}   "
           f"{BOLD}{_('Security')}{RESET} {len(s['security'])}")
     adv = s.get("adventure")
@@ -216,8 +216,8 @@ def dev(args):
     backup()
     with state.locked() as s:
         if args.action == "unlock-all":
-            s["pets"] = [pet for pet, _ in ROSTER]
-            print(f"  All {len(ROSTER)} pets unlocked.")
+            s["pets"] = [pet for pet, _ in roster()]
+            print(f"  All {len(roster())} pets unlocked.")
         elif args.action == "stage":
             fam = [a.id for a in achievements.family(args.pet)]
             keep = fam[:{1: 0, 2: 2, 3: len(fam)}[args.stage]]
@@ -226,7 +226,7 @@ def dev(args):
                 s["pets"].append(args.pet)
             print(f"  {STAGES[args.pet][args.stage - 1]} (stage {args.stage}).")
         elif args.action == "stage-all":
-            for pet, rule in ROSTER:
+            for pet, rule in roster():
                 fam = [a.id for a in achievements.family(pet)]
                 keep = fam[:{1: 0, 2: 2, 3: len(fam)}[args.stage]]
                 s["achievements"] = [a for a in s["achievements"] if a not in fam] + keep

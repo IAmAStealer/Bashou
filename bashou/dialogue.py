@@ -16,7 +16,8 @@ VOICE = {
     "cat": "Mrrp.", "sprout": "*rustle*", "pebble": "*clack*", "bat": "*flap*", "gremlin": "Hehehe.", "snail": "*slow bow*", "frog": "Ribbit.", "turtle": "…", "mushroom": "*puff*", "slime": "Blub.",
     "sofa": "*creak*", "octopus": "Glub!", "dragon": "Rawr!", "fox": "*sniff*", "owl": "Hoo.",
     "mole": "*dig dig*", "snake": "Sss…", "ghost": "Boo~", "spider": "*tik-tik*", "ant": "*click*",
-    "axolotl": "*wiggle*",
+    "axolotl": "*wiggle*", "beaver": "*chomp*", "squirrel": "*chitter*", "pigeon": "Coo.", "hedgehog": "*huff*",
+    "bee": "Bzz.", "whale": "*whoosh*", "meerkat": "*peek*",
 }
 
 TIPS = {
@@ -70,6 +71,20 @@ TIPS = {
             "xargs -P4 runs 4 jobs in parallel.", "ls *.txt | xargs -I{} cp {} {}.bak"],
     "axolotl": ["`jq .` pretty-prints JSON.", "jq -r '.[].name' : raw names, no quotes.",
                 "jq 'map(select(.age > 30))' filters a list.", "curl -s url | jq '.items[0]'"],
+    "beaver": ["`git add -p` picks changes piece by piece.", "`git commit --amend` fixes the last commit.",
+               "`git diff --staged` shows what you're about to commit.", "`git restore file` drops your changes."],
+    "squirrel": ["tar -czf backup.tgz dir/ packs a folder.", "tar -tf a.tgz lists it without unpacking.",
+                 "tar -xf a.tgz -C /tmp unpacks somewhere else.", "`gzip -k file` keeps the original."],
+    "pigeon": ["curl -I url : just the headers.", "curl -sS url : quiet, but still shows errors.",
+               "rsync -av src/ dst/ : copies only what changed.", "ssh -L 8080:localhost:80 host : a tunnel."],
+    "hedgehog": ["chmod 644 : rw for you, read for others.", "chmod 755 : scripts and folders everyone can enter.",
+                 "`ls -l` : the 10 letters are the rights.", "`umask` : the rights new files get."],
+    "bee": ["systemctl status nginx : is it running?", "journalctl -u nginx -f : its logs, live.",
+            "systemctl list-units --failed : what broke.", "Edited a unit file? `systemctl daemon-reload`."],
+    "whale": ["kubectl get pods -A : every pod everywhere.", "kubectl describe pod x : the Events explain why.",
+              "kubectl logs -f pod : logs, live.", "kubectl config get-contexts : which cluster am I on?"],
+    "meerkat": ["df -h : how full are the disks?", "du -sh * | sort -h : biggest last.",
+                "free -h : memory at a glance.", "watch -n 2 cmd : rerun it every 2 s."],
 }
 
 # Achievement -> an example that earns it.
@@ -96,6 +111,18 @@ EXAMPLES = {
     "null": "find . -print0 | xargs -0 ls", "raw": "jq -r '.name' f.json",
     "selector": "jq '.[] | select(.ok)' f.json", "mapper": "jq 'map(.id)' f.json",
     "warrior": "bashou fight",
+    "brancher": "git switch -c try-it", "stasher": "git stash", "grapher": "git log --oneline --graph",
+    "bisector": "git bisect start", "packer": "tar -czf notes.tgz notes", "peeker": "tar -tf notes.tgz",
+    "unpacker": "tar -xf notes.tgz -C /tmp", "squeezer": "xz -k big.log",
+    "headers": "curl -I https://example.com", "poster": "curl -d 'a=1' https://httpbin.org/post",
+    "tunneler": "ssh -L 8080:localhost:80 server", "mirror": "rsync -av notes/ backup/",
+    "resolver": "dig +short example.com", "tracer": "dig +trace example.com",
+    "octal": "chmod 644 notes.txt", "symbolic": "chmod g+w notes.txt", "owner": "sudo chown $USER:$USER f",
+    "mode_reader": "stat -c %a notes.txt", "status": "systemctl status cron", "logbook": "journalctl -u cron",
+    "enabler": "sudo systemctl enable --now cron", "reload": "sudo systemctl daemon-reload",
+    "pods": "kubectl get pods -A", "describer": "kubectl describe pod <name>", "tailer": "kubectl logs -f <pod>",
+    "diver": "kubectl exec -it <pod> -- sh", "disk": "df -h", "sizer": "du -sh *", "memory": "free -h",
+    "watcher": "watch -n 2 df -h",
 }
 
 # Trait (an achievement you earned) -> lines any pet may say.
@@ -123,6 +150,10 @@ PERSONAL = {
     "mole": ["I dig through text all day."], "snake": ["I rewrite what I touch."],
     "ghost": ["I see every process…"], "spider": ["I hear every syscall on my web."],
     "ant": ["Many small jobs make one big job."], "axolotl": ["JSON is my favourite pond."],
+    "beaver": ["Commit often. A dam is built stick by stick."], "squirrel": ["I pack everything for winter."],
+    "pigeon": ["I always find my way home. Even through a tunnel."], "hedgehog": ["Not everyone gets to touch my files."],
+    "bee": ["Every service in the hive has its job."], "whale": ["So many containers on my back."],
+    "meerkat": ["I keep watch. Disks, memory, all of it."],
 }
 
 
@@ -130,7 +161,7 @@ def hint(state, pet, rng):
     """Next achievement of this pet's family, or any one left (the easiest first), with an example."""
     earned = set(state["achievements"])
     todo = [a for a in achievements.family(pet) if a.id not in earned and not a.state]
-    todo = todo or [a for a in achievements.ALL if a.id not in earned and not a.state]
+    todo = todo or [a for a in achievements.usable() if a.id not in earned and not a.state]
     if not todo:
         return None
     easiest = min(map(achievements.difficulty, todo))

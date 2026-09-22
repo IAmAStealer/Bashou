@@ -1,6 +1,7 @@
 import unittest
+from unittest import mock
 
-from bashou import progress, state
+from bashou import achievements, creatures, dialogue, progress, state
 
 
 class ProgressTest(unittest.TestCase):
@@ -62,6 +63,45 @@ class ProgressTest(unittest.TestCase):
         for a in ("field_reader", "accountant", "night_owl", "nested", "capture", "reader"):
             self.assertIn(a, self.s["achievements"])
         self.assertNotIn("loop", self.s["achievements"])
+
+    def test_new_tool_pets(self):
+        self.run_cmd("git status", times=10)
+        self.assertIn("beaver", self.s["pets"])
+        notes = self.run_cmd("tar -tzf a.tgz", times=10)
+        self.assertIn("squirrel", self.s["pets"])
+        self.assertTrue(any("tar/gzip" in n for n in notes), notes)     # a readable tool name, not "gunzip"
+        self.run_cmd("watch -n 2 df -h", times=10)                     # a wrapper and its command both count
+        self.assertIn("meerkat", self.s["pets"])
+
+    def test_new_rules_need_the_right_arguments(self):
+        for line in ("git log --oneline", "git checkout main", "tar -xf a.tgz", "tar -cf a.tar d",
+                     "curl https://x", "ssh host", "dig example.com", "chmod +x f", "chown root f",
+                     "systemctl enable cron", "kubectl get pods", "kubectl logs pod", "kubectl exec pod -- ls",
+                     "du -h", "df", "watch df"):
+            self.run_cmd(line)
+        new = {a.id for pet in ("beaver", "squirrel", "pigeon", "hedgehog", "bee", "whale", "meerkat")
+               for a in achievements.ALL if a.pet == pet}
+        self.assertEqual(new & set(self.s["achievements"]), set())
+        self.run_cmd("tar czf a.tgz d")                                 # no dash: still tar -czf
+        self.assertIn("packer", self.s["achievements"])
+
+    def test_pets_and_hints_need_their_command(self):
+        with mock.patch("bashou.which.installed", side_effect=lambda name: name != "kubectl"):
+            self.assertNotIn("whale", dict(creatures.roster()))
+            self.s["pets"] = ["whale", "fox"]                             # unlocked before kubectl was removed
+            self.assertEqual(creatures.owned(self.s), ["fox"])
+            self.assertEqual(achievements.family("whale"), [])
+            for pet in ("pigeon", "cat"):
+                for seed in range(30):
+                    import random
+                    self.assertNotIn("kubectl", dialogue.hint(self.s, pet, random.Random(seed)) or "")
+        with mock.patch("bashou.which.installed", side_effect=lambda name: name != "dig"):
+            self.assertIn("whale", dict(creatures.roster()))
+            ids = {a.id for a in achievements.family("pigeon")}
+            self.assertNotIn("resolver", ids)
+            self.assertIn("headers", ids)
+            self.s["achievements"] += list(ids)                          # legendary without the dig ones
+            self.assertEqual(progress.stage(self.s, "pigeon"), 3)
 
     def test_legendary_stage(self):
         for line in ("uniq -c f", "sort -rn f", "sort -u f"):

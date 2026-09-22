@@ -22,7 +22,21 @@ TOOL_PETS = {
     "spider": ({"strace"}, 3),
     "ant": ({"xargs"}, 10),
     "axolotl": ({"jq"}, 10),
+    "beaver": ({"git"}, 10),
+    "squirrel": ({"tar", "gzip", "gunzip", "zip", "unzip", "xz", "zstd"}, 10),
+    "pigeon": ({"curl", "wget", "ssh", "scp", "rsync", "dig", "host", "nslookup"}, 10),
+    "hedgehog": ({"chmod", "chown", "chgrp", "umask"}, 10),
+    "bee": ({"systemctl", "journalctl"}, 10),
+    "whale": ({"kubectl"}, 10),
+    "meerkat": ({"top", "htop", "btop", "free", "df", "du", "watch", "vmstat"}, 10),
 }
+# How the unlock hint names a tool pet's tools (default: the first in alphabetical order).
+TOOL_LABELS = {"ghost": "ps/kill", "squirrel": "tar/gzip", "pigeon": "curl/ssh/dig", "hedgehog": "chmod/chown",
+               "bee": "systemctl", "meerkat": "df/du/top"}
+
+
+def tool_label(pet):
+    return TOOL_LABELS.get(pet) or min(TOOL_PETS[pet][0])
 
 
 # pet: (construct, lines needed); "pipe3" = a line chaining 3+ commands with |
@@ -127,7 +141,7 @@ def check(state, earned=()):
             notes += unlock(state, pet, _(how))
     for pet, (tools, needed) in TOOL_PETS.items():
         if tool_uses(state, tools) >= needed:
-            notes += unlock(state, pet, f"{needed} × {min(tools)}")
+            notes += unlock(state, pet, f"{needed} × {tool_label(pet)}")
     if state["starter"] and starter_level(state) > level_before:
         line = STARTERS[state["starter"]]
         old, new = _(FORM_NAMES[line[form_before - 1]]), _(FORM_NAMES[line[starter_form(state) - 1]])

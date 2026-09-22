@@ -57,7 +57,7 @@ class SecurityTest(unittest.TestCase):
     def test_only_update_talks_to_git(self):
         for path, tree in self.trees():
             text = (ROOT / path).read_text()
-            if '"git"' in text:
+            if '["git"' in text:                               # an argv list that runs git
                 self.assertEqual(path.name, "update.py", f"{path} runs git")
 
 

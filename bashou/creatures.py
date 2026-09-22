@@ -83,8 +83,23 @@ ROSTER = [
     ("fox", "Fox"), ("owl", "Owl"), ("mole", "Mole"), ("snake", "Snake"),
     ("ghost", "Ghost"), ("spider", "Spider"), ("ant", "Ant"), ("axolotl", "Axolotl"),
     ("gremlin", "Gremlin"), ("snail", "Knight snail"),
+    ("beaver", "Beaver"), ("squirrel", "Squirrel"), ("pigeon", "Pigeon"), ("hedgehog", "Hedgehog"),
+    ("bee", "Bee"), ("whale", "Whale"), ("meerkat", "Meerkat"),
 ]
 NAMES = dict(ROSTER)
+NEEDS = {"whale": "kubectl", "bee": "systemctl"}                   # pet -> the command it's about; hidden when it isn't installed
+
+
+def roster():
+    """The pets of this system, in board order."""
+    from .which import installed
+    return [(pet, name) for pet, name in ROSTER if pet not in NEEDS or installed(NEEDS[pet])]
+
+
+def owned(state):
+    """Unlocked pets of this system (a Whale unlocked before kubectl was removed stays saved, not counted)."""
+    shown = dict(roster())
+    return [pet for pet in state["pets"] if pet in shown]
 
 # Names of the three stages: unlocked, evolved (2 achievements), legendary (whole family).
 STAGES = {
@@ -106,6 +121,13 @@ STAGES = {
     "spider": ("Spiderling", "Spider", "Weaver"),
     "ant": ("Ant", "Soldier ant", "Ant queen"),
     "axolotl": ("Axolittle", "Axolotl", "Axolord"),
+    "beaver": ("Kit", "Beaver", "Dam builder"),
+    "squirrel": ("Nutling", "Squirrel", "Hoarder"),
+    "pigeon": ("Squab", "Pigeon", "Carrier pigeon"),
+    "hedgehog": ("Hoglet", "Hedgehog", "Spiked guard"),
+    "bee": ("Larva", "Bee", "Hive keeper"),
+    "whale": ("Calf", "Whale", "Leviathan"),
+    "meerkat": ("Pup", "Meerkat", "Sentinel"),
 }
 FROG = Pet(
     id="frog", name="Frog",
@@ -829,6 +851,202 @@ aooloooooooatttt.
     idle="swim",
 )
 
+BEAVER = Pet(
+    id="beaver", name="Beaver",
+    base=sprite("""
+.................
+..aa........aa...
+.aooaaaaaaaaooa..
+.aooooooooooooa..
+.aoomoooooomooa..
+.apooccnnccoopa..
+.aoooccwwccoooa..
+.aooooowwoooooa..
+.aoocccccccoooatt
+.aoocccccccoooaTt
+..aoooooooooaatTt
+...aaa....aaa.tt.
+"""),
+    palette={"a": (70, 45, 30), "o": (150, 100, 60), "c": (215, 180, 140), "n": (60, 35, 30),
+             "w": (250, 250, 240), "m": (25, 25, 25), "p": (235, 140, 130), "t": (95, 70, 60),
+             "T": (70, 50, 45)},
+    poses={
+        "inhale": pixels("8,0,a 8,1,o 9,0,a 9,1,o"),
+        "closed": pixels("4,4,o 4,11,o 5,4,a 5,11,a"),
+        "left": pixels("4,4,o 4,3,m 4,11,o 4,10,m"),
+        "right": pixels("4,4,o 4,5,m 4,11,o 4,12,m"),
+        "fidget": pixels("8,15,. 8,16,. 9,15,. 9,16,. 10,15,t 10,16,T 11,15,t 11,16,t 7,15,."),
+    },
+    z_at=(0, 14),
+)
+
+SQUIRREL = Pet(
+    id="squirrel", name="Squirrel",
+    base=sprite("""
+.................
+...a...a....ttt..
+..aoa.aoa..tTTTt.
+..aoooooa.tTTTTt.
+.aomoooomatTTTt..
+.aooonnooatTTt...
+..acccccatTTTt...
+.aoccccccaTTTt...
+.aocyyyycaTTt....
+.aoccyyccoaTt....
+..aoooooooat.....
+...aa...aa.......
+"""),
+    palette={"a": (110, 55, 25), "o": (205, 110, 50), "c": (245, 215, 175), "n": (80, 40, 30),
+             "m": (25, 25, 25), "t": (130, 65, 30), "T": (225, 130, 60), "y": (150, 100, 55)},
+    poses={
+        "inhale": pixels("7,0,a 8,0,a 9,0,a"),
+        "closed": pixels("4,3,o 4,8,o 5,3,a"),
+        "left": pixels("4,3,o 4,2,m 4,7,m"),
+        "right": pixels("4,3,o 4,4,m 4,7,o 4,8,m"),
+        "fidget": pixels("1,11,. 1,12,t 1,13,t 1,14,t 2,15,T 3,16,t"),
+    },
+    z_at=(0, 0),
+)
+
+PIGEON = Pet(
+    id="pigeon", name="Pigeon",
+    base=sprite("""
+.................
+.....aaaa........
+....aooooa.......
+...aoomoooa......
+.yyaooooooa......
+..yyaggggoa......
+....agpgpgoaa....
+...aooooooooaa...
+..aoowwooowwooa..
+..aoooooooooooa..
+...aaooooooaa....
+.....y....y......
+"""),
+    palette={"a": (70, 75, 95), "o": (145, 150, 170), "g": (90, 160, 140), "p": (170, 110, 170),
+             "w": (200, 205, 215), "m": (230, 110, 40), "y": (240, 170, 80)},
+    poses={
+        "inhale": pixels("8,1,a 9,1,a 8,15,a 9,15,a"),
+        "closed": pixels("3,6,a"),
+        "left": pixels("3,6,o 3,5,m"),
+        "right": pixels("3,6,o 3,7,m"),
+        "fidget": pixels("4,1,. 4,2,. 5,2,. 5,3,. 3,1,y 3,2,y 4,3,y"),
+    },
+)
+
+HEDGEHOG = Pet(
+    id="hedgehog", name="Hedgehog",
+    base=sprite("""
+.................
+.....s.s.s.......
+...s.sssssss.s...
+..sssSsSsSsssss..
+.ssSsSsSsSsSsss..
+.sssssssssssssss.
+sccmcccsSsSsSsss.
+ccccccccssssssss.
+nccpcccsSsSsSsss.
+.ccccccsssssssss.
+..cccccccccccc...
+...aa......aa....
+"""),
+    palette={"s": (95, 75, 65), "S": (150, 125, 105), "c": (235, 205, 170), "m": (25, 25, 25),
+             "n": (40, 30, 30), "p": (240, 150, 150), "a": (180, 140, 110)},
+    poses={
+        "inhale": pixels("5,0,s 4,16,s"),
+        "closed": pixels("6,3,c 7,3,s"),
+        "left": pixels("6,3,c 6,2,m"),
+        "right": pixels("6,3,c 6,4,m"),
+        "fidget": pixels("1,5,. 1,7,. 1,9,. 2,3,. 2,13,. 3,3,s"),
+    },
+    z_at=(0, 13),
+)
+
+BEE = Pet(
+    id="bee", name="Bee",
+    base=sprite("""
+.................
+....a.....a......
+.....a...a.......
+...wwaaaaawww....
+..wwaooooowww....
+...aomooomoa.....
+..aooopoopooa....
+..akkkkkkkkka....
+..aoooooooooa....
+..akkkkkkkkkaka..
+...aoooooooa.....
+.....aaaaa.......
+"""),
+    palette={"a": (50, 40, 30), "o": (250, 200, 60), "k": (60, 50, 40), "w": (215, 235, 250),
+             "m": (25, 25, 25), "p": (240, 140, 120)},
+    poses={
+        "inhale": pixels("7,1,a 8,1,a 7,13,a 8,13,a"),
+        "closed": pixels("5,5,o 5,9,o 6,5,a 6,9,a"),
+        "left": pixels("5,5,o 5,4,m 5,9,o 5,8,m"),
+        "right": pixels("5,5,o 5,6,m 5,9,o 5,10,m"),
+        "fidget": pixels("3,3,. 3,4,. 4,2,. 3,11,. 4,12,. 2,3,w 2,4,w 2,11,w 2,12,w"),
+    },
+)
+
+WHALE = Pet(
+    id="whale", name="Whale",
+    base=sprite("""
+.................
+.....b..b........
+......bb.........
+....aaaaaa.......
+..aaoooooaaa...aa
+.aoooooooooaa.aoa
+aoomoooooooooaoa.
+aoooooooooooooa..
+apoolllllloooa...
+.aollllllllooa...
+..aallllllaaa....
+....aaaaaa.......
+"""),
+    palette={"a": (35, 70, 120), "o": (80, 140, 210), "l": (200, 225, 245), "m": (25, 25, 25),
+             "p": (240, 150, 170), "b": (150, 210, 250)},
+    poses={
+        "inhale": pixels("7,15,a 8,14,a"),
+        "closed": pixels("6,3,o 7,3,a"),
+        "left": pixels("6,3,o 6,2,m"),
+        "right": pixels("6,3,o 6,4,m"),
+        "fidget": pixels("4,15,. 4,16,. 5,16,. 3,15,a 3,16,a 4,16,o 5,15,o"),
+    },
+    z_at=(0, 13),
+)
+
+MEERKAT = Pet(
+    id="meerkat", name="Meerkat",
+    base=sprite("""
+......aaaa.......
+.....aoooooa.....
+....aomooomoa....
+....aoooooooa....
+.....aocnnca.....
+......acccca.....
+.....aoccccoa....
+....aooccccooa...
+.....aoccccoa....
+.....aoccccoa....
+.....aoooooa.....
+....aaa...aaa....
+"""),
+    palette={"a": (110, 80, 50), "o": (200, 160, 110), "c": (240, 215, 175), "n": (50, 35, 30),
+             "m": (25, 25, 25)},
+    poses={
+        "inhale": pixels("7,3,a 7,14,a"),
+        "closed": pixels("2,6,o 2,10,o 3,6,a 3,10,a"),
+        "left": pixels("2,6,o 2,5,m 2,10,o 2,9,m"),
+        "right": pixels("2,6,o 2,7,m 2,10,o 2,11,m"),
+        "fidget": pixels("7,4,. 7,5,a 6,4,a 5,4,a 5,5,o 6,5,o"),
+    },
+    z_at=(0, 13),
+)
+
+
 # Pets whose first stage is another animal: the sprite of each stage.
 FORMS = {"frog": ("tadpole", "frog", "frog")}
 
@@ -854,7 +1072,8 @@ STARTER_BLURBS = {
 
 PETS = {p.id: p for p in (KITTEN, CAT, LION, SEEDLING, SPROUT, TREE, PEBBLE, GOLEM, CRYSTAL,
                          BAT, TADPOLE, FROG, TURTLE, MUSHROOM, SLIME, SOFA, OCTOPUS, DRAGON,
-                         FOX, OWL, MOLE, SNAKE, GHOST, SPIDER, ANT, AXOLOTL, GREMLIN, SNAIL)}
+                         FOX, OWL, MOLE, SNAKE, GHOST, SPIDER, ANT, AXOLOTL, GREMLIN, SNAIL,
+                         BEAVER, SQUIRREL, PIGEON, HEDGEHOG, BEE, WHALE, MEERKAT)}
 
 
 def get(pet_id):
