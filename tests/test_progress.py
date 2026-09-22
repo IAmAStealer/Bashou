@@ -1,4 +1,7 @@
+import json
+import tempfile
 import unittest
+from pathlib import Path
 from unittest import mock
 
 from bashou import achievements, creatures, dialogue, progress, state
@@ -131,8 +134,12 @@ class StarterTest(unittest.TestCase):
         self.assertEqual((progress.starter_level(s), progress.starter_form(s)), (1, 1))
         self.assertEqual(progress.current(s)[:3], ("pebble", 1, "Pebble"))
         s["achievements"] = [f"a{i}" for i in range(15)]
-        self.assertEqual((progress.starter_level(s), progress.starter_form(s)), (4, 2))
+        self.assertEqual((progress.starter_level(s), progress.starter_form(s)), (4, 1))
+        s["achievements"] = [f"a{i}" for i in range(35)]
+        self.assertEqual((progress.starter_level(s), progress.starter_form(s)), (8, 2))
         self.assertEqual(progress.current(s)[2], "Rock golem")
+        s["achievements"] = [f"a{i}" for i in range(94)]
+        self.assertEqual(progress.starter_level(s), progress.MAX_LEVEL - 1)
         s["achievements"] = [f"a{i}" for i in range(99)]
         self.assertEqual(progress.starter_level(s), progress.MAX_LEVEL)
         self.assertEqual(progress.current(s)[:3], ("crystal", 3, "Crystal golem"))
@@ -146,25 +153,50 @@ class StarterTest(unittest.TestCase):
         s["achievements"] = [f"a{i}" for i in range(14)]
         notes = progress.check(s, [a for a in __import__("bashou").achievements.ALL[:1]])
         self.assertIn("✨ Stardust is evolving! Watch it: `bashou evolve`", notes)
-        self.assertEqual(progress.current(s)[:3], ("stardust", 2, "Stardust"))
-        s["achievements"] = [f"a{i}" for i in range(29)]                   # to Star before watching
+        self.assertEqual(progress.current(s)[:3], ("stardust", 1, "Stardust"))     # a Comet: still tier 1
+        s["achievements"] = [f"a{i}" for i in range(34)]                   # to Planet (level 8) before watching
         progress.check(s, [a for a in __import__("bashou").achievements.ALL[:1]])
-        self.assertEqual(s["evolving"], [{"who": "starter", "from": 1, "to": 3}])   # one animation, Stardust → Star
+        self.assertEqual(s["evolving"], [{"who": "starter", "from": 1, "to": 3}])   # one animation, Stardust → Planet
 
     def test_pick_an_earlier_look(self):
         s = state.default()
-        s["starter"], s["achievements"] = "star", [f"a{i}" for i in range(30)]
+        s["starter"], s["achievements"] = "star", [f"a{i}" for i in range(45)]
         self.assertEqual(progress.current(s)[:3], ("star", 3, "Star"))
         s["looks"]["starter"] = 1
         self.assertEqual(progress.current(s)[:3], ("stardust", 3, "Stardust"))   # stardust that can dance
         s["looks"]["starter"] = 9
-        self.assertEqual(progress.look(s), 3)                                   # never beyond what's reached
+        self.assertEqual(progress.look(s), 4)                                   # never beyond what's reached
 
     def test_old_saves_keep_the_cat_as_starter(self):
         s = state.migrate({**state.default(), "pets": ["cat", "fox"], "active": "cat"})
         self.assertEqual((s["starter"], s["pets"], s["active"]), ("star", ["fox"], "starter"))
 
     def test_the_cat_starter_becomes_the_star(self):
-        s = state.migrate({**state.default(), "starter": "cat", "achievements": ["a"] * 20})
+        old = {**state.default(), "starter": "cat", "achievements": ["a"] * 20}
+        del old["starter_best"]                                            # saved before long ladders
+        s = state.migrate(old)
         self.assertEqual(s["starter"], "star")
         self.assertEqual(progress.current(s)[:3], ("planet", 2, "Planet"))
+
+    def test_old_saves_never_lose_their_form(self):
+        """0.2.3 saves: a Planet at level 5 (now the Comet's level) stays a Planet until the Star."""
+        for achieved, looks, sprite in ((20, {}, "planet"), (40, {}, "star"), (40, {"starter": 2}, "planet"),
+                                        (10, {}, "stardust")):
+            with self.subTest(achieved=achieved, looks=looks):
+                with tempfile.TemporaryDirectory() as tmp:
+                    path = Path(tmp) / "state.json"
+                    path.write_text(json.dumps({"starter": "star", "looks": looks,
+                                                "achievements": [f"a{i}" for i in range(achieved)]}))
+                    with mock.patch.object(state, "STATE", path):
+                        s = state.load()
+                self.assertEqual(progress.current(s)[0], sprite)
+        s["achievements"] = [f"a{i}" for i in range(45)]                   # level 10: the Star comes
+        self.assertEqual(progress.starter_form(s), 4)
+
+    def test_evolving_saved_before_long_ladders(self):
+        old = {**state.default(), "starter": "star", "achievements": ["a"] * 15,
+               "evolving": [{"who": "starter", "from": 1, "to": 2}], "looks": {"starter": 1}}
+        del old["starter_best"]
+        s = state.migrate(old)
+        self.assertEqual(s["evolving"], [{"who": "starter", "from": 1, "to": 3}])      # Stardust → Planet still
+        self.assertEqual(progress.starter_form(s), 3)

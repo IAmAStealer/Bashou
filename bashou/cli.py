@@ -239,6 +239,8 @@ def dev(args):
             n = max(1, min(progress.MAX_LEVEL, int(args.pet or 1)))
             form_before = progress.starter_form(s)
             s["achievements"] = [a.id for a in achievements.ALL][:(n - 1) * progress.ACHIEVEMENTS_PER_LEVEL]
+            s["starter_best"] = 1
+            s["starter_best"] = progress.starter_form(s)
             s.get("looks", {}).pop("starter", None)
             s["evolving"] = [e for e in s.get("evolving", []) if e["who"] != "starter"]
             print(f"  Starter at level {n}: {progress.current(s, 'starter')[2]}.")

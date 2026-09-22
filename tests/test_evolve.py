@@ -9,7 +9,7 @@ from tests.test_regressions import TempState
 def evolving_stardust():
     s = state.default()
     s["starter"], s["achievements"] = "star", [f"a{i}" for i in range(14)]
-    progress.check(s, achievements.ALL[:1])                              # the 15th: level 4, the Cat
+    progress.check(s, achievements.ALL[:1])                              # the 15th: level 4, the Comet
     return s
 
 
@@ -23,7 +23,7 @@ class AnimationTest(unittest.TestCase):
         self.assertEqual(waits, sorted(waits[:1]) + waits[1:])            # starts slow…
         self.assertLess(min(waits), 0.1)                                   # …ends fast
         self.assertIn("Stardust evolved into", shown[-1][2])
-        self.assertIn("Planet", shown[-1][2])
+        self.assertIn("Comet", shown[-1][2])
 
     def test_s_skips_to_the_end(self):
         s = evolving_stardust()
@@ -42,7 +42,7 @@ class EvolveCommandTest(TempState):
         with contextlib.redirect_stdout(io.StringIO()):
             evolve.main()                                                 # not a tty: no animation, just the news
         s = state.load()
-        self.assertEqual((s["evolving"], progress.current(s)[2]), ([], "Planet"))
+        self.assertEqual((s["evolving"], progress.current(s)[2]), ([], "Comet"))
 
     def test_nothing_waiting(self):
         with contextlib.redirect_stdout(io.StringIO()):
@@ -53,14 +53,14 @@ class FormSwitchTest(TempState):
     def test_f_cycles_the_forms_reached(self):
         from bashou.board import Board
         with state.locked() as s:
-            s["starter"], s["achievements"] = "star", [f"a{i}" for i in range(30)]
+            s["starter"], s["achievements"] = "star", [f"a{i}" for i in range(45)]
         board = Board()
         board.pos = 0
         names = []
-        for _ in range(3):
+        for _ in range(4):
             board.key("form")
             names.append(progress.current(state.load())[2])
-        self.assertEqual(names, ["Stardust", "Planet", "Star"])
+        self.assertEqual(names, ["Stardust", "Comet", "Planet", "Star"])
         self.assertEqual(state.load()["looks"], {})                        # back to the latest: no pin left
         self.assertEqual(progress.current(state.load())[1], 3)             # actions never went back
 

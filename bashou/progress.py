@@ -5,7 +5,7 @@ from .achievements import Ctx
 from .analyze import analyze
 from .behavior import ACTIONS
 from . import creatures
-from .creatures import FORM_NAMES, STAGES, STARTERS
+from .creatures import FORM_NAMES, STAGES, STARTER_LEVELS, STARTERS
 from .i18n import _
 
 # Total commands run -> pet unlocked.
@@ -75,16 +75,34 @@ def stage(state, pet):
 
 
 ACHIEVEMENTS_PER_LEVEL = 5
-MAX_LEVEL = 9
+MAX_LEVEL = 20
 
 
 def starter_level(state):
     return 1 + min(MAX_LEVEL - 1, len(state["achievements"]) // ACHIEVEMENTS_PER_LEVEL)
 
 
+def ladder(state):
+    """The starter's forms, in order, and the level each one comes at."""
+    line = state["starter"] or "star"
+    return STARTERS[line], STARTER_LEVELS[line]
+
+
 def starter_form(state):
-    """1, 2 or 3: the starter changes shape at levels 4 and 7."""
-    return (starter_level(state) - 1) // 3 + 1
+    """The starter's form (1 = the first): the last one its level reached. Never goes back: a form once
+    reached stays (`starter_best`), even when the ladder changes."""
+    forms, levels = ladder(state)
+    by_level = sum(1 for lvl in levels if lvl <= starter_level(state))
+    return min(len(forms), max(by_level, state.get("starter_best", 1)))
+
+
+def tier(state, who, form):
+    """What a form can do (1-3, see behavior.ACTIONS): a pet's stage; for the starter, which third of
+    its ladder the form is in."""
+    if who_of(state, who) != "starter":
+        return form
+    n = len(ladder(state)[0])
+    return min(3, 1 + 3 * (form - 1) // n) if n > 3 else form
 
 
 def who_of(state, who=None):
@@ -94,12 +112,12 @@ def who_of(state, who=None):
 
 
 def reached(state, who):
-    """The latest form (1-3): it gives the actions."""
+    """The latest form (a pet: 1-3; the starter: its place on the ladder)."""
     return starter_form(state) if who_of(state, who) == "starter" else stage(state, who)
 
 
 def look(state, who=None):
-    """The form shown (1-3): the latest, unless you picked an earlier one or haven't watched it evolve."""
+    """The form shown: the latest, unless you picked an earlier one or haven't watched it evolve."""
     who = who_of(state, who)
     top = reached(state, who)
     return max(1, min(state.get("looks", {}).get(who, top), top))
@@ -114,11 +132,12 @@ def sprite_of(state, who, form):
 
 
 def current(state, who=None):
-    """(sprite id, action stage, display name, voice id) of the active pet, or of `who`.
+    """(sprite id, action tier, display name, voice id) of the active pet, or of `who`.
     The sprite and name follow the form shown (`look`), the actions the latest form."""
     who = who_of(state, who)
     sprite, name = sprite_of(state, who, look(state, who))
-    return sprite, reached(state, who), name, (state["starter"] or "star") if who == "starter" else who
+    return (sprite, tier(state, who, reached(state, who)), name,
+            (state["starter"] or "star") if who == "starter" else who)
 
 
 def evolve(state, who, old, new):
@@ -188,6 +207,7 @@ def check(state, earned=()):
             notes += unlock(state, pet, f"{needed} × {tool_label(pet)}")
     if state["starter"] and starter_level(state) > level_before:
         line = STARTERS[state["starter"]]
+        state["starter_best"] = starter_form(state)
         if starter_form(state) > form_before:
             notes.append(evolve(state, "starter", form_before, starter_form(state)))
         else:

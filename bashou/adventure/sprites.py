@@ -86,9 +86,21 @@ BACK = {
 }
 
 
+def back_of(form):
+    """The form whose back view stands for `form`: itself, or the closest earlier form of its starter
+    that has one (back views get drawn after the forms)."""
+    if form in BACK:
+        return form
+    for forms in creatures.STARTERS.values():
+        if form in forms:
+            return next((f for f in reversed(forms[:forms.index(form)]) if f in BACK), forms[0])
+    return "stardust"
+
+
 def hero(form):
     """(frames, palette): the back view, then a step with each side (feet lifted, body up a pixel)."""
-    base = BACK.get(form, BACK["stardust"])
+    form = back_of(form)
+    base = BACK[form]
     palette = creatures.get(form).palette
     low = max(i for i, row in enumerate(base) if row.strip("."))
     has_feet = "." in base[low].strip(".")

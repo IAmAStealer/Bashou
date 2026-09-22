@@ -3,6 +3,14 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.3.0 — 2026-09-22
+
+- Starters now grow up to level 20 and get more forms. The Star line gains the Comet: Stardust (1) →
+  Comet (4) → Planet (8) → Star (10), with more forms to come. Seedling and Pebble change shape at
+  levels 8 and 15.
+- You never lose a form: a Planet or a Star from before this update stays one until the next form.
+- The swap board shows each form of your starter with the level it comes at.
+
 ## v0.2.3 — 2026-09-22
 
 - Every threat of `bashou fight` has its own look: the Log Hydra, the Ledger Golem, the Maze Wraith,

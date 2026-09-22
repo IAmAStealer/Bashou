@@ -41,7 +41,9 @@ def scenes(s, e):
         pause *= 0.78
     out.append((title, draw(glow(new), e["to"]), "", 0.5))
     done = _("{old} evolved into {new}!").format(old=old_name, new=f"{BOLD}{new_name}{RESET}")
-    learns = DIM + _("New: {actions}").format(actions=_(ACTIONS[e["to"]])) + RESET
+    new_tier = progress.tier(s, who, e["to"])
+    learns = (DIM + _("New: {actions}").format(actions=_(ACTIONS[new_tier])) + RESET
+              if new_tier > progress.tier(s, who, e["from"]) else "")
     for spark in ("  ✦", " ✧  ✦", "✦  ✧  ✦"):
         out.append((f"{SPARKLE}{spark}{RESET}", draw(new, e["to"]), f"{done}\n  {learns}", 0.35))
     return out

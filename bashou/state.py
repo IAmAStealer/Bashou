@@ -34,7 +34,8 @@ def default():
         "update_checked": 0,   # last time a terminal looked for a new version
         "update_available": "",  # newest release tag not installed yet, at that check
         "settings": {},     # `bashou config`, only what differs from SETTINGS
-        "looks": {},        # pet or "starter" -> form shown (1-3) when not the latest (`f` in `bashou swap`)
+        "looks": {},        # pet or "starter" -> form shown when not the latest (`f` in `bashou swap`)
+        "starter_best": 1,  # the starter's highest form reached: it never goes back
         "evolving": [],     # evolutions waiting to be watched: {"who", "from", "to"} (`bashou evolve`)
     }
 
@@ -80,7 +81,10 @@ def load():
         data = json.loads(STATE.read_text())
     except (FileNotFoundError, json.JSONDecodeError):
         return default()
-    return migrate({**default(), **data})
+    state = {**default(), **data}
+    if "starter_best" not in data:
+        del state["starter_best"]                          # an old save: migrate() sets it from its level
+    return migrate(state)
 
 
 def migrate(state):
@@ -93,7 +97,36 @@ def migrate(state):
         state["pets"].remove("cat")
     if state["active"] == "cat":
         state["active"] = "starter"
+    if "starter_best" not in state:
+        migrate_ladder(state)
     return state
+
+
+# Before starters had long ladders (0.2.3 and older): 3 forms, at levels 4 and 7 (level max 9).
+OLD_LADDERS = {"star": ("stardust", "planet", "star"), "sprout": ("seedling", "sprout", "tree"),
+               "pebble": ("pebble", "golem", "crystal")}
+
+
+def migrate_ladder(state):
+    """Form numbers of an old save are places on the old 3-form ladder: turn them into places on the
+    new one, and keep the form reached (a Planet stays a Planet until it becomes a Star)."""
+    from .creatures import STARTERS
+    line = state.get("starter")
+    state["starter_best"] = 1
+    if line not in OLD_LADDERS or line not in STARTERS:
+        return
+
+    def new(old_form):
+        sprite = OLD_LADDERS[line][max(1, min(3, old_form)) - 1]
+        return STARTERS[line].index(sprite) + 1 if sprite in STARTERS[line] else 1
+
+    level = 1 + min(8, len(state.get("achievements", [])) // 5)
+    state["starter_best"] = new((level - 1) // 3 + 1)
+    if "starter" in state.get("looks", {}):
+        state["looks"]["starter"] = new(state["looks"]["starter"])
+    for e in state.get("evolving", []):
+        if e["who"] == "starter":
+            e["from"], e["to"] = new(e["from"]), new(e["to"])
 
 
 def save(state):

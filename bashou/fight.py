@@ -57,7 +57,7 @@ cd "$BASHOU_ARENA/arena"
 
 def level(s):
     return (len(s["pets"]) + sum(progress.stage(s, p) - 1 for p in s["pets"])
-            + progress.starter_level(s) - 1)
+            + min(progress.starter_level(s), 9) - 1)            # the starter's first 9 levels
 
 
 def remaining(s):

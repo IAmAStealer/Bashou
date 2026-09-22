@@ -6,8 +6,9 @@ A pixel-art pet that lives in the top-right corner of your terminal and grows as
   has been idle for 5–15 minutes.
   It's erased before each command, so it never ends up in your scrollback.
 - **Choose a starter** the first time: Stardust, Seedling or Pebble. It levels up every 5 achievements
-  (up to level 9) and changes shape at levels 4 and 7: Stardust → Planet → Star, Seedling → Sprout →
-  Tree spirit, Pebble → Rock golem → Crystal golem. Only `bashou reset` lets you choose again.
+  (up to level 20) and changes shape along the way: Stardust → Comet (4) → Planet (8) → Star (10),
+  Seedling → Sprout (8) → Tree spirit (15), Pebble → Rock golem (8) → Crystal golem (15). More forms
+  are coming. A form once reached is never lost. Only `bashou reset` lets you choose again.
 - **Every command counts.** Milestones (10, 50, 200, 500… commands) unlock new pets.
 - **New tools unlock pets too.** Use `find`, `awk`, `grep`, `sed`, `ps`, `xargs`, `jq` or `strace`
   and a matching creature joins you.
