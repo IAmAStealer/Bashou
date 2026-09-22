@@ -15,7 +15,6 @@ from pathlib import Path
 
 from .. import challenges, fight, progress, render, state
 from ..i18n import _, cap
-from .. import creatures
 from . import canvas, lessons, quiz, scene, sprites, world
 
 ESC = "\x1b"
@@ -289,11 +288,7 @@ class Game:
             return
         if rel > scene.FAR:
             return
-        rows, palette = {
-            "monster": lambda: sprites.monster(adv["topic"]), "boss": lambda: sprites.boss(adv["topic"]),
-            "chest": lambda: sprites.CHEST, "fork": lambda: sprites.SIGNPOST,
-            "lesson": lambda: (creatures.OWL.base, creatures.OWL.palette),
-        }[kind]()
+        rows, palette = sprites.ahead(kind, adv["topic"])
         bob = 1 if kind in ("monster", "boss") and int(t * 3) % 2 else 0
         if room:
             share = {"boss": 0.9, "monster": 0.6}.get(kind, 0.4)

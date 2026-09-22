@@ -200,3 +200,23 @@ BOSSES = {
 
 def boss(topic):
     return BOSSES.get(topic, BOSSES["bash"])
+
+
+def pet(sprite_id):
+    """A pet met on the road, by its sprite id (pets/<id>.json)."""
+    p = creatures.get(sprite_id)
+    return p.base, p.palette
+
+
+# Every event of the road -> what stands on it, from the chapter's topic: (rows, palette).
+AHEAD = {
+    "monster": monster,
+    "boss": boss,
+    "chest": lambda topic: CHEST,
+    "fork": lambda topic: SIGNPOST,
+    "lesson": lambda topic: pet("barn_owl"),             # the Sage Owl
+}
+
+
+def ahead(kind, topic):
+    return AHEAD[kind](topic)

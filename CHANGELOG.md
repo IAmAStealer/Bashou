@@ -8,6 +8,7 @@ Every release has a section here, written for players. CI refuses to tag a relea
 - `bashou version` says which version you have, and if a newer one is out.
 - `bashou update` lists what's new, one entry per line.
 - Ctrl+L starts the prompt below your pet too, like `clear` does.
+- The adventure no longer crashes when the Sage Owl comes to teach you.
 
 ## v0.2.1 — 2026-09-22
 
