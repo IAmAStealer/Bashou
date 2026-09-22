@@ -123,7 +123,7 @@ STAGES = {
     "snake": ("Snakelet", "Snake", "Great serpent"),
     "ghost": ("Wisp", "Ghost", "Phantom"),
     "spider": ("Spiderling", "Spider", "Weaver"),
-    "ant": ("Ant", "Soldier ant", "Ant queen"),
+    "ant": ("Worker ant", "Soldier ant", "Ant queen"),
     "axolotl": ("Axolittle", "Axolotl", "Axolord"),
     "beaver": ("Kit", "Beaver", "Dam builder"),
     "squirrel": ("Nutling", "Squirrel", "Hoarder"),
