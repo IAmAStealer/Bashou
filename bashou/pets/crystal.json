@@ -1,0 +1,48 @@
+{
+ "name": "Crystal golem",
+ "palette": {
+  "a": "#555a64",
+  "o": "#8c919b",
+  "m": "#191919",
+  "p": "#ffa0aa",
+  "n": "#3c3c46",
+  "c": "#6ed7eb",
+  "C": "#c8f5ff"
+ },
+ "base": [
+  "C......c......C..",
+  "cC...aCcCa...Cc..",
+  "cc..aoooooa..cc..",
+  ".a.aoooooooa.a...",
+  "ac.aomooomoa.ca..",
+  "aCaaoooooooaaCa..",
+  "aooaoponopoaooa..",
+  "aooaoooooooaooa..",
+  ".a.aoooooooa.a...",
+  "...aoocccooa.....",
+  "...aoaaaaaoa.....",
+  "..aaa.....aaa...."
+ ],
+ "poses": {
+  "inhale": {
+   "9": "------CCC--------"
+  },
+  "closed": {
+   "4": "----nn---nn------"
+  },
+  "left": {
+   "4": "----mo--mo-------"
+  },
+  "right": {
+   "4": "-----om--om------"
+  },
+  "fidget": {
+   "0": "c-------------c--",
+   "1": "C------Cc-----C--"
+  }
+ },
+ "particles": [
+  0,
+  10
+ ]
+}

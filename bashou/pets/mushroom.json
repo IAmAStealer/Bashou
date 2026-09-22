@@ -1,0 +1,53 @@
+{
+ "name": "Mushroom",
+ "palette": {
+  "a": "#aa2832",
+  "r": "#e14646",
+  "w": "#fff5eb",
+  "s": "#d7c3a0",
+  "c": "#f5e8cd",
+  "m": "#191919",
+  "p": "#ffaaaa",
+  "n": "#965050"
+ },
+ "base": [
+  "....aaaaaaa......",
+  "..aarrrrwwraa....",
+  ".arwwrrrrwwrra...",
+  "arrwwrrrrrrrwra..",
+  "arrrrrwwrrrrrra..",
+  ".aaaaaaaaaaaaa...",
+  "...scccccccs.....",
+  "...ccmcccmccc....",
+  "...ccmcccmccc....",
+  "...cpccnccpcc....",
+  "..sccccccccccs...",
+  "..sssssssssss...."
+ ],
+ "poses": {
+  "fidget": {
+   "1": "------wwrr-------",
+   "4": "------rrww-------"
+  },
+  "left": {
+   "7": "----mc--mc-------",
+   "8": "----mc--mc-------"
+  },
+  "right": {
+   "7": "-----cm--cm------",
+   "8": "-----cm--cm------"
+  },
+  "inhale": {
+   "1": "-a---------------",
+   "2": "a----------------",
+   "5": "a-------------a--"
+  },
+  "closed": {
+   "7": "-----c---c-------"
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

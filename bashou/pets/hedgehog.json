@@ -1,0 +1,51 @@
+{
+ "name": "Hedgehog",
+ "palette": {
+  "s": "#5f4b41",
+  "S": "#967d69",
+  "c": "#ebcdaa",
+  "m": "#191919",
+  "n": "#281e1e",
+  "p": "#f09696",
+  "a": "#b48c6e"
+ },
+ "base": [
+  ".................",
+  ".....s.s.s.......",
+  "...s.sssssss.s...",
+  "..sssSsSsSsssss..",
+  ".ssSsSsSsSsSsss..",
+  ".sssssssssssssss.",
+  "sccmcccsSsSsSsss.",
+  "ccccccccssssssss.",
+  "nccpcccsSsSsSsss.",
+  ".ccccccsssssssss.",
+  "..cccccccccccc...",
+  "...aa......aa...."
+ ],
+ "poses": {
+  "inhale": {
+   "4": "----------------s",
+   "5": "s----------------"
+  },
+  "closed": {
+   "6": "---c-------------",
+   "7": "---s-------------"
+  },
+  "left": {
+   "6": "--mc-------------"
+  },
+  "right": {
+   "6": "---cm------------"
+  },
+  "fidget": {
+   "1": "-----.-.-.-------",
+   "2": "---.---------.---",
+   "3": "---s-------------"
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

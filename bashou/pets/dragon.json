@@ -1,0 +1,55 @@
+{
+ "name": "Dragon",
+ "palette": {
+  "a": "#2d7346",
+  "o": "#5ab464",
+  "c": "#f0dc8c",
+  "y": "#fae6aa",
+  "m": "#191919",
+  "w": "#ffffff",
+  "n": "#235532",
+  "v": "#825abe",
+  "l": "#fae6aa"
+ },
+ "base": [
+  "..y.......y......",
+  "..yaaaaaaay......",
+  ".aoooooooooa.....",
+  ".aomwooowmoa.....",
+  ".aommooommoa.....",
+  ".aooononoooa.....",
+  "..aoooooooa......",
+  "v.aocccccoa.v....",
+  "vvaocccccoavv....",
+  ".vaocccccoav...ay",
+  "..aoooooooa.aooa.",
+  "..ll.aaa.ll.aaa.."
+ ],
+ "poses": {
+  "fidget": {
+   "6": "v-----------v----",
+   "8": "-.---------.-----",
+   "9": "-.---------.-----"
+  },
+  "right": {
+   "3": "---mw---mw-------"
+  },
+  "inhale": {
+   "6": "-ao-------oa-----"
+  },
+  "closed": {
+   "3": "---oo---oo-------"
+  },
+  "left": {
+   "3": "---wm---wm-------"
+  },
+  "tail_up": {
+   "8": "---------------ay",
+   "9": "---------------oa"
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

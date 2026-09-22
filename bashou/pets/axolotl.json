@@ -1,0 +1,52 @@
+{
+ "name": "Axolotl",
+ "palette": {
+  "a": "#dc6e96",
+  "o": "#ffafc8",
+  "c": "#ffe1e6",
+  "g": "#c84682",
+  "m": "#191919",
+  "p": "#ff7896",
+  "q": "#aa3c64",
+  "l": "#ffafc8"
+ },
+ "base": [
+  ".................",
+  "....aaaaaaa......",
+  "gg.aoooooooa.gg..",
+  "..aoooooooooa....",
+  "gg.aomooomoa.gg..",
+  "..aoomooomooa....",
+  "g..aopoqopoa..g..",
+  "...aoooooooa....a",
+  "...accccccca...ao",
+  "..aocccccccoa.ao.",
+  "..lao.ooo.oal..oa",
+  "...aa.....aa....."
+ ],
+ "poses": {
+  "fidget": {
+   "2": ".-------------.--",
+   "3": "g-------------g--"
+  },
+  "inhale": {
+   "8": "--ao-------oa----"
+  },
+  "closed": {
+   "4": "-----o---o-------",
+   "5": "----qq---qq------"
+  },
+  "left": {
+   "4": "----mo--mo-------",
+   "5": "----mo--mo-------"
+  },
+  "right": {
+   "4": "-----om--om------",
+   "5": "-----om--om------"
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

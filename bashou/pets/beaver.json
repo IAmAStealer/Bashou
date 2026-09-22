@@ -1,0 +1,55 @@
+{
+ "name": "Beaver",
+ "palette": {
+  "a": "#462d1e",
+  "o": "#96643c",
+  "c": "#d7b48c",
+  "n": "#3c231e",
+  "w": "#fafaf0",
+  "m": "#191919",
+  "p": "#eb8c82",
+  "t": "#5f463c",
+  "T": "#46322d"
+ },
+ "base": [
+  ".................",
+  "..aa........aa...",
+  ".aooaaaaaaaaooa..",
+  ".aooooooooooooa..",
+  ".aoomoooooomooa..",
+  ".apooccnnccoopa..",
+  ".aoooccwwccoooa..",
+  ".aooooowwoooooa..",
+  ".aoocccccccoooatt",
+  ".aoocccccccoooaTt",
+  "..aoooooooooaatTt",
+  "...aaa....aaa.tt."
+ ],
+ "poses": {
+  "inhale": {
+   "8": "ao---------------",
+   "9": "ao---------------"
+  },
+  "closed": {
+   "4": "----o------o-----",
+   "5": "----a------a-----"
+  },
+  "left": {
+   "4": "---mo-----mo-----"
+  },
+  "right": {
+   "4": "----om-----om----"
+  },
+  "fidget": {
+   "7": "---------------.-",
+   "8": "---------------..",
+   "9": "---------------..",
+   "10": "---------------tT",
+   "11": "---------------tt"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

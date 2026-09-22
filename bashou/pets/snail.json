@@ -1,0 +1,49 @@
+{
+ "name": "Knight snail",
+ "palette": {
+  "a": "#784628",
+  "S": "#c88c50",
+  "s": "#ebbe78",
+  "b": "#afcd7d",
+  "m": "#191919",
+  "p": "#ffa0aa"
+ },
+ "base": [
+  ".................",
+  "............m.m..",
+  "............b.b..",
+  "....aaaaa...b.b..",
+  "..aaSSSSSaa.bbbb.",
+  ".aSSsaaasSa.bmbb.",
+  ".aSsaSSasSa.bbpb.",
+  ".aSsaaSsSSa.bbbb.",
+  ".aSSsssSSa..bbb..",
+  "..aaSSSaa.bbbbb..",
+  "bbbbbbbbbbbbbbb..",
+  ".bbbbbbbbbbbbb..."
+ ],
+ "poses": {
+  "inhale": {
+   "2": "-----aaa---------",
+   "3": "-----SSS---------"
+  },
+  "closed": {
+   "1": "------------.-.--",
+   "5": "-------------b---"
+  },
+  "left": {
+   "1": "-----------m.m.--"
+  },
+  "right": {
+   "1": "------------.m.m-"
+  },
+  "fidget": {
+   "1": "------------.-.--",
+   "2": "------------m-m--"
+  }
+ },
+ "particles": [
+  0,
+  2
+ ]
+}

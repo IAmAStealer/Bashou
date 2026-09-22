@@ -1,0 +1,46 @@
+{
+ "name": "Rock golem",
+ "palette": {
+  "a": "#555a64",
+  "o": "#8c919b",
+  "G": "#6ea550",
+  "m": "#191919",
+  "p": "#ffa0aa",
+  "n": "#3c3c46"
+ },
+ "base": [
+  "....GGGGG........",
+  "...aGGoGGa.......",
+  "..aoooooooa......",
+  "..aomooomoa......",
+  "..aoooooooa......",
+  "..aoponopoa......",
+  "aaaoooooooaaa....",
+  "aoaoooooooaoa....",
+  "aoaoooooooaoa....",
+  ".a.aoooooa.a.....",
+  "...aoaaaoa.......",
+  "..aaa...aaa......"
+ ],
+ "poses": {
+  "inhale": {
+   "5": "aa---------aa----"
+  },
+  "closed": {
+   "3": "---nn---nn-------"
+  },
+  "left": {
+   "3": "---mo--mo--------"
+  },
+  "right": {
+   "3": "----om--om-------"
+  },
+  "fidget": {
+   "0": "------p----------"
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

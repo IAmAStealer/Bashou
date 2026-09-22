@@ -1,0 +1,48 @@
+{
+ "name": "Ghost",
+ "palette": {
+  "a": "#96aadc",
+  "w": "#f0f5ff",
+  "m": "#28283c",
+  "p": "#ffb4c8"
+ },
+ "base": [
+  "....aaaaaa.......",
+  "..aawwwwwwaa.....",
+  ".awwwwwwwwwwa....",
+  "awwwwwwwwwwwwa...",
+  "awwmmwwwwmmwwa...",
+  "awwmmwwwwmmwwa...",
+  "awpwwwwmwwwpwa...",
+  "awwwwwwwwwwwwa...",
+  "awwwwwwwwwwwwa...",
+  "awwwwwwwwwwwwa...",
+  "awwaawwaawwaawa..",
+  ".aa..aa..aa..a..."
+ ],
+ "poses": {
+  "fidget": {
+   "10": "---w-a-w-a-w-a---",
+   "11": "-.-a-.-a-.-a-.a--"
+  },
+  "inhale": {
+   "7": "--------------a--",
+   "8": "--------------a--"
+  },
+  "closed": {
+   "4": "---ww----ww------"
+  },
+  "left": {
+   "4": "--m-w---m-w------",
+   "5": "--m-w---m-w------"
+  },
+  "right": {
+   "4": "---w-m---w-m-----",
+   "5": "---w-m---w-m-----"
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

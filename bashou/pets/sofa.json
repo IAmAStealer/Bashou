@@ -1,0 +1,49 @@
+{
+ "name": "Living sofa",
+ "palette": {
+  "a": "#8c323c",
+  "o": "#cd555f",
+  "c": "#ebc896",
+  "l": "#fae1b9",
+  "m": "#191919",
+  "q": "#6e232d",
+  "k": "#5a3c28"
+ },
+ "base": [
+  ".................",
+  ".................",
+  "..aaaaaaaaaaa....",
+  ".aoooooooooooa...",
+  ".aoooomomooooa...",
+  ".aoooomomooooa...",
+  ".aoooooqoooooa...",
+  "aoacccccccccaoa..",
+  "aoaclllllllcaoa..",
+  "aoaaaaaaaaaaaoa..",
+  "aoooooooooooooa..",
+  ".kk.........kk..."
+ ],
+ "poses": {
+  "fidget": {
+   "8": "----cc---cc------"
+  },
+  "inhale": {
+   "7": "----lllllll------"
+  },
+  "closed": {
+   "4": "------o-o--------"
+  },
+  "left": {
+   "4": "-----momo--------",
+   "5": "-----momo--------"
+  },
+  "right": {
+   "4": "------omom-------",
+   "5": "------omom-------"
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

@@ -1,0 +1,52 @@
+{
+ "name": "Tree spirit",
+ "palette": {
+  "L": "#50a04b",
+  "l": "#96d26e",
+  "g": "#3c7837",
+  "m": "#191919",
+  "p": "#ffa096",
+  "n": "#784628",
+  "d": "#32733c",
+  "t": "#7d5532",
+  "T": "#aa784b",
+  "f": "#ffc8dc"
+ },
+ "base": [
+  "....ddddddd......",
+  "..ddLLLLLLLdd....",
+  ".dLLlLLfLLlLLd...",
+  "dLLlLLLLLLLlLLd..",
+  "dLLLLfLLLfLLLLd..",
+  ".ddLLLLLLLLLdd...",
+  "...dtTTTTTtd.....",
+  "g..tTmTTTmTt..g..",
+  ".g.tpTTnTTpt.g...",
+  "..gtTTTTTTTtg....",
+  "...tTTTTTTTt.....",
+  "..ttt.ttt.ttt...."
+ ],
+ "poses": {
+  "inhale": {
+   "0": "---d-------d-----",
+   "5": "-d-----------d---"
+  },
+  "closed": {
+   "7": "----tt---tt------"
+  },
+  "left": {
+   "7": "----mT--mT-------"
+  },
+  "right": {
+   "7": "-----Tm--Tm------"
+  },
+  "fidget": {
+   "6": "g-------------g--",
+   "9": "--.---------.----"
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

@@ -1,0 +1,52 @@
+{
+ "name": "Snake",
+ "palette": {
+  "a": "#326e32",
+  "o": "#78be50",
+  "l": "#d7e68c",
+  "m": "#191919",
+  "p": "#ffa0aa",
+  "r": "#e64650"
+ },
+ "base": [
+  "......aaaa.......",
+  ".....aoooooa.....",
+  "....aomoooomoa...",
+  "....aoooooooooa..",
+  ".....aopooopaa...",
+  "......aaoooaa....",
+  "....aaaoooaaaa...",
+  "...aoooooooooooa.",
+  "..aollllllllllloa",
+  "..aaoooooooooooa.",
+  ".aoooooooooooooa.",
+  "..aaaaaaaaaaaaa.."
+ ],
+ "poses": {
+  "fidget": {
+   "4": "--------------rr-",
+   "5": "---------------r-"
+  },
+  "inhale": {
+   "10": "a--------------oa"
+  },
+  "closed": {
+   "2": "------o----o-----",
+   "3": "------a----a-----"
+  },
+  "left": {
+   "2": "-----mo---mo-----"
+  },
+  "right": {
+   "2": "------om---om----"
+  },
+  "tail_up": {
+   "4": "--------------rr-",
+   "5": "---------------r-"
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

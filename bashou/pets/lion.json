@@ -1,0 +1,58 @@
+{
+ "name": "Lion",
+ "palette": {
+  "a": "#d68c28",
+  "o": "#f5a734",
+  "l": "#ffc46e",
+  "c": "#ffeccd",
+  "n": "#be6464",
+  "g": "#96d26e",
+  "m": "#191919",
+  "w": "#ffffff",
+  "M": "#a55a23",
+  "N": "#c87328"
+ },
+ "base": [
+  "...NNNNNNNNN.....",
+  "..NMMMMMMMMMN....",
+  ".NMMaoooooaMMN...",
+  "NMMaogwowgoaMMN..",
+  "NMMaogmomgoaMMN..",
+  "NMMaooonoooaMMN..",
+  ".NMMacncncaMMN..N",
+  "..NMMacccaMMN...M",
+  "...aoooooooa...a.",
+  "..aoocccccooa.a..",
+  ".aoocccccccooaa..",
+  ".lla.aaaaa.all..."
+ ],
+ "poses": {
+  "inhale": {
+   "8": "--ao-------oa----"
+  },
+  "closed": {
+   "3": "-----oo-oo-------",
+   "4": "-----aa-aa-------"
+  },
+  "left": {
+   "4": "-----mg-mg-------"
+  },
+  "right": {
+   "4": "-----gm-gm-------"
+  },
+  "fidget": {
+   "0": "---.-------.-----",
+   "2": "N-------------N--"
+  },
+  "tail_up": {
+   "5": "----------------N",
+   "6": "----------------M",
+   "7": "----------------a",
+   "8": "---------------.-"
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

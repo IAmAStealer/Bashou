@@ -1,0 +1,48 @@
+{
+ "name": "Frog",
+ "palette": {
+  "a": "#3c823c",
+  "o": "#6ebe50",
+  "l": "#a5dc6e",
+  "c": "#e1f0b4",
+  "w": "#ffffff",
+  "m": "#191919",
+  "p": "#ffa0a0"
+ },
+ "base": [
+  "..aaa.....aaa....",
+  ".awwwa...awwwa...",
+  ".awmwa...awmwa...",
+  "aoooooooooooooa..",
+  "aoooooooooooooa..",
+  "aopooooooooopoa..",
+  ".aoooaaaaaoooa...",
+  ".aoocccccccooa...",
+  "aoocccccccccooa..",
+  "aoocccccccccooa..",
+  "allocccccccolla..",
+  ".aaaaaaaaaaaaa..."
+ ],
+ "poses": {
+  "fidget": {
+   "6": "-----ccccc-------"
+  },
+  "inhale": {
+   "7": "ao-c-------c-oa--"
+  },
+  "closed": {
+   "1": "--ooo-----ooo----",
+   "2": "--aaa-----aaa----"
+  },
+  "left": {
+   "2": "--mw------mw-----"
+  },
+  "right": {
+   "2": "---wm------wm----"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

@@ -27,6 +27,23 @@ class CreaturesTest(unittest.TestCase):
             for pose in (*idle, "closed", "left", "right", "fidget"):
                 self.assertIn(pose, pet.poses, f"{pet.id} has no {pose}")
 
+    def test_pet_files_are_valid(self):
+        for path in sorted(creatures.ART.glob("*.json")):
+            self.assertEqual(creatures.problems(path), [], path.name)
+
+    def test_check_explains_mistakes(self):
+        import json, tempfile
+        from pathlib import Path
+        d = json.loads((creatures.ART / "fox.json").read_text())
+        d["base"][5] = d["base"][5][:-1] + "Z"                           # a color missing from the palette
+        del d["poses"]["closed"]
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "fox.json"
+            path.write_text(json.dumps(d))
+            found = " ".join(creatures.problems(path))
+        self.assertIn("'Z' is used but not in the palette", found)
+        self.assertIn("missing pose closed", found)
+
     def test_roster_has_stage_names(self):
         self.assertEqual(len(ROSTER), 25)
         self.assertEqual({p for p, _ in ROSTER}, set(STAGES))

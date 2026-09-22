@@ -1,0 +1,52 @@
+{
+ "name": "Bat",
+ "palette": {
+  "a": "#5a4b78",
+  "o": "#8c78b4",
+  "e": "#cdbee6",
+  "w": "#ffffff",
+  "m": "#191919",
+  "p": "#ffa5be",
+  "n": "#462d46",
+  "W": "#46375f",
+  "V": "#735f96"
+ },
+ "base": [
+  ".................",
+  "...a.........a...",
+  "...aa.......aa...",
+  "...aoaaaaaaaoa...",
+  "W..aoooooooooa..W",
+  "WV.aowwooowwoa.VW",
+  "WVVaowmooomwoaVVW",
+  "WVVVapoonoopaVVVW",
+  "WWVVaoeeeeeoaVVWW",
+  ".W.W.aeeeeea.W.W.",
+  ".....aoooooa.....",
+  "......a...a......"
+ ],
+ "poses": {
+  "inhale": {
+   "3": "W---------------W"
+  },
+  "closed": {
+   "5": "-----oo---oo-----",
+   "6": "-----aa---aa-----"
+  },
+  "left": {
+   "6": "-----mw---mw-----"
+  },
+  "right": {
+   "6": "-----wm---wm-----"
+  },
+  "fidget": {
+   "4": ".---------------.",
+   "5": ".---------------.",
+   "9": "-W-------------W-"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

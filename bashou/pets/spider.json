@@ -1,0 +1,48 @@
+{
+ "name": "Spider",
+ "palette": {
+  "a": "#8c73b9",
+  "o": "#5f4882",
+  "w": "#ffffff",
+  "m": "#191919",
+  "p": "#ffa0aa",
+  "q": "#281937"
+ },
+ "base": [
+  ".................",
+  ".................",
+  ".a...aaaaaaa...a.",
+  ".a..aoooooooa..a.",
+  "..aaoowwowwooaa..",
+  "aa.aoowmomwooa.aa",
+  "..aaoooooooooaa..",
+  ".a.aoopoqopooa.a.",
+  "a..aoooooooooa..a",
+  ".aa.aaoooooaa.aa.",
+  "a....aaaaaaa....a",
+  "................."
+ ],
+ "poses": {
+  "fidget": {
+   "9": "a---------------a",
+   "10": ".---------------."
+  },
+  "inhale": {
+   "3": "---ao-------oa---"
+  },
+  "closed": {
+   "4": "------oo-oo------",
+   "5": "------mm-mm------"
+  },
+  "left": {
+   "5": "------mw---------"
+  },
+  "right": {
+   "5": "---------wm------"
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

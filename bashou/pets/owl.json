@@ -1,0 +1,50 @@
+{
+ "name": "Owl",
+ "palette": {
+  "a": "#6e4b2d",
+  "o": "#a07346",
+  "w": "#f5ebd7",
+  "y": "#f5be3c",
+  "m": "#191919",
+  "c": "#e1cdaa",
+  "l": "#966e46"
+ },
+ "base": [
+  ".a...........a...",
+  ".aa.........aa...",
+  ".aoaaaaaaaaaoa...",
+  "aowwwoaaaowwwoa..",
+  "awyyywoaowyyywa..",
+  "awymywooowymywa..",
+  "awyyywoyowyyywa..",
+  "aowwwoyyyowwwoa..",
+  "aooocclcclcooaa..",
+  "aaoclcclcclcaaa..",
+  ".aoocclccclooa...",
+  "..aayy...yyaa...."
+ ],
+ "poses": {
+  "fidget": {
+   "0": "a.-----------.a--"
+  },
+  "inhale": {
+   "9": "a----------------",
+   "10": "a-------------a--"
+  },
+  "closed": {
+   "4": "--www-----www----",
+   "5": "--aaa-----aaa----",
+   "6": "--www-----www----"
+  },
+  "left": {
+   "5": "--my------my-----"
+  },
+  "right": {
+   "5": "---ym------ym----"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}
