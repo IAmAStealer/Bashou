@@ -1,0 +1,51 @@
+{
+ "name": "Typo Serpent",
+ "palette": {
+  "a": "#3a1f4a",
+  "p": "#9b5ab8",
+  "b": "#c48ae0",
+  "y": "#ffe060",
+  "k": "#1a0f20",
+  "n": "#2a1636",
+  "w": "#f4f0e8",
+  "m": "#3a0f1c",
+  "r": "#7a2a40",
+  "t": "#ff5a78"
+ },
+ "base": [
+  "....aaaaaaaaa....",
+  "..aapppppppppaa..",
+  ".apppbpppppbpppa.",
+  "apyypppbpbpppyypa",
+  "apykpppnpnpppkypa",
+  "aapppppppppppppaa",
+  ".awaaaaaaaaaaawa.",
+  ".awmmmmmmmmmmmwa.",
+  "..amrmmmtmmmrma..",
+  "..ammrmmtmmrmma..",
+  "...aappmtmppaa...",
+  ".....aat.taa....."
+ ],
+ "poses": {
+  "inhale": {},
+  "closed": {
+   "3": "--pp---------pp--",
+   "4": "--pp---------pp--"
+  },
+  "left": {
+   "4": "--ky---------ky--"
+  },
+  "right": {
+   "4": "-------------yk--"
+  },
+  "fidget": {
+   "9": "--------m--------",
+   "10": "--------m--------",
+   "11": "-------.-.-------"
+  }
+ },
+ "particles": [
+  5,
+  14
+ ]
+}
