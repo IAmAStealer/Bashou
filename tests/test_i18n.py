@@ -14,7 +14,8 @@ class CatalogTest(unittest.TestCase):
         keys = set(i18n.messages())
         for lang in i18n.LANGUAGES:
             if lang != "en":
-                self.assertEqual(set(i18n.catalog(lang)), keys, f"{lang}: run python3 -m bashou.i18n")
+                self.assertEqual(set(i18n.catalog(lang)) - {i18n.NAME}, keys, f"{lang}: run python3 -m bashou.i18n")
+                self.assertTrue(i18n.catalog(lang).get(i18n.NAME), f"{lang}: needs its \"@language\" name")
 
     def test_placeholders_survive_translation(self):
         for lang in i18n.LANGUAGES:

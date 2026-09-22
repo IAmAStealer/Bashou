@@ -5,6 +5,9 @@ English, so a language can ship half-translated.
 
     _("Commands")                        # code
     python3 -m bashou.i18n               # add new messages to every catalog (empty values)
+
+A new language is just a new file: locales/<code>.json with {"@language": "Deutsch"}, then run
+the command above to fill it with every message to translate.
 """
 
 import ast
@@ -13,8 +16,21 @@ import os
 import sys
 from pathlib import Path
 
-LANGUAGES = {"en": "English", "fr": "Français"}
 LOCALES = Path(__file__).resolve().parent / "locales"
+NAME = "@language"                    # a catalog's own entry: the language's name, in that language
+
+
+def _languages():
+    found = {"en": "English"}
+    for path in sorted(LOCALES.glob("*.json")):
+        try:
+            found[path.stem] = json.loads(path.read_text()).get(NAME) or path.stem
+        except json.JSONDecodeError:
+            pass
+    return found
+
+
+LANGUAGES = _languages()
 
 _cache = {}
 _lang = None
@@ -108,10 +124,10 @@ def update():
             continue
         path = LOCALES / f"{lang}.json"
         old = json.loads(path.read_text()) if path.exists() else {}
-        new = {k: old.get(k, "") for k in keys}
+        new = {NAME: old.get(NAME) or lang, **{k: old.get(k, "") for k in keys}}
         path.write_text(json.dumps(new, ensure_ascii=False, indent=1) + "\n")
-        done = sum(bool(v) for v in new.values())
-        print(f"{lang}: {done}/{len(new)} translated")
+        done = sum(bool(new[k]) for k in keys)
+        print(f"{lang}: {done}/{len(keys)} translated")
 
 
 if __name__ == "__main__":

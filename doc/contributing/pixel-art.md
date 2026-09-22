@@ -1,10 +1,59 @@
 # Pixel art for Bashou
 
-Bashou's pets are small pixel-art sprites drawn in the terminal. You can redraw an existing pet, or
-draw it in a bigger size, and send it as a pull request. We will switch the game over to the new art
-later.
+Bashou's pets are small pixel-art sprites drawn in the terminal. There are two ways to help, and
+neither needs any code:
 
-## Sizes
+1. **Improve a pet in the game today**: edit its text file, `bashou/pets/<pet>.json`.
+2. **Draw a bigger version** (16, 32 or 64 px) as PNG files in `art/`. The game will switch to them
+   later.
+
+## 1. The pets in the game: `bashou/pets/<pet>.json`
+
+Each pet is one JSON file. The picture is text: one letter per pixel, `.` is transparent. Each
+letter's color is set in `palette`. Two pixel rows make one terminal line, so `base` has an even
+number of rows (the pets are 17 × 12).
+
+```json
+{
+ "name": "Tadpole",
+ "palette": {"a": "#284830", "o": "#4e7048", "w": "#ffffff", "m": "#191919"},
+ "base": [
+  ".................",
+  "....aaaaa........",
+  "..aaoooooaa......",
+  ".aowmooooooat...."
+ ],
+ "poses": {
+  "closed": {"3": "---oo------------"},
+  "left":   {"3": "---mw------------"}
+ },
+ "particles": [0, 12]
+}
+```
+
+- **`poses`** paint over `base`, only on the rows they change: the key is the row number (from 0),
+  and in the row, `-` keeps the pixel of `base`. Every pet needs `inhale` (breathing in: the body
+  grows by a pixel), `closed` (eyes closed), `left` / `right` (pupils moved) and `fidget` (a small
+  move: an ear, a tail, a wing).
+- **`stages`** (optional) work the same way, for pixels added when the pet evolves: `"2"` and `"3"`
+  (a scarf, a crown…).
+- **`particles`**: the terminal line and column of a 3-cell empty spot where `z`, `♪` and `✦` show up.
+- **`idle`** (optional): `"swim"` instead of breathing; the pet then needs `swim_up` and `swim_down`
+  poses instead of `inhale` (see `tadpole.json`).
+
+Check your change, and look at every pose in your terminal:
+
+```bash
+python3 -m bashou.creatures check        # sizes, colors, poses, particle spot
+python3 -m bashou.creatures show fox     # draws base, every pose and stage
+```
+
+The same rules as below apply: your own work, readable on dark and light terminals, no pure black
+outline.
+
+## 2. Bigger art: PNG files in `art/`
+
+### Sizes
 
 Bashou will let players pick the pet size (`16`, `32` or `64` pixels; the setting isn't there yet).
 In a terminal, one pixel is one column wide and half a line tall:
@@ -17,7 +66,7 @@ In a terminal, one pixel is one column wide and half a line tall:
 
 Your drawing can be smaller than the canvas (e.g. 30 × 24 in the `32` folder), but not bigger.
 
-## Where the files go
+### Where the files go
 
 ```
 art/<pet>/<size>/<pose>.png
@@ -29,7 +78,7 @@ art/fox/32/closed.png
 axolotl gremlin beaver squirrel pigeon hedgehog bee whale meerkat`, and the starters' forms: `kitten cat lion seedling sprout tree pebble golem crystal`.
 For a brand new pet, open an issue first so we can agree on how it's unlocked.
 
-**Poses:** every pose is a full image of the same size. Only `base` is required, but a pet feels
+**Poses:** in PNG, every pose is a full image of the same size. Only `base` is required, but a pet feels
 alive with all of them:
 
 | Pose | What changes |
@@ -41,7 +90,7 @@ alive with all of them:
 | `fidget.png` | a small movement: ear twitch, tail flick, a wing… |
 | `back.png` | seen from behind, for `bashou adventure` (only starters walk there for now) |
 
-## Rules
+### Rules
 
 - **PNG, 8 bits (RGBA or indexed), transparent background.**
 - **Every pixel fully opaque or fully transparent**: no anti-aliasing, no soft edges.
@@ -55,7 +104,7 @@ Any pixel-art editor works: [Aseprite](https://www.aseprite.org/),
 [LibreSprite](https://libresprite.github.io/), [Piskel](https://www.piskelapp.com/) (in the browser)…
 Export each pose as its own PNG, at 1× scale.
 
-## Check it, then send it
+### Check it, then send it
 
 ```bash
 python3 -m bashou.art show art/fox/32/base.png   # see it as Bashou draws it

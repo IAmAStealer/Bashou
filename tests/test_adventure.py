@@ -226,6 +226,19 @@ class QuizTest(unittest.TestCase):
             self.assertEqual(quiz.problems(items), [], topic)
             self.assertEqual({q["level"] for q in items} >= {1, 2}, True, topic)
 
+    def test_translated_banks_match_english(self):
+        """A translation changes q, choices and explain only: same ids, levels and answer positions."""
+        for path in sorted(quiz.HERE.glob("*/*.json")):
+            if path.parent.name == "en":
+                continue
+            english = {q["id"]: q for q in quiz.bank(path.stem, "en")}
+            items = quiz.bank(path.stem, path.parent.name)
+            self.assertEqual(quiz.problems(items), [], path)
+            for q in items:
+                self.assertIn(q["id"], english, path)
+                self.assertEqual((q["level"], q["answer"]), (english[q["id"]]["level"], english[q["id"]]["answer"]),
+                                 f"{path}: {q['id']}")
+
     def test_no_repeats_until_all_seen(self):
         rng = random.Random(1)
         pool = [q["id"] for q in quiz.bank("bash", "en") if q["level"] == 1]

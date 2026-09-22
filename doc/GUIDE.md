@@ -119,14 +119,16 @@ Only counters are kept, in `~/.local/share/bashou/state.json`.
 ## Translations
 
 English is the source language. Translations live in `bashou/locales/<lang>.json`, keyed by the
-English text; an empty value falls back to English, so a language can ship half-done.
+English text; an empty value falls back to English, so a language can ship half-done. Adventure
+questions are translated in `bashou/adventure/questions/<lang>/`. Only JSON files, no code: see
+[translations.md](contributing/translations.md).
 
 ```bash
 python3 -m bashou.i18n         # add new messages (empty) to every catalog, show progress
 ```
 
-Keep the `{placeholders}` as they are. To add a language, add it to `LANGUAGES` in `bashou/i18n.py`
-and run the command above.
+To add a language, create `bashou/locales/<lang>.json` with `{"@language": "Deutsch"}` and run the
+command above.
 
 ## Tests
 

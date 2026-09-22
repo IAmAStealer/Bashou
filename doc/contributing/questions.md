@@ -1,14 +1,16 @@
 # Questions for `bashou adventure`
 
-Monsters and bosses ask multiple-choice questions on a topic. Each topic has levels: the first time
-you take a path it's level 1, after beating its boss level 2, and so on. More questions, and new
-levels, are very welcome.
+Monsters and bosses ask multiple-choice questions on a topic. Questions are plain JSON files, so you
+don't need to touch any code. Each topic has levels: the first time you take a path it's level 1,
+after beating its boss level 2, and so on. More questions, and new levels, are very welcome.
+
+Questions may be about tools the player hasn't installed yet: that's how they discover them.
 
 ## Where
 
 `bashou/adventure/questions/en/<topic>.json`. Topics: `bash`, `linux`, `python`, `rust`, `c`,
-`debian`, `rocky`, `cicd`. Translations go in `questions/<lang>/<topic>.json` (same ids); a missing
-translation falls back to English.
+`debian`, `rocky`, `cicd`. Translations go in `questions/<lang>/<topic>.json` (same ids, levels and
+answer positions); a missing translation falls back to English. See [translations.md](translations.md).
 
 ```json
 {"id": "linux-2-11", "level": 2,
