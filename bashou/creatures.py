@@ -142,6 +142,10 @@ FORMS = {
     "frog": ("tadpole", "frog", "toad"),
     "fox": ("fennec", "fox", "kitsune"),
     "owl": ("pygmy_owl", "barn_owl", "owl"),
+    "turtle": ("hatchling", "turtle", "sea_turtle"),
+    "mushroom": ("spore", "mushroom", "blob"),
+    "octopus": ("octopito", "octopus", "kraken"),
+    "sofa": ("beanbag", "sofa", "throne"),
 }
 
 

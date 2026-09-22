@@ -1,0 +1,49 @@
+{
+ "name": "Kraken",
+ "palette": {
+  "a": "#3a1f4a",
+  "o": "#7a3a8a",
+  "w": "#b070c0",
+  "y": "#ffd040",
+  "m": "#191919",
+  "s": "#f0c0d0"
+ },
+ "base": [
+  ".....aaaaaaa.....",
+  "...aaowoooooaa...",
+  "o.aowwooooooooa.o",
+  "o.aowoooooooooa.o",
+  "oaaoyyoooooyyoaao",
+  ".aaoymoooooymoaa.",
+  "..aoooooooooooa..",
+  ".aoaooaoaoaooaoa.",
+  "ao.aoaoa.aoaoa.oa",
+  "os.o.ao...oa.o.so",
+  ".o..ao.....oa..o.",
+  "..o..o.....o..o.."
+ ],
+ "poses": {
+  "inhale": {
+   "11": "-o.-----------.o-"
+  },
+  "closed": {
+   "4": "----oo-----oo----",
+   "5": "----aa-----aa----"
+  },
+  "left": {
+   "5": "----my-----my----"
+  },
+  "right": {
+   "5": "----ym-----ym----"
+  },
+  "fidget": {
+   "1": "o----------------",
+   "2": ".o---------------",
+   "3": ".----------------"
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}
