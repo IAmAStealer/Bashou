@@ -1,0 +1,44 @@
+{
+ "name": "Dust Bunny",
+ "palette": {
+  "g": "#9aa0a8",
+  "m": "#1c1e22"
+ },
+ "base": [
+  ".....gg...gg.....",
+  ".....gg...gg.....",
+  ".....gg...gg.....",
+  "....ggggggggg....",
+  "...ggggggggggg...",
+  "..ggmmgggggmmgg..",
+  "..ggggggggggggg..",
+  "..ggggggggggggg..",
+  "...ggggggggggg...",
+  "....ggggggggg....",
+  ".....g.g.g.g.....",
+  "................."
+ ],
+ "poses": {
+  "closed": {
+   "5": "----gg-----gg----"
+  },
+  "left": {
+   "5": "---mmg----mmg----"
+  },
+  "right": {
+   "5": "----gmm----gmm---"
+  },
+  "inhale": {
+   "0": "-----..----------",
+   "1": "-----gg----------"
+  },
+  "fidget": {
+   "0": "----------..-----",
+   "1": "----------gg-----"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

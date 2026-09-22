@@ -13,6 +13,12 @@ SOLUTIONS = {
     "column_crab": ("cut -d, -f2 servers.csv | sed -n '{x}p'", r"on line (\d+)"),
     "jumble_sprite": ("sort names.txt | head -1", None),
     "last_word_wisp": ("tail -1 boot.log", None),
+    "first_line_imp": ("head -{x} recipe.txt | tail -1", r"line (\d+)"),
+    "needle_gnat": ("grep {x} contacts.txt | cut -d' ' -f2", r"What is (\w+)'s"),
+    "field_wasp": ("awk '{{print $2}}' people.txt | sed -n '{x}p'", r"line (\d+)"),
+    "dust_bunny": ("ls crates | grep '[.]key$'", None),
+    "verse_viper": ("sed -n '{x}p' poem.txt", r"line (\d+)"),
+    "peak_harpy": ("sort -n scores.txt | tail -1", None),
     "grep_hydra": ("grep -cF '[ERROR]' app.log", None),
     "awk_golem": ("awk -F, '$2 == \"{x}\" {{ s += $3 }} END {{ print s }}' sales.csv", r'for "(\w+)"'),
     "find_wraith": ("find maze -type f -name '*.bak' | wc -l", None),
@@ -132,7 +138,7 @@ class OrderTest(unittest.TestCase):
     def test_beginners_get_level_1_fights_only(self):
         s = state.default()
         ready = {ch.id for ch in challenges.ALL if fight.ready(s, ch)}
-        self.assertEqual(ready, {"line_moth", "column_crab", "jumble_sprite", "last_word_wisp"})
+        self.assertEqual(ready, {ch.id for ch in challenges.ALL if ch.level == 1})
         s["tools"]["grep"] = 1                                          # met grep, its fight can come
         self.assertTrue(fight.ready(s, challenges.BY_ID["grep_hydra"]))
 

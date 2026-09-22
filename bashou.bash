@@ -77,7 +77,7 @@ bashou() {
 _bashou_commands="level pets achievements fight talk learn evolve swap stats start language config update version security adventure reset dev on off"
 _bashou_pets="bat frog turtle mushroom slime sofa octopus dragon fox owl mole snake ghost spider ant axolotl gremlin snail beaver squirrel pigeon hedgehog bee whale meerkat"
 _bashou_dev="unlock-all stage stage-all level threat restore"
-_bashou_challenges="line_moth column_crab jumble_sprite last_word_wisp grep_hydra awk_golem find_wraith uniq_swarm sed_serpent ps_phantom pipe_eel"
+_bashou_challenges="line_moth first_line_imp needle_gnat field_wasp dust_bunny verse_viper peak_harpy column_crab jumble_sprite last_word_wisp grep_hydra awk_golem find_wraith uniq_swarm sed_serpent ps_phantom pipe_eel"
 _bashou_security="1 2 3 4 5 6"
 
 _bashou_complete() {

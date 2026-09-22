@@ -72,3 +72,105 @@ LAST_WORD_WISP = Challenge(
 )
 
 ALL = [LINE_MOTH, COLUMN_CRAB, JUMBLE_SPRITE, LAST_WORD_WISP]
+
+
+def recipe_setup(work, rng):
+    steps = [f"add-{rng.choice(WORDS).replace(' ', '-')}-{rng.randint(10, 99)}" for _ in range(8)]
+    (work / "recipe.txt").write_text("\n".join(steps) + "\n")
+    n = rng.randint(2, 6)
+    return {"answer": steps[n - 1], "args": {"n": n}}
+
+
+def contacts_setup(work, rng):
+    people = rng.sample(NAMES, 9)
+    numbers = [f"0{rng.randint(1, 9)}-{rng.randint(10, 99)}-{rng.randint(10, 99)}-{rng.randint(10, 99)}"
+               for _ in people]
+    (work / "contacts.txt").write_text("\n".join(f"{p} {n}" for p, n in zip(people, numbers)) + "\n")
+    i = rng.randrange(len(people))
+    return {"answer": numbers[i], "args": {"who": people[i]}}
+
+
+def people_setup(work, rng):
+    people = rng.sample(NAMES, 9)
+    ages = [rng.randint(18, 79) for _ in people]
+    lines = [f"{p} {a} {rng.choice(ROOMS)}" for p, a in zip(people, ages)]
+    (work / "people.txt").write_text("\n".join(lines) + "\n")
+    n = rng.randint(2, len(lines))
+    return {"answer": ages[n - 1], "args": {"n": n}}
+
+
+def crates_setup(work, rng):
+    crates = work / "crates"
+    crates.mkdir()
+    for _ in range(rng.randint(6, 12)):
+        (crates / f"{rng.choice(WORDS).replace(' ', '-')}-{rng.randint(10, 99)}.txt").write_text("junk\n")
+    key = f"{rng.choice(NAMES)}-{rng.randint(100, 999)}.key"
+    (crates / key).write_text("open me\n")
+    return {"answer": key}
+
+
+def poem_setup(work, rng):
+    lines = rng.sample([w for w in WORDS if " " not in w], 8)
+    (work / "poem.txt").write_text("\n".join(lines) + "\n")
+    n = rng.randint(2, 8)
+    return {"answer": lines[n - 1], "args": {"n": n}}
+
+
+def scores_setup(work, rng):
+    scores = rng.sample(range(10, 999), 12)
+    (work / "scores.txt").write_text("\n".join(str(s) for s in scores) + "\n")
+    return {"answer": max(scores)}
+
+
+FIRST_LINE_IMP = Challenge(
+    level=1, id="first_line_imp", pet="mole", tools=("head",), threat="First-line Imp",
+    task="The First-line Imp swaps the steps of recipe.txt.\nWhat is written on line {n}?",
+    hints=["`bashou learn head`: head shows the start of a file, -n how many lines. Then read the last one.",
+           "Try: head -{n} recipe.txt"],
+    setup=recipe_setup,
+)
+
+NEEDLE_GNAT = Challenge(
+    level=1, id="needle_gnat", pet="mole", tools=("grep",), threat="Needle Gnat",
+    task="The Needle Gnat buzzes around contacts.txt.\nWhat is {who}'s phone number?",
+    hints=["`bashou learn grep`: grep keeps the lines that contain a word. No option needed.",
+           "Try: grep {who} contacts.txt"],
+    setup=contacts_setup,
+)
+
+FIELD_WASP = Challenge(
+    level=1, id="field_wasp", pet="owl", tools=("awk",), threat="Field Wasp",
+    task="The Field Wasp mixes up the columns of people.txt (name age room).\n"
+         "How old is the person on line {n}?",
+    hints=["`bashou learn awk`: awk cuts each line into fields, $1 is the first word, $2 the second. "
+           "Print the column, then read the line you need.",
+           "Try: awk '{print $2}' people.txt"],
+    setup=people_setup,
+)
+
+DUST_BUNNY = Challenge(
+    level=1, id="dust_bunny", pet="fox", tools=("ls",), threat="Dust Bunny",
+    task="A Dust Bunny rolled into crates/.\nWhich file in there ends in .key?",
+    hints=["`bashou learn ls`: ls lists what a folder holds. One command, no option.",
+           "Try: ls crates"],
+    setup=crates_setup,
+)
+
+VERSE_VIPER = Challenge(
+    level=1, id="verse_viper", pet="snake", tools=("sed",), threat="Verse Viper",
+    task="The Verse Viper coils around poem.txt.\nWhat word is on line {n}?",
+    hints=["`bashou learn sed`: with -n sed stays quiet, and '{n}p' prints only that line.",
+           "Try: sed -n '{n}p' poem.txt"],
+    setup=poem_setup,
+)
+
+PEAK_HARPY = Challenge(
+    level=2, id="peak_harpy", pet="sofa", tools=("sort",), threat="Peak Harpy",
+    task="The Peak Harpy nests on the highest score.\nWhat is the biggest number in scores.txt?",
+    hints=["sort compares as text unless you pass -n, which compares as numbers. "
+           "The last line of the sorted file is the biggest one: `tail -1`.",
+           "Try: sort -n scores.txt | tail -1"],
+    setup=scores_setup,
+)
+
+ALL += [FIRST_LINE_IMP, NEEDLE_GNAT, FIELD_WASP, DUST_BUNNY, VERSE_VIPER, PEAK_HARPY]
