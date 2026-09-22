@@ -96,6 +96,10 @@ class ProgressTest(unittest.TestCase):
                     import random
                     self.assertNotIn("kubectl", dialogue.hint(self.s, pet, random.Random(seed)) or "")
         with mock.patch("bashou.which.installed", side_effect=lambda name: name != "dig"):
+            self.assertEqual(progress.tool_label("pigeon"), "curl/ssh")        # the unlock hint named dig
+            for seed in range(50):
+                import random
+                self.assertNotIn("dig ", dialogue.hint(self.s, "pigeon", random.Random(seed)) or "")
             self.assertIn("whale", dict(creatures.roster()))
             ids = {a.id for a in achievements.family("pigeon")}
             self.assertNotIn("resolver", ids)

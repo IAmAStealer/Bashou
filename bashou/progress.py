@@ -31,12 +31,15 @@ TOOL_PETS = {
     "meerkat": ({"top", "htop", "btop", "free", "df", "du", "watch", "vmstat"}, 10),
 }
 # How the unlock hint names a tool pet's tools (default: the first in alphabetical order).
-TOOL_LABELS = {"ghost": "ps/kill", "squirrel": "tar/gzip", "pigeon": "curl/ssh/dig", "hedgehog": "chmod/chown",
-               "bee": "systemctl", "meerkat": "df/du/top"}
+# Only the installed ones are named: no `dig` in the hint when dig is missing.
+TOOL_LABELS = {"ghost": ("ps", "kill"), "squirrel": ("tar", "gzip"), "pigeon": ("curl", "ssh", "dig"),
+               "hedgehog": ("chmod", "chown"), "bee": ("systemctl",), "meerkat": ("df", "du", "top")}
 
 
 def tool_label(pet):
-    return TOOL_LABELS.get(pet) or min(TOOL_PETS[pet][0])
+    from .which import installed
+    names = TOOL_LABELS.get(pet) or (min(TOOL_PETS[pet][0]),)
+    return "/".join([n for n in names if installed(n)] or names[:1])
 
 
 # pet: (construct, lines needed); "pipe3" = a line chaining 3+ commands with |
