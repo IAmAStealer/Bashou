@@ -17,7 +17,7 @@ from pathlib import Path
 
 from . import challenges, progress, state
 from .analyze import analyze, parse_log
-from .i18n import _
+from .i18n import _, cap
 
 BOLD, DIM, RESET = "\033[1m", "\033[2m", "\033[0m"
 ACCENT, GOOD, BAD = "\033[38;2;150;190;230m", "\033[38;2;130;210;120m", "\033[38;2;240;110;110m"
@@ -120,15 +120,15 @@ def announcement(s, now=None):
     if not t or t["challenge"] not in challenges.BY_ID:
         return None
     ch = challenges.BY_ID[t["challenge"]]
-    return "⚠ " + _("A {threat} is coming! Use `{tool}` to fight it → bashou fight").format(
-        threat=_(ch.threat), tool=ch.tool)
+    return "⚠ " + cap(_("A {threat} is coming! Use `{tool}` to fight it → bashou fight").format(
+        threat=_(ch.threat), tool=ch.tool))
 
 
 def gone(challenge_id):
     """What the pet says when a threat got tired of waiting."""
     ch = challenges.BY_ID.get(challenge_id)
     name = _(ch.threat) if ch else "?"
-    return "💨 " + _("The {threat} got tired of waiting and left. It'll be back!").format(threat=name)
+    return "💨 " + cap(_("The {threat} got tired of waiting and left. It'll be back!").format(threat=name))
 
 
 # --- arena -----------------------------------------------------------------
@@ -190,7 +190,7 @@ def cmd_task(base):
 
 
 def banner(ch, task):
-    return (f"\n{BAD}{BOLD}⚔ " + _("The {threat} attacks!").format(threat=_(ch.threat)) + f"{RESET}  "
+    return (f"\n{BAD}{BOLD}⚔ " + cap(_("The {threat} attacks!").format(threat=_(ch.threat))) + f"{RESET}  "
             + _("Use {tool} to fight it.").format(tool=f"{BOLD}{ch.tool}{RESET}") + f"\n\n{task}\n\n"
             f"{DIM}" + _("You're in a sandbox folder with a real bash. Commands:") + f"{RESET}\n"
             "  answer <value>   " + _("strike") + f"   {DIM}("

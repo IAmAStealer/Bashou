@@ -67,6 +67,11 @@ def _(text):
     return catalog(lang).get(text) or text
 
 
+def cap(text):
+    """Capitalize the first letter: a translation may start with a name like "une hydre des logs"."""
+    return text[:1].upper() + text[1:]
+
+
 def progress_of(lang):
     """(translated, total) messages for a language."""
     cat = catalog(lang)

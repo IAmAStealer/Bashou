@@ -14,7 +14,7 @@ import tty
 from pathlib import Path
 
 from .. import challenges, fight, progress, render, state
-from ..i18n import _
+from ..i18n import _, cap
 from .. import creatures
 from . import canvas, lessons, quiz, scene, sprites, world
 
@@ -162,10 +162,10 @@ class Game:
         if not right:
             name = _(world.TOPICS[topic][2])
             if not world.lose_heart(adv):
-                self.result = (False, [_("The {boss} hits you! ♥ -1").format(boss=name)] + explain)
+                self.result = (False, [cap(_("The {boss} hits you! ♥ -1").format(boss=name))] + explain)
                 return
             self.boss = None
-            self.result = (False, [_("The {boss} wins this time.").format(boss=name)] + explain
+            self.result = (False, [cap(_("The {boss} wins this time.").format(boss=name))] + explain
                            + [_("Back to the last checkpoint. Bosses are there to make it stick!")])
             save(adv)
             return
@@ -330,7 +330,7 @@ class Game:
             if phase == "boss":
                 left = max(0.0, self.boss["deadline"] - now)
                 bar = "█" * int(left) + "░" * (BOSS_SECONDS - int(left))
-                head = [(_("{boss} · {n}/{total}").format(boss=_(world.TOPICS[adv["topic"]][2]),
+                head = [(_("{boss} · {n}/{total}").format(boss=cap(_(world.TOPICS[adv["topic"]][2])),
                                                            n=self.boss["total"] - self.boss["left"] + 1,
                                                            total=self.boss["total"]), BAD),
                         (f"⏳ {bar} {int(left)}s", BAD if left < 6 else ACCENT)]
