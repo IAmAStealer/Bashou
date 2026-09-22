@@ -42,7 +42,7 @@ Run `python3 -m unittest tests.test_i18n tests.test_adventure` after each batch.
 - Pet, stage and form names must fit **16 characters** (the swap board cuts them).
 - Question files keep the same `id`, `level` and `answer`, and the choices in the same order
   (`answer` is a position). Translate only `q`, `choices` and `explain`.
-- Valid JSON, UTF-8, `ensure_ascii=False` style (write `é`, not `é`).
+- Valid JSON in UTF-8: write accented letters as they are (`é`), not as `\u` escapes.
 
 ## Rules the tests can't check
 
