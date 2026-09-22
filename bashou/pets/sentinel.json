@@ -1,0 +1,49 @@
+{
+ "name": "Sentinel",
+ "palette": {
+  "a": "#6e5032",
+  "o": "#c8a06e",
+  "c": "#f0d7af",
+  "n": "#32231e",
+  "m": "#191919",
+  "s": "#c83a3a",
+  "B": "#3a3a44",
+  "R": "#6a6a70",
+  "r": "#8a8a90"
+ },
+ "base": [
+  "......aaaa.......",
+  ".....aoooooa.....",
+  "....anmooomna....",
+  "....aoooooooa....",
+  ".....aocnnca.....",
+  "......assssa.....",
+  ".....aoccccoa....",
+  "....aooccccooa...",
+  ".....aoccccoa....",
+  ".....aoooooa.....",
+  "..RRRRRRRRRRRRR..",
+  ".RRrrrrrrrrrrrRR."
+ ],
+ "poses": {
+  "inhale": {
+   "7": "---a----------a--"
+  },
+  "closed": {
+   "2": "------n---n------"
+  },
+  "left": {
+   "2": "-----mo--mo------"
+  },
+  "right": {
+   "2": "------om--om-----"
+  },
+  "fidget": {
+   "2": "-----BBBBBBB-----"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

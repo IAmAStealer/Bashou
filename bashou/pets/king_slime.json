@@ -1,0 +1,52 @@
+{
+ "name": "King slime",
+ "palette": {
+  "a": "#329682",
+  "o": "#6ed7b9",
+  "w": "#e6fff5",
+  "m": "#191919",
+  "p": "#ffa0aa",
+  "q": "#286455",
+  "y": "#f0c030",
+  "r": "#e04050"
+ },
+ "base": [
+  ".....y..y..y.....",
+  ".....yyyryyy.....",
+  "....aaaaaaaaa....",
+  "...awooooooooa...",
+  "..awooooooooooa..",
+  ".aoooooooooooooa.",
+  ".aooomooooomoooa.",
+  ".aooomooooomoooa.",
+  "aooopoooqoooopooa",
+  "aoooooooooooooooa",
+  ".aoooooooooooooa.",
+  "..aaaaaaaaaaaaa.."
+ ],
+ "poses": {
+  "inhale": {
+   "10": "a---------------a",
+   "11": "-a-------------a-"
+  },
+  "closed": {
+   "6": "-----o-----o-----",
+   "7": "-----q-----q-----"
+  },
+  "left": {
+   "6": "----mo----mo-----",
+   "7": "----mo----mo-----"
+  },
+  "right": {
+   "6": "-----om----om----",
+   "7": "-----om----om----"
+  },
+  "fidget": {
+   "1": "--------w--------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

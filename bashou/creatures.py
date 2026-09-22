@@ -159,6 +159,10 @@ FORMS = {
     "pigeon": ("squab", "pigeon", "messenger"),
     "hedgehog": ("hoglet", "hedgehog", "porcupine"),
     "bee": ("brood", "bee", "queen_bee"),
+    "slime": ("droplet", "slime", "king_slime"),
+    "mole": ("molekin", "mole", "mole_king"),
+    "whale": ("calf", "whale", "leviathan"),
+    "meerkat": ("pup", "meerkat", "sentinel"),
 }
 
 
