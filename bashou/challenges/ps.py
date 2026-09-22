@@ -32,7 +32,7 @@ def cleanup(meta):
 
 
 CHALLENGE = Challenge(
-    level=1, id="ps_phantom", pet="ghost", tools=("ps", "pgrep", "pidof"), threat="Process Phantom",
+    level=2, id="ps_phantom", pet="ghost", tools=("ps", "pgrep", "pidof"), threat="Process Phantom",
     task="A Process Phantom named {name} haunts this machine.\nWhat is its PID?",
     hints=["`ps aux` lists every process with its PID in the 2nd column; filter it with grep.",
            "Try: pgrep -f phantom   or   ps aux | grep phantom"],

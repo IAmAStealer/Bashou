@@ -9,6 +9,10 @@ from bashou import challenges, fight, state
 
 # Reference solutions, run with bash in the arena folder. {x} is filled from the task text.
 SOLUTIONS = {
+    "line_moth": ("wc -l < notes.txt", None),
+    "column_crab": ("cut -d, -f2 servers.csv | sed -n '{x}p'", r"on line (\d+)"),
+    "jumble_sprite": ("sort names.txt | head -1", None),
+    "last_word_wisp": ("tail -1 boot.log", None),
     "grep_hydra": ("grep -cF '[ERROR]' app.log", None),
     "awk_golem": ("awk -F, '$2 == \"{x}\" {{ s += $3 }} END {{ print s }}' sales.csv", r'for "(\w+)"'),
     "find_wraith": ("find maze -type f -name '*.bak' | wc -l", None),
@@ -128,7 +132,9 @@ class OrderTest(unittest.TestCase):
     def test_beginners_get_level_1_fights_only(self):
         s = state.default()
         ready = {ch.id for ch in challenges.ALL if fight.ready(s, ch)}
-        self.assertEqual(ready, {"grep_hydra", "find_wraith", "ps_phantom"})
+        self.assertEqual(ready, {"line_moth", "column_crab", "jumble_sprite", "last_word_wisp"})
+        s["tools"]["grep"] = 1                                          # met grep, its fight can come
+        self.assertTrue(fight.ready(s, challenges.BY_ID["grep_hydra"]))
 
     def test_harder_fights_after_their_tool_and_their_basics(self):
         s = state.default()

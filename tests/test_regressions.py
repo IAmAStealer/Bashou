@@ -37,7 +37,8 @@ class TempState(unittest.TestCase):
 class ArenaBugs(unittest.TestCase):
     def test_banner_names_the_main_tool(self):
         """The Log Hydra asked for `egrep`: tools were a set, and the "main" one was sorted()[0]."""
-        expected = {"grep_hydra": "grep", "awk_golem": "awk", "find_wraith": "find",
+        expected = {"line_moth": "wc", "column_crab": "cut", "jumble_sprite": "sort",
+                    "last_word_wisp": "tail", "grep_hydra": "grep", "awk_golem": "awk", "find_wraith": "find",
                     "uniq_swarm": "uniq", "sed_serpent": "sed", "ps_phantom": "ps",
                     "pipe_eel": "|"}
         for ch in challenges.ALL:
