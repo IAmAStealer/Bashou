@@ -44,6 +44,19 @@ class CreaturesTest(unittest.TestCase):
         self.assertIn("'Z' is used but not in the palette", found)
         self.assertIn("missing pose closed", found)
 
+    def test_large_sprites_are_valid_and_have_a_small_one(self):
+        for path in sorted((creatures.ART / "large").glob("*.json")):
+            self.assertEqual(creatures.problems(path), [], path.name)
+            self.assertIn(path.stem, creatures.PETS)
+            big = creatures.LARGE[path.stem]
+            self.assertTrue(set(creatures.POSES) <= set(big.poses), path.name)
+            self.assertEqual(len(render.lines(big, ["inhale"], render.mask(big))), len(big.base) // 2)
+
+    def test_size_picks_the_large_sprite_when_there_is_one(self):
+        self.assertIs(creatures.get("tarantula", "large"), creatures.LARGE["tarantula"])
+        self.assertIs(creatures.get("tarantula"), creatures.PETS["tarantula"])
+        self.assertIs(creatures.get("fox", "large"), creatures.PETS["fox"])
+
     def test_roster_has_stage_names(self):
         self.assertEqual(len(ROSTER), 25)
         self.assertEqual({p for p, _ in ROSTER}, set(STAGES))

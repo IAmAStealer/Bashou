@@ -119,6 +119,8 @@ def messages():
     for lesson in lessons.LESSONS:
         found += [lesson["title"]] + [text for text, example in lesson["pages"]]
     found += list(progress.CONSTRUCT_NAMES.values()) + [how for rule, how in progress.STATE_PETS.values()]
+    from . import state
+    found += [text for default, text in state.SETTINGS.values()]
     for ch in challenges.ALL + challenges.SECURITY + challenges.TRIALS:
         found += [ch.threat, ch.task, *ch.hints]
     return list(dict.fromkeys(found))

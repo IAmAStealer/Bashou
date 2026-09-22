@@ -48,6 +48,7 @@ class Companion:
         self.busy = True
         self.state_mtime = 0
         sprite, self.voice = progress.current(state.load())[::3]
+        self.sprite, self.size = sprite, "small"
         self.pet = creatures.get(sprite)
         self.cells = render.mask(self.pet)
         self.stage = 1
@@ -123,9 +124,7 @@ class Companion:
         i18n.use(None)                 # `bashou language` may have changed it
         s = state.load()
         sprite, stage, name, self.voice = progress.current(s)
-        if sprite != self.pet.id:
-            self.pet = creatures.get(sprite)
-            self.cells = render.mask(self.pet)
+        self.sprite, self.size = sprite, state.setting(s, "size")
         self.stage = self.behavior.stage = stage
         self.look = progress.look(s)           # the form drawn; the actions follow `stage`
         threat = fight.active_threat(s)
@@ -236,14 +235,24 @@ class Companion:
         if not self.bubble and self.notes:
             self.bubble = (self.notes.pop(0), 0, random.randint(*state.setting(state.load(), "bubble")))
 
+    def fit(self, cols):
+        """The large sprite when asked for and the terminal has room for it, else the small one."""
+        pet = creatures.get(self.sprite, self.size)
+        if cols < pet.width + 20:
+            pet = creatures.get(self.sprite)
+        if pet is not self.pet:
+            self.pet = pet
+            self.cells = render.mask(pet)
+
     def draw(self, ms):
         self.update_bubble()
 
-        poses, z = self.behavior.frame(ms, self.pet, self.threat, ms - self.last_activity())
         cols = os.get_terminal_size(1).columns
+        self.fit(cols)
         if cols < self.pet.width + 20:
             return
-        key = (tuple(poses), z, cols, self.bubble and self.bubble[0], self.pet.id, self.look)
+        poses, z = self.behavior.frame(ms, self.pet, self.threat, ms - self.last_activity())
+        key = (tuple(poses), z, cols, self.bubble and self.bubble[0], self.pet.id, self.pet.width, self.look)
         if key == self.last_key and self.tick % 8:
             return
         self.last_key = key

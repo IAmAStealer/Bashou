@@ -43,7 +43,9 @@ def default():
 SETTINGS = {
     "bubble": ((5, 10), "commands a speech bubble stays on screen (e.g. 5-10, or 3)"),
     "updates": ("on", "look for a new version once a day (on/off)"),
+    "size": ("small", "pet size: small, or large for pets that have big pixel art (small/large)"),
 }
+CHOICES = {"updates": ("on", "off"), "size": ("small", "large")}
 
 
 def setting(state, name):
@@ -59,7 +61,7 @@ def parse(name, text):
     """Check a new value against the setting's kind; ValueError if it doesn't fit."""
     if isinstance(SETTINGS[name][0], tuple):
         return list(parse_range(text))
-    if text not in ("on", "off"):
+    if text not in CHOICES[name]:
         raise ValueError(text)
     return text
 

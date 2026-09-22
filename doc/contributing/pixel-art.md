@@ -51,11 +51,21 @@ python3 -m bashou.creatures show fox     # draws base, every pose and stage
 The same rules as below apply: your own work, readable on dark and light terminals, no pure black
 outline.
 
+### Large sprites: `bashou/pets/large/<form>.json`
+
+A form can also have big pixel art, shown to players who run `bashou config size large`. Same JSON
+format, any width, an even number of rows. It needs the same poses; they don't have to be eyes: the
+large Tarantula has no face, so its "blink" and "look" poses move its legs instead. Everywhere else
+(the swap board, evolutions, the adventure) and in terminals too narrow for it, the 17 × 12 sprite
+shows. `python3 -m bashou.creatures check` checks both folders; see a large one with
+`python3 -m bashou.creatures show large/tarantula`.
+
 ## 2. Bigger art: PNG files in `art/`
 
 ### Sizes
 
-Bashou will let players pick the pet size (`16`, `32` or `64` pixels; the setting isn't there yet).
+Bashou will let players pick the pet size (`16`, `32` or `64` pixels). For now `bashou config size large`
+only switches between the 17 × 12 sprites and the large JSON ones above.
 In a terminal, one pixel is one column wide and half a line tall:
 
 | Size | Canvas at most | Space in the terminal |

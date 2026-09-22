@@ -173,9 +173,13 @@ STARTER_BLURBS = {
 }
 
 PETS = {path.stem: load(path) for path in sorted(ART.glob("*.json"))}
+LARGE = {path.stem: load(path) for path in sorted((ART / "large").glob("*.json"))}   # `bashou config size large`
 
 
-def get(pet_id):
+def get(pet_id, size="small"):
+    """A pet's sprite; with size "large", its big pixel art when it has one."""
+    if size == "large" and pet_id in LARGE:
+        return LARGE[pet_id]
     return PETS.get(pet_id, PETS["stardust"])
 
 
@@ -192,8 +196,9 @@ def main():
             print("\n".join(render.lines(pet, poses, cells, stage)).replace(render.SKIP, " ") + "\n")
         return 0
     if args == ["check"]:
-        found = [p for path in sorted(ART.glob("*.json")) for p in problems(path)]
-        print("\n".join(found) or f"{len(PETS)} pets OK")
+        found = [p for path in sorted(ART.glob("*.json")) + sorted((ART / "large").glob("*.json"))
+                 for p in problems(path)]
+        print("\n".join(found) or f"{len(PETS)} pets OK, {len(LARGE)} large")
         return 1 if found else 0
     print(main.__doc__)
     return 2

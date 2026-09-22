@@ -16,7 +16,7 @@ import unittest
 from unittest import mock
 from pathlib import Path
 
-from bashou import challenges, cli, fight, state
+from bashou import challenges, cli, creatures, fight, state
 
 
 class TempState(unittest.TestCase):
@@ -109,6 +109,20 @@ class ScrollTrailTest(unittest.TestCase):
                 for c, on in enumerate(cells[r]):
                     if on:
                         self.assertTrue(cells[r - 1][c], f"{pet.id}: row {r - 1}, col {c} left transparent")
+
+
+class SizeTest(TempState):
+    def test_large_sprite_only_where_it_fits(self):
+        from bashou.companion import Companion
+        pet = Companion(os.getpid())
+        pet.sprite, pet.size = "tarantula", "large"
+        pet.fit(200)
+        self.assertIs(pet.pet, creatures.LARGE["tarantula"])
+        pet.fit(60)                                              # too narrow: back to the small one
+        self.assertIs(pet.pet, creatures.PETS["tarantula"])
+        pet.sprite = "fox"
+        pet.fit(200)                                             # no big art: small
+        self.assertIs(pet.pet, creatures.PETS["fox"])
 
 
 class BubbleTest(TempState):
@@ -235,6 +249,9 @@ class ConfigTest(TempState):
             self.assertEqual(cli.config("updates", "maybe"), 1)
             self.assertEqual(cli.config("updates", "off"), 0)
             self.assertEqual(state.setting(state.load(), "updates"), "off")
+            self.assertEqual(cli.config("size", "huge"), 1)
+            self.assertEqual(cli.config("size", "large"), 0)
+            self.assertEqual(state.setting(state.load(), "size"), "large")
 
 
 class BoardTest(TempState):
