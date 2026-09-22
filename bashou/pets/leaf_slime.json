@@ -9,20 +9,20 @@
   "q": "#6b4a22",
   "l": "#6fd04f",
   "L": "#1d5218",
-  "d": "#2f7a2a"
+  "d": "#63bb47"
  },
  "base": [
   "..LlllL..........",
   ".LldddlL.qq......",
   "..Lll.awooa......",
   "....awodooa......",
-  "...awdododoa.....",
-  "..aooodddoooa....",
+  "...awoodoooa.....",
+  "..aoooodooooa....",
   ".aooomodomoooa...",
   ".aooomodomoooa...",
   ".aopoooqooopoa...",
-  ".aoooodddooooa...",
-  "..aoodododooa....",
+  ".aooooodoooooa...",
+  "..aoooodooooa....",
   "...aaaaaaaaa....."
  ],
  "poses": {
