@@ -3,8 +3,8 @@
 A little pixel-art pet that lives in the corner of your terminal and grows while you learn bash.
 Run commands, try new tools, and collect new pets along the way.
 
-![A pixel-art planet in the corner of the terminal, with a tip in its speech bubble, above a
-`bashou learn` explanation of a tar command](doc/img/prompt.svg)
+![A small pixel-art stardust in the corner of the terminal, with a tip in its speech bubble, above
+a `bashou learn` explanation of a tar command](doc/img/prompt.svg)
 
 ## Learn bash without asking an AI
 
@@ -28,14 +28,17 @@ tokens spent to learn what a command does.
 ![bashou fight: your pet and its hearts face the Log Hydra, the task in a bubble, and the arena
 shell below](doc/img/duel.svg)
 
-## Collect pets
+## Discover pets
 
-25 pets, each with 3 forms, unlocked by what you do: 10 uses of `find` bring the Fox, `awk` the Owl,
-`git` the Beaver. Your starter (Stardust, Seedling or Pebble) grows up to level 20 and keeps changing
-shape.
+Choose a starter: Stardust, Seedling or Pebble. It grows up to level 20 and changes shape along the
+way. What it becomes is for you to find out.
 
-![Twelve of the pets: Stardust, Comet, Planet, Star, Fox, Kitsune, Octopus, Kraken, Owl, Dragon,
-Axolotl, Ghost](doc/img/pets.svg)
+25 more pets hide in your terminal, each with 3 forms. They come from what you do: a new tool used
+often enough, a long pipe, a risky command… The swap board shows only their silhouette until you
+meet them.
+
+![The three starters, Stardust, Seedling and Pebble, next to three dark silhouettes of pets still to
+discover](doc/img/pets.svg)
 
 ## Install
 

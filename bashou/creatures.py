@@ -187,7 +187,7 @@ FORM_NAMES = {"stardust": "Stardust", "comet": "Comet", "planet": "Planet", "sta
               "sprout": "Sprout",
               "tree": "Tree spirit", "pebble": "Pebble", "golem": "Rock golem", "crystal": "Crystal golem"}
 STARTER_BLURBS = {
-    "star": "Bright and curious. Grows from a speck of dust into a star.",
+    "star": "Bright and curious. A speck of dust with big dreams.",
     "sprout": "Calm and patient. Grows scripts from tiny seeds.",
     "pebble": "Solid and loyal. Knows the filesystem rock by rock.",
 }

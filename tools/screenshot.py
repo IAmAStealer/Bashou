@@ -149,7 +149,7 @@ PROMPT = "\x1b[38;2;130;210;120mme@laptop\x1b[0m:\x1b[38;2;120;160;240m~/notes\x
 
 def prompt_shot():
     s = Screen(92, 21)
-    draw_pet(s, creatures.get("planet"), "Ctrl+R searches your history as you type.")
+    draw_pet(s, creatures.get("stardust"), "Ctrl+R searches your history as you type.")
     s.write("\x1b[8;1H")
     s.write(PROMPT + "grep -c ERROR app.log\n3\n")
     s.write(PROMPT + "tar -czf backup.tgz notes/\n")
@@ -172,7 +172,7 @@ def duel_shot():
         (base / "meta.json").write_text(json.dumps(meta))
         (base / "duel.json").write_text(json.dumps({"hearts": 2, "enemy": 2, "offset": 0, "event": "hit", "at": 0,
                                                     "said": "💥 grep hits the Log Hydra!"}))
-        fake = {**state.default(), "starter": "star", "achievements": [f"a{i}" for i in range(40)]}
+        fake = {**state.default(), "starter": "star"}                    # no spoiler: the first form
         with mock.patch.object(state, "load", return_value=fake):
             scene = duel.Scene(base, 0)
         body, _erase = scene.frame(s.cols + 1, 1.0)
@@ -188,17 +188,17 @@ def duel_shot():
 
 
 def pets_shot():
-    ids = ["stardust", "comet", "planet", "star", "fox", "kitsune", "octopus", "kraken", "owl", "great_dragon",
-           "axolotl", "ghost"]
+    """The three starters you choose from, then pets to discover: silhouettes only, as on the board."""
+    from bashou.board import silhouette
+    shown = [(creatures.get(forms[0]), creatures.FORM_NAMES[forms[0]]) for forms in creatures.STARTERS.values()]
+    hidden = [(silhouette(creatures.get(creatures.form(p, 1))), "???") for p in ("fox", "octopus", "bat")]
     per_row = 6
-    s = Screen(per_row * 19 + 1, 2 * 8 + 1)
-    for i, pet_id in enumerate(ids):
-        pet = creatures.get(pet_id)
-        r, c = (i // per_row) * 8 + 1, (i % per_row) * 19 + 2
-        s.write("".join(f"\x1b[{r + j};{c}H{line}" for j, line in enumerate(sprite(pet))))
-        name = creatures.FORM_NAMES.get(pet_id) or pet.name
-        s.write(f"\x1b[{r + 6};{c + (17 - len(name)) // 2}H\x1b[2m{name}\x1b[0m")
-    return s.svg("25 pets to collect, 3 forms each")
+    s = Screen(per_row * 19 + 1, 8)
+    for i, (pet, name) in enumerate(shown + hidden):
+        c = i * 19 + 2
+        s.write("".join(f"\x1b[{1 + j};{c}H{line}" for j, line in enumerate(sprite(pet))))
+        s.write(f"\x1b[7;{c + (17 - len(name)) // 2}H\x1b[2m{name}\x1b[0m")
+    return s.svg("Choose a starter, then discover 25 pets")
 
 
 def main():

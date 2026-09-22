@@ -74,5 +74,29 @@ class FormSwitchTest(TempState):
         self.assertIn("Only one form", board.message)
 
 
+class NoSpoilerTest(unittest.TestCase):
+    """Forms are to discover (owner): only the ones reached are named, then "?" and its level."""
+
+    def test_the_board_names_only_reached_forms(self):
+        from bashou.board import ladder_line
+        s = state.default()
+        s["starter"], s["achievements"] = "star", [f"a{i}" for i in range(15)]
+        self.assertEqual(ladder_line(s), "Stardust → Comet → ? (level 8)")
+        s["achievements"] = [f"a{i}" for i in range(99)]
+        self.assertEqual(ladder_line(s), "Stardust → Comet → Planet → Star")
+
+    def test_the_starter_choice_names_only_the_first_form(self):
+        from bashou import starter
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            starter.draw(0, False)
+        import re
+        from bashou import creatures
+        text = out.getvalue() + " ".join(creatures.STARTER_BLURBS.values())
+        for forms in creatures.STARTERS.values():
+            for later in forms[1:]:
+                self.assertIsNone(re.search(rf"\b{creatures.FORM_NAMES[later]}\b", text, re.I), later)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -5,11 +5,11 @@ Every release has a section here, written for players. CI refuses to tag a relea
 
 ## v0.3.0 — 2026-09-22
 
-- Starters now grow up to level 20 and get more forms. The Star line gains the Comet: Stardust (1) →
-  Comet (4) → Planet (8) → Star (10), with more forms to come. Seedling and Pebble change shape at
-  levels 8 and 15.
-- You never lose a form: a Planet or a Star from before this update stays one until the next form.
-- The swap board shows each form of your starter with the level it comes at.
+- Starters now grow up to level 20 and get more forms, starting with a new one for Stardust, with
+  more to come. Seedling and Pebble now change shape at levels 8 and 15.
+- You never lose a form: the form you have stays until you reach the next one.
+- No more spoilers: the swap board and the starter choice show only the forms you've reached, and
+  the level of the next one.
 
 ## v0.2.3 — 2026-09-22
 

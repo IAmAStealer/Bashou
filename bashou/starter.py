@@ -29,7 +29,7 @@ def draw(pos, breath):
         sprite = render.lines(pet, ["inhale"] if breath and i == pos else [], cells)
         name = _(FORM_NAMES[forms[0]])
         title = f"{REV} {name} {RESET}" if i == pos else f" {name} "
-        evolves = " → ".join(_(FORM_NAMES[f]) for f in forms)
+        evolves = " → ".join([name] + ["?"] * (len(forms) - 1))                # to discover
         cols.append(sprite + ["", title, f"{DIM}{evolves}{RESET}"])
     out = [f"{ESC}[H{ESC}[2J"] + [f"{ESC}[{i + 1};1H{l}" for i, l in enumerate(lines)]
     for i, col in enumerate(cols):

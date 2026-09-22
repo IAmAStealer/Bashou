@@ -42,6 +42,16 @@ def silhouette(pet):
                          stages=pet.stages)
 
 
+def ladder_line(s):
+    """The forms reached so far, then a mystery: what comes next is for you to discover."""
+    forms, levels = progress.ladder(s)
+    top = progress.starter_form(s)
+    shown = [_(FORM_NAMES[f]) for f in forms[:top]]
+    if top < len(forms):
+        shown.append("? " + _("(level {level})").format(level=levels[top]))
+    return " → ".join(shown)
+
+
 class Board:
     def __init__(self):
         self.s = state.load()
@@ -87,8 +97,7 @@ class Board:
             per = progress.ACHIEVEMENTS_PER_LEVEL
             out.append(DIM + _("{n} achievement(s) to level {level}").format(
                 n=per - len(s["achievements"]) % per, level=lvl + 1) + RESET)
-        forms, levels = progress.ladder(s)
-        out.append(DIM + " → ".join(f"{_(FORM_NAMES[f])} {lvl}" for f, lvl in zip(forms, levels)) + RESET)
+        out.append(DIM + ladder_line(s) + RESET)
         return out
 
     def preview(self):
