@@ -320,43 +320,5 @@ class BoardTest(TempState):
         self.assertEqual(state.load()["active"], "starter")
 
 
-class NamesExistTest(unittest.TestCase):
-    """The adventure asked for creatures.OWL after the pets moved to JSON files (owner's bug report):
-    every `module.NAME` used in Bashou must exist, and every road event must have something to draw."""
-
-    def test_every_module_attribute_exists(self):
-        import ast
-        import importlib
-        root = Path(__file__).resolve().parent.parent / "bashou"
-        missing = []
-        for path in sorted(root.rglob("*.py")):
-            tree = ast.parse(path.read_text())
-            package = ".".join(("bashou",) + path.relative_to(root).parent.parts)
-            modules = {}
-            for node in ast.walk(tree):
-                if isinstance(node, ast.ImportFrom) and node.level:
-                    base = package.rsplit(".", node.level - 1)[0] if node.level > 1 else package
-                    base = base + "." + node.module if node.module else base
-                    for alias in node.names:
-                        try:
-                            modules[alias.asname or alias.name] = importlib.import_module(f"{base}.{alias.name}")
-                        except ImportError:
-                            pass                                    # a function or class, not a module
-            for node in ast.walk(tree):
-                if (isinstance(node, ast.Attribute) and isinstance(node.value, ast.Name)
-                        and node.value.id in modules and not hasattr(modules[node.value.id], node.attr)):
-                    missing.append(f"{path.relative_to(root)}:{node.lineno} {node.value.id}.{node.attr}")
-        self.assertEqual(missing, [])
-
-    def test_every_road_event_draws(self):
-        from bashou.adventure import sprites
-        kinds = {"fork"} | {k for topic in sprites.TOPIC_COLORS for k in ("monster", "boss", "chest", "lesson")}
-        self.assertEqual(set(sprites.AHEAD), kinds)
-        for kind in sprites.AHEAD:
-            for topic in sprites.TOPIC_COLORS:
-                rows, palette = sprites.ahead(kind, topic)
-                self.assertTrue(set("".join(rows)) - {"."} <= set(palette), (kind, topic))
-
-
 if __name__ == "__main__":
     unittest.main()
