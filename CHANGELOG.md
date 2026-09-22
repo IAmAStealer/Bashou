@@ -5,8 +5,8 @@ Every release has a section here, written for players. CI refuses to tag a relea
 
 ## v0.2.3 — 2026-09-22
 
-- The Log Hydra, the Ledger Golem, the Maze Wraith, the Echo Swarm, the Typo Serpent and the Process
-  Phantom have their own look in `bashou fight`.
+- Every threat of `bashou fight` has its own look: the Log Hydra, the Ledger Golem, the Maze Wraith,
+  the Echo Swarm, the Typo Serpent, the Process Phantom and the Knot Eel.
 
 ## v0.2.2 — 2026-09-22
 

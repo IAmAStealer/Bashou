@@ -1,0 +1,46 @@
+{
+ "name": "Knot Eel",
+ "palette": {
+  "a": "#123a44",
+  "e": "#3aa0b0",
+  "b": "#c8f0f0",
+  "y": "#fff080",
+  "w": "#f4f0e8",
+  "m": "#0a1a20",
+  "f": "#7ad8e0"
+ },
+ "base": [
+  "........aaaaa....",
+  ".......aeebeea...",
+  "..aaaa.aea..aea..",
+  ".aeyeeaaea...aea.",
+  "aeeeeeebeeaa.aea.",
+  "awwmeeeeeeeebeea.",
+  ".aaaaaaeaaaeeaa..",
+  ".......aea.aea...",
+  ".......aeaaea....",
+  "........aeea.....",
+  ".........aeeb....",
+  "..........aeeef.."
+ ],
+ "poses": {
+  "inhale": {},
+  "closed": {
+   "3": "---e-------------"
+  },
+  "left": {
+   "3": "--ye-------------"
+  },
+  "right": {
+   "3": "---ey------------"
+  },
+  "fidget": {
+   "10": "---------------f-",
+   "11": "--------------e.-"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

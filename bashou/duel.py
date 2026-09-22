@@ -29,11 +29,7 @@ FREE = {"ls", "cd", "pwd", "cat", "head", "tail", "less", "more", "file", "stat"
         "clear", "man", "help", "history", "type", "which", "task", "hint", "answer", "flee", "bashou"}
 
 ENEMIES = Path(__file__).resolve().parent / "enemies"     # <challenge id>.json, the pet format, facing left
-# Placeholder for a threat without its own sprite yet: the adventure's monster, tinted.
-TINTS = {"grep_hydra": ((90, 200, 110), (40, 120, 60)), "awk_golem": ((170, 150, 120), (100, 85, 60)),
-         "find_wraith": ((150, 160, 220), (70, 80, 140)), "uniq_swarm": ((240, 200, 70), (150, 110, 30)),
-         "sed_serpent": ((120, 200, 90), (50, 110, 40)), "ps_phantom": ((220, 225, 240), (120, 130, 160)),
-         "pipe_eel": ((80, 170, 200), (30, 90, 120))}
+PLACEHOLDER = ((150, 150, 160), (80, 80, 90))              # for a new fight still without its sprite
 
 
 def judge(ch, status, command):
@@ -83,7 +79,7 @@ def cmd_judge(base):
 def enemy_sprite(ch_id):
     if (ENEMIES / f"{ch_id}.json").exists():
         return creatures.load(ENEMIES / f"{ch_id}.json")
-    body, dark = TINTS.get(ch_id, TINTS["grep_hydra"])
+    body, dark = PLACEHOLDER
     rows = sprites.symmetric(sprites.MONSTER)
     rows = rows + ["." * len(rows[0])] * (len(rows) % 2)
     palette = {"a": dark, "o": body, "w": (255, 255, 255), "m": (25, 25, 25)}

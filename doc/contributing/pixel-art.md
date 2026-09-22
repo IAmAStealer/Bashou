@@ -64,7 +64,7 @@ shows. `python3 -m bashou.creatures check` checks both folders; see a large one 
 
 The threats of `bashou fight` are drawn next to your pet during the duel. Same format and size as a
 pet (17 × 12, the same poses), facing **left**, toward the pet. The file is named after the fight
-(`grep_hydra.json` for the Log Hydra); a fight without one shows a tinted placeholder monster.
+(`grep_hydra.json` for the Log Hydra); every fight needs one (a test checks it).
 Big threats show only their top part, as if the rest were below the frame (the Log Hydra is three
 heads on long necks). Check with `python3 -m bashou.creatures check`, see one with
 `python3 -m bashou.creatures show ../enemies/grep_hydra`.
