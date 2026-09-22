@@ -31,6 +31,7 @@ Every release has a section here, written for players. CI refuses to tag a relea
 ### Contributing
 - Pets, translations and adventure questions are plain JSON files: see `doc/contributing/`.
 - The README explains how AI is used in Bashou: to help you learn, not to do it for you.
+- Translating with an AI agent: `doc/agents/translation.md` tells it how to work with a native speaker.
 
 ## v0.1.0 — 2026-09-22
 

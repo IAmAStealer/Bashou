@@ -91,6 +91,8 @@ class ProgressTest(unittest.TestCase):
         self.assertIn("packer", self.s["achievements"])
 
     def test_pets_and_hints_need_their_command(self):
+        with mock.patch("bashou.which.installed", return_value=True):     # CI runners have kubectl, this machine doesn't
+            self.assertEqual(len(achievements.family("whale")), 4)
         with mock.patch("bashou.which.installed", side_effect=lambda name: name != "kubectl"):
             self.assertNotIn("whale", dict(creatures.roster()))
             self.s["pets"] = ["whale", "fox"]                             # unlocked before kubectl was removed

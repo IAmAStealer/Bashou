@@ -10,7 +10,7 @@ from datetime import date, timedelta
 from typing import Callable, Optional
 
 from . import safety
-from .which import installed
+from . import which
 
 
 @dataclass
@@ -69,7 +69,7 @@ class Achievement:
     needs: tuple = ()           # commands it needs (any one); hidden when none is installed
 
     def available(self):
-        return not self.needs or any(map(installed, self.needs))
+        return not self.needs or any(map(which.installed, self.needs))
 
 
 def tool(s, *names):
