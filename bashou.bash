@@ -7,13 +7,16 @@ BASHOU_DIR=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
 _bashou_data=${BASHOU_DATA:-$HOME/.local/share/bashou}
 _bashou_events=$_bashou_data/events.$$
 _bashou_erase=${BASHOU_CACHE:-$HOME/.cache/bashou}/erase.$$
+_bashou_height=${BASHOU_CACHE:-$HOME/.cache/bashou}/height.$$
 mkdir -p "$_bashou_data"
 _bashou_restarts=0
 
 # Log each new history entry as "status<TAB>history line". No fork: builtins only.
 # $HISTCMD only moves when a command is added, so empty Enters are not counted.
 _bashou_log() {
-  local status=$?
+  local status=$? last=$_
+  # `clear` put the prompt back on the top line, under the pet.
+  [[ $last == clear || $last == reset ]] && _bashou_below
   if [[ -n $BASHOU_PID && -n $_bashou_hc && $HISTCMD != "$_bashou_hc" ]]; then
     printf '%s\t' "$status" >> "$_bashou_events"
     HISTTIMEFORMAT='' history 1 >> "$_bashou_events"
@@ -25,6 +28,15 @@ _bashou_log() {
     bashou on
   fi
   return "$status"
+}
+
+# The pet is drawn over the top lines of the screen: move the prompt down past it, or the first
+# commands' output would hide under the pet. Cursor down doesn't scroll: on a full screen it does
+# nothing. (Asking the terminal where the cursor is could swallow keys typed at that moment.)
+_bashou_below() {
+  local lines=6
+  [[ -r $_bashou_height ]] && IFS= read -r lines < "$_bashou_height"
+  printf '\e[%dB' "$lines"
 }
 
 # Erase the pet before a command runs, so it never scrolls with the output.
@@ -55,7 +67,7 @@ bashou() {
 }
 
 # Tab completion. Static lists (no Python on Tab); tests/test_completion.py keeps them in sync.
-_bashou_commands="level pets achievements fight talk evolve swap stats start language config update security adventure reset dev on off"
+_bashou_commands="level pets achievements fight talk learn evolve swap stats start language config update security adventure reset dev on off"
 _bashou_pets="bat frog turtle mushroom slime sofa octopus dragon fox owl mole snake ghost spider ant axolotl gremlin snail beaver squirrel pigeon hedgehog bee whale meerkat"
 _bashou_dev="unlock-all stage stage-all level threat restore"
 _bashou_challenges="grep_hydra awk_golem find_wraith uniq_swarm sed_serpent ps_phantom pipe_eel"
@@ -66,7 +78,8 @@ _bashou_complete() {
   case "$COMP_CWORD:${COMP_WORDS[1]}:${COMP_WORDS[2]}" in
     1:*)              words=$_bashou_commands ;;
     2:swap:*)         words="starter $_bashou_pets" ;;
-    2:config:*)       words="bubble updates" ;;
+    2:config:*)       words="bubble updates size" ;;
+    3:config:size)    words="small large default" ;;
     2:security:*)     words=$_bashou_security ;;
     3:config:bubble)  words="default" ;;
     3:config:updates) words="on off default" ;;
@@ -93,5 +106,6 @@ _bashou_ready() {
   [[ $s == *'"language": "'* ]] && [[ $s == *'"starter": "'* || $s == *'"cat"'* ]]
 }
 if _bashou_ready || bashou start; then
+  _bashou_below
   bashou on
 fi

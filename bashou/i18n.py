@@ -121,6 +121,11 @@ def messages():
     found += list(progress.CONSTRUCT_NAMES.values()) + [how for rule, how in progress.STATE_PETS.values()]
     from . import state
     found += [text for default, text in state.SETTINGS.values()]
+    from . import learn
+    found += list(learn.COMMANDS.values()) + list(learn.SYNTAX.values())
+    found += [m for flags in learn.FLAGS.values() for m in flags.values()]
+    found += [m for subs in learn.SUBCOMMANDS.values() for m in subs.values()]
+    found += [m for roles in learn.ARGS.values() for m in roles]
     for ch in challenges.ALL + challenges.SECURITY + challenges.TRIALS:
         found += [ch.threat, ch.task, *ch.hints]
     return list(dict.fromkeys(found))

@@ -13,7 +13,7 @@ import threading
 import time
 from pathlib import Path
 
-from . import creatures, dialogue, fight, i18n, progress, render, state, update
+from . import creatures, dialogue, fight, i18n, learn, progress, render, state, update
 from .behavior import Behavior
 from .analyze import parse_log
 from .i18n import _
@@ -38,6 +38,7 @@ class Companion:
         self.events = state.DATA / f"events.{shell}"
         self.erase_file = state.CACHE / f"erase.{shell}"
         self.resume_file = state.CACHE / f"resume.{shell}"
+        self.height_file = state.CACHE / f"height.{shell}"     # lines the pet covers, for the loader
         self.offset = 0            # bytes of the events file already counted
         self.code = code_version()
         self.notes = []            # notifications waiting for the bubble
@@ -187,7 +188,9 @@ class Companion:
         if ms < self.talk_at or self.notes or self.bubble or self.behavior.mood == "sleep":
             return
         self.talk_at = ms + random.randint(10, 20) * 60_000
-        self.notes.append(dialogue.line(state.load(), self.voice))
+        said = dialogue.line(state.load(), self.voice)
+        learn.remember(said)
+        self.notes.append(said)
 
     def check_update(self):
         """Once a day, in the background (git may take a while): a bubble if a new version is out."""
@@ -243,6 +246,10 @@ class Companion:
         if pet is not self.pet:
             self.pet = pet
             self.cells = render.mask(pet)
+            try:
+                self.height_file.write_text(str(len(pet.base) // 2))
+            except OSError:
+                pass
 
     def draw(self, ms):
         self.update_bubble()

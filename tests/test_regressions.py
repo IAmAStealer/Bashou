@@ -24,12 +24,13 @@ class TempState(unittest.TestCase):
 
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
-        self.saved = state.DATA, state.STATE
+        self.saved = state.DATA, state.STATE, state.CACHE
         state.DATA = Path(self.tmp.name)
         state.STATE = state.DATA / "state.json"
+        state.CACHE = state.DATA / "cache"
 
     def tearDown(self):
-        state.DATA, state.STATE = self.saved
+        state.DATA, state.STATE, state.CACHE = self.saved
         self.tmp.cleanup()
 
 

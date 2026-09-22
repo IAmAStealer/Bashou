@@ -258,6 +258,8 @@ def main():
     sub.add_parser("achievements", help="what you earned and what to try next")
     sub.add_parser("fight", help="enter the arena")
     sub.add_parser("talk", help="your pet says something useful")
+    ln = sub.add_parser("learn", help="take the last suggested command (or yours) apart, piece by piece")
+    ln.add_argument("command", nargs=argparse.REMAINDER)
     sub.add_parser("evolve", help="watch your pets evolve")
     sw = sub.add_parser("swap", help="change your active pet")
     sw.add_argument("pet", nargs="?")
@@ -287,11 +289,18 @@ def main():
     elif args.cmd == "evolve":
         from . import evolve
         return evolve.main()
+    elif args.cmd == "learn":
+        from . import learn
+        raise SystemExit(learn.main(args.command))
     elif args.cmd == "talk":
-        from . import dialogue
+        from . import dialogue, learn
         s = state.load()
         name, voice = progress.current(s)[2:]
-        print(f"  {BOLD}{name}{RESET}: {dialogue.line(s, voice)}")
+        said = dialogue.line(s, voice)
+        learn.remember(said)
+        print(f"  {BOLD}{name}{RESET}: {said}")
+        if "`" in said:
+            print(f"  {DIM}" + _("Not sure what it does? `bashou learn` takes it apart.") + RESET)
     elif args.cmd == "adventure":
         from . import adventure
         raise SystemExit(adventure.main())

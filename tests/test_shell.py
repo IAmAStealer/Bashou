@@ -116,6 +116,13 @@ class ShellTest(unittest.TestCase):
         self.sh.read(1)
         self.sh.expect(b"38;2;216;200;160")              # the pet is drawn: rc read, pet started
 
+    def test_prompt_starts_below_the_pet(self):
+        """The first commands' output hid under the pet (the prompt started on the top line)."""
+        self.assertIn(b"\x1b[6B", self.sh.out)             # at startup
+        start = len(self.sh.out)
+        self.sh.send("clear\n", wait=0.2)
+        self.assertTrue(self.sh.expect(b"\x1b[6B", start))  # and after clear
+
     def tearDown(self):
         pid = ""
         if os.waitpid(self.sh.pid, os.WNOHANG)[0] == 0:  # the shell still runs

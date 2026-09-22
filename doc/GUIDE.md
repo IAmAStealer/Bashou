@@ -60,6 +60,7 @@ bashou pets             # your collection
 bashou achievements     # what you earned, and what to try next
 bashou fight            # enter the arena, once your pet has announced a threat
 bashou talk             # your pet says something useful
+bashou learn            # takes its last suggested command apart; or: bashou learn tar -czf a.tgz d
 bashou evolve           # watch your pets evolve (s skips)
 bashou swap             # board to pick your pet (or: bashou swap fox); f switches its form
 bashou off / on         # hide / show the pet

@@ -3,6 +3,18 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.2.1 — 2026-09-22
+
+- `bashou learn` takes a command apart and explains each piece: the command, every option, the
+  arguments, pipes and redirections. With no command, it explains the last one your pet suggested.
+- The prompt starts below your pet, at startup and after `clear`, so the first commands' output
+  no longer hides under it.
+- `bashou update` shows what's new from this changelog.
+- Pets switch to new sprites and translations right after an update.
+- Achievements that need a tool stay hidden in tests on machines that have it (fixes the first
+  0.2.0 release run).
+- In French, the Star line starts as "Poussière", which fits the pet board.
+
 ## v0.2.0 — 2026-09-22
 
 ### Evolutions
