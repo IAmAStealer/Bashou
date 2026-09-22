@@ -146,6 +146,10 @@ FORMS = {
     "mushroom": ("spore", "mushroom", "blob"),
     "octopus": ("octopito", "octopus", "kraken"),
     "sofa": ("beanbag", "sofa", "throne"),
+    "dragon": ("dragon_egg", "dragon", "great_dragon"),
+    "snake": ("snakelet", "snake", "basilisk"),
+    "ghost": ("spirit", "wisp", "ghost"),
+    "spider": ("spiderling", "spider", "tarantula"),
 }
 
 

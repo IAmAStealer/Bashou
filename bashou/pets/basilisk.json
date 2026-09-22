@@ -1,0 +1,49 @@
+{
+ "name": "Basilisk",
+ "palette": {
+  "a": "#1e3a1e",
+  "o": "#3f7a3a",
+  "l": "#b8c070",
+  "y": "#ffe040",
+  "n": "#10240f",
+  "w": "#f0f0e0",
+  "r": "#c02030",
+  "g": "#e8b830"
+ },
+ "base": [
+  ".....g..g..g.....",
+  ".....ggggggg.....",
+  "....aaaaaaaaa....",
+  "...aoooooooooa...",
+  "...aoyoooooyoa...",
+  "...aooononoooa...",
+  "....aowooowoa....",
+  ".....aaoooaa.....",
+  "...aaaaoooaaaa...",
+  ".aaoolllllllooaa.",
+  "aoolllllllllllooa",
+  ".aaaaaaaaaaaaaaa."
+ ],
+ "poses": {
+  "inhale": {
+   "8": "--a-----------a--"
+  },
+  "closed": {
+   "4": "-----a-----a-----"
+  },
+  "left": {
+   "4": "----yo----yo-----"
+  },
+  "right": {
+   "4": "-----oy----oy----"
+  },
+  "fidget": {
+   "7": "--------r--------",
+   "8": "-------r-r-------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}
