@@ -1,0 +1,262 @@
+[
+ {
+  "id": "c-1-01",
+  "level": 1,
+  "q": "Quelle fonction affiche du texte formaté ?",
+  "choices": [
+   "printf",
+   "print",
+   "echo",
+   "cout"
+  ],
+  "answer": 0,
+  "explain": "#include <stdio.h> d'abord."
+ },
+ {
+  "id": "c-1-02",
+  "level": 1,
+  "q": "Par où commence tout programme C ?",
+  "choices": [
+   "main",
+   "start",
+   "init",
+   "run"
+  ],
+  "answer": 0,
+  "explain": "int main(void) ou int main(int argc, char **argv)."
+ },
+ {
+  "id": "c-1-03",
+  "level": 1,
+  "q": "Comment compiler hello.c avec gcc ?",
+  "choices": [
+   "gcc hello.c -o hello",
+   "gcc run hello.c",
+   "cc --build hello",
+   "make hello.c"
+  ],
+  "answer": 0,
+  "explain": "Puis lance ./hello."
+ },
+ {
+  "id": "c-1-04",
+  "level": 1,
+  "q": "Qu'est-ce qui termine une chaîne en C ?",
+  "choices": [
+   "Un octet nul '\\0'",
+   "Un retour à la ligne",
+   "Son champ de longueur",
+   "Un espace"
+  ],
+  "answer": 0,
+  "explain": "strlen compte jusqu'à l'octet nul."
+ },
+ {
+  "id": "c-1-05",
+  "level": 1,
+  "q": "Qu'est-ce que `int *p` ?",
+  "choices": [
+   "Un pointeur vers un int",
+   "Un int multiplié",
+   "Un tableau d'int",
+   "Un int constant"
+  ],
+  "answer": 0,
+  "explain": "*p lit l'int pointé."
+ },
+ {
+  "id": "c-1-06",
+  "level": 1,
+  "q": "Que donne `&x` ?",
+  "choices": [
+   "L'adresse de x",
+   "x et 1",
+   "Une copie de x",
+   "Un x à compteur de références"
+  ],
+  "answer": 0,
+  "explain": "Les pointeurs contiennent des adresses."
+ },
+ {
+  "id": "c-1-07",
+  "level": 1,
+  "q": "Quelle fonction alloue de la mémoire sur le tas ?",
+  "choices": [
+   "malloc",
+   "new",
+   "alloc",
+   "heap"
+  ],
+  "answer": 0,
+  "explain": "Chaque malloc a besoin de son free."
+ },
+ {
+  "id": "c-1-08",
+  "level": 1,
+  "q": "Que fait `#include` ?",
+  "choices": [
+   "Colle ici un autre fichier (un en-tête)",
+   "Lie une bibliothèque",
+   "Importe un module à l'exécution",
+   "Définit une macro"
+  ],
+  "answer": 0,
+  "explain": "Le préprocesseur passe avant le compilateur."
+ },
+ {
+  "id": "c-1-09",
+  "level": 1,
+  "q": "Que veut dire un main qui renvoie 0 ?",
+  "choices": [
+   "Succès",
+   "Échec",
+   "Rien",
+   "Redémarrage"
+  ],
+  "answer": 0,
+  "explain": "Le shell le voit dans $?."
+ },
+ {
+  "id": "c-1-10",
+  "level": 1,
+  "q": "Quelle option active les avertissements courants de gcc ?",
+  "choices": [
+   "-Wall",
+   "-W0",
+   "-warn",
+   "-O2"
+  ],
+  "answer": 0,
+  "explain": "Ajoute -Wextra aussi, et corrige-les tous."
+ },
+ {
+  "id": "c-2-01",
+  "level": 2,
+  "q": "Qu'est-ce qu'une segfault ?",
+  "choices": [
+   "Toucher de la mémoire interdite",
+   "Une erreur de disque",
+   "Une erreur de syntaxe",
+   "Un dépassement d'entier"
+  ],
+  "answer": 0,
+  "explain": "Souvent un pointeur NULL ou pendouillant."
+ },
+ {
+  "id": "c-2-02",
+  "level": 2,
+  "q": "Que provoque `free(p)` deux fois ?",
+  "choices": [
+   "Un comportement indéfini (double free)",
+   "Rien",
+   "Une erreur de compilation",
+   "La mémoire est libérée deux fois plus vite"
+  ],
+  "answer": 0,
+  "explain": "Mets p = NULL après le free."
+ },
+ {
+  "id": "c-2-03",
+  "level": 2,
+  "q": "Pourquoi `gets()` est-il banni ?",
+  "choices": [
+   "Il ne peut pas limiter la taille lue : débordement de tampon",
+   "Il est lent",
+   "Il est déconseillé pour le style",
+   "Il ne lit qu'un caractère"
+  ],
+  "answer": 0,
+  "explain": "Utilise fgets(buf, size, stdin)."
+ },
+ {
+  "id": "c-2-04",
+  "level": 2,
+  "q": "Que fait `static` sur une fonction ?",
+  "choices": [
+   "La garde privée à son fichier",
+   "La rend plus rapide",
+   "La lance une seule fois",
+   "La range sur le tas"
+  ],
+  "answer": 0,
+  "explain": "Sur une variable locale, elle garde sa valeur entre les appels."
+ },
+ {
+  "id": "c-2-05",
+  "level": 2,
+  "q": "Combien vaut `sizeof(char)` ?",
+  "choices": [
+   "1",
+   "2",
+   "4",
+   "Ça dépend de la chaîne"
+  ],
+  "answer": 0,
+  "explain": "Toujours 1, par définition."
+ },
+ {
+  "id": "c-2-06",
+  "level": 2,
+  "q": "Quel outil trouve les erreurs mémoire à l'exécution ?",
+  "choices": [
+   "valgrind",
+   "gdb seulement",
+   "strace",
+   "lint"
+  ],
+  "answer": 0,
+  "explain": "Ou compile avec -fsanitize=address."
+ },
+ {
+  "id": "c-2-07",
+  "level": 2,
+  "q": "Que dit `volatile` au compilateur ?",
+  "choices": [
+   "La valeur peut changer hors de la vue du programme",
+   "Mets-la en cache",
+   "Rends-la constante",
+   "Mets-la dans un registre"
+  ],
+  "answer": 0,
+  "explain": "Pour les registres matériels et les gestionnaires de signaux."
+ },
+ {
+  "id": "c-2-08",
+  "level": 2,
+  "q": "À quoi sert une garde d'en-tête ?",
+  "choices": [
+   "À n'inclure un en-tête qu'une fois",
+   "À protéger des secrets",
+   "À compiler main plus vite",
+   "À vérifier les types"
+  ],
+  "answer": 0,
+  "explain": "#ifndef X / #define X / #endif, ou #pragma once."
+ },
+ {
+  "id": "c-2-09",
+  "level": 2,
+  "q": "Que contient `argv[0]` ?",
+  "choices": [
+   "Le nom du programme",
+   "Le premier argument",
+   "Le nombre d'arguments",
+   "L'environnement"
+  ],
+  "answer": 0,
+  "explain": "Les arguments commencent à argv[1] ; argc les compte tous."
+ },
+ {
+  "id": "c-2-10",
+  "level": 2,
+  "q": "Que lit `make` ?",
+  "choices": [
+   "Un Makefile",
+   "Directement CMakeLists.txt",
+   "package.json",
+   "Seulement build.ninja"
+  ],
+  "answer": 0,
+  "explain": "Règles : cible: dépendances, puis une tabulation et les commandes."
+ }
+]

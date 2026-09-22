@@ -1,0 +1,288 @@
+[
+ {
+  "id": "bash-1-01",
+  "level": 1,
+  "q": "Quelle commande affiche le dossier où tu es ?",
+  "choices": [
+   "pwd",
+   "ls",
+   "cd",
+   "whoami"
+  ],
+  "answer": 0,
+  "explain": "pwd = print working directory (affiche le dossier courant)."
+ },
+ {
+  "id": "bash-1-02",
+  "level": 1,
+  "q": "Comment revenir à ton dossier personnel ?",
+  "choices": [
+   "cd",
+   "cd /",
+   "home",
+   "ls ~"
+  ],
+  "answer": 0,
+  "explain": "cd sans argument ramène à la maison (comme cd ~)."
+ },
+ {
+  "id": "bash-1-03",
+  "level": 1,
+  "q": "Quelle commande liste aussi les fichiers cachés ?",
+  "choices": [
+   "ls -a",
+   "ls -l",
+   "ls -h",
+   "ls -r"
+  ],
+  "answer": 0,
+  "explain": "-a montre tous les fichiers, même ceux qui commencent par un point."
+ },
+ {
+  "id": "bash-1-04",
+  "level": 1,
+  "q": "Que fait `mkdir -p a/b/c` ?",
+  "choices": [
+   "Crée a, b et c si besoin",
+   "Échoue si a n'existe pas",
+   "Crée seulement c",
+   "Supprime a/b/c"
+  ],
+  "answer": 0,
+  "explain": "-p crée les parents manquants et ne râle pas s'ils existent."
+ },
+ {
+  "id": "bash-1-05",
+  "level": 1,
+  "q": "Quel symbole envoie la sortie d'une commande dans un fichier, en l'écrasant ?",
+  "choices": [
+   ">",
+   ">>",
+   "|",
+   "<"
+  ],
+  "answer": 0,
+  "explain": "> écrase le fichier ; >> ajoute à la fin."
+ },
+ {
+  "id": "bash-1-06",
+  "level": 1,
+  "q": "Que fait `|` entre deux commandes ?",
+  "choices": [
+   "Envoie la sortie de la première dans la seconde",
+   "Les lance en même temps, sans lien",
+   "Lance la seconde seulement si la première échoue",
+   "Écrit la sortie dans un fichier"
+  ],
+  "answer": 0,
+  "explain": "Un pipe relie le stdout de la commande de gauche au stdin de celle de droite."
+ },
+ {
+  "id": "bash-1-07",
+  "level": 1,
+  "q": "Quelle touche complète une commande ou un nom de fichier ?",
+  "choices": [
+   "Tab",
+   "Ctrl+C",
+   "Entrée",
+   "Échap"
+  ],
+  "answer": 0,
+  "explain": "Tab complète ; appuie deux fois pour voir tous les choix."
+ },
+ {
+  "id": "bash-1-08",
+  "level": 1,
+  "q": "Comment voir le manuel d'une commande ?",
+  "choices": [
+   "man ls",
+   "help ls",
+   "ls --manual",
+   "info-ls"
+  ],
+  "answer": 0,
+  "explain": "man ouvre la page de manuel ; q pour quitter."
+ },
+ {
+  "id": "bash-1-09",
+  "level": 1,
+  "q": "Que contient `$?` juste après une commande ?",
+  "choices": [
+   "Son code de retour",
+   "Son numéro de processus",
+   "Sa sortie",
+   "Le dernier argument"
+  ],
+  "answer": 0,
+  "explain": "0 veut dire succès, tout le reste est une erreur."
+ },
+ {
+  "id": "bash-1-10",
+  "level": 1,
+  "q": "Quelle commande affiche un texte ?",
+  "choices": [
+   "echo",
+   "print",
+   "say",
+   "cat"
+  ],
+  "answer": 0,
+  "explain": "echo affiche ses arguments ; cat affiche des fichiers."
+ },
+ {
+  "id": "bash-1-11",
+  "level": 1,
+  "q": "Que fait `rm -r dossier` ?",
+  "choices": [
+   "Supprime le dossier et tout son contenu",
+   "Renomme le dossier",
+   "Supprime seulement les dossiers vides",
+   "Le met à la corbeille"
+  ],
+  "answer": 0,
+  "explain": "rm n'a pas de corbeille : -r supprime récursivement, pour de bon."
+ },
+ {
+  "id": "bash-1-12",
+  "level": 1,
+  "q": "Comment relancer la commande précédente ?",
+  "choices": [
+   "!!",
+   "$$",
+   "..",
+   "!?"
+  ],
+  "answer": 0,
+  "explain": "!! devient la dernière commande (sudo !! la relance avec sudo)."
+ },
+ {
+  "id": "bash-2-01",
+  "level": 2,
+  "q": "Que fait `cmd 2>&1` ?",
+  "choices": [
+   "Envoie les erreurs là où va la sortie normale",
+   "Lance cmd deux fois",
+   "Cache toute la sortie",
+   "Envoie la sortie dans le fichier 1"
+  ],
+  "answer": 0,
+  "explain": "2 est stderr, 1 est stdout : 2>&1 les fusionne."
+ },
+ {
+  "id": "bash-2-02",
+  "level": 2,
+  "q": "Qu'est-ce que `$(date)` dans une commande ?",
+  "choices": [
+   "La sortie de date, insérée à cet endroit",
+   "Une variable nommée date",
+   "La date en secondes",
+   "Un commentaire"
+  ],
+  "answer": 0,
+  "explain": "$( ) est une substitution de commande."
+ },
+ {
+  "id": "bash-2-03",
+  "level": 2,
+  "q": "Quelle boucle tourne pour chaque fichier .log ?",
+  "choices": [
+   "for f in *.log; do …; done",
+   "while f in *.log; do …",
+   "loop *.log { … }",
+   "foreach f (*.log)"
+  ],
+  "answer": 0,
+  "explain": "Le motif *.log devient la liste des fichiers qui correspondent."
+ },
+ {
+  "id": "bash-2-04",
+  "level": 2,
+  "q": "Que fait `set -e` dans un script ?",
+  "choices": [
+   "Arrête le script à la première commande qui échoue",
+   "Affiche chaque commande",
+   "Exporte toutes les variables",
+   "Active les globs étendus"
+  ],
+  "answer": 0,
+  "explain": "set -e quitte sur erreur ; set -x affiche chaque commande."
+ },
+ {
+  "id": "bash-2-05",
+  "level": 2,
+  "q": "Comment lire un fichier ligne par ligne sans risque ?",
+  "choices": [
+   "while IFS= read -r line; do …; done < file",
+   "for line in $(cat file)",
+   "cat file | for line",
+   "read file line"
+  ],
+  "answer": 0,
+  "explain": "for sur $(cat) découpe sur les espaces, pas sur les lignes."
+ },
+ {
+  "id": "bash-2-06",
+  "level": 2,
+  "q": "Que fait `&&` dans `make && ./app` ?",
+  "choices": [
+   "Lance ./app seulement si make a réussi",
+   "Lance les deux en même temps",
+   "Lance ./app seulement si make a échoué",
+   "Envoie make dans ./app"
+  ],
+  "answer": 0,
+  "explain": "&& continue en cas de succès, || en cas d'échec."
+ },
+ {
+  "id": "bash-2-07",
+  "level": 2,
+  "q": "Pourquoi mettre \"$var\" entre guillemets ?",
+  "choices": [
+   "Pour que ses espaces ne la coupent pas en plusieurs mots",
+   "Pour la rendre en lecture seule",
+   "Pour l'exporter",
+   "Ce n'est jamais utile"
+  ],
+  "answer": 0,
+  "explain": "Sans guillemets, une variable est coupée sur les espaces et ses motifs sont développés."
+ },
+ {
+  "id": "bash-2-08",
+  "level": 2,
+  "q": "Quelle commande rend un script exécutable ?",
+  "choices": [
+   "chmod +x script.sh",
+   "run script.sh",
+   "exec script.sh",
+   "chown +x script.sh"
+  ],
+  "answer": 0,
+  "explain": "Le droit x permet de le lancer avec ./script.sh."
+ },
+ {
+  "id": "bash-2-09",
+  "level": 2,
+  "q": "Que commence `<<EOF` ?",
+  "choices": [
+   "Un heredoc : les lignes jusqu'à EOF sont l'entrée",
+   "Une fin de fichier",
+   "Une comparaison",
+   "Une tâche en arrière-plan"
+  ],
+  "answer": 0,
+  "explain": "Pratique pour donner plusieurs lignes à une commande."
+ },
+ {
+  "id": "bash-2-10",
+  "level": 2,
+  "q": "Que montre `jobs` ?",
+  "choices": [
+   "Les commandes en arrière-plan de ce shell",
+   "Tous les processus de la machine",
+   "Les tâches cron planifiées",
+   "Ton intitulé de poste"
+  ],
+  "answer": 0,
+  "explain": "fg en ramène une au premier plan, bg la relance en arrière-plan."
+ }
+]

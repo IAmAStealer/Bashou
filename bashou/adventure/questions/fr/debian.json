@@ -1,0 +1,262 @@
+[
+ {
+  "id": "debian-1-01",
+  "level": 1,
+  "q": "Quelle commande installe un paquet sur Debian ?",
+  "choices": [
+   "apt install nom",
+   "dnf install nom",
+   "pacman -S nom",
+   "yum get nom"
+  ],
+  "answer": 0,
+  "explain": "Avec sudo ; apt update d'abord."
+ },
+ {
+  "id": "debian-1-02",
+  "level": 1,
+  "q": "Que fait `apt update` ?",
+  "choices": [
+   "Rafraîchit la liste des paquets disponibles",
+   "Met à jour tous les paquets",
+   "Met à jour seulement apt",
+   "Redémarre"
+  ],
+  "answer": 0,
+  "explain": "apt upgrade installe ensuite les nouvelles versions."
+ },
+ {
+  "id": "debian-1-03",
+  "level": 1,
+  "q": "Qu'est-ce qu'un fichier .deb ?",
+  "choices": [
+   "Un paquet Debian",
+   "Une image disque",
+   "Un fichier de config",
+   "Un noyau"
+  ],
+  "answer": 0,
+  "explain": "S'installe avec apt install ./fichier.deb."
+ },
+ {
+  "id": "debian-1-04",
+  "level": 1,
+  "q": "Où sont listées les sources de paquets ?",
+  "choices": [
+   "/etc/apt/sources.list(.d)",
+   "/etc/yum.repos.d",
+   "/var/lib/dpkg/sources",
+   "/usr/apt"
+  ],
+  "answer": 0,
+  "explain": "Chaque ligne (ou fichier .sources) est un dépôt."
+ },
+ {
+  "id": "debian-1-05",
+  "level": 1,
+  "q": "Quelle branche de Debian est faite pour les serveurs ?",
+  "choices": [
+   "stable",
+   "rolling",
+   "latest",
+   "sid"
+  ],
+  "answer": 0,
+  "explain": "testing et unstable (sid) passent avant elle."
+ },
+ {
+  "id": "debian-1-06",
+  "level": 1,
+  "q": "Comment supprimer un paquet et sa configuration ?",
+  "choices": [
+   "apt purge nom",
+   "apt remove --all nom",
+   "dpkg -d nom",
+   "apt delete nom"
+  ],
+  "answer": 0,
+  "explain": "apt remove garde les fichiers de config."
+ },
+ {
+  "id": "debian-1-07",
+  "level": 1,
+  "q": "Quelle commande cherche des paquets ?",
+  "choices": [
+   "apt search mot",
+   "apt find mot",
+   "dpkg -s mot",
+   "apt look mot"
+  ],
+  "answer": 0,
+  "explain": "apt show nom donne les détails."
+ },
+ {
+  "id": "debian-1-08",
+  "level": 1,
+  "q": "Que montre `dpkg -l` ?",
+  "choices": [
+   "Les paquets installés",
+   "Le partitionnement",
+   "Les logs des paquets",
+   "Les fichiers verrouillés"
+  ],
+  "answer": 0,
+  "explain": "dpkg est l'outil de bas niveau sous apt."
+ },
+ {
+  "id": "debian-1-09",
+  "level": 1,
+  "q": "Les versions de Debian portent le nom…",
+  "choices": [
+   "de personnages de Toy Story",
+   "de planètes",
+   "de villes",
+   "d'oiseaux"
+  ],
+  "answer": 0,
+  "explain": "Bookworm, Trixie, Forky…"
+ },
+ {
+  "id": "debian-1-10",
+  "level": 1,
+  "q": "Comment supprimer les paquets dont plus personne n'a besoin ?",
+  "choices": [
+   "apt autoremove",
+   "apt clean",
+   "apt purge --all",
+   "dpkg --prune"
+  ],
+  "answer": 0,
+  "explain": "apt clean vide le cache des paquets téléchargés."
+ },
+ {
+  "id": "debian-2-01",
+  "level": 2,
+  "q": "Quelle commande montre pourquoi un paquet est installé ?",
+  "choices": [
+   "apt-cache rdepends --installed nom",
+   "apt why nom",
+   "dpkg --why nom",
+   "apt reason nom"
+  ],
+  "answer": 0,
+  "explain": "aptitude why est une autre façon."
+ },
+ {
+  "id": "debian-2-02",
+  "level": 2,
+  "q": "Comment bloquer un paquet à sa version ?",
+  "choices": [
+   "apt-mark hold nom",
+   "apt freeze nom",
+   "dpkg --lock nom",
+   "apt pin nom now"
+  ],
+  "answer": 0,
+  "explain": "apt-mark unhold le libère."
+ },
+ {
+  "id": "debian-2-03",
+  "level": 2,
+  "q": "Que fait `unattended-upgrades` ?",
+  "choices": [
+   "Installe les mises à jour de sécurité tout seul",
+   "Passe à la version suivante",
+   "Supprime seulement les vieux noyaux",
+   "Sauvegarde le système"
+  ],
+  "answer": 0,
+  "explain": "Se configure dans /etc/apt/apt.conf.d/."
+ },
+ {
+  "id": "debian-2-04",
+  "level": 2,
+  "q": "Qu'est-ce que l'épinglage (pinning) d'apt ?",
+  "choices": [
+   "Choisir quel dépôt l'emporte pour un paquet",
+   "Verrouiller l'écran",
+   "Attacher un CPU",
+   "Signer des paquets"
+  ],
+  "answer": 0,
+  "explain": "Dans /etc/apt/preferences.d/."
+ },
+ {
+  "id": "debian-2-05",
+  "level": 2,
+  "q": "Comment reconfigurer un paquet installé ?",
+  "choices": [
+   "dpkg-reconfigure nom",
+   "apt config nom",
+   "dpkg --setup nom",
+   "apt reinstall --config"
+  ],
+  "answer": 0,
+  "explain": "Par exemple dpkg-reconfigure tzdata."
+ },
+ {
+  "id": "debian-2-06",
+  "level": 2,
+  "q": "Comment apt fait-il confiance à un dépôt ?",
+  "choices": [
+   "Par sa clé de signature (signed-by)",
+   "Seulement par son certificat HTTPS",
+   "Par son adresse IP",
+   "Il fait confiance à tous les dépôts"
+  ],
+  "answer": 0,
+  "explain": "Les clés sont dans /etc/apt/keyrings ou /usr/share/keyrings."
+ },
+ {
+  "id": "debian-2-07",
+  "level": 2,
+  "q": "Qu'est-ce que `sid` ?",
+  "choices": [
+   "La branche unstable de Debian",
+   "La prochaine version stable",
+   "Un format de paquet",
+   "L'installateur"
+  ],
+  "answer": 0,
+  "explain": "sid reste toujours unstable ; testing devient la prochaine stable."
+ },
+ {
+  "id": "debian-2-08",
+  "level": 2,
+  "q": "Où dpkg garde-t-il sa base de données ?",
+  "choices": [
+   "/var/lib/dpkg",
+   "/etc/dpkg",
+   "/usr/share/dpkg",
+   "/var/cache/apt"
+  ],
+  "answer": 0,
+  "explain": "Ne la modifie pas à la main."
+ },
+ {
+  "id": "debian-2-09",
+  "level": 2,
+  "q": "Que permet `apt full-upgrade` de plus que upgrade ?",
+  "choices": [
+   "Supprimer des paquets pour finir la mise à jour",
+   "Mettre à jour le noyau",
+   "Télécharger plus vite",
+   "Sauter les signatures"
+  ],
+  "answer": 0,
+  "explain": "Sert pour changer de version de Debian."
+ },
+ {
+  "id": "debian-2-10",
+  "level": 2,
+  "q": "Comment lister les fichiers installés par un paquet ?",
+  "choices": [
+   "dpkg -L nom",
+   "apt files nom",
+   "dpkg -f nom",
+   "apt show --files nom"
+  ],
+  "answer": 0,
+  "explain": "dpkg -S /chemin fait l'inverse : quel paquet possède un fichier."
+ }
+]

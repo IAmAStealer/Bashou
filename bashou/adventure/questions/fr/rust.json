@@ -1,0 +1,262 @@
+[
+ {
+  "id": "rust-1-01",
+  "level": 1,
+  "q": "Quel outil compile et lance les projets Rust ?",
+  "choices": [
+   "cargo",
+   "rustpm",
+   "make",
+   "rustc run"
+  ],
+  "answer": 0,
+  "explain": "cargo new, cargo build, cargo run, cargo test."
+ },
+ {
+  "id": "rust-1-02",
+  "level": 1,
+  "q": "Comment rendre une variable modifiable ?",
+  "choices": [
+   "let mut x = 1;",
+   "var x = 1;",
+   "let x = mut 1;",
+   "mut x = 1;"
+  ],
+  "answer": 0,
+  "explain": "Les variables sont immuables par défaut."
+ },
+ {
+  "id": "rust-1-03",
+  "level": 1,
+  "q": "Quelle macro affiche une ligne ?",
+  "choices": [
+   "println!",
+   "print()",
+   "echo!",
+   "console.log"
+  ],
+  "answer": 0,
+  "explain": "Le ! marque une macro."
+ },
+ {
+  "id": "rust-1-04",
+  "level": 1,
+  "q": "Qu'est-ce que `Option<T>` ?",
+  "choices": [
+   "Soit Some(valeur), soit None",
+   "Un fichier de config",
+   "Un pointeur",
+   "Seulement un type d'erreur"
+  ],
+  "answer": 0,
+  "explain": "Rust n'a pas de null : Option rend l'absence explicite."
+ },
+ {
+  "id": "rust-1-05",
+  "level": 1,
+  "q": "À quoi sert `Result<T, E>` ?",
+  "choices": [
+   "Une valeur ou une erreur",
+   "Des résultats de tests",
+   "Un tuple de deux valeurs",
+   "Seulement des résultats async"
+  ],
+  "answer": 0,
+  "explain": "Ok(valeur) ou Err(erreur) ; ? fait remonter les erreurs."
+ },
+ {
+  "id": "rust-1-06",
+  "level": 1,
+  "q": "Que crée `&x` ?",
+  "choices": [
+   "Une référence (un emprunt) vers x",
+   "Une copie de x",
+   "Un pointeur à libérer",
+   "L'adresse sous forme de nombre"
+  ],
+  "answer": 0,
+  "explain": "Emprunter permet d'utiliser une valeur sans la prendre."
+ },
+ {
+  "id": "rust-1-07",
+  "level": 1,
+  "q": "Quel fichier décrit un projet cargo ?",
+  "choices": [
+   "Cargo.toml",
+   "package.json",
+   "Makefile",
+   "rust.yaml"
+  ],
+  "answer": 0,
+  "explain": "Nom, version, dépendances…"
+ },
+ {
+  "id": "rust-1-08",
+  "level": 1,
+  "q": "Comment une fonction Rust renvoie-t-elle une valeur sans `return` ?",
+  "choices": [
+   "La dernière expression, sans ;",
+   "Elle ne peut pas",
+   "Avec yield",
+   "Avec => à la fin"
+  ],
+  "answer": 0,
+  "explain": "Un ; final en fait une instruction qui renvoie ()."
+ },
+ {
+  "id": "rust-1-09",
+  "level": 1,
+  "q": "Que fait `cargo check` ?",
+  "choices": [
+   "Vérifie que le code compile, sans produire de binaire",
+   "Lance les tests",
+   "Formate le code",
+   "Cherche des mises à jour"
+  ],
+  "answer": 0,
+  "explain": "Plus rapide que cargo build pendant que tu écris."
+ },
+ {
+  "id": "rust-1-10",
+  "level": 1,
+  "q": "Quel mot-clé compare une valeur à des motifs ?",
+  "choices": [
+   "match",
+   "switch",
+   "case",
+   "select"
+  ],
+  "answer": 0,
+  "explain": "match doit couvrir tous les cas."
+ },
+ {
+  "id": "rust-2-01",
+  "level": 2,
+  "q": "Combien d'emprunts mutables d'une valeur peuvent exister en même temps ?",
+  "choices": [
+   "Un",
+   "Autant qu'on veut",
+   "Deux",
+   "Aucun, jamais"
+  ],
+  "answer": 0,
+  "explain": "Un seul &mut, ou autant de & qu'on veut, jamais les deux."
+ },
+ {
+  "id": "rust-2-02",
+  "level": 2,
+  "q": "Que fait l'opérateur `?` ?",
+  "choices": [
+   "Renvoie l'erreur tout de suite, ou déballe la valeur",
+   "Rend une valeur optionnelle",
+   "Affiche la valeur",
+   "Ignore l'erreur"
+  ],
+  "answer": 0,
+  "explain": "Marche sur Result et Option dans les fonctions qui en renvoient."
+ },
+ {
+  "id": "rust-2-03",
+  "level": 2,
+  "q": "Quand une valeur est-elle libérée (drop) ?",
+  "choices": [
+   "Quand son propriétaire sort de la portée",
+   "Quand le GC passe",
+   "À la fin du programme",
+   "Quand tu appelles free()"
+  ],
+  "answer": 0,
+  "explain": "La possession (ownership) remplace un ramasse-miettes."
+ },
+ {
+  "id": "rust-2-04",
+  "level": 2,
+  "q": "Que donne `#[derive(Debug)]` à une struct ?",
+  "choices": [
+   "L'affichage avec {:?}",
+   "Un débogueur",
+   "Des builds debug plus rapides",
+   "Des logs"
+  ],
+  "answer": 0,
+  "explain": "derive écrit les implémentations de traits pour toi."
+ },
+ {
+  "id": "rust-2-05",
+  "level": 2,
+  "q": "Quel trait permet `.clone()` ?",
+  "choices": [
+   "Clone",
+   "Copy",
+   "Dup",
+   "Borrow"
+  ],
+  "answer": 0,
+  "explain": "Copy sert aux copies bit à bit bon marché, comme les entiers."
+ },
+ {
+  "id": "rust-2-06",
+  "level": 2,
+  "q": "Qu'est-ce qu'une durée de vie comme `'a` ?",
+  "choices": [
+   "Combien de temps une référence reste valide",
+   "La durée d'un thread",
+   "Un délai d'attente",
+   "L'âge d'une variable"
+  ],
+  "answer": 0,
+  "explain": "Le compilateur vérifie qu'une référence ne survit pas à ses données."
+ },
+ {
+  "id": "rust-2-07",
+  "level": 2,
+  "q": "Comment partager des données entre threads sans risque ?",
+  "choices": [
+   "Arc<Mutex<T>>",
+   "Rc<RefCell<T>>",
+   "static mut",
+   "&mut T"
+  ],
+  "answer": 0,
+  "explain": "Arc compte les propriétaires entre threads ; Mutex protège l'accès."
+ },
+ {
+  "id": "rust-2-08",
+  "level": 2,
+  "q": "Que fait `unwrap()` sur None ou Err ?",
+  "choices": [
+   "Panique",
+   "Renvoie 0",
+   "Renvoie une valeur vide",
+   "Réessaie"
+  ],
+  "answer": 0,
+  "explain": "Ça va dans les tests ; préfère ? ou match dans le vrai code."
+ },
+ {
+  "id": "rust-2-09",
+  "level": 2,
+  "q": "Qu'est-ce que `impl Trait for Type` ?",
+  "choices": [
+   "Implémenter les méthodes d'un trait pour un type",
+   "Hériter d'une classe",
+   "Importer un type",
+   "Un alias de type générique"
+  ],
+  "answer": 0,
+  "explain": "Les traits ressemblent aux interfaces."
+ },
+ {
+  "id": "rust-2-10",
+  "level": 2,
+  "q": "Quelle commande lance les tests ?",
+  "choices": [
+   "cargo test",
+   "cargo run --tests",
+   "rustc --test-all",
+   "cargo check --test"
+  ],
+  "answer": 0,
+  "explain": "Les tests sont des fonctions marquées #[test]."
+ }
+]

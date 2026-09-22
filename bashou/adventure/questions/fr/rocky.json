@@ -1,0 +1,262 @@
+[
+ {
+  "id": "rocky-1-01",
+  "level": 1,
+  "q": "Quelle commande installe un paquet sur Rocky Linux ?",
+  "choices": [
+   "dnf install nom",
+   "apt install nom",
+   "pacman -S nom",
+   "zypper get nom"
+  ],
+  "answer": 0,
+  "explain": "yum marche encore comme alias de dnf."
+ },
+ {
+  "id": "rocky-1-02",
+  "level": 1,
+  "q": "Rocky Linux est compatible avec…",
+  "choices": [
+   "Red Hat Enterprise Linux",
+   "Debian",
+   "Arch Linux",
+   "FreeBSD"
+  ],
+  "answer": 0,
+  "explain": "Construit à partir des mêmes sources, après le changement de cap de CentOS."
+ },
+ {
+  "id": "rocky-1-03",
+  "level": 1,
+  "q": "Qu'est-ce qu'un fichier .rpm ?",
+  "choices": [
+   "Un paquet pour les systèmes de type Red Hat",
+   "Une image disque",
+   "Un module du noyau",
+   "Un paquet Rust"
+  ],
+  "answer": 0,
+  "explain": "rpm -qa liste ceux qui sont installés."
+ },
+ {
+  "id": "rocky-1-04",
+  "level": 1,
+  "q": "Quel outil de pare-feu est fourni avec Rocky ?",
+  "choices": [
+   "firewalld (firewall-cmd)",
+   "ufw",
+   "pf",
+   "ipfw"
+  ],
+  "answer": 0,
+  "explain": "firewall-cmd --add-service=http --permanent."
+ },
+ {
+  "id": "rocky-1-05",
+  "level": 1,
+  "q": "Que fait SELinux ?",
+  "choices": [
+   "Ajoute des règles d'accès en plus des droits",
+   "Chiffre le disque",
+   "Accélère Linux",
+   "Gère les paquets"
+  ],
+  "answer": 0,
+  "explain": "getenforce montre son mode."
+ },
+ {
+  "id": "rocky-1-06",
+  "level": 1,
+  "q": "Où sont configurés les dépôts dnf ?",
+  "choices": [
+   "/etc/yum.repos.d/",
+   "/etc/apt/sources.list",
+   "/etc/dnf/sources",
+   "/var/repos"
+  ],
+  "answer": 0,
+  "explain": "Un fichier .repo par dépôt."
+ },
+ {
+  "id": "rocky-1-07",
+  "level": 1,
+  "q": "Quelle commande cherche des mises à jour ?",
+  "choices": [
+   "dnf check-update",
+   "dnf refresh",
+   "apt list --upgradable",
+   "rpm -U"
+  ],
+  "answer": 0,
+  "explain": "dnf upgrade les installe."
+ },
+ {
+  "id": "rocky-1-08",
+  "level": 1,
+  "q": "Qu'est-ce qu'EPEL ?",
+  "choices": [
+   "Extra Packages for Enterprise Linux",
+   "Un patch du noyau",
+   "Un module de sécurité",
+   "L'installateur de Rocky"
+  ],
+  "answer": 0,
+  "explain": "dnf install epel-release l'active."
+ },
+ {
+  "id": "rocky-1-09",
+  "level": 1,
+  "q": "Quelle commande montre la version de Rocky ?",
+  "choices": [
+   "cat /etc/rocky-release",
+   "rocky --version",
+   "uname -v",
+   "dnf version"
+  ],
+  "answer": 0,
+  "explain": "/etc/os-release marche sur toutes les distributions."
+ },
+ {
+  "id": "rocky-1-10",
+  "level": 1,
+  "q": "Quel outil gère les services ?",
+  "choices": [
+   "systemctl",
+   "service-manager",
+   "rc-service",
+   "launchctl"
+  ],
+  "answer": 0,
+  "explain": "Comme sur la plupart des distributions récentes."
+ },
+ {
+  "id": "rocky-2-01",
+  "level": 2,
+  "q": "Quel mode fait que SELinux note sans bloquer ?",
+  "choices": [
+   "permissive",
+   "disabled",
+   "enforcing",
+   "audit"
+  ],
+  "answer": 0,
+  "explain": "setenforce 0 passe en permissive jusqu'au redémarrage."
+ },
+ {
+  "id": "rocky-2-02",
+  "level": 2,
+  "q": "Comment remettre l'étiquette SELinux par défaut d'un fichier ?",
+  "choices": [
+   "restorecon -v fichier",
+   "chmod -Z fichier",
+   "chcon --reset",
+   "selinux fix fichier"
+  ],
+  "answer": 0,
+  "explain": "ls -Z montre les étiquettes."
+ },
+ {
+  "id": "rocky-2-03",
+  "level": 2,
+  "q": "Où apparaissent les refus de SELinux ?",
+  "choices": [
+   "/var/log/audit/audit.log",
+   "/var/log/selinux",
+   "Seulement dans dmesg",
+   "/etc/selinux/log"
+  ],
+  "answer": 0,
+  "explain": "ausearch -m avc ou sealert aident à les lire."
+ },
+ {
+  "id": "rocky-2-04",
+  "level": 2,
+  "q": "Que sont les modules/flux AppStream ?",
+  "choices": [
+   "Plusieurs versions d'un ensemble de paquets, au choix",
+   "Des flux vidéo",
+   "Des modules du noyau",
+   "Des images de conteneurs"
+  ],
+  "answer": 0,
+  "explain": "dnf module list."
+ },
+ {
+  "id": "rocky-2-05",
+  "level": 2,
+  "q": "Comment voir quel paquet possède un fichier ?",
+  "choices": [
+   "rpm -qf /chemin/fichier",
+   "dnf owner fichier",
+   "rpm -l fichier",
+   "which -p fichier"
+  ],
+  "answer": 0,
+  "explain": "dnf provides marche aussi pour les fichiers pas encore installés."
+ },
+ {
+  "id": "rocky-2-06",
+  "level": 2,
+  "q": "Comment ouvrir un port dans firewalld pour de bon ?",
+  "choices": [
+   "firewall-cmd --add-port=8080/tcp --permanent, puis --reload",
+   "iptables -A 8080",
+   "ufw allow 8080",
+   "firewall-cmd --open 8080"
+  ],
+  "answer": 0,
+  "explain": "Sans --permanent, ça disparaît au rechargement."
+ },
+ {
+  "id": "rocky-2-07",
+  "level": 2,
+  "q": "Quelle commande annule une transaction dnf ?",
+  "choices": [
+   "dnf history undo <id>",
+   "dnf revert",
+   "rpm --rollback",
+   "dnf downgrade --all"
+  ],
+  "answer": 0,
+  "explain": "dnf history liste les transactions."
+ },
+ {
+  "id": "rocky-2-08",
+  "level": 2,
+  "q": "Quelle commande liste les booléens SELinux ?",
+  "choices": [
+   "getsebool -a",
+   "selinux --bools",
+   "setsebool -l",
+   "lsbool"
+  ],
+  "answer": 0,
+  "explain": "setsebool -P nom on rend un changement permanent."
+ },
+ {
+  "id": "rocky-2-09",
+  "level": 2,
+  "q": "Qu'est-ce que `cockpit` sur Rocky ?",
+  "choices": [
+   "Une console d'administration web",
+   "Un gestionnaire de paquets",
+   "Un pare-feu",
+   "Un moteur de conteneurs"
+  ],
+  "answer": 0,
+  "explain": "systemctl enable --now cockpit.socket."
+ },
+ {
+  "id": "rocky-2-10",
+  "level": 2,
+  "q": "Qu'est-ce qui remplace docker par défaut sur Rocky ?",
+  "choices": [
+   "podman",
+   "lxc",
+   "rkt",
+   "containerd-cli"
+  ],
+  "answer": 0,
+  "explain": "À peu près les mêmes commandes, sans démon, sans root."
+ }
+]

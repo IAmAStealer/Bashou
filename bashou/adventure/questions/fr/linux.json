@@ -1,0 +1,288 @@
+[
+ {
+  "id": "linux-1-01",
+  "level": 1,
+  "q": "Quel dossier contient les fichiers de configuration du système ?",
+  "choices": [
+   "/etc",
+   "/bin",
+   "/var",
+   "/home"
+  ],
+  "answer": 0,
+  "explain": "/etc a les configs ; /var les données qui changent, comme les logs."
+ },
+ {
+  "id": "linux-1-02",
+  "level": 1,
+  "q": "Où sont la plupart des fichiers de log ?",
+  "choices": [
+   "/var/log",
+   "/etc/log",
+   "/tmp/log",
+   "/usr/log"
+  ],
+  "answer": 0,
+  "explain": "journalctl lit le journal systemd, /var/log contient les fichiers."
+ },
+ {
+  "id": "linux-1-03",
+  "level": 1,
+  "q": "Quel utilisateur peut tout faire ?",
+  "choices": [
+   "root",
+   "admin",
+   "sudo",
+   "system"
+  ],
+  "answer": 0,
+  "explain": "root a l'UID 0 ; sudo te permet d'agir en tant que root."
+ },
+ {
+  "id": "linux-1-04",
+  "level": 1,
+  "q": "Quelle commande montre les processus en cours ?",
+  "choices": [
+   "ps aux",
+   "ls -p",
+   "top -f",
+   "proc"
+  ],
+  "answer": 0,
+  "explain": "top et htop les montrent en direct."
+ },
+ {
+  "id": "linux-1-05",
+  "level": 1,
+  "q": "Que fait `sudo` ?",
+  "choices": [
+   "Lance une commande en tant qu'autre utilisateur (root)",
+   "Éteint la machine",
+   "Ouvre un nouveau shell",
+   "Met le système à jour"
+  ],
+  "answer": 0,
+  "explain": "sudo vérifie d'abord /etc/sudoers."
+ },
+ {
+  "id": "linux-1-06",
+  "level": 1,
+  "q": "Quelle commande montre l'espace disque ?",
+  "choices": [
+   "df -h",
+   "du -s",
+   "free -h",
+   "disk"
+  ],
+  "answer": 0,
+  "explain": "df = disk free (espace libre) ; du = disk usage des fichiers."
+ },
+ {
+  "id": "linux-1-07",
+  "level": 1,
+  "q": "Quelle commande montre la mémoire libre ?",
+  "choices": [
+   "free -h",
+   "mem",
+   "df -m",
+   "top -m"
+  ],
+  "answer": 0,
+  "explain": "-h affiche des tailles lisibles (M, G)."
+ },
+ {
+  "id": "linux-1-08",
+  "level": 1,
+  "q": "Que donne `chmod 644 fichier` ?",
+  "choices": [
+   "Lecture/écriture au propriétaire, lecture aux autres",
+   "Tout à tout le monde",
+   "Rien aux autres",
+   "Le droit de lancer à tout le monde"
+  ],
+  "answer": 0,
+  "explain": "6 = rw-, 4 = r--."
+ },
+ {
+  "id": "linux-1-09",
+  "level": 1,
+  "q": "Quelle commande change le propriétaire d'un fichier ?",
+  "choices": [
+   "chown",
+   "chmod",
+   "chgrp -o",
+   "own"
+  ],
+  "answer": 0,
+  "explain": "chown utilisateur:groupe fichier."
+ },
+ {
+  "id": "linux-1-10",
+  "level": 1,
+  "q": "Qu'est-ce que `~` ?",
+  "choices": [
+   "Ton dossier personnel",
+   "Le dossier racine",
+   "Le dossier précédent",
+   "La corbeille"
+  ],
+  "answer": 0,
+  "explain": "~ vaut /home/toi (ou /root pour root)."
+ },
+ {
+  "id": "linux-1-11",
+  "level": 1,
+  "q": "Quel signal `kill` envoie-t-il par défaut ?",
+  "choices": [
+   "TERM (15)",
+   "KILL (9)",
+   "HUP (1)",
+   "INT (2)"
+  ],
+  "answer": 0,
+  "explain": "TERM demande poliment ; KILL ne peut pas être intercepté."
+ },
+ {
+  "id": "linux-1-12",
+  "level": 1,
+  "q": "Quelle commande suit un log pendant qu'il grossit ?",
+  "choices": [
+   "tail -f",
+   "cat -f",
+   "less +G",
+   "head -f"
+  ],
+  "answer": 0,
+  "explain": "Ctrl+C arrête le suivi."
+ },
+ {
+  "id": "linux-2-01",
+  "level": 2,
+  "q": "Quelle commande gère les services sur la plupart des distributions ?",
+  "choices": [
+   "systemctl",
+   "service-ctl",
+   "initctl",
+   "svcadm"
+  ],
+  "answer": 0,
+  "explain": "systemctl status/start/stop/enable nom."
+ },
+ {
+  "id": "linux-2-02",
+  "level": 2,
+  "q": "Comment voir les logs d'un service avec systemd ?",
+  "choices": [
+   "journalctl -u nom",
+   "systemctl logs nom",
+   "cat /var/log/nom",
+   "dmesg nom"
+  ],
+  "answer": 0,
+  "explain": "-f suit en direct, -b se limite à ce démarrage."
+ },
+ {
+  "id": "linux-2-03",
+  "level": 2,
+  "q": "Que veut dire le bit SUID sur un programme ?",
+  "choices": [
+   "Il tourne avec les droits de son propriétaire",
+   "Il ne peut pas être supprimé",
+   "Seul root peut le lire",
+   "Il démarre au boot"
+  ],
+  "answer": 0,
+  "explain": "Il s'affiche en s dans rwsr-xr-x : dangereux sur le mauvais fichier."
+ },
+ {
+  "id": "linux-2-04",
+  "level": 2,
+  "q": "Quel fichier liste les disques montés au démarrage ?",
+  "choices": [
+   "/etc/fstab",
+   "/etc/mtab",
+   "/etc/disks",
+   "/boot/mounts"
+  ],
+  "answer": 0,
+  "explain": "Une ligne par système de fichiers : périphérique, point de montage, type, options."
+ },
+ {
+  "id": "linux-2-05",
+  "level": 2,
+  "q": "Que montre `ss -tlnp` ?",
+  "choices": [
+   "Les ports TCP en écoute, avec leur processus",
+   "Les fichiers ouverts",
+   "La table de routage",
+   "Les règles du pare-feu"
+  ],
+  "answer": 0,
+  "explain": "Il remplace netstat -tlnp."
+ },
+ {
+  "id": "linux-2-06",
+  "level": 2,
+  "q": "Qu'est-ce qu'un inode ?",
+  "choices": [
+   "La fiche de métadonnées d'un fichier (pas son nom)",
+   "Une interface réseau",
+   "Un module du noyau",
+   "Un type de partition"
+  ],
+  "answer": 0,
+  "explain": "Les noms pointent vers des inodes ; ls -i montre le numéro."
+ },
+ {
+  "id": "linux-2-07",
+  "level": 2,
+  "q": "Comment trouver quel processus utilise un fichier ?",
+  "choices": [
+   "lsof fichier",
+   "ps fichier",
+   "who fichier",
+   "stat -p fichier"
+  ],
+  "answer": 0,
+  "explain": "fuser marche aussi."
+ },
+ {
+  "id": "linux-2-08",
+  "level": 2,
+  "q": "Quelle différence entre un lien physique et un lien symbolique ?",
+  "choices": [
+   "Le symbolique vise un chemin, le physique l'inode",
+   "Il n'y en a pas",
+   "Les liens physiques marchent entre disques",
+   "Les liens symboliques copient le fichier"
+  ],
+  "answer": 0,
+  "explain": "Supprime la cible : un lien symbolique casse, un lien physique non."
+ },
+ {
+  "id": "linux-2-09",
+  "level": 2,
+  "q": "Où le noyau expose-t-il les infos des processus ?",
+  "choices": [
+   "/proc",
+   "/sys/proc",
+   "/dev",
+   "/run/kernel"
+  ],
+  "answer": 0,
+  "explain": "/proc/<pid>/ contient status, cmdline, fd…"
+ },
+ {
+  "id": "linux-2-10",
+  "level": 2,
+  "q": "Que fait `nice -n 10 cmd` ?",
+  "choices": [
+   "Lance cmd avec une priorité plus basse",
+   "Le lance 10 fois",
+   "Lui donne 10 CPU",
+   "Le retarde de 10 s"
+  ],
+  "answer": 0,
+  "explain": "Plus nice est haut, plus il est gentil avec les autres : priorité plus basse."
+ }
+]

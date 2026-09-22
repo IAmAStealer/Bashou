@@ -1,0 +1,288 @@
+[
+ {
+  "id": "python-1-01",
+  "level": 1,
+  "q": "Comment afficher hello en Python 3 ?",
+  "choices": [
+   "print(\"hello\")",
+   "echo \"hello\"",
+   "print \"hello\"",
+   "puts(\"hello\")"
+  ],
+  "answer": 0,
+  "explain": "print est une fonction depuis Python 3."
+ },
+ {
+  "id": "python-1-02",
+  "level": 1,
+  "q": "Quel est le type de `[1, 2, 3]` ?",
+  "choices": [
+   "list",
+   "tuple",
+   "set",
+   "array"
+  ],
+  "answer": 0,
+  "explain": "Les listes utilisent [ ], les tuples ( ), les ensembles { }."
+ },
+ {
+  "id": "python-1-03",
+  "level": 1,
+  "q": "Que renvoie `len(\"bash\")` ?",
+  "choices": [
+   "4",
+   "3",
+   "5",
+   "\"bash\""
+  ],
+  "answer": 0,
+  "explain": "len compte les caractères."
+ },
+ {
+  "id": "python-1-04",
+  "level": 1,
+  "q": "Comment commencer un commentaire ?",
+  "choices": [
+   "#",
+   "//",
+   "--",
+   "/*"
+  ],
+  "answer": 0,
+  "explain": "Tout ce qui suit # sur la ligne est ignoré."
+ },
+ {
+  "id": "python-1-05",
+  "level": 1,
+  "q": "Qu'est-ce qui délimite un bloc (le corps d'un if ou d'une boucle) ?",
+  "choices": [
+   "L'indentation",
+   "Les accolades { }",
+   "begin/end",
+   "Les points-virgules"
+  ],
+  "answer": 0,
+  "explain": "Quatre espaces par niveau, c'est la convention."
+ },
+ {
+  "id": "python-1-06",
+  "level": 1,
+  "q": "Quel mot-clé définit une fonction ?",
+  "choices": [
+   "def",
+   "func",
+   "function",
+   "fn"
+  ],
+  "answer": 0,
+  "explain": "def nom(args): puis un corps indenté."
+ },
+ {
+  "id": "python-1-07",
+  "level": 1,
+  "q": "Combien vaut `3 // 2` ?",
+  "choices": [
+   "1",
+   "1.5",
+   "2",
+   "Erreur"
+  ],
+  "answer": 0,
+  "explain": "// est la division entière ; / donne 1.5."
+ },
+ {
+  "id": "python-1-08",
+  "level": 1,
+  "q": "Comment obtenir le premier élément d'une liste `xs` ?",
+  "choices": [
+   "xs[0]",
+   "xs[1]",
+   "xs.first",
+   "first(xs)"
+  ],
+  "answer": 0,
+  "explain": "Les indices commencent à 0 ; xs[-1] est le dernier."
+ },
+ {
+  "id": "python-1-09",
+  "level": 1,
+  "q": "Quelle valeur veut dire « rien » ?",
+  "choices": [
+   "None",
+   "null",
+   "nil",
+   "undefined"
+  ],
+  "answer": 0,
+  "explain": "Compare avec `is None`."
+ },
+ {
+  "id": "python-1-10",
+  "level": 1,
+  "q": "Comment installer un paquet pour ton utilisateur ?",
+  "choices": [
+   "pip install --user nom",
+   "apt install python-nom seulement",
+   "python get nom",
+   "import --install nom"
+  ],
+  "answer": 0,
+  "explain": "Mieux : un environnement virtuel (python3 -m venv)."
+ },
+ {
+  "id": "python-1-11",
+  "level": 1,
+  "q": "Sur quoi boucle `for x in range(3)` ?",
+  "choices": [
+   "0, 1, 2",
+   "1, 2, 3",
+   "0, 1, 2, 3",
+   "3 seulement"
+  ],
+  "answer": 0,
+  "explain": "range s'arrête avant sa fin."
+ },
+ {
+  "id": "python-1-12",
+  "level": 1,
+  "q": "Comment lire tout un fichier ?",
+  "choices": [
+   "open(\"f\").read()",
+   "read(\"f\")",
+   "file(\"f\").all()",
+   "cat(\"f\")"
+  ],
+  "answer": 0,
+  "explain": "Mieux avec `with open(\"f\") as fh:` pour qu'il se ferme."
+ },
+ {
+  "id": "python-2-01",
+  "level": 2,
+  "q": "Que garantit `with open(\"f\") as fh:` ?",
+  "choices": [
+   "Le fichier est fermé après le bloc, même en cas d'erreur",
+   "Le fichier existe",
+   "Le fichier est en lecture seule",
+   "Rien de plus que open()"
+  ],
+  "answer": 0,
+  "explain": "C'est un gestionnaire de contexte."
+ },
+ {
+  "id": "python-2-02",
+  "level": 2,
+  "q": "Qu'est-ce que `[x * 2 for x in xs]` ?",
+  "choices": [
+   "Une liste en compréhension",
+   "Une fonction génératrice",
+   "Un dict",
+   "Une erreur de syntaxe"
+  ],
+  "answer": 0,
+  "explain": "Avec ( ) à la place, on obtient un générateur paresseux."
+ },
+ {
+  "id": "python-2-03",
+  "level": 2,
+  "q": "Lequel est immuable ?",
+  "choices": [
+   "tuple",
+   "list",
+   "dict",
+   "set"
+  ],
+  "answer": 0,
+  "explain": "Un tuple peut servir de clé de dict ; une liste, non."
+ },
+ {
+  "id": "python-2-04",
+  "level": 2,
+  "q": "Que reçoit `*args` ?",
+  "choices": [
+   "Les arguments positionnels en plus, dans un tuple",
+   "Les arguments nommés",
+   "Un pointeur",
+   "Seulement le premier argument"
+  ],
+  "answer": 0,
+  "explain": "**kwargs reçoit les arguments nommés en plus, dans un dict."
+ },
+ {
+  "id": "python-2-05",
+  "level": 2,
+  "q": "Comment attraper une erreur ?",
+  "choices": [
+   "try: … except ValueError: …",
+   "catch ValueError: …",
+   "on error: …",
+   "if error: …"
+  ],
+  "answer": 0,
+  "explain": "Attrape l'exception précise, pas tout."
+ },
+ {
+  "id": "python-2-06",
+  "level": 2,
+  "q": "Que vérifie `if __name__ == \"__main__\":` ?",
+  "choices": [
+   "Que le fichier est lancé directement, pas importé",
+   "Qu'on utilise Python 3",
+   "Que le thread principal tourne",
+   "Que le module s'appelle main"
+  ],
+  "answer": 0,
+  "explain": "Le code en dessous ne tourne pas à l'import."
+ },
+ {
+  "id": "python-2-07",
+  "level": 2,
+  "q": "À quoi sert un environnement virtuel ?",
+  "choices": [
+   "Des paquets séparés pour chaque projet",
+   "Lancer Python dans une VM",
+   "Du code plus rapide",
+   "Cacher du code"
+  ],
+  "answer": 0,
+  "explain": "python3 -m venv .venv, puis source .venv/bin/activate."
+ },
+ {
+  "id": "python-2-08",
+  "level": 2,
+  "q": "Que renvoie `dict.get(\"k\", 0)` si k n'existe pas ?",
+  "choices": [
+   "0",
+   "None",
+   "KeyError",
+   "\"k\""
+  ],
+  "answer": 0,
+  "explain": "Les crochets lèveraient KeyError."
+ },
+ {
+  "id": "python-2-09",
+  "level": 2,
+  "q": "Laquelle lance une commande shell sans risque ?",
+  "choices": [
+   "subprocess.run([\"ls\", \"-l\"])",
+   "os.system(\"ls -l \" + user_input)",
+   "eval(\"ls -l\")",
+   "exec(\"ls\")"
+  ],
+  "answer": 0,
+  "explain": "Une liste d'arguments : pas de shell, pas d'injection."
+ },
+ {
+  "id": "python-2-10",
+  "level": 2,
+  "q": "Que fait `yield` d'une fonction ?",
+  "choices": [
+   "Un générateur",
+   "Seulement une coroutine",
+   "Une classe",
+   "Une fonction plus rapide"
+  ],
+  "answer": 0,
+  "explain": "Il produit les valeurs une par une, à la demande."
+ }
+]
