@@ -11,13 +11,13 @@
   "y": "#ffe060"
  },
  "base": [
-  ".......y.f.......",
-  "......fyff.......",
-  ".....awyoa.......",
-  "....awooooa......",
+  ".....y.f.y.......",
+  "..f..fyfy..f.....",
+  ".ff..awooa.ff....",
+  "..f.awooooa.f....",
   "...awooooooa.....",
   "..aoooooooooa....",
-  ".aooomooomoooa...",
+  "faooomooomoooaf..",
   ".aooomooomoooa...",
   ".aopoooqooopoa...",
   ".aoooooooooooa...",
@@ -26,8 +26,9 @@
  ],
  "poses": {
   "fidget": {
-   "0": "-------fy.-------",
-   "1": "-------f---------"
+   "0": "-----f-y-f-------",
+   "1": "--y--------y-----",
+   "2": "-y----------y----"
   },
   "inhale": {
    "10": "-ao---------oa---",
