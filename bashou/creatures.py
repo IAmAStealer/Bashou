@@ -154,6 +154,11 @@ FORMS = {
     "axolotl": ("larva", "axolotl", "xolotl"),
     "gremlin": ("gremlin", "goblin", "orc"),
     "snail": ("slug", "snail", "gary"),
+    "squirrel": ("squirrel", "chipmunk", "flying_squirrel"),
+    "beaver": ("kit", "beaver", "platypus"),
+    "pigeon": ("squab", "pigeon", "messenger"),
+    "hedgehog": ("hoglet", "hedgehog", "porcupine"),
+    "bee": ("brood", "bee", "queen_bee"),
 }
 
 
