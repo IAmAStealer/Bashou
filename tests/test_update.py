@@ -43,13 +43,14 @@ class UpdateTest(unittest.TestCase):
             git(self.dev, "push", "-q", "origin", tag)
 
     def test_update_shows_the_changelog(self):
-        (self.dev / "CHANGELOG.md").write_text("# Changelog\n\n## v0.3.0 — 2026-10-01\n\n- Pets can swim\n")
+        (self.dev / "CHANGELOG.md").write_text("# Changelog\n\n## v0.3.0 — 2026-10-01\n\n### Pets\n- Pets can\n  swim\n")
         git(self.dev, "add", "CHANGELOG.md")
         self.publish("Internal refactor", tag="v0.3.0")
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
             self.assertEqual(update.run(), 0)
-        self.assertIn("- Pets can swim", out.getvalue())
+        self.assertIn("Pets:", out.getvalue())
+        self.assertIn("• Pets can swim", out.getvalue())                  # one entry per line
         self.assertNotIn("Internal refactor", out.getvalue())
 
     def test_install_a_given_release_even_an_older_one(self):

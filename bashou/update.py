@@ -118,7 +118,7 @@ def run(version=None):
         return 1
     print("  " + _("Updated to {version}! What's new:").format(version=tag))
     notes = changelog.notes(ROOT, tag)          # the release notes; commit subjects for old releases
-    changes = notes.splitlines() if notes else git("log", "--format=%s", "--no-merges", f"{before}..HEAD").stdout.splitlines()[:15]
+    changes = changelog.items(notes) if notes else git("log", "--format=%s", "--no-merges", f"{before}..HEAD").stdout.splitlines()[:15]
     for line in changes:
         print("    " + line)
     print("  " + _("Your pets switch to the new version by themselves."))

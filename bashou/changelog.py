@@ -13,6 +13,22 @@ def sections(text):
     return {m.group(1): text[m.end():end].strip() for m, end in zip(found, ends)}
 
 
+def items(text):
+    """Release notes as a list: "### Title" headings and "- " entries, wrapped lines joined back."""
+    out = []
+    for line in text.splitlines():
+        line = line.strip()
+        if line.startswith("#"):
+            out.append(line.lstrip("#").strip() + ":")
+        elif line.startswith(("- ", "* ")):
+            out.append("• " + line[2:])
+        elif line and out and out[-1].startswith("• "):
+            out[-1] += " " + line
+        elif line:
+            out.append(line)
+    return out
+
+
 def notes(root, version):
     """That release's notes from `root`/CHANGELOG.md, or "" (no file, no section)."""
     try:
