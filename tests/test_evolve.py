@@ -1,3 +1,5 @@
+import contextlib
+import io
 import unittest
 
 from bashou import achievements, evolve, progress, state
@@ -37,7 +39,8 @@ class EvolveCommandTest(TempState):
         with state.locked() as s:
             s.update(evolving_kitten())
         self.assertEqual(progress.current(state.load())[2], "Kitten")      # no spoiler before watching
-        evolve.main()                                                     # not a tty: no animation, just the news
+        with contextlib.redirect_stdout(io.StringIO()):
+            evolve.main()                                                 # not a tty: no animation, just the news
         s = state.load()
         self.assertEqual((s["evolving"], progress.current(s)[2]), ([], "Cat"))
 
