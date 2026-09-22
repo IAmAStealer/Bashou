@@ -72,6 +72,8 @@ jobs:
           version=$(printf '%s\n' "$MESSAGE" | grep -oE '^release: v[0-9]+\.[0-9]+\.[0-9]+$' | head -1 | cut -d' ' -f2)
           if [ -z "$version" ]; then echo "Not a release commit."; exit 0; fi
           if git rev-parse -q --verify "refs/tags/$version" >/dev/null; then echo "$version already exists."; exit 0; fi
+          # No changelog section, no tag: the notes come from CHANGELOG.md.
+          python3 tools/changelog.py "$version" > notes.md || { echo "::error title=No changelog::Add '## $version' to CHANGELOG.md"; exit 1; }
           git tag "$version"
           git push origin "$version"
-          gh release create "$version" --title "Bashou $version" --generate-notes
+          gh release create "$version" --title "Bashou $version" --notes-file notes.md
