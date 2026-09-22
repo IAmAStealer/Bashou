@@ -21,8 +21,6 @@ from .i18n import _
 ESC = "\x1b"
 TICK = 0.25
 FIRST_TALK = (8, 15)        # minutes before the first spontaneous line
-TALK_EVERY = (20, 40)       # and between the next ones
-QUIET = 60_000              # it only talks after this long without a command or a key
 SOURCE = Path(__file__).resolve().parent
 
 
@@ -187,16 +185,23 @@ class Companion:
         self.bubble = None
 
     def maybe_talk(self, ms):
-        """Every 20-40 minutes at the prompt, the pet says something, and only once you have stopped
-        typing for a minute: it waits for a pause instead of cutting into your work (owner).
-        Whoever wants more can go and get it: `bashou talk`, `bashou adventure`."""
+        """Now and then at the prompt the pet says something, and only once you have stopped typing:
+        it waits for a pause instead of cutting into your work (owner). `bashou config talk` sets how
+        often (or `off`), `bashou config quiet` how long a pause it waits for. Whoever wants more can
+        go and get it: `bashou talk`, `bashou adventure`."""
         if ms < self.talk_at or self.notes or self.bubble or self.behavior.mood == "sleep":
             return
-        if ms - self.last_activity() < QUIET:
-            self.talk_at = ms + QUIET                   # still working: ask again after the next pause
+        s = state.load()
+        every = state.setting(s, "talk")
+        if every == "off":                              # `bashou config talk off`: it keeps quiet
+            self.talk_at = ms + 10 * 60_000
             return
-        self.talk_at = ms + random.randint(*TALK_EVERY) * 60_000
-        said = dialogue.line(state.load(), self.voice)
+        quiet = state.setting(s, "quiet")[0] * 1000
+        if ms - self.last_activity() < quiet:
+            self.talk_at = ms + quiet                   # still working: ask again after the next pause
+            return
+        self.talk_at = ms + random.randint(*every) * 60_000
+        said = dialogue.line(s, self.voice)
         learn.remember(said)
         self.notes.append(said)
 

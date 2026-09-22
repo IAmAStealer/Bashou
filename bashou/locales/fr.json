@@ -778,6 +778,8 @@
  "commands a speech bubble stays on screen (e.g. 5-10, or 3)": "commandes pendant lesquelles une bulle reste à l'écran (ex. 5-10, ou 3)",
  "look for a new version once a day (on/off)": "chercher une nouvelle version une fois par jour (on/off)",
  "pet size: small, or large for pets that have big pixel art (small/large)": "taille du compagnon : small, ou large pour ceux qui ont un grand pixel art (small/large)",
+ "minutes between the things your pet says on its own (e.g. 20-40, 60, or off)": "minutes entre les phrases que votre compagnon dit de lui-même (par ex. 20-40, 60, ou off)",
+ "seconds without typing before it says one (it waits for a pause in your work)": "secondes sans frappe avant qu'il en dise une (il attend une pause dans votre travail)",
  "reads text line by line and splits each line into columns ($1, $2…)": "lit le texte ligne par ligne et découpe chaque ligne en colonnes ($1, $2…)",
  "the shell itself: runs commands or a script": "le shell lui-même : lance des commandes ou un script",
  "keeps only the last part of a path": "ne garde que la dernière partie d'un chemin",

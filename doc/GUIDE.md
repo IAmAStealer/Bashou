@@ -86,12 +86,17 @@ bashou config bubble            # show one
 bashou config bubble 3-8        # a speech bubble stays for 3 to 8 commands (random in the range)
 bashou config bubble 5          # always 5 commands
 bashou config bubble default    # back to the default (5-10)
+bashou config talk 45           # a line every 45 minutes, in a pause
+bashou config talk off          # never talks on its own (achievements and threats still show)
+bashou config quiet 120         # and only after 2 minutes without typing
 ```
 
 | Setting | Default | What it does |
 |---|---|---|
 | `bubble` | `5-10` | How many commands a speech bubble (tips, hints, achievements) stays on screen. When another message is waiting, the current one closes after 2 commands. |
 | `size` | `small` | `large` shows big pixel art for the pets that have some (for now the Tarantula), when the terminal is wide enough. |
+| `talk` | `20-40` | Minutes between the things your pet says on its own (tips, hints, invitations). `off` keeps it quiet; what you earn (achievements, evolutions, threats, `command not found`) still shows. |
+| `quiet` | `60` | Seconds without a command or a keypress before it says one: it waits for a pause instead of cutting into your work. |
 | `updates` | `on` | Once a day, your pet looks for a new release on GitHub (a `git fetch` of the install folder, nothing about you is sent) and tells you in a bubble. `bashou update` installs it; running pets switch to it by themselves. |
 
 Settings are saved in `~/.local/share/bashou/state.json` (only the ones you changed) and apply to

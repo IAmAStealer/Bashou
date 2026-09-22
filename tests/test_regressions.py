@@ -340,13 +340,20 @@ class QuietTest(unittest.TestCase):
         return c
 
     def test_it_waits_for_a_pause(self):
-        from bashou import companion
-        c = self.companion()
-        now = 30 * 60_000
-        c.last_command = now - 10_000                      # a command 10 s ago: still working
-        c.maybe_talk(now)
+        c, now, s = self.companion(), 30 * 60_000, state.default()
+        quiet = state.setting(s, "quiet")[0] * 1000
+        with mock.patch.object(state, "load", return_value=s):
+            c.last_command = now - 10_000                      # a command 10 s ago: still working
+            c.maybe_talk(now)
+            self.assertEqual(c.notes, [])
+            self.assertEqual(c.talk_at, now + quiet)
+            c.last_command = now - quiet - 1                   # a real pause
+            c.maybe_talk(c.talk_at)
+            self.assertEqual(len(c.notes), 1)
+
+    def test_talk_off_keeps_it_quiet(self):
+        c, s = self.companion(), {**state.default(), "settings": {"talk": "off"}}
+        with mock.patch.object(state, "load", return_value=s):
+            c.last_command = -10 * 60_000                      # long pause: it would talk otherwise
+            c.maybe_talk(0)
         self.assertEqual(c.notes, [])
-        self.assertEqual(c.talk_at, now + companion.QUIET)
-        c.last_command = now - companion.QUIET - 1         # a real pause
-        c.maybe_talk(c.talk_at)
-        self.assertEqual(len(c.notes), 1)

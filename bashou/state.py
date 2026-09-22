@@ -47,8 +47,11 @@ SETTINGS = {
     "bubble": ((5, 10), "commands a speech bubble stays on screen (e.g. 5-10, or 3)"),
     "updates": ("on", "look for a new version once a day (on/off)"),
     "size": ("small", "pet size: small, or large for pets that have big pixel art (small/large)"),
+    "talk": ((20, 40), "minutes between the things your pet says on its own (e.g. 20-40, 60, or off)"),
+    "quiet": ((60, 60), "seconds without typing before it says one (it waits for a pause in your work)"),
 }
 CHOICES = {"updates": ("on", "off"), "size": ("small", "large")}
+OFFABLE = {"talk"}                  # ranges that also accept "off"
 
 
 def setting(state, name):
@@ -57,12 +60,16 @@ def setting(state, name):
 
 
 def show(value):
-    return f"{value[0]}-{value[1]}" if isinstance(value, tuple) else value
+    if not isinstance(value, tuple):
+        return value
+    return str(value[0]) if value[0] == value[1] else f"{value[0]}-{value[1]}"
 
 
 def parse(name, text):
     """Check a new value against the setting's kind; ValueError if it doesn't fit."""
     if isinstance(SETTINGS[name][0], tuple):
+        if name in OFFABLE and text == "off":
+            return "off"
         return list(parse_range(text))
     if text not in CHOICES[name]:
         raise ValueError(text)
