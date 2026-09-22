@@ -62,5 +62,20 @@ class CreaturesTest(unittest.TestCase):
         self.assertEqual({p for p, _ in ROSTER}, set(STAGES))
 
 
+# Symmetric designs (their outline, not their highlights). A one-pixel slip broke the Droplet, the
+# Orc's tusk and the Snakelet (owner's bug report): they must stay mirror images.
+SYMMETRIC = ["barn_owl", "basilisk", "bat", "beanbag", "brood", "dragon_egg", "droplet", "goblin", "gremlin",
+             "king_slime", "kitsune", "kraken", "molekin", "octopito", "orc", "planet", "porcupine", "pup",
+             "snakelet", "spider", "spiderling", "spirit", "star", "throne", "vampire"]
+
+
+class SymmetryTest(unittest.TestCase):
+    def test_symmetric_sprites_stay_symmetric(self):
+        for pet_id in SYMMETRIC:
+            for i, row in enumerate(creatures.PETS[pet_id].base):
+                shape = "".join("." if k == "." else "x" for k in row)
+                self.assertEqual(shape, shape[::-1], f"{pet_id} row {i}: {row}")
+
+
 if __name__ == "__main__":
     unittest.main()
