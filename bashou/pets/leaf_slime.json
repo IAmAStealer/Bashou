@@ -15,19 +15,19 @@
   "..LlllL..........",
   ".LldddlL.qq......",
   "..Lll.awooa......",
-  "....awooooa......",
-  "...awooooooa.....",
-  "..aoooooooooa....",
+  "....awodooa......",
+  "...awodddooa.....",
+  "..aoddododdoa....",
   ".aooomooomoooa...",
   ".aooomooomoooa...",
   ".aopoooqooopoa...",
-  ".aoooooooooooa...",
-  "..aoooooooooa....",
+  ".aooddododdooa...",
+  "..aooodddoooa....",
   "...aaaaaaaaa....."
  ],
  "poses": {
   "fidget": {
-   "0": "--.L-L.----------",
+   "0": "---L-L-----------",
    "1": "---l-l-----------",
    "2": "---d-------------"
   },
