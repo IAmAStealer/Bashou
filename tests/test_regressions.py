@@ -325,3 +325,28 @@ class BoardTest(TempState):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class QuietTest(unittest.TestCase):
+    """The pet chatted in the middle of work; it must wait for a pause first (owner)."""
+
+    def companion(self):
+        from bashou import companion
+        c = companion.Companion.__new__(companion.Companion)
+        c.notes, c.bubble, c.talk_at = [], None, 0
+        c.behavior = type("B", (), {"mood": "awake"})()
+        c.voice, c.last_command = "star", 0
+        c.last_activity = lambda: c.last_command
+        return c
+
+    def test_it_waits_for_a_pause(self):
+        from bashou import companion
+        c = self.companion()
+        now = 30 * 60_000
+        c.last_command = now - 10_000                      # a command 10 s ago: still working
+        c.maybe_talk(now)
+        self.assertEqual(c.notes, [])
+        self.assertEqual(c.talk_at, now + companion.QUIET)
+        c.last_command = now - companion.QUIET - 1         # a real pause
+        c.maybe_talk(c.talk_at)
+        self.assertEqual(len(c.notes), 1)
