@@ -55,7 +55,7 @@ bashou() {
 }
 
 # Tab completion. Static lists (no Python on Tab); tests/test_completion.py keeps them in sync.
-_bashou_commands="level pets achievements fight talk swap stats start language config update security adventure reset dev on off"
+_bashou_commands="level pets achievements fight talk evolve swap stats start language config update security adventure reset dev on off"
 _bashou_pets="bat frog turtle mushroom slime sofa octopus dragon fox owl mole snake ghost spider ant axolotl gremlin snail beaver squirrel pigeon hedgehog bee whale meerkat"
 _bashou_dev="unlock-all stage stage-all level threat restore"
 _bashou_challenges="grep_hydra awk_golem find_wraith uniq_swarm sed_serpent ps_phantom pipe_eel"

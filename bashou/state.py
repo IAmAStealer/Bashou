@@ -34,6 +34,8 @@ def default():
         "update_checked": 0,   # last time a terminal looked for a new version
         "update_available": "",  # newest release tag not installed yet, at that check
         "settings": {},     # `bashou config`, only what differs from SETTINGS
+        "looks": {},        # pet or "starter" -> form shown (1-3) when not the latest (`f` in `bashou swap`)
+        "evolving": [],     # evolutions waiting to be watched: {"who", "from", "to"} (`bashou evolve`)
     }
 
 

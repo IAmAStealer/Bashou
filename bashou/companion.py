@@ -51,6 +51,7 @@ class Companion:
         self.pet = creatures.get(sprite)
         self.cells = render.mask(self.pet)
         self.stage = 1
+        self.look = 1
         self.threat = False
         self.threat_text = self.threat_id = None     # the waiting threat's announcement
         self.threat_until = 0.0
@@ -126,6 +127,7 @@ class Companion:
             self.pet = creatures.get(sprite)
             self.cells = render.mask(self.pet)
         self.stage = self.behavior.stage = stage
+        self.look = progress.look(s)           # the form drawn; the actions follow `stage`
         threat = fight.active_threat(s)
         if self.threat and not threat:
             self.threat_ended(s)
@@ -210,7 +212,7 @@ class Companion:
         """Escape sequence for one frame, and the sequence that erases it."""
         pet = self.pet
         x = cols - pet.width
-        out = [f"{ESC}[{i + 1};{x}H{line}" for i, line in enumerate(render.lines(pet, poses, self.cells, self.stage))]
+        out = [f"{ESC}[{i + 1};{x}H{line}" for i, line in enumerate(render.lines(pet, poses, self.cells, self.look))]
         zr, zc = pet.z_at
         out.append(f"{ESC}[{zr + 1};{x + zc}H{ESC}[38;2;150;190;230m{z:<3}{ESC}[0m")
         erase = render.erase(self.cells, 1, x)
@@ -241,7 +243,7 @@ class Companion:
         cols = os.get_terminal_size(1).columns
         if cols < self.pet.width + 20:
             return
-        key = (tuple(poses), z, cols, self.bubble and self.bubble[0], self.pet.id, self.stage)
+        key = (tuple(poses), z, cols, self.bubble and self.bubble[0], self.pet.id, self.look)
         if key == self.last_key and self.tick % 8:
             return
         self.last_key = key

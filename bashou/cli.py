@@ -225,6 +225,10 @@ def dev(args):
             if args.pet not in s["pets"]:
                 s["pets"].append(args.pet)
             print(f"  {STAGES[args.pet][args.stage - 1]} (stage {args.stage}).")
+            if args.stage > 1:                                   # as if you'd just earned it: bashou evolve
+                s["evolving"] = [e for e in s.get("evolving", []) if e["who"] != args.pet]
+                s.get("looks", {}).pop(args.pet, None)
+                print("  " + progress.evolve(s, args.pet, args.stage - 1, args.stage))
         elif args.action == "stage-all":
             for pet, rule in roster():
                 fam = [a.id for a in achievements.family(pet)]
@@ -233,8 +237,13 @@ def dev(args):
             print(f"  Every pet at stage {args.stage}.")
         elif args.action == "level":
             n = max(1, min(progress.MAX_LEVEL, int(args.pet or 1)))
+            form_before = progress.starter_form(s)
             s["achievements"] = [a.id for a in achievements.ALL][:(n - 1) * progress.ACHIEVEMENTS_PER_LEVEL]
+            s.get("looks", {}).pop("starter", None)
+            s["evolving"] = [e for e in s.get("evolving", []) if e["who"] != "starter"]
             print(f"  Starter at level {n}: {progress.current(s, 'starter')[2]}.")
+            if progress.starter_form(s) > form_before:
+                print("  " + progress.evolve(s, "starter", form_before, progress.starter_form(s)))
         elif args.action == "threat":
             ch = challenges.BY_ID.get(args.pet) or challenges.ALL[0]
             s["threat"] = {"challenge": ch.id, "until": time.time() + 600}
@@ -249,6 +258,7 @@ def main():
     sub.add_parser("achievements", help="what you earned and what to try next")
     sub.add_parser("fight", help="enter the arena")
     sub.add_parser("talk", help="your pet says something useful")
+    sub.add_parser("evolve", help="watch your pets evolve")
     sw = sub.add_parser("swap", help="change your active pet")
     sw.add_argument("pet", nargs="?")
     sub.add_parser("stats", help="your terminal stats: commands, tools, streaks")
@@ -274,6 +284,9 @@ def main():
         pets()
     elif args.cmd == "achievements":
         achievements_list()
+    elif args.cmd == "evolve":
+        from . import evolve
+        return evolve.main()
     elif args.cmd == "talk":
         from . import dialogue
         s = state.load()

@@ -87,16 +87,57 @@ def starter_form(state):
     return (starter_level(state) - 1) // 3 + 1
 
 
-def current(state, who=None):
-    """(sprite id, action stage, display name, voice id) of the active pet, or of `who`."""
+def who_of(state, who=None):
+    """"starter" for the starter (by any of its names), else the pet id."""
     who = who or state["active"]
-    if who == "starter" or who in STARTERS:
-        line = state["starter"] or "cat"
-        form = starter_form(state)
-        sprite = STARTERS[line][form - 1]
-        return sprite, form, _(FORM_NAMES[sprite]), line
-    st = stage(state, who)
-    return creatures.form(who, st), st, _(STAGES[who][st - 1]), who
+    return "starter" if who == "starter" or who in STARTERS else who
+
+
+def reached(state, who):
+    """The latest form (1-3): it gives the actions."""
+    return starter_form(state) if who_of(state, who) == "starter" else stage(state, who)
+
+
+def look(state, who=None):
+    """The form shown (1-3): the latest, unless you picked an earlier one or haven't watched it evolve."""
+    who = who_of(state, who)
+    top = reached(state, who)
+    return max(1, min(state.get("looks", {}).get(who, top), top))
+
+
+def sprite_of(state, who, form):
+    """(sprite id, name) of a pet or the starter at a form."""
+    if who_of(state, who) == "starter":
+        sprite = STARTERS[state["starter"] or "cat"][form - 1]
+        return sprite, _(FORM_NAMES[sprite])
+    return creatures.form(who, form), _(STAGES[who][form - 1])
+
+
+def current(state, who=None):
+    """(sprite id, action stage, display name, voice id) of the active pet, or of `who`.
+    The sprite and name follow the form shown (`look`), the actions the latest form."""
+    who = who_of(state, who)
+    sprite, name = sprite_of(state, who, look(state, who))
+    return sprite, reached(state, who), name, (state["starter"] or "cat") if who == "starter" else who
+
+
+def evolve(state, who, old, new):
+    """Queue an evolution for `bashou evolve`; until then the pet keeps its old look."""
+    state.setdefault("looks", {}).setdefault(who, old)
+    queue = state.setdefault("evolving", [])
+    for e in queue:
+        if e["who"] == who:
+            e["to"] = new
+            break
+    else:
+        queue.append({"who": who, "from": old, "to": new})
+    return "✨ " + _("{old} is evolving! Watch it: `bashou evolve`").format(old=sprite_of(state, who, old)[1])
+
+
+def watched(state, who):
+    """After the animation: show the new form."""
+    state["evolving"] = [e for e in state.get("evolving", []) if e["who"] != who]
+    state.get("looks", {}).pop(who, None)
 
 
 def record(state, status, line, today, hour):
@@ -147,17 +188,15 @@ def check(state, earned=()):
             notes += unlock(state, pet, f"{needed} × {tool_label(pet)}")
     if state["starter"] and starter_level(state) > level_before:
         line = STARTERS[state["starter"]]
-        old, new = _(FORM_NAMES[line[form_before - 1]]), _(FORM_NAMES[line[starter_form(state) - 1]])
         if starter_form(state) > form_before:
-            notes.append("✨ " + _("{old} evolved into {new}! New: {actions}").format(
-                old=old, new=new, actions=_(ACTIONS[starter_form(state)])))
+            notes.append(evolve(state, "starter", form_before, starter_form(state)))
         else:
-            notes.append("⬆ " + _("{name} reached level {level}!").format(name=new, level=starter_level(state)))
+            name = _(FORM_NAMES[line[starter_form(state) - 1]])
+            notes.append("⬆ " + _("{name} reached level {level}!").format(name=name, level=starter_level(state)))
     for pet in STAGES:
         now = stage(state, pet)
         if now > before[pet] and pet in state["pets"]:
-            notes.append("✨ " + _("{old} evolved into {new}! New: {actions}").format(
-                old=_(STAGES[pet][before[pet] - 1]), new=_(STAGES[pet][now - 1]), actions=_(ACTIONS[now])))
+            notes.append(evolve(state, pet, before[pet], now))
     return notes
 
 

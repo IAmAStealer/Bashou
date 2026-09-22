@@ -19,7 +19,7 @@ DIM, BOLD, RESET, REV = f"{ESC}[2m", f"{ESC}[1m", f"{ESC}[0m", f"{ESC}[7m"
 ACCENT = f"{ESC}[38;2;150;190;230m"
 KEYS = {"\x1b[A": "up", "\x1b[B": "down", "\x1b[C": "right", "\x1b[D": "left",
         "k": "up", "j": "down", "l": "right", "h": "left", "\r": "enter", "\n": "enter",
-        "q": "quit", "\x1b": "quit", "\x04": "quit", "\x03": "quit"}
+        "f": "form", "q": "quit", "\x1b": "quit", "\x04": "quit", "\x03": "quit"}
 
 
 def hint(s, pet):
@@ -66,7 +66,7 @@ class Board:
             top = _("Lv {level}").format(level=lvl) + ("  ●" if self.s["active"] == "starter" else "")
         elif unlocked:
             st = progress.stage(self.s, pet)
-            name = _(STAGES[pet][st - 1])
+            name = progress.current(self.s, pet)[2]
             top = "★" * st + "☆" * (3 - st) + ("  ●" if pet == self.s["active"] else "")
         else:
             name, top = "???", "☆☆☆"
@@ -80,7 +80,7 @@ class Board:
         sprite, form, name, voice = progress.current(s, "starter")
         pet = creatures.get(sprite)
         cells = [[True] * pet.width for _ in range(len(pet.base) // 2)]
-        out = render.lines(pet, ["inhale"] if self.breath else [], cells) + [""]
+        out = render.lines(pet, ["inhale"] if self.breath else [], cells, progress.look(s, "starter")) + [""]
         lvl = progress.starter_level(s)
         out.append(f"{BOLD}{name}{RESET}  " + _("level {level}").format(level=f"{lvl}/{progress.MAX_LEVEL}"))
         if lvl < progress.MAX_LEVEL:
@@ -100,7 +100,7 @@ class Board:
         drawn = pet_id in creatures.PETS
         out = []
         if drawn:
-            stage = progress.stage(self.s, pet_id) if unlocked else 1
+            stage = progress.look(self.s, pet_id) if unlocked else 1
             pet = creatures.PETS[creatures.form(pet_id, stage)]
             shown = pet if unlocked else silhouette(pet)
             cells = [[True] * pet.width for _ in range(len(pet.base) // 2)]
@@ -111,7 +111,7 @@ class Board:
         out.append("")
         if unlocked:
             st = progress.stage(self.s, pet_id)
-            out.append(f"{BOLD}{_(STAGES[pet_id][st - 1])}{RESET}  {'★' * st}{'☆' * (3 - st)}")
+            out.append(f"{BOLD}{progress.current(self.s, pet_id)[2]}{RESET}  {'★' * st}{'☆' * (3 - st)}")
             if st < 3:
                 out.append(DIM + _("next: {name}, learns to {actions}").format(
                     name=_(STAGES[pet_id][st]), actions=_(ACTIONS[st + 1])) + RESET)
@@ -129,7 +129,7 @@ class Board:
     def layout(self, cols, lines):
         """(grid lines, preview lines, preview on the side?) fitting a cols × lines terminal.
         When it's too short, the preview keeps its sprite and name, and the grid scrolls."""
-        head = [f"{BOLD}Bashou{RESET} {DIM}· " + _("{n} pets · arrows/hjkl · Enter: pick · q: quit").format(
+        head = [f"{BOLD}Bashou{RESET} {DIM}· " + _("{n} pets · arrows/hjkl · Enter: pick · f: form · q: quit").format(
             n=f"{len(creatures.owned(self.s))}/{len(self.ids) - 1}") + RESET, ""] + self.tile(0)
         preview = self.preview()
         side = cols >= COLS * TILE_W + 40
@@ -168,6 +168,24 @@ class Board:
         sys.stdout.write("".join(out))
         sys.stdout.flush()
 
+    def switch_form(self, pet):
+        """Show the next form this pet has reached (looks only: it keeps every action)."""
+        if pet != "starter" and pet not in self.s["pets"]:
+            return
+        top = progress.reached(self.s, pet)
+        if top == 1:
+            self.message = DIM + _("Only one form so far: it evolves with achievements.") + RESET
+            return
+        form = progress.look(self.s, pet) % top + 1
+        who = progress.who_of(self.s, pet)
+        with state.locked() as s:
+            if form == top:
+                s.setdefault("looks", {}).pop(who, None)
+            else:
+                s.setdefault("looks", {})[who] = form
+        self.s = state.load()
+        self.message = _("{name}: form {n}/{total}").format(name=progress.current(self.s, pet)[2], n=form, total=top)
+
     def key(self, k):
         n, size = self.pos, len(self.ids)
         last_row = 1 + (self.rows() - 1) * COLS
@@ -193,6 +211,9 @@ class Board:
                 s["active"] = pet
             self.s = state.load()
             return False
+        elif k == "form":
+            self.switch_form(self.ids[n])
+            return True
         elif k == "quit":
             return False
         self.message = ""

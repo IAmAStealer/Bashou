@@ -48,8 +48,13 @@ class ProgressTest(unittest.TestCase):
         self.assertEqual(progress.stage(self.s, "fox"), 1)
         notes = self.run_cmd("find . -name '*.log' -exec rm {} +")
         self.assertIn("🏆 Executor: act on results with `find -exec`", notes)
-        self.assertIn("✨ Fox cub evolved into Fox! New: wash, hum, flick its tail", notes)
+        self.assertIn("✨ Fox cub is evolving! Watch it: `bashou evolve`", notes)
         self.assertEqual(progress.stage(self.s, "fox"), 2)
+        self.assertEqual(progress.current(self.s, "fox")[1:3], (2, "Fox cub"))   # new actions, old look until watched
+        self.assertEqual(self.s["evolving"], [{"who": "fox", "from": 1, "to": 2}])
+        progress.watched(self.s, "fox")
+        self.assertEqual(progress.current(self.s, "fox")[2], "Fox")
+        self.assertEqual(self.s["evolving"], [])
 
     def test_failed_commands_earn_nothing(self):
         self.run_cmd("grep -r foo .", status=2)
@@ -138,7 +143,20 @@ class StarterTest(unittest.TestCase):
         self.assertIn("⬆ Kitten reached level 2!", notes)
         s["achievements"] = [f"a{i}" for i in range(14)]
         notes = progress.check(s, [a for a in __import__("bashou").achievements.ALL[:1]])
-        self.assertTrue(any(n.startswith("✨ Kitten evolved into Cat!") for n in notes), notes)
+        self.assertIn("✨ Kitten is evolving! Watch it: `bashou evolve`", notes)
+        self.assertEqual(progress.current(s)[:3], ("kitten", 2, "Kitten"))
+        s["achievements"] = [f"a{i}" for i in range(29)]                   # to Lion before watching
+        progress.check(s, [a for a in __import__("bashou").achievements.ALL[:1]])
+        self.assertEqual(s["evolving"], [{"who": "starter", "from": 1, "to": 3}])   # one animation, Kitten → Lion
+
+    def test_pick_an_earlier_look(self):
+        s = state.default()
+        s["starter"], s["achievements"] = "cat", [f"a{i}" for i in range(30)]
+        self.assertEqual(progress.current(s)[:3], ("lion", 3, "Lion"))
+        s["looks"]["starter"] = 1
+        self.assertEqual(progress.current(s)[:3], ("kitten", 3, "Kitten"))       # a kitten that can dance
+        s["looks"]["starter"] = 9
+        self.assertEqual(progress.look(s), 3)                                   # never beyond what's reached
 
     def test_old_saves_keep_the_cat_as_starter(self):
         s = state.migrate({**state.default(), "pets": ["cat", "fox"], "active": "cat"})

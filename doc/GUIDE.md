@@ -14,6 +14,8 @@ A pixel-art pet that lives in the top-right corner of your terminal and grows as
 - **Achievements evolve your pets.** Each pet has a family of achievements (`find -exec`,
   `awk -F`, `sort -rn`, a heredoc…): 2 of them evolve it, all of them make it legendary.
   Evolved pets learn new actions: washing, humming, tail flicks, then dancing and sparkles.
+  The pet tells you when it's evolving; watch it with `bashou evolve` (it keeps its old look until
+  then). In `bashou swap`, `f` switches between the forms it has reached, and it keeps its actions.
 - **Pipes.** Chain 3 commands with `|` ten times, or beat the Knot Eel in the arena, and the
   Octopus joins you.
 - **Safety.** Your pet warns you right away about risky commands: a download piped into a shell
@@ -58,7 +60,8 @@ bashou pets             # your collection
 bashou achievements     # what you earned, and what to try next
 bashou fight            # enter the arena, once your pet has announced a threat
 bashou talk             # your pet says something useful
-bashou swap             # board to pick your pet (or: bashou swap fox)
+bashou evolve           # watch your pets evolve (s skips)
+bashou swap             # board to pick your pet (or: bashou swap fox); f switches its form
 bashou off / on         # hide / show the pet
 bashou stats            # commands, top tools, constructs, streaks
 bashou config           # list settings (see Configuration)
