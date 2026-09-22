@@ -13,7 +13,7 @@ from .i18n import _
 
 ESC = "\x1b"
 COLS = 4
-TILE_W, TILE_H = 16, 3
+TILE_W, TILE_H = 16, 2
 DIM, BOLD, RESET, REV = f"{ESC}[2m", f"{ESC}[1m", f"{ESC}[0m", f"{ESC}[7m"
 ACCENT = f"{ESC}[38;2;150;190;230m"
 KEYS = {"\x1b[A": "up", "\x1b[B": "down", "\x1b[C": "right", "\x1b[D": "left",
@@ -55,7 +55,7 @@ class Board:
 
     def tile(self, i):
         if i >= len(self.ids):
-            return ["", "", ""]
+            return ["", ""]
         pet = self.ids[i]
         unlocked = pet in self.s["pets"] or pet == "starter"
         if pet == "starter":
@@ -71,8 +71,7 @@ class Board:
         name = name[:TILE_W - 2]
         style = REV if i == self.pos else ("" if unlocked else DIM)
         return [f"{style} {top:<{TILE_W - 2}} {RESET}",
-                f"{style} {name:<{TILE_W - 2}} {RESET}",
-                ""]
+                f"{style} {name:<{TILE_W - 2}} {RESET}"]
 
     def starter_preview(self):
         s = self.s

@@ -22,6 +22,10 @@ class Ctx:
         """Argument lists of every call to one of `tools`."""
         return [a for name, a in self.analysis.commands if name in tools]
 
+    def sub(self, tool, *names):
+        """True if a call to `tool` used one of the subcommands (`git stash`, `systemctl status`)."""
+        return any(args and args[0] in names for args in self.args(tool))
+
     def flag(self, tools, short="", long=()):
         """True if a call to `tools` used one of the short flag letters or long options."""
         if isinstance(tools, str):
