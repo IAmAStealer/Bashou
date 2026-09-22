@@ -20,7 +20,7 @@ from .i18n import _
 
 ESC = "\x1b"
 TICK = 0.25
-FIRST_TALK = (8, 15)        # minutes before the first spontaneous line
+FIRST_TALK = (3, 8)         # minutes before the first spontaneous line
 SOURCE = Path(__file__).resolve().parent
 
 

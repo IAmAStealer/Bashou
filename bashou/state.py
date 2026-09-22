@@ -47,7 +47,7 @@ SETTINGS = {
     "bubble": ((5, 10), "commands a speech bubble stays on screen (e.g. 5-10, or 3)"),
     "updates": ("on", "look for a new version once a day (on/off)"),
     "size": ("small", "pet size: small, or large for pets that have big pixel art (small/large)"),
-    "talk": ((20, 40), "minutes between the things your pet says on its own (e.g. 20-40, 60, or off)"),
+    "talk": ((10, 20), "minutes between the things your pet says on its own (e.g. 10-20, 30, or off)"),
     "quiet": ((60, 60), "seconds without typing before it says one (it waits for a pause in your work)"),
 }
 CHOICES = {"updates": ("on", "off"), "size": ("small", "large")}
