@@ -915,6 +915,8 @@
  "extract": "extrait",
  "extract into this folder: {value}": "extrait dans ce dossier : {value}",
  "count how many times each line repeats": "compte combien de fois chaque ligne se répète",
+ "only the lines that never repeat (sort first, it only sees neighbours)": "seulement les lignes qui ne se répètent jamais (triez d'abord, il ne voit que les voisines)",
+ "only the lines that do repeat": "seulement les lignes qui se répètent",
  "only the number of lines": "seulement le nombre de lignes",
  "every {value} seconds": "toutes les {value} secondes",
  "{value} stands for each line in the command": "{value} remplace chaque ligne dans la commande",
