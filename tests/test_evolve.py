@@ -23,7 +23,7 @@ class AnimationTest(unittest.TestCase):
         self.assertEqual(waits, sorted(waits[:1]) + waits[1:])            # starts slow…
         self.assertLess(min(waits), 0.1)                                   # …ends fast
         self.assertIn("Stardust evolved into", shown[-1][2])
-        self.assertIn("Comet", shown[-1][2])
+        self.assertIn("Planet", shown[-1][2])
 
     def test_s_skips_to_the_end(self):
         s = evolving_stardust()
@@ -42,7 +42,7 @@ class EvolveCommandTest(TempState):
         with contextlib.redirect_stdout(io.StringIO()):
             evolve.main()                                                 # not a tty: no animation, just the news
         s = state.load()
-        self.assertEqual((s["evolving"], progress.current(s)[2]), ([], "Comet"))
+        self.assertEqual((s["evolving"], progress.current(s)[2]), ([], "Planet"))
 
     def test_nothing_waiting(self):
         with contextlib.redirect_stdout(io.StringIO()):
@@ -60,7 +60,7 @@ class FormSwitchTest(TempState):
         for _ in range(3):
             board.key("form")
             names.append(progress.current(state.load())[2])
-        self.assertEqual(names, ["Stardust", "Comet", "Star"])
+        self.assertEqual(names, ["Stardust", "Planet", "Star"])
         self.assertEqual(state.load()["looks"], {})                        # back to the latest: no pin left
         self.assertEqual(progress.current(state.load())[1], 3)             # actions never went back
 

@@ -160,11 +160,11 @@ def form(pet_id, stage):
 
 # Starters: chosen once, they level up with every 5 achievements and change shape at levels 4 and 7.
 STARTERS = {
-    "star": ("stardust", "comet", "star"),
+    "star": ("stardust", "planet", "star"),
     "sprout": ("seedling", "sprout", "tree"),
     "pebble": ("pebble", "golem", "crystal"),
 }
-FORM_NAMES = {"stardust": "Stardust", "comet": "Comet", "star": "Star", "seedling": "Seedling", "sprout": "Sprout",
+FORM_NAMES = {"stardust": "Stardust", "planet": "Planet", "star": "Star", "seedling": "Seedling", "sprout": "Sprout",
               "tree": "Tree spirit", "pebble": "Pebble", "golem": "Rock golem", "crystal": "Crystal golem"}
 STARTER_BLURBS = {
     "star": "Bright and curious. Grows from a speck of dust into a star.",

@@ -33,7 +33,7 @@ class SceneTest(unittest.TestCase):
         self.assertNotEqual(a.px, b.px)
 
     def test_every_hero_has_a_back_view(self):
-        for form in ["stardust", "comet", "star", "seedling", "sprout", "tree", "pebble", "golem", "crystal"]:
+        for form in ["stardust", "planet", "star", "seedling", "sprout", "tree", "pebble", "golem", "crystal"]:
             frames, palette = sprites.hero(form)
             for frame in frames:
                 self.assertEqual(len(frame), 12, form)

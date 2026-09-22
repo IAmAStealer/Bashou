@@ -165,4 +165,4 @@ class StarterTest(unittest.TestCase):
     def test_the_cat_starter_becomes_the_star(self):
         s = state.migrate({**state.default(), "starter": "cat", "achievements": ["a"] * 20})
         self.assertEqual(s["starter"], "star")
-        self.assertEqual(progress.current(s)[:3], ("comet", 2, "Comet"))
+        self.assertEqual(progress.current(s)[:3], ("planet", 2, "Planet"))
