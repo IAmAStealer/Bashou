@@ -8,6 +8,7 @@ names in the code, ids in the tables, and a full playthrough that draws every fr
 import ast
 import importlib
 import random
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -234,6 +235,25 @@ class DrawEverythingTest(TempState):
         for who in ["starter"] + list(creatures.NAMES):
             for a, b in ((1, 2), (2, 3)):
                 self.assertTrue(evolve.scenes(s, {"who": who, "from": a, "to": b}), who)
+
+
+class ScreenshotTest(unittest.TestCase):
+    def test_readme_pictures_are_up_to_date(self):
+        """tools/screenshot.py draws the README pictures with the real code: rerun it after changing it."""
+        import subprocess
+        import sys
+        import xml.dom.minidom
+        root = ROOT.parent
+        with tempfile.TemporaryDirectory() as tmp:
+            subprocess.run([sys.executable, str(root / "tools" / "screenshot.py"), tmp], check=True,
+                           capture_output=True)
+            for svg in sorted(Path(tmp).glob("*.svg")):
+                xml.dom.minidom.parse(str(svg))
+                self.assertEqual(svg.read_text(), (root / "doc" / "img" / svg.name).read_text(),
+                                 f"{svg.name}: run python3 tools/screenshot.py")
+        readme = (root / "README.md").read_text()
+        for name in ("prompt", "duel", "pets"):
+            self.assertIn(f"doc/img/{name}.svg", readme)
 
 
 if __name__ == "__main__":
