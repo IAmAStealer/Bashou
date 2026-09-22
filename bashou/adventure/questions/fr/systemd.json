@@ -1,0 +1,262 @@
+[
+ {
+  "id": "systemd-1-01",
+  "level": 1,
+  "q": "Quelle commande démarre un service tout de suite ?",
+  "choices": [
+   "systemctl start nom",
+   "systemctl enable nom",
+   "service nom boot",
+   "systemd run nom"
+  ],
+  "answer": 0,
+  "explain": "`systemctl stop nom` est l'autre moitié."
+ },
+ {
+  "id": "systemd-1-02",
+  "level": 1,
+  "q": "Quelle commande fait démarrer un service à chaque démarrage ?",
+  "choices": [
+   "systemctl enable nom",
+   "systemctl start nom",
+   "systemctl boot nom",
+   "systemctl auto nom"
+  ],
+  "answer": 0,
+  "explain": "`systemctl enable --now nom` l'active et le démarre d'un coup."
+ },
+ {
+  "id": "systemd-1-03",
+  "level": 1,
+  "q": "Comment voir si un service tourne, avec ses dernières lignes de journal ?",
+  "choices": [
+   "systemctl status nom",
+   "systemctl show nom",
+   "systemctl list nom",
+   "journalctl nom"
+  ],
+  "answer": 0,
+  "explain": "La première ligne dit active (running), failed ou inactive (dead)."
+ },
+ {
+  "id": "systemd-1-04",
+  "level": 1,
+  "q": "Où placer une unité que vous avez écrite ?",
+  "choices": [
+   "/etc/systemd/system/",
+   "/usr/lib/systemd/system/",
+   "/etc/init.d/",
+   "~/.systemd/"
+  ],
+  "answer": 0,
+  "explain": "Les paquets utilisent /usr/lib/systemd/system ; la vôtre est prioritaire."
+ },
+ {
+  "id": "systemd-1-05",
+  "level": 1,
+  "q": "Comment s'appelle l'unité qui gère un démon ?",
+  "choices": [
+   "nom.service",
+   "nom.unit",
+   "nom.daemon",
+   "nom.conf"
+  ],
+  "answer": 0,
+  "explain": "Autres types : .timer, .socket, .mount, .target."
+ },
+ {
+  "id": "systemd-1-06",
+  "level": 1,
+  "q": "Vous venez de modifier une unité. Que lancer avant de la redémarrer ?",
+  "choices": [
+   "systemctl daemon-reload",
+   "systemctl reload-units",
+   "systemctl refresh",
+   "systemd-update"
+  ],
+  "answer": 0,
+  "explain": "Sinon systemd garde la version lue au démarrage."
+ },
+ {
+  "id": "systemd-1-07",
+  "level": 1,
+  "q": "Comment lire les journaux d'un seul service ?",
+  "choices": [
+   "journalctl -u nom",
+   "journalctl nom",
+   "systemctl logs nom",
+   "cat /var/log/nom.log"
+  ],
+  "answer": 0,
+  "explain": "-f suit en direct, -b limite à ce démarrage, -e saute à la fin."
+ },
+ {
+  "id": "systemd-1-08",
+  "level": 1,
+  "q": "Quelle commande liste les unités en échec ?",
+  "choices": [
+   "systemctl --failed",
+   "systemctl --errors",
+   "systemctl list --bad",
+   "journalctl --failed"
+  ],
+  "answer": 0,
+  "explain": "`systemctl list-units --type=service` les montre toutes."
+ },
+ {
+  "id": "systemd-1-09",
+  "level": 1,
+  "q": "Que fait `systemctl disable nom` ?",
+  "choices": [
+   "Il l'empêche de démarrer au boot, sans l'arrêter maintenant",
+   "Il l'arrête maintenant et au démarrage",
+   "Il supprime le fichier d'unité",
+   "Il masque l'unité"
+  ],
+  "answer": 0,
+  "explain": "`systemctl disable --now nom` l'arrête aussi ; `mask` rend le démarrage impossible."
+ },
+ {
+  "id": "systemd-1-10",
+  "level": 1,
+  "q": "Quelle commande montre l'unité réellement utilisée par systemd ?",
+  "choices": [
+   "systemctl cat nom",
+   "systemctl show nom",
+   "cat /etc/systemd/nom",
+   "systemd-analyze nom"
+  ],
+  "answer": 0,
+  "explain": "Elle affiche le fichier et toutes les surcharges appliquées dessus."
+ },
+ {
+  "id": "systemd-2-01",
+  "level": 2,
+  "q": "Dans un .service, quelle section contient ExecStart ?",
+  "choices": [
+   "[Service]",
+   "[Unit]",
+   "[Install]",
+   "[Exec]"
+  ],
+  "answer": 0,
+  "explain": "[Unit] décrit et ordonne, [Install] dit où `enable` l'accroche."
+ },
+ {
+  "id": "systemd-2-02",
+  "level": 2,
+  "q": "Que veut dire WantedBy=multi-user.target dans [Install] ?",
+  "choices": [
+   "`enable` l'accroche au démarrage normal",
+   "Il démarre avant le réseau",
+   "Il ne tourne que pour les utilisateurs connectés",
+   "Il attend une session graphique"
+  ],
+  "answer": 0,
+  "explain": "multi-user.target est le démarrage serveur habituel ; graphical.target l'entraîne aussi."
+ },
+ {
+  "id": "systemd-2-03",
+  "level": 2,
+  "q": "Votre programme reste au premier plan. Quel Type convient ?",
+  "choices": [
+   "Type=simple",
+   "Type=forking",
+   "Type=oneshot",
+   "Type=idle"
+  ],
+  "answer": 0,
+  "explain": "Type=forking sert aux démons qui se dédoublent et sortent ; systemd veut alors PIDFile."
+ },
+ {
+  "id": "systemd-2-04",
+  "level": 2,
+  "q": "Un script tourne une fois et sort, mais l'unité doit rester « faite ». Que mettre ?",
+  "choices": [
+   "Type=oneshot avec RemainAfterExit=yes",
+   "Type=simple avec Restart=always",
+   "Type=forking avec PIDFile=",
+   "Type=notify avec WatchdogSec="
+  ],
+  "answer": 0,
+  "explain": "C'est ainsi qu'on écrit les unités de préparation (montages, règles de pare-feu)."
+ },
+ {
+  "id": "systemd-2-05",
+  "level": 2,
+  "q": "Que fait Restart=on-failure ?",
+  "choices": [
+   "Il redémarre le service seulement s'il sort en erreur",
+   "Il le redémarre à chaque arrêt",
+   "Il le redémarre une fois par jour",
+   "Il le redémarre au démarrage de la machine"
+  ],
+  "answer": 0,
+  "explain": "RestartSec= espace les tentatives ; StartLimitBurst= évite les boucles sans fin."
+ },
+ {
+  "id": "systemd-2-06",
+  "level": 2,
+  "q": "After=network-online.target seul ne suffit pas. Pourquoi ?",
+  "choices": [
+   "After= ne fait qu'ordonner ; Wants= entraîne la cible",
+   "After= ne vaut que pour les timers",
+   "La cible n'existe pas par défaut",
+   "After= attend un nombre de secondes"
+  ],
+  "answer": 0,
+  "explain": "Écrivez Wants=network-online.target et After=network-online.target ensemble."
+ },
+ {
+  "id": "systemd-2-07",
+  "level": 2,
+  "q": "Comment donner ses réglages à un service sans les écrire dans l'unité ?",
+  "choices": [
+   "EnvironmentFile=/etc/default/nom",
+   "Include=/etc/default/nom",
+   "Source=/etc/default/nom",
+   "Config=/etc/default/nom"
+  ],
+  "answer": 0,
+  "explain": "Environment=CLE=valeur les pose une par une, dans l'unité."
+ },
+ {
+  "id": "systemd-2-08",
+  "level": 2,
+  "q": "Quelle commande vérifie une unité avant de s'en servir ?",
+  "choices": [
+   "systemd-analyze verify ./nom.service",
+   "systemctl check ./nom.service",
+   "systemd-verify ./nom.service",
+   "systemctl lint ./nom.service"
+  ],
+  "answer": 0,
+  "explain": "`man 5 systemd.service` liste toutes les options, avec des exemples."
+ },
+ {
+  "id": "systemd-2-09",
+  "level": 2,
+  "q": "Qu'est-ce qu'une surcharge drop-in ?",
+  "choices": [
+   "Un .conf dans /etc/systemd/system/nom.d/, quelques lignes",
+   "Une copie de l'unité dans votre dossier personnel",
+   "Une unité qui en remplace une autre",
+   "Un bloc de commentaires à la fin"
+  ],
+  "answer": 0,
+  "explain": "`systemctl edit nom` la crée : une mise à jour du paquet garde votre changement."
+ },
+ {
+  "id": "systemd-2-10",
+  "level": 2,
+  "q": "Qu'est-ce qui remplace une tâche cron avec systemd ?",
+  "choices": [
+   "Une unité .timer avec OnCalendar=, activée comme un service",
+   "Un .service avec Restart=always",
+   "Une ligne dans /etc/systemd/crontab",
+   "Une unité .socket avec Accept=yes"
+  ],
+  "answer": 0,
+  "explain": "`systemctl list-timers` montre les prochains passages ; le timer lance le service du même nom."
+ }
+]

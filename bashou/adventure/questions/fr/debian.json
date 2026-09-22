@@ -258,5 +258,135 @@
   ],
   "answer": 0,
   "explain": "dpkg -S /chemin fait l'inverse : quel paquet possède un fichier."
+ },
+ {
+  "id": "debian-3-01",
+  "level": 3,
+  "q": "Quelle commande montre la version candidate d'un paquet et d'où elle vient ?",
+  "choices": [
+   "apt policy nom",
+   "apt sources nom",
+   "dpkg --policy nom",
+   "apt-get priority nom"
+  ],
+  "answer": 0,
+  "explain": "Elle liste chaque source avec sa priorité de pin : on voit laquelle gagne."
+ },
+ {
+  "id": "debian-3-02",
+  "level": 3,
+  "q": "Vous ajoutez un dépôt à vous. Comment faire confiance à ses paquets ?",
+  "choices": [
+   "Mettre sa clé dans /etc/apt/keyrings, citée par Signed-By",
+   "Lancer apt-key add, toujours d'actualité",
+   "Écrire trusted=yes dans l'entrée du dépôt",
+   "Rien : apt fait confiance à tout dépôt ajouté"
+  ],
+  "answer": 0,
+  "explain": "La signature prouve que les paquets viennent de cet éditeur, intacts. apt-key a disparu, et trusted=yes ne fait que désactiver la vérification."
+ },
+ {
+  "id": "debian-3-03",
+  "level": 3,
+  "q": "`apt update` affiche NO_PUBKEY. Qu'est-ce que cela veut dire ?",
+  "choices": [
+   "apt n'a pas la clé du dépôt et refuse de lui faire confiance",
+   "Le dépôt est hors ligne",
+   "Votre clé GPG a expiré",
+   "La liste des paquets est abîmée, lancez apt clean"
+  ],
+  "answer": 0,
+  "explain": "Récupérez la clé de l'éditeur, dearmorez-la dans /etc/apt/keyrings et citez-la avec Signed-By."
+ },
+ {
+  "id": "debian-3-04",
+  "level": 3,
+  "q": "Que fait `update-alternatives --config editor` ?",
+  "choices": [
+   "Choisit vers quel programme pointe le lien editor",
+   "Installe un autre éditeur",
+   "Définit la variable EDITOR de votre shell",
+   "Liste les éditeurs des dépôts"
+  ],
+  "answer": 0,
+  "explain": "Les alternatives sont des liens gérés par Debian : editor, java, x-www-browser…"
+ },
+ {
+  "id": "debian-3-05",
+  "level": 3,
+  "q": "À quoi sert `dpkg-divert` ?",
+  "choices": [
+   "Envoyer le fichier d'un paquet ailleurs, sans écrasement",
+   "À rediriger apt vers un autre miroir",
+   "À déplacer la base de dpkg",
+   "À ignorer un paquet pendant une mise à jour"
+  ],
+  "answer": 0,
+  "explain": "Pratique quand vous remplacez un fichier fourni par un paquet : la diversion survit aux mises à jour."
+ },
+ {
+  "id": "debian-3-06",
+  "level": 3,
+  "q": "Un fichier est apparu dans /usr/bin : quelle commande dit de quel paquet il vient ?",
+  "choices": [
+   "dpkg -S /usr/bin/nom",
+   "dpkg -L /usr/bin/nom",
+   "apt owner /usr/bin/nom",
+   "apt-file list /usr/bin/nom"
+  ],
+  "answer": 0,
+  "explain": "dpkg -S cherche dans les paquets installés ; apt-file search cherche dans ceux que vous n'avez pas."
+ },
+ {
+  "id": "debian-3-07",
+  "level": 3,
+  "q": "Que change `apt-mark auto nom` ?",
+  "choices": [
+   "Il compte comme dépendance : autoremove peut l'enlever",
+   "Le paquet est mis à jour automatiquement",
+   "Le paquet est gelé à sa version",
+   "Le paquet est réinstallé au prochain démarrage"
+  ],
+  "answer": 0,
+  "explain": "`apt-mark manual` fait l'inverse ; `apt-mark showauto` les liste."
+ },
+ {
+  "id": "debian-3-08",
+  "level": 3,
+  "q": "Où écrit-on un pin pour préférer une distribution pour un paquet ?",
+  "choices": [
+   "Dans un fichier de /etc/apt/preferences.d/",
+   "/etc/apt/sources.list",
+   "/var/lib/dpkg/status",
+   "/etc/apt/apt.conf.d/pins"
+  ],
+  "answer": 0,
+  "explain": "Package, Pin (version ou distribution) et Pin-Priority vont ensemble dans ce fichier."
+ },
+ {
+  "id": "debian-3-09",
+  "level": 3,
+  "q": "Une mise à jour s'est arrêtée en chemin : quelle commande finit la configuration ?",
+  "choices": [
+   "dpkg --configure -a",
+   "apt install --fix-broken",
+   "apt clean",
+   "dpkg --audit --fix"
+  ],
+  "answer": 0,
+  "explain": "`apt --fix-broken install` est l'étape suivante si des dépendances manquent aussi."
+ },
+ {
+  "id": "debian-3-10",
+  "level": 3,
+  "q": "Après avoir changé un module noyau ou une entrée crypttab, que reconstruit-on ?",
+  "choices": [
+   "L'initramfs, avec update-initramfs -u",
+   "Le thème GRUB, avec grub-mkfont",
+   "Le cache des paquets, avec apt clean",
+   "Les alternatives, avec update-alternatives --all"
+  ],
+  "answer": 0,
+  "explain": "update-grub écrit ensuite les entrées de démarrage qui pointent dessus."
  }
 ]

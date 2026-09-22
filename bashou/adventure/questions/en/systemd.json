@@ -1,0 +1,262 @@
+[
+ {
+  "id": "systemd-1-01",
+  "level": 1,
+  "q": "Which command starts a service right now?",
+  "choices": [
+   "systemctl start name",
+   "systemctl enable name",
+   "service name boot",
+   "systemd run name"
+  ],
+  "answer": 0,
+  "explain": "`systemctl stop name` is the other half."
+ },
+ {
+  "id": "systemd-1-02",
+  "level": 1,
+  "q": "Which command makes a service start at every boot?",
+  "choices": [
+   "systemctl enable name",
+   "systemctl start name",
+   "systemctl boot name",
+   "systemctl auto name"
+  ],
+  "answer": 0,
+  "explain": "`systemctl enable --now name` enables it and starts it at once."
+ },
+ {
+  "id": "systemd-1-03",
+  "level": 1,
+  "q": "How do you see whether a service runs, and its last lines of log?",
+  "choices": [
+   "systemctl status name",
+   "systemctl show name",
+   "systemctl list name",
+   "journalctl name"
+  ],
+  "answer": 0,
+  "explain": "The first line says active (running), failed, or inactive (dead)."
+ },
+ {
+  "id": "systemd-1-04",
+  "level": 1,
+  "q": "Where do you put a unit file you wrote?",
+  "choices": [
+   "/etc/systemd/system/",
+   "/usr/lib/systemd/system/",
+   "/etc/init.d/",
+   "~/.systemd/"
+  ],
+  "answer": 0,
+  "explain": "Packages use /usr/lib/systemd/system; yours takes precedence."
+ },
+ {
+  "id": "systemd-1-05",
+  "level": 1,
+  "q": "What is a unit that manages a daemon called?",
+  "choices": [
+   "name.service",
+   "name.unit",
+   "name.daemon",
+   "name.conf"
+  ],
+  "answer": 0,
+  "explain": "Other kinds: .timer, .socket, .mount, .target."
+ },
+ {
+  "id": "systemd-1-06",
+  "level": 1,
+  "q": "You just edited a unit file. What do you run before restarting it?",
+  "choices": [
+   "systemctl daemon-reload",
+   "systemctl reload-units",
+   "systemctl refresh",
+   "systemd-update"
+  ],
+  "answer": 0,
+  "explain": "Otherwise systemd keeps the version it read at boot."
+ },
+ {
+  "id": "systemd-1-07",
+  "level": 1,
+  "q": "How do you read one service's logs?",
+  "choices": [
+   "journalctl -u name",
+   "journalctl name",
+   "systemctl logs name",
+   "cat /var/log/name.log"
+  ],
+  "answer": 0,
+  "explain": "Add -f to follow, -b for this boot only, -e to jump to the end."
+ },
+ {
+  "id": "systemd-1-08",
+  "level": 1,
+  "q": "Which command lists the units that failed?",
+  "choices": [
+   "systemctl --failed",
+   "systemctl --errors",
+   "systemctl list --bad",
+   "journalctl --failed"
+  ],
+  "answer": 0,
+  "explain": "`systemctl list-units --type=service` shows them all."
+ },
+ {
+  "id": "systemd-1-09",
+  "level": 1,
+  "q": "What does `systemctl disable name` do?",
+  "choices": [
+   "It stops it from starting at boot, without stopping it now",
+   "It stops it now and at boot",
+   "It removes the unit file",
+   "It masks the unit"
+  ],
+  "answer": 0,
+  "explain": "`systemctl disable --now name` also stops it; `mask` makes it impossible to start."
+ },
+ {
+  "id": "systemd-1-10",
+  "level": 1,
+  "q": "Which command shows the unit file systemd actually uses?",
+  "choices": [
+   "systemctl cat name",
+   "systemctl show name",
+   "cat /etc/systemd/name",
+   "systemd-analyze name"
+  ],
+  "answer": 0,
+  "explain": "It prints the file and every drop-in override on top of it."
+ },
+ {
+  "id": "systemd-2-01",
+  "level": 2,
+  "q": "In a .service file, which section holds ExecStart?",
+  "choices": [
+   "[Service]",
+   "[Unit]",
+   "[Install]",
+   "[Exec]"
+  ],
+  "answer": 0,
+  "explain": "[Unit] describes and orders it, [Install] says where `enable` hooks it."
+ },
+ {
+  "id": "systemd-2-02",
+  "level": 2,
+  "q": "What does WantedBy=multi-user.target in [Install] mean?",
+  "choices": [
+   "`enable` links it into the normal boot",
+   "It starts before the network",
+   "It only runs for logged-in users",
+   "It waits for a graphical session"
+  ],
+  "answer": 0,
+  "explain": "multi-user.target is the usual server boot; graphical.target pulls it in too."
+ },
+ {
+  "id": "systemd-2-03",
+  "level": 2,
+  "q": "Your program stays in the foreground. Which Type fits?",
+  "choices": [
+   "Type=simple",
+   "Type=forking",
+   "Type=oneshot",
+   "Type=idle"
+  ],
+  "answer": 0,
+  "explain": "Type=forking is for daemons that fork and exit; systemd then needs PIDFile."
+ },
+ {
+  "id": "systemd-2-04",
+  "level": 2,
+  "q": "A script runs once and exits, but the unit should count as done. What do you write?",
+  "choices": [
+   "Type=oneshot with RemainAfterExit=yes",
+   "Type=simple with Restart=always",
+   "Type=forking with PIDFile=",
+   "Type=notify with WatchdogSec="
+  ],
+  "answer": 0,
+  "explain": "That is how one-off setup units (mounts, firewall rules) are written."
+ },
+ {
+  "id": "systemd-2-05",
+  "level": 2,
+  "q": "What does Restart=on-failure do?",
+  "choices": [
+   "It restarts the service only when it exits with an error",
+   "It restarts it every time it stops",
+   "It restarts it once a day",
+   "It restarts it when the machine boots"
+  ],
+  "answer": 0,
+  "explain": "RestartSec= spaces the attempts; StartLimitBurst= stops endless loops."
+ },
+ {
+  "id": "systemd-2-06",
+  "level": 2,
+  "q": "After=network-online.target alone is not enough. Why?",
+  "choices": [
+   "After= only orders; Wants= is what pulls the target in",
+   "After= is only for timers",
+   "The target does not exist by default",
+   "After= needs a number of seconds"
+  ],
+  "answer": 0,
+  "explain": "Write Wants=network-online.target and After=network-online.target together."
+ },
+ {
+  "id": "systemd-2-07",
+  "level": 2,
+  "q": "How do you give a service its settings without writing them in the unit?",
+  "choices": [
+   "EnvironmentFile=/etc/default/name",
+   "Include=/etc/default/name",
+   "Source=/etc/default/name",
+   "Config=/etc/default/name"
+  ],
+  "answer": 0,
+  "explain": "Environment=KEY=value sets them one by one, right in the unit."
+ },
+ {
+  "id": "systemd-2-08",
+  "level": 2,
+  "q": "Which command checks a unit file for mistakes before you use it?",
+  "choices": [
+   "systemd-analyze verify ./name.service",
+   "systemctl check ./name.service",
+   "systemd-verify ./name.service",
+   "systemctl lint ./name.service"
+  ],
+  "answer": 0,
+  "explain": "`man 5 systemd.service` lists every option, with examples."
+ },
+ {
+  "id": "systemd-2-09",
+  "level": 2,
+  "q": "What is a drop-in override?",
+  "choices": [
+   "A .conf in /etc/systemd/system/name.d/, changing a few lines",
+   "A copy of the unit in your home",
+   "A unit that replaces another at boot",
+   "A comment block at the end of the unit"
+  ],
+  "answer": 0,
+  "explain": "`systemctl edit name` creates it, so a package update keeps your change."
+ },
+ {
+  "id": "systemd-2-10",
+  "level": 2,
+  "q": "What replaces a cron job in systemd?",
+  "choices": [
+   "A .timer unit with OnCalendar=, enabled like a service",
+   "A .service with Restart=always",
+   "A line in /etc/systemd/crontab",
+   "A .socket unit with Accept=yes"
+  ],
+  "answer": 0,
+  "explain": "`systemctl list-timers` shows the next runs; the timer starts the service of the same name."
+ }
+]

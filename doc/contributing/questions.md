@@ -9,7 +9,7 @@ Questions may be about tools the player hasn't installed yet: that's how they di
 ## Where
 
 `bashou/adventure/questions/en/<topic>.json`. Topics: `bash`, `linux`, `python`, `rust`, `c`,
-`debian`, `rocky`, `cicd`. Translations go in `questions/<lang>/<topic>.json` (same ids, levels and
+`debian`, `rocky`, `cicd`, `systemd`. Translations go in `questions/<lang>/<topic>.json` (same ids, levels and
 answer positions); a missing translation falls back to English. See [translations.md](translations.md).
 
 ```json
@@ -26,6 +26,13 @@ answer positions); a missing translation falls back to English. See [translation
 
 ## A good question
 
+- **Foundations, not recitation** (owner): ask what a file or a command is *for*, or how to recognize
+  something in real output — spotting a `$6$…` hash is useful, reciting the field order of
+  /etc/passwd is not. The details (field order, option lists, the neighbouring commands) belong in
+  `explain`, which is read once the answer is given.
+- **Everyday situations**: trusting a repository key, finding which package owns a file, finishing a
+  half-done upgrade. A few "build the command, the help is there" questions are welcome; niche flags
+  and trivia are not.
 - **One right answer**, and three wrong ones that look plausible (no joke choices).
 - **Short**: 110 characters for the question, 60 per choice (it must fit a small terminal).
 - **Level 1**: everyday basics. **Level 2**: things you meet after a few months. **Level 3**: the

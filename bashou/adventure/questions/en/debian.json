@@ -258,5 +258,135 @@
   ],
   "answer": 0,
   "explain": "dpkg -S /path does the reverse: which package owns a file."
+ },
+ {
+  "id": "debian-3-01",
+  "level": 3,
+  "q": "Which command shows a package's candidate version and where it comes from?",
+  "choices": [
+   "apt policy name",
+   "apt sources name",
+   "dpkg --policy name",
+   "apt-get priority name"
+  ],
+  "answer": 0,
+  "explain": "It lists every source with its pin priority, so you see which one wins."
+ },
+ {
+  "id": "debian-3-02",
+  "level": 3,
+  "q": "You add a repository of your own. How do you make apt trust its packages?",
+  "choices": [
+   "Save its key in /etc/apt/keyrings, cited by Signed-By",
+   "Run apt-key add, still the way today",
+   "Write trusted=yes in the sources entry",
+   "Nothing: apt trusts any repository you add"
+  ],
+  "answer": 0,
+  "explain": "The signature proves the packages come from that publisher, unchanged. apt-key is gone, and trusted=yes just turns the check off."
+ },
+ {
+  "id": "debian-3-03",
+  "level": 3,
+  "q": "`apt update` says NO_PUBKEY. What does it mean?",
+  "choices": [
+   "apt has no key for that repository, so it won't trust it",
+   "The repository is offline",
+   "Your own GPG key expired",
+   "The package list is corrupted, run apt clean"
+  ],
+  "answer": 0,
+  "explain": "Fetch the publisher's key, dearmor it into /etc/apt/keyrings, and point Signed-By at it."
+ },
+ {
+  "id": "debian-3-04",
+  "level": 3,
+  "q": "What does `update-alternatives --config editor` do?",
+  "choices": [
+   "Chooses which program the editor link points to",
+   "Installs another editor",
+   "Sets the EDITOR variable for your shell",
+   "Lists the editors in the repositories"
+  ],
+  "answer": 0,
+  "explain": "Alternatives are symlinks managed by Debian: editor, java, x-www-browser…"
+ },
+ {
+  "id": "debian-3-05",
+  "level": 3,
+  "q": "What is `dpkg-divert` for?",
+  "choices": [
+   "Sending a package's file elsewhere, so nothing overwrites it",
+   "Redirecting apt to another mirror",
+   "Moving the dpkg database",
+   "Skipping a package during an upgrade"
+  ],
+  "answer": 0,
+  "explain": "Useful when you replace a file a package ships; the diversion survives upgrades."
+ },
+ {
+  "id": "debian-3-06",
+  "level": 3,
+  "q": "A file appeared in /usr/bin and you wonder where it came from. Which command tells you?",
+  "choices": [
+   "dpkg -S /usr/bin/name",
+   "dpkg -L /usr/bin/name",
+   "apt owner /usr/bin/name",
+   "apt-file list /usr/bin/name"
+  ],
+  "answer": 0,
+  "explain": "dpkg -S searches installed packages; apt-file search looks in packages you don't have."
+ },
+ {
+  "id": "debian-3-07",
+  "level": 3,
+  "q": "What does `apt-mark auto name` change?",
+  "choices": [
+   "It counts as a dependency: autoremove may take it",
+   "The package is upgraded automatically",
+   "The package is held at its version",
+   "The package is reinstalled at the next boot"
+  ],
+  "answer": 0,
+  "explain": "`apt-mark manual` does the opposite; `apt-mark showauto` lists them."
+ },
+ {
+  "id": "debian-3-08",
+  "level": 3,
+  "q": "Where do you write a pin to prefer one release for a package?",
+  "choices": [
+   "A file in /etc/apt/preferences.d/",
+   "/etc/apt/sources.list",
+   "/var/lib/dpkg/status",
+   "/etc/apt/apt.conf.d/pins"
+  ],
+  "answer": 0,
+  "explain": "Package, Pin (release or version) and Pin-Priority go together in that file."
+ },
+ {
+  "id": "debian-3-09",
+  "level": 3,
+  "q": "An upgrade stopped half way: which command finishes configuring the packages?",
+  "choices": [
+   "dpkg --configure -a",
+   "apt install --fix-broken",
+   "apt clean",
+   "dpkg --audit --fix"
+  ],
+  "answer": 0,
+  "explain": "`apt --fix-broken install` is the next step when dependencies are missing too."
+ },
+ {
+  "id": "debian-3-10",
+  "level": 3,
+  "q": "After changing a kernel module or a crypttab entry, what do you rebuild?",
+  "choices": [
+   "The initramfs, with update-initramfs -u",
+   "The GRUB theme, with grub-mkfont",
+   "The package cache, with apt clean",
+   "The alternatives, with update-alternatives --all"
+  ],
+  "answer": 0,
+  "explain": "update-grub then writes the boot entries that point at it."
  }
 ]

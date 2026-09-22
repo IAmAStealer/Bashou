@@ -284,5 +284,135 @@
   ],
   "answer": 0,
   "explain": "Higher nice = nicer to others = lower priority."
+ },
+ {
+  "id": "linux-3-01",
+  "level": 3,
+  "q": "What is /etc/passwd for?",
+  "choices": [
+   "The list of accounts: name, id, home and shell",
+   "The list of passwords, encrypted",
+   "The list of groups on the machine",
+   "The list of users logged in right now"
+  ],
+  "answer": 0,
+  "explain": "One line per account: name:x:uid:gid:comment:home:shell. No secret in it, which is why everyone can read it."
+ },
+ {
+  "id": "linux-3-02",
+  "level": 3,
+  "q": "Where are the password hashes kept on a modern Linux?",
+  "choices": [
+   "/etc/shadow, which only root can read",
+   "/etc/passwd, in the second field",
+   "/etc/security/hashes",
+   "/var/lib/pam/passwords"
+  ],
+  "answer": 0,
+  "explain": "That is why /etc/passwd stays world-readable: it holds no secret."
+ },
+ {
+  "id": "linux-3-03",
+  "level": 3,
+  "q": "In /etc/shadow, which second field means the account has a usable password?",
+  "choices": [
+   "$6$Xy9x...$k2... — a hash, $6$ is SHA-512",
+   "! — the account is locked",
+   "* — no password login at all",
+   "An empty field"
+  ],
+  "answer": 0,
+  "explain": "$y$ is yescrypt (today's default), $6$ SHA-512, $2b$ bcrypt. `!` and `*` block the password, empty means none."
+ },
+ {
+  "id": "linux-3-04",
+  "level": 3,
+  "q": "Where do you put a unit file you wrote yourself?",
+  "choices": [
+   "/etc/systemd/system/",
+   "/usr/lib/systemd/system/",
+   "/var/lib/systemd/",
+   "/etc/init.d/"
+  ],
+  "answer": 0,
+  "explain": "Packages ship theirs in /usr/lib/systemd/system; yours wins over a package's."
+ },
+ {
+  "id": "linux-3-05",
+  "level": 3,
+  "q": "What does `systemctl daemon-reload` do?",
+  "choices": [
+   "Re-reads the unit files after you changed one",
+   "Restarts every running service",
+   "Reloads the kernel modules",
+   "Applies a new systemd version"
+  ],
+  "answer": 0,
+  "explain": "It does not restart your service: `systemctl restart name` does."
+ },
+ {
+  "id": "linux-3-06",
+  "level": 3,
+  "q": "What is the difference between `systemctl enable` and `systemctl start`?",
+  "choices": [
+   "enable is for the next boot, start is now",
+   "enable is for now, start is for the next boot",
+   "enable also reloads the unit",
+   "There is none, they are aliases"
+  ],
+  "answer": 0,
+  "explain": "`systemctl enable --now name` does both at once."
+ },
+ {
+  "id": "linux-3-07",
+  "level": 3,
+  "q": "Which command adds an override to a unit without touching the package's file?",
+  "choices": [
+   "systemctl edit name",
+   "systemctl override name",
+   "systemctl set name",
+   "systemd-edit name"
+  ],
+  "answer": 0,
+  "explain": "It writes /etc/systemd/system/name.d/override.conf, a drop-in that wins."
+ },
+ {
+  "id": "linux-3-08",
+  "level": 3,
+  "q": "What is /run for?",
+  "choices": [
+   "Runtime files, in memory, emptied at each boot",
+   "Programs you installed yourself",
+   "The logs of running services",
+   "Temporary files kept for 10 days"
+  ],
+  "answer": 0,
+  "explain": "PID files and sockets live there; /var/run is a link to it."
+ },
+ {
+  "id": "linux-3-09",
+  "level": 3,
+  "q": "What belongs in /usr/local?",
+  "choices": [
+   "Software you installed outside the package manager",
+   "The user home directories",
+   "The system configuration",
+   "Local copies of the package cache"
+  ],
+  "answer": 0,
+  "explain": "The package manager owns /usr; /usr/local is yours."
+ },
+ {
+  "id": "linux-3-10",
+  "level": 3,
+  "q": "What does `journalctl -u ssh -b` show?",
+  "choices": [
+   "The ssh unit's logs since this boot",
+   "Every log since this boot",
+   "The ssh unit's logs of the previous boot",
+   "The boot messages of the kernel"
+  ],
+  "answer": 0,
+  "explain": "-b -1 goes back one boot; -f follows, like tail -f."
  }
 ]

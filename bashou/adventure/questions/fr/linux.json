@@ -284,5 +284,135 @@
   ],
   "answer": 0,
   "explain": "Plus nice est haut, plus il est gentil avec les autres : priorité plus basse."
+ },
+ {
+  "id": "linux-3-01",
+  "level": 3,
+  "q": "À quoi sert /etc/passwd ?",
+  "choices": [
+   "À lister les comptes : nom, identifiant, maison et shell",
+   "À lister les mots de passe, chiffrés",
+   "À lister les groupes de la machine",
+   "À lister les utilisateurs connectés"
+  ],
+  "answer": 0,
+  "explain": "Une ligne par compte : nom:x:uid:gid:commentaire:maison:shell. Aucun secret dedans, d'où sa lecture par tous."
+ },
+ {
+  "id": "linux-3-02",
+  "level": 3,
+  "q": "Où sont gardées les empreintes de mots de passe sur un Linux moderne ?",
+  "choices": [
+   "/etc/shadow, que seul root peut lire",
+   "/etc/passwd, dans le deuxième champ",
+   "/etc/security/hashes",
+   "/var/lib/pam/passwords"
+  ],
+  "answer": 0,
+  "explain": "C'est pour cela que /etc/passwd reste lisible par tous : il ne contient aucun secret."
+ },
+ {
+  "id": "linux-3-03",
+  "level": 3,
+  "q": "Dans /etc/shadow, quel deuxième champ indique un mot de passe utilisable ?",
+  "choices": [
+   "$6$Xy9x...$k2... — une empreinte, $6$ = SHA-512",
+   "! — le compte est verrouillé",
+   "* — aucune connexion par mot de passe",
+   "Un champ vide"
+  ],
+  "answer": 0,
+  "explain": "$y$ = yescrypt (défaut actuel), $6$ = SHA-512, $2b$ = bcrypt. `!` et `*` bloquent le mot de passe, vide = aucun."
+ },
+ {
+  "id": "linux-3-04",
+  "level": 3,
+  "q": "Où placer une unité systemd que vous écrivez vous-même ?",
+  "choices": [
+   "/etc/systemd/system/",
+   "/usr/lib/systemd/system/",
+   "/var/lib/systemd/",
+   "/etc/init.d/"
+  ],
+  "answer": 0,
+  "explain": "Les paquets livrent les leurs dans /usr/lib/systemd/system ; la vôtre l'emporte."
+ },
+ {
+  "id": "linux-3-05",
+  "level": 3,
+  "q": "Que fait `systemctl daemon-reload` ?",
+  "choices": [
+   "Il relit les fichiers d'unité après une modification",
+   "Il redémarre tous les services",
+   "Il recharge les modules du noyau",
+   "Il applique une nouvelle version de systemd"
+  ],
+  "answer": 0,
+  "explain": "Il ne redémarre pas votre service : `systemctl restart nom` s'en charge."
+ },
+ {
+  "id": "linux-3-06",
+  "level": 3,
+  "q": "Quelle différence entre `systemctl enable` et `systemctl start` ?",
+  "choices": [
+   "enable vaut pour le prochain démarrage, start maintenant",
+   "enable vaut pour maintenant, start au prochain démarrage",
+   "enable recharge aussi l'unité",
+   "Aucune, ce sont des alias"
+  ],
+  "answer": 0,
+  "explain": "`systemctl enable --now nom` fait les deux d'un coup."
+ },
+ {
+  "id": "linux-3-07",
+  "level": 3,
+  "q": "Quelle commande ajoute une surcharge sans toucher au fichier du paquet ?",
+  "choices": [
+   "systemctl edit nom",
+   "systemctl override nom",
+   "systemctl set nom",
+   "systemd-edit nom"
+  ],
+  "answer": 0,
+  "explain": "Elle écrit /etc/systemd/system/nom.d/override.conf, un drop-in prioritaire."
+ },
+ {
+  "id": "linux-3-08",
+  "level": 3,
+  "q": "À quoi sert /run ?",
+  "choices": [
+   "Aux fichiers d'exécution, en mémoire, vidés au démarrage",
+   "Aux programmes que vous installez vous-même",
+   "Aux journaux des services",
+   "Aux fichiers temporaires gardés 10 jours"
+  ],
+  "answer": 0,
+  "explain": "Les fichiers PID et les sockets y vivent ; /var/run est un lien vers lui."
+ },
+ {
+  "id": "linux-3-09",
+  "level": 3,
+  "q": "Que met-on dans /usr/local ?",
+  "choices": [
+   "Les logiciels installés hors du gestionnaire de paquets",
+   "Les dossiers personnels",
+   "La configuration du système",
+   "Une copie locale du cache de paquets"
+  ],
+  "answer": 0,
+  "explain": "Le gestionnaire de paquets possède /usr ; /usr/local est à vous."
+ },
+ {
+  "id": "linux-3-10",
+  "level": 3,
+  "q": "Qu'affiche `journalctl -u ssh -b` ?",
+  "choices": [
+   "Les journaux de l'unité ssh depuis ce démarrage",
+   "Tous les journaux depuis ce démarrage",
+   "Les journaux ssh du démarrage précédent",
+   "Les messages du noyau au démarrage"
+  ],
+  "answer": 0,
+  "explain": "-b -1 remonte d'un démarrage ; -f suit en direct, comme tail -f."
  }
 ]
