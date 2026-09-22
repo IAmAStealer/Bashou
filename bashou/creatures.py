@@ -137,7 +137,12 @@ STAGES = {
 
 
 # Pets whose first stage is another animal: the sprite of each stage.
-FORMS = {"frog": ("tadpole", "frog", "frog")}
+FORMS = {
+    "bat": ("mouseling", "bat", "vampire"),
+    "frog": ("tadpole", "frog", "toad"),
+    "fox": ("fennec", "fox", "kitsune"),
+    "owl": ("pygmy_owl", "barn_owl", "owl"),
+}
 
 
 def form(pet_id, stage):

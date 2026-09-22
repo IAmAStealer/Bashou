@@ -1,0 +1,49 @@
+{
+ "name": "Barn owl",
+ "palette": {
+  "a": "#7a5634",
+  "o": "#d8a868",
+  "g": "#a8a098",
+  "f": "#fbf6ee",
+  "r": "#c88a58",
+  "m": "#191919",
+  "b": "#e8c8a8"
+ },
+ "base": [
+  ".................",
+  "....aaaaaaaaa....",
+  "..aorrrooorrroa..",
+  "...arfffrfffra...",
+  "...arfmfffmfra...",
+  "...arfffbfffra...",
+  "...aorfffffroa...",
+  "..aoogrfffrgooa..",
+  "..aogoorrroogoa..",
+  "..aoogooooogooa..",
+  "...aaoooooooaa...",
+  ".....bb...bb....."
+ ],
+ "poses": {
+  "inhale": {
+   "8": "-a-------------a-",
+   "9": "-a-------------a-"
+  },
+  "closed": {
+   "4": "-----rfr-rfr-----"
+  },
+  "left": {
+   "4": "-----mf--mf------"
+  },
+  "right": {
+   "4": "------fm--fm-----"
+  },
+  "fidget": {
+   "7": "--.--------------",
+   "8": "-ao--------------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

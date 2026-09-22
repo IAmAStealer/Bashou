@@ -1,0 +1,51 @@
+{
+ "name": "Fennec",
+ "palette": {
+  "a": "#a8703a",
+  "o": "#e8c48a",
+  "i": "#f0b0a0",
+  "w": "#fff5e6",
+  "m": "#191919",
+  "k": "#4a3020"
+ },
+ "base": [
+  "a.........a......",
+  "aa.......aa......",
+  "aia.....aia......",
+  "aiia...aiia......",
+  "aoiaaaaaaioa.....",
+  "aomoooooomoa.....",
+  "aomoooooomoa.....",
+  "awwoooooowwa.....",
+  ".awwwwkwwwwa.....",
+  "..awwwwwwwa.aaaa.",
+  ".aoowwwwooaaoooka",
+  ".aaaaaaaaaaaaaaaa"
+ ],
+ "poses": {
+  "inhale": {
+   "9": "-a---------------",
+   "10": "a----------------"
+  },
+  "closed": {
+   "5": "--o------o-------",
+   "6": "--k------k-------"
+  },
+  "left": {
+   "5": "-mo-----mo-------",
+   "6": "-mo-----mo-------"
+  },
+  "right": {
+   "5": "--om-----om------",
+   "6": "--om-----om------"
+  },
+  "fidget": {
+   "0": ".----------------",
+   "1": ".a---------------"
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

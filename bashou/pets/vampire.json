@@ -1,0 +1,52 @@
+{
+ "name": "Vampire",
+ "palette": {
+  "a": "#3a2c48",
+  "o": "#54426a",
+  "e": "#6e5a88",
+  "w": "#ffffff",
+  "m": "#191919",
+  "r": "#e0303a",
+  "n": "#2a1d2a",
+  "W": "#2e2438",
+  "V": "#9b2436"
+ },
+ "base": [
+  "...a.........a...",
+  "...a.........a...",
+  "...aa.......aa...",
+  "...aoaaaaaaaoa...",
+  "W..aoooooooooa..W",
+  "WV.aorrooorroa.VW",
+  "WVVaormooomroaVVW",
+  "WVVVaoownwooaVVVW",
+  "WWVVaoeeeeeoaVVWW",
+  ".W.W.aeeeeea.W.W.",
+  ".....aoooooa.....",
+  "......a...a......"
+ ],
+ "poses": {
+  "inhale": {
+   "3": "W---------------W"
+  },
+  "closed": {
+   "5": "-----oo---oo-----",
+   "6": "-----aa---aa-----"
+  },
+  "left": {
+   "6": "-----mr---mr-----"
+  },
+  "right": {
+   "6": "-----rm---rm-----"
+  },
+  "fidget": {
+   "4": ".---------------.",
+   "5": ".---------------.",
+   "9": "-W-------------W-"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

@@ -1,0 +1,53 @@
+{
+ "name": "Kitsune",
+ "palette": {
+  "a": "#b0806a",
+  "o": "#fff4ea",
+  "w": "#ffe6d2",
+  "m": "#191919",
+  "r": "#e0483a",
+  "g": "#f5c542",
+  "t": "#231a15"
+ },
+ "base": [
+  "gt..r.......r..tg",
+  "gotrar.....rartog",
+  "towaoaaaaaaaoawot",
+  "ttwaomooooomoawtt",
+  "gttaomooooomoattg",
+  "gooarwooooowraoog",
+  "twwtawwwmwwwatwwt",
+  "ttt..awwwwwa..ttt",
+  "gtt.aoowwwooa.ttg",
+  "gooaooowwwoooaoog",
+  "towaowwooowwoawot",
+  ".twtaaaaaaaaatwt."
+ ],
+ "poses": {
+  "inhale": {
+   "9": "--a-----------a--"
+  },
+  "closed": {
+   "3": "-----o-----o-----",
+   "4": "-----a-----a-----"
+  },
+  "left": {
+   "3": "----mo----mo-----",
+   "4": "----mo----mo-----"
+  },
+  "right": {
+   "3": "-----om----om----",
+   "4": "-----om----om----"
+  },
+  "fidget": {
+   "4": ".g---------------",
+   "5": ".g---------------",
+   "8": "---------------g.",
+   "9": "---------------g."
+  }
+ },
+ "particles": [
+  0,
+  7
+ ]
+}
