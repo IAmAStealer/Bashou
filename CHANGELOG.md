@@ -3,6 +3,23 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.3.1 — 2026-09-22
+
+- **Ten new fights, and the easy ones come first.** Your first threats now ask for one command with
+  at most one option: count the lines of a file (`wc`), print a column (`cut`), sort names, read the
+  end or the start of a file (`tail`, `head`), find someone in a list (`grep`), list a folder (`ls`),
+  print one line (`sed -n`). The tool fights (grep, awk, find, uniq, sed, ps) only come once you have
+  met their tool, and the Knot Eel's pipeline stays last.
+- The first hint of every new fight points at the help: `bashou learn <command>` and `--help`.
+- Each new threat has its own look: Line Moth, Column Crab, Jumble Sprite, Last-word Wisp,
+  First-line Imp, Needle Gnat, Field Wasp, Dust Bunny, Verse Viper and Peak Harpy.
+- `bashou learn` explains `uniq -u` and `uniq -d`, and says that uniq only compares neighbouring
+  lines, so you sort first.
+- The Sand grain rides a pale blue gust that curls into a spiral, and no longer shows twice when the
+  wind catches it mid-breath.
+- The Leaf slime is a leaf: veins from the foot of its midrib to the sides, a pointed tip, and it
+  breathes out an O2 bubble instead of flapping.
+
 ## v0.3.0 — 2026-09-22
 
 - Every starter now has **7 forms** and grows to level 20 (one level per 5 achievements). New shapes
