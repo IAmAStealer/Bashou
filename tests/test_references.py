@@ -149,6 +149,9 @@ class TablesTest(unittest.TestCase):
             if ch.kind == "fight":
                 self.assertIn(ch.pet, creatures.NAMES, ch.id)
         self.assertEqual(set(duel.TINTS), {ch.id for ch in challenges.ALL})
+        self.assertIn_all([p.stem for p in duel.ENEMIES.glob("*.json")], challenges.BY_ID, "enemy sprites")
+        for path in duel.ENEMIES.glob("*.json"):
+            self.assertEqual(creatures.problems(path), [], path.name)
 
     def test_adventure(self):
         topics = set(world.TOPICS)

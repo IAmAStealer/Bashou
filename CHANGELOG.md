@@ -3,6 +3,10 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.2.3 — 2026-09-22
+
+- The Log Hydra has its own look in `bashou fight`: three heads rising from below.
+
 ## v0.2.2 — 2026-09-22
 
 - `bashou version` says which version you have, and if a newer one is out.

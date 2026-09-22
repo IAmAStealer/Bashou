@@ -209,7 +209,8 @@ def main():
             print("\n".join(render.lines(pet, poses, cells, stage)).replace(render.SKIP, " ") + "\n")
         return 0
     if args == ["check"]:
-        found = [p for path in sorted(ART.glob("*.json")) + sorted((ART / "large").glob("*.json"))
+        enemies = sorted((ART.parent / "enemies").glob("*.json"))
+        found = [p for path in sorted(ART.glob("*.json")) + sorted((ART / "large").glob("*.json")) + enemies
                  for p in problems(path)]
         print("\n".join(found) or f"{len(PETS)} pets OK, {len(LARGE)} large")
         return 1 if found else 0

@@ -1,0 +1,47 @@
+{
+ "name": "Log Hydra",
+ "palette": {
+  "a": "#1f4a2c",
+  "o": "#4f9a5a",
+  "l": "#8fc27a",
+  "r": "#ff4040",
+  "w": "#f0ece0"
+ },
+ "base": [
+  ".......aaaa......",
+  "......aooraa.....",
+  ".....aoooooa.....",
+  ".....awwwoa......",
+  "..aaaa.aooa......",
+  ".aooraaaloa.aaaa.",
+  "aoooooaaloaaooraa",
+  "awwwoa.aloaoooooa",
+  "..aooa.aloawwwoa.",
+  "...aloaaloa.aooa.",
+  "...aloaaloa.aloa.",
+  "...aloaaloaaloa.."
+ ],
+ "poses": {
+  "inhale": {},
+  "closed": {
+   "1": "---------o-------",
+   "5": "----o------------",
+   "6": "--------------o--"
+  },
+  "left": {
+   "1": "--------ro-------",
+   "5": "---ro------------",
+   "6": "-------------ro--"
+  },
+  "right": {},
+  "fidget": {
+   "3": "------rrr--------",
+   "7": "-rrr-------------",
+   "8": "-----------rrr---"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}
