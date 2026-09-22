@@ -71,6 +71,15 @@ def check():
     return note(tag)
 
 
+def version():
+    """This install's version: its release tag, "v0.2.1-3-gabc1234" between releases, or None."""
+    try:
+        out = git("describe", "--tags", "--match", "v*.*.*")
+        return out.stdout.strip() if out.returncode == 0 else None
+    except (OSError, subprocess.SubprocessError):
+        return None
+
+
 def releases():
     """Release tags, newest first (after a fetch)."""
     latest()

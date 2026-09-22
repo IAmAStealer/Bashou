@@ -270,6 +270,7 @@ def main():
     dv.add_argument("stage", nargs="?", type=int, choices=[1, 2, 3], default=3)
     sub.add_parser("start", help="choose your starter (once)")
     sub.add_parser("language", help="choose the language")
+    sub.add_parser("version", help="which version of Bashou this is")
     up = sub.add_parser("update", help="get the new version from GitHub")
     up.add_argument("--version", help="install this release instead, even an older one (e.g. v0.2.0)")
     sub.add_parser("adventure", help="walk into the world with your starter")
@@ -308,6 +309,12 @@ def main():
     elif args.cmd == "security":
         from . import security
         raise SystemExit(security.run(args.which))
+    elif args.cmd == "version":
+        from . import update
+        print("  Bashou " + (update.version() or _("(unknown version: not a git clone)")))
+        newer = state.load()["update_available"]
+        if newer:
+            print("  🆕 " + _("Bashou {version} is out: bashou update").format(version=newer))
     elif args.cmd == "update":
         from . import update
         raise SystemExit(update.run(args.version))

@@ -101,6 +101,7 @@
  "Not a valid value for {name}: {value}": "Valeur invalide pour {name} : {value}",
  "backup: {path}": "sauvegarde : {path}",
  "Not sure what it does? `bashou learn` takes it apart.": "Pas sûr de ce que ça fait ? `bashou learn` la décortique.",
+ "(unknown version: not a git clone)": "(version inconnue : pas un clone git)",
  "Next: {how} (achv: {name})": "Prochain : {how} (succès : {name})",
  "Try `{example}` (achv: {name})": "Essaie `{example}` (succès : {name})",
  "(bashou adventure teaches it too)": "(bashou adventure l'enseigne aussi)",

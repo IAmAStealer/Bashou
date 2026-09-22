@@ -63,6 +63,14 @@ class UpdateTest(unittest.TestCase):
             self.assertEqual(update.run("v9.9.9"), 1)             # no such release
         self.assertEqual(update.available(), "v0.3.0")            # and the newest is offered again
 
+    def test_version_names_the_release(self):
+        self.publish("Faster pets", tag="v0.2.0")
+        with contextlib.redirect_stdout(io.StringIO()):
+            update.run()
+        self.assertEqual(update.version(), "v0.2.0")
+        update.ROOT = update.ROOT.parent / "nowhere"                # not a clone
+        self.assertIsNone(update.version())
+
     def test_only_releases_are_offered(self):
         """A commit on main isn't a release: CI hasn't vouched for it."""
         self.publish("Work in progress")

@@ -197,6 +197,24 @@ class ShellTest(unittest.TestCase):
         self.sh.send("whih\n", 0)
         self.assertTrue(self.sh.expect(b"`which`", start))
 
+    def test_quitting_keeps_bashs_exit_status(self):
+        """The terminal said "exited with code 2": bash exits with the last command's status, Bashou
+        (its exit trap, its prompt hook) must not change it."""
+        for last, code in (("true", 0), ("ls /nope", 2)):
+            with tempfile.TemporaryDirectory() as tmp:
+                sh = Shell(tmp)
+                sh.read(1)
+                sh.expect(b"38;2;216;200;160")
+                sh.send(last + "\n", 0.5)
+                sh.send("\x04", 0)                              # Ctrl+D: logout
+                for _ in range(TIMEOUT * 10):
+                    done, status = os.waitpid(sh.pid, os.WNOHANG)
+                    if done:
+                        break
+                    time.sleep(0.1)
+                os.close(sh.fd)
+                self.assertEqual(os.waitstatus_to_exitcode(status), code, last)
+
     def test_exit_cleans_up(self):
         """On exit the pet stops and removes its events/erase files."""
         pet = int(self.sh.value("BASHOU_PID"))

@@ -3,6 +3,11 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.2.2 — 2026-09-22
+
+- `bashou version` says which version you have, and if a newer one is out.
+- `bashou update` lists what's new, one entry per line.
+
 ## v0.2.1 — 2026-09-22
 
 - `bashou learn` takes a command apart and explains each piece: the command, every option, the
