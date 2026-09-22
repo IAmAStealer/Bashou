@@ -192,8 +192,9 @@ def pets_shot():
     from bashou import progress
     shown = [(creatures.get(forms[0]), creatures.FORM_NAMES[forms[0]], "starter")
              for forms in creatures.STARTERS.values()]
-    for count, pet in progress.MILESTONES[:3]:
-        shown.append((creatures.get(creatures.form(pet, 1)), creatures.STAGES[pet][0], f"{count} commands"))
+    for pet, how in (("slime", f"{progress.MILESTONES[0][0]} commands"), ("bat", "10 × python3…"),
+                     ("mushroom", "5 scripts run")):
+        shown.append((creatures.get(creatures.form(pet, 1)), creatures.STAGES[pet][0], how))
     s = Screen(len(shown) * 19 + 1, 9)
     for i, (pet, name, how) in enumerate(shown):
         c = i * 19 + 2

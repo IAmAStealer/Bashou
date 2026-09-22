@@ -33,12 +33,13 @@ shell below](doc/img/duel.svg)
 Choose a starter: Stardust, Seedling or Pebble. It grows up to level 20 and changes shape along the
 way. What it becomes is for you to find out.
 
-25 more pets hide in your terminal, each with 3 forms. The first ones come quickly, just by using
-your terminal; the others come from what you do: a new tool used often enough, a long pipe, a risky
-command… The swap board shows only their silhouette until you meet them.
+25 more pets hide in your terminal. Each one comes from what it stands for: a Droplet after your
+first 10 commands (it keeps changing shape as you type), a night coder for your first programs, a
+mushroom for your own scripts, others for a new tool used often enough, a long pipe, a fight lost or
+won, a walk in the adventure… The swap board shows only their silhouette until you meet them.
 
-![The three starters, Stardust, Seedling and Pebble, then the first pets you meet: a Mouseling after
-10 commands, a Tadpole after 50, a Hatchling after 200](doc/img/pets.svg)
+![The three starters, Stardust, Seedling and Pebble, then three of the first pets you can meet: a
+Droplet after 10 commands, a Mouseling after 10 programs, a Spore after 5 scripts](doc/img/pets.svg)
 
 ## Install
 

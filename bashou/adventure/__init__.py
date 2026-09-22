@@ -142,6 +142,8 @@ class Game:
     def answer(self, i, now):
         adv, q = self.adv, self.question
         right = i == q["answer"]
+        if right:
+            adv["correct"] = adv.get("correct", 0) + 1         # 20 bring the Frog
         explain = [f"{q['choices'][q['answer']]}: {q['explain']}"]
         if adv["phase"] == "monster":
             if right:

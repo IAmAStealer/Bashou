@@ -258,6 +258,9 @@ def run():
     code, notes = arena(ch, lambda task: banner(ch, task), fight=True)
     won = code == WIN
     with state.locked() as s:
+        if not won:
+            s["fights_lost"] = s.get("fights_lost", 0) + 1
+            notes += progress.check(s)
         if won:
             s["fights_won"] += 1
             if ch.id not in s["challenges"]:

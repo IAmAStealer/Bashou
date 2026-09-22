@@ -9,8 +9,10 @@ from .creatures import FORM_NAMES, STAGES, STARTER_LEVELS, STARTERS
 from .i18n import _
 
 # Total commands run -> pet unlocked.
-MILESTONES = [(10, "bat"), (50, "frog"), (200, "turtle"), (500, "mushroom"), (1000, "slime"),
-              (2500, "sofa"), (5000, "octopus"), (10000, "dragon")]
+# The Slime grows with your command count: one form per count, as many as creatures.FORMS gives it
+# (round animals and elements join as they get drawn, the King slime stays last; see doc/PLAN.md).
+COMMAND_LADDER = {"slime": (10, 50, 10000)}
+MILESTONES = [(COMMAND_LADDER["slime"][0], "slime")]
 
 # Pet -> (tools that count, successful uses needed).
 TOOL_PETS = {
@@ -29,10 +31,12 @@ TOOL_PETS = {
     "bee": ({"systemctl", "journalctl"}, 10),
     "whale": ({"kubectl"}, 10),
     "meerkat": ({"top", "htop", "btop", "free", "df", "du", "watch", "vmstat"}, 10),
+    "bat": ({"python", "python3", "cargo", "rustc", "gcc", "g++", "clang", "make", "cmake", "node", "npm",
+             "go", "javac", "java", "ruby", "perl", "php"}, 10),              # a night coder
 }
 # How the unlock hint names a tool pet's tools (default: the first in alphabetical order).
 # Only the installed ones are named: no `dig` in the hint when dig is missing.
-TOOL_LABELS = {"ghost": ("ps", "kill"), "squirrel": ("tar", "gzip"), "pigeon": ("curl", "ssh", "dig"),
+TOOL_LABELS = {"bat": ("python3", "cargo", "gcc", "make", "node"), "ghost": ("ps", "kill"), "squirrel": ("tar", "gzip"), "pigeon": ("curl", "ssh", "dig"),
                "hedgehog": ("chmod", "chown"), "bee": ("systemctl",), "meerkat": ("df", "du", "top")}
 
 
@@ -43,8 +47,8 @@ def tool_label(pet):
 
 
 # pet: (construct, lines needed); "pipe3" = a line chaining 3+ commands with |
-CONSTRUCT_PETS = {"octopus": ("pipe3", 10), "gremlin": ("risky", 5)}
-CONSTRUCT_NAMES = {"pipe3": "3-command pipes", "risky": "risky commands"}
+CONSTRUCT_PETS = {"octopus": ("pipe3", 10), "gremlin": ("risky", 5), "mushroom": ("script", 5)}
+CONSTRUCT_NAMES = {"pipe3": "3-command pipes", "risky": "risky commands", "script": "scripts of your own run"}
 
 
 def adventure(state):
@@ -52,7 +56,28 @@ def adventure(state):
 
 
 # pet: (rule on the state, how to get it)
-STATE_PETS = {"snail": (lambda s: adventure(s).get("chapters_done", 0) >= 1, "finish chapter 1 of bashou adventure")}
+STATE_PETS = {
+    "snail": (lambda s: adventure(s).get("chapters_done", 0) >= 1, "finish chapter 1 of bashou adventure"),
+    "turtle": (lambda s: adventure(s).get("walked", 0) >= 500, "walk 500 m in bashou adventure"),
+    "frog": (lambda s: adventure(s).get("correct", 0) >= 20, "answer 20 questions right in bashou adventure"),
+    "sofa": (lambda s: s.get("fights_lost", 0) >= 1, "lose (or flee) a fight: take a seat"),
+    "dragon": (lambda s: s["fights_won"] >= 1, "win a fight: bashou fight"),
+}
+
+
+def how_to_unlock(state, pet):
+    """The hint of a locked pet, with where you stand."""
+    if pet in STATE_PETS:
+        return _(STATE_PETS[pet][1])
+    if pet in CONSTRUCT_PETS:
+        construct, needed = CONSTRUCT_PETS[pet]
+        return f"{state['constructs'].get(construct, 0)}/{needed} × " + _(CONSTRUCT_NAMES[construct])
+    if pet in COMMAND_LADDER:
+        return _("{count} commands").format(count=f"{state['commands']:,}/{COMMAND_LADDER[pet][0]:,}")
+    if pet in TOOL_PETS:
+        tools, needed = TOOL_PETS[pet]
+        return f"{tool_uses(state, tools)}/{needed} × {tool_label(pet)}"
+    return ""
 
 
 def unlock(state, pet, reason):
@@ -68,7 +93,11 @@ def tool_uses(state, tools):
 
 
 def stage(state, pet):
-    """1, 2 or 3 depending on the achievements earned in the pet's family."""
+    """1, 2 or 3 depending on the achievements earned in the pet's family; the Slime by your command
+    count. A form once reached stays (`ladder_best`)."""
+    if pet in COMMAND_LADDER:
+        by_count = sum(1 for n in COMMAND_LADDER[pet] if state["commands"] >= n)
+        return max(1, by_count, state.get("ladder_best", {}).get(pet, 1))
     earned = sum(a.id in state["achievements"] for a in achievements.family(pet))
     total = len(achievements.family(pet))
     return 3 if total and earned == total else 2 if earned >= 2 else 1
@@ -97,11 +126,10 @@ def starter_form(state):
 
 
 def tier(state, who, form):
-    """What a form can do (1-3, see behavior.ACTIONS): a pet's stage; for the starter, which third of
-    its ladder the form is in."""
-    if who_of(state, who) != "starter":
-        return form
-    n = len(ladder(state)[0])
+    """What a form can do (1-3, see behavior.ACTIONS, and the ★ shown): the form itself, or on a long
+    ladder (the starter, the Slime) which third of it the form is in."""
+    who = who_of(state, who)
+    n = len(ladder(state)[0]) if who == "starter" else len(creatures.FORMS.get(who, ()))
     return min(3, 1 + 3 * (form - 1) // n) if n > 3 else form
 
 
@@ -159,6 +187,14 @@ def watched(state, who):
     state.get("looks", {}).pop(who, None)
 
 
+def runs_a_script(analysis, line):
+    """`./backup.sh`, `bash deploy.sh`, `sh x.sh`: running a script of your own."""
+    import re
+    if any(t.endswith(".sh") for t in analysis.tools):
+        return True
+    return bool(analysis.tools & {"bash", "sh", "zsh"}) and bool(re.search(r"\b(ba|z)?sh\s+\S+\.sh\b", line))
+
+
 def record(state, status, line, today, hour):
     """Count one command. Returns the notifications to show."""
     analysis = analyze(line)
@@ -180,6 +216,8 @@ def record(state, status, line, today, hour):
             state["constructs"][construct] = state["constructs"].get(construct, 0) + 1
         if analysis.pipes >= 3:
             state["constructs"]["pipe3"] = state["constructs"].get("pipe3", 0) + 1
+        if runs_a_script(analysis, line):
+            state["constructs"]["script"] = state["constructs"].get("script", 0) + 1
     return check(state, earned)
 
 
@@ -213,6 +251,9 @@ def check(state, earned=()):
         else:
             name = _(FORM_NAMES[line[starter_form(state) - 1]])
             notes.append("⬆ " + _("{name} reached level {level}!").format(name=name, level=starter_level(state)))
+    for pet in COMMAND_LADDER:                              # its count went up before check(): compare
+        before[pet] = state.setdefault("ladder_best", {}).get(pet, 1)   # with the form it had
+        state["ladder_best"][pet] = stage(state, pet)
     for pet in STAGES:
         now = stage(state, pet)
         if now > before[pet] and pet in state["pets"]:
@@ -221,7 +262,9 @@ def check(state, earned=()):
 
 
 def next_milestone(state):
-    for count, pet in MILESTONES:
-        if state["commands"] < count:
-            return count, pet
+    """(commands, what comes): the Slime, then its next form (a surprise)."""
+    for pet, counts in COMMAND_LADDER.items():
+        for i, count in enumerate(counts):
+            if state["commands"] < count:
+                return count, _(STAGES[pet][0]) if i == 0 else "?"
     return None

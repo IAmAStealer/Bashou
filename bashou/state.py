@@ -25,6 +25,8 @@ def default():
         "active": "starter",
         "achievements": [],
         "fights_won": 0,
+        "fights_lost": 0,   # knocked out or fled (the Living sofa comforts you)
+        "ladder_best": {},  # pet -> highest form reached on a command ladder (the Slime): never goes back
         "challenges": [],   # challenges beaten
         "security": [],     # security challenges solved (`bashou security`)
         "adventure": None,  # `bashou adventure` progress (see bashou/adventure)
@@ -82,8 +84,9 @@ def load():
     except (FileNotFoundError, json.JSONDecodeError):
         return default()
     state = {**default(), **data}
-    if "starter_best" not in data:
-        del state["starter_best"]                          # an old save: migrate() sets it from its level
+    for key in ("starter_best", "ladder_best"):
+        if key not in data:
+            del state[key]                                 # an old save: migrate() sets it
     return migrate(state)
 
 
@@ -99,7 +102,17 @@ def migrate(state):
         state["active"] = "starter"
     if "starter_best" not in state:
         migrate_ladder(state)
+    if "ladder_best" not in state:
+        migrate_slime(state)
     return state
+
+
+def migrate_slime(state):
+    """The Slime evolved with its achievement family before it had a command ladder: keep its form."""
+    from . import achievements
+    fam = achievements.family("slime")
+    earned = sum(a.id in state.get("achievements", []) for a in fam)
+    state["ladder_best"] = {"slime": 3 if fam and earned == len(fam) else 2 if earned >= 2 else 1}
 
 
 # Before starters had long ladders (0.2.3 and older): 3 forms, at levels 4 and 7 (level max 9).

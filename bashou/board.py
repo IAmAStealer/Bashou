@@ -23,18 +23,7 @@ KEYS = {"\x1b[A": "up", "\x1b[B": "down", "\x1b[C": "right", "\x1b[D": "left",
 
 
 def hint(s, pet):
-    if pet in progress.STATE_PETS:
-        return _(progress.STATE_PETS[pet][1])
-    if pet in progress.CONSTRUCT_PETS:
-        construct, needed = progress.CONSTRUCT_PETS[pet]
-        return f"{s['constructs'].get(construct, 0)}/{needed} × " + _(progress.CONSTRUCT_NAMES[construct])
-    for count, p in progress.MILESTONES:
-        if p == pet:
-            return _("{count} commands").format(count=f"{s['commands']:,}/{count:,}")
-    if pet in progress.TOOL_PETS:
-        tools, needed = progress.TOOL_PETS[pet]
-        return f"{progress.tool_uses(s, tools)}/{needed} × {progress.tool_label(pet)}"
-    return ""
+    return progress.how_to_unlock(s, pet)
 
 
 def silhouette(pet):
@@ -77,7 +66,8 @@ class Board:
         elif unlocked:
             st = progress.stage(self.s, pet)
             name = progress.current(self.s, pet)[2]
-            top = "★" * st + "☆" * (3 - st) + ("  ●" if pet == self.s["active"] else "")
+            t = progress.tier(self.s, pet, st)
+            top = "★" * t + "☆" * (3 - t) + ("  ●" if pet == self.s["active"] else "")
         else:
             name, top = "???", "☆☆☆"
         name = name[:TILE_W - 2]

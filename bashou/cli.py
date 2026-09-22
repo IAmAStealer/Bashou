@@ -3,7 +3,7 @@
 import argparse
 
 from . import achievements, progress, state
-from .creatures import NAMES, STAGES, owned, roster
+from .creatures import STAGES, owned, roster
 from .i18n import _
 
 BOLD, DIM, RESET = "\033[1m", "\033[2m", "\033[0m"
@@ -33,8 +33,8 @@ def level():
             (_("Pets"), f"{len(owned(s))}/{len(roster())}")]
     nxt = progress.next_milestone(s)
     if nxt:
-        count, pet = nxt
-        rows.append((_("Next"), f"{progress_bar(s['commands'], count)} {s['commands']:,}/{count:,} → {_(NAMES[pet])}"))
+        count, what = nxt
+        rows.append((_("Next"), f"{progress_bar(s['commands'], count)} {s['commands']:,}/{count:,} → {what}"))
     width = max(len(label) for label, value in rows)
     for label, value in rows:
         print(f"  {BOLD}{label:<{width}}{RESET} : {value}")
@@ -43,22 +43,12 @@ def level():
 
 
 def hint(s, pet):
-    if pet in progress.STATE_PETS:
-        return _(progress.STATE_PETS[pet][1])
-    if pet in progress.CONSTRUCT_PETS:
-        construct, needed = progress.CONSTRUCT_PETS[pet]
-        return f"{s['constructs'].get(construct, 0)}/{needed} × " + _(progress.CONSTRUCT_NAMES[construct])
-    for count, p in progress.MILESTONES:
-        if p == pet:
-            return _("{count} commands").format(count=f"{count:,}")
-    if pet in progress.TOOL_PETS:
-        tools, needed = progress.TOOL_PETS[pet]
-        return f"{progress.tool_uses(s, tools)}/{needed} × {progress.tool_label(pet)}"
-    return ""
+    return progress.how_to_unlock(s, pet)
 
 
 def stars(s, pet):
-    return "★" * progress.stage(s, pet) + "☆" * (3 - progress.stage(s, pet))
+    t = progress.tier(s, pet, progress.stage(s, pet))
+    return "★" * t + "☆" * (3 - t)
 
 
 def pets():

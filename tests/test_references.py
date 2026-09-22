@@ -113,6 +113,10 @@ class TablesTest(unittest.TestCase):
         roster = set(creatures.NAMES)
         self.assertEqual(set(creatures.STAGES), roster)
         self.assertEqual(set(creatures.FORMS), roster)
+        for pet, forms in creatures.FORMS.items():
+            self.assertEqual(len(creatures.STAGES[pet]), len(forms), pet)
+            self.assertEqual(len(forms), len(progress.COMMAND_LADDER.get(pet, forms)), pet)
+            self.assertEqual(list(progress.COMMAND_LADDER.get(pet, ())), sorted(progress.COMMAND_LADDER.get(pet, ())))
         self.assertIn_all([s for forms in creatures.FORMS.values() for s in forms], creatures.PETS, "FORMS sprites")
         starter_forms = [s for forms in creatures.STARTERS.values() for s in forms]
         self.assertIn_all(starter_forms, creatures.PETS, "starter sprites")

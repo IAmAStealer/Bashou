@@ -18,14 +18,33 @@ class ProgressTest(unittest.TestCase):
         return notes
 
     def test_command_milestone(self):
+        """Commands grow the Slime (owner): a Droplet at 10, a new form at each count of its ladder."""
         self.assertEqual(self.run_cmd("ls", times=9), [])
-        self.assertIn("Mouseling", self.run_cmd("ls")[0])
+        self.assertIn("Droplet", self.run_cmd("ls")[0])
         self.assertEqual(self.run_cmd("ls", times=39), [])
         notes = self.run_cmd("ls")
-        self.assertIn("frog", self.s["pets"])
-        self.assertEqual(len(notes), 1)
-        self.assertIn("Tadpole", notes[0])
-        self.assertEqual(progress.current(self.s, "frog")[0], "tadpole")    # a real tadpole, not a small frog
+        self.assertIn("Droplet is evolving", " ".join(notes))
+        self.assertEqual(progress.stage(self.s, "slime"), 2)
+        self.assertEqual(progress.next_milestone(self.s), (10000, "?"))           # no spoiler
+
+    def test_themed_unlocks(self):
+        """Milestone pets now come from what they stand for (owner)."""
+        self.run_cmd("python3 app.py", times=10)
+        self.assertIn("bat", self.s["pets"])
+        self.run_cmd("./backup.sh", times=3)
+        self.run_cmd("bash deploy.sh", times=2)
+        self.assertIn("mushroom", self.s["pets"])
+        self.s["adventure"] = {"walked": 500, "correct": 20}
+        self.s["fights_lost"], self.s["fights_won"] = 1, 1
+        progress.check(self.s)
+        self.assertLessEqual({"turtle", "frog", "sofa", "dragon"}, set(self.s["pets"]))
+
+    def test_the_slime_never_shrinks(self):
+        old = {**state.default(), "commands": 20, "achievements": [a.id for a in achievements.family("slime")]}
+        del old["ladder_best"]                                             # a King slime by its family
+        s = state.migrate(old)
+        self.assertEqual(progress.stage(s, "slime"), 3)
+        self.assertEqual(progress.tier(s, "slime", 3), 3)
 
     def test_tool_pet_needs_successes(self):
         self.run_cmd("find . -name x", status=1, times=20)
