@@ -9,7 +9,8 @@ Every release has a section here, written for players. CI refuses to tag a relea
   arguments, pipes and redirections. With no command, it explains the last one your pet suggested.
 - The prompt starts below your pet, at startup and after `clear`, so the first commands' output
   no longer hides under it.
-- `bashou update` shows what's new from this changelog.
+- `bashou update` shows what's new from this changelog, and `bashou update --version v0.2.0`
+  installs a given release, older ones too.
 - Pets switch to new sprites and translations right after an update.
 - Achievements that need a tool stay hidden in tests on machines that have it (fixes the first
   0.2.0 release run).

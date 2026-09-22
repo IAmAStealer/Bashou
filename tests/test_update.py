@@ -52,6 +52,16 @@ class UpdateTest(unittest.TestCase):
         self.assertIn("- Pets can swim", out.getvalue())
         self.assertNotIn("Internal refactor", out.getvalue())
 
+    def test_install_a_given_release_even_an_older_one(self):
+        self.publish("Faster pets", tag="v0.2.0")
+        self.publish("Swimming pets", tag="v0.3.0")
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(update.run(), 0)                     # newest: v0.3.0
+            self.assertEqual(update.run("0.2.0"), 0)              # back to v0.2.0 ("v" optional)
+            self.assertEqual((update.ROOT / "a").read_text(), "Faster pets")
+            self.assertEqual(update.run("v9.9.9"), 1)             # no such release
+        self.assertEqual(update.available(), "v0.3.0")            # and the newest is offered again
+
     def test_only_releases_are_offered(self):
         """A commit on main isn't a release: CI hasn't vouched for it."""
         self.publish("Work in progress")

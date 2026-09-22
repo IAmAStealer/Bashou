@@ -71,11 +71,40 @@ def check():
     return note(tag)
 
 
-def run():
-    """`bashou update`."""
+def releases():
+    """Release tags, newest first (after a fetch)."""
+    latest()
+    return git("tag", "--list", "v*.*.*", "--sort=-v:refname").stdout.split()
+
+
+def switch(tag):
+    """Install exactly this release."""
+    known = releases()
+    if tag not in known:
+        print("  " + _("No release {version}. Releases: {list}").format(version=tag, list=", ".join(known[:8]) or "-"))
+        return 1
+    if git("rev-parse", "HEAD").stdout == git("rev-parse", f"{tag}^{{commit}}").stdout:
+        print("  " + _("Bashou {version} is already installed.").format(version=tag))
+        return 0
+    out = git("-c", "advice.detachedHead=false", "checkout", "--quiet", tag, timeout=60)
+    if out.returncode:
+        print("  " + _("Update failed:") + " " + out.stderr.strip())
+        return 1
+    with state.locked() as s:
+        s["update_available"] = ""
+        s["update_checked"] = 0              # an older release: the next terminal offers the newest again
+    print("  " + _("Bashou {version} installed. Your pets switch to it by themselves.").format(version=tag))
+    print("  " + _("Back to the newest: bashou update"))
+    return 0
+
+
+def run(version=None):
+    """`bashou update`, or `bashou update --version v0.2.0` for a given release (older ones too)."""
     if not (ROOT / ".git").exists():
         print("  " + _("This copy of Bashou isn't a git clone, so it can't update itself."))
         return 1
+    if version:
+        return switch("v" + version.lstrip("v"))
     tag = available()
     with state.locked() as s:
         s["update_available"] = ""

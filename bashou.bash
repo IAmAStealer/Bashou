@@ -79,6 +79,7 @@ _bashou_complete() {
     1:*)              words=$_bashou_commands ;;
     2:swap:*)         words="starter $_bashou_pets" ;;
     2:config:*)       words="bubble updates size" ;;
+    2:update:*)       words="--version" ;;
     3:config:size)    words="small large default" ;;
     2:security:*)     words=$_bashou_security ;;
     3:config:bubble)  words="default" ;;

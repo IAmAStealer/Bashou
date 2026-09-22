@@ -270,7 +270,8 @@ def main():
     dv.add_argument("stage", nargs="?", type=int, choices=[1, 2, 3], default=3)
     sub.add_parser("start", help="choose your starter (once)")
     sub.add_parser("language", help="choose the language")
-    sub.add_parser("update", help="get the new version from GitHub")
+    up = sub.add_parser("update", help="get the new version from GitHub")
+    up.add_argument("--version", help="install this release instead, even an older one (e.g. v0.2.0)")
     sub.add_parser("adventure", help="walk into the world with your starter")
     sc = sub.add_parser("security", help="security challenges, easy to hard")
     sc.add_argument("which", nargs="?", help="number or id (see the list)")
@@ -309,7 +310,7 @@ def main():
         raise SystemExit(security.run(args.which))
     elif args.cmd == "update":
         from . import update
-        raise SystemExit(update.run())
+        raise SystemExit(update.run(args.version))
     elif args.cmd == "config":
         raise SystemExit(config(args.name, args.value))
     elif args.cmd == "language":

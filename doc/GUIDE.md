@@ -66,7 +66,7 @@ bashou swap             # board to pick your pet (or: bashou swap fox); f switch
 bashou off / on         # hide / show the pet
 bashou stats            # commands, top tools, constructs, streaks
 bashou config           # list settings (see Configuration)
-bashou update           # get the new version from GitHub
+bashou update           # get the new version from GitHub (--version v0.2.0: a given one, older too)
 bashou security         # security challenges (bashou security 3 starts the third)
 bashou adventure        # walk into the world with your starter (s: save & quit)
 bashou reset            # start over with a new starter (asks first, keeps a backup)
