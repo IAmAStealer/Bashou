@@ -112,7 +112,8 @@ def migrate_slime(state):
     from . import achievements
     fam = achievements.family("slime")
     earned = sum(a.id in state.get("achievements", []) for a in fam)
-    state["ladder_best"] = {"slime": 3 if fam and earned == len(fam) else 2 if earned >= 2 else 1}
+    from .creatures import FORMS
+    state["ladder_best"] = {"slime": len(FORMS["slime"]) if fam and earned == len(fam) else 2 if earned >= 2 else 1}
 
 
 # Before starters had long ladders (0.2.3 and older): 3 forms, at levels 4 and 7 (level max 9).

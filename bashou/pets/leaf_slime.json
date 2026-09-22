@@ -1,0 +1,53 @@
+{
+ "name": "Leaf slime",
+ "palette": {
+  "a": "#2f6e2a",
+  "o": "#7ccc5a",
+  "w": "#d8f5c0",
+  "m": "#191919",
+  "p": "#ffa0aa",
+  "q": "#24521f",
+  "l": "#4fae3a",
+  "L": "#2f6e2a"
+ },
+ "base": [
+  ".....l..ll.......",
+  ".....lLoLll......",
+  ".....awooa.......",
+  "....awooooa......",
+  "...awooooooa.....",
+  "..aoooooooooa....",
+  ".aooomooomoooa...",
+  ".aooomooomoooa...",
+  ".aopoooqooopoa...",
+  ".aoooooooooooa...",
+  "..aoooooooooa....",
+  "...aaaaaaaaa....."
+ ],
+ "poses": {
+  "fidget": {
+   "0": "--------L.-------",
+   "1": "----------L------"
+  },
+  "inhale": {
+   "10": "-ao---------oa---",
+   "11": "--a---------a----"
+  },
+  "closed": {
+   "6": "-----o---o-------",
+   "7": "----qq---qq------"
+  },
+  "left": {
+   "6": "----mo--mo-------",
+   "7": "----mo--mo-------"
+  },
+  "right": {
+   "6": "-----om--om------",
+   "7": "-----om--om------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

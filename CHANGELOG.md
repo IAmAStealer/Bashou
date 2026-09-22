@@ -8,8 +8,8 @@ Every release has a section here, written for players. CI refuses to tag a relea
 - Starters now grow up to level 20 and get more forms, starting with a new one for Stardust, with
   more to come. Seedling and Pebble now change shape at levels 8 and 15.
 - You never lose a form: the form you have stays until you reach the next one.
-- Pets come from what they stand for. Your command count now grows a Droplet that keeps changing
-  shape; the other pets come from your first programs, your own scripts, walks and right answers in
+- Pets come from what they stand for. Your command count now grows a Droplet that changes shape 6
+  times on the way to 10,000 commands; the other pets come from your first programs, your own scripts, walks and right answers in
   the adventure, and fights won or lost. Pets you already have stay yours.
 - No more spoilers: the swap board and the starter choice show only the forms you've reached, and
   the level of the next one.

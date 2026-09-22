@@ -23,9 +23,11 @@ class ProgressTest(unittest.TestCase):
         self.assertIn("Droplet", self.run_cmd("ls")[0])
         self.assertEqual(self.run_cmd("ls", times=39), [])
         notes = self.run_cmd("ls")
+        self.assertEqual(notes, [])
+        notes = self.run_cmd("ls", times=50)                                       # 100 commands
         self.assertIn("Droplet is evolving", " ".join(notes))
         self.assertEqual(progress.stage(self.s, "slime"), 2)
-        self.assertEqual(progress.next_milestone(self.s), (10000, "?"))           # no spoiler
+        self.assertEqual(progress.next_milestone(self.s), (200, "?"))             # no spoiler
 
     def test_themed_unlocks(self):
         """Milestone pets now come from what they stand for (owner)."""
@@ -43,8 +45,8 @@ class ProgressTest(unittest.TestCase):
         old = {**state.default(), "commands": 20, "achievements": [a.id for a in achievements.family("slime")]}
         del old["ladder_best"]                                             # a King slime by its family
         s = state.migrate(old)
-        self.assertEqual(progress.stage(s, "slime"), 3)
-        self.assertEqual(progress.tier(s, "slime", 3), 3)
+        self.assertEqual(progress.current(s, "slime")[0], "king_slime")
+        self.assertEqual(progress.tier(s, "slime", progress.stage(s, "slime")), 3)
 
     def test_tool_pet_needs_successes(self):
         self.run_cmd("find . -name x", status=1, times=20)
