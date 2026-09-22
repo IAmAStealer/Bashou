@@ -47,7 +47,8 @@ def run(key):
     if not ch.available():
         print("  " + _("This one needs {tools}, which isn't installed.").format(tools=", ".join(ch.requires)))
         return 1
-    won, notes = fight.arena(ch, lambda task: intro(ch, task))
+    code, notes = fight.arena(ch, lambda task: intro(ch, task))
+    won = code == fight.WIN
     if won:
         with state.locked() as s:
             if ch.id not in s["security"]:

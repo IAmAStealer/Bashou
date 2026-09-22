@@ -15,13 +15,13 @@ import tempfile
 import time
 from pathlib import Path
 
-from . import challenges, progress, state
+from . import challenges, duel, progress, state
 from .analyze import analyze, parse_log
 from .i18n import _, cap
 
 BOLD, DIM, RESET = "\033[1m", "\033[2m", "\033[0m"
 ACCENT, GOOD, BAD = "\033[38;2;150;190;230m", "\033[38;2;130;210;120m", "\033[38;2;240;110;110m"
-WIN, FLEE = 42, 3          # exit codes of the arena shell (Ctrl-D is a flee)
+WIN, FLEE, KO = 42, 3, 4   # exit codes of the arena shell (Ctrl-D is a flee, KO: no hearts left)
 THREAT_MINUTES = 30
 
 RC = r"""
@@ -33,6 +33,10 @@ _arena_log() {
   if [[ -n $_arena_hc && $HISTCMD != "$_arena_hc" ]]; then
     printf '%s\t' "$s" >> "$BASHOU_ARENA/log"
     HISTTIMEFORMAT= history 1 >> "$BASHOU_ARENA/log"
+    if [[ -n $BASHOU_DUEL ]]; then
+      PYTHONPATH=$BASHOU_SRC python3 -m bashou.duel judge "$BASHOU_ARENA"
+      (( $? == 4 )) && exit 4
+    fi
   fi
   _arena_hc=$HISTCMD
   return "$s"
@@ -43,6 +47,8 @@ answer() { _arena answer "$*" && exit 42; }
 hint() { _arena hint; }
 task() { _arena task; }
 flee() { exit 3; }
+_arena_ps0() { [[ -r $BASHOU_ARENA/erase ]] && printf '%s' "$(< "$BASHOU_ARENA/erase")"; }
+[[ -n $BASHOU_DUEL ]] && PS0='$(_arena_ps0)'
 cd "$BASHOU_ARENA/arena"
 """
 
@@ -200,8 +206,9 @@ def banner(ch, task):
             "  flee             " + _("run away (the threat will come back)") + "\n")
 
 
-def arena(ch, intro, rng=None):
-    """Run the sandbox bash for `ch`. `intro(task_text)` is printed first. Returns (won, notes)."""
+def arena(ch, intro, rng=None, fight=False):
+    """Run the sandbox bash for `ch`. `intro(task_text)` is printed first. Returns (exit code, notes).
+    With `fight`, the duel is drawn at the top and wrong commands cost hearts (duel.py)."""
     base = Path(tempfile.mkdtemp(prefix="bashou-arena-"))
     work = base / "arena"
     work.mkdir()
@@ -210,10 +217,21 @@ def arena(ch, intro, rng=None):
         meta.update(ch.setup(work, rng or random.Random()))
         (base / "meta.json").write_text(json.dumps(meta))
         (base / "arena.rc").write_text(RC)
-        print(intro(ch.task_text(meta)))
+        top = duel.room(base) if fight else 0
+        if top:                                            # the duel takes the top: start below it
+            print("\033[H\033[2J" + "\n" * top, end="", flush=True)
+        print(intro(ch.task_text(meta)), flush=True)
         env = {**os.environ, "BASHOU_ARENA": str(base),
                "BASHOU_SRC": str(Path(__file__).resolve().parent.parent)}
-        code = subprocess.run(["bash", "--rcfile", str(base / "arena.rc"), "-i"], env=env).returncode
+        env.pop("BASHOU_DUEL", None)
+        if top:
+            env["BASHOU_DUEL"] = "1"
+        shell = subprocess.Popen(["bash", "--rcfile", str(base / "arena.rc"), "-i"], env=env)
+        scene = duel.start(base, shell.pid) if top else None
+        try:
+            code = shell.wait()
+        finally:
+            duel.stop(scene)
         try:
             records = parse_log((base / "log").read_text())
         except FileNotFoundError:
@@ -228,7 +246,7 @@ def arena(ch, intro, rng=None):
     with state.locked() as s:
         for status, cmd in records:                        # arena commands count too
             notes += progress.record(s, status, cmd, now.date().isoformat(), now.hour)
-    return code == WIN, notes
+    return code, notes
 
 
 def run():
@@ -237,7 +255,8 @@ def run():
     if not ch:
         print(DIM + _("No threat around. Your pet will warn you when one comes.") + RESET)
         return
-    won, notes = arena(ch, lambda task: banner(ch, task))
+    code, notes = arena(ch, lambda task: banner(ch, task), fight=True)
+    won = code == WIN
     with state.locked() as s:
         if won:
             s["fights_won"] += 1
@@ -249,6 +268,10 @@ def run():
             notes += progress.check(s)
     if won:
         print(f"\n{GOOD}{BOLD}✨ " + _("You beat the {threat}!").format(threat=_(ch.threat)) + RESET)
+    elif code == KO:
+        print(f"\n{BAD}{BOLD}💫 " + _("Knocked out! The {threat} wins this time.").format(threat=_(ch.threat))
+              + f"{RESET}\n{DIM}" + _("Only `{tool}` hurts it; looking around (ls, cat…) is free. "
+                                       "It'll be back.").format(tool=ch.tool) + RESET)
     else:
         print(f"\n{DIM}" + _("You fled. The {threat} will be back.").format(threat=_(ch.threat)) + RESET)
     for note in notes:

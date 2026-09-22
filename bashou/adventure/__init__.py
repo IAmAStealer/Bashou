@@ -447,7 +447,8 @@ def run_trial(game, fd, old, out):
     termios.tcsetattr(fd, termios.TCSADRAIN, old)
     out.write(f"{ESC}[0m{ESC}[?25h{ESC}[?1049l")
     out.flush()
-    won, notes = fight.arena(trial, lambda task: trial_intro(task), random.Random(game.trial_seed()))
+    code, notes = fight.arena(trial, lambda task: trial_intro(task), random.Random(game.trial_seed()))
+    won = code == fight.WIN
     tty.setcbreak(fd)
     out.write(f"{ESC}[?1049h{ESC}[?25l{ESC}[2J")
     game.canvas.shown = {}                     # the whole screen is drawn again
