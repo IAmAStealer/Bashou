@@ -8,17 +8,21 @@ trying new tools (`find`, `awk`, `ps`, `strace`…) and writing more complex lin
 up now and then, and you would fight them with real commands in a sandbox. The project was renamed
 **Bashou** (bash + « chou », French for "cute").
 
-## Fully vibecoded
+## Made with AI, for responsible use
 
-This version is **100% vibecoded** with [Claude Code](https://claude.com/claude-code), for testing
-purposes. The owner gave the ideas, playtested, and reported bugs. Claude wrote the Python code,
-the pixel art, the tests and the docs.
+The Python version is made with AI ([Claude Code](https://claude.com/claude-code)): the owner gives
+the ideas, playtests and reports bugs; Claude writes the code, the pixel art, the tests and the docs.
+
+The point is learning, so you can do it too. Bashou teaches you the shell instead of doing it for
+you, and the project is built the same way: AI is a tool here, not a requirement. Some things are
+made by AI, but nothing *has to* be: every pet, challenge or line of code can be written by hand,
+and contributions made without AI are just as welcome.
 
 Expect rough edges: it's a playground to find out whether the idea is fun.
 
 ## What's next: a single Rust binary
 
-The goal is to rewrite Bashou as **one Rust binary**, written by hand this time:
+The goal is to rewrite Bashou as **one Rust binary**. The owner does this migration by hand, without AI:
 
 - install and uninstall itself (the `~/.bashrc` line included), and keep your progress;
 - update itself from GitHub releases, and check the signature of what it downloads;
