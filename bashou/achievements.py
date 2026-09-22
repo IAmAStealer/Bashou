@@ -123,10 +123,10 @@ ALL = [
     A("ranges", "mushroom", "Ranges", "count with `seq` or `{1..10}`", cmd=lambda c: bool(c.args("seq")) or bool(re.search(r"\{\d+\.\.\d+", c.line))),
 
     # Slime: substitutions
-    A("capture", "slime", "Capture", "capture output with `$( )`", cmd=lambda c: "subst" in c.analysis.constructs),
-    A("nested", "slime", "Nested", "nest `$( $( ) )`", cmd=lambda c: nested_subst(c.line)),
-    A("substitute", "slime", "Substitute", "use a process substitution `<( )`", cmd=lambda c: "procsub" in c.analysis.constructs),
-    A("here", "slime", "Here", "feed a heredoc `<<EOF`", cmd=lambda c: "heredoc" in c.analysis.constructs),
+    A("capture", "mushroom", "Capture", "capture output with `$( )`", cmd=lambda c: "subst" in c.analysis.constructs),
+    A("nested", "mushroom", "Nested", "nest `$( $( ) )`", cmd=lambda c: nested_subst(c.line)),
+    A("substitute", "mushroom", "Substitute", "use a process substitution `<( )`", cmd=lambda c: "procsub" in c.analysis.constructs),
+    A("here", "mushroom", "Here", "feed a heredoc `<<EOF`", cmd=lambda c: "heredoc" in c.analysis.constructs),
 
     # Living sofa: sort and uniq
     A("tally", "sofa", "Tally", "count duplicates with `uniq -c`", cmd=lambda c: c.flag("uniq", "c", ("--count",))),

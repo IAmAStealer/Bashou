@@ -182,18 +182,17 @@ def form(pet_id, stage):
 # Starters: chosen once, they level up with every 5 achievements and take a new shape at the levels
 # of STARTER_LEVELS (one per form). Forms are added as their art is drawn (see doc/PLAN.md).
 STARTERS = {
-    "star": ("stardust", "comet", "planet", "star"),
-    "sprout": ("seedling", "sprout", "tree"),
-    "pebble": ("pebble", "golem", "crystal"),
+    "star": ("stardust", "meteor", "comet", "moon", "planet", "star", "red_giant"),
+    "sprout": ("seedling", "sprout", "grass", "flower", "fern", "bush", "tree"),
+    "pebble": ("sand_grain", "gravel", "pebble", "stone", "golem", "crystal", "jade_golem"),
 }
-STARTER_LEVELS = {
-    "star": (1, 4, 8, 10),
-    "sprout": (1, 8, 15),
-    "pebble": (1, 8, 15),
-}
-FORM_NAMES = {"stardust": "Stardust", "comet": "Comet", "planet": "Planet", "star": "Star", "seedling": "Seedling",
-              "sprout": "Sprout",
-              "tree": "Tree spirit", "pebble": "Pebble", "golem": "Rock golem", "crystal": "Crystal golem"}
+STARTER_LEVELS = {line: (1, 3, 5, 8, 11, 15, 20) for line in STARTERS}
+FORM_NAMES = {"stardust": "Stardust", "meteor": "Meteor", "comet": "Comet", "moon": "Moon", "planet": "Planet",
+              "star": "Star", "red_giant": "Red giant",
+              "seedling": "Seedling", "sprout": "Sprout", "grass": "Grass", "flower": "Flower", "fern": "Fern",
+              "bush": "Bush", "tree": "Tree spirit",
+              "sand_grain": "Sand grain", "gravel": "Gravel", "pebble": "Pebble", "stone": "Stone",
+              "golem": "Rock golem", "crystal": "Crystal golem", "jade_golem": "Jade golem"}
 STARTER_BLURBS = {
     "star": "Bright and curious. A speck of dust with big dreams.",
     "sprout": "Calm and patient. Grows scripts from tiny seeds.",

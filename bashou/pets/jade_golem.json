@@ -1,0 +1,45 @@
+{
+ "name": "Jade golem",
+ "palette": {
+  "a": "#1e4a36",
+  "o": "#2f7a56",
+  "m": "#0a1f16",
+  "p": "#a8e8c0",
+  "n": "#123326",
+  "c": "#6ee8a8",
+  "C": "#d0ffe0"
+ },
+ "base": [
+  "C......c......C..",
+  "cC...aCcCa...Cc..",
+  "cc..aoooooa..cc..",
+  ".a.aoooooooa.a...",
+  "ac.aomooomoa.ca..",
+  "aCaaoooooooaaCa..",
+  "aooaoponopoaooa..",
+  "aooaoooooooaooa..",
+  ".a.aoooooooa.a...",
+  "...aoocccooa.....",
+  "...aoaaaaaoa.....",
+  "..aaa.....aaa...."
+ ],
+ "poses": {
+  "inhale": {},
+  "closed": {
+   "4": "-----o---o-------"
+  },
+  "left": {
+   "4": "----mm--mo-------"
+  },
+  "right": {
+   "4": "-----om--mm------"
+  },
+  "fidget": {
+   "9": "------CcC--------"
+  }
+ },
+ "particles": [
+  0,
+  10
+ ]
+}

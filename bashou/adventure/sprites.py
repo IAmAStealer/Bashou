@@ -31,6 +31,20 @@ BACK = {
         ".....hhHHHhh..w..",
         "......hhhhh......",
     ],
+    "comet": [                      # from behind: the nucleus, its coma, and the tail streaming back
+        "...............tt",
+        ".............tttT",
+        "....dddd...tttTT.",
+        "...dcyyycdttTTT..",
+        "..dcywwwycttTT...",
+        "..dcyw wycuuT....".replace(" ", "w"),
+        "..dcywwwycuu.....",
+        "..dcyyyyycu......",
+        "...dcyyycd.......",
+        "....dddd.........",
+        ".................",
+        ".................",
+    ],
     "planet": [
         "........h........",
         ".....hhwwohh.....",
@@ -93,7 +107,10 @@ def back_of(form):
         return form
     for forms in creatures.STARTERS.values():
         if form in forms:
-            return next((f for f in reversed(forms[:forms.index(form)]) if f in BACK), forms[0])
+            before = [f for f in reversed(forms[:forms.index(form)]) if f in BACK]
+            after = [f for f in forms[forms.index(form):] if f in BACK]
+            if before or after:
+                return (before or after)[0]
     return "stardust"
 
 

@@ -163,8 +163,10 @@ class TablesTest(unittest.TestCase):
         self.assertEqual(set(sprites.TOPIC_COLORS), topics)
         self.assertEqual(set(sprites.BOSSES), topics)
         self.assertIn_all(sprites.BACK, {s for forms in creatures.STARTERS.values() for s in forms}, "back views")
-        self.assertIn_all([forms[0] for forms in creatures.STARTERS.values()], sprites.BACK, "first forms")
-        self.assertEqual(sprites.back_of("comet"), "stardust")                    # no back view yet: the last one
+        for forms in creatures.STARTERS.values():                    # each line has at least one back view
+            self.assertTrue(set(forms) & set(sprites.BACK), forms)
+        self.assertEqual(sprites.back_of("moon"), "comet")           # no back view yet: the last one before it
+        self.assertEqual(sprites.back_of("sand_grain"), "pebble")    # none before it: the first one after
         self.assertEqual({len(f) for f in creatures.STARTERS.values()} - {0},
                          {len(creatures.STARTER_LEVELS[k]) for k in creatures.STARTERS})
         for line, levels in creatures.STARTER_LEVELS.items():

@@ -5,16 +5,19 @@ Every release has a section here, written for players. CI refuses to tag a relea
 
 ## v0.3.0 — 2026-09-22
 
-- Starters now grow up to level 20 and get more forms, starting with a new one for Stardust, with
-  more to come. Seedling and Pebble now change shape at levels 8 and 15.
-- You never lose a form: the form you have stays until you reach the next one.
+- Every starter now has **7 forms** and grows to level 20 (one level per 5 achievements). New shapes
+  at levels 3, 5, 8, 11, 15 and 20; what your pet becomes is a surprise, and a form once reached is
+  never lost.
+- Pets come from what they stand for. Your command count grows a Droplet that changes shape 6 times
+  on the way to 10,000 commands, while the other pets come from your first programs, your own
+  scripts, walks and right answers in the adventure, and fights won or lost. Pets you already have
+  stay yours.
 - Secret achievements. Nothing tells you what they are; they show up when they show up, and the
   first one brings a pet that isn't on the board.
-- Pets come from what they stand for. Your command count now grows a Droplet that changes shape 6
-  times on the way to 10,000 commands; the other pets come from your first programs, your own scripts, walks and right answers in
-  the adventure, and fights won or lost. Pets you already have stay yours.
-- No more spoilers: the swap board and the starter choice show only the forms you've reached, and
-  the level of the next one.
+- The Slime's old achievements (`$( )`, heredocs…) join the Mushroom, which is about scripting.
+- No spoilers: the swap board, the starter choice and `bashou level` show only what you've reached,
+  and the level of the next form.
+- Sprite fixes: the Droplet, the Orc's tusk and the Snakelet are symmetric again.
 
 ## v0.2.3 — 2026-09-22
 

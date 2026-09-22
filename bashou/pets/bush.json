@@ -1,0 +1,48 @@
+{
+ "name": "Bush",
+ "palette": {
+  "a": "#8c5f37",
+  "o": "#cd9b64",
+  "L": "#50a04b",
+  "l": "#96d26e",
+  "g": "#3c7837",
+  "m": "#191919",
+  "p": "#ffa096",
+  "n": "#784628"
+ },
+ "base": [
+  ".................",
+  "........g........",
+  "....g..gLg..g....",
+  "....ggglllggg....",
+  "...glllllLLLLg...",
+  "..gllllLLLLLLlg..",
+  ".glllmLLLLLmLLLg.",
+  ".glllLLLLLLLLLLg.",
+  ".glLpLLLnLLLpLLg.",
+  "..gLLLLLLLLgLLg..",
+  "...gLLLLLLLLLg...",
+  "....gggLLLggg...."
+ ],
+ "poses": {
+  "inhale": {},
+  "closed": {
+   "6": "-----L-----L-----"
+  },
+  "left": {
+   "6": "----mm----mL-----"
+  },
+  "right": {
+   "6": "-----Lm----mm----"
+  },
+  "fidget": {
+   "1": "--------L--------",
+   "2": "--------g--------",
+   "4": "------L----------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

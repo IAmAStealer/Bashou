@@ -42,7 +42,8 @@ class ProgressTest(unittest.TestCase):
         self.assertLessEqual({"turtle", "frog", "sofa", "dragon"}, set(self.s["pets"]))
 
     def test_the_slime_never_shrinks(self):
-        old = {**state.default(), "commands": 20, "achievements": [a.id for a in achievements.family("slime")]}
+        old = {**state.default(), "commands": 20,
+               "achievements": ["capture", "nested", "substitute", "here"]}      # its family until 0.2.3
         del old["ladder_best"]                                             # a King slime by its family
         s = state.migrate(old)
         self.assertEqual(progress.current(s, "slime")[0], "king_slime")
@@ -153,17 +154,17 @@ class StarterTest(unittest.TestCase):
         s = state.default()
         s["starter"] = "pebble"
         self.assertEqual((progress.starter_level(s), progress.starter_form(s)), (1, 1))
-        self.assertEqual(progress.current(s)[:3], ("pebble", 1, "Pebble"))
+        self.assertEqual(progress.current(s)[:3], ("sand_grain", 1, "Sand grain"))
         s["achievements"] = [f"a{i}" for i in range(15)]
-        self.assertEqual((progress.starter_level(s), progress.starter_form(s)), (4, 1))
-        s["achievements"] = [f"a{i}" for i in range(35)]
-        self.assertEqual((progress.starter_level(s), progress.starter_form(s)), (8, 2))
+        self.assertEqual((progress.starter_level(s), progress.starter_form(s)), (4, 2))   # Gravel at level 3
+        s["achievements"] = [f"a{i}" for i in range(50)]
+        self.assertEqual((progress.starter_level(s), progress.starter_form(s)), (11, 5))
         self.assertEqual(progress.current(s)[2], "Rock golem")
         s["achievements"] = [f"a{i}" for i in range(94)]
         self.assertEqual(progress.starter_level(s), progress.MAX_LEVEL - 1)
         s["achievements"] = [f"a{i}" for i in range(99)]
         self.assertEqual(progress.starter_level(s), progress.MAX_LEVEL)
-        self.assertEqual(progress.current(s)[:3], ("crystal", 3, "Crystal golem"))
+        self.assertEqual(progress.current(s)[:3], ("jade_golem", 3, "Jade golem"))
 
     def test_level_up_and_evolution_notes(self):
         s = state.default()
@@ -171,22 +172,22 @@ class StarterTest(unittest.TestCase):
         s["achievements"] = [f"a{i}" for i in range(4)]
         notes = progress.check(s, [a for a in __import__("bashou").achievements.ALL[:1]])
         self.assertIn("⬆ Stardust reached level 2!", notes)
-        s["achievements"] = [f"a{i}" for i in range(14)]
+        s["achievements"] = [f"a{i}" for i in range(9)]
         notes = progress.check(s, [a for a in __import__("bashou").achievements.ALL[:1]])
         self.assertIn("✨ Stardust is evolving! Watch it: `bashou evolve`", notes)
         self.assertEqual(progress.current(s)[:3], ("stardust", 1, "Stardust"))     # a Comet: still tier 1
-        s["achievements"] = [f"a{i}" for i in range(34)]                   # to Planet (level 8) before watching
+        s["achievements"] = [f"a{i}" for i in range(19)]                   # to Comet (level 5) before watching
         progress.check(s, [a for a in __import__("bashou").achievements.ALL[:1]])
-        self.assertEqual(s["evolving"], [{"who": "starter", "from": 1, "to": 3}])   # one animation, Stardust → Planet
+        self.assertEqual(s["evolving"], [{"who": "starter", "from": 1, "to": 3}])   # one animation, Stardust → Comet
 
     def test_pick_an_earlier_look(self):
         s = state.default()
-        s["starter"], s["achievements"] = "star", [f"a{i}" for i in range(45)]
-        self.assertEqual(progress.current(s)[:3], ("star", 3, "Star"))
+        s["starter"], s["achievements"] = "star", [f"a{i}" for i in range(95)]
+        self.assertEqual(progress.current(s)[:3], ("red_giant", 3, "Red giant"))
         s["looks"]["starter"] = 1
         self.assertEqual(progress.current(s)[:3], ("stardust", 3, "Stardust"))   # stardust that can dance
         s["looks"]["starter"] = 9
-        self.assertEqual(progress.look(s), 4)                                   # never beyond what's reached
+        self.assertEqual(progress.look(s), 7)                                   # never beyond what's reached
 
     def test_old_saves_keep_the_cat_as_starter(self):
         s = state.migrate({**state.default(), "pets": ["cat", "fox"], "active": "cat"})
@@ -202,7 +203,7 @@ class StarterTest(unittest.TestCase):
     def test_old_saves_never_lose_their_form(self):
         """0.2.3 saves: a Planet at level 5 (now the Comet's level) stays a Planet until the Star."""
         for achieved, looks, sprite in ((20, {}, "planet"), (40, {}, "star"), (40, {"starter": 2}, "planet"),
-                                        (10, {}, "stardust")):
+                                        (10, {}, "meteor")):
             with self.subTest(achieved=achieved, looks=looks):
                 with tempfile.TemporaryDirectory() as tmp:
                     path = Path(tmp) / "state.json"
@@ -211,13 +212,13 @@ class StarterTest(unittest.TestCase):
                     with mock.patch.object(state, "STATE", path):
                         s = state.load()
                 self.assertEqual(progress.current(s)[0], sprite)
-        s["achievements"] = [f"a{i}" for i in range(45)]                   # level 10: the Star comes
-        self.assertEqual(progress.starter_form(s), 4)
+        s["achievements"] = [f"a{i}" for i in range(70)]                   # level 15: the Star comes
+        self.assertEqual(progress.starter_form(s), 6)
 
     def test_evolving_saved_before_long_ladders(self):
         old = {**state.default(), "starter": "star", "achievements": ["a"] * 15,
                "evolving": [{"who": "starter", "from": 1, "to": 2}], "looks": {"starter": 1}}
         del old["starter_best"]
         s = state.migrate(old)
-        self.assertEqual(s["evolving"], [{"who": "starter", "from": 1, "to": 3}])      # Stardust → Planet still
-        self.assertEqual(progress.starter_form(s), 3)
+        self.assertEqual(s["evolving"], [{"who": "starter", "from": 1, "to": 5}])      # Stardust → Planet still
+        self.assertEqual(progress.starter_form(s), 5)
