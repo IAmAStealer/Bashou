@@ -1,5 +1,7 @@
 # Translating Bashou
 
+Translating with an AI agent? Point it at [doc/agents/translation.md](../agents/translation.md).
+
 Everything to translate is in JSON files, so you don't need to touch any code. English is the
 source language. A missing or empty translation falls back to English, so a language can ship
 half-done.

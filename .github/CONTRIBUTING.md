@@ -13,6 +13,8 @@ Most contributions don't need any code: you edit a JSON file (or draw PNGs) and 
 | Draw bigger pets (16/32/64 px) | `art/<pet>/<size>/<pose>.png` | [pixel-art.md](../doc/contributing/pixel-art.md) |
 | Write a security challenge | Python (a small setup function) | [security-challenges.md](../doc/contributing/security-challenges.md) |
 
+Translating with an AI agent: see [doc/agents/translation.md](../doc/agents/translation.md).
+
 Bugs and ideas: open an issue. Not comfortable with JSON? The *Adventure question* issue template
 works too.
 
