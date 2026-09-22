@@ -1,0 +1,48 @@
+{
+ "name": "Process Phantom",
+ "palette": {
+  "a": "#2a5a4a",
+  "g": "#9ce8c8",
+  "G": "#e0fff0",
+  "k": "#16302a",
+  "q": "#6a8a80",
+  "i": "#6a8a80",
+  "t": "#f0e6c8"
+ },
+ "base": [
+  "......aaaaa......",
+  "....aagggggaa....",
+  "...agGgggggGga...",
+  "..agGgkkgkkgGga..",
+  "q.aggGkkgkkGgga..",
+  "q.aggggggggggga..",
+  "ttagggggkggggga..",
+  "tiaggggggggggga..",
+  ".aggggggggggggga.",
+  ".aggggggggggggga.",
+  ".aggagggggggagga.",
+  "..a..aga.aga..a.."
+ ],
+ "poses": {
+  "inhale": {},
+  "closed": {
+   "3": "------gg-gg------"
+  },
+  "left": {
+   "3": "-----k-gk-g------",
+   "4": "-----k-gk-g------"
+  },
+  "right": {
+   "3": "------g-kg-k-----",
+   "4": "------g-kg-k-----"
+  },
+  "fidget": {
+   "6": "-------k-k-------",
+   "7": "-------kkk-------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}
