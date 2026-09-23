@@ -327,7 +327,7 @@
  {
   "id": "debian-3-02",
   "level": 3,
-  "q": "Vous ajoutez un dépôt à vous. Comment faire confiance à ses paquets ?",
+  "q": "Tu ajoutes ton propre dépôt. Comment faire confiance à ses paquets ?",
   "choices": [
    "Mettre sa clé dans /etc/apt/keyrings, citée par Signed-By",
    "Lancer apt-key add, toujours d'actualité",
@@ -357,7 +357,7 @@
   "choices": [
    "Choisit vers quel programme pointe le lien editor",
    "Installe un autre éditeur",
-   "Définit la variable EDITOR de votre shell",
+   "Définit la variable EDITOR de ton shell",
    "Liste les éditeurs des dépôts"
   ],
   "answer": 0,

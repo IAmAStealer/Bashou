@@ -382,7 +382,7 @@
   "q": "Les services rangent leurs fichiers PID et leurs sockets dans /run. Quel genre de dossier est /run ?",
   "choices": [
    "Aux fichiers d'exécution, en mémoire, vidés au démarrage",
-   "Aux programmes que vous installez vous-même",
+   "Aux programmes que tu installes toi-même",
    "Aux journaux des services",
    "Aux fichiers temporaires gardés 10 jours"
   ],

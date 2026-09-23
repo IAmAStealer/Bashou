@@ -2,7 +2,7 @@
  {
   "id": "systemd-1-01",
   "level": 1,
-  "q": "Quelle commande démarre un service tout de suite ?",
+  "q": "Tu as installé un serveur web et veux qu'il tourne tout de suite. Quelle commande démarre un service ?",
   "choices": [
    "systemctl start nom",
    "systemctl enable nom",
@@ -10,12 +10,12 @@
    "systemd run nom"
   ],
   "answer": 0,
-  "explain": "`systemctl stop nom` est l'autre moitié."
+  "explain": "systemctl start nom lance le service maintenant ; systemctl stop nom l'arrête. Ça ne fait rien pour le prochain démarrage : après un redémarrage, le service reste éteint s'il n'est pas aussi activé. Démarrer (maintenant) et activer (au boot) sont deux choses séparées."
  },
  {
   "id": "systemd-1-02",
   "level": 1,
-  "q": "Quelle commande fait démarrer un service à chaque démarrage ?",
+  "q": "Après un redémarrage, ton service est de nouveau éteint. Quelle commande le fait démarrer à chaque démarrage ?",
   "choices": [
    "systemctl enable nom",
    "systemctl start nom",
@@ -23,7 +23,7 @@
    "systemctl auto nom"
   ],
   "answer": 0,
-  "explain": "`systemctl enable --now nom` l'active et le démarre d'un coup."
+  "explain": "systemctl enable nom accroche le service à la séquence de démarrage : il démarre tout seul à chaque démarrage de la machine. Il ne le lance pas maintenant. systemctl enable --now nom fait les deux d'un coup : activer pour les prochains démarrages, et démarrer tout de suite."
  },
  {
   "id": "systemd-1-03",
@@ -36,12 +36,12 @@
    "journalctl nom"
   ],
   "answer": 0,
-  "explain": "La première ligne dit active (running), failed ou inactive (dead)."
+  "explain": "systemctl status nom donne l'état sur la ligne « Active: », active (running), failed ou inactive (dead), avec le numéro du processus, puis les dernières lignes de son journal. C'est la première commande à lancer quand un service se comporte mal : l'erreur est souvent là. journalctl -u nom montre le journal complet."
  },
  {
   "id": "systemd-1-04",
   "level": 1,
-  "q": "Où placer une unité que vous avez écrite ?",
+  "q": "Tu as écrit ton propre fichier myapp.service. Où le mets-tu ?",
   "choices": [
    "/etc/systemd/system/",
    "/usr/lib/systemd/system/",
@@ -49,7 +49,7 @@
    "~/.systemd/"
   ],
   "answer": 0,
-  "explain": "Les paquets utilisent /usr/lib/systemd/system ; la vôtre est prioritaire."
+  "explain": "/etc/systemd/system/ est le dossier de l'admin : les unités posées là sont à toi et passent devant celles du même nom livrées par les paquets, qui vivent dans /usr/lib/systemd/system/. Ne modifie pas la copie du paquet : une mise à jour l'écraserait. /etc/init.d/ est l'ancien système, d'avant systemd."
  },
  {
   "id": "systemd-1-05",
@@ -62,12 +62,12 @@
    "root ne peut pas ouvrir de ports"
   ],
   "answer": 0,
-  "explain": "Moindre privilège. DynamicUser=yes crée même un utilisateur jetable pour lui."
+  "explain": "Tout service peut être attaqué, par un bug ou une requête piégée. S'il tourne en root, l'attaquant obtient toute la machine ; avec un utilisateur dédié, seulement ce que cet utilisateur peut toucher. C'est la règle du moindre privilège. Avec DynamicUser=yes, systemd crée même un utilisateur jetable pour le service à chaque démarrage."
  },
  {
   "id": "systemd-1-06",
   "level": 1,
-  "q": "Vous venez de modifier une unité. Que lancer avant de la redémarrer ?",
+  "q": "Tu viens de modifier un fichier d'unité. Que lances-tu avant de redémarrer le service ?",
   "choices": [
    "systemctl daemon-reload",
    "systemctl reload-units",
@@ -75,12 +75,12 @@
    "systemd-update"
   ],
   "answer": 0,
-  "explain": "Sinon systemd garde la version lue au démarrage."
+  "explain": "systemd garde les fichiers d'unité en mémoire et ne remarque pas quand tu les modifies. systemctl daemon-reload lui fait tout relire. Sans ça, restart utilise l'ancienne version et ton changement semble ignoré (systemctl status le signale même). systemctl edit fait le reload pour toi."
  },
  {
   "id": "systemd-1-07",
   "level": 1,
-  "q": "Comment lire les journaux d'un seul service ?",
+  "q": "Un service échoue et tu ne veux que ses messages. Comment lire les journaux d'un seul service ?",
   "choices": [
    "journalctl -u nom",
    "journalctl nom",
@@ -88,12 +88,12 @@
    "cat /var/log/nom.log"
   ],
   "answer": 0,
-  "explain": "-f suit en direct, -b limite à ce démarrage, -e saute à la fin."
+  "explain": "journalctl montre le journal, où systemd rassemble la sortie de tous les services, et -u nom ne garde que cette unité. Ajoute -e pour sauter à la fin, -f pour suivre les nouvelles lignes en direct, -b pour le démarrage en cours seulement. Beaucoup de services n'écrivent aucun fichier dans /var/log : leurs messages sont dans le journal."
  },
  {
   "id": "systemd-1-08",
   "level": 1,
-  "q": "Quelle commande liste les unités en échec ?",
+  "q": "Après un redémarrage, quelque chose semble cassé. Quelle commande liste les unités en échec ?",
   "choices": [
    "systemctl --failed",
    "systemctl --errors",
@@ -101,12 +101,12 @@
    "journalctl --failed"
   ],
   "answer": 0,
-  "explain": "`systemctl list-units --type=service` les montre toutes."
+  "explain": "systemctl --failed liste chaque unité dont le dernier démarrage s'est terminé en échec. Ensuite systemctl status nom et journalctl -u nom disent pourquoi. C'est une bonne première commande après un redémarrage ou une mise à jour. systemctl list-units --type=service liste tous les services, pas seulement les cassés."
  },
  {
   "id": "systemd-1-09",
   "level": 1,
-  "q": "Que fait `systemctl disable nom` ?",
+  "q": "Tu ne veux plus qu'un service démarre au boot. Que fait exactement `systemctl disable nom` ?",
   "choices": [
    "Il l'empêche de démarrer au boot, sans l'arrêter maintenant",
    "Il l'arrête maintenant et au démarrage",
@@ -114,12 +114,12 @@
    "Il masque l'unité"
   ],
   "answer": 0,
-  "explain": "`systemctl disable --now nom` l'arrête aussi ; `mask` rend le démarrage impossible."
+  "explain": "disable retire le service de la séquence de démarrage : au prochain démarrage il ne se lancera pas. Mais s'il tourne maintenant, il continue. systemctl disable --now nom l'arrête aussi tout de suite. mask va plus loin : rien, même pas un autre service, ne peut le démarrer avant unmask."
  },
  {
   "id": "systemd-1-10",
   "level": 1,
-  "q": "Quelle commande montre l'unité réellement utilisée par systemd ?",
+  "q": "Un service ne se comporte pas comme le dit son fichier d'unité. Quelle commande montre le fichier que systemd utilise vraiment ?",
   "choices": [
    "systemctl cat nom",
    "systemctl show nom",
@@ -127,12 +127,12 @@
    "systemd-analyze nom"
   ],
   "answer": 0,
-  "explain": "Elle affiche le fichier et toutes les surcharges appliquées dessus."
+  "explain": "systemctl cat nom affiche le fichier d'unité chargé par systemd, et dessous chaque fichier drop-in (surcharges dans nom.d/) qui le modifie, avec leurs chemins. Il révèle la surcharge que quelqu'un a ajoutée et oubliée. systemctl show liste des centaines de réglages calculés, plus durs à lire."
  },
  {
   "id": "systemd-2-01",
   "level": 2,
-  "q": "Dans un .service, quelle section contient ExecStart ?",
+  "q": "Dans un fichier .service, quelle section contient ExecStart, la commande qui lance le programme ?",
   "choices": [
    "[Service]",
    "[Unit]",
@@ -140,7 +140,7 @@
    "[Exec]"
   ],
   "answer": 0,
-  "explain": "[Unit] décrit et ordonne, [Install] dit où `enable` l'accroche."
+  "explain": "Un fichier de service a trois sections. [Unit] le décrit et l'ordonne parmi les autres (Description, After, Wants). [Service] dit comment le lancer : ExecStart, User, Restart. [Install] n'est lue que par enable, pour savoir où l'accrocher (WantedBy)."
  },
  {
   "id": "systemd-2-02",
@@ -153,12 +153,12 @@
    "Il attend une session graphique"
   ],
   "answer": 0,
-  "explain": "multi-user.target est le démarrage serveur habituel ; graphical.target l'entraîne aussi."
+  "explain": "Une target est un groupe d'unités atteint pendant le démarrage. multi-user.target est le démarrage normal d'un serveur, avec réseau et services, sans graphique. WantedBy=multi-user.target dit à systemctl enable d'ajouter ton service à ce groupe : il démarre avec les autres. graphical.target inclut multi-user, donc les postes de travail le démarrent aussi."
  },
  {
   "id": "systemd-2-03",
   "level": 2,
-  "q": "Votre programme reste au premier plan. Quel Type convient ?",
+  "q": "Ton programme reste au premier plan jusqu'à ce qu'on l'arrête. Quel Type= convient à son unité ?",
   "choices": [
    "Type=simple",
    "Type=forking",
@@ -166,12 +166,12 @@
    "Type=idle"
   ],
   "answer": 0,
-  "explain": "Type=forking sert aux démons qui se dédoublent et sortent ; systemd veut alors PIDFile."
+  "explain": "Type=simple, le défaut, est fait pour un programme qui reste au premier plan : systemd le lance et suit ce processus. La plupart des programmes modernes marchent ainsi. Type=forking sert aux vieux démons qui lancent une copie d'eux-mêmes en arrière-plan puis sortent ; systemd a alors besoin de PIDFile= pour trouver le bon processus."
  },
  {
   "id": "systemd-2-04",
   "level": 2,
-  "q": "Un script tourne une fois et sort, mais l'unité doit rester « faite ». Que mettre ?",
+  "q": "Un script tourne une fois et se termine, mais l'unité doit rester « faite ». Qu'écris-tu ?",
   "choices": [
    "Type=oneshot avec RemainAfterExit=yes",
    "Type=simple avec Restart=always",
@@ -179,12 +179,12 @@
    "Type=notify avec WatchdogSec="
   ],
   "answer": 0,
-  "explain": "C'est ainsi qu'on écrit les unités de préparation (montages, règles de pare-feu)."
+  "explain": "Type=oneshot dit à systemd que la commande tourne une fois et se termine, et attend qu'elle finisse avant de lancer la suite. RemainAfterExit=yes garde ensuite l'unité « active » après la sortie : systemd considère le travail fait et ne le relance pas. C'est ainsi qu'on écrit les unités de préparation (montages, règles de pare-feu)."
  },
  {
   "id": "systemd-2-05",
   "level": 2,
-  "q": "Que fait Restart=on-failure ?",
+  "q": "Tu ajoutes Restart=on-failure à un service. Qu'est-ce que ça fait ?",
   "choices": [
    "Il redémarre le service seulement s'il sort en erreur",
    "Il le redémarre à chaque arrêt",
@@ -192,12 +192,12 @@
    "Il le redémarre au démarrage de la machine"
   ],
   "answer": 0,
-  "explain": "RestartSec= espace les tentatives ; StartLimitBurst= évite les boucles sans fin."
+  "explain": "Si le service plante ou sort avec un code d'erreur, systemd le relance tout seul. Un arrêt propre (exit 0, ou systemctl stop) est laissé tel quel. RestartSec=5 attend 5 secondes entre deux tentatives, et StartLimitBurst= abandonne après trop d'échecs d'affilée : un service cassé ne tourne pas en boucle sans fin."
  },
  {
   "id": "systemd-2-06",
   "level": 2,
-  "q": "After=network-online.target seul ne suffit pas. Pourquoi ?",
+  "q": "Ton service a besoin du réseau, et After=network-online.target seul n'aide pas. Pourquoi ?",
   "choices": [
    "After= ne fait qu'ordonner ; Wants= entraîne la cible",
    "After= ne vaut que pour les timers",
@@ -205,7 +205,7 @@
    "After= attend un nombre de secondes"
   ],
   "answer": 0,
-  "explain": "Écrivez Wants=network-online.target et After=network-online.target ensemble."
+  "explain": "After= fixe seulement un ordre : si les deux démarrent, le tien attend. Il ne fait pas du tout démarrer la cible réseau. C'est Wants= qui l'entraîne. Écris donc les deux : Wants=network-online.target et After=network-online.target. C'est une des erreurs les plus courantes dans les fichiers d'unité."
  },
  {
   "id": "systemd-2-07",
@@ -218,7 +218,7 @@
    "La ligne Description="
   ],
   "answer": 0,
-  "explain": "Les fichiers unit sont lisibles par tous et `systemctl show` affiche Environment= ; les arguments de ExecStart se voient dans ps."
+  "explain": "Les fichiers d'unité sont lisibles par tous les utilisateurs, systemctl show affiche les valeurs d'Environment=, et les arguments d'ExecStart se voient dans ps. Mets le secret dans un fichier à part que seul root peut lire (chmod 600) et charge-le avec EnvironmentFile=, ou mieux LoadCredential=, qui le donne au service sans l'exposer dans son environnement."
  },
  {
   "id": "systemd-2-08",
@@ -231,25 +231,25 @@
    "systemctl lint ./nom.service"
   ],
   "answer": 0,
-  "explain": "`man 5 systemd.service` liste toutes les options, avec des exemples."
+  "explain": "systemd-analyze verify lit le fichier d'unité et signale les options inconnues, les fautes dans les noms de section et les programmes qui n'existent pas, avant de l'installer ou de le démarrer. Pour savoir ce que fait chaque option, man 5 systemd.service les liste toutes avec des exemples (et man systemd.unit pour [Unit])."
  },
  {
   "id": "systemd-2-09",
   "level": 2,
-  "q": "Qu'est-ce qu'une surcharge drop-in ?",
+  "q": "Tu veux changer un réglage d'une unité venue avec un paquet. Qu'est-ce qu'une surcharge drop-in ?",
   "choices": [
    "Un .conf dans /etc/systemd/system/nom.d/, quelques lignes",
-   "Une copie de l'unité dans votre dossier personnel",
+   "Une copie de l'unité dans ton dossier personnel",
    "Une unité qui en remplace une autre",
    "Un bloc de commentaires à la fin"
   ],
   "answer": 0,
-  "explain": "`systemctl edit nom` la crée : une mise à jour du paquet garde votre changement."
+  "explain": "Un drop-in est un petit fichier .conf dans /etc/systemd/system/nom.d/ qui ne contient que les lignes que tu changes, appliqué par-dessus l'unité du paquet. systemctl edit nom le crée et recharge systemd pour toi. Le paquet peut mettre à jour sa propre unité et ton changement reste. systemctl cat nom montre les deux."
  },
  {
   "id": "systemd-2-10",
   "level": 2,
-  "q": "Qu'est-ce qui remplace une tâche cron avec systemd ?",
+  "q": "Une tâche doit tourner chaque nuit à 3 h. Qu'est-ce qui remplace une tâche cron avec systemd ?",
   "choices": [
    "Une unité .timer avec OnCalendar=, activée comme un service",
    "Un .service avec Restart=always",
@@ -257,6 +257,6 @@
    "Une unité .socket avec Accept=yes"
   ],
   "answer": 0,
-  "explain": "`systemctl list-timers` montre les prochains passages ; le timer lance le service du même nom."
+  "explain": "Une unité .timer dit quand (OnCalendar=*-*-* 03:00:00) et lance l'unité .service du même nom, qui dit quoi lancer. Active et démarre le timer, pas le service. Tu gagnes les journaux dans journalctl, le rattrapage des passages manqués avec Persistent=true, et systemctl list-timers montre le prochain passage."
  }
 ]

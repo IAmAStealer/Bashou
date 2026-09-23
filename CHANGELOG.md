@@ -29,6 +29,12 @@ Every release has a section here, written for players. CI refuses to tag a relea
   command after `answer` in a hands-on fight now tells you to run it at the prompt.
 - After an update, your save is upgraded to the new format on disk, and a copy of the old one is
   kept next to it.
+- **Adventure answers that teach.** After each question, the right answer now stands on its own line,
+  followed by a real explanation in plain words: why it's right, what the tempting wrong answer
+  does, and what to do next. All 254 questions, in English and French; many questions also give
+  more context.
+- **The road splits.** At a fork, the road now divides in front of your pet into two or three paths
+  fading into the distance, each with its name written at its end; the one you pick lights up.
 
 ## v0.4.1 — 2026-09-23
 
