@@ -91,6 +91,19 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(state.load()["update_available"], "")
         self.assertIsNone(update.check())                 # installed now
 
+    def test_update_works_when_main_diverged(self):
+        """Bug: old installs ran `git pull --ff-only` and stopped with "Not possible to fast-forward"
+        once their main no longer matched GitHub's (history rewritten, or a local commit)."""
+        (update.ROOT / "a").write_text("local tweak")
+        git(update.ROOT, "commit", "-qam", "Local commit")
+        git(self.dev, "commit", "-q", "--amend", "-m", "First, rewritten")
+        git(self.dev, "push", "-q", "--force", "origin", "HEAD:main")
+        self.publish("Faster pets", tag="v0.2.0")
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(update.run(), 0)
+        self.assertEqual((update.ROOT / "a").read_text(), "Faster pets")
+        self.assertEqual(update.version(), "v0.2.0")
+
     def test_newest_version_wins(self):
         self.publish("One", tag="v0.9.0")
         self.publish("Two", tag="v0.10.0")                 # version order, not text order
