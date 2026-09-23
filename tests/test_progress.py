@@ -215,6 +215,24 @@ class StarterTest(unittest.TestCase):
         s["achievements"] = [f"a{i}" for i in range(70)]                   # level 15: the Star comes
         self.assertEqual(progress.starter_form(s), 6)
 
+    def test_pre_release_save_loads(self):
+        """A save from before v0.1.0 (installs that updated with git pull) keeps its progress."""
+        old = {"version": 1, "commands": 50, "tools": {"ls": 9}, "constructs": {"pipe3": 1},
+               "days": ["2026-09-20"], "today": {"date": "2026-09-20", "count": 4}, "language": "en",
+               "starter": "cat", "pets": ["cat", "fox"], "active": "fox", "achievements": ["tally"],
+               "fights_won": 2, "challenges": ["pipe"], "threat": None,
+               "threat_day": {"date": "", "count": 0}, "last_threat": 0, "update_checked": 0,
+               "update_behind": 3, "settings": {"bubble": [5, 10]}}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "state.json"
+            path.write_text(json.dumps(old))
+            with mock.patch.object(state, "STATE", path):
+                s = state.load()
+        self.assertEqual((s["starter"], s["pets"], s["active"]), ("star", ["fox"], "fox"))
+        self.assertEqual((s["commands"], s["achievements"], s["challenges"]), (50, ["tally"], ["pipe"]))
+        self.assertEqual(s["skills"], "all")
+        progress.current(s)
+
     def test_evolving_saved_before_long_ladders(self):
         old = {**state.default(), "starter": "star", "achievements": ["a"] * 15,
                "evolving": [{"who": "starter", "from": 1, "to": 2}], "looks": {"starter": 1}}
