@@ -2,249 +2,249 @@
  {
   "id": "linux-1-01",
   "level": 1,
-  "q": "Which folder holds system-wide configuration files?",
+  "q": "You must back up a server's configuration. Which folder matters most?",
   "choices": [
    "/etc",
    "/bin",
-   "/var",
-   "/home"
+   "/tmp",
+   "/proc"
   ],
   "answer": 0,
-  "explain": "/etc has the configs; /var the data that changes, like logs."
+  "explain": "/etc holds config, /var changing data (logs, databases), /home the users. Keeping /etc in git (etckeeper) helps."
  },
  {
   "id": "linux-1-02",
   "level": 1,
-  "q": "Where are most log files?",
+  "q": "An app misbehaves. Where do you look first?",
   "choices": [
-   "/var/log",
-   "/etc/log",
-   "/tmp/log",
-   "/usr/log"
+   "Its logs: journalctl -u app or /var/log",
+   "Its config in /etc, to rewrite it",
+   "/tmp",
+   "The kernel source"
   ],
   "answer": 0,
-  "explain": "journalctl reads the systemd journal, /var/log has the files."
+  "explain": "Read the error before changing anything: the log usually names the file or setting at fault."
  },
  {
   "id": "linux-1-03",
   "level": 1,
-  "q": "Which user can do everything?",
+  "q": "Why work as your own user with sudo rather than logged in as root?",
   "choices": [
-   "root",
-   "admin",
-   "sudo",
-   "system"
+   "Fewer accidents, and each sudo is logged with your name",
+   "root cannot use ssh",
+   "sudo is faster",
+   "root has no shell"
   ],
   "answer": 0,
-  "explain": "root has UID 0; sudo lets you act as root."
+  "explain": "root (UID 0) can do everything; sudo gives it for one command, and leaves a trace of who did what."
  },
  {
   "id": "linux-1-04",
   "level": 1,
-  "q": "Which command shows running processes?",
+  "q": "A server is slow. Which command shows what eats the CPU right now?",
   "choices": [
-   "ps aux",
-   "ls -p",
-   "top -f",
-   "proc"
+   "top",
+   "ps -p",
+   "df -h",
+   "uptime -v"
   ],
   "answer": 0,
-  "explain": "top and htop show them live."
+  "explain": "top (or htop) sorts live by CPU; M sorts by memory. ps aux is a snapshot, handy in scripts."
  },
  {
   "id": "linux-1-05",
   "level": 1,
-  "q": "What does `sudo` do?",
+  "q": "How do you see who logged in to a server recently, and from where?",
   "choices": [
-   "Runs a command as another user, root by default",
-   "Shuts the machine down",
-   "Switches to a new shell",
-   "Updates the system"
+   "last",
+   "whoami",
+   "id",
+   "history"
   ],
   "answer": 0,
-  "explain": "sudo checks /etc/sudoers first."
+  "explain": "last reads the login records: user, source address, time. who shows who is logged in right now."
  },
  {
   "id": "linux-1-06",
   "level": 1,
-  "q": "Which command shows disk space?",
+  "q": "Writes fail with 'No space left on device'. What do you check first?",
   "choices": [
    "df -h",
-   "du -s",
    "free -h",
-   "disk"
+   "top",
+   "uname -a"
   ],
   "answer": 0,
-  "explain": "df = disk free; du = disk usage of files."
+  "explain": "df = disk free, per filesystem. Then du -sh /var/* finds the folder that grew (often logs)."
  },
  {
   "id": "linux-1-07",
   "level": 1,
-  "q": "Which command shows free memory?",
+  "q": "free -h shows little 'free' memory but a lot 'available'. Is RAM short?",
   "choices": [
-   "free -h",
-   "mem",
-   "df -m",
-   "top -m"
+   "No: spare RAM serves as cache and is given back",
+   "Yes, add RAM",
+   "Yes, a program leaks memory",
+   "Yes, the machine is swapping"
   ],
   "answer": 0,
-  "explain": "-h prints human sizes (M, G)."
+  "explain": "Linux fills idle RAM with file cache. 'available' is what programs can still get."
  },
  {
   "id": "linux-1-08",
   "level": 1,
-  "q": "What does `chmod 644 file` give?",
+  "q": "`ls -l` shows -rw-r--r-- on a file. Who can change it?",
   "choices": [
-   "Read/write to the owner, read to others",
-   "Everything to everyone",
-   "Nothing to others",
-   "Run rights to everyone"
+   "Only its owner",
+   "Everyone",
+   "The owner and the group",
+   "Nobody"
   ],
   "answer": 0,
-  "explain": "6 = rw-, 4 = r--."
+  "explain": "Three blocks: owner, group, others; r read, w write, x run. That is chmod 644."
  },
  {
   "id": "linux-1-09",
   "level": 1,
-  "q": "Which command changes a file's owner?",
+  "q": "A file with a database password is -rw-r--r--. What is wrong?",
   "choices": [
-   "chown",
-   "chmod",
-   "chgrp -o",
-   "own"
+   "Every user on the machine can read it",
+   "Its owner can't read it",
+   "Nothing",
+   "Anyone can run it"
   ],
   "answer": 0,
-  "explain": "chown user:group file."
+  "explain": "chmod 600 keeps it to its owner. SSH even refuses private keys that others can read."
  },
  {
   "id": "linux-1-10",
   "level": 1,
-  "q": "What is `~`?",
+  "q": "What is ~/.ssh/authorized_keys?",
   "choices": [
-   "Your home folder",
-   "The root folder",
-   "The previous folder",
-   "The trash"
+   "The public keys allowed to log in as you",
+   "Your private keys",
+   "The servers you trust",
+   "Your saved passwords"
   ],
   "answer": 0,
-  "explain": "~ is /home/you (or /root for root)."
+  "explain": "One key per line. An unknown line there is a door someone left open: check it."
  },
  {
   "id": "linux-1-11",
   "level": 1,
-  "q": "Which signal does `kill` send by default?",
+  "q": "A process ignores Ctrl+C. What do you try before kill -9?",
   "choices": [
-   "TERM (15)",
-   "KILL (9)",
-   "HUP (1)",
-   "INT (2)"
+   "kill PID, which lets it clean up",
+   "A reboot",
+   "Deleting its program file",
+   "Nothing: -9 first is fine"
   ],
   "answer": 0,
-  "explain": "TERM asks politely; KILL can't be caught."
+  "explain": "kill sends TERM (15), which it can handle; KILL (9) can't be caught: no cleanup, half-written files."
  },
  {
   "id": "linux-1-12",
   "level": 1,
-  "q": "Which command follows a log as it grows?",
+  "q": "You restart a web app and want to watch its log live. What do you run?",
   "choices": [
-   "tail -f",
-   "cat -f",
-   "less +G",
-   "head -f"
+   "tail -f /var/log/app.log",
+   "cat /var/log/app.log",
+   "head -f /var/log/app.log",
+   "less /var/log/app.log --live"
   ],
   "answer": 0,
-  "explain": "Ctrl+C stops following."
+  "explain": "Ctrl+C stops following. journalctl -fu app does the same for a systemd service."
  },
  {
   "id": "linux-2-01",
   "level": 2,
-  "q": "Which command manages services on most distros?",
+  "q": "You change who may use sudo. Why edit with visudo?",
   "choices": [
-   "systemctl",
-   "service-ctl",
-   "initctl",
-   "svcadm"
+   "It checks the syntax: a typo could lock everyone out of sudo",
+   "It encrypts the file",
+   "Only visudo can write in /etc",
+   "It restarts sudo"
   ],
   "answer": 0,
-  "explain": "systemctl status/start/stop/enable name."
+  "explain": "Better still, add a file in /etc/sudoers.d/ with visudo -f, and keep a root shell open while testing."
  },
  {
   "id": "linux-2-02",
   "level": 2,
-  "q": "How do you see a service's logs with systemd?",
+  "q": "Where do you see failed SSH logins?",
   "choices": [
-   "journalctl -u name",
-   "systemctl logs name",
-   "cat /var/log/name",
-   "dmesg name"
+   "journalctl -u ssh, or the auth log in /var/log",
+   "~/.ssh/known_hosts",
+   "/etc/ssh/sshd_config",
+   "/var/log/ssh.err"
   ],
   "answer": 0,
-  "explain": "-f follows, -b limits to this boot."
+  "explain": "Hundreds of failures from one address = brute force; fail2ban or keys-only logins stop it. Rocky logs to /var/log/secure."
  },
  {
   "id": "linux-2-03",
   "level": 2,
-  "q": "What does a SUID bit on a program mean?",
+  "q": "`ls -l` shows -rwsr-xr-x root on a program. What does the s mean?",
   "choices": [
-   "It runs with its owner's rights",
-   "It can't be deleted",
-   "Only root can read it",
-   "It starts at boot"
+   "It runs as root, whoever starts it",
+   "It is a symbolic link",
+   "It is signed",
+   "Only root can start it"
   ],
   "answer": 0,
-  "explain": "Shows as s in rwsr-xr-x: dangerous on the wrong file."
+  "explain": "SUID. passwd needs it; an unexpected one is a red flag. find / -perm -4000 lists them all."
  },
  {
   "id": "linux-2-04",
   "level": 2,
-  "q": "Which file lists the disks mounted at boot?",
+  "q": "You added a disk to /etc/fstab. How do you test it before rebooting?",
   "choices": [
-   "/etc/fstab",
-   "/etc/mtab",
-   "/etc/disks",
-   "/boot/mounts"
+   "mount -a",
+   "Reboot and see",
+   "fsck /etc/fstab",
+   "systemctl restart fstab"
   ],
   "answer": 0,
-  "explain": "One line per filesystem: device, mount point, type, options."
+  "explain": "A bad fstab line can stop the boot. mount -a (or findmnt --verify) shows the mistake while you can still fix it."
  },
  {
   "id": "linux-2-05",
   "level": 2,
-  "q": "What does `ss -tlnp` show?",
+  "q": "`ss -tlnp` shows 0.0.0.0:5432 for postgres. What does it mean?",
   "choices": [
-   "TCP ports listening, with their process",
-   "Open files",
-   "Routing table",
-   "Firewall rules"
+   "It listens on every interface, reachable from outside",
+   "It only accepts local connections",
+   "The port is closed",
+   "It listens on port 0"
   ],
   "answer": 0,
-  "explain": "It replaces netstat -tlnp."
+  "explain": "127.0.0.1:5432 would be local only. Listen only where needed and firewall the rest."
  },
  {
   "id": "linux-2-06",
   "level": 2,
-  "q": "What is an inode?",
+  "q": "df -h shows free space, yet you get 'No space left on device'. What else can be full?",
   "choices": [
-   "A file's metadata record (not its name)",
-   "A network interface",
-   "A kernel module",
-   "A type of partition"
+   "The inodes: df -i",
+   "The RAM",
+   "The swap",
+   "/proc"
   ],
   "answer": 0,
-  "explain": "Names point to inodes; ls -i shows the number."
+  "explain": "Each file takes an inode; millions of tiny files (sessions, cache) use them up before the space."
  },
  {
   "id": "linux-2-07",
   "level": 2,
-  "q": "How do you find which process uses a file?",
+  "q": "You deleted a huge log, but df shows no space back. Why?",
   "choices": [
-   "lsof file",
-   "ps file",
-   "who file",
-   "stat -p file"
+   "A process still has it open",
+   "The trash still holds it",
+   "df only updates at reboot",
+   "rm only hides files"
   ],
   "answer": 0,
-  "explain": "fuser works too."
+  "explain": "lsof +L1 lists deleted files still open. Restart that process; next time empty a log with `> file`, not rm."
  },
  {
   "id": "linux-2-08",
@@ -262,28 +262,28 @@
  {
   "id": "linux-2-09",
   "level": 2,
-  "q": "Where does the kernel expose process info?",
+  "q": "A script works by hand but fails from cron. Most likely cause?",
   "choices": [
-   "/proc",
-   "/sys/proc",
-   "/dev",
-   "/run/kernel"
+   "cron runs it with a tiny PATH and environment",
+   "cron cannot run scripts",
+   "cron needs root",
+   "cron ignores the shebang line"
   ],
   "answer": 0,
-  "explain": "/proc/<pid>/ has status, cmdline, fd…"
+  "explain": "Use full paths or set PATH in the crontab, and log the output (>> file 2>&1) to see the error."
  },
  {
   "id": "linux-2-10",
   "level": 2,
-  "q": "What does `nice -n 10 cmd` do?",
+  "q": "A backup script logs in to a server by SSH. Which key should it use?",
   "choices": [
-   "Runs cmd with a lower priority",
-   "Runs it 10 times",
-   "Gives it 10 CPUs",
-   "Delays it 10 s"
+   "Its own key, limited to that job in authorized_keys",
+   "Your personal key",
+   "root's key, copied to each server",
+   "One passphrase-less key shared by all scripts"
   ],
   "answer": 0,
-  "explain": "Higher nice = nicer to others = lower priority."
+  "explain": "One key per job: you can revoke it alone, and command=\"…\", from=\"…\" restrict what it may do."
  },
  {
   "id": "linux-3-01",
@@ -327,54 +327,54 @@
  {
   "id": "linux-3-04",
   "level": 3,
-  "q": "Where do you put a unit file you wrote yourself?",
+  "q": "You edited sshd_config on a remote server. What do you do before reloading sshd?",
   "choices": [
-   "/etc/systemd/system/",
-   "/usr/lib/systemd/system/",
-   "/var/lib/systemd/",
-   "/etc/init.d/"
+   "sshd -t, and keep your current session open",
+   "ssh-keygen -A",
+   "systemctl daemon-reload",
+   "Close your session, then reconnect"
   ],
   "answer": 0,
-  "explain": "Packages ship theirs in /usr/lib/systemd/system; yours wins over a package's."
+  "explain": "sshd -t checks the file. A broken config can lock you out: test a new login before closing the old one."
  },
  {
   "id": "linux-3-05",
   "level": 3,
-  "q": "What does `systemctl daemon-reload` do?",
+  "q": "A process with a random name runs from /tmp. What do you do first?",
   "choices": [
-   "Re-reads the unit files after you changed one",
-   "Restarts every running service",
-   "Reloads the kernel modules",
-   "Applies a new systemd version"
+   "Note its binary and connections before killing it",
+   "Reboot the server",
+   "Delete everything in /tmp",
+   "Ignore it: /tmp is temporary"
   ],
   "answer": 0,
-  "explain": "It does not restart your service: `systemctl restart name` does."
+  "explain": "ls -l /proc/PID/exe and ss -p show what and who it talks to; killing it first destroys evidence. Then isolate the machine."
  },
  {
   "id": "linux-3-06",
   "level": 3,
-  "q": "What is the difference between `systemctl enable` and `systemctl start`?",
+  "q": "Which sshd setting stops password guessing altogether?",
   "choices": [
-   "enable is for the next boot, start is now",
-   "enable is for now, start is for the next boot",
-   "enable also reloads the unit",
-   "There is none, they are aliases"
+   "PasswordAuthentication no (keys only)",
+   "Port 2222",
+   "MaxSessions 1",
+   "PermitEmptyPasswords no"
   ],
   "answer": 0,
-  "explain": "`systemctl enable --now name` does both at once."
+  "explain": "A new port only cuts the noise in the logs; keys only removes the attack. Make sure your key works first."
  },
  {
   "id": "linux-3-07",
   "level": 3,
-  "q": "Which command adds an override to a unit without touching the package's file?",
+  "q": "What does `sudo -l` show?",
   "choices": [
-   "systemctl edit name",
-   "systemctl override name",
-   "systemctl set name",
-   "systemd-edit name"
+   "The commands you may run with sudo",
+   "The last sudo commands run",
+   "The users in the sudo group",
+   "The sudo log file"
   ],
   "answer": 0,
-  "explain": "It writes /etc/systemd/system/name.d/override.conf, a drop-in that wins."
+  "explain": "Attackers run it first too: (ALL) NOPASSWD: /usr/bin/vim is root for anyone who knows :!sh."
  },
  {
   "id": "linux-3-08",
@@ -405,14 +405,14 @@
  {
   "id": "linux-3-10",
   "level": 3,
-  "q": "What does `journalctl -u ssh -b` show?",
+  "q": "Why send a server's logs to another machine as well?",
   "choices": [
-   "The ssh unit's logs since this boot",
-   "Every log since this boot",
-   "The ssh unit's logs of the previous boot",
-   "The boot messages of the kernel"
+   "An intruder who gets root can erase the local ones",
+   "It saves disk space",
+   "journald needs it",
+   "Logs are faster to write there"
   ],
   "answer": 0,
-  "explain": "-b -1 goes back one boot; -f follows, like tail -f."
+  "explain": "rsyslog or systemd-journal-upload forward them; the copy elsewhere is what you read after an incident."
  }
 ]

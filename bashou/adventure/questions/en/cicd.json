@@ -2,15 +2,15 @@
  {
   "id": "cicd-1-01",
   "level": 1,
-  "q": "What does CI stand for?",
+  "q": "What is continuous integration (CI) for?",
   "choices": [
-   "Continuous Integration",
-   "Code Inspection",
-   "Container Image",
-   "Central Infrastructure"
+   "Building and testing every change automatically",
+   "Merging branches without review",
+   "Deploying on Fridays",
+   "Writing the tests for you"
   ],
   "answer": 0,
-  "explain": "Build and test every change automatically."
+  "explain": "Problems show up minutes after a push, while the change is still fresh in mind."
  },
  {
   "id": "cicd-1-02",
@@ -28,15 +28,15 @@
  {
   "id": "cicd-1-03",
   "level": 1,
-  "q": "What is a pipeline stage/job?",
+  "q": "A job needs a tool. What is the best way to get it?",
   "choices": [
-   "A step like build, test or deploy",
-   "A git branch",
-   "A Docker image",
-   "A server"
+   "A pinned version, in the job's image or lock file",
+   "Always the latest, downloaded at each run",
+   "Installed by hand on the runner once",
+   "Copied from your laptop"
   ],
   "answer": 0,
-  "explain": "Jobs can run in parallel or depend on each other."
+  "explain": "Pinned versions make the build the same today and in six months, and changes to them go through review."
  },
  {
   "id": "cicd-1-04",
@@ -54,20 +54,20 @@
  {
   "id": "cicd-1-05",
   "level": 1,
-  "q": "What is an artifact?",
+  "q": "Why build once and deploy the same artifact everywhere?",
   "choices": [
-   "A file produced by a job and kept",
-   "A bug",
-   "An old commit",
-   "A secret"
+   "What you tested is exactly what runs in production",
+   "It uses less disk",
+   "Rebuilding is forbidden",
+   "Artifacts are encrypted"
   ],
   "answer": 0,
-  "explain": "Binaries, reports, packages…"
+  "explain": "Rebuilding per environment can pull other versions. Artifacts: binaries, packages, images, reports."
  },
  {
   "id": "cicd-1-06",
   "level": 1,
-  "q": "Where should passwords for a pipeline live?",
+  "q": "Where should a pipeline's passwords live?",
   "choices": [
    "In the CI's secret storage",
    "In the YAML file",
@@ -75,20 +75,20 @@
    "In a commit message"
   ],
   "answer": 0,
-  "explain": "They're masked in logs and never committed."
+  "explain": "Secrets there are masked in logs and never committed. Give each one only to the jobs that need it."
  },
  {
   "id": "cicd-1-07",
   "level": 1,
-  "q": "What does CD stand for?",
+  "q": "Someone committed a password, then removed it in the next commit. Is it safe?",
   "choices": [
-   "Continuous Delivery or Deployment",
-   "Code Deploy only",
-   "Compact Disc",
-   "Central Docs"
+   "No: it stays in the history; revoke it and make a new one",
+   "Yes, the file no longer has it",
+   "Yes, if the repo is private",
+   "Yes, after git gc"
   ],
   "answer": 0,
-  "explain": "Delivery: ready to release; deployment: released automatically."
+  "explain": "Anyone with a clone has it. Rotate first; rewriting history comes after, if at all. Secret scanners catch it early."
  },
  {
   "id": "cicd-1-08",
@@ -119,15 +119,15 @@
  {
   "id": "cicd-1-10",
   "level": 1,
-  "q": "What is YAML?",
+  "q": "In a YAML pipeline file, what breaks things most often?",
   "choices": [
-   "A text format for configuration",
-   "A programming language",
-   "A container",
-   "A test framework"
+   "Wrong indentation",
+   "Comments",
+   "Long lines",
+   "Blank lines"
   ],
   "answer": 0,
-  "explain": "Indentation matters, like in Python."
+  "explain": "Indentation decides what belongs to what, like in Python. Tabs are not allowed; a CI lint catches it."
  },
  {
   "id": "cicd-2-01",
@@ -145,15 +145,15 @@
  {
   "id": "cicd-2-02",
   "level": 2,
-  "q": "What is a runner?",
+  "q": "Why not run a public repo's pull requests on your own self-hosted runner?",
   "choices": [
-   "The machine that executes the jobs",
-   "A test type",
-   "A deploy script",
-   "A git hook"
+   "Anyone's PR could run code on your machine",
+   "Self-hosted runners are slower",
+   "Public repos can't use them",
+   "They don't support Linux"
   ],
   "answer": 0,
-  "explain": "Hosted by the CI service or your own."
+  "explain": "A fork's PR edits the workflow or the tests: that code runs with your runner's access. Use throwaway hosted runners."
  },
  {
   "id": "cicd-2-03",
@@ -223,40 +223,40 @@
  {
   "id": "cicd-2-08",
   "level": 2,
-  "q": "What does a `needs:` (or `dependencies`) key do?",
+  "q": "How should a deploy job get its cloud credentials?",
   "choices": [
-   "Runs a job after others succeed",
-   "Installs packages",
-   "Marks a job optional",
-   "Sets secrets"
+   "Short-lived tokens issued per run (OIDC)",
+   "A long-lived admin key in a secret",
+   "The developer's own key",
+   "A key written in the repo"
   ],
   "answer": 0,
-  "explain": "Builds a graph of jobs."
+  "explain": "A token that expires in minutes is worth little if it leaks. Scope it to that job's environment."
  },
  {
   "id": "cicd-2-09",
   "level": 2,
-  "q": "What is infrastructure as code?",
+  "q": "Why describe servers in versioned files (Ansible, Terraform)?",
   "choices": [
-   "Servers and config described in versioned files",
-   "Code running on servers",
-   "Writing servers in C",
-   "Documentation of servers"
+   "Changes get reviewed, repeated and rolled back",
+   "Servers run faster",
+   "No one needs access anymore",
+   "It replaces backups"
   ],
   "answer": 0,
-  "explain": "Terraform, Ansible, …"
+  "explain": "Infrastructure as code: git log tells who changed what, and a new server is built the same way."
  },
  {
   "id": "cicd-2-10",
   "level": 2,
-  "q": "What is a rollback?",
+  "q": "What does idempotent mean for an automation task?",
   "choices": [
-   "Going back to the previous working version",
-   "Deleting the repo",
-   "Retrying the tests",
-   "Scaling down"
+   "Running it twice changes nothing the second time",
+   "It runs on every server at once",
+   "It never fails",
+   "It can't be undone"
   ],
   "answer": 0,
-  "explain": "Plan it before you need it."
+  "explain": "'Ensure this line is in the file', not 'append this line': safe to rerun after a failure. Ansible reports changed=0."
  }
 ]

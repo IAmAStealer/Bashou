@@ -2,236 +2,236 @@
  {
   "id": "debian-1-01",
   "level": 1,
-  "q": "Quelle commande installe un paquet sur Debian ?",
+  "q": "Pourquoi installer avec apt plutôt qu'un .deb trouvé sur un site ?",
   "choices": [
-   "apt install nom",
-   "dnf install nom",
-   "pacman -S nom",
-   "yum get nom"
+   "apt vérifie les signatures et apporte les mises à jour",
+   "apt télécharge plus vite",
+   "Les .deb des sites ne s'installent pas",
+   "apt saute les dépendances"
   ],
   "answer": 0,
-  "explain": "Avec sudo ; apt update d'abord."
+  "explain": "Un .deb isolé n'a pas de mises à jour de sécurité, sauf si le site fournit un dépôt apt. apt install ./fichier.deb gère quand même les dépendances."
  },
  {
   "id": "debian-1-02",
   "level": 1,
-  "q": "Que fait `apt update` ?",
+  "q": "Un correctif de sécurité est sorti, mais `apt upgrade` ne voit rien. Qu'as-tu oublié ?",
   "choices": [
-   "Rafraîchit la liste des paquets disponibles",
-   "Met à jour tous les paquets",
-   "Met à jour seulement apt",
-   "Redémarre"
+   "apt update, pour rafraîchir les listes",
+   "Un redémarrage",
+   "apt clean",
+   "Ajouter -y"
   ],
   "answer": 0,
-  "explain": "apt upgrade installe ensuite les nouvelles versions."
+  "explain": "apt update récupère ce que proposent les dépôts ; upgrade installe ensuite les nouvelles versions."
  },
  {
   "id": "debian-1-03",
   "level": 1,
-  "q": "Qu'est-ce qu'un fichier .deb ?",
+  "q": "Quelles mises à jour reçoit un serveur Debian stable ?",
   "choices": [
-   "Un paquet Debian",
-   "Une image disque",
-   "Un fichier de config",
-   "Un noyau"
+   "Sécurité et corrections, rarement des nouveautés",
+   "Chaque nouvelle version en amont",
+   "Aucune avant la version suivante",
+   "Seulement le noyau"
   ],
   "answer": 0,
-  "explain": "S'installe avec apt install ./fichier.deb."
+  "explain": "Stable est prévisible, c'est pour ça que les serveurs l'utilisent. testing et unstable (sid) bougent chaque jour."
  },
  {
   "id": "debian-1-04",
   "level": 1,
-  "q": "Où sont listées les sources de paquets ?",
+  "q": "Où regarder quels dépôts un serveur accepte ?",
   "choices": [
-   "/etc/apt/sources.list(.d)",
-   "/etc/yum.repos.d",
+   "/etc/apt/sources.list et /etc/apt/sources.list.d/",
+   "/etc/yum.repos.d/",
    "/var/lib/dpkg/sources",
-   "/usr/apt"
+   "/usr/share/apt/"
   ],
   "answer": 0,
-  "explain": "Chaque ligne (ou fichier .sources) est un dépôt."
+  "explain": "Chaque entrée est un dépôt qui peut installer du code en root : un dépôt inconnu mérite une question."
  },
  {
   "id": "debian-1-05",
   "level": 1,
-  "q": "Quelle branche de Debian est faite pour les serveurs ?",
+  "q": "Comment voir quels paquets ont une mise à jour en attente ?",
   "choices": [
-   "stable",
-   "rolling",
-   "latest",
-   "sid"
+   "apt list --upgradable, après apt update",
+   "apt show --new",
+   "dpkg -l --updates",
+   "apt check"
   ],
   "answer": 0,
-  "explain": "testing et unstable (sid) passent avant elle."
+  "explain": "Pratique avant une maintenance : tu sais ce qui va bouger."
  },
  {
   "id": "debian-1-06",
   "level": 1,
-  "q": "Comment supprimer un paquet et sa configuration ?",
+  "q": "Tu désinstalles un service et ne veux garder aucune config. Quelle commande ?",
   "choices": [
    "apt purge nom",
-   "apt remove --all nom",
-   "dpkg -d nom",
-   "apt delete nom"
+   "apt remove nom",
+   "dpkg --unpack nom",
+   "apt clean nom"
   ],
   "answer": 0,
-  "explain": "apt remove garde les fichiers de config."
+  "explain": "apt remove garde les fichiers de /etc, pour qu'une réinstallation les retrouve ; purge les supprime aussi."
  },
  {
   "id": "debian-1-07",
   "level": 1,
-  "q": "Quelle commande cherche des paquets ?",
+  "q": "Tu as besoin d'un outil sans connaître le nom du paquet. Tu lances quoi ?",
   "choices": [
    "apt search mot",
-   "apt find mot",
-   "dpkg -s mot",
-   "apt look mot"
+   "apt install mot*",
+   "dpkg -S mot",
+   "apt policy mot"
   ],
   "answer": 0,
-  "explain": "apt show nom donne les détails."
+  "explain": "apt show nom donne ensuite la description, la version et les dépendances."
  },
  {
   "id": "debian-1-08",
   "level": 1,
-  "q": "Que montre `dpkg -l` ?",
+  "q": "Comment vérifier si nginx est installé, et en quelle version ?",
   "choices": [
-   "Les paquets installés",
-   "Le partitionnement",
-   "Les logs des paquets",
-   "Les fichiers verrouillés"
+   "dpkg -l nginx",
+   "which nginx --version",
+   "apt search nginx",
+   "ls /etc/nginx"
   ],
   "answer": 0,
-  "explain": "dpkg est l'outil de bas niveau sous apt."
+  "explain": "ii en début de ligne veut dire installé. /etc/nginx peut rester après un remove."
  },
  {
   "id": "debian-1-09",
   "level": 1,
-  "q": "Les versions de Debian portent le nom…",
+  "q": "apt demande 'Souhaitez-vous continuer ? [O/n]'. Que lis-tu avant O ?",
   "choices": [
-   "de personnages de Toy Story",
-   "de planètes",
-   "de villes",
-   "d'oiseaux"
+   "Les paquets qu'il va SUPPRIMER",
+   "Rien, O est le choix par défaut",
+   "Seulement la taille à télécharger",
+   "Le texte de la licence"
   ],
   "answer": 0,
-  "explain": "Bookworm, Trixie, Forky…"
+  "explain": "Pour résoudre un conflit, apt peut supprimer des paquets utiles. Une longue liste de suppressions : on s'arrête et on regarde."
  },
  {
   "id": "debian-1-10",
   "level": 1,
-  "q": "Comment supprimer les paquets dont plus personne n'a besoin ?",
+  "q": "Que supprime `apt autoremove` ?",
   "choices": [
-   "apt autoremove",
-   "apt clean",
-   "apt purge --all",
-   "dpkg --prune"
+   "Les dépendances dont plus rien n'a besoin",
+   "Les vieux logs",
+   "Les paquets inutilisés depuis un mois",
+   "Le cache des .deb téléchargés"
   ],
   "answer": 0,
-  "explain": "apt clean vide le cache des paquets téléchargés."
+  "explain": "Lis sa liste : un outil que tu utilises mais installé comme dépendance part aussi (apt-mark manual le garde). apt clean vide le cache."
  },
  {
   "id": "debian-2-01",
   "level": 2,
-  "q": "Quelle commande montre pourquoi un paquet est installé ?",
+  "q": "Comment voir ce que ferait `apt remove nom`, sans le faire ?",
   "choices": [
-   "apt-cache rdepends --installed nom",
-   "apt why nom",
-   "dpkg --why nom",
-   "apt reason nom"
+   "apt remove -s nom",
+   "apt remove --list nom",
+   "apt show --remove nom",
+   "dpkg -r --preview nom"
   ],
   "answer": 0,
-  "explain": "aptitude why est une autre façon."
+  "explain": "-s (--simulate) affiche le plan sans rien changer. Bonne habitude dans les scripts et en production."
  },
  {
   "id": "debian-2-02",
   "level": 2,
-  "q": "Comment bloquer un paquet à sa version ?",
+  "q": "Une nouvelle version d'un paquet casse ton appli. Comment la tenir à l'écart des mises à jour ?",
   "choices": [
    "apt-mark hold nom",
-   "apt freeze nom",
-   "dpkg --lock nom",
-   "apt pin nom now"
+   "apt remove nom",
+   "chmod -w /var/lib/dpkg",
+   "Ne plus lancer apt upgrade"
   ],
   "answer": 0,
-  "explain": "apt-mark unhold le libère."
+  "explain": "Un hold bloque aussi ses correctifs de sécurité : note pourquoi, et apt-mark unhold une fois réglé."
  },
  {
   "id": "debian-2-03",
   "level": 2,
-  "q": "Que fait `unattended-upgrades` ?",
+  "q": "Pourquoi activer unattended-upgrades sur un serveur ?",
   "choices": [
-   "Installe les mises à jour de sécurité tout seul",
-   "Passe à la version suivante",
-   "Supprime seulement les vieux noyaux",
-   "Sauvegarde le système"
+   "Les correctifs arrivent en un jour, même sans personne",
+   "Il passe à la version suivante de Debian",
+   "Il fait des sauvegardes",
+   "Il supprime seulement les vieux noyaux"
   ],
   "answer": 0,
-  "explain": "Se configure dans /etc/apt/apt.conf.d/."
+  "explain": "Réglages dans /etc/apt/apt.conf.d/50unattended-upgrades ; ce qu'il a fait est dans /var/log/unattended-upgrades/."
  },
  {
   "id": "debian-2-04",
   "level": 2,
-  "q": "Qu'est-ce que l'épinglage (pinning) d'apt ?",
+  "q": "Quelque chose a cassé cette nuit. Où voir ce qu'apt a installé ou mis à jour, et quand ?",
   "choices": [
-   "Choisir quel dépôt l'emporte pour un paquet",
-   "Verrouiller l'écran",
-   "Attacher un CPU",
-   "Signer des paquets"
+   "/var/log/apt/history.log",
+   "/var/lib/dpkg/status",
+   "/etc/apt/log",
+   "~/.apt_history"
   ],
   "answer": 0,
-  "explain": "Dans /etc/apt/preferences.d/."
+  "explain": "Chaque passage : date, commande, paquets et versions. /var/log/dpkg.log détaille chaque étape."
  },
  {
   "id": "debian-2-05",
   "level": 2,
-  "q": "Comment reconfigurer un paquet installé ?",
+  "q": "Tu as choisi le mauvais fuseau à l'installation. Comment reposer les questions du paquet ?",
   "choices": [
-   "dpkg-reconfigure nom",
-   "apt config nom",
-   "dpkg --setup nom",
-   "apt reinstall --config"
+   "dpkg-reconfigure tzdata",
+   "apt install --reinstall tzdata",
+   "apt config tzdata",
+   "Modifier /var/lib/dpkg/status"
   ],
   "answer": 0,
-  "explain": "Par exemple dpkg-reconfigure tzdata."
+  "explain": "dpkg-reconfigure relance les questions d'installation d'un paquet ; ça marche pour les locales, le clavier…"
  },
  {
   "id": "debian-2-06",
   "level": 2,
-  "q": "Comment apt fait-il confiance à un dépôt ?",
+  "q": "Contre quoi te protège la signature d'un dépôt ?",
   "choices": [
-   "Par sa clé de signature (signed-by)",
-   "Seulement par son certificat HTTPS",
-   "Par son adresse IP",
-   "Il fait confiance à tous les dépôts"
+   "Un miroir ou un attaquant qui sert des paquets modifiés",
+   "Du mauvais code écrit par l'éditeur",
+   "Les téléchargements lents",
+   "Les bugs des paquets"
   ],
   "answer": 0,
-  "explain": "Les clés sont dans /etc/apt/keyrings ou /usr/share/keyrings."
+  "explain": "Elle prouve l'origine et l'intégrité, pas que le code est bon : n'ajoute que des éditeurs de confiance."
  },
  {
   "id": "debian-2-07",
   "level": 2,
-  "q": "Qu'est-ce que `sid` ?",
+  "q": "Pourquoi ne pas installer quelques paquets de testing sur un serveur stable ?",
   "choices": [
-   "La branche unstable de Debian",
-   "La prochaine version stable",
-   "Un format de paquet",
-   "L'installateur"
+   "Ils changent des bibliothèques sous tout le système",
+   "Les paquets de testing ne sont pas signés",
+   "La licence l'interdit",
+   "Ils ne marchent que sur un poste de bureau"
   ],
   "answer": 0,
-  "explain": "sid reste toujours unstable ; testing devient la prochaine stable."
+  "explain": "Mélanger les versions donne une « FrankenDebian » qui se met mal à jour. Préfère backports ou un conteneur."
  },
  {
   "id": "debian-2-08",
   "level": 2,
-  "q": "Où dpkg garde-t-il sa base de données ?",
+  "q": "Comment vérifier que les fichiers installés correspondent encore à leurs paquets ?",
   "choices": [
-   "/var/lib/dpkg",
-   "/etc/dpkg",
-   "/usr/share/dpkg",
-   "/var/cache/apt"
+   "dpkg --verify (ou debsums -c)",
+   "apt check",
+   "dpkg -l",
+   "md5sum -r /usr"
   ],
   "answer": 0,
-  "explain": "Ne la modifie pas à la main."
+  "explain": "Il compare aux sommes de contrôle livrées dans chaque paquet : un binaire modifié dans /usr/bin est un signal d'alerte."
  },
  {
   "id": "debian-2-09",
@@ -249,15 +249,15 @@
  {
   "id": "debian-2-10",
   "level": 2,
-  "q": "Comment lister les fichiers installés par un paquet ?",
+  "q": "Un paquet a installé un service. Comment trouver ses fichiers, config comprise ?",
   "choices": [
    "dpkg -L nom",
-   "apt files nom",
-   "dpkg -f nom",
-   "apt show --files nom"
+   "apt show nom",
+   "find / -name nom",
+   "apt files nom"
   ],
   "answer": 0,
-  "explain": "dpkg -S /chemin fait l'inverse : quel paquet possède un fichier."
+  "explain": "dpkg -L liste ce que le paquet a posé sur le disque ; sa config est sous /etc. dpkg -S fait l'inverse."
  },
  {
   "id": "debian-3-01",
@@ -314,15 +314,15 @@
  {
   "id": "debian-3-05",
   "level": 3,
-  "q": "À quoi sert `dpkg-divert` ?",
+  "q": "Après une mise à jour d'openssl, quel outil dit quels services tournent encore avec l'ancien ?",
   "choices": [
-   "Envoyer le fichier d'un paquet ailleurs, sans écrasement",
-   "À rediriger apt vers un autre miroir",
-   "À déplacer la base de dpkg",
-   "À ignorer un paquet pendant une mise à jour"
+   "needrestart",
+   "apt policy openssl",
+   "systemctl --failed",
+   "ldconfig -p"
   ],
   "answer": 0,
-  "explain": "Pratique quand vous remplacez un fichier fourni par un paquet : la diversion survit aux mises à jour."
+  "explain": "Les programmes lancés gardent l'ancienne bibliothèque en mémoire jusqu'au redémarrage : le correctif n'agit pas avant."
  },
  {
   "id": "debian-3-06",

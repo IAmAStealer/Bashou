@@ -2,15 +2,15 @@
  {
   "id": "c-1-01",
   "level": 1,
-  "q": "Quelle fonction affiche du texte formaté ?",
+  "q": "Pourquoi vérifier ce que renvoie malloc ?",
   "choices": [
-   "printf",
-   "print",
-   "echo",
-   "cout"
+   "Il renvoie NULL quand la mémoire manque",
+   "Il renvoie la taille",
+   "Il peut renvoyer un nombre négatif",
+   "Il n'échoue jamais, inutile"
   ],
   "answer": 0,
-  "explain": "#include <stdio.h> d'abord."
+  "explain": "Utiliser NULL plante, ou pire. if (!p) { perror(\"malloc\"); exit(1); }"
  },
  {
   "id": "c-1-02",
@@ -184,15 +184,15 @@
  {
   "id": "c-2-05",
   "level": 2,
-  "q": "Combien vaut `sizeof(char)` ?",
+  "q": "Pourquoi `printf(saisie)` est dangereux ?",
   "choices": [
-   "1",
-   "2",
-   "4",
-   "Ça dépend de la chaîne"
+   "Des %x et %n dans la saisie lisent et écrivent la mémoire",
+   "Il affiche trop lentement",
+   "Il ajoute un saut de ligne",
+   "Il n'affiche pas les accents"
   ],
   "answer": 0,
-  "explain": "Toujours 1, par définition."
+  "explain": "Une faille de chaîne de format. Écris toujours printf(\"%s\", saisie). -Wformat-security prévient."
  },
  {
   "id": "c-2-06",
@@ -210,15 +210,15 @@
  {
   "id": "c-2-07",
   "level": 2,
-  "q": "Que dit `volatile` au compilateur ?",
+  "q": "Que peut-il mal se passer dans `malloc(n * taille)` quand n vient de l'entrée ?",
   "choices": [
-   "La valeur peut changer hors de la vue du programme",
-   "Mets-la en cache",
-   "Rends-la constante",
-   "Mets-la dans un registre"
+   "Le produit déborde et trop peu est alloué",
+   "malloc refuse les grands nombres",
+   "Il alloue sur la pile",
+   "Rien, malloc vérifie"
   ],
   "answer": 0,
-  "explain": "Pour les registres matériels et les gestionnaires de signaux."
+  "explain": "Écrire ensuite n éléments déborde le tampon. calloc(n, taille) vérifie la multiplication."
  },
  {
   "id": "c-2-08",

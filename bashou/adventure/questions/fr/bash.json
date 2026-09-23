@@ -2,210 +2,210 @@
  {
   "id": "bash-1-01",
   "level": 1,
-  "q": "Quelle commande affiche le dossier où tu es ?",
+  "q": "Un script lance `rm -r build/`. Quel build/ supprime-t-il ?",
   "choices": [
-   "pwd",
-   "ls",
-   "cd",
-   "whoami"
+   "Celui du dossier d'où on lance le script",
+   "Celui à côté du fichier du script",
+   "Celui de ton dossier personnel",
+   "Le premier trouvé dans $PATH"
   ],
   "answer": 0,
-  "explain": "pwd = print working directory (affiche le dossier courant)."
+  "explain": "Un chemin relatif part du dossier courant (pwd). Un script fait d'abord cd vers un endroit connu, ou utilise des chemins absolus."
  },
  {
   "id": "bash-1-02",
   "level": 1,
-  "q": "Comment revenir à ton dossier personnel ?",
+  "q": "Un tuto dit `curl https://get.example.sh | sudo bash`. Quel est le risque ?",
   "choices": [
-   "cd",
-   "cd /",
-   "home",
-   "ls ~"
+   "Tu lances en root du code que tu n'as jamais lu",
+   "curl télécharge trop lentement pour bash",
+   "bash ne sait pas lire un script depuis un pipe",
+   "Aucun : HTTPS rend ça sûr"
   ],
   "answer": 0,
-  "explain": "cd sans argument ramène à la maison (comme cd ~)."
+  "explain": "HTTPS prouve qui envoie le script, pas ce qu'il fait. Télécharge-le, lis-le, puis lance-le."
  },
  {
   "id": "bash-1-03",
   "level": 1,
-  "q": "Quelle commande liste aussi les fichiers cachés ?",
+  "q": "Pourquoi .bashrc ou .ssh n'apparaissent pas dans un simple `ls` ?",
   "choices": [
-   "ls -a",
-   "ls -l",
-   "ls -h",
-   "ls -r"
+   "Les noms qui commencent par un point sont cachés",
+   "Ils appartiennent à root",
+   "Ce sont des liens, ls ignore les liens",
+   "Ils sont vides"
   ],
   "answer": 0,
-  "explain": "-a montre tous les fichiers, même ceux qui commencent par un point."
+  "explain": "ls -a les montre. Une bonne partie de ta config (et des restes d'un intrus) se cache derrière ce point."
  },
  {
   "id": "bash-1-04",
   "level": 1,
-  "q": "Que fait `mkdir -p a/b/c` ?",
+  "q": "Pourquoi les scripts écrivent `mkdir -p logs` plutôt que `mkdir logs` ?",
   "choices": [
-   "Crée a, b et c si besoin",
-   "Échoue si a n'existe pas",
-   "Crée seulement c",
-   "Supprime a/b/c"
+   "Il n'échoue pas si logs existe déjà",
+   "Il est plus rapide",
+   "Il rend le dossier privé",
+   "Il le crée dans ton dossier personnel"
   ],
   "answer": 0,
-  "explain": "-p crée les parents manquants et ne râle pas s'ils existent."
+  "explain": "Un script doit pouvoir tourner deux fois sans casse (idempotent). -p crée aussi les dossiers parents manquants."
  },
  {
   "id": "bash-1-05",
   "level": 1,
-  "q": "Quel symbole envoie la sortie d'une commande dans un fichier, en l'écrasant ?",
+  "q": "Tu veux ajouter une ligne à /etc/hosts sans perdre le reste. Tu utilises quoi ?",
   "choices": [
-   ">",
    ">>",
+   ">",
    "|",
    "<"
   ],
   "answer": 0,
-  "explain": "> écrase le fichier ; >> ajoute à la fin."
+  "explain": "> vide d'abord le fichier : un > de travers l'efface. `set -o noclobber` empêche > d'écraser."
  },
  {
   "id": "bash-1-06",
   "level": 1,
-  "q": "Que fait `|` entre deux commandes ?",
+  "q": "`grep error app.log | wc -l` affiche 12. Que vaut 12 ?",
   "choices": [
-   "Envoie la sortie de la première dans la seconde",
-   "Les lance en même temps, sans lien",
-   "Lance la seconde seulement si la première échoue",
-   "Écrit la sortie dans un fichier"
+   "Le nombre de lignes qui contiennent error",
+   "Le nombre de fois où error apparaît",
+   "Le nombre de lignes de app.log",
+   "Le code de retour de grep"
   ],
   "answer": 0,
-  "explain": "Un pipe relie le stdout de la commande de gauche au stdin de celle de droite."
+  "explain": "Le pipe envoie les lignes trouvées par grep à wc -l, qui compte les lignes. grep -c le fait seul."
  },
  {
   "id": "bash-1-07",
   "level": 1,
-  "q": "Quelle touche complète une commande ou un nom de fichier ?",
+  "q": "Comment retrouver une longue commande tapée hier ?",
   "choices": [
-   "Tab",
-   "Ctrl+C",
-   "Entrée",
-   "Échap"
+   "Ctrl+R, puis taper un morceau",
+   "Deux fois Tab",
+   "Remonter l'écran",
+   "cat /var/log/commands"
   ],
   "answer": 0,
-  "explain": "Tab complète ; appuie deux fois pour voir tous les choix."
+  "explain": "L'historique est dans ~/.bash_history. Les mots de passe tapés en ligne de commande y finissent aussi."
  },
  {
   "id": "bash-1-08",
   "level": 1,
-  "q": "Comment voir le manuel d'une commande ?",
+  "q": "Tu as oublié les options d'une commande. Où est la bonne réponse, même hors ligne ?",
   "choices": [
-   "man ls",
-   "help ls",
-   "ls --manual",
-   "info-ls"
+   "cmd --help ou man cmd",
+   "La première réponse d'un forum",
+   "Le fichier /etc/cmd.conf",
+   "Ton historique du shell"
   ],
   "answer": 0,
-  "explain": "man ouvre la page de manuel ; q pour quitter."
+  "explain": "L'aide livrée avec l'outil correspond à ta version. q quitte man, / y cherche."
  },
  {
   "id": "bash-1-09",
   "level": 1,
-  "q": "Que contient `$?` juste après une commande ?",
+  "q": "Un script doit savoir si `cp` a marché. Il regarde quoi ?",
   "choices": [
-   "Son code de retour",
-   "Son numéro de processus",
-   "Sa sortie",
-   "Le dernier argument"
+   "Son code de retour : 0 = succès",
+   "Si cp n'a rien affiché",
+   "La taille de la copie",
+   "Si cp a affiché OK"
   ],
   "answer": 0,
-  "explain": "0 veut dire succès, tout le reste est une erreur."
+  "explain": "Chaque commande rend un code de retour, dans $?. `if cp a b; then …` le teste directement."
  },
  {
   "id": "bash-1-10",
   "level": 1,
-  "q": "Quelle commande affiche un texte ?",
+  "q": "Pourquoi `mysql -pSecret123` est une mauvaise façon de donner un mot de passe ?",
   "choices": [
-   "echo",
-   "print",
-   "say",
-   "cat"
+   "Il finit dans l'historique et se voit dans ps",
+   "Le mot de passe devient trop long",
+   "Le shell abîme les caractères spéciaux",
+   "Ça ne marche qu'une fois"
   ],
   "answer": 0,
-  "explain": "echo affiche ses arguments ; cat affiche des fichiers."
+  "explain": "Tout le monde sur la machine voit les lignes de commande avec ps. Laisse l'outil le demander, ou un fichier lisible par toi seul."
  },
  {
   "id": "bash-1-11",
   "level": 1,
-  "q": "Que fait `rm -r dossier` ?",
+  "q": "rm n'a pas de corbeille. Quelle bonne habitude avant `rm *.log` ?",
   "choices": [
-   "Supprime le dossier et tout son contenu",
-   "Renomme le dossier",
-   "Supprime seulement les dossiers vides",
-   "Le met à la corbeille"
+   "Lancer `ls *.log` d'abord pour voir ce qui correspond",
+   "Ajouter -f pour qu'il ne demande rien",
+   "Le lancer en root",
+   "Ajouter -r pour être sûr"
   ],
   "answer": 0,
-  "explain": "rm n'a pas de corbeille : -r supprime récursivement, pour de bon."
+  "explain": "Le motif est développé avant que rm tourne : ls avec le même motif montre exactement ce qui part."
  },
  {
   "id": "bash-1-12",
   "level": 1,
-  "q": "Comment relancer la commande précédente ?",
+  "q": "À quoi sert stderr ?",
   "choices": [
-   "!!",
-   "$$",
-   "..",
-   "!?"
+   "Aux messages d'erreur, séparés de la vraie sortie",
+   "Aux permissions standard des fichiers",
+   "À ce que tu tapes",
+   "À un fichier de log dans /var/log"
   ],
   "answer": 0,
-  "explain": "!! devient la dernière commande (sudo !! la relance avec sudo)."
+  "explain": "stdout (1) porte les résultats, stderr (2) les erreurs : `cmd > out.txt` garde les résultats et affiche encore les erreurs."
  },
  {
   "id": "bash-2-01",
   "level": 2,
-  "q": "Que fait `cmd 2>&1` ?",
+  "q": "Les erreurs d'une tâche cron disparaissent. Quelle ligne les journalise avec la sortie ?",
   "choices": [
-   "Envoie les erreurs là où va la sortie normale",
-   "Lance cmd deux fois",
-   "Cache toute la sortie",
-   "Envoie la sortie dans le fichier 1"
+   "job >> job.log 2>&1",
+   "job 2>&1 >> job.log",
+   "job >> job.log",
+   "job | tee 2"
   ],
   "answer": 0,
-  "explain": "2 est stderr, 1 est stdout : 2>&1 les fusionne."
+  "explain": "L'ordre compte : d'abord stdout vers le fichier, puis stderr (2) là où va maintenant stdout (1)."
  },
  {
   "id": "bash-2-02",
   "level": 2,
-  "q": "Qu'est-ce que `$(date)` dans une commande ?",
+  "q": "Un script de sauvegarde écrit `backup-$(date +%F).tar.gz`. Quel nom obtient-on ?",
   "choices": [
-   "La sortie de date, insérée à cet endroit",
-   "Une variable nommée date",
-   "La date en secondes",
-   "Un commentaire"
+   "backup-2026-09-23.tar.gz, avec la date du jour",
+   "backup-$(date +%F).tar.gz, tel quel",
+   "backup-date.tar.gz",
+   "Une erreur : date n'est pas une variable"
   ],
   "answer": 0,
-  "explain": "$( ) est une substitution de commande."
+  "explain": "$( ) lance la commande et met sa sortie à cet endroit. date +%F donne AAAA-MM-JJ, qui se trie bien."
  },
  {
   "id": "bash-2-03",
   "level": 2,
-  "q": "Quelle boucle tourne pour chaque fichier .log ?",
+  "q": "Quelle boucle marche encore quand les noms de fichiers ont des espaces ?",
   "choices": [
-   "for f in *.log; do …; done",
-   "while f in *.log; do …",
-   "loop *.log { … }",
-   "foreach f (*.log)"
+   "for f in *.log; do gzip \"$f\"; done",
+   "for f in $(ls *.log); do gzip $f; done",
+   "ls *.log | for f; do gzip $f; done",
+   "for f in \"$(ls)\"; do gzip \"$f\"; done"
   ],
   "answer": 0,
-  "explain": "Le motif *.log devient la liste des fichiers qui correspondent."
+  "explain": "Le motif donne un mot par fichier ; $(ls) est coupé aux espaces. Mets toujours \"$f\" entre guillemets."
  },
  {
   "id": "bash-2-04",
   "level": 2,
-  "q": "Que fait `set -e` dans un script ?",
+  "q": "Pourquoi commencer un script par `set -euo pipefail` ?",
   "choices": [
-   "Arrête le script à la première commande qui échoue",
-   "Affiche chaque commande",
-   "Exporte toutes les variables",
-   "Active les globs étendus"
+   "Arrêt sur commande ratée, variable vide ou pipe cassé",
+   "Il rend le script plus rapide",
+   "Il affiche chaque commande",
+   "Il lance le script en root"
   ],
   "answer": 0,
-  "explain": "set -e quitte sur erreur ; set -x affiche chaque commande."
+  "explain": "Sans lui, un script continue après un cd raté et lance le rm suivant au mauvais endroit. set -x affiche les commandes."
  },
  {
   "id": "bash-2-05",
@@ -223,66 +223,66 @@
  {
   "id": "bash-2-06",
   "level": 2,
-  "q": "Que fait `&&` dans `make && ./app` ?",
+  "q": "Pourquoi écrire `cd /srv/app && rm -rf ./cache` plutôt qu'avec `;` ?",
   "choices": [
-   "Lance ./app seulement si make a réussi",
-   "Lance les deux en même temps",
-   "Lance ./app seulement si make a échoué",
-   "Envoie make dans ./app"
+   "Si cd échoue, rm ne tourne pas au mauvais endroit",
+   "&& est plus rapide",
+   "; est interdit à cet endroit",
+   "&& lance les deux en même temps"
   ],
   "answer": 0,
-  "explain": "&& continue en cas de succès, || en cas d'échec."
+  "explain": "&& continue seulement si ça a marché, || seulement si ça a échoué, ; toujours."
  },
  {
   "id": "bash-2-07",
   "level": 2,
-  "q": "Pourquoi mettre \"$var\" entre guillemets ?",
+  "q": "f='vieilles notes.txt'. Que fait `rm $f` ?",
   "choices": [
-   "Pour que ses espaces ne la coupent pas en plusieurs mots",
-   "Pour la rendre en lecture seule",
-   "Pour l'exporter",
-   "Ce n'est jamais utile"
+   "Essaie de supprimer deux fichiers : vieilles et notes.txt",
+   "Supprime vieilles notes.txt",
+   "Échoue : la variable veut des guillemets dedans",
+   "Rien"
   ],
   "answer": 0,
-  "explain": "Sans guillemets, une variable est coupée sur les espaces et ses motifs sont développés."
+  "explain": "Une variable sans guillemets est coupée aux espaces et développée comme un motif. Écris rm \"$f\"."
  },
  {
   "id": "bash-2-08",
   "level": 2,
-  "q": "Quelle commande rend un script exécutable ?",
+  "q": "`./deploy.sh` répond Permission denied, alors qu'il est à toi. Pourquoi ?",
   "choices": [
-   "chmod +x script.sh",
-   "run script.sh",
-   "exec script.sh",
-   "chown +x script.sh"
+   "Il n'a pas le droit d'exécution (x)",
+   "Seul root peut lancer des scripts",
+   "Le fichier est vide",
+   "Un script doit finir en .exe"
   ],
   "answer": 0,
-  "explain": "Le droit x permet de le lancer avec ./script.sh."
+  "explain": "chmod +x deploy.sh, ou bash deploy.sh. Un disque monté noexec le bloque aussi."
  },
  {
   "id": "bash-2-09",
   "level": 2,
-  "q": "Que commence `<<EOF` ?",
+  "q": "Comment un script supprime son fichier temporaire même s'il échoue en route ?",
   "choices": [
-   "Un heredoc : les lignes jusqu'à EOF sont l'entrée",
-   "Une fin de fichier",
-   "Une comparaison",
-   "Une tâche en arrière-plan"
+   "trap 'rm -f \"$tmp\"' EXIT",
+   "Un rm sur sa dernière ligne",
+   "set -e",
+   "mktemp --autoremove"
   ],
   "answer": 0,
-  "explain": "Pratique pour donner plusieurs lignes à une commande."
+  "explain": "trap … EXIT tourne à toute sortie, erreur ou Ctrl+C. À utiliser avec tmp=$(mktemp)."
  },
  {
   "id": "bash-2-10",
   "level": 2,
-  "q": "Que montre `jobs` ?",
+  "q": "Pourquoi `tmp=$(mktemp)` plutôt qu'un nom fixe /tmp/monscript.tmp ?",
   "choices": [
-   "Les commandes en arrière-plan de ce shell",
-   "Tous les processus de la machine",
-   "Les tâches cron planifiées",
-   "Ton intitulé de poste"
+   "Un autre utilisateur peut créer ou lier ce nom avant toi",
+   "mktemp est plus rapide",
+   "/tmp est en lecture seule pour les scripts",
+   "Les noms fixes sont trop longs"
   ],
   "answer": 0,
-  "explain": "fg en ramène une au premier plan, bg la relance en arrière-plan."
+  "explain": "/tmp est partagé : un lien symbolique posé là fait écraser un autre fichier. mktemp choisit un nom unique, privé."
  }
 ]

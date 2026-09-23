@@ -15,184 +15,184 @@
  {
   "id": "rocky-1-02",
   "level": 1,
-  "q": "Rocky Linux est compatible avec…",
+  "q": "Pourquoi des entreprises choisissent Rocky Linux pour leurs serveurs ?",
   "choices": [
-   "Red Hat Enterprise Linux",
-   "Debian",
-   "Arch Linux",
-   "FreeBSD"
+   "Il reconstruit RHEL : mêmes paquets, support long, gratuit",
+   "Il a les versions les plus récentes de tout",
+   "C'est Debian sous un autre nom",
+   "Il n'a pas besoin de mises à jour"
   ],
   "answer": 0,
-  "explain": "Construit à partir des mêmes sources, après le changement de cap de CentOS."
+  "explain": "Environ dix ans de mises à jour par version majeure, construites à partir des sources de Red Hat."
  },
  {
   "id": "rocky-1-03",
   "level": 1,
-  "q": "Qu'est-ce qu'un fichier .rpm ?",
+  "q": "`rpm -qa | grep openssl` affiche des lignes. Qu'apprends-tu ?",
   "choices": [
-   "Un paquet pour les systèmes de type Red Hat",
-   "Une image disque",
-   "Un module du noyau",
-   "Un paquet Rust"
+   "Quels paquets openssl sont installés, et leurs versions",
+   "Où est openssl sur le disque",
+   "Quelles mises à jour d'openssl attendent",
+   "Quels services utilisent openssl"
   ],
   "answer": 0,
-  "explain": "rpm -qa liste ceux qui sont installés."
+  "explain": "rpm -qa liste chaque paquet installé avec sa version : premier réflexe quand une faille est annoncée."
  },
  {
   "id": "rocky-1-04",
   "level": 1,
-  "q": "Quel outil de pare-feu est fourni avec Rocky ?",
+  "q": "Un serveur web tourne sur Rocky, mais personne ne l'atteint. Cause probable ?",
   "choices": [
-   "firewalld (firewall-cmd)",
-   "ufw",
-   "pf",
-   "ipfw"
+   "firewalld n'autorise pas encore http",
+   "SELinux est désactivé",
+   "Le cache dnf est vieux",
+   "IPv6 est activé"
   ],
   "answer": 0,
-  "explain": "firewall-cmd --add-service=http --permanent."
+  "explain": "firewall-cmd --add-service=http --permanent, puis firewall-cmd --reload."
  },
  {
   "id": "rocky-1-05",
   "level": 1,
-  "q": "Que fait SELinux ?",
+  "q": "Pourquoi garder SELinux en enforcing plutôt que le couper ?",
   "choices": [
-   "Ajoute des règles d'accès en plus des droits",
-   "Chiffre le disque",
-   "Accélère Linux",
-   "Gère les paquets"
+   "Il enferme un service piraté dans ce qui lui est permis",
+   "Il rend le système plus rapide",
+   "dnf en a besoin",
+   "Il chiffre les fichiers"
   ],
   "answer": 0,
-  "explain": "getenforce montre son mode."
+  "explain": "Un serveur web compromis ne peut toujours pas lire /home ni ouvrir des ports inattendus. getenforce montre le mode."
  },
  {
   "id": "rocky-1-06",
   "level": 1,
-  "q": "Où sont configurés les dépôts dnf ?",
+  "q": "Où voir quels dépôts un serveur Rocky accepte ?",
   "choices": [
    "/etc/yum.repos.d/",
-   "/etc/apt/sources.list",
+   "/etc/apt/sources.list.d/",
    "/etc/dnf/sources",
-   "/var/repos"
+   "/var/lib/rpm/"
   ],
   "answer": 0,
-  "explain": "Un fichier .repo par dépôt."
+  "explain": "Un fichier .repo chacun ; gpgcheck=1 et une ligne gpgkey= veulent dire paquets vérifiés. dnf repolist montre les actifs."
  },
  {
   "id": "rocky-1-07",
   "level": 1,
-  "q": "Quelle commande cherche des mises à jour ?",
+  "q": "Quelle commande liste les mises à jour en attente sans les installer ?",
   "choices": [
    "dnf check-update",
-   "dnf refresh",
-   "apt list --upgradable",
-   "rpm -U"
+   "dnf upgrade",
+   "rpm -U",
+   "dnf refresh"
   ],
   "answer": 0,
-  "explain": "dnf upgrade les installe."
+  "explain": "Il sort avec 100 quand des mises à jour attendent, 0 sinon : pratique dans les scripts de supervision."
  },
  {
   "id": "rocky-1-08",
   "level": 1,
-  "q": "Qu'est-ce qu'EPEL ?",
+  "q": "Que faut-il savoir avant d'activer EPEL ?",
   "choices": [
-   "Extra Packages for Enterprise Linux",
-   "Un patch du noyau",
-   "Un module de sécurité",
-   "L'installateur de Rocky"
+   "Ses paquets viennent de la communauté, pas de Rocky",
+   "Il remplace le noyau",
+   "Il faut une licence payante",
+   "Il coupe SELinux"
   ],
   "answer": 0,
-  "explain": "dnf install epel-release l'active."
+  "explain": "Extra Packages for Enterprise Linux : utile et signé, mais un éditeur de plus à qui tu fais confiance."
  },
  {
   "id": "rocky-1-09",
   "level": 1,
-  "q": "Quelle commande montre la version de Rocky ?",
+  "q": "Un script doit marcher sur Rocky comme sur Debian. Où lit-il la distribution ?",
   "choices": [
-   "cat /etc/rocky-release",
-   "rocky --version",
-   "uname -v",
-   "dnf version"
+   "/etc/os-release",
+   "/etc/rocky-release",
+   "uname -r",
+   "/etc/issue.net"
   ],
   "answer": 0,
-  "explain": "/etc/os-release marche sur toutes les distributions."
+  "explain": "Source-le et utilise $ID et $VERSION_ID. uname ne connaît que le noyau."
  },
  {
   "id": "rocky-1-10",
   "level": 1,
-  "q": "Quel outil gère les services ?",
+  "q": "Comment n'appliquer que les mises à jour de sécurité ?",
   "choices": [
-   "systemctl",
-   "service-manager",
-   "rc-service",
-   "launchctl"
+   "dnf upgrade --security",
+   "dnf install security",
+   "dnf check --cve",
+   "rpm -U --security"
   ],
   "answer": 0,
-  "explain": "Comme sur la plupart des distributions récentes."
+  "explain": "dnf updateinfo list --security les montre d'abord, avec leur bulletin."
  },
  {
   "id": "rocky-2-01",
   "level": 2,
-  "q": "Quel mode fait que SELinux note sans bloquer ?",
+  "q": "Que fait le mode permissive de SELinux ?",
   "choices": [
-   "permissive",
-   "disabled",
-   "enforcing",
-   "audit"
+   "Il note ce qu'il bloquerait, et ne bloque rien",
+   "Il bloque tout ce qui n'est pas permis",
+   "Il coupe SELinux pour de bon",
+   "Il n'autorise que root"
   ],
   "answer": 0,
-  "explain": "setenforce 0 passe en permissive jusqu'au redémarrage."
+  "explain": "Utile pour diagnostiquer ; ne le laisse pas. setenforce 1 revient en enforcing."
  },
  {
   "id": "rocky-2-02",
   "level": 2,
-  "q": "Comment remettre l'étiquette SELinux par défaut d'un fichier ?",
+  "q": "Tu as déplacé une page de ton home vers /var/www ; Apache répond 403. Pourquoi ?",
   "choices": [
-   "restorecon -v fichier",
-   "chmod -Z fichier",
-   "chcon --reset",
-   "selinux fix fichier"
+   "Le fichier a gardé l'étiquette SELinux de ton home",
+   "Apache ne sait pas lire le HTML",
+   "mv a retiré le droit de lecture",
+   "firewalld le bloque"
   ],
   "answer": 0,
-  "explain": "ls -Z montre les étiquettes."
+  "explain": "mv garde l'étiquette (user_home_t) ; restorecon -Rv /var/www remet la bonne. ls -Z montre les étiquettes."
  },
  {
   "id": "rocky-2-03",
   "level": 2,
-  "q": "Où apparaissent les refus de SELinux ?",
+  "q": "Une appli échoue et tu soupçonnes SELinux. Où est la preuve ?",
   "choices": [
-   "/var/log/audit/audit.log",
-   "/var/log/selinux",
-   "Seulement dans dmesg",
-   "/etc/selinux/log"
+   "Les refus AVC du journal d'audit : ausearch -m avc",
+   "/var/log/selinux.log",
+   "dmesg seulement",
+   "/etc/selinux/config"
   ],
   "answer": 0,
-  "explain": "ausearch -m avc ou sealert aident à les lire."
+  "explain": "Pas de ligne AVC, pas SELinux. sealert explique un refus et propose une solution."
  },
  {
   "id": "rocky-2-04",
   "level": 2,
-  "q": "Que sont les modules/flux AppStream ?",
+  "q": "Que vérifie `rpm -V paquet` ?",
   "choices": [
-   "Plusieurs versions d'un ensemble de paquets, au choix",
-   "Des flux vidéo",
-   "Des modules du noyau",
-   "Des images de conteneurs"
+   "Les fichiers installés face au paquet : taille, empreinte…",
+   "La signature du paquet en ligne",
+   "La version la plus récente",
+   "Les dépendances du paquet"
   ],
   "answer": 0,
-  "explain": "dnf module list."
+  "explain": "Sortie vide = rien de changé. Un 5 veut dire contenu modifié : normal pour une config, inquiétant pour un binaire."
  },
  {
   "id": "rocky-2-05",
   "level": 2,
-  "q": "Comment voir quel paquet possède un fichier ?",
+  "q": "Un binaire étrange est dans /usr/sbin. Comment savoir à quel paquet il appartient ?",
   "choices": [
-   "rpm -qf /chemin/fichier",
-   "dnf owner fichier",
-   "rpm -l fichier",
-   "which -p fichier"
+   "rpm -qf /usr/sbin/nom",
+   "dnf owner nom",
+   "rpm -l nom",
+   "which -p nom"
   ],
   "answer": 0,
-  "explain": "dnf provides marche aussi pour les fichiers pas encore installés."
+  "explain": "'not owned by any package' sur un chemin système mérite un examen. dnf provides cherche dans les paquets absents."
  },
  {
   "id": "rocky-2-06",
@@ -223,40 +223,40 @@
  {
   "id": "rocky-2-08",
   "level": 2,
-  "q": "Quelle commande liste les booléens SELinux ?",
+  "q": "httpd doit joindre une base distante et SELinux le bloque. La solution propre ?",
   "choices": [
-   "getsebool -a",
-   "selinux --bools",
-   "setsebool -l",
-   "lsbool"
+   "setsebool -P httpd_can_network_connect_db on",
+   "setenforce 0",
+   "chmod 777 /var/www",
+   "Arrêter firewalld"
   ],
   "answer": 0,
-  "explain": "setsebool -P nom on rend un changement permanent."
+  "explain": "Les booléens activent des comportements permis ; getsebool -a les liste, -P garde le réglage au redémarrage."
  },
  {
   "id": "rocky-2-09",
   "level": 2,
-  "q": "Qu'est-ce que `cockpit` sur Rocky ?",
+  "q": "Comment voir tout ce que firewalld laisse entrer ?",
   "choices": [
-   "Une console d'administration web",
-   "Un gestionnaire de paquets",
-   "Un pare-feu",
-   "Un moteur de conteneurs"
+   "firewall-cmd --list-all",
+   "iptables -L seulement",
+   "ss -tlnp",
+   "systemctl status firewalld"
   ],
   "answer": 0,
-  "explain": "systemctl enable --now cockpit.socket."
+  "explain": "Il montre les services, ports et règles de la zone. ss montre ce qui écoute, pas ce que le pare-feu permet."
  },
  {
   "id": "rocky-2-10",
   "level": 2,
-  "q": "Qu'est-ce qui remplace docker par défaut sur Rocky ?",
+  "q": "Quel gain de sécurité apporte podman face au docker classique ?",
   "choices": [
-   "podman",
-   "lxc",
-   "rkt",
-   "containerd-cli"
+   "Pas de démon root : les conteneurs tournent sous ton compte",
+   "Il chiffre les images",
+   "Il n'a pas de réseau",
+   "Il cherche des virus dans les images"
   ],
   "answer": 0,
-  "explain": "À peu près les mêmes commandes, sans démon, sans root."
+  "explain": "Sans root, une évasion atterrit dans ton compte, pas en root. Les commandes sont presque celles de docker."
  }
 ]

@@ -2,15 +2,15 @@
  {
   "id": "c-1-01",
   "level": 1,
-  "q": "Which function prints formatted text?",
+  "q": "Why check what malloc returns?",
   "choices": [
-   "printf",
-   "print",
-   "echo",
-   "cout"
+   "It returns NULL when memory runs out",
+   "It returns the size",
+   "It can return a negative number",
+   "It never fails, no need"
   ],
   "answer": 0,
-  "explain": "#include <stdio.h> first."
+  "explain": "Using NULL crashes, or worse. if (!p) { perror(\"malloc\"); exit(1); }"
  },
  {
   "id": "c-1-02",
@@ -184,15 +184,15 @@
  {
   "id": "c-2-05",
   "level": 2,
-  "q": "What is `sizeof(char)`?",
+  "q": "Why is `printf(user_input)` dangerous?",
   "choices": [
-   "1",
-   "2",
-   "4",
-   "Depends on the string"
+   "%x and %n in the input read and write memory",
+   "It prints too slowly",
+   "It adds a newline",
+   "It can't print accents"
   ],
   "answer": 0,
-  "explain": "Always 1 by definition."
+  "explain": "A format string bug. Always write printf(\"%s\", user_input). -Wformat-security warns."
  },
  {
   "id": "c-2-06",
@@ -210,15 +210,15 @@
  {
   "id": "c-2-07",
   "level": 2,
-  "q": "What does `volatile` tell the compiler?",
+  "q": "What can go wrong in `malloc(count * size)` when count comes from input?",
   "choices": [
-   "The value can change outside the program's view",
-   "Cache it",
-   "Make it constant",
-   "Put it in a register"
+   "The product overflows and too little is allocated",
+   "malloc refuses big numbers",
+   "It allocates on the stack",
+   "Nothing, malloc checks it"
   ],
   "answer": 0,
-  "explain": "For hardware registers and signal handlers."
+  "explain": "Then writing count items overflows the buffer. calloc(count, size) checks the multiplication."
  },
  {
   "id": "c-2-08",

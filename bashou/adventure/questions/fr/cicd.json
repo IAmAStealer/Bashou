@@ -2,15 +2,15 @@
  {
   "id": "cicd-1-01",
   "level": 1,
-  "q": "Que veut dire CI ?",
+  "q": "À quoi sert l'intégration continue (CI) ?",
   "choices": [
-   "Continuous Integration (intégration continue)",
-   "Code Inspection",
-   "Container Image",
-   "Central Infrastructure"
+   "Construire et tester chaque changement automatiquement",
+   "Fusionner les branches sans relecture",
+   "Déployer le vendredi",
+   "Écrire les tests à ta place"
   ],
   "answer": 0,
-  "explain": "Compiler et tester chaque changement automatiquement."
+  "explain": "Les problèmes apparaissent quelques minutes après un push, quand le changement est encore frais."
  },
  {
   "id": "cicd-1-02",
@@ -28,15 +28,15 @@
  {
   "id": "cicd-1-03",
   "level": 1,
-  "q": "Qu'est-ce qu'une étape (stage/job) de pipeline ?",
+  "q": "Un job a besoin d'un outil. Quelle est la meilleure façon de l'avoir ?",
   "choices": [
-   "Une étape comme build, test ou deploy",
-   "Une branche git",
-   "Une image Docker",
-   "Un serveur"
+   "Une version figée, dans l'image du job ou un fichier lock",
+   "Toujours la dernière, téléchargée à chaque passage",
+   "Installée à la main sur le runner une fois",
+   "Copiée depuis ton portable"
   ],
   "answer": 0,
-  "explain": "Les jobs peuvent tourner en parallèle ou dépendre les uns des autres."
+  "explain": "Des versions figées donnent le même build aujourd'hui et dans six mois, et leurs changements passent en relecture."
  },
  {
   "id": "cicd-1-04",
@@ -54,41 +54,41 @@
  {
   "id": "cicd-1-05",
   "level": 1,
-  "q": "Qu'est-ce qu'un artefact ?",
+  "q": "Pourquoi construire une fois et déployer le même artefact partout ?",
   "choices": [
-   "Un fichier produit par un job et conservé",
-   "Un bug",
-   "Un vieux commit",
-   "Un secret"
+   "Ce que tu as testé est ce qui tourne en production",
+   "Ça prend moins de disque",
+   "Reconstruire est interdit",
+   "Les artefacts sont chiffrés"
   ],
   "answer": 0,
-  "explain": "Binaires, rapports, paquets…"
+  "explain": "Reconstruire par environnement peut tirer d'autres versions. Artefacts : binaires, paquets, images, rapports."
  },
  {
   "id": "cicd-1-06",
   "level": 1,
   "q": "Où doivent vivre les mots de passe d'un pipeline ?",
   "choices": [
-   "Dans le coffre à secrets de la CI",
+   "Dans le stockage de secrets de la CI",
    "Dans le fichier YAML",
    "Dans le README",
    "Dans un message de commit"
   ],
   "answer": 0,
-  "explain": "Ils sont masqués dans les logs et jamais committés."
+  "explain": "Là, les secrets sont masqués dans les logs et jamais commités. Ne les donne qu'aux jobs qui en ont besoin."
  },
  {
   "id": "cicd-1-07",
   "level": 1,
-  "q": "Que veut dire CD ?",
+  "q": "Quelqu'un a commité un mot de passe, puis l'a retiré au commit suivant. C'est réglé ?",
   "choices": [
-   "Continuous Delivery ou Deployment",
-   "Seulement Code Deploy",
-   "Compact Disc",
-   "Central Docs"
+   "Non : il reste dans l'historique ; il faut le révoquer",
+   "Oui, le fichier ne l'a plus",
+   "Oui, si le dépôt est privé",
+   "Oui, après git gc"
   ],
   "answer": 0,
-  "explain": "Delivery : prêt à publier ; deployment : publié automatiquement."
+  "explain": "Tout clone l'a. D'abord changer le secret ; réécrire l'historique vient après, si besoin. Les scanners de secrets l'attrapent tôt."
  },
  {
   "id": "cicd-1-08",
@@ -119,15 +119,15 @@
  {
   "id": "cicd-1-10",
   "level": 1,
-  "q": "Qu'est-ce que YAML ?",
+  "q": "Dans un fichier YAML de pipeline, qu'est-ce qui casse le plus souvent ?",
   "choices": [
-   "Un format texte pour la configuration",
-   "Un langage de programmation",
-   "Un conteneur",
-   "Un framework de test"
+   "Une mauvaise indentation",
+   "Les commentaires",
+   "Les lignes longues",
+   "Les lignes vides"
   ],
   "answer": 0,
-  "explain": "L'indentation compte, comme en Python."
+  "explain": "L'indentation dit qui appartient à quoi, comme en Python. Les tabulations sont interdites ; un lint de la CI le voit."
  },
  {
   "id": "cicd-2-01",
@@ -145,15 +145,15 @@
  {
   "id": "cicd-2-02",
   "level": 2,
-  "q": "Qu'est-ce qu'un runner ?",
+  "q": "Pourquoi ne pas lancer les pull requests d'un dépôt public sur ton propre runner ?",
   "choices": [
-   "La machine qui exécute les jobs",
-   "Un type de test",
-   "Un script de déploiement",
-   "Un hook git"
+   "La PR de n'importe qui lancerait du code chez toi",
+   "Les runners maison sont plus lents",
+   "Les dépôts publics ne peuvent pas",
+   "Ils ne gèrent pas Linux"
   ],
   "answer": 0,
-  "explain": "Hébergé par le service de CI ou par toi."
+  "explain": "La PR d'un fork modifie le workflow ou les tests : ce code tourne avec les accès de ton runner. Utilise des runners hébergés jetables."
  },
  {
   "id": "cicd-2-03",
@@ -223,40 +223,40 @@
  {
   "id": "cicd-2-08",
   "level": 2,
-  "q": "Que fait une clé `needs:` (ou `dependencies`) ?",
+  "q": "Comment un job de déploiement obtient-il ses accès au cloud ?",
   "choices": [
-   "Lance un job après la réussite d'autres",
-   "Installe des paquets",
-   "Rend un job facultatif",
-   "Définit des secrets"
+   "Des jetons courts émis à chaque passage (OIDC)",
+   "Une clé admin longue durée dans un secret",
+   "La clé personnelle d'un développeur",
+   "Une clé écrite dans le dépôt"
   ],
   "answer": 0,
-  "explain": "Construit un graphe de jobs."
+  "explain": "Un jeton qui expire en quelques minutes vaut peu s'il fuit. Limite-le à l'environnement de ce job."
  },
  {
   "id": "cicd-2-09",
   "level": 2,
-  "q": "Qu'est-ce que l'infrastructure as code ?",
+  "q": "Pourquoi décrire les serveurs dans des fichiers versionnés (Ansible, Terraform) ?",
   "choices": [
-   "Serveurs et config décrits dans des fichiers versionnés",
-   "Du code qui tourne sur des serveurs",
-   "Écrire des serveurs en C",
-   "La documentation des serveurs"
+   "Les changements sont relus, rejouables et annulables",
+   "Les serveurs vont plus vite",
+   "Plus personne n'a besoin d'accès",
+   "Ça remplace les sauvegardes"
   ],
   "answer": 0,
-  "explain": "Terraform, Ansible, …"
+  "explain": "Infrastructure as code : git log dit qui a changé quoi, et un nouveau serveur se construit pareil."
  },
  {
   "id": "cicd-2-10",
   "level": 2,
-  "q": "Qu'est-ce qu'un rollback ?",
+  "q": "Que veut dire idempotent pour une tâche d'automatisation ?",
   "choices": [
-   "Revenir à la dernière version qui marchait",
-   "Supprimer le dépôt",
-   "Relancer les tests",
-   "Réduire le nombre de serveurs"
+   "La relancer ne change rien la deuxième fois",
+   "Elle tourne sur tous les serveurs à la fois",
+   "Elle n'échoue jamais",
+   "On ne peut pas l'annuler"
   ],
   "answer": 0,
-  "explain": "Prévois-le avant d'en avoir besoin."
+  "explain": "« Assurer que la ligne est dans le fichier », pas « ajouter la ligne » : on peut relancer après un échec. Ansible affiche changed=0."
  }
 ]

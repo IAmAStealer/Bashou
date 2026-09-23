@@ -2,54 +2,54 @@
  {
   "id": "python-1-01",
   "level": 1,
-  "q": "Comment afficher hello en Python 3 ?",
+  "q": "Ton script a rencontré une erreur. Comment le dire au shell ou à cron qui l'a lancé ?",
   "choices": [
-   "print(\"hello\")",
-   "echo \"hello\"",
-   "print \"hello\"",
-   "puts(\"hello\")"
+   "Écrire sur stderr et sortir avec un code non nul",
+   "print('ERREUR') et sortir normalement",
+   "Écrire l'erreur dans un commentaire",
+   "Ne rien lever, juste s'arrêter"
   ],
   "answer": 0,
-  "explain": "print est une fonction depuis Python 3."
+  "explain": "sys.exit(1) (ou une exception non rattrapée) donne un $? non nul, que les && et les alertes cron remarquent."
  },
  {
   "id": "python-1-02",
   "level": 1,
-  "q": "Quel est le type de `[1, 2, 3]` ?",
+  "q": "Comment lire un fichier de config JSON en données Python ?",
   "choices": [
-   "list",
-   "tuple",
-   "set",
-   "array"
+   "json.load(fh)",
+   "eval(fh.read())",
+   "fh.read().split(',')",
+   "import config.json"
   ],
   "answer": 0,
-  "explain": "Les listes utilisent [ ], les tuples ( ), les ensembles { }."
+  "explain": "eval lance le code que contient le fichier : jamais sur des données. json.load ne fait qu'analyser."
  },
  {
   "id": "python-1-03",
   "level": 1,
-  "q": "Que renvoie `len(\"bash\")` ?",
+  "q": "Où un script doit-il prendre son jeton d'API ?",
   "choices": [
-   "4",
-   "3",
-   "5",
-   "\"bash\""
+   "Une variable d'environnement ou un fichier privé",
+   "Une constante en haut du script",
+   "Un commentaire dans le script",
+   "Le nom du script"
   ],
   "answer": 0,
-  "explain": "len compte les caractères."
+  "explain": "os.environ['API_TOKEN']. Le code se partage et se commite ; le jeton fuit avec lui."
  },
  {
   "id": "python-1-04",
   "level": 1,
-  "q": "Comment commencer un commentaire ?",
+  "q": "Quel module construit proprement des chemins de fichiers ?",
   "choices": [
-   "#",
-   "//",
-   "--",
-   "/*"
+   "pathlib",
+   "string",
+   "sys",
+   "re"
   ],
   "answer": 0,
-  "explain": "Tout ce qui suit # sur la ligne est ignoré."
+  "explain": "Path('/srv') / 'app' / 'config.json'. Il y a aussi .exists(), .read_text(), .glob('*.log')."
  },
  {
   "id": "python-1-05",
@@ -80,15 +80,15 @@
  {
   "id": "python-1-07",
   "level": 1,
-  "q": "Combien vaut `3 // 2` ?",
+  "q": "`python3 outil.py alice 3` : où le script trouve-t-il alice et 3 ?",
   "choices": [
-   "1",
-   "1.5",
-   "2",
-   "Erreur"
+   "sys.argv[1] et sys.argv[2], en chaînes",
+   "sys.argv[0] et sys.argv[1]",
+   "input(), deux fois",
+   "os.environ['ARGS']"
   ],
   "answer": 0,
-  "explain": "// est la division entière ; / donne 1.5."
+  "explain": "argv[0] est le nom du script, et 3 arrive en '3'. argparse ajoute --help et les contrôles gratuitement."
  },
  {
   "id": "python-1-08",
@@ -119,15 +119,15 @@
  {
   "id": "python-1-10",
   "level": 1,
-  "q": "Comment installer un paquet pour ton utilisateur ?",
+  "q": "`pip install requests` répond externally-managed-environment. Que fais-tu ?",
   "choices": [
-   "pip install --user nom",
-   "apt install python-nom seulement",
-   "python get nom",
-   "import --install nom"
+   "Utiliser un venv, ou le paquet de la distribution",
+   "sudo pip install requests",
+   "Toujours ajouter --break-system-packages",
+   "Réinstaller Python"
   ],
   "answer": 0,
-  "explain": "Mieux : un environnement virtuel (python3 -m venv)."
+  "explain": "La distribution protège son propre Python. python3 -m venv .venv, puis .venv/bin/pip install requests."
  },
  {
   "id": "python-1-11",
@@ -197,28 +197,28 @@
  {
   "id": "python-2-04",
   "level": 2,
-  "q": "Que reçoit `*args` ?",
+  "q": "Pourquoi yaml.safe_load plutôt que yaml.load sur un fichier de config ?",
   "choices": [
-   "Les arguments positionnels en plus, dans un tuple",
-   "Les arguments nommés",
-   "Un pointeur",
-   "Seulement le premier argument"
+   "load crée n'importe quel objet Python demandé",
+   "safe_load est plus rapide",
+   "load ne lit pas les listes",
+   "safe_load vérifie l'orthographe"
   ],
   "answer": 0,
-  "explain": "**kwargs reçoit les arguments nommés en plus, dans un dict."
+  "explain": "Un YAML piégé peut alors lancer du code. safe_load ne crée que des données simples : dicts, listes, chaînes, nombres."
  },
  {
   "id": "python-2-05",
   "level": 2,
-  "q": "Comment attraper une erreur ?",
+  "q": "Pourquoi ne pas envelopper tout un script dans un `except:` nu ?",
   "choices": [
-   "try: … except ValueError: …",
-   "catch ValueError: …",
-   "on error: …",
-   "if error: …"
+   "Il cache les vrais bugs, même Ctrl+C",
+   "Il ralentit le script",
+   "Python l'interdit",
+   "Il n'attrape que les erreurs de syntaxe"
   ],
   "answer": 0,
-  "explain": "Attrape l'exception précise, pas tout."
+  "explain": "Attrape les erreurs attendues (except FileNotFoundError:) et laisse le reste planter bruyamment."
  },
  {
   "id": "python-2-06",
@@ -236,15 +236,15 @@
  {
   "id": "python-2-07",
   "level": 2,
-  "q": "À quoi sert un environnement virtuel ?",
+  "q": "Comment faire que les dépendances d'un script s'installent pareil partout ?",
   "choices": [
-   "Des paquets séparés pour chaque projet",
-   "Lancer Python dans une VM",
-   "Du code plus rapide",
-   "Cacher du code"
+   "Les figer dans requirements.txt ou un fichier lock",
+   "Dire d'installer la dernière version",
+   "Copier site-packages",
+   "Les importer dans un try"
   ],
   "answer": 0,
-  "explain": "python3 -m venv .venv, puis source .venv/bin/activate."
+  "explain": "nom==1.2.3 dans requirements.txt ; pip install -r requirements.txt dans un venv neuf le reconstruit."
  },
  {
   "id": "python-2-08",
@@ -275,14 +275,14 @@
  {
   "id": "python-2-10",
   "level": 2,
-  "q": "Que fait `yield` d'une fonction ?",
+  "q": "subprocess.run(['cp', a, b]) a échoué, mais le script a continué. Que manquait-il ?",
   "choices": [
-   "Un générateur",
-   "Seulement une coroutine",
-   "Une classe",
-   "Une fonction plus rapide"
+   "check=True, qui lève une erreur si le code est non nul",
+   "shell=True",
+   "capture_output=True",
+   "text=True"
   ],
   "answer": 0,
-  "explain": "Il produit les valeurs une par une, à la demande."
+  "explain": "Sans check=True, l'échec n'est que dans result.returncode, que personne n'a lu."
  }
 ]

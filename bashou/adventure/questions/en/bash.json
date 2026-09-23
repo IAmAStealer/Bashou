@@ -2,210 +2,210 @@
  {
   "id": "bash-1-01",
   "level": 1,
-  "q": "Which command shows the folder you are in?",
+  "q": "A script runs `rm -r build/`. Which build/ does it delete?",
   "choices": [
-   "pwd",
-   "ls",
-   "cd",
-   "whoami"
+   "The one in the folder the script is run from",
+   "The one next to the script file",
+   "The one in your home folder",
+   "The first one found in $PATH"
   ],
   "answer": 0,
-  "explain": "pwd = print working directory."
+  "explain": "Relative paths start from the current folder (pwd). Scripts cd to a known place first, or use absolute paths."
  },
  {
   "id": "bash-1-02",
   "level": 1,
-  "q": "How do you go back to your home folder?",
+  "q": "A tutorial says `curl https://get.example.sh | sudo bash`. What is the risk?",
   "choices": [
-   "cd",
-   "cd /",
-   "home",
-   "ls ~"
+   "You run code you never read, as root",
+   "curl downloads too slowly for bash",
+   "bash cannot read a script from a pipe",
+   "None: HTTPS makes it safe"
   ],
   "answer": 0,
-  "explain": "cd with no argument goes home (same as cd ~)."
+  "explain": "HTTPS proves who sent the script, not what it does. Download it, read it, then run it."
  },
  {
   "id": "bash-1-03",
   "level": 1,
-  "q": "Which command lists hidden files too?",
+  "q": "Why don't .bashrc or .ssh show up in a plain `ls`?",
   "choices": [
-   "ls -a",
-   "ls -l",
-   "ls -h",
-   "ls -r"
+   "Names starting with a dot are hidden",
+   "They belong to root",
+   "They are links, ls skips links",
+   "They are empty"
   ],
   "answer": 0,
-  "explain": "-a shows every file, including names starting with a dot."
+  "explain": "ls -a shows them. Much of your config (and an attacker's leftovers) hides behind that dot."
  },
  {
   "id": "bash-1-04",
   "level": 1,
-  "q": "What does `mkdir -p a/b/c` do?",
+  "q": "Why do scripts write `mkdir -p logs` rather than `mkdir logs`?",
   "choices": [
-   "Creates a, b and c as needed",
-   "Fails if a doesn't exist",
-   "Creates only c",
-   "Deletes a/b/c"
+   "It doesn't fail when logs already exists",
+   "It is faster",
+   "It makes the folder private",
+   "It creates it in your home"
   ],
   "answer": 0,
-  "explain": "-p creates the missing parents and doesn't complain if they exist."
+  "explain": "A script must be safe to run twice (idempotent). -p also creates missing parent folders."
  },
  {
   "id": "bash-1-05",
   "level": 1,
-  "q": "Which symbol sends a command's output to a file, replacing it?",
+  "q": "You want to add a line to /etc/hosts without losing the rest. Which do you use?",
   "choices": [
-   ">",
    ">>",
+   ">",
    "|",
    "<"
   ],
   "answer": 0,
-  "explain": "> overwrites the file; >> appends to it."
+  "explain": "> empties the file first: one wrong > wipes it. `set -o noclobber` makes > refuse to overwrite."
  },
  {
   "id": "bash-1-06",
   "level": 1,
-  "q": "What does `|` do between two commands?",
+  "q": "`grep error app.log | wc -l` prints 12. What is 12?",
   "choices": [
-   "Sends the output of the first into the second",
-   "Runs them at the same time, unrelated",
-   "Runs the second only if the first fails",
-   "Writes the output to a file"
+   "The number of lines that contain error",
+   "The number of times error appears",
+   "The number of lines in app.log",
+   "grep's exit code"
   ],
   "answer": 0,
-  "explain": "A pipe connects stdout of the left command to stdin of the right one."
+  "explain": "The pipe feeds grep's matching lines into wc -l, which counts lines. grep -c does it alone."
  },
  {
   "id": "bash-1-07",
   "level": 1,
-  "q": "Which key completes a command or file name?",
+  "q": "How do you find a long command you typed yesterday?",
   "choices": [
-   "Tab",
-   "Ctrl+C",
-   "Enter",
-   "Esc"
+   "Ctrl+R, then type a piece of it",
+   "Tab twice",
+   "Scroll up the screen",
+   "cat /var/log/commands"
   ],
   "answer": 0,
-  "explain": "Tab completes; press it twice to see all the choices."
+  "explain": "History lives in ~/.bash_history. Passwords typed on a command line land there too."
  },
  {
   "id": "bash-1-08",
   "level": 1,
-  "q": "How do you see the manual of a command?",
+  "q": "You forgot a command's options. Where is the reliable answer, even offline?",
   "choices": [
-   "man ls",
-   "help ls",
-   "ls --manual",
-   "info-ls"
+   "cmd --help or man cmd",
+   "The first forum answer",
+   "The file /etc/cmd.conf",
+   "Your shell history"
   ],
   "answer": 0,
-  "explain": "man opens the manual page; q quits it."
+  "explain": "The help that ships with the tool matches the version you have. q quits man, / searches in it."
  },
  {
   "id": "bash-1-09",
   "level": 1,
-  "q": "What does `$?` hold right after a command?",
+  "q": "A script must know whether `cp` worked. What does it look at?",
   "choices": [
-   "Its exit code",
-   "Its process ID",
-   "Its output",
-   "The last argument"
+   "Its exit code: 0 means success",
+   "Whether cp printed nothing",
+   "The size of the copy",
+   "Whether cp printed OK"
   ],
   "answer": 0,
-  "explain": "0 means success, anything else is an error."
+  "explain": "Every command returns an exit code, in $?. `if cp a b; then …` tests it directly."
  },
  {
   "id": "bash-1-10",
   "level": 1,
-  "q": "Which command prints a text?",
+  "q": "Why is `mysql -pSecret123` a bad way to give a password?",
   "choices": [
-   "echo",
-   "print",
-   "say",
-   "cat"
+   "It lands in your history and shows in ps",
+   "The password gets too long",
+   "The shell mangles special characters",
+   "It only works once"
   ],
   "answer": 0,
-  "explain": "echo prints its arguments; cat prints files."
+  "explain": "Anyone on the machine can see command lines with ps. Let the tool prompt, or use a root-only config file."
  },
  {
   "id": "bash-1-11",
   "level": 1,
-  "q": "What does `rm -r folder` do?",
+  "q": "rm has no trash. What's a good habit before `rm *.log`?",
   "choices": [
-   "Deletes the folder and everything in it",
-   "Renames the folder",
-   "Only deletes empty folders",
-   "Moves it to the trash"
+   "Run `ls *.log` first to see what matches",
+   "Add -f so it doesn't ask",
+   "Run it as root",
+   "Add -r to be thorough"
   ],
   "answer": 0,
-  "explain": "rm has no trash: -r deletes recursively, for good."
+  "explain": "The glob is expanded before rm runs: ls with the same pattern shows exactly what goes."
  },
  {
   "id": "bash-1-12",
   "level": 1,
-  "q": "How do you run the previous command again?",
+  "q": "What is stderr for?",
   "choices": [
-   "!!",
-   "$$",
-   "..",
-   "!?"
+   "Error messages, kept apart from the real output",
+   "Standard file permissions",
+   "The input you type",
+   "A log file in /var/log"
   ],
   "answer": 0,
-  "explain": "!! expands to the last command (sudo !! reruns it with sudo)."
+  "explain": "stdout (1) carries results, stderr (2) errors: `cmd > out.txt` saves results and still shows the errors."
  },
  {
   "id": "bash-2-01",
   "level": 2,
-  "q": "What does `cmd 2>&1` do?",
+  "q": "A cron job's errors vanish. Which line logs them along with the output?",
   "choices": [
-   "Sends errors where the normal output goes",
-   "Runs cmd twice",
-   "Hides all output",
-   "Sends output to file 1"
+   "job >> job.log 2>&1",
+   "job 2>&1 >> job.log",
+   "job >> job.log",
+   "job | tee 2"
   ],
   "answer": 0,
-  "explain": "2 is stderr, 1 is stdout: 2>&1 merges them."
+  "explain": "Order matters: send stdout to the file first, then point stderr (2) where stdout (1) now goes."
  },
  {
   "id": "bash-2-02",
   "level": 2,
-  "q": "What is `$(date)` inside a command?",
+  "q": "A backup script writes `backup-$(date +%F).tar.gz`. Which name comes out?",
   "choices": [
-   "The output of date, inserted there",
-   "A variable named date",
-   "The date in seconds",
-   "A comment"
+   "backup-2026-09-23.tar.gz, with today's date",
+   "backup-$(date +%F).tar.gz, as written",
+   "backup-date.tar.gz",
+   "An error: date is not a variable"
   ],
   "answer": 0,
-  "explain": "$( ) is command substitution."
+  "explain": "$( ) runs the command and puts its output there. date +%F gives YYYY-MM-DD, which sorts well."
  },
  {
   "id": "bash-2-03",
   "level": 2,
-  "q": "Which loop runs for each .log file?",
+  "q": "Which loop still works when file names contain spaces?",
   "choices": [
-   "for f in *.log; do …; done",
-   "while f in *.log; do …",
-   "loop *.log { … }",
-   "foreach f (*.log)"
+   "for f in *.log; do gzip \"$f\"; done",
+   "for f in $(ls *.log); do gzip $f; done",
+   "ls *.log | for f; do gzip $f; done",
+   "for f in \"$(ls)\"; do gzip \"$f\"; done"
   ],
   "answer": 0,
-  "explain": "The glob *.log expands to the matching file names."
+  "explain": "The glob gives one word per file; $(ls) is split on spaces. Always quote \"$f\"."
  },
  {
   "id": "bash-2-04",
   "level": 2,
-  "q": "What does `set -e` do in a script?",
+  "q": "Why start a script with `set -euo pipefail`?",
   "choices": [
-   "Stops the script at the first failing command",
-   "Prints each command",
-   "Exports every variable",
-   "Enables extended globs"
+   "It stops at a failed command, unset variable or broken pipe",
+   "It makes the script faster",
+   "It prints each command",
+   "It runs the script as root"
   ],
   "answer": 0,
-  "explain": "set -e exits on error; set -x prints each command."
+  "explain": "Without it, a script goes on after a failed cd and runs the next rm in the wrong place. set -x prints commands."
  },
  {
   "id": "bash-2-05",
@@ -223,66 +223,66 @@
  {
   "id": "bash-2-06",
   "level": 2,
-  "q": "What does `&&` do in `make && ./app`?",
+  "q": "Why write `cd /srv/app && rm -rf ./cache` rather than using `;`?",
   "choices": [
-   "Runs ./app only if make succeeded",
-   "Runs both at the same time",
-   "Runs ./app only if make failed",
-   "Pipes make into ./app"
+   "If cd fails, rm doesn't run in the wrong folder",
+   "&& is faster",
+   "; is not allowed there",
+   "&& runs both at once"
   ],
   "answer": 0,
-  "explain": "&& continues on success, || on failure."
+  "explain": "&& goes on only on success, || only on failure, ; always."
  },
  {
   "id": "bash-2-07",
   "level": 2,
-  "q": "Why quote \"$var\"?",
+  "q": "f='old notes.txt'. What does `rm $f` do?",
   "choices": [
-   "So spaces in it don't split it into several words",
-   "To make it read-only",
-   "To export it",
-   "It's never needed"
+   "Tries to delete two files: old and notes.txt",
+   "Deletes old notes.txt",
+   "Fails: the variable needs quotes inside",
+   "Nothing"
   ],
   "answer": 0,
-  "explain": "Unquoted variables are split on spaces and expanded as globs."
+  "explain": "Unquoted variables are split on spaces and expanded as globs. Write rm \"$f\"."
  },
  {
   "id": "bash-2-08",
   "level": 2,
-  "q": "Which command makes a script runnable?",
+  "q": "`./deploy.sh` says Permission denied, yet you own it. Why?",
   "choices": [
-   "chmod +x script.sh",
-   "run script.sh",
-   "exec script.sh",
-   "chown +x script.sh"
+   "It lacks the execute (x) permission",
+   "Only root may run scripts",
+   "The file is empty",
+   "Scripts need a .exe name"
   ],
   "answer": 0,
-  "explain": "The x permission lets you run it with ./script.sh."
+  "explain": "chmod +x deploy.sh, or bash deploy.sh. A disk mounted noexec blocks it too."
  },
  {
   "id": "bash-2-09",
   "level": 2,
-  "q": "What does `<<EOF` start?",
+  "q": "How does a script remove its temp file even when it fails half way?",
   "choices": [
-   "A heredoc: lines until EOF are the input",
-   "An end of file",
-   "A comparison",
-   "A background job"
+   "trap 'rm -f \"$tmp\"' EXIT",
+   "An rm on its last line",
+   "set -e",
+   "mktemp --autoremove"
   ],
   "answer": 0,
-  "explain": "Handy to feed several lines to a command."
+  "explain": "trap … EXIT runs on any exit, error or Ctrl+C. Pair it with tmp=$(mktemp)."
  },
  {
   "id": "bash-2-10",
   "level": 2,
-  "q": "What does `jobs` show?",
+  "q": "Why use `tmp=$(mktemp)` instead of a fixed /tmp/myscript.tmp?",
   "choices": [
-   "Commands running in the background of this shell",
-   "Every process on the machine",
-   "Scheduled cron jobs",
-   "Your job title"
+   "Another user could create or link that fixed name first",
+   "mktemp is faster",
+   "/tmp is read-only for scripts",
+   "Fixed names are too long"
   ],
   "answer": 0,
-  "explain": "fg brings one back, bg resumes it in the background."
+  "explain": "/tmp is shared: a planted symlink makes your script overwrite another file. mktemp picks a unique name, private to you."
  }
 ]

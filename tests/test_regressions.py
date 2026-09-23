@@ -357,3 +357,12 @@ class QuietTest(unittest.TestCase):
             c.last_command = -10 * 60_000                      # long pause: it would talk otherwise
             c.maybe_talk(0)
         self.assertEqual(c.notes, [])
+
+
+class PanelPercentTest(unittest.TestCase):
+    def test_percent_in_a_question(self):
+        """A question with `date +%F` crashed the adventure panel (text went through % formatting)."""
+        from bashou.adventure import Game
+        line = ("backup-$(date +%F).tar.gz", (200, 200, 200))
+        out = Game(80, 30).panel_text([line], (1, 1, 40, [line]))
+        self.assertIn("date +%F", out)

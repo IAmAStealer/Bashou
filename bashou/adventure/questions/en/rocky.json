@@ -15,184 +15,184 @@
  {
   "id": "rocky-1-02",
   "level": 1,
-  "q": "Rocky Linux is compatible with…",
+  "q": "Why do companies choose Rocky Linux for servers?",
   "choices": [
-   "Red Hat Enterprise Linux",
-   "Debian",
-   "Arch Linux",
-   "FreeBSD"
+   "It rebuilds RHEL: same packages, long support, free",
+   "It has the newest versions of everything",
+   "It is Debian with a new name",
+   "It needs no updates"
   ],
   "answer": 0,
-  "explain": "Built from the same sources, after CentOS changed course."
+  "explain": "About ten years of updates per major version, built from Red Hat's sources."
  },
  {
   "id": "rocky-1-03",
   "level": 1,
-  "q": "What is an .rpm file?",
+  "q": "`rpm -qa | grep openssl` prints lines. What do you learn?",
   "choices": [
-   "A package for Red Hat-like systems",
-   "A disk image",
-   "A kernel module",
-   "A Rust package"
+   "Which openssl packages and versions are installed",
+   "Where openssl is on disk",
+   "Which openssl updates are waiting",
+   "Which services use openssl"
   ],
   "answer": 0,
-  "explain": "rpm -qa lists installed ones."
+  "explain": "rpm -qa lists every installed package with its version: the first check when a vulnerability is announced."
  },
  {
   "id": "rocky-1-04",
   "level": 1,
-  "q": "Which firewall tool comes with Rocky?",
+  "q": "A web server runs on Rocky, but nobody can reach it. A likely cause?",
   "choices": [
-   "firewalld (firewall-cmd)",
-   "ufw",
-   "pf",
-   "ipfw"
+   "firewalld doesn't allow http yet",
+   "SELinux is disabled",
+   "The dnf cache is old",
+   "IPv6 is on"
   ],
   "answer": 0,
-  "explain": "firewall-cmd --add-service=http --permanent."
+  "explain": "firewall-cmd --add-service=http --permanent, then firewall-cmd --reload."
  },
  {
   "id": "rocky-1-05",
   "level": 1,
-  "q": "What does SELinux do?",
+  "q": "Why keep SELinux enforcing rather than turning it off?",
   "choices": [
-   "Extra access control rules on top of permissions",
-   "Encrypts the disk",
-   "Speeds up Linux",
-   "Manages packages"
+   "It confines a hacked service to what it's allowed",
+   "It makes the system faster",
+   "dnf needs it",
+   "It encrypts the files"
   ],
   "answer": 0,
-  "explain": "getenforce shows its mode."
+  "explain": "A compromised web server still can't read /home or open odd ports. getenforce shows the mode."
  },
  {
   "id": "rocky-1-06",
   "level": 1,
-  "q": "Where are dnf repositories configured?",
+  "q": "Where do you see which repositories a Rocky server trusts?",
   "choices": [
    "/etc/yum.repos.d/",
-   "/etc/apt/sources.list",
+   "/etc/apt/sources.list.d/",
    "/etc/dnf/sources",
-   "/var/repos"
+   "/var/lib/rpm/"
   ],
   "answer": 0,
-  "explain": "One .repo file per repository."
+  "explain": "One .repo file each; gpgcheck=1 and a gpgkey= line mean its packages are verified. dnf repolist shows the active ones."
  },
  {
   "id": "rocky-1-07",
   "level": 1,
-  "q": "Which command checks for updates?",
+  "q": "Which command lists the waiting updates without installing them?",
   "choices": [
    "dnf check-update",
-   "dnf refresh",
-   "apt list --upgradable",
-   "rpm -U"
+   "dnf upgrade",
+   "rpm -U",
+   "dnf refresh"
   ],
   "answer": 0,
-  "explain": "dnf upgrade installs them."
+  "explain": "It exits with 100 when updates wait, 0 otherwise: handy in monitoring scripts."
  },
  {
   "id": "rocky-1-08",
   "level": 1,
-  "q": "What is EPEL?",
+  "q": "What should you know before enabling EPEL?",
   "choices": [
-   "Extra Packages for Enterprise Linux",
-   "A kernel patch",
-   "A security module",
-   "The Rocky installer"
+   "Its packages come from the community, not from Rocky",
+   "It replaces the kernel",
+   "It needs a paid licence",
+   "It turns SELinux off"
   ],
   "answer": 0,
-  "explain": "dnf install epel-release enables it."
+  "explain": "Extra Packages for Enterprise Linux: useful and signed, but another publisher you now trust."
  },
  {
   "id": "rocky-1-09",
   "level": 1,
-  "q": "Which command shows the Rocky version?",
+  "q": "A script must work on Rocky and Debian alike. Where does it read the distro?",
   "choices": [
-   "cat /etc/rocky-release",
-   "rocky --version",
-   "uname -v",
-   "dnf version"
+   "/etc/os-release",
+   "/etc/rocky-release",
+   "uname -r",
+   "/etc/issue.net"
   ],
   "answer": 0,
-  "explain": "/etc/os-release works on every distro."
+  "explain": "Source it and use $ID and $VERSION_ID. uname only knows the kernel."
  },
  {
   "id": "rocky-1-10",
   "level": 1,
-  "q": "Which tool manages services?",
+  "q": "How do you apply only the security updates?",
   "choices": [
-   "systemctl",
-   "service-manager",
-   "rc-service",
-   "launchctl"
+   "dnf upgrade --security",
+   "dnf install security",
+   "dnf check --cve",
+   "rpm -U --security"
   ],
   "answer": 0,
-  "explain": "Same as on most modern distros."
+  "explain": "dnf updateinfo list --security shows them first, with their advisory."
  },
  {
   "id": "rocky-2-01",
   "level": 2,
-  "q": "Which mode lets SELinux only log, not block?",
+  "q": "What does SELinux's permissive mode do?",
   "choices": [
-   "permissive",
-   "disabled",
-   "enforcing",
-   "audit"
+   "Logs what it would block, and blocks nothing",
+   "Blocks everything not allowed",
+   "Turns SELinux off for good",
+   "Allows root only"
   ],
   "answer": 0,
-  "explain": "setenforce 0 switches to permissive until reboot."
+  "explain": "Useful to diagnose; don't leave it on. setenforce 1 goes back to enforcing."
  },
  {
   "id": "rocky-2-02",
   "level": 2,
-  "q": "How do you fix a file's SELinux label to the default?",
+  "q": "You moved a page from your home to /var/www; Apache answers 403. Why?",
   "choices": [
-   "restorecon -v file",
-   "chmod -Z file",
-   "chcon --reset",
-   "selinux fix file"
+   "The file kept its home SELinux label",
+   "Apache can't read HTML",
+   "mv removed the read rights",
+   "firewalld blocks it"
   ],
   "answer": 0,
-  "explain": "ls -Z shows labels."
+  "explain": "mv keeps the label (user_home_t); restorecon -Rv /var/www gives the right one. ls -Z shows labels."
  },
  {
   "id": "rocky-2-03",
   "level": 2,
-  "q": "Where do SELinux denials show up?",
+  "q": "An app fails and you suspect SELinux. Where is the proof?",
   "choices": [
-   "/var/log/audit/audit.log",
-   "/var/log/selinux",
+   "AVC denials in the audit log: ausearch -m avc",
+   "/var/log/selinux.log",
    "dmesg only",
-   "/etc/selinux/log"
+   "/etc/selinux/config"
   ],
   "answer": 0,
-  "explain": "ausearch -m avc or sealert help read them."
+  "explain": "No AVC line, not SELinux. sealert explains a denial and suggests a fix."
  },
  {
   "id": "rocky-2-04",
   "level": 2,
-  "q": "What are AppStream modules/streams?",
+  "q": "What does `rpm -V package` check?",
   "choices": [
-   "Several versions of a package set to choose from",
-   "Video streams",
-   "Kernel modules",
-   "Container images"
+   "Installed files against the package: size, hash, rights",
+   "The package's signature online",
+   "Which version is newest",
+   "The package's dependencies"
   ],
   "answer": 0,
-  "explain": "dnf module list."
+  "explain": "Empty output = unchanged. A 5 means the content changed: expected for a config, alarming for a binary."
  },
  {
   "id": "rocky-2-05",
   "level": 2,
-  "q": "How do you see which package owns a file?",
+  "q": "A strange binary sits in /usr/sbin. How do you see which package owns it?",
   "choices": [
-   "rpm -qf /path/file",
-   "dnf owner file",
-   "rpm -l file",
-   "which -p file"
+   "rpm -qf /usr/sbin/name",
+   "dnf owner name",
+   "rpm -l name",
+   "which -p name"
   ],
   "answer": 0,
-  "explain": "dnf provides works for files not installed yet."
+  "explain": "'not owned by any package' on a system path deserves a closer look. dnf provides searches packages you don't have."
  },
  {
   "id": "rocky-2-06",
@@ -223,40 +223,40 @@
  {
   "id": "rocky-2-08",
   "level": 2,
-  "q": "Which command lists the SELinux booleans?",
+  "q": "httpd must reach a remote database and SELinux blocks it. The clean fix?",
   "choices": [
-   "getsebool -a",
-   "selinux --bools",
-   "setsebool -l",
-   "lsbool"
+   "setsebool -P httpd_can_network_connect_db on",
+   "setenforce 0",
+   "chmod 777 /var/www",
+   "Stop firewalld"
   ],
   "answer": 0,
-  "explain": "setsebool -P name on makes a change permanent."
+  "explain": "Booleans switch allowed behaviours on and off; getsebool -a lists them, -P keeps it after reboot."
  },
  {
   "id": "rocky-2-09",
   "level": 2,
-  "q": "What is `cockpit` on Rocky?",
+  "q": "How do you see everything firewalld lets in?",
   "choices": [
-   "A web admin console",
-   "A package manager",
-   "A firewall",
-   "A container runtime"
+   "firewall-cmd --list-all",
+   "iptables -L only",
+   "ss -tlnp",
+   "systemctl status firewalld"
   ],
   "answer": 0,
-  "explain": "systemctl enable --now cockpit.socket."
+  "explain": "It shows the zone's services, ports and rules. ss shows what listens, not what the firewall allows."
  },
  {
   "id": "rocky-2-10",
   "level": 2,
-  "q": "What replaces docker on Rocky by default?",
+  "q": "What is podman's security gain over classic docker?",
   "choices": [
-   "podman",
-   "lxc",
-   "rkt",
-   "containerd-cli"
+   "No root daemon: containers can run as your user",
+   "It encrypts images",
+   "It has no network",
+   "It scans images for viruses"
   ],
   "answer": 0,
-  "explain": "Mostly the same commands, no daemon, rootless."
+  "explain": "Rootless containers mean an escape lands in your account, not root. Commands are mostly docker's."
  }
 ]

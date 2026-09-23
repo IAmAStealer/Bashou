@@ -2,54 +2,54 @@
  {
   "id": "python-1-01",
   "level": 1,
-  "q": "How do you print hello in Python 3?",
+  "q": "Your script hit an error. How should it tell the shell or cron that ran it?",
   "choices": [
-   "print(\"hello\")",
-   "echo \"hello\"",
-   "print \"hello\"",
-   "puts(\"hello\")"
+   "Print to stderr and exit with a non-zero code",
+   "print('ERROR') and exit normally",
+   "Write the error in a comment",
+   "Raise nothing, just stop"
   ],
   "answer": 0,
-  "explain": "print is a function since Python 3."
+  "explain": "sys.exit(1) (or an uncaught exception) gives a non-zero $?, so && chains and cron alerts notice."
  },
  {
   "id": "python-1-02",
   "level": 1,
-  "q": "Which type is `[1, 2, 3]`?",
+  "q": "How do you read a JSON config file into Python data?",
   "choices": [
-   "list",
-   "tuple",
-   "set",
-   "array"
+   "json.load(fh)",
+   "eval(fh.read())",
+   "fh.read().split(',')",
+   "import config.json"
   ],
   "answer": 0,
-  "explain": "Lists use [ ], tuples ( ), sets { }."
+  "explain": "eval runs whatever code is in the file: never on data. json.load only parses."
  },
  {
   "id": "python-1-03",
   "level": 1,
-  "q": "What does `len(\"bash\")` return?",
+  "q": "Where should a script get its API token?",
   "choices": [
-   "4",
-   "3",
-   "5",
-   "\"bash\""
+   "An environment variable or a private file, not the code",
+   "A constant at the top of the script",
+   "A comment in the script",
+   "The script's name"
   ],
   "answer": 0,
-  "explain": "len counts the characters."
+  "explain": "os.environ['API_TOKEN']. Code gets shared and committed; the token then leaks with it."
  },
  {
   "id": "python-1-04",
   "level": 1,
-  "q": "How do you start a comment?",
+  "q": "Which module builds file paths cleanly?",
   "choices": [
-   "#",
-   "//",
-   "--",
-   "/*"
+   "pathlib",
+   "string",
+   "sys",
+   "re"
   ],
   "answer": 0,
-  "explain": "Everything after # on the line is ignored."
+  "explain": "Path('/srv') / 'app' / 'config.json'. Also .exists(), .read_text(), .glob('*.log')."
  },
  {
   "id": "python-1-05",
@@ -80,15 +80,15 @@
  {
   "id": "python-1-07",
   "level": 1,
-  "q": "What is `3 // 2`?",
+  "q": "`python3 tool.py alice 3`: where does the script find alice and 3?",
   "choices": [
-   "1",
-   "1.5",
-   "2",
-   "Error"
+   "sys.argv[1] and sys.argv[2], as strings",
+   "sys.argv[0] and sys.argv[1]",
+   "input(), twice",
+   "os.environ['ARGS']"
   ],
   "answer": 0,
-  "explain": "// is integer (floor) division; / gives 1.5."
+  "explain": "argv[0] is the script's name, and 3 arrives as '3'. argparse adds --help and checks for free."
  },
  {
   "id": "python-1-08",
@@ -119,15 +119,15 @@
  {
   "id": "python-1-10",
   "level": 1,
-  "q": "How do you install a package for your user?",
+  "q": "`pip install requests` says externally-managed-environment. What do you do?",
   "choices": [
-   "pip install --user name",
-   "apt install python-name only",
-   "python get name",
-   "import --install name"
+   "Use a venv, or the distro's package",
+   "sudo pip install requests",
+   "Always add --break-system-packages",
+   "Reinstall Python"
   ],
   "answer": 0,
-  "explain": "Better: a virtual environment (python3 -m venv)."
+  "explain": "The distro protects its own Python. python3 -m venv .venv, then .venv/bin/pip install requests."
  },
  {
   "id": "python-1-11",
@@ -197,28 +197,28 @@
  {
   "id": "python-2-04",
   "level": 2,
-  "q": "What does `*args` receive?",
+  "q": "Why use yaml.safe_load rather than yaml.load on a config file?",
   "choices": [
-   "Extra positional arguments, as a tuple",
-   "Keyword arguments",
-   "A pointer",
-   "Only the first argument"
+   "load can build any Python object the file asks for",
+   "safe_load is faster",
+   "load can't read lists",
+   "safe_load checks the spelling"
   ],
   "answer": 0,
-  "explain": "**kwargs receives extra keyword arguments as a dict."
+  "explain": "A crafted YAML file can then run code. safe_load only builds plain data: dicts, lists, strings, numbers."
  },
  {
   "id": "python-2-05",
   "level": 2,
-  "q": "How do you catch an error?",
+  "q": "Why not wrap a whole script in a bare `except:`?",
   "choices": [
-   "try: … except ValueError: …",
-   "catch ValueError: …",
-   "on error: …",
-   "if error: …"
+   "It hides real bugs, even Ctrl+C",
+   "It makes the script slower",
+   "Python forbids it",
+   "It only catches syntax errors"
   ],
   "answer": 0,
-  "explain": "Catch the specific exception, not everything."
+  "explain": "Catch the errors you expect (except FileNotFoundError:) and let the rest crash loudly."
  },
  {
   "id": "python-2-06",
@@ -236,15 +236,15 @@
  {
   "id": "python-2-07",
   "level": 2,
-  "q": "What is a virtual environment for?",
+  "q": "How do you make a script's dependencies install the same way everywhere?",
   "choices": [
-   "Separate packages per project",
-   "Running Python in a VM",
-   "Faster code",
-   "Hiding code"
+   "Pin them in requirements.txt or a lock file",
+   "Tell people to pip install the latest",
+   "Copy site-packages around",
+   "Import them in a try block"
   ],
   "answer": 0,
-  "explain": "python3 -m venv .venv, then source .venv/bin/activate."
+  "explain": "name==1.2.3 in requirements.txt; pip install -r requirements.txt in a fresh venv rebuilds it."
  },
  {
   "id": "python-2-08",
@@ -275,14 +275,14 @@
  {
   "id": "python-2-10",
   "level": 2,
-  "q": "What does `yield` make a function?",
+  "q": "subprocess.run(['cp', a, b]) failed, but the script went on. What was missing?",
   "choices": [
-   "A generator",
-   "A coroutine only",
-   "A class",
-   "Faster"
+   "check=True, which raises on a non-zero exit code",
+   "shell=True",
+   "capture_output=True",
+   "text=True"
   ],
   "answer": 0,
-  "explain": "It produces values one at a time, lazily."
+  "explain": "Without check=True the failure is only in result.returncode, which nobody read."
  }
 ]

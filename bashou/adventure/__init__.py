@@ -374,7 +374,7 @@ class Game:
         for i, (text, color) in enumerate(wrapped):
             pad = width - 4 - render.width(text)
             out.append(f"{ESC}[{top + 1 + i};{left}H{ESC}[{bg};38;2;%d;%d;%dm│ " % ACCENT
-                       + f"{ESC}[38;2;%d;%d;%dm{text}{' ' * pad}" % color
+                       + f"{ESC}[38;2;%d;%d;%dm" % color + text + " " * pad
                        + f"{ESC}[38;2;%d;%d;%dm │" % ACCENT)
         out.append(f"{ESC}[{top + 1 + len(wrapped)};{left}H{ESC}[{bg};38;2;%d;%d;%dm╰{'─' * (width - 2)}╯" % ACCENT)
         return "".join(out) + f"{ESC}[0m"

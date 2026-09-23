@@ -54,15 +54,15 @@
  {
   "id": "systemd-1-05",
   "level": 1,
-  "q": "What is a unit that manages a daemon called?",
+  "q": "Why run a service as its own user (User=app) rather than root?",
   "choices": [
-   "name.service",
-   "name.unit",
-   "name.daemon",
-   "name.conf"
+   "If it gets hacked, the intruder only has that user's rights",
+   "It starts faster",
+   "systemd refuses root services",
+   "root cannot open network ports"
   ],
   "answer": 0,
-  "explain": "Other kinds: .timer, .socket, .mount, .target."
+  "explain": "Least privilege. DynamicUser=yes even makes a throwaway user for it."
  },
  {
   "id": "systemd-1-06",
@@ -210,15 +210,15 @@
  {
   "id": "systemd-2-07",
   "level": 2,
-  "q": "How do you give a service its settings without writing them in the unit?",
+  "q": "Where should a service's database password go?",
   "choices": [
-   "EnvironmentFile=/etc/default/name",
-   "Include=/etc/default/name",
-   "Source=/etc/default/name",
-   "Config=/etc/default/name"
+   "A root-only file: EnvironmentFile= or LoadCredential=",
+   "Environment= in the unit file",
+   "An ExecStart= argument",
+   "The Description= line"
   ],
   "answer": 0,
-  "explain": "Environment=KEY=value sets them one by one, right in the unit."
+  "explain": "Unit files are readable by all and `systemctl show` prints Environment=; ExecStart arguments show in ps."
  },
  {
   "id": "systemd-2-08",

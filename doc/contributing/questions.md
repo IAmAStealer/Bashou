@@ -30,6 +30,10 @@ answer positions); a missing translation falls back to English. See [translation
   something in real output — spotting a `$6$…` hash is useful, reciting the field order of
   /etc/passwd is not. The details (field order, option lists, the neighbouring commands) belong in
   `explain`, which is read once the answer is given.
+- **Long-term value** (owner): each question should leave a habit that holds up in automation and security —
+  why a script uses `set -e` or `mkdir -p`, what a listening `0.0.0.0` means, why a secret never goes in a
+  commit. Prefer "what goes wrong / what do you check first / what does this output tell you" over "which
+  command does X". Trivia (codenames, acronyms, which function prints) has no place.
 - **Everyday situations**: trusting a repository key, finding which package owns a file, finishing a
   half-done upgrade. A few "build the command, the help is there" questions are welcome; niche flags
   and trivia are not.

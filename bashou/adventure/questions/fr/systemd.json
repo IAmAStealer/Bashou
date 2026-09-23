@@ -54,15 +54,15 @@
  {
   "id": "systemd-1-05",
   "level": 1,
-  "q": "Comment s'appelle l'unité qui gère un démon ?",
+  "q": "Pourquoi lancer un service avec son propre utilisateur (User=app) plutôt qu'en root ?",
   "choices": [
-   "nom.service",
-   "nom.unit",
-   "nom.daemon",
-   "nom.conf"
+   "S'il est piraté, l'intrus n'a que les droits de ce compte",
+   "Il démarre plus vite",
+   "systemd refuse les services root",
+   "root ne peut pas ouvrir de ports"
   ],
   "answer": 0,
-  "explain": "Autres types : .timer, .socket, .mount, .target."
+  "explain": "Moindre privilège. DynamicUser=yes crée même un utilisateur jetable pour lui."
  },
  {
   "id": "systemd-1-06",
@@ -210,15 +210,15 @@
  {
   "id": "systemd-2-07",
   "level": 2,
-  "q": "Comment donner ses réglages à un service sans les écrire dans l'unité ?",
+  "q": "Où mettre le mot de passe de base de données d'un service ?",
   "choices": [
-   "EnvironmentFile=/etc/default/nom",
-   "Include=/etc/default/nom",
-   "Source=/etc/default/nom",
-   "Config=/etc/default/nom"
+   "Un fichier root seul : EnvironmentFile= ou LoadCredential=",
+   "Environment= dans le fichier unit",
+   "Un argument de ExecStart=",
+   "La ligne Description="
   ],
   "answer": 0,
-  "explain": "Environment=CLE=valeur les pose une par une, dans l'unité."
+  "explain": "Les fichiers unit sont lisibles par tous et `systemctl show` affiche Environment= ; les arguments de ExecStart se voient dans ps."
  },
  {
   "id": "systemd-2-08",

@@ -28,15 +28,15 @@
  {
   "id": "rust-1-03",
   "level": 1,
-  "q": "Quelle macro affiche une ligne ?",
+  "q": "Comment Rust reste sûr en mémoire sans ramasse-miettes ?",
   "choices": [
-   "println!",
-   "print()",
-   "echo!",
-   "console.log"
+   "Le compilateur vérifie la possession et les emprunts",
+   "Il copie chaque valeur",
+   "Il libère la mémoire à intervalles",
+   "Il interdit les pointeurs"
   ],
   "answer": 0,
-  "explain": "Le ! marque une macro."
+  "explain": "Chaque valeur a un seul propriétaire ; les références sont vérifiées à la compilation, donc pas d'use-after-free."
  },
  {
   "id": "rust-1-04",
@@ -80,15 +80,15 @@
  {
   "id": "rust-1-07",
   "level": 1,
-  "q": "Quel fichier décrit un projet cargo ?",
+  "q": "À quoi sert Cargo.lock ?",
   "choices": [
-   "Cargo.toml",
-   "package.json",
-   "Makefile",
-   "rust.yaml"
+   "Figer les versions exactes des dépendances d'un build",
+   "Empêcher de modifier le projet",
+   "Stocker des mots de passe",
+   "Lister les tests"
   ],
   "answer": 0,
-  "explain": "Nom, version, dépendances…"
+  "explain": "Commite-le pour un programme : chaque build utilise alors le même code. Cargo.toml dit quelles versions conviennent."
  },
  {
   "id": "rust-1-08",
@@ -184,15 +184,15 @@
  {
   "id": "rust-2-05",
   "level": 2,
-  "q": "Quel trait permet `.clone()` ?",
+  "q": "Que veut dire un bloc `unsafe` ?",
   "choices": [
-   "Clone",
-   "Copy",
-   "Dup",
-   "Borrow"
+   "Tu promets au compilateur que les règles tiennent là",
+   "Le code est cassé",
+   "Il tourne dans un bac à sable",
+   "Il coupe tous les contrôles du fichier"
   ],
   "answer": 0,
-  "explain": "Copy sert aux copies bit à bit bon marché, comme les entiers."
+  "explain": "Seuls quelques contrôles sont levés (pointeurs bruts, FFI). Garde-le petit et écris pourquoi il est correct."
  },
  {
   "id": "rust-2-06",
@@ -249,14 +249,14 @@
  {
   "id": "rust-2-10",
   "level": 2,
-  "q": "Quelle commande lance les tests ?",
+  "q": "Comment vérifier que tes dépendances n'ont pas de failles connues ?",
   "choices": [
-   "cargo test",
-   "cargo run --tests",
-   "rustc --test-all",
-   "cargo check --test"
+   "cargo audit",
+   "cargo check",
+   "cargo test --security",
+   "cargo update --safe"
   ],
   "answer": 0,
-  "explain": "Les tests sont des fonctions marquées #[test]."
+  "explain": "Il compare Cargo.lock à la base d'alertes RustSec. S'installe avec cargo install cargo-audit."
  }
 ]
