@@ -36,6 +36,11 @@ Every release has a section here, written for players. CI refuses to tag a relea
 - **Why sort comes before uniq.** uniq only merges identical lines that follow each other, so
   `cut … | uniq -c` counted the same city several times. The Sage Owl's pipe lesson now says so, the
   cities chest explains it in its hints, and the arena tells you once when you run uniq without sort.
+- **sort, taught at last.** The Sage Owl has a new lesson on sort (alphabetical, -n for numbers,
+  -rn | head for a top list, and why sort comes before uniq), two chests to practice it, and new
+  questions on sort and uniq.
+- The Slug has a new look: olive green, big eyes on stalks, pink cheeks and a smile.
+- During a boss fight, the pet no longer flashes under the question box.
 - **The road splits.** At a fork, the road now divides in front of your pet into two or three paths
   fading into the distance, each with its name written at its end; the one you pick lights up.
 
