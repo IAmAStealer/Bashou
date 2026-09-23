@@ -11,11 +11,12 @@ from pathlib import Path
 DATA = Path(os.environ.get("BASHOU_DATA", Path.home() / ".local/share/bashou"))
 CACHE = Path(os.environ.get("BASHOU_CACHE", Path.home() / ".cache/bashou"))
 STATE = DATA / "state.json"
+SAVE_VERSION = 2        # bump with a step in migrate() whenever the save's shape changes
 
 
 def default():
     return {
-        "version": 1,
+        "version": SAVE_VERSION,
         "commands": 0,
         "tools": {},        # tool -> successful uses
         "constructs": {},   # construct -> uses
@@ -159,6 +160,7 @@ def migrate(state):
         migrate_slime(state)
     if "reviews" not in state:
         migrate_reviews(state)
+    state["version"] = SAVE_VERSION
     return state
 
 
@@ -220,12 +222,24 @@ def save(state):
         os.replace(tmp, prev())
 
 
+def keep_old_format():
+    """A save from an older version is upgraded on disk by the next save: keep a copy of it first."""
+    try:
+        old = json.loads(STATE.read_text()).get("version", 1)
+        if isinstance(old, int) and old < SAVE_VERSION:
+            name = f"state.json.bak-{time.strftime('%Y%m%d-%H%M%S')}-v{old}"
+            STATE.with_name(name).write_text(STATE.read_text())
+    except (OSError, ValueError, AttributeError):
+        pass
+
+
 @contextmanager
 def locked():
     """Load the state under an exclusive lock and save it on exit."""
     DATA.mkdir(parents=True, exist_ok=True)
     with open(DATA / ".lock", "w") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
+        keep_old_format()
         state = load()
         yield state
         save(state)

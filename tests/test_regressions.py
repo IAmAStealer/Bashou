@@ -470,3 +470,20 @@ class SaveSafetyTest(TempState):
         self.assertEqual((s["pets"], s["achievements"], s["commands"]), ([], [], 12))
         self.assertEqual((s["starter"], s["tools"], s["skills"]), ("star", {"ls": 3}, ["bash"]))
         self.assertEqual(list(state.DATA.glob("state.json.broken-*")), [])
+
+    def test_an_old_save_is_upgraded_on_disk_and_kept(self):
+        """Owner: updates migrate the old save to the new format, and the old one stays next to it."""
+        old = json.dumps({"version": 1, "starter": "cat", "pets": ["cat", "fox"], "commands": 9,
+                          "challenges": ["line_moth"]})
+        state.STATE.write_text(old)
+        with state.locked() as s:
+            s["commands"] += 1
+        saved = json.loads(state.STATE.read_text())
+        self.assertEqual((saved["version"], saved["starter"], saved["pets"], saved["commands"]),
+                         (state.SAVE_VERSION, "star", ["fox"], 10))
+        self.assertIn("line_moth", saved["reviews"])                 # the migration is on disk now
+        kept = list(state.DATA.glob("state.json.bak-*-v1"))
+        self.assertEqual([k.read_text() for k in kept], [old])
+        with state.locked():
+            pass
+        self.assertEqual(len(list(state.DATA.glob("state.json.bak-*"))), 1)   # once, not every save
