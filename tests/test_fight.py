@@ -211,6 +211,64 @@ class PackageFightTest(unittest.TestCase):
                 self.assertFalse(hare.check(Path(tmp), {"answer": "coreutils"}, "coreutils-extra"))
 
 
+class ReviewTest(unittest.TestCase):
+    """Owner: a beaten fight comes back after 1, 7 and 30 days; after the third review it is acquired."""
+
+    def setUp(self):
+        self.s = state.default()
+        self.ch = challenges.BY_ID["line_moth"]
+
+    def fight(self, day, won=True):
+        return fight.after_fight(self.s, self.ch, won, today=day)
+
+    def test_four_fights_then_acquired(self):
+        self.assertIn("tomorrow", self.fight("2026-01-01"))
+        self.s["challenges"].append(self.ch.id)                       # run() records the win
+        self.assertEqual(self.s["reviews"]["line_moth"]["due"], "2026-01-02")
+        self.assertEqual(fight.due(self.s, "2026-01-01"), [])
+        self.assertEqual(fight.due(self.s, "2026-01-02"), [self.ch])
+        self.assertIn("7 days", self.fight("2026-01-02"))
+        self.assertEqual(self.s["reviews"]["line_moth"]["due"], "2026-01-09")
+        self.assertIn("30 days", self.fight("2026-01-09"))
+        self.assertEqual(self.s["reviews"]["line_moth"]["due"], "2026-02-08")
+        self.assertIn("for good", self.fight("2026-02-08"))
+        self.assertNotIn("line_moth", self.s["reviews"])
+        self.assertIsNone(self.fight("2026-06-01"))                   # acquired: nothing more
+
+    def test_a_lost_review_starts_over(self):
+        self.fight("2026-01-01")
+        self.s["challenges"].append(self.ch.id)
+        self.fight("2026-01-02")                                       # review 1 won
+        self.assertIn("start over", self.fight("2026-01-09", won=False))
+        self.assertEqual(self.s["reviews"]["line_moth"], {"step": 0, "due": "2026-01-10"})
+
+    def test_losing_a_new_fight_schedules_nothing(self):
+        self.assertIsNone(self.fight("2026-01-01", won=False))
+        self.assertEqual(self.s["reviews"], {})
+
+    def test_due_reviews_come_as_threats_and_say_so(self):
+        s = self.s
+        s["challenges"] = [c.id for c in challenges.ALL]                # nothing new left
+        s["reviews"] = {"line_moth": {"step": 1, "due": "2000-01-01"}}
+        self.assertGreater(fight.threats_per_day(s), 0)                # reviews keep threats coming
+        rng = ThreatTest.Always()
+        fight.maybe_threat(s, rng, now=10_000_000_000)
+        self.assertEqual((s["threat"]["challenge"], s["threat"]["review"]), ("line_moth", True))
+        said = fight.announcement(s, now=10_000_000_000)
+        self.assertIn("is back", said)
+        banner = fight.banner(self.ch, "task", s["reviews"]["line_moth"])
+        self.assertIn("Review 2/3", banner)
+        self.assertNotIn("Review", fight.banner(self.ch, "task"))
+
+    def test_old_wins_are_spread_over_the_next_days(self):
+        old = {**state.default(), "challenges": ["line_moth", "grep_hydra", "awk_golem"]}
+        del old["reviews"]
+        s = state.migrate(old)
+        days = sorted(r["due"] for r in s["reviews"].values())
+        self.assertEqual(len(set(days)), 3)                            # one a day, not all at once
+        self.assertTrue(all(r["step"] == 0 for r in s["reviews"].values()))
+
+
 class LenientAnswerTest(unittest.TestCase):
     def test_the_same_answer_written_another_way(self):
         from bashou.challenges import code, packages

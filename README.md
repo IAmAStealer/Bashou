@@ -23,6 +23,7 @@ tokens spent to learn what a command does.
   the right tool hits the enemy; other commands cost you a heart. Code fights hand you a small broken
   Python or C file to fix (a missing `;`, a loop that never ends, a memory leak, a shell injection);
   package fights ask your own machine with `apt`, `dpkg` or `rpm`, or have you fix a repository file.
+  Beaten fights come back after 1, 7 and 30 days (spaced repetition), so what you learned stays.
 - **`bashou explain python list`** (or `dict`, `loop`, `recursion`; `bashou explain c malloc`…): a
   short note with an example, for the code fights.
 - **`bashou security`**: small investigations (a hidden file, a cron backdoor, a SUID binary).

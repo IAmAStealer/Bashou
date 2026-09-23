@@ -28,6 +28,7 @@ def default():
         "fights_lost": 0,   # knocked out or fled (the Living sofa comforts you)
         "ladder_best": {},  # pet -> highest form reached on a command ladder (the Slime): never goes back
         "challenges": [],   # challenges beaten
+        "reviews": {},      # beaten fight -> {"step": reviews won, "due": ISO date}: it comes back (fight.py)
         "security": [],     # security challenges solved (`bashou security`)
         "adventure": None,  # `bashou adventure` progress (see bashou/adventure)
         "threat": None,     # {"challenge", "until"} while a threat waits for you
@@ -91,7 +92,7 @@ def load():
     except (FileNotFoundError, json.JSONDecodeError):
         return default()
     state = {**default(), **data}
-    for key in ("starter_best", "ladder_best"):
+    for key in ("starter_best", "ladder_best", "reviews"):
         if key not in data:
             del state[key]                                 # an old save: migrate() sets it
     return migrate(state)
@@ -111,7 +112,17 @@ def migrate(state):
         migrate_ladder(state)
     if "ladder_best" not in state:
         migrate_slime(state)
+    if "reviews" not in state:
+        migrate_reviews(state)
     return state
+
+
+def migrate_reviews(state):
+    """Fights beaten before reviews existed come back too: one a day from tomorrow, not all at once."""
+    import datetime
+    today = datetime.date.today()
+    state["reviews"] = {cid: {"step": 0, "due": (today + datetime.timedelta(days=i + 1)).isoformat()}
+                        for i, cid in enumerate(state["challenges"])}
 
 
 def migrate_slime(state):

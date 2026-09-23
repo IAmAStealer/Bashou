@@ -5,6 +5,10 @@ Every release has a section here, written for players. CI refuses to tag a relea
 
 ## v0.4.1 — 2026-09-23
 
+- **Beaten fights come back, so you keep what you learned.** A fight you win returns the next day,
+  then 7 days later, then 30 days later; win that one and the tool is acquired. Your pet says when a
+  threat is a review, and a lost review starts over the next day. Fights you had already won are
+  spread over the coming days. The guide explains why (spaced repetition).
 - **Rust fights**, where `rustc` is installed: a counter that isn't `mut`, a `const` without its
   type, text that should become a number (shadowing, since `mut` can't change a type), and a `u8`
   total that overflows. Each file says what it must print and how to build it (`rustc counter.rs`).

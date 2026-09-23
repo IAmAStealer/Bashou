@@ -86,9 +86,48 @@ def to_discover(s):
                               if not ready(s, ch) and all(a in s["challenges"] for a in ch.after)))
 
 
-def threats_per_day(s):
-    """About 3 a day at first, 1 later, fewer when the bank runs low, none when it's empty."""
-    return max(1, min(3, 3 - level(s) // 3)) * min(1, len(remaining(s)) / 5)
+def threats_per_day(s, today=None):
+    """About 3 a day at first, 1 later, fewer when the bank runs low, none when it's empty
+    (reviews that are due count as fights left)."""
+    left = len(remaining(s)) + len(due(s, today))
+    return max(1, min(3, 3 - level(s) // 3)) * min(1, left / 5)
+
+
+# --- reviews: a beaten fight comes back after 1, 7 and 30 days (owner: learning is repetition) ---------
+
+INTERVALS = (1, 7, 30)          # days before each review; after the last one the tool is acquired
+REVIEW_FIRST = 0.6              # when reviews and new fights are both waiting, reviews usually go first
+
+
+def due(s, today=None):
+    """Beaten fights whose review day has come."""
+    today = today or datetime.date.today().isoformat()
+    return [challenges.BY_ID[cid] for cid, r in s.get("reviews", {}).items()
+            if r["due"] <= today and cid in challenges.BY_ID and challenges.BY_ID[cid].available()]
+
+
+def after_fight(s, ch, won, today=None):
+    """Move `ch` along its reviews after a fight. Returns what to tell the player, or None."""
+    today = datetime.date.fromisoformat(today) if today else datetime.date.today()
+    reviews = s.setdefault("reviews", {})
+    r = reviews.get(ch.id)
+    if not won:
+        if r and r["due"] <= today.isoformat():             # lost a review: start again tomorrow
+            r.update(step=0, due=(today + datetime.timedelta(days=INTERVALS[0])).isoformat())
+            return _("It'll be back tomorrow: the reviews start over.")
+        return None
+    if ch.id not in s["challenges"]:
+        reviews[ch.id] = {"step": 0, "due": (today + datetime.timedelta(days=INTERVALS[0])).isoformat()}
+        return _("It'll be back tomorrow: fighting it again is how `{tool}` sticks.").format(tool=ch.tool)
+    if not r or r["due"] > today.isoformat():
+        return None                                        # acquired already, or not due yet
+    step = r["step"] + 1
+    if step >= len(INTERVALS):
+        del reviews[ch.id]
+        return _("Last review won: `{tool}` is yours for good.").format(tool=ch.tool)
+    r.update(step=step, due=(today + datetime.timedelta(days=INTERVALS[step])).isoformat())
+    return _("Review {n}/{total} won. It'll be back in {days} days.").format(
+        n=step, total=len(INTERVALS), days=INTERVALS[step])
 
 
 def active_threat(s, now=None):
@@ -108,13 +147,14 @@ def maybe_threat(s, rng=random, now=None):
     today = datetime.date.fromtimestamp(now).isoformat()
     if s["threat_day"]["date"] != today:
         s["threat_day"] = {"date": today, "count": 0}
-    if s["threat_day"]["count"] >= threats_per_day(s) or now - s["last_threat"] < 2 * 3600:
+    if s["threat_day"]["count"] >= threats_per_day(s, today) or now - s["last_threat"] < 2 * 3600:
         return None
-    pool = [ch for ch in remaining(s) if ready(s, ch)]
-    if not pool or rng.random() > 1 / 120:                 # one chance in 120 per 30 s at the prompt
+    new, back = [ch for ch in remaining(s) if ready(s, ch)], due(s, today)
+    if not (new or back) or rng.random() > 1 / 120:        # one chance in 120 per 30 s at the prompt
         return None
-    ch = rng.choice(pool)
-    s["threat"] = {"challenge": ch.id, "until": now + THREAT_MINUTES * 60}
+    review = bool(back) and (not new or rng.random() < REVIEW_FIRST)
+    ch = rng.choice(back if review else new)
+    s["threat"] = {"challenge": ch.id, "until": now + THREAT_MINUTES * 60, "review": review}
     s["threat_day"]["count"] += 1
     s["last_threat"] = now
     return announcement(s, now)
@@ -126,6 +166,9 @@ def announcement(s, now=None):
     if not t or t["challenge"] not in challenges.BY_ID:
         return None
     ch = challenges.BY_ID[t["challenge"]]
+    if t.get("review"):
+        return "⚠ " + cap(_("The {threat} is back! Still remember `{tool}`? → bashou fight").format(
+            threat=_(ch.threat), tool=ch.tool))
     return "⚠ " + cap(_("A {threat} is coming! Use `{tool}` to fight it → bashou fight").format(
         threat=_(ch.threat), tool=ch.tool))
 
@@ -195,9 +238,15 @@ def cmd_task(base):
     return 0
 
 
-def banner(ch, task):
+def banner(ch, task, review=None):
+    """`review`: the fight's entry in s["reviews"] when it comes back for a review."""
+    back = ""
+    if review:
+        back = f"{ACCENT}🔁 " + _("Review {n}/{total}: it came back on purpose. Beating it again after a break "
+                                "is what makes `{tool}` stay with you.").format(
+            n=review["step"] + 1, total=len(INTERVALS), tool=ch.tool) + f"{RESET}\n"
     return (f"\n{BAD}{BOLD}⚔ " + cap(_("The {threat} attacks!").format(threat=_(ch.threat))) + f"{RESET}  "
-            + _("Use {tool} to fight it.").format(tool=f"{BOLD}{ch.tool}{RESET}") + f"\n\n{task}\n\n"
+            + _("Use {tool} to fight it.").format(tool=f"{BOLD}{ch.tool}{RESET}") + f"\n{back}\n{task}\n\n"
             f"{DIM}" + _("You're in a sandbox folder with a real bash. Commands:") + f"{RESET}\n"
             "  answer <value>   " + _("strike") + f"   {DIM}("
             + _("needs a successful {tool} command first").format(tool=ch.tool) + f"){RESET}\n"
@@ -255,9 +304,11 @@ def run():
     if not ch:
         print(DIM + _("No threat around. Your pet will warn you when one comes.") + RESET)
         return
-    code, notes = arena(ch, lambda task: banner(ch, task), fight=True)
+    review = s.get("reviews", {}).get(ch.id) if (s.get("threat") or {}).get("review") else None
+    code, notes = arena(ch, lambda task: banner(ch, task, review), fight=True)
     won = code == WIN
     with state.locked() as s:
+        told = after_fight(s, ch, won) if won or code == KO else None
         if not won:
             s["fights_lost"] = s.get("fights_lost", 0) + 1
             notes += progress.check(s)
@@ -277,6 +328,8 @@ def run():
                                        "It'll be back.").format(tool=ch.tool) + RESET)
     else:
         print(f"\n{DIM}" + _("You fled. The {threat} will be back.").format(threat=_(ch.threat)) + RESET)
+    if told:
+        print(f"{ACCENT}🔁 {told}{RESET}")
     for note in notes:
         print(f"  {note}")
     print()

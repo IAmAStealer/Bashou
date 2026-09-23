@@ -47,6 +47,14 @@ A pixel-art pet that lives in the top-right corner of your terminal and grows as
   fight: the arena only opens after your pet's warning. Code fights hand you a small broken Python
   or C file instead: its first lines say what goes in, what should come out and how to run it; fix
   it and `answer done`. Opening an editor is free.
+- **Reviews: beaten fights come back.** We remember what we practise again just as we start to
+  forget it, so Bashou uses spaced repetition (the "1-7-30" rhythm of flashcard systems like the
+  Leitner boxes). A fight you win comes back **1 day** later, then **7 days** after that, then
+  **30 days** after that. Win that fourth fight and the tool is yours for good: it doesn't come back.
+  Your pet tells you when it's a review (« The Log Hydra is back! Still remember `grep`? ») and the
+  arena says which review it is. Knocked out in a review? It comes back the next day and the reviews
+  start over. Fleeing changes nothing: it stays due. Reviews are picked before new threats most of
+  the time, and they keep coming even once you've beaten every fight.
 
 ## Install
 
