@@ -24,14 +24,15 @@ Every release has a section here, written for players. CI refuses to tag a relea
   fast-forward" can't update themselves. Move them to this release once:
   `git -C ~/.bashou fetch --tags && git -C ~/.bashou checkout v0.4.2`. Your progress is kept.
 - The starter screen no longer shows a line of question marks under each starter.
-- **`verify` for hands-on fights.** Fights where you fix a file or run commands end with `verify`
-  (Bashou checks your work); fights that ask a question still end with `answer <value>`. Typing a
-  command after `answer` in a hands-on fight now tells you to run it at the prompt.
+- **`verify` or `answer`, never both.** Fights and chests where you do the job (fix a file, make a
+  folder…) end with `verify`: Bashou checks your work. Those that ask a question end with
+  `answer <value>`. Each screen shows only the one that applies, and typing a command after `answer`
+  tells you to run it at the prompt instead.
 - After an update, your save is upgraded to the new format on disk, and a copy of the old one is
   kept next to it.
 - **Adventure answers that teach.** After each question, the right answer now stands on its own line,
   followed by a real explanation in plain words: why it's right, what the tempting wrong answer
-  does, and what to do next. All 254 questions, in English and French; many questions also give
+  does, and what to do next. All the questions, in English and French; many questions also give
   more context.
 - **Why sort comes before uniq.** uniq only merges identical lines that follow each other, so
   `cut … | uniq -c` counted the same city several times. The Sage Owl's pipe lesson now says so, the
@@ -41,6 +42,7 @@ Every release has a section here, written for players. CI refuses to tag a relea
   questions on sort and uniq.
 - The Slug has a new look: olive green, big eyes on stalks, pink cheeks and a smile.
 - During a boss fight, the pet no longer flashes under the question box.
+- Moving on the swap board no longer leaves pieces of text behind.
 - **CI/CD fights.** Five new threats hand you a pipeline file to fix: a GitHub Actions workflow with a
   line indented wrong (Indent Imp), a token written in clear (Secret Sprite), a deploy that neither
   waits for the tests nor stays on main (Needs Newt); a .gitlab-ci.yml with a stage that doesn't
