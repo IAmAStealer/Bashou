@@ -2,7 +2,7 @@
  {
   "id": "rust-1-01",
   "level": 1,
-  "q": "Which tool builds and runs Rust projects?",
+  "q": "You start a Rust project. Which tool creates it, builds it and runs it?",
   "choices": [
    "cargo",
    "rustpm",
@@ -10,12 +10,12 @@
    "rustc run"
   ],
   "answer": 0,
-  "explain": "cargo new, cargo build, cargo run, cargo test."
+  "explain": "cargo is Rust's project tool: cargo new name creates the folder, cargo build compiles, cargo run builds then runs, cargo test runs the tests, and it downloads the dependencies listed in Cargo.toml. rustc is the compiler underneath; you rarely call it yourself."
  },
  {
   "id": "rust-1-02",
   "level": 1,
-  "q": "How do you make a variable changeable?",
+  "q": "In Rust, a counter must change inside a loop. How do you declare it so it can change?",
   "choices": [
    "let mut x = 1;",
    "var x = 1;",
@@ -23,7 +23,7 @@
    "mut x = 1;"
   ],
   "answer": 0,
-  "explain": "Variables are immutable by default."
+  "explain": "In Rust, a variable declared with let can't change: that's the default, to avoid surprises. Add mut to allow it: let mut x = 1; then x += 1 works. var comes from other languages. Seeing mut tells the reader this value will change."
  },
  {
   "id": "rust-1-03",
@@ -36,12 +36,12 @@
    "It forbids pointers"
   ],
   "answer": 0,
-  "explain": "Each value has one owner; references are checked at compile time, so no use-after-free."
+  "explain": "Every value has exactly one owner, and it is freed when that owner ends. Code can borrow it with references, and the compiler checks that no reference outlives the value. Mistakes like use-after-free are caught when you build, not when the program runs, and there's no garbage collector pausing the program."
  },
  {
   "id": "rust-1-04",
   "level": 1,
-  "q": "What is `Option<T>`?",
+  "q": "A Rust function that looks up a user returns `Option<User>`. What does that type mean?",
   "choices": [
    "Either Some(value) or None",
    "A config file",
@@ -49,12 +49,12 @@
    "An error type only"
   ],
   "answer": 0,
-  "explain": "Rust has no null: Option makes absence explicit."
+  "explain": "Option means 'maybe a value': Some(user) when there is one, None when there isn't. Rust has no null, so a missing value is visible in the type. The compiler makes you handle the None case (with match, if let, or ?) before you can use the user: no more forgotten null checks."
  },
  {
   "id": "rust-1-05",
   "level": 1,
-  "q": "What is `Result<T, E>` for?",
+  "q": "Reading a file in Rust returns `Result<String, io::Error>`. What is Result for?",
   "choices": [
    "A value or an error",
    "Test results",
@@ -62,12 +62,12 @@
    "Async results only"
   ],
   "answer": 0,
-  "explain": "Ok(value) or Err(error); ? passes errors up."
+  "explain": "Result holds either the value, Ok(text), or the error, Err(e). Errors are ordinary values that you must look at, not exceptions that fly past. Handle both cases with match, or write ? to pass the error up to the caller. The compiler warns if you ignore a Result."
  },
  {
   "id": "rust-1-06",
   "level": 1,
-  "q": "What does `&x` create?",
+  "q": "In Rust, you pass `&x` to a function instead of x. What does `&x` create?",
   "choices": [
    "A reference (a borrow) to x",
    "A copy of x",
@@ -75,7 +75,7 @@
    "The address as a number"
   ],
   "answer": 0,
-  "explain": "Borrowing lets you use a value without taking it."
+  "explain": "&x creates a reference: the function borrows x to read it, and x stays yours afterwards. Passing x itself would move it: the function would own it and you couldn't use it after. Nothing to free by hand: the compiler checks the borrow ends in time."
  },
  {
   "id": "rust-1-07",
@@ -88,7 +88,7 @@
    "Listing the tests"
   ],
   "answer": 0,
-  "explain": "Commit it for programs: every build then uses the same code. Cargo.toml says which versions are acceptable."
+  "explain": "Cargo.toml says which versions of each dependency are acceptable (serde = \"1\"). Cargo.lock records the exact versions chosen, down to the last digit, for the whole tree. Commit it for programs: every machine and every CI run then builds with the same code, and updates only happen with cargo update."
  },
  {
   "id": "rust-1-08",
@@ -101,12 +101,12 @@
    "With => at the end"
   ],
   "answer": 0,
-  "explain": "A trailing ; turns it into a statement returning ()."
+  "explain": "In Rust, the last line of a function without a ; is an expression, and its value is what the function returns: fn double(x: i32) -> i32 { x * 2 }. Add a ; at the end and it becomes a statement that returns nothing, (), so the compiler complains about the type. return still exists, for leaving early."
  },
  {
   "id": "rust-1-09",
   "level": 1,
-  "q": "What does `cargo check` do?",
+  "q": "While writing Rust, you want to know quickly whether your code compiles. What does `cargo check` do?",
   "choices": [
    "Checks the code compiles, without building a binary",
    "Runs the tests",
@@ -114,12 +114,12 @@
    "Checks for updates"
   ],
   "answer": 0,
-  "explain": "Faster than cargo build while you write."
+  "explain": "cargo check runs all the compiler's checks (types, borrows, errors) but stops before producing a program. So it's much faster than cargo build. Use it often while you write, and cargo build or cargo run when you want to run the result. It doesn't run tests or format code."
  },
  {
   "id": "rust-1-10",
   "level": 1,
-  "q": "Which keyword matches a value against patterns?",
+  "q": "You want different code for Some(x) and None. Which Rust keyword compares a value against patterns?",
   "choices": [
    "match",
    "switch",
@@ -127,7 +127,7 @@
    "select"
   ],
   "answer": 0,
-  "explain": "match must cover every case."
+  "explain": "match takes a value and a list of patterns, each with the code to run: Some(x) => …, None => …. The compiler checks the list covers every possible case: forget None and it refuses to build. switch and case come from other languages."
  },
  {
   "id": "rust-1-11",
@@ -140,7 +140,7 @@
    "Use var instead of let"
   ],
   "answer": 0,
-  "explain": "Rust variables are fixed unless you say mut. rustc's 'help:' line usually shows the exact change."
+  "explain": "Rust variables can't change unless declared with mut, and the message says count was declared without it. Change its declaration to let mut count = 0;. rustc's error messages usually include a 'help:' line showing that exact change: read the whole message, it often gives the answer."
  },
  {
   "id": "rust-1-12",
@@ -153,7 +153,7 @@
    "Rust ignores types on let"
   ],
   "answer": 0,
-  "explain": "Shadowing reuses a name with a new value and even a new type. mut can change the value, never the type."
+  "explain": "Each let creates a new variable. The second one reuses the name n and hides the first: that's called shadowing. The new n can even have another type, here a number instead of text. mut can't do that: a mut variable can change its value, never its type."
  },
  {
   "id": "rust-1-13",
@@ -166,7 +166,7 @@
    "Nothing: they are the same"
   ],
   "answer": 0,
-  "explain": "const MAX: u32 = 100; lives for the whole program, often at the top of the file, in capitals by habit."
+  "explain": "A const is written into the program when it's built, so Rust needs its type written out (const MAX: u32 = 100;) and a value it can compute right then, not one from user input. It exists for the whole program, usually at the top of the file, in capitals by convention."
  },
  {
   "id": "rust-1-14",
@@ -179,7 +179,7 @@
    "rustc refuses to build"
   ],
   "answer": 0,
-  "explain": "u8 stops at 255. Debug builds panic; release builds wrap. Pick a bigger type (u16, u32) or checked_add."
+  "explain": "A u8 holds 0 to 255, so 250 + 10 doesn't fit. In a debug build Rust stops the program with a panic, 'attempt to add with overflow', instead of giving a wrong number. Release builds silently wrap around (to 4). Choose a bigger type (u16, u32), or checked_add, which returns None on overflow."
  },
  {
   "id": "rust-2-01",
@@ -192,12 +192,12 @@
    "None, ever"
   ],
   "answer": 0,
-  "explain": "One &mut, or any number of &, never both."
+  "explain": "Rust's rule: at any moment, either one mutable reference (&mut), or any number of read-only ones (&), never both. So no code can read a value while another part changes it. This rule, checked when you build, prevents data races between threads."
  },
  {
   "id": "rust-2-02",
   "level": 2,
-  "q": "What does the `?` operator do?",
+  "q": "In `let text = fs::read_to_string(path)?;`, what does the `?` at the end do?",
   "choices": [
    "Returns the error early, or unwraps the value",
    "Makes a value optional",
@@ -205,12 +205,12 @@
    "Ignores the error"
   ],
   "answer": 0,
-  "explain": "Works on Result and Option in functions returning them."
+  "explain": "? looks at the Result: if it's Ok, it takes the value out and the line continues; if it's Err, the function returns that error to its caller right away. It replaces a whole match. It only works inside a function that itself returns a Result (or Option for Options)."
  },
  {
   "id": "rust-2-03",
   "level": 2,
-  "q": "When is a value dropped (freed)?",
+  "q": "Rust has no garbage collector. When is a value freed (dropped)?",
   "choices": [
    "When its owner goes out of scope",
    "When the GC runs",
@@ -218,12 +218,12 @@
    "When you call free()"
   ],
   "answer": 0,
-  "explain": "Ownership replaces a garbage collector."
+  "explain": "A value is freed as soon as its owner goes out of scope, usually at the closing } of the block where it was created. No collector runs in the background and there's no free() to forget: the compiler inserts the cleanup at the right place. Files and locks are closed the same way."
  },
  {
   "id": "rust-2-04",
   "level": 2,
-  "q": "What does `#[derive(Debug)]` give a struct?",
+  "q": "You write `#[derive(Debug)]` above a struct. What does it give you?",
   "choices": [
    "Printing with {:?}",
    "A debugger",
@@ -231,7 +231,7 @@
    "Logging"
   ],
   "answer": 0,
-  "explain": "derive writes trait implementations for you."
+  "explain": "derive asks the compiler to write standard code for you. Debug lets you print the struct with {:?} (or {:#?} on several lines) in println! or in logs, which is very handy while debugging. Other common ones: Clone, PartialEq. It doesn't add a debugger or logging."
  },
  {
   "id": "rust-2-05",
@@ -244,12 +244,12 @@
    "It turns off all checks in the file"
   ],
   "answer": 0,
-  "explain": "Only a few checks are lifted (raw pointers, FFI). Keep it small and write why it is sound."
+  "explain": "Inside unsafe, a few things the compiler can't check become allowed: using raw pointers, calling C code (FFI). The rest of the rules still apply. You are promising that the code is still correct. Keep these blocks tiny, and write a // SAFETY: comment explaining why, so reviewers know what to check."
  },
  {
   "id": "rust-2-06",
   "level": 2,
-  "q": "What is a lifetime like `'a`?",
+  "q": "A Rust function is written `fn first<'a>(s: &'a str) -> &'a str`. What does `'a` describe?",
   "choices": [
    "How long a reference stays valid",
    "A thread's duration",
@@ -257,12 +257,12 @@
    "A variable's age"
   ],
   "answer": 0,
-  "explain": "The compiler checks references don't outlive their data."
+  "explain": "'a is a lifetime: a name for how long a reference stays valid. Here it says the returned reference lives as long as s, the input it points into. The compiler uses it to refuse code where a reference would outlive its data. Often you don't write it: Rust infers it."
  },
  {
   "id": "rust-2-07",
   "level": 2,
-  "q": "How do you share data between threads safely?",
+  "q": "Several threads must update the same counter in Rust. What do you wrap it in?",
   "choices": [
    "Arc<Mutex<T>>",
    "Rc<RefCell<T>>",
@@ -270,7 +270,7 @@
    "&mut T"
   ],
   "answer": 0,
-  "explain": "Arc counts owners across threads; Mutex guards access."
+  "explain": "Arc (atomic reference count) lets several threads own the same value, and frees it when the last one is done. Mutex makes each thread take a lock before touching it, so only one changes it at a time. Rc and RefCell do the same for a single thread only, and the compiler refuses to send them to another thread."
  },
  {
   "id": "rust-2-08",
@@ -283,12 +283,12 @@
    "Retries"
   ],
   "answer": 0,
-  "explain": "Fine in tests; prefer ? or match in real code."
+  "explain": "unwrap() takes the value out of Some or Ok, and on None or Err it stops the program with a panic. Fine in tests or quick experiments. In real code a missing file shouldn't crash the program: pass the error up with ?, or handle both cases with match. expect(\"msg\") at least explains the crash."
  },
  {
   "id": "rust-2-09",
   "level": 2,
-  "q": "What is `impl Trait for Type`?",
+  "q": "You read `impl Display for Point { … }`. What is `impl Trait for Type`?",
   "choices": [
    "Implementing a trait's methods for a type",
    "Inheriting a class",
@@ -296,7 +296,7 @@
    "A generic type alias"
   ],
   "answer": 0,
-  "explain": "Traits are like interfaces."
+  "explain": "A trait lists methods a type can offer, a bit like an interface. impl Display for Point writes those methods for Point, here how to print it, so println!(\"{}\", p) works. Rust has no class inheritance: types gain abilities by implementing traits."
  },
  {
   "id": "rust-2-10",
@@ -309,6 +309,6 @@
    "cargo update --safe"
   ],
   "answer": 0,
-  "explain": "It compares Cargo.lock with the RustSec advisory database. Install it with cargo install cargo-audit."
+  "explain": "cargo audit reads Cargo.lock and compares each exact dependency version with the RustSec database of known vulnerabilities, then lists the ones affected and the fixed version. Install it once with cargo install cargo-audit, and run it in CI so a new advisory shows up without you having to think about it."
  }
 ]
