@@ -12,6 +12,7 @@ KEYWORDS = {"do", "then", "else", "elif", "if", "while", "until", "!", "time", "
 WRAPPERS = {"sudo", "env", "nice", "nohup", "exec", "command", "builtin", "watch", "xargs",
             "strace", "ltrace", "timeout", "stdbuf", "ionice", "doas"}
 # Wrapper options that take a separate value.
+HELP_READERS = {"man", "info", "help", "less", "more", "whatis", "apropos"}
 OPTION_VALUES = {"-e", "-o", "-p", "-s", "-u", "-g", "-n", "-I", "-d", "-P", "-L", "-a"}
 REDIRECT = re.compile(r"^(\d*|&)(>>?|<|>&|<&|&>>?)(.*)$")
 # One logged command: "status<TAB>" + the output of `history 1` ("  123  command").
@@ -27,6 +28,11 @@ class Analysis:
     @property
     def tools(self):
         return {name for name, _ in self.commands}
+
+    @property
+    def help_only(self):
+        """Only reading about commands: `wc --help`, `man wc`, `wc --help | less`."""
+        return bool(self.commands) and all("--help" in args or name in HELP_READERS for name, args in self.commands)
 
 
 def parse_log(text):

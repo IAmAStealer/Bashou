@@ -36,6 +36,8 @@ PLACEHOLDER = ((150, 150, 160), (80, 80, 90))              # for a new fight sti
 def judge(ch, status, command):
     """"hit", "hurt" or None (free) for one arena command."""
     found = analyze(command)
+    if found.help_only:
+        return None                                       # reading the help is never a mistake
     if ch.used_by(found):
         return "hit" if status == 0 else "hurt"
     return None if found.tools <= FREE else "hurt"

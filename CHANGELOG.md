@@ -13,6 +13,9 @@ Every release has a section here, written for players. CI refuses to tag a relea
   follow. `bashou skills` changes it any time.
 - `bashou config` asks you a few questions and saves the answers (bubble length, pet size, how often
   your pet talks, updates, skills, language). `bashou config list` still lists everything.
+- **Learn to read `--help`.** For your first 5 wins, a fight's first hint shows how to ask the tool
+  itself (`wc --help`), how to read the Usage line and the options, and what to look for this time.
+  `--help` and `man` are free moves in a duel.
 - Bashou no longer runs a `bashou` folder found in the directory you're in instead of its own code.
 
 ## v0.4.1 — 2026-09-23

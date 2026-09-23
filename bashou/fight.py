@@ -200,7 +200,8 @@ def used_tool(base, ch):
         records = parse_log((Path(base) / "log").read_text())
     except FileNotFoundError:
         return False
-    return any(status == 0 and ch.used_by(analyze(cmd)) for status, cmd in records)
+    return any(status == 0 and not (found := analyze(cmd)).help_only and ch.used_by(found)
+               for status, cmd in records)
 
 
 def cmd_answer(base, value):
@@ -226,7 +227,7 @@ def cmd_answer(base, value):
 def cmd_hint(base):
     meta = load_meta(base)
     ch = challenges.BY_ID[meta["challenge"]]
-    i = min(meta.get("hints", 0), len(ch.hints) - 1)
+    i = min(meta.get("hints", 0), len(ch.hint_list(meta)) - 1)
     print(f"{ACCENT}💡 {ch.hint_text(i, meta)}{RESET}")
     meta["hints"] = i + 1
     (Path(base) / "meta.json").write_text(json.dumps(meta))
@@ -256,13 +257,20 @@ def banner(ch, task, review=None):
             "  flee             " + _("run away (the threat will come back)") + "\n")
 
 
-def arena(ch, intro, rng=None, fight=False):
+BEGINNER_WINS = 5          # until then, a fight's first hint teaches `tool --help` (owner)
+
+
+def beginner(s):
+    return s["fights_won"] < BEGINNER_WINS
+
+
+def arena(ch, intro, rng=None, fight=False, help_first=False):
     """Run the sandbox bash for `ch`. `intro(task_text)` is printed first. Returns (exit code, notes).
     With `fight`, the duel is drawn at the top and wrong commands cost hearts (duel.py)."""
     base = Path(tempfile.mkdtemp(prefix="bashou-arena-"))
     work = base / "arena"
     work.mkdir()
-    meta = {"challenge": ch.id, "hints": 0}
+    meta = {"challenge": ch.id, "hints": 0, "help_first": help_first}
     try:
         meta.update(ch.setup(work, rng or random.Random()))
         (base / "meta.json").write_text(json.dumps(meta))
@@ -306,7 +314,7 @@ def run():
         print(DIM + _("No threat around. Your pet will warn you when one comes.") + RESET)
         return
     review = s.get("reviews", {}).get(ch.id) if (s.get("threat") or {}).get("review") else None
-    code, notes = arena(ch, lambda task: banner(ch, task, review), fight=True)
+    code, notes = arena(ch, lambda task: banner(ch, task, review), fight=True, help_first=beginner(s))
     won = code == WIN
     with state.locked() as s:
         told = after_fight(s, ch, won) if won or code == KO else None

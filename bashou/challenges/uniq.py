@@ -17,6 +17,7 @@ CHALLENGE = Challenge(
     level=2, id="uniq_swarm", pet="sofa", tools=("uniq",), threat="Echo Swarm",
     task="The Echo Swarm repeats itself endlessly.\n"
          "Which IP address appears most often in visitors.txt?",
+    help="Here, find the option that prefixes each line with how many times it came.",
     hints=["uniq only merges adjacent lines, so sort first. `uniq -c` counts them.",
            "Try: sort visitors.txt | uniq -c | sort -rn | head -1"],
     setup=setup,

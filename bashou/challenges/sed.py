@@ -23,6 +23,7 @@ CHALLENGE = Challenge(
     level=2, id="sed_serpent", pet="snake", tools=("sed",), threat="Typo Serpent",
     task="The Typo Serpent scrambled letter.txt: \"the\" became \"teh\" in places.\n"
          "Fix the file in place (every occurrence, also \"Teh\"), then type: answer done",
+    help="Here, look at -i: it edits the file in place.",
     hints=["sed -i edits a file in place; s/old/new/g replaces every match on a line.",
            "Try: sed -i 's/teh/the/g; s/Teh/The/g' letter.txt"],
     setup=setup, verify=verify,

@@ -19,6 +19,7 @@ CHALLENGE = Challenge(
     level=2, id="grep_hydra", pet="mole", tools=("grep", "egrep", "rg"), threat="Log Hydra",
     task="The Log Hydra grows a head for every [ERROR] line in app.log.\n"
          "How many lines contain [ERROR]? (lowercase \"error\" doesn't count)",
+    help="Here, find the option that counts matching lines instead of printing them.",
     hints=["grep can count matching lines by itself: look at `grep -c`.",
            "Try: grep -c '\\[ERROR\\]' app.log  (or grep -cF '[ERROR]' app.log)"],
     setup=setup,

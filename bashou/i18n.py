@@ -131,7 +131,8 @@ def messages():
     from . import explain
     found += [text for topics in explain.NOTES.values() for text, example in topics.values()]
     for ch in challenges.ALL + challenges.SECURITY + challenges.TRIALS:
-        found += [ch.threat, ch.task, *ch.hints]
+        found += [ch.threat, ch.task, *ch.hints] + ([ch.help] if ch.help else [])
+    found.append(challenges.HELP_HINT)
     return list(dict.fromkeys(found))
 
 

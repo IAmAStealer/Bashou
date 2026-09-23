@@ -18,6 +18,7 @@ CHALLENGE = Challenge(
     level=2, after=("grep_hydra",), id="awk_golem", pet="owl", tools=("awk", "gawk", "mawk"), threat="Ledger Golem",
     task="The Ledger Golem only yields to exact accounts.\n"
          "In sales.csv, what is the total qty (3rd column) sold for \"{item}\"?",
+    help="Here, look at -F: it sets the field separator.",
     hints=["awk splits lines into fields: -F, sets the separator, $2 and $3 are the columns.",
            "Try: awk -F, '$2 == \"ITEM\" { s += $3 } END { print s }' sales.csv"],
     setup=setup,

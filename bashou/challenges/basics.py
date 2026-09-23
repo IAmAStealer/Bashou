@@ -39,6 +39,7 @@ def boot_setup(work, rng):
 LINE_MOTH = Challenge(
     level=1, id="line_moth", pet="sofa", tools=("wc",), threat="Line Moth",
     task="The Line Moth eats one line at a time.\nHow many lines does notes.txt have?",
+    help="Here, find the option that counts lines.",
     hints=["`bashou learn wc` takes the command apart, `wc --help` lists its options. "
            "One command, one option, no pipe.",
            "Try: wc -l notes.txt"],
@@ -49,6 +50,7 @@ COLUMN_CRAB = Challenge(
     level=1, id="column_crab", pet="owl", tools=("cut",), threat="Column Crab",
     task="The Column Crab pinches the wrong column.\n"
          "servers.csv holds name,room,port. Which room is on line {n}?",
+    help="Here, find the options for the delimiter (what separates columns) and the fields to keep.",
     hints=["`bashou learn cut` explains it: -d says what separates the columns, -f which one to keep. "
            "Print the column, then read the line you need.",
            "Try: cut -d, -f2 servers.csv"],
@@ -58,6 +60,7 @@ COLUMN_CRAB = Challenge(
 JUMBLE_SPRITE = Challenge(
     level=1, id="jumble_sprite", pet="sofa", tools=("sort",), threat="Jumble Sprite",
     task="The Jumble Sprite shuffled names.txt.\nWhich name comes first in alphabetical order?",
+    help="Here, the Usage line is enough: sort FILE prints it in order.",
     hints=["`bashou learn sort` explains it: sort prints a file in order, no option needed.",
            "Try: sort names.txt"],
     setup=names_setup,
@@ -66,6 +69,7 @@ JUMBLE_SPRITE = Challenge(
 LAST_WORD_WISP = Challenge(
     level=1, id="last_word_wisp", pet="mole", tools=("tail", "head"), threat="Last-word Wisp",
     task="The Last-word Wisp hides at the end of boot.log.\nWhat is the last line of the file?",
+    help="Here, find how to choose how many lines to show.",
     hints=["`bashou learn tail`: tail shows the end of a file, head its start. One command is enough.",
            "Try: tail -1 boot.log"],
     setup=boot_setup,
@@ -125,6 +129,7 @@ def scores_setup(work, rng):
 FIRST_LINE_IMP = Challenge(
     level=1, id="first_line_imp", pet="mole", tools=("head",), threat="First-line Imp",
     task="The First-line Imp swaps the steps of recipe.txt.\nWhat is written on line {n}?",
+    help="Here, find how to choose how many lines to show.",
     hints=["`bashou learn head`: head shows the start of a file, -n how many lines. Then read the last one.",
            "Try: head -{n} recipe.txt"],
     setup=recipe_setup,
@@ -133,6 +138,7 @@ FIRST_LINE_IMP = Challenge(
 NEEDLE_GNAT = Challenge(
     level=1, id="needle_gnat", pet="mole", tools=("grep",), threat="Needle Gnat",
     task="The Needle Gnat buzzes around contacts.txt.\nWhat is {who}'s phone number?",
+    help="Here, the Usage line is enough: a PATTERN, then a FILE.",
     hints=["`bashou learn grep`: grep keeps the lines that contain a word. No option needed.",
            "Try: grep {who} contacts.txt"],
     setup=contacts_setup,
@@ -142,6 +148,8 @@ FIELD_WASP = Challenge(
     level=1, id="field_wasp", pet="owl", tools=("awk",), threat="Field Wasp",
     task="The Field Wasp mixes up the columns of people.txt (name age room).\n"
          "How old is the person on line {n}?",
+    help="awk's help is short: its real language is in `man awk`. Here you need the 'program' part: "
+         "'{print $2}'.",
     hints=["`bashou learn awk`: awk cuts each line into fields, $1 is the first word, $2 the second. "
            "Print the column, then read the line you need.",
            "Try: awk '{print $2}' people.txt"],
@@ -151,6 +159,7 @@ FIELD_WASP = Challenge(
 DUST_BUNNY = Challenge(
     level=1, id="dust_bunny", pet="fox", tools=("ls",), threat="Dust Bunny",
     task="A Dust Bunny rolled into crates/.\nWhich file in there ends in .key?",
+    help="Here, the Usage line is enough: ls FOLDER.",
     hints=["`bashou learn ls`: ls lists what a folder holds. One command, no option.",
            "Try: ls crates"],
     setup=crates_setup,
@@ -159,6 +168,7 @@ DUST_BUNNY = Challenge(
 VERSE_VIPER = Challenge(
     level=1, id="verse_viper", pet="snake", tools=("sed",), threat="Verse Viper",
     task="The Verse Viper coils around poem.txt.\nWhat word is on line {n}?",
+    help="Here, find the option that stops sed printing every line (-n); the script 'Np' prints line N.",
     hints=["`bashou learn sed`: with -n sed stays quiet, and '{n}p' prints only that line.",
            "Try: sed -n '{n}p' poem.txt"],
     setup=poem_setup,
@@ -167,6 +177,7 @@ VERSE_VIPER = Challenge(
 PEAK_HARPY = Challenge(
     level=2, id="peak_harpy", pet="sofa", tools=("sort",), threat="Peak Harpy",
     task="The Peak Harpy nests on the highest score.\nWhat is the biggest number in scores.txt?",
+    help="Here, find the option that compares numbers, not text.",
     hints=["sort compares as text unless you pass -n, which compares as numbers. "
            "The last line of the sorted file is the biggest one: `tail -1`.",
            "Try: sort -n scores.txt | tail -1"],

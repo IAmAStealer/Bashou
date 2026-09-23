@@ -133,3 +133,39 @@ class ArenaShellTest(TempState):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class HelpHintTest(unittest.TestCase):
+    """Beginners (owner): a fight's first hint teaches `tool --help`, and reading help is never punished."""
+
+    def test_beginners_learn_help_first(self):
+        moth = challenges.BY_ID["line_moth"]
+        first = moth.hint_text(0, {"help_first": True})
+        self.assertIn("wc --help", first)
+        self.assertIn("counts lines", first)
+        self.assertEqual(len(moth.hint_list({"help_first": True})), len(moth.hints) + 1)
+        self.assertEqual(moth.hint_list({"help_first": False}), moth.hints)        # later: straight to it
+        code = challenges.BY_ID["colon_cobra"]                    # its file already says how to get help
+        self.assertEqual(code.hint_list({"help_first": True}), code.hints)
+
+    def test_beginner_threshold(self):
+        s = state.default()
+        self.assertTrue(fight.beginner(s))
+        s["fights_won"] = fight.BEGINNER_WINS
+        self.assertFalse(fight.beginner(s))
+
+    def test_every_bash_level_1_fight_explains_its_help(self):
+        for ch in challenges.ALL:
+            if ch.skill == "bash" and ch.level == 1:
+                self.assertTrue(ch.help, ch.id)
+
+    def test_reading_help_is_free_and_no_strike(self):
+        moth = challenges.BY_ID["line_moth"]
+        for cmd in ("wc --help", "wc --help | less", "man wc"):
+            self.assertIsNone(duel.judge(moth, 0, cmd), cmd)
+        self.assertEqual(duel.judge(moth, 0, "wc -l notes.txt"), "hit")
+        with tempfile.TemporaryDirectory() as base:
+            (Path(base) / "log").write_text("0\t    1  wc --help\n")
+            self.assertFalse(fight.used_tool(base, moth))          # `answer` still needs a real wc
+            (Path(base) / "log").write_text("0\t    1  wc --help\n0\t    2  wc -l notes.txt\n")
+            self.assertTrue(fight.used_tool(base, moth))

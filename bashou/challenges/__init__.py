@@ -18,6 +18,12 @@ def fill(text, meta):
     return text
 
 
+HELP_HINT = ("Ask {tool} itself: `{tool} --help` (-h works for many tools, not all: `ls -h` means human sizes). "
+             "The Usage line shows how to write it: [ ] is optional, ... means you can give several. "
+             "Below, one line per option: short form (-x), long form (--xxx), what it does. "
+             "Too long? `{tool} --help | less`, q quits.")
+
+
 @dataclass
 class Challenge:
     id: str
@@ -36,6 +42,7 @@ class Challenge:
     after: tuple = ()         # fights to beat before this one comes (beginners first)
     distro: tuple = ()        # only on these families (os-release ID or ID_LIKE), e.g. ("debian",)
     skill: str = "bash"       # what it teaches (skills.SKILLS): only sent if you learn that
+    help: str = ""            # what to look for in `tool --help`: beginners get that hint first
 
     @property
     def tool(self):
@@ -45,9 +52,16 @@ class Challenge:
         from ..i18n import _
         return fill(_(self.task), meta)
 
-    def hint_text(self, i, meta):
+    def hint_list(self, meta):
+        """The hints of this fight; beginners (meta["help_first"]) first learn to read --help."""
         from ..i18n import _
-        return fill(_(self.hints[i]), meta)
+        hints = [fill(_(h), meta) for h in self.hints]
+        if meta.get("help_first") and self.help:
+            hints.insert(0, _(HELP_HINT).format(tool=self.tool) + " " + fill(_(self.help), meta))
+        return hints
+
+    def hint_text(self, i, meta):
+        return self.hint_list(meta)[i]
 
     def used_by(self, analysis):
         return self.uses(analysis) if self.uses else bool(analysis.tools & set(self.tools))

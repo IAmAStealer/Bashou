@@ -28,6 +28,7 @@ CHALLENGE = Challenge(
     task="The Maze Wraith hides in backup files.\n"
          "How many regular files ending in .bak are there in maze/, at any depth?\n"
          "(Careful: some directories are named *.bak too.)",
+    help="Here, look for the test on a file's name (-name) in the expression part.",
     hints=["find walks every subdirectory; -type f keeps only files, -name matches a pattern.",
            "Try: find maze -type f -name '*.bak' | wc -l"],
     setup=setup,
