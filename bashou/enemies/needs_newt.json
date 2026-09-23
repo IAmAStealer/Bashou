@@ -1,0 +1,47 @@
+{
+ "name": "Needs Newt",
+ "palette": {
+  "a": "#4a200c",
+  "o": "#f08a30",
+  "O": "#c0601c",
+  "y": "#f8d060",
+  "w": "#ffffff",
+  "m": "#101010"
+ },
+ "base": [
+  ".................",
+  ".................",
+  "..........aaaa...",
+  ".........aoooooa.",
+  "........aowmwooya",
+  ".aaa...aoooooooa.",
+  "aoOoaaaoOoOoOoa..",
+  ".aoooooOoOoOoa...",
+  "..aaoOoooooaa....",
+  "...aOa.aOa.aOa...",
+  "...aa..aa..aa....",
+  "................."
+ ],
+ "poses": {
+  "inhale": {
+   "7": ".aoooooooooooa..."
+  },
+  "closed": {
+   "4": "----------ooo----"
+  },
+  "left": {
+   "4": "----------mww----"
+  },
+  "right": {
+   "4": "----------wwm----"
+  },
+  "fidget": {
+   "5": "aaa--------------",
+   "6": "oOa--------------"
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}

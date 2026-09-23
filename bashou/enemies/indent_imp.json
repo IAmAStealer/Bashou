@@ -1,0 +1,47 @@
+{
+ "name": "Indent Imp",
+ "palette": {
+  "a": "#3a1420",
+  "r": "#d0485a",
+  "R": "#9a2f44",
+  "w": "#ffffff",
+  "m": "#101010",
+  "y": "#f0c860"
+ },
+ "base": [
+  "...a.........a...",
+  "...aa.......aa...",
+  "....aarrrrraa....",
+  "...arrrrrrrrra...",
+  "..arrwmwrwmwrra..",
+  "..arrrrrrrrrrra..",
+  "..arrrmwmwmrrra..",
+  "...arrrrrrrrra...",
+  "....aRRRRRRRa..y.",
+  "...aRRaRRRaRRa.y.",
+  "....aRa...aRa.yy.",
+  "....aa.....aa...."
+ ],
+ "poses": {
+  "inhale": {
+   "3": "..arrrrrrrrrrra.."
+  },
+  "closed": {
+   "4": "-----rrr-rrr-----"
+  },
+  "left": {
+   "4": "-----mww-mww-----"
+  },
+  "right": {
+   "4": "-----wwm-wwm-----"
+  },
+  "fidget": {
+   "8": "---------------..",
+   "9": "---------------yy"
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}

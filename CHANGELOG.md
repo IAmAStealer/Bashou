@@ -41,6 +41,12 @@ Every release has a section here, written for players. CI refuses to tag a relea
   questions on sort and uniq.
 - The Slug has a new look: olive green, big eyes on stalks, pink cheeks and a smile.
 - During a boss fight, the pet no longer flashes under the question box.
+- **CI/CD fights.** Five new threats hand you a pipeline file to fix: a GitHub Actions workflow with a
+  line indented wrong (Indent Imp), a token written in clear (Secret Sprite), a deploy that neither
+  waits for the tests nor stays on main (Needs Newt); a .gitlab-ci.yml with a stage that doesn't
+  exist (Stage Specter) or a production deploy that should wait for a click (Manual Mole). The
+  Sage Owl teaches pipeline files on the CI/CD path, with a chest to practice, and six new CI/CD
+  questions go with them.
 - **The road splits.** At a fork, the road now divides in front of your pet into two or three paths
   fading into the distance, each with its name written at its end; the one you pick lights up.
 

@@ -10,7 +10,7 @@ from pathlib import Path
 from unittest import mock
 
 from bashou import challenges, fight, state
-from bashou.challenges import repos
+from bashou.challenges import cicd, repos
 
 # Reference solutions, run with bash in the arena folder. {x} is filled from the task text.
 SOLUTIONS = {
@@ -67,6 +67,12 @@ SOLUTIONS = {
     "hitchhiker_hare": ("rpm -qf --qf '%{{NAME}}' {x}", r"put (\S+) on"),
     "census_centipede": ("rpm -qa | wc -l", None),
     # repository fights: write the right file back, or one dnf command limited to one repo
+    "indent_imp": ("cat > .github/workflows/ci.yml <<'X'\n" + cicd.GH_OK.replace("{", "{{").replace("}", "}}") + "X", None),
+    "trial_ci_indent": ("cat > .github/workflows/ci.yml <<'X'\n" + cicd.GH_OK.replace("{", "{{").replace("}", "}}") + "X", None),
+    "stage_specter": ("sed -i 's/^  stage: [a-z-]*$/&/; /^unit:/,/^$/s/stage: .*/stage: test/' .gitlab-ci.yml", None),
+    "secret_sprite": ("sed -i 's/API_TOKEN: ghp_.*/API_TOKEN: ${{{{ secrets.API_TOKEN }}}}/' .github/workflows/ci.yml", None),
+    "needs_newt": ("sed -i \"/^  deploy:/a\\    needs: test\\n    if: github.ref == 'refs/heads/main'\" .github/workflows/ci.yml", None),
+    "manual_mole": ("printf '%s\\n' '  rules:' '    - if: $CI_COMMIT_BRANCH == \"main\"' '      when: manual' >> .gitlab-ci.yml", None),
     "mirror_mimic": ("cat > debian.sources <<'X'\n" + repos.DEBIAN_OK + "X", None),
     "repo_revenant": ("cat > rocky.repo <<'X'\n" + repos.ROCKY_OK + "X", None),
     "enabled_ettin": ("dnf --disablerepo='*' --enablerepo={x} repolist", r"only the (\S+) repository"),
@@ -282,6 +288,47 @@ class LenientAnswerTest(unittest.TestCase):
         self.assertTrue(packages.same_version("bash 5.2.37-2+b9", "5.2.37-2+b9"))       # dpkg-query -W
         self.assertTrue(packages.same_version("4.0.4-9", "2:4.0.4-9"))
         self.assertFalse(packages.same_version("", "2:4.0.4-9"))
+
+
+class CicdFightTest(unittest.TestCase):
+    """CI/CD fights read the fix by meaning: other valid ways of writing it win too."""
+
+    def fixed(self, fight, text):
+        with tempfile.TemporaryDirectory() as tmp:
+            work = Path(tmp)
+            ch = challenges.BY_ID[fight]
+            meta = ch.setup(work, random.Random(0))
+            name = cicd.GITLAB if (work / cicd.GITLAB).exists() else cicd.WORKFLOW
+            (work / name).write_text(text(( work / name).read_text(), meta))
+            return ch.check(work, meta, "done")
+
+    def test_every_planted_indent_mistake_breaks_the_file(self):
+        for right, wrong in cicd.INDENT_MISTAKES:
+            with tempfile.TemporaryDirectory() as tmp:
+                cicd.write(Path(tmp), cicd.WORKFLOW, cicd.GH_OK.replace(right, wrong, 1))
+                self.assertFalse(cicd.indent_verify(Path(tmp), {}, ""), wrong)
+        self.assertRaises(ValueError, cicd.load, cicd.GH_OK.replace("    runs-on", "\trunt-on"))
+
+    def test_needs_and_if_in_other_forms(self):
+        add = lambda extra: lambda text, meta: text.replace("  deploy:\n", "  deploy:\n" + extra)
+        self.assertTrue(self.fixed("needs_newt", add("    needs: [test]\n    if: github.ref_name == 'main'\n")))
+        self.assertTrue(self.fixed("needs_newt", add("    needs:\n      - test\n    if: ${{ github.ref == \"refs/heads/main\" }}\n")))
+        self.assertFalse(self.fixed("needs_newt", add("    needs: test\n")))                # still every branch
+        self.assertFalse(self.fixed("needs_newt", add("    if: github.ref == 'refs/heads/main'\n")))
+
+    def test_manual_in_other_forms(self):
+        add = lambda extra: lambda text, meta: text + extra
+        self.assertTrue(self.fixed("manual_mole", add("  rules:\n    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'\n      when: manual\n")))
+        self.assertTrue(self.fixed("manual_mole", add("  only:\n    - main\n  when: manual\n")))
+        self.assertFalse(self.fixed("manual_mole", add("  when: manual\n")))                      # every branch
+        self.assertFalse(self.fixed("manual_mole", add("  rules:\n    - if: $CI_COMMIT_BRANCH == \"main\"\n      when: manual\n    - when: on_success\n")))
+        self.assertFalse(self.fixed("manual_mole", add("  when: manual\n  rules:\n    - if: $CI_COMMIT_BRANCH == \"main\"\n")))
+
+    def test_secret_needs_the_secrets_context_and_the_token_gone(self):
+        swap = lambda new: lambda text, meta: text.replace(meta["token"], new)
+        self.assertTrue(self.fixed("secret_sprite", swap("${{secrets.API_TOKEN}}")))
+        self.assertFalse(self.fixed("secret_sprite", swap("$API_TOKEN")))
+        self.assertFalse(self.fixed("secret_sprite", lambda text, meta: text + "# old: " + meta["token"] + "\n"))
 
 
 class RepoFightTest(unittest.TestCase):

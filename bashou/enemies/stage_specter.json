@@ -1,0 +1,46 @@
+{
+ "name": "Stage Specter",
+ "palette": {
+  "a": "#2a3040",
+  "g": "#b8c4dc",
+  "G": "#8a96b4",
+  "w": "#ffffff",
+  "m": "#101010",
+  "s": "#e0b050"
+ },
+ "base": [
+  ".....aaaaaaa.....",
+  "....aggggggga....",
+  "...aggggggggga...",
+  "...agwmwgwmwga...",
+  "...aggggggggga...",
+  "...agggaaaggga...",
+  "...aggggggggga...",
+  "...aggggggggga...",
+  "...aGgGgGgGgGa...",
+  "...aGaGaGaGaGa...",
+  "ssssssssssssssss.",
+  "s..............s."
+ ],
+ "poses": {
+  "inhale": {
+   "0": "....aaaaaaaaa...."
+  },
+  "closed": {
+   "3": "-----ggg-ggg-----"
+  },
+  "left": {
+   "3": "-----mww-mww-----"
+  },
+  "right": {
+   "3": "-----wwm-wwm-----"
+  },
+  "fidget": {
+   "9": "---a.a.a.a.a.a---"
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}

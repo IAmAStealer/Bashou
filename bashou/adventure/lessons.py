@@ -31,6 +31,20 @@ LESSONS = [
         ("A condition before the braces picks lines; END runs after the last one.",
          "awk '$2 > 30 {n++} END {print n}' people.txt"),
     ]},
+    {"id": "pipelines", "tool": "yaml", "topics": ("cicd",), "title": "Pipeline files", "pages": [
+        ("GitHub Actions reads .github/workflows/*.yml, GitLab reads .gitlab-ci.yml. Names that start with "
+         "a dot are hidden: ls -a shows them.", "ls -a; cat .gitlab-ci.yml"),
+        ("These files are YAML: the spaces at the start of a line say what belongs to what, 2 more per "
+         "level. A line one space off lands in the wrong place, or breaks the file. Never use tabs.",
+         "cat -A .github/workflows/ci.yml   # shows every space, and tabs as ^I"),
+        ("Jobs run side by side unless you set an order: needs: on GitHub, stages: on GitLab. A deploy "
+         "should wait for the tests, and be skipped when they fail.", "grep -n 'needs:\\|stage' .gitlab-ci.yml"),
+        ("Conditions decide when a job runs: if: on GitHub, rules: on GitLab. when: manual makes GitLab "
+         "wait for someone to click, handy for a production deploy.", "grep -n 'if:\\|rules:\\|when:' .gitlab-ci.yml"),
+        ("Never write a password or a token in the file: everyone who reads the repository gets it. The "
+         "CI keeps secrets for you: ${{ secrets.NAME }} on GitHub, a CI/CD variable on GitLab.",
+         "grep -rni 'token\\|password' .github .gitlab-ci.yml"),
+    ]},
 ]
 BY_ID = {lesson["id"]: lesson for lesson in LESSONS}
 

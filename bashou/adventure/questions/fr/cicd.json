@@ -130,6 +130,45 @@
   "explain": "En YAML, les espaces en début de ligne décident de qui appartient à quoi, comme en Python : un espace de travers et une étape atterrit dans le mauvais job, ou le fichier ne se lit plus. Les tabulations sont interdites, seulement des espaces. Le support YAML de ton éditeur ou une étape de lint montre l'erreur avant le pipeline."
  },
  {
+  "id": "cicd-1-11",
+  "level": 1,
+  "q": "Dans .gitlab-ci.yml, un job de déploiement a `when: manual`. Que se passe-t-il quand le pipeline tourne ?",
+  "choices": [
+   "Il attend qu'on clique sur son bouton lecture",
+   "Il tourne, puis demande une confirmation",
+   "Il est retiré du pipeline",
+   "Il ne tourne que la nuit"
+  ],
+  "answer": 0,
+  "explain": "when: manual met le job dans le pipeline sans le lancer : un bouton lecture apparaît sur la page du pipeline, et le job tourne quand quelqu'un qui en a le droit clique dessus. C'est une sécurité simple pour les déploiements en production : les tests tournent tout seuls, un humain décide quand livrer."
+ },
+ {
+  "id": "cicd-1-12",
+  "level": 1,
+  "q": "GitLab refuse ton pipeline : 'unit job: chosen stage does not exist'. Que vérifies-tu ?",
+  "choices": [
+   "Que le stage: du job est listé sous stages:",
+   "Que le runner est en ligne",
+   "Que la branche est protégée",
+   "Que le job a une image:"
+  ],
+  "answer": 0,
+  "explain": "stages: en haut de .gitlab-ci.yml liste les étapes dans l'ordre où elles tournent, et le stage: de chaque job doit en faire partie. Une faute comme tests au lieu de test suffit pour que GitLab refuse tout le fichier, avant qu'un seul job tourne. La page de lint de la CI (CI/CD > Editor) montre ces erreurs pendant que tu tapes."
+ },
+ {
+  "id": "cicd-1-13",
+  "level": 1,
+  "q": "Dans .github/workflows/ci.yml, une ligne d'une étape commence un espace trop à gauche. Que se passe-t-il ?",
+  "choices": [
+   "Le fichier casse, ou la ligne atterrit au mauvais endroit",
+   "GitHub corrige l'indentation pour toi",
+   "Rien : YAML ignore les espaces",
+   "Juste un avertissement dans les logs"
+  ],
+  "answer": 0,
+  "explain": "En YAML, les espaces en début de ligne décident de qui appartient à quoi. Un espace de travers, et une clé n'appartient plus à son étape : GitHub refuse le fichier, ou lance autre chose que ce que tu voulais. Garde 2 espaces par niveau, jamais de tabulations, et laisse un éditeur qui connaît YAML montrer la structure."
+ },
+ {
   "id": "cicd-2-01",
   "level": 2,
   "q": "Pourquoi épingler une action sur le SHA d'un commit ?",
@@ -258,5 +297,44 @@
   ],
   "answer": 0,
   "explain": "Une tâche idempotente décrit le résultat, pas une action : « cette ligne est dans le fichier », plutôt que « ajoute cette ligne ». Le premier passage fait le changement, les suivants voient que c'est déjà fait et ne changent rien. On peut relancer sans risque après un échec ; Ansible affiche alors changed=0."
+ },
+ {
+  "id": "cicd-2-11",
+  "level": 2,
+  "q": "Sur GitHub Actions, le job deploy ne doit démarrer qu'après la réussite du job test. Qu'ajoutes-tu à deploy ?",
+  "choices": [
+   "needs: test",
+   "after: test",
+   "depends_on: test",
+   "stage: deploy"
+  ],
+  "answer": 0,
+  "explain": "Les jobs d'un workflow tournent en même temps sauf si tu dis autre chose. needs: test fait attendre test à deploy, et saute deploy quand test échoue : du code cassé n'est jamais livré. after: et depends_on: n'existent pas dans GitHub Actions ; stage: est la façon de GitLab d'ordonner les jobs."
+ },
+ {
+  "id": "cicd-2-12",
+  "level": 2,
+  "q": "Un job de déploiement GitLab a `rules: - if: $CI_COMMIT_BRANCH == \"main\"` avec `when: manual`. Que se passe-t-il sur une branche de fonctionnalité ?",
+  "choices": [
+   "Le job n'est pas du tout dans ce pipeline",
+   "Il tourne tout seul",
+   "Il attend un clic",
+   "Tout le pipeline échoue"
+  ],
+  "answer": 0,
+  "explain": "GitLab lit les rules dans l'ordre et prend la première qui correspond. Sur une branche de fonctionnalité, le if est faux et aucune autre règle ne correspond : le job n'est pas ajouté au pipeline. Sur main, la règle correspond et when: manual ajoute le job avec un bouton lecture. Attention à une dernière règle sans if : elle correspondrait à toutes les branches."
+ },
+ {
+  "id": "cicd-2-13",
+  "level": 2,
+  "q": "Pourquoi mettre `if: github.ref == 'refs/heads/main'` sur un job de déploiement GitHub ?",
+  "choices": [
+   "Seuls les push sur main déploient, ni branches ni PR",
+   "Pour que le job aille plus vite",
+   "Parce que deploy a besoin d'un nom de branche",
+   "Pour déployer chaque branche sur son propre serveur"
+  ],
+  "answer": 0,
+  "explain": "Un workflow qui tourne sur push et pull_request tourne pour chaque branche et chaque pull request. Sans condition, chacune déploierait en production. github.ref est le nom complet de ce qui a lancé le passage : refs/heads/main pour la branche main. Avec ce if, les autres passages testent quand même, mais sautent le déploiement."
  }
 ]

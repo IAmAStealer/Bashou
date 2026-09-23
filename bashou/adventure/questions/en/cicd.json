@@ -130,6 +130,45 @@
   "explain": "In YAML the spaces at the start of a line decide what belongs to what, like in Python: one space off and a step lands in the wrong job, or the file no longer parses. Tabs are forbidden, only spaces. Your editor's YAML support or a lint step shows the mistake before the pipeline does."
  },
  {
+  "id": "cicd-1-11",
+  "level": 1,
+  "q": "In .gitlab-ci.yml, a deploy job has `when: manual`. What happens when the pipeline runs?",
+  "choices": [
+   "It waits until someone clicks its play button",
+   "It runs, then asks for a confirmation",
+   "It is removed from the pipeline",
+   "It runs only at night"
+  ],
+  "answer": 0,
+  "explain": "when: manual puts the job in the pipeline but doesn't start it: a play button appears in the pipeline page, and the job runs when someone with the rights clicks it. It's a simple safety for production deploys: the tests run by themselves, a human decides when to ship."
+ },
+ {
+  "id": "cicd-1-12",
+  "level": 1,
+  "q": "GitLab refuses your pipeline: 'unit job: chosen stage does not exist'. What do you check?",
+  "choices": [
+   "That the job's stage: is listed under stages:",
+   "That the runner is online",
+   "That the branch is protected",
+   "That the job has an image:"
+  ],
+  "answer": 0,
+  "explain": "stages: at the top of .gitlab-ci.yml lists the stages in the order they run, and each job's stage: must be one of them. A typo like tests instead of test is enough for GitLab to refuse the whole file, before any job runs. The CI lint page (CI/CD > Editor) shows such errors as you type."
+ },
+ {
+  "id": "cicd-1-13",
+  "level": 1,
+  "q": "In .github/workflows/ci.yml, one line of a step starts one space too far left. What happens?",
+  "choices": [
+   "The file breaks, or the line lands in the wrong place",
+   "GitHub fixes the indentation for you",
+   "Nothing: YAML ignores spaces",
+   "Only a warning in the logs"
+  ],
+  "answer": 0,
+  "explain": "In YAML, the spaces at the start of a line decide what belongs to what. One space off, and a key no longer belongs to its step: GitHub rejects the file, or runs something different from what you meant. Keep 2 spaces per level, never tabs, and let an editor with YAML support show the structure."
+ },
+ {
   "id": "cicd-2-01",
   "level": 2,
   "q": "Why pin an action to a commit SHA?",
@@ -258,5 +297,44 @@
   ],
   "answer": 0,
   "explain": "An idempotent task describes the result, not an action: 'this line is in the file', rather than 'add this line'. The first run makes the change, the next runs see it's already done and change nothing. You can safely run it again after a failure; Ansible then reports changed=0."
+ },
+ {
+  "id": "cicd-2-11",
+  "level": 2,
+  "q": "On GitHub Actions, the deploy job must start only after the test job succeeded. What do you add to deploy?",
+  "choices": [
+   "needs: test",
+   "after: test",
+   "depends_on: test",
+   "stage: deploy"
+  ],
+  "answer": 0,
+  "explain": "Jobs of a workflow run at the same time unless you say otherwise. needs: test makes deploy wait for test, and skips deploy when test fails, so broken code is never shipped. after: and depends_on: don't exist in GitHub Actions; stage: is GitLab's way of ordering jobs."
+ },
+ {
+  "id": "cicd-2-12",
+  "level": 2,
+  "q": "A GitLab deploy job has `rules: - if: $CI_COMMIT_BRANCH == \"main\"` with `when: manual`. What happens on a feature branch?",
+  "choices": [
+   "The job isn't in that pipeline at all",
+   "It runs by itself",
+   "It waits for a click",
+   "The whole pipeline fails"
+  ],
+  "answer": 0,
+  "explain": "GitLab reads rules in order and uses the first one that matches. On a feature branch the if is false and no other rule matches, so the job isn't added to the pipeline at all. On main, the rule matches and when: manual adds the job with a play button. Beware of a last rule without if: it would match every branch."
+ },
+ {
+  "id": "cicd-2-13",
+  "level": 2,
+  "q": "Why put `if: github.ref == 'refs/heads/main'` on a GitHub deploy job?",
+  "choices": [
+   "Only pushes to main deploy, not branches or PRs",
+   "To make the job faster",
+   "Because deploy needs a branch name to run",
+   "To deploy each branch to its own server"
+  ],
+  "answer": 0,
+  "explain": "A workflow that runs on push and pull_request runs for every branch and every pull request. Without a condition, any of them would deploy to production. github.ref is the full name of what triggered the run: refs/heads/main for the main branch. With this if, the other runs still test, but skip the deploy."
  }
 ]

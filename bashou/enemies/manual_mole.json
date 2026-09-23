@@ -1,0 +1,48 @@
+{
+ "name": "Manual Mole",
+ "palette": {
+  "a": "#2a1c14",
+  "b": "#6a4a38",
+  "B": "#4a3226",
+  "p": "#f0a0a8",
+  "w": "#ffffff",
+  "m": "#101010",
+  "g": "#c0c8d0"
+ },
+ "base": [
+  ".....aaaaaaa.....",
+  "...aabbbbbbbaa...",
+  "..abbbbbbbbbbba..",
+  "..agggggbggggga..",
+  "..agwmwgbgwmwga..",
+  "..agggggpggggga..",
+  "..abbbbpppbbbba..",
+  ".aabbbbbbbbbbbaa.",
+  "appaBBBBBBBBBappa",
+  "apppaBBBBBBBapppa",
+  ".appaaBBBBBaappa.",
+  "..aa..aa.aa..aa.."
+ ],
+ "poses": {
+  "inhale": {
+   "1": "...abbbbbbbbba..."
+  },
+  "closed": {
+   "4": "----ggg---ggg----"
+  },
+  "left": {
+   "4": "----mww---mww----"
+  },
+  "right": {
+   "4": "----wwm---wwm----"
+  },
+  "fidget": {
+   "8": "a--a---------a--a",
+   "9": ".ppp---------ppp."
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}

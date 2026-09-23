@@ -50,6 +50,7 @@ class ArenaBugs(unittest.TestCase):
         expected.update({ch.id: "rustc" for ch in challenges.rust.ALL})
         editor = challenges.BY_ID["mirror_mimic"].tools[0]                  # the first editor installed
         expected.update({"mirror_mimic": editor, "repo_revenant": editor, "enabled_ettin": "dnf"})
+        expected.update({ch.id: editor for ch in challenges.cicd.ALL})
         for ch in challenges.ALL:
             self.assertEqual(ch.tool, expected[ch.id])
 

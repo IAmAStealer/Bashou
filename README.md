@@ -22,13 +22,15 @@ tokens spent to learn what a command does.
   right tool: `grep` against the Log Hydra, `awk` against the Ledger Golem. A successful command with
   the right tool hits the enemy; other commands cost you a heart. Code fights hand you a small broken
   Python or C file to fix (a missing `;`, a loop that never ends, a memory leak, a shell injection);
-  package fights ask your own machine with `apt`, `dpkg` or `rpm`, or have you fix a repository file.
+  package fights ask your own machine with `apt`, `dpkg` or `rpm`, or have you fix a repository file;
+  CI/CD fights hand you a GitHub Actions or GitLab CI file to fix (indentation, stages, a token in
+  clear, `needs:` and `if:`, `when: manual`).
   Beaten fights come back after 1, 7 and 30 days (spaced repetition), so what you learned stays.
 - **`bashou explain python list`** (or `dict`, `loop`, `recursion`; `bashou explain c malloc`…): a
   short note with an example, for the code fights.
 - **`bashou security`**: small investigations (a hidden file, a cron backdoor, a SUID binary).
 - **`bashou adventure`**: a walk through 10 topics (coding logic, bash, Linux, systemd, Python, Rust,
-  C, Debian, Rocky Linux, CI/CD) with 254 questions about what goes wrong and what to check first, bosses, and
+  C, Debian, Rocky Linux, CI/CD) with 263 questions about what goes wrong and what to check first, bosses, and
   chests that open with real commands.
 
 ![bashou fight: a Planet and its hearts face the Log Hydra, the task in a bubble, and the arena
