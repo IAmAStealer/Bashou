@@ -33,6 +33,9 @@ Every release has a section here, written for players. CI refuses to tag a relea
   followed by a real explanation in plain words: why it's right, what the tempting wrong answer
   does, and what to do next. All 254 questions, in English and French; many questions also give
   more context.
+- **Why sort comes before uniq.** uniq only merges identical lines that follow each other, so
+  `cut … | uniq -c` counted the same city several times. The Sage Owl's pipe lesson now says so, the
+  cities chest explains it in its hints, and the arena tells you once when you run uniq without sort.
 - **The road splits.** At a fork, the road now divides in front of your pet into two or three paths
   fading into the distance, each with its name written at its end; the one you pick lights up.
 

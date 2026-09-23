@@ -39,7 +39,16 @@ _arena_log() {
     fi
   fi
   _arena_hc=$HISTCMD
+  _arena_tip
   return "$s"
+}
+_arena_tip() {
+  local cmd
+  cmd=$(HISTTIMEFORMAT= history 1)
+  if [[ $cmd == *uniq* && $cmd != *sort*uniq* && -r $BASHOU_ARENA/tip_uniq ]]; then
+    printf '%s\n' "$(< "$BASHOU_ARENA/tip_uniq")"
+    rm -f "$BASHOU_ARENA/tip_uniq"
+  fi
 }
 PROMPT_COMMAND=_arena_log
 _arena() { python3 "$BASHOU_SRC/launch.py" bashou.fight "$@" "$BASHOU_ARENA"; }
@@ -294,6 +303,9 @@ def arena(ch, intro, rng=None, fight=False, help_first=False):
         meta.update(ch.setup(work, rng or random.Random()))
         (base / "meta.json").write_text(json.dumps(meta))
         (base / "arena.rc").write_text(RC)
+        (base / "tip_uniq").write_text(ACCENT + "💡 " + _(                # shown once, on uniq without sort
+            "Tip: uniq only merges identical lines that are next to each other. "
+            "Sort first: … | sort | uniq -c (or sort -u to keep one of each).") + RESET)
         top = duel.room(base) if fight else 0
         if top:                                            # the duel takes the top: start below it
             print("\033[H\033[2J" + "\n" * top, end="", flush=True)

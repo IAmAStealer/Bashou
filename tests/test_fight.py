@@ -493,3 +493,33 @@ class FixFightTest(unittest.TestCase):
                 mock.patch.object(fight, "used_tool", return_value=True):
             self.assertEqual(fight.cmd_verify(str(base)), 0)
         self.assertEqual(check.call_args.args[2], "done")
+
+
+class UniqTipTest(unittest.TestCase):
+    """Bug report: `cut … | uniq -c` counted the same city several times; nothing said why."""
+
+    def run_arena(self, lines):
+        base = Path(tempfile.mkdtemp())
+        self.addCleanup(__import__("shutil").rmtree, base)
+        (base / "arena").mkdir()
+        (base / "arena.rc").write_text(fight.RC)
+        (base / "tip_uniq").write_text("TIP-UNIQ")
+        (base / "arena/f.txt").write_text("b\na\nb\n")
+        env = {**os.environ, "BASHOU_ARENA": str(base), "BASHOU_SRC": str(Path(fight.__file__).parent.parent)}
+        env.pop("BASHOU_DUEL", None)
+        out = subprocess.run(["bash", "--rcfile", str(base / "arena.rc"), "-i"], input="\n".join(lines) + "\nexit 0\n",
+                             capture_output=True, text=True, env=env, timeout=20)
+        return out.stdout
+
+    def test_uniq_without_sort_gets_the_tip_once(self):
+        out = self.run_arena(["cat f.txt | uniq -c", "cat f.txt | uniq -c"])
+        self.assertEqual(out.count("TIP-UNIQ"), 1)
+
+    def test_sort_then_uniq_gets_no_tip(self):
+        self.assertNotIn("TIP-UNIQ", self.run_arena(["sort f.txt | uniq -c"]))
+
+    def test_the_owl_and_the_chest_say_why_sort_comes_first(self):
+        from bashou.adventure import lessons
+        pages = " ".join(text for text, example in lessons.BY_ID["pipes"]["pages"])
+        self.assertIn("sort always comes before uniq", pages)
+        self.assertTrue(any("next to each other" in h for h in challenges.BY_ID["trial_pipe_cities"].hints))

@@ -226,7 +226,10 @@ PRICES = trial("trial_awk_sum", 2, "prices.txt has an item and a price per line.
                prices_setup, lambda w, m, v: v.strip() == str(m["answer"]), requires=["awk"], teaches=["awk"])
 
 CITIES = trial("trial_pipe_cities", 2, "How many different cities are in people.txt (3rd column)? Then: answer <number>",
-               ["Keep the city column, remove duplicates, count the lines: three commands joined with |.",
+               ["Three steps joined with | (a pipe): keep the city column (awk '{print $3}' or cut -d' ' -f3), "
+                "keep each city once, count the lines (wc -l).",
+                "To keep each city once, sort first: uniq only removes duplicates that are next to each other, "
+                "and sort puts identical lines together. sort -u does both at once.",
                 "Try: awk '{print $3}' people.txt | sort -u | wc -l"],
                people_setup, lambda w, m, v: v.strip() == str(m["cities"]), requires=["sort", "wc"], teaches=["|"])
 

@@ -839,9 +839,6 @@
  "The Dungeon of Daemons": "Le Donjon des Démons",
  "Deep below, processes that never die guard the way.": "Tout en bas, des processus qui ne meurent jamais gardent le passage.",
  "Pipes": "Les pipes",
- "A pipe | sends the output of one command into the next one.": "Un pipe | envoie la sortie d'une commande dans la suivante.",
- "Chain small tools, one step each.": "Enchaîne de petits outils, une étape chacun.",
- "Read it left to right: filter, keep what you need, then count.": "Lis de gauche à droite : filtre, garde ce qu'il te faut, puis compte.",
  "awk, the column reader": "awk, le lecteur de colonnes",
  "awk reads a file line by line and cuts each line into fields: $1 is the first word, $2 the second, $NF the last.": "awk lit un fichier ligne par ligne et découpe chaque ligne en champs : $1 est le premier mot, $2 le deuxième, $NF le dernier.",
  "-F sets the separator, for CSV and friends.": "-F choisit le séparateur, pour les CSV et compagnie.",
@@ -1342,10 +1339,16 @@
  "awk can add up a column in a variable and print it in END.": "awk peut additionner une colonne dans une variable et l'afficher dans END.",
  "Try: awk '{s += $2} END {print s}' prices.txt": "Essaie : awk '{s += $2} END {print s}' prices.txt",
  "How many different cities are in people.txt (3rd column)? Then: answer <number>": "Combien de villes différentes y a-t-il dans people.txt (3e colonne) ? Puis : answer <nombre>",
- "Keep the city column, remove duplicates, count the lines: three commands joined with |.": "Garde la colonne des villes, enlève les doublons, compte les lignes : trois commandes reliées par |.",
  "Try: awk '{print $3}' people.txt | sort -u | wc -l": "Essaie : awk '{print $3}' people.txt | sort -u | wc -l",
  "Ask {tool} itself: `{tool} --help` (-h works for many tools, not all: `ls -h` means human sizes). The Usage line shows how to write it: [ ] is optional, ... means you can give several. Below, one line per option: short form (-x), long form (--xxx), what it does. Too long? `{tool} --help | less`, q quits.": "Demande à {tool} lui-même : `{tool} --help` (-h marche pour beaucoup d'outils, pas tous : `ls -h` veut dire tailles lisibles). La ligne Usage montre comment l'écrire : [ ] est facultatif, ... veut dire que tu peux en mettre plusieurs. Dessous, une ligne par option : forme courte (-x), forme longue (--xxx), ce qu'elle fait. Trop long ? `{tool} --help | less`, q pour quitter.",
  "Nothing to answer here: run `{value}` at the prompt, and when it works type `verify`.": "Rien à répondre ici : lance `{value}` à l'invite, et quand ça marche tape `verify`.",
  "strike when it works: Bashou checks your work": "frapper quand ça marche : Bashou vérifie ton travail",
- "This one asks a question: answer <value>": "Celui-ci pose une question : answer <valeur>"
+ "This one asks a question: answer <value>": "Celui-ci pose une question : answer <valeur>",
+ "A pipe | sends what one command prints into the next command, as if it were a file.": "Un pipe | envoie ce qu'affiche une commande dans la commande suivante, comme si c'était un fichier.",
+ "Chain small tools, one step each: grep keeps the lines with error, sort puts identical lines side by side, uniq -c counts each group.": "Enchaîne de petits outils, une étape chacun : grep garde les lignes avec error, sort met les lignes identiques côte à côte, uniq -c compte chaque groupe.",
+ "uniq only merges identical lines that follow each other. Without sort, a city that appears on lines 1 and 3 is counted twice. So sort always comes before uniq.": "uniq ne fusionne que les lignes identiques qui se suivent. Sans sort, une ville qui apparaît aux lignes 1 et 3 est comptée deux fois. Donc sort vient toujours avant uniq.",
+ "Read a pipe left to right: take a column, keep each value once (sort -u = sort then uniq), then count the lines.": "Lis un pipe de gauche à droite : prends une colonne, garde chaque valeur une fois (sort -u = sort puis uniq), puis compte les lignes.",
+ "Three steps joined with | (a pipe): keep the city column (awk '{print $3}' or cut -d' ' -f3), keep each city once, count the lines (wc -l).": "Trois étapes reliées par | (un pipe) : garde la colonne des villes (awk '{print $3}' ou cut -d' ' -f3), garde chaque ville une fois, compte les lignes (wc -l).",
+ "To keep each city once, sort first: uniq only removes duplicates that are next to each other, and sort puts identical lines together. sort -u does both at once.": "Pour garder chaque ville une fois, trie d'abord : uniq n'enlève que les doublons qui se suivent, et sort regroupe les lignes identiques. sort -u fait les deux d'un coup.",
+ "Tip: uniq only merges identical lines that are next to each other. Sort first: … | sort | uniq -c (or sort -u to keep one of each).": "Astuce : uniq ne fusionne que les lignes identiques qui se suivent. Trie d'abord : … | sort | uniq -c (ou sort -u pour n'en garder qu'une de chaque)."
 }

@@ -3,10 +3,15 @@
 # Each page: (text, example). A lesson counts as "met" for the tool (see fight.learned).
 LESSONS = [
     {"id": "pipes", "tool": "|", "topics": ("bash", "linux"), "title": "Pipes", "pages": [
-        ("A pipe | sends the output of one command into the next one.", "ls | wc -l     # how many files here?"),
-        ("Chain small tools, one step each.", "grep error app.log | sort | uniq -c"),
-        ("Read it left to right: filter, keep what you need, then count.",
-         "cut -d' ' -f1 access.log | sort -u | wc -l"),
+        ("A pipe | sends what one command prints into the next command, as if it were a file.",
+         "ls | wc -l     # how many files here?"),
+        ("Chain small tools, one step each: grep keeps the lines with error, sort puts identical lines "
+         "side by side, uniq -c counts each group.", "grep error app.log | sort | uniq -c"),
+        ("uniq only merges identical lines that follow each other. Without sort, a city that appears on "
+         "lines 1 and 3 is counted twice. So sort always comes before uniq.",
+         "cut -d' ' -f3 people.txt | sort | uniq -c"),
+        ("Read a pipe left to right: take a column, keep each value once (sort -u = sort then uniq), "
+         "then count the lines.", "cut -d' ' -f1 access.log | sort -u | wc -l"),
     ]},
     {"id": "awk", "tool": "awk", "topics": ("bash", "linux"), "title": "awk, the column reader", "pages": [
         ("awk reads a file line by line and cuts each line into fields: $1 is the first word, "
