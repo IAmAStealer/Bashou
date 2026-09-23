@@ -579,3 +579,17 @@ class UniqTipTest(unittest.TestCase):
         pages = " ".join(text for text, example in lessons.BY_ID["pipes"]["pages"])
         self.assertIn("sort always comes before uniq", pages)
         self.assertTrue(any("next to each other" in h for h in challenges.BY_ID["trial_pipe_cities"].hints))
+
+
+class StrikeWordTest(unittest.TestCase):
+    """Owner: `answer` for file checks and `answer X` for questions were hard to tell apart."""
+
+    def test_each_screen_shows_only_the_command_that_applies(self):
+        from bashou import adventure
+        for ch in challenges.ALL + challenges.TRIALS:
+            with self.subTest(ch.id):
+                screen = (adventure.trial_intro(ch, "task") if ch.kind == "trial" else fight.banner(ch, "task"))
+                if ch.kind == "trial":
+                    self.assertEqual(ch.fix, "answer <" not in ch.task)
+                self.assertEqual("verify" in screen, ch.fix)
+                self.assertEqual("answer <value>" in screen, not ch.fix)

@@ -395,4 +395,3 @@ INDENT_CHEST = trial("trial_ci_indent", 2, "A pipeline file hides in this chest:
                       "cat -A " + WORKFLOW + " shows the spaces; the line out of place doesn't line up with its "
                       "neighbours."],
                      indent_setup, indent_verify, requires=["sed"], teaches=["yaml"])
-INDENT_CHEST.fix = True

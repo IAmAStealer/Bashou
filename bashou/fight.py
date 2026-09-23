@@ -222,7 +222,10 @@ def cmd_answer(base, value):
               .format(value=value.strip()) + RESET)
         return 1
     if not ch.check(Path(base) / "arena", meta, value):
-        if ch.kind == "trial":
+        if ch.fix:
+            print(BAD + "✗ " + _("Not yet: Bashou checked your work and it isn't right yet. "
+                                "Look again, try it at the prompt, then verify.") + f"{RESET} {DIM}(hint · task · flee){RESET}")
+        elif ch.kind == "trial":
             print(BAD + "✗ " + _("Not yet: the chest is still locked.") + f"{RESET} {DIM}(hint · task · flee){RESET}")
         elif ch.kind == "security":
             print(BAD + "✗ " + _("Not quite. Keep looking.") + f"{RESET} {DIM}(hint · task · flee){RESET}")

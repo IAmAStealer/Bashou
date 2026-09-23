@@ -40,7 +40,6 @@
  "{boss} · {n}/{total}": "{boss} · {n}/{total}",
  "A wild {topic} monster asks:": "Un monstre {topic} sauvage demande :",
  "Wrong… and that was your last heart.": "Raté… et c'était ton dernier cœur.",
- "check (answer <value> when there's a question)": "vérifier (answer <valeur> quand il y a une question)",
  "The {boss} hits you! ♥ -1": "{boss} te frappe ! ♥ -1",
  "The {boss} wins this time.": "{boss} gagne cette fois.",
  "The owl nods: now try it, the next chest uses it.": "La chouette acquiesce : essaie maintenant, le prochain coffre s'en sert.",
@@ -1389,5 +1388,7 @@
  "Under `deploy:`, at the level of runs-on, add two lines: `needs: test` and `if: github.ref == 'refs/heads/main'`.": "Sous `deploy:`, au niveau de runs-on, ajoute deux lignes : `needs: test` et `if: github.ref == 'refs/heads/main'`.",
  "Under deploy:, add: rules:, then a list item `- if: $CI_COMMIT_BRANCH == \"main\"` with `when: manual` under it (2 more spaces).": "Sous deploy:, ajoute rules:, puis un élément de liste `- if: $CI_COMMIT_BRANCH == \"main\"` avec `when: manual` en dessous (2 espaces de plus).",
  "cat -A .github/workflows/ci.yml shows the spaces; the line out of place doesn't line up with its neighbours.": "cat -A .github/workflows/ci.yml montre les espaces ; la ligne déplacée n'est pas alignée avec ses voisines.",
- "rules: is a list of conditions, read in order; the first that matches decides. Each can say when: manual, so the job waits for a click in the pipeline page. A branch that matches no rule gets no deploy job at all.": "rules: est une liste de conditions, lues dans l'ordre ; la première qui correspond décide. Chacune peut dire when: manual : le job attend alors un clic sur la page du pipeline. Une branche qui ne correspond à aucune règle n'a pas de job deploy du tout."
+ "rules: is a list of conditions, read in order; the first that matches decides. Each can say when: manual, so the job waits for a click in the pipeline page. A branch that matches no rule gets no deploy job at all.": "rules: est une liste de conditions, lues dans l'ordre ; la première qui correspond décide. Chacune peut dire when: manual : le job attend alors un clic sur la page du pipeline. Une branche qui ne correspond à aucune règle n'a pas de job deploy du tout.",
+ "give your answer": "donner ta réponse",
+ "Not yet: Bashou checked your work and it isn't right yet. Look again, try it at the prompt, then verify.": "Pas encore : Bashou a vérifié ton travail et ce n'est pas encore bon. Regarde à nouveau, essaie à l'invite, puis verify."
 }

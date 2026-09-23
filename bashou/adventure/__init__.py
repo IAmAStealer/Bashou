@@ -509,7 +509,7 @@ def run_trial(game, fd, old, out):
     termios.tcsetattr(fd, termios.TCSADRAIN, old)
     out.write(f"{ESC}[0m{ESC}[?25h{ESC}[?1049l")
     out.flush()
-    code, notes = fight.arena(trial, lambda task: trial_intro(task), random.Random(game.trial_seed()))
+    code, notes = fight.arena(trial, lambda task: trial_intro(trial, task), random.Random(game.trial_seed()))
     won = code == fight.WIN
     tty.setcbreak(fd)
     out.write(f"{ESC}[?1049h{ESC}[?25l{ESC}[2J")
@@ -517,12 +517,12 @@ def run_trial(game, fd, old, out):
     game.trial_done(won, notes)
 
 
-def trial_intro(task):
+def trial_intro(trial, task):
     b, d, r = "\033[1m", "\033[2m", "\033[0m"
     return (f"\n{b}🧰 " + _("A locked chest!") + f"{r}\n\n{task}\n\n"
             f"{d}" + _("A real shell, in a sandbox folder. Commands:") + f"{r}\n"
-            "  answer           " + _("check (answer <value> when there's a question)") + "\n"
-            "  hint             " + _("get a hint") + "\n"
+            + (fight.strike_done(trial) if trial.fix else "  answer <value>   " + _("give your answer") + "\n")
+            + "  hint             " + _("get a hint") + "\n"
             "  task             " + _("show the task again") + "\n"
             "  flee             " + _("leave the chest and go back to the adventure") + "\n")
 
