@@ -1,3 +1,5 @@
+import contextlib
+import io
 import os
 import random
 import re
@@ -450,3 +452,31 @@ class ThreatTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class FixFightTest(unittest.TestCase):
+    """Players typed their command after `answer` in fights where they fix a file (owner)."""
+
+    def test_every_answer_done_fight_is_flagged(self):
+        for ch in challenges.ALL:
+            with self.subTest(ch.id):
+                self.assertEqual(ch.fix, "answer done" in ch.task, ch.id)
+
+    def test_banner_explains_answer_done(self):
+        ch = challenges.BY_ID["colon_cobra"]
+        banner = fight.banner(ch, "task")
+        self.assertIn("answer done", banner)
+        self.assertIn("commands go at the prompt", banner)
+        self.assertNotIn("answer <value>", banner)
+        self.assertIn("answer <value>", fight.banner(challenges.BY_ID["line_moth"], "task"))
+
+    def test_a_command_after_answer_is_explained_not_judged(self):
+        base = Path(tempfile.mkdtemp())
+        self.addCleanup(__import__("shutil").rmtree, base)
+        (base / "arena").mkdir()
+        (base / "meta.json").write_text('{"challenge": "colon_cobra"}')
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out), mock.patch.object(challenges.Challenge, "check") as check:
+            self.assertEqual(fight.cmd_answer(str(base), "python3 greet.py"), 1)
+        check.assert_not_called()
+        self.assertIn("type `python3 greet.py` at the prompt", out.getvalue())

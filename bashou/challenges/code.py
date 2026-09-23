@@ -545,7 +545,7 @@ PY = dict(tools=PYTHON, requires=["python3"], skill="python")
 C = dict(tools=COMPILERS, uses=c_used, requires=["gcc"], skill="c")
 
 ALL = [
-    Challenge(level=1, id="colon_cobra", pet="snake", threat="Colon Cobra", **PY,
+    Challenge(level=1, id="colon_cobra", fix=True, pet="snake", threat="Colon Cobra", **PY,
               task="The Colon Cobra swallowed a character in greet.py: Python stops at a SyntaxError.\n"
                    "Fix greet.py (its first lines say what it must do). Run it: python3 greet.py\n"
                    "When it works, type: answer done",
@@ -553,14 +553,14 @@ ALL = [
                      "point at where. A def or a for line ends with something.",
                      "Add the missing : at the end of the def line, then run python3 greet.py."],
               setup=colon_setup, verify=py_output("greet.py")),
-    Challenge(level=1, id="semicolon_slug", pet="beaver", threat="Semicolon Slug", **C,
+    Challenge(level=1, id="semicolon_slug", fix=True, pet="beaver", threat="Semicolon Slug", **C,
               task="The Semicolon Slug ate a character in hello.c: gcc refuses to build it.\n"
                    "Fix hello.c (its first lines say what it must do). Run it: gcc hello.c -o hello && ./hello\n"
                    "When it works, type: answer done",
               hints=["gcc prints file:line:column: error. In C every statement ends with the same character.",
                      "Add the missing ; after the printf(...) line, then build and run again."],
               setup=semicolon_setup, verify=c_tests("hello.c")),
-    Challenge(level=2, id="list_leech", pet="snake", threat="List Leech", **PY,
+    Challenge(level=2, id="list_leech", fix=True, pet="snake", threat="List Leech", **PY,
               task="The List Leech clings to hosts.py: unique() leaves duplicates and changes its input.\n"
                    "Fix hosts.py (its first lines say what it must do). Run it: python3 hosts.py\n"
                    "When it works, type: answer done",
@@ -569,7 +569,7 @@ ALL = [
                      "Try: seen = [] then for host in hosts: if host not in seen: seen.append(host), "
                      "and return seen."],
               setup=list_setup, verify=py_tests("hosts.py", "unique")),
-    Challenge(level=2, id="dict_djinn", pet="snake", threat="Dict Djinn", **PY,
+    Challenge(level=2, id="dict_djinn", fix=True, pet="snake", threat="Dict Djinn", **PY,
               task="The Dict Djinn hid a key: tally.py crashes with KeyError: '{level}'.\n"
                    "Fix tally.py (its first lines say what it must do). Run it: python3 tally.py\n"
                    "When it works, type: answer done",
@@ -577,7 +577,7 @@ ALL = [
                      "bashou explain python dict",
                      "Try: counts[level] = counts.get(level, 0) + 1"],
               setup=dict_setup, verify=py_tests("tally.py", "count_levels")),
-    Challenge(level=2, id="loop_lich", pet="snake", threat="Loop Lich", **PY,
+    Challenge(level=2, id="loop_lich", fix=True, pet="snake", threat="Loop Lich", **PY,
               task="The Loop Lich traps retry.py in a loop that never ends.\n"
                    "Fix retry.py (its first lines say what it must do). Run it: python3 retry.py\n"
                    "When it works, type: answer done",
@@ -585,7 +585,7 @@ ALL = [
                      "bashou explain python loop",
                      "Add i += 1 inside the loop (or write: for i in range(tries):)."],
               setup=loop_setup, verify=py_tests("retry.py", "delays")),
-    Challenge(level=2, id="ouroboros", pet="snake", threat="Ouroboros", **PY,
+    Challenge(level=2, id="ouroboros", fix=True, pet="snake", threat="Ouroboros", **PY,
               task="The Ouroboros bites its own tail: du.py forgets the files in subfolders.\n"
                    "Fix du.py (its first lines say what it must do). Run it: python3 du.py\n"
                    "When it works, type: answer done",
@@ -613,7 +613,7 @@ ALL = [
                      "Try: python3 -c \"import urllib.parse; print(urllib.parse.unquote(open('access.log').read()))\""
                      " | grep etc"],
               setup=url_setup, verify=url_verify),
-    Challenge(level=3, id="injection_imp", pet="snake", threat="Injection Imp", after=("list_leech",), **PY,
+    Challenge(level=3, id="injection_imp", fix=True, pet="snake", threat="Injection Imp", after=("list_leech",), **PY,
               task="The Injection Imp slipped a command into hosts.txt, and check_hosts.py runs it.\n"
                    "Fix check_hosts.py (its first lines say what it must do). Run it: python3 check_hosts.py\n"
                    "When it works, type: answer done",
@@ -629,7 +629,7 @@ ALL = [
                      "Try: python3 -c \"import base64; p = open('token.txt').read().split('.')[1]; "
                      "print(base64.urlsafe_b64decode(p + '=='))\""],
               setup=jwt_setup),
-    Challenge(level=2, id="leak_lurker", pet="beaver", threat="Leak Lurker", **C,
+    Challenge(level=2, id="leak_lurker", fix=True, pet="beaver", threat="Leak Lurker", **C,
               task="The Leak Lurker feeds on memory nobody frees in shout.c.\n"
                    "Fix shout.c (its first lines say what it must do). "
                    "Run it: gcc -g -fsanitize=address shout.c -o shout && ./shout < names.txt\n"
@@ -638,7 +638,7 @@ ALL = [
                      "Who should free it once it's printed? bashou explain c malloc",
                      "Add free(loud); right after fputs(loud, stdout);"],
               setup=leak_setup, verify=c_tests("shout.c")),
-    Challenge(level=2, id="fencepost_fiend", pet="beaver", threat="Fencepost Fiend", **C,
+    Challenge(level=2, id="fencepost_fiend", fix=True, pet="beaver", threat="Fencepost Fiend", **C,
               task="The Fencepost Fiend moved a fence post in average.c: a loop goes one step too far.\n"
                    "Fix average.c (its first lines say what it must do). "
                    "Run it: gcc -g -fsanitize=address average.c -o average && ./average 2 4 9\n"
@@ -647,7 +647,7 @@ ALL = [
                      "bashou explain c array",
                      "In the second loop, write i < count instead of i <= count."],
               setup=fence_setup, verify=c_tests("average.c")),
-    Challenge(level=2, id="stack_specter", pet="beaver", threat="Stack Specter", **C,
+    Challenge(level=2, id="stack_specter", fix=True, pet="beaver", threat="Stack Specter", **C,
               task="The Stack Specter haunts sum.c: sum_to() never stops calling itself.\n"
                    "Fix sum.c (its first lines say what it must do). Run it: gcc -g sum.c -o sum && ./sum 4\n"
                    "When it works, type: answer done",
@@ -655,7 +655,7 @@ ALL = [
                      "bashou explain c recursion",
                      "Add at the start of sum_to: if (n <= 0) return 0;"],
               setup=stack_setup, verify=c_tests("sum.c")),
-    Challenge(level=3, id="overflow_ogre", pet="beaver", threat="Overflow Ogre", after=("leak_lurker",), **C,
+    Challenge(level=3, id="overflow_ogre", fix=True, pet="beaver", threat="Overflow Ogre", after=("leak_lurker",), **C,
               task="The Overflow Ogre stuffs long names into an 8-byte box in greet.c.\n"
                    "Fix greet.c (its first lines say what it must do). "
                    "Run it: gcc -g -fsanitize=address greet.c -o greet && ./greet averyveryverylongname\n"

@@ -43,6 +43,7 @@ class Challenge:
     distro: tuple = ()        # only on these families (os-release ID or ID_LIKE), e.g. ("debian",)
     skill: str = "bash"       # what it teaches (skills.SKILLS): only sent if you learn that
     help: str = ""            # what to look for in `tool --help`: beginners get that hint first
+    fix: bool = False         # you fix a file (or run commands), then `answer done`: Bashou checks the result
 
     @property
     def tool(self):

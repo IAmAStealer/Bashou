@@ -133,7 +133,7 @@ def temps_setup(work, rng):
 RUST = dict(tools=("rustc", "cargo"), uses=rust_used, requires=["rustc"], skill="rust")
 
 ALL = [
-    Challenge(level=1, id="mut_marmot", pet="beaver", threat="Mut Marmot", **RUST,
+    Challenge(level=1, id="mut_marmot", fix=True, pet="beaver", threat="Mut Marmot", **RUST,
               task="The Mut Marmot froze a counter in counter.rs: rustc won't let it change.\n"
                    "Fix counter.rs (its first lines say what it must do). Run it: rustc counter.rs && ./counter\n"
                    "When it works, type: answer done",
@@ -141,7 +141,7 @@ ALL = [
                      "bashou explain rust mut",
                      "Write: let mut errors = 0;"],
               setup=counter_setup, verify=rust_output("counter.rs")),
-    Challenge(level=1, id="const_condor", pet="beaver", threat="Const Condor", **RUST,
+    Challenge(level=1, id="const_condor", fix=True, pet="beaver", threat="Const Condor", **RUST,
               task="The Const Condor stole a type from points.rs: rustc stops at the constant.\n"
                    "Fix points.rs (its first lines say what it must do). Run it: rustc points.rs && ./points\n"
                    "When it works, type: answer done",
@@ -149,7 +149,7 @@ ALL = [
                      "bashou explain rust const",
                      "Write: const MAX_POINTS: u32 = …;"],
               setup=points_setup, verify=rust_output("points.rs")),
-    Challenge(level=2, id="shadow_shade", pet="beaver", threat="Shadow Shade", after=("mut_marmot",), **RUST,
+    Challenge(level=2, id="shadow_shade", fix=True, pet="beaver", threat="Shadow Shade", after=("mut_marmot",), **RUST,
               task="The Shadow Shade wants guess.rs to turn text into a number, and mut isn't enough.\n"
                    "Fix guess.rs (its first lines say what it must do). Run it: rustc guess.rs && ./guess\n"
                    "When it works, type: answer done",
@@ -157,7 +157,7 @@ ALL = [
                      "that's shadowing. bashou explain rust shadowing",
                      "Write: let guess = \"  42  \"; then let guess: u32 = guess.trim().parse().unwrap();"],
               setup=guess_setup, verify=rust_output("guess.rs")),
-    Challenge(level=2, id="byte_basilisk", pet="beaver", threat="Byte Basilisk", after=("mut_marmot",), **RUST,
+    Challenge(level=2, id="byte_basilisk", fix=True, pet="beaver", threat="Byte Basilisk", after=("mut_marmot",), **RUST,
               task="The Byte Basilisk squeezes four readings into one byte in temps.rs.\n"
                    "Fix temps.rs (its first lines say what it must do). Run it: rustc temps.rs && ./temps\n"
                    "When it works, type: answer done",

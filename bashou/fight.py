@@ -207,6 +207,11 @@ def used_tool(base, ch):
 def cmd_answer(base, value):
     meta = load_meta(base)
     ch = challenges.BY_ID[meta["challenge"]]
+    if ch.fix and value.strip() not in ("done", ""):
+        print(ACCENT + "✗ " + _("answer doesn't run commands: type `{value}` at the prompt. "
+                                "When it works, type `answer done` and Bashou checks the result.")
+              .format(value=value.strip()) + RESET)
+        return 1
     if not ch.check(Path(base) / "arena", meta, value):
         if ch.kind == "trial":
             print(BAD + "✗ " + _("Not yet: the chest is still locked.") + f"{RESET} {DIM}(hint · task · flee){RESET}")
@@ -250,11 +255,16 @@ def banner(ch, task, review=None):
     return (f"\n{BAD}{BOLD}⚔ " + cap(_("The {threat} attacks!").format(threat=_(ch.threat))) + f"{RESET}  "
             + _("Use {tool} to fight it.").format(tool=f"{BOLD}{ch.tool}{RESET}") + f"\n{back}\n{task}\n\n"
             f"{DIM}" + _("You're in a sandbox folder with a real bash. Commands:") + f"{RESET}\n"
-            "  answer <value>   " + _("strike") + f"   {DIM}("
-            + _("needs a successful {tool} command first").format(tool=ch.tool) + f"){RESET}\n"
-            "  hint             " + _("get a hint") + "\n"
+            + (strike_done(ch) if ch.fix else "  answer <value>   " + _("strike") + f"   {DIM}("
+               + _("needs a successful {tool} command first").format(tool=ch.tool) + f"){RESET}\n")
+            + "  hint             " + _("get a hint") + "\n"
             "  task             " + _("show the task again") + "\n"
             "  flee             " + _("run away (the threat will come back)") + "\n")
+
+
+def strike_done(ch):
+    """Fights where you fix a file: `answer` takes no value, Bashou checks the result itself."""
+    return "  answer done      " + _("strike when it works: Bashou checks it (commands go at the prompt)") + "\n"
 
 
 BEGINNER_WINS = 5          # until then, a fight's first hint teaches `tool --help` (owner)

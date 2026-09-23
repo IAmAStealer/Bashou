@@ -20,7 +20,7 @@ def verify(work, meta, value):
 
 
 CHALLENGE = Challenge(
-    level=2, id="sed_serpent", pet="snake", tools=("sed",), threat="Typo Serpent",
+    level=2, id="sed_serpent", fix=True, pet="snake", tools=("sed",), threat="Typo Serpent",
     task="The Typo Serpent scrambled letter.txt: \"the\" became \"teh\" in places.\n"
          "Fix the file in place (every occurrence, also \"Teh\"), then type: answer done",
     help="Here, look at -i: it edits the file in place.",
