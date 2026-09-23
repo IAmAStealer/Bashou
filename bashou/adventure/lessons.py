@@ -34,9 +34,9 @@ LESSONS = [
     {"id": "pipelines", "tool": "yaml", "topics": ("cicd",), "title": "Pipeline files", "pages": [
         ("GitHub Actions reads .github/workflows/*.yml, GitLab reads .gitlab-ci.yml. Names that start with "
          "a dot are hidden: ls -a shows them.", "ls -a; cat .gitlab-ci.yml"),
-        ("These files are YAML: the spaces at the start of a line say what belongs to what, 2 more per "
-         "level. A line one space off lands in the wrong place, or breaks the file. Never use tabs.",
-         "cat -A .github/workflows/ci.yml   # shows every space, and tabs as ^I"),
+        ("These files are YAML, written like an outline: a line pushed further right belongs to the line "
+         "above it. Each level is 2 spaces further right. Only spaces, never tabs.",
+         "cat .github/workflows/ci.yml"),
         ("Jobs run side by side unless you set an order: needs: on GitHub, stages: on GitLab. A deploy "
          "should wait for the tests, and be skipped when they fail.", "grep -n 'needs:\\|stage' .gitlab-ci.yml"),
         ("Conditions decide when a job runs: if: on GitHub, rules: on GitLab. when: manual makes GitLab "

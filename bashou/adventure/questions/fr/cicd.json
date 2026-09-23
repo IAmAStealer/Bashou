@@ -127,7 +127,7 @@
    "Les lignes vides"
   ],
   "answer": 0,
-  "explain": "En YAML, les espaces en début de ligne décident de qui appartient à quoi, comme en Python : un espace de travers et une étape atterrit dans le mauvais job, ou le fichier ne se lit plus. Les tabulations sont interdites, seulement des espaces. Le support YAML de ton éditeur ou une étape de lint montre l'erreur avant le pipeline."
+  "explain": "Le YAML s'écrit comme un plan : une ligne poussée plus à droite appartient à la ligne au-dessus, et chaque niveau est 2 espaces plus à droite. Quand une ligne n'est pas alignée avec celles dont elle fait partie, le fichier ne dit plus ce que tu voulais : le pipeline casse, ou une étape se retrouve dans un autre job. Seulement des espaces, jamais de tabulations."
  },
  {
   "id": "cicd-1-11",
@@ -158,7 +158,7 @@
  {
   "id": "cicd-1-13",
   "level": 1,
-  "q": "Dans .github/workflows/ci.yml, une ligne d'une étape commence un espace trop à gauche. Que se passe-t-il ?",
+  "q": "Dans .github/workflows/ci.yml, une ligne d'une étape ne commence pas là où commencent les autres lignes de l'étape. Que se passe-t-il ?",
   "choices": [
    "Le fichier casse, ou la ligne atterrit au mauvais endroit",
    "GitHub corrige l'indentation pour toi",
@@ -166,7 +166,7 @@
    "Juste un avertissement dans les logs"
   ],
   "answer": 0,
-  "explain": "En YAML, les espaces en début de ligne décident de qui appartient à quoi. Un espace de travers, et une clé n'appartient plus à son étape : GitHub refuse le fichier, ou lance autre chose que ce que tu voulais. Garde 2 espaces par niveau, jamais de tabulations, et laisse un éditeur qui connaît YAML montrer la structure."
+  "explain": "Le YAML s'écrit comme un plan : les lignes qui vont ensemble commencent au même endroit, et chaque niveau est 2 espaces plus à droite. Une ligne décalée n'appartient plus à ce que tu voulais : GitHub refuse le fichier, ou la lit comme faisant partie d'autre chose. Un éditeur qui connaît le YAML montre le plan et aide à aligner."
  },
  {
   "id": "cicd-2-01",

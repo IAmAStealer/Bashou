@@ -127,7 +127,7 @@
    "Blank lines"
   ],
   "answer": 0,
-  "explain": "In YAML the spaces at the start of a line decide what belongs to what, like in Python: one space off and a step lands in the wrong job, or the file no longer parses. Tabs are forbidden, only spaces. Your editor's YAML support or a lint step shows the mistake before the pipeline does."
+  "explain": "YAML is written like an outline: a line pushed further right belongs to the line above it, and each level is 2 spaces further right. When a line isn't lined up with the lines it belongs with, the file no longer says what you meant: the pipeline breaks, or a step ends up in another job. Only spaces are allowed, never tabs."
  },
  {
   "id": "cicd-1-11",
@@ -158,7 +158,7 @@
  {
   "id": "cicd-1-13",
   "level": 1,
-  "q": "In .github/workflows/ci.yml, one line of a step starts one space too far left. What happens?",
+  "q": "In .github/workflows/ci.yml, one line of a step doesn't start where the other lines of that step do. What happens?",
   "choices": [
    "The file breaks, or the line lands in the wrong place",
    "GitHub fixes the indentation for you",
@@ -166,7 +166,7 @@
    "Only a warning in the logs"
   ],
   "answer": 0,
-  "explain": "In YAML, the spaces at the start of a line decide what belongs to what. One space off, and a key no longer belongs to its step: GitHub rejects the file, or runs something different from what you meant. Keep 2 spaces per level, never tabs, and let an editor with YAML support show the structure."
+  "explain": "YAML is written like an outline: lines that belong together start at the same place, and each level is 2 spaces further right. A line out of line no longer belongs where you meant: GitHub rejects the file, or reads the line as part of something else. An editor that knows YAML shows the outline and makes it easy to line things up."
  },
  {
   "id": "cicd-2-01",

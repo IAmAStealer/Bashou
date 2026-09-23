@@ -336,17 +336,19 @@ def manual_verify(work, meta, value):
 
 # --- the fights -----------------------------------------------------------------------------------
 
+YAML_OUTLINE = ("YAML is written like an outline: a line pushed further right belongs to the line above it. "
+                "Each level is 2 spaces further right, and lines that belong together start at the same place.")
+YAML_NEIGHBOURS = ("Find the line that doesn't start where its neighbours do. runs-on: and steps: both belong to "
+                   "the job, so they line up; name: and run: both belong to the same step, so they line up too.")
+
 CICD = dict(pet="beaver", tools=EDITORS, requires=["sed"], skill="cicd", fix=True)
 
 ALL = [
     Challenge(level=1, id="indent_imp", threat="Indent Imp", **CICD,
-              task="The Indent Imp shoved one line of the GitHub workflow " + WORKFLOW + " out of place.\n"
-                   "GitHub would reject it, or run the step in the wrong place. Put it back: the job test runs "
-                   "on ubuntu-latest with two steps, checkout then the tests. Then: verify",
-              hints=["In YAML, the spaces at the start of a line say what belongs to what: each level is 2 more "
-                     "spaces, and all the keys of one step start in the same column. cat -A shows every space.",
-                     "Under `- name: Test`, `run:` must start exactly under the n of name (8 spaces). "
-                     "Compare each line with the one above it."],
+              task="The Indent Imp pushed one line of the GitHub workflow " + WORKFLOW + " out of line.\n"
+                   "Put it back in line, so the job test has its two steps: checkout, then the tests. "
+                   "Then: verify",
+              hints=[YAML_OUTLINE, YAML_NEIGHBOURS],
               setup=indent_setup, verify=indent_verify),
     Challenge(level=1, id="stage_specter", threat="Stage Specter", **CICD,
               task="The Stage Specter renamed a stage in " + GITLAB + ": GitLab refuses the pipeline, "
@@ -389,9 +391,6 @@ ALL = [
 # The Sage Owl's chest for the CI/CD path: the same broken indentation, no enemy.
 from .trials import trial  # noqa: E402
 
-INDENT_CHEST = trial("trial_ci_indent", 2, "A pipeline file hides in this chest: " + WORKFLOW + ". One line is "
-                     "indented wrong. Fix it so the job test has its two steps. Then: verify",
-                     ["Each level is 2 more spaces, and all the keys of one step start in the same column.",
-                      "cat -A " + WORKFLOW + " shows the spaces; the line out of place doesn't line up with its "
-                      "neighbours."],
-                     indent_setup, indent_verify, requires=["sed"], teaches=["yaml"])
+INDENT_CHEST = trial("trial_ci_indent", 2, "A pipeline file hides in this chest: " + WORKFLOW + ". One line is out "
+                     "of line. Put it back, so the job test has its two steps. Then: verify",
+                     [YAML_OUTLINE, YAML_NEIGHBOURS], indent_setup, indent_verify, requires=["sed"], teaches=["yaml"])
