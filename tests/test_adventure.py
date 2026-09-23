@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 from bashou import adventure, state
-from bashou.adventure import canvas, quiz, scene, sprites, world
+from bashou.adventure import canvas, quiz, scene, sprites, topic_name, world
 
 
 class CanvasTest(unittest.TestCase):
@@ -76,6 +76,24 @@ class GameTest(unittest.TestCase):
         self.assertEqual(g.adv["topic"], world.fork_options(g.adv | {"leg": 0})[1])
         self.assertEqual(self.walk_to_event(), "monster")  # every path starts with a monster
         self.assertTrue(g.draw(1.0, 0))
+
+    def test_start_and_fork_leave_the_road_in_view(self):
+        """Owner: the box over the start and the fork hid the pet; one line on top, keys at the bottom."""
+        g = self.game
+        self.assertEqual(g.panel(0), [])
+        self.assertIn("Chapter 1", g.caption())
+        self.assertIn("Enter", g.hud())
+        self.go("\r")
+        top = g.caption()
+        for topic in world.fork_options(g.adv):
+            self.assertIn(topic_name(topic), top)
+        self.assertIn("▶", top)
+        self.assertIn("←/→", g.hud())
+        g.draw(0.0, 0)
+        self.go("\r")                                    # off we go: the top line is sky again
+        self.assertEqual(g.caption(), "")
+        g.draw(0.0, 0)
+        self.assertIn((0, 0), g.canvas.shown)
 
     def test_monster_right_and_wrong(self):
         g = self.game

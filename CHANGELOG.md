@@ -31,6 +31,8 @@ Every release has a section here, written for players. CI refuses to tag a relea
   New: a systemd topic about writing units, and level 3 questions for Debian and Linux.
 - Your pet waits for a pause in your work before it talks, about every 10 to 20 minutes.
   `bashou config talk` and `bashou config quiet` change that.
+- The start and the forks of `bashou adventure` no longer cover the road with a box: the chapter or
+  the ways you can go sit on the top line, the keys (Enter, ←/→) on the bottom line.
 - Fixed: a question with a `%` in it crashed the adventure.
 
 ## v0.3.1 — 2026-09-22

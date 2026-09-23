@@ -64,6 +64,7 @@ class Game:
         self.result = None              # (good?, lines) after an answer
         self.boss = None                # {"left": questions left, "total", "deadline"}
         self.panel_rect = None
+        self.captioned = False          # the top line holds a caption (repaint the sky when it goes)
         self.trial = None               # the chest's shell trial
         self.pending_trial = None       # set when you open it: main() runs the sandbox shell
         self.page = 0                   # lesson page
@@ -272,7 +273,39 @@ class Game:
         if rect != self.panel_rect and self.panel_rect:
             self.forget(self.panel_rect)                     # repaint what the old panel covered
         self.panel_rect = rect
-        return c.render() + self.panel_text(lines, rect)
+        caption = self.caption()
+        if self.captioned and not caption:
+            for col in range(c.w):
+                c.shown.pop((0, col), None)
+        self.captioned = bool(caption)
+        return c.render() + self.panel_text(lines, rect) + caption
+
+    def caption(self):
+        """At the start and at a fork no box hides the road: one line on top says where you are or
+        which ways you can go (← left, → right), the keys are on the bottom line."""
+        adv = self.adv
+        if adv["phase"] == "intro":
+            ch = world.chapter(adv["chapter"])
+            parts = [(_("Chapter {n}: {title}").format(n=adv["chapter"], title=world.title(ch)), ACCENT, True)]
+        elif adv["phase"] == "fork" and not self.result:
+            parts = [(_("The road splits:") + "  ", PANEL_FG, False)]
+            for i, topic in enumerate(world.fork_options(adv)):
+                name = f"{topic_name(topic)} · " + _("level {n}").format(n=world.level(adv, topic))
+                picked = i == self.choice
+                parts.append((f"▶ {name} ◀" if picked else f"  {name}  ", ACCENT if picked else PANEL_FG, picked))
+                parts.append(("   ", PANEL_FG, False))
+            parts.pop()
+            if sum(render.width(t) for t, _c, _b in parts) > self.cols - 2:
+                parts.pop(0)                                  # three ways on a small screen
+        else:
+            return ""
+        width = sum(render.width(text) for text, _c, _b in parts)
+        pad = max(0, (self.cols - width) // 2)
+        out = [f"{ESC}[1;1H{ESC}[0m{ESC}[48;2;%d;%d;%dm{ESC}[2K" % PANEL_BG, " " * pad]
+        for text, color, bold in parts:
+            out.append((f"{ESC}[1m" if bold else f"{ESC}[22m") + f"{ESC}[38;2;%d;%d;%dm" % color + text)
+        out.append(" " * max(0, self.cols - pad - width))
+        return "".join(out) + f"{ESC}[0m"
 
     def draw_ahead(self, t, room=None):
         """What waits on the road: the next event growing as you come closer, or the signpost.
@@ -311,17 +344,8 @@ class Game:
             good, texts = self.result
             return ([(texts[0], GOOD if good else BAD)] + [(t, PANEL_FG) for t in texts[1:]]
                     + [("", PANEL_FG), (_("Enter: continue"), ACCENT)])
-        if phase == "intro":
-            ch = world.chapter(adv["chapter"])
-            return [(_("Chapter {n}: {title}").format(n=adv["chapter"], title=world.title(ch)), ACCENT),
-                    (_(ch["intro"]), PANEL_FG), ("", PANEL_FG), (_("Enter: set off · s: save & quit"), ACCENT)]
-        if phase == "fork":
-            out = [(_("The road splits. Which way?"), ACCENT)]
-            for i, topic in enumerate(world.fork_options(adv)):
-                mark = "▶ " if i == self.choice else "  "
-                out.append((f"{mark}{i + 1}. {topic_name(topic)} · "
-                            + _("level {n}").format(n=world.level(adv, topic)), ACCENT if i == self.choice else PANEL_FG))
-            return out + [("", PANEL_FG), (_("←/→ choose · Enter: go · s: save & quit"), ACCENT)]
+        if phase in ("intro", "fork"):
+            return []                                         # the road stays in view: see caption()
         if phase in ("monster", "boss") and self.question:
             q = self.question
             if phase == "boss":
@@ -391,8 +415,12 @@ class Game:
         where = biome_name(world.biome(adv))
         path = f" · {topic_name(adv['topic'])} " + _("level {n}").format(n=world.level(adv, adv["topic"])) \
             if adv["topic"] else ""
-        keys = _("s: save & quit")
-        text = f" {_('Chapter {n}').format(n=adv['chapter'])} · {where}{path} · {hearts} · {int(adv['walked'])} m   {keys}"
+        keys = {"intro": _("Enter: set off · s: save & quit"),
+                "fork": _("←/→ choose · Enter: go · s: save & quit")}.get(adv["phase"], _("s: save & quit"))
+        if self.result:
+            keys = _("s: save & quit")
+        info = f"{_('Chapter {n}').format(n=adv['chapter'])} · {where}{path} · {hearts} · {int(adv['walked'])} m"
+        text = f" {keys}   {info}" if adv["phase"] in ("intro", "fork") and not self.result else f" {info}   {keys}"
         return f"{ESC}[{self.rows};1H{ESC}[0m{ESC}[2K{text[:self.cols - 1]}"
 
 
