@@ -1,0 +1,47 @@
+{
+ "name": "Fencepost Fiend",
+ "palette": {
+  "a": "#2a1a10",
+  "c": "#a07040",
+  "d": "#806030",
+  "r": "#d04030",
+  "m": "#101010",
+  "w": "#ffe040"
+ },
+ "base": [
+  "..a.........a...r",
+  ".aca.......aca.rr",
+  ".aca..aca..aca.rr",
+  "aaaaaaaaaaaaaaaaa",
+  "adwmdddddddwmddda",
+  "aaaaaaaaaaaaaaaaa",
+  ".aca..aca..aca.rr",
+  ".acmmmmmmmmmca.rr",
+  "aaaaaaaaaaaaaaaaa",
+  "addddddddddddddda",
+  "aaaaaaaaaaaaaaaaa",
+  ".aca..aca..aca.rr"
+ ],
+ "poses": {
+  "closed": {
+   "4": "--aa-------aa----"
+  },
+  "left": {
+   "4": "-wmd------wmd----"
+  },
+  "right": {
+   "4": "--dwm------dwm---"
+  },
+  "fidget": {
+   "0": "---------------r.",
+   "1": "----------------."
+  },
+  "inhale": {
+   "7": "------aaa--------"
+  }
+ },
+ "particles": [
+  0,
+  8
+ ]
+}

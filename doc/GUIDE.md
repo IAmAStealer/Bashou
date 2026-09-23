@@ -44,7 +44,9 @@ A pixel-art pet that lives in the top-right corner of your terminal and grows as
 - **Threats.** A few times a day your pet warns you that a threat is coming (« ⚠ A Log Hydra is coming! Use `grep` to fight
   it »). `bashou fight` drops you in a sandbox bash with random data: solve the task with the named
   tool, `answer` it, and the threat's pet joins you. `hint` helps, `flee` runs away. No threat, no
-  fight: the arena only opens after your pet's warning.
+  fight: the arena only opens after your pet's warning. Code fights hand you a small broken Python
+  or C file instead: its first lines say what goes in, what should come out and how to run it; fix
+  it and `answer done`. Opening an editor is free.
 
 ## Install
 
@@ -62,6 +64,7 @@ bashou achievements     # what you earned, and what to try next
 bashou fight            # enter the arena, once your pet has announced a threat
 bashou talk             # your pet says something useful
 bashou learn            # takes its last suggested command apart; or: bashou learn tar -czf a.tgz d
+bashou explain          # a short note on a code topic: bashou explain python list, bashou explain c malloc
 bashou evolve           # watch your pets evolve (s skips)
 bashou swap             # board to pick your pet (or: bashou swap fox); f switches its form
 bashou off / on         # hide / show the pet

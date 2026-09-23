@@ -1,0 +1,46 @@
+{
+ "name": "Leak Lurker",
+ "palette": {
+  "a": "#20302a",
+  "b": "#70c070",
+  "c": "#90e0f0",
+  "m": "#102010",
+  "w": "#ffffff"
+ },
+ "base": [
+  ".................",
+  "......aaaaa......",
+  "....aabbbbbaa....",
+  "...abbbbbbbbba...",
+  "..abwmbbbbbwmba..",
+  "..abbbbbbbbbbba..",
+  "..abbbmmmmmbbba..",
+  "..abbbbbbbbbbba..",
+  "...aabbabbabbaa..",
+  ".....ab.ab..ab...",
+  "......c..c...c...",
+  "......c......c..."
+ ],
+ "poses": {
+  "closed": {
+   "4": "----aa-----aa----"
+  },
+  "left": {
+   "4": "---wmb----wmb----"
+  },
+  "right": {
+   "4": "----bwm----bwm---"
+  },
+  "fidget": {
+   "10": "---------.---.c--",
+   "11": "------.--c---.c--"
+  },
+  "inhale": {
+   "7": "-ab-----------ba-"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

@@ -3,6 +3,26 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.3.2 — 2026-09-23
+
+- **Code fights.** Fifteen new threats, in Python and C. Most hand you a small broken file whose
+  first lines say what goes in, what should come out and how to run it; fix it, and Bashou runs its
+  own tests on your version. The first ones only ask to make the code compile (a missing `:` in
+  Python, a missing `;` in C). Then lists, dicts, loops and recursion in Python, and memory, arrays,
+  recursion and a buffer overflow in C, checked with AddressSanitizer. Others take a `python3 -c`
+  one-liner: read a JSON config, decode base64, decode a URL-encoded attack, read what a JWT says.
+  One more asks you to stop a shell injection.
+- `bashou explain python list` (or dict, loop, recursion, json, url, base64, subprocess;
+  `bashou explain c malloc`, array, string, recursion, asan) gives a short note with an example,
+  offline.
+- Opening a text editor in the arena no longer costs a heart.
+- The quiz questions of `bashou adventure` were rewritten to teach habits that last in automation
+  and security (what goes wrong, what to check first, what an output means) instead of trivia.
+  New: a systemd topic about writing units, and level 3 questions for Debian and Linux.
+- Your pet waits for a pause in your work before it talks, about every 10 to 20 minutes.
+  `bashou config talk` and `bashou config quiet` change that.
+- Fixed: a question with a `%` in it crashed the adventure.
+
 ## v0.3.1 — 2026-09-22
 
 - **Ten new fights, and the easy ones come first.** Your first threats now ask for one command with

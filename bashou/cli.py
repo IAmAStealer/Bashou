@@ -257,6 +257,8 @@ def main():
     sub.add_parser("talk", help="your pet says something useful")
     ln = sub.add_parser("learn", help="take the last suggested command (or yours) apart, piece by piece")
     ln.add_argument("command", nargs=argparse.REMAINDER)
+    ex = sub.add_parser("explain", help="a short note on a code topic, e.g. bashou explain python list")
+    ex.add_argument("topic", nargs="*")
     sub.add_parser("evolve", help="watch your pets evolve")
     sw = sub.add_parser("swap", help="change your active pet")
     sw.add_argument("pet", nargs="?")
@@ -291,6 +293,9 @@ def main():
     elif args.cmd == "learn":
         from . import learn
         raise SystemExit(learn.main(args.command))
+    elif args.cmd == "explain":
+        from . import explain
+        raise SystemExit(explain.main(args.topic))
     elif args.cmd == "talk":
         from . import dialogue, learn
         s = state.load()

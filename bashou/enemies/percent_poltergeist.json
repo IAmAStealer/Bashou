@@ -1,0 +1,45 @@
+{
+ "name": "Percent Poltergeist",
+ "palette": {
+  "a": "#1a3040",
+  "b": "#c0e0f0",
+  "c": "#e05080",
+  "m": "#102030",
+  "w": "#ffffff"
+ },
+ "base": [
+  "......aaaaa......",
+  "....aabbbbbaa....",
+  "...abbbbbbbbba...",
+  "...abwmbbbwmba...",
+  "...abbbbbbbbba...",
+  "...abbbmmmbbba...",
+  "...abccbbbcbba...",
+  "...abccbbcbbba...",
+  "...abbbbcbbbba...",
+  "...abbbcbbccba...",
+  "...abbcbbbccba...",
+  "...aa.aa.aa.aa..."
+ ],
+ "poses": {
+  "closed": {
+   "3": "-----aa---aa-----"
+  },
+  "left": {
+   "3": "----wmb--wmb-----"
+  },
+  "right": {
+   "3": "-----bwm--bwm----"
+  },
+  "fidget": {
+   "11": "---.-a.-a.-a.-a--"
+  },
+  "inhale": {
+   "6": "--a-----------a--"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

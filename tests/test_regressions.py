@@ -43,6 +43,7 @@ class ArenaBugs(unittest.TestCase):
                     "last_word_wisp": "tail", "grep_hydra": "grep", "awk_golem": "awk", "find_wraith": "find",
                     "uniq_swarm": "uniq", "sed_serpent": "sed", "ps_phantom": "ps",
                     "pipe_eel": "|"}
+        expected.update({ch.id: "gcc" if "gcc" in ch.tools else "python3" for ch in challenges.code.ALL})
         for ch in challenges.ALL:
             self.assertEqual(ch.tool, expected[ch.id])
 

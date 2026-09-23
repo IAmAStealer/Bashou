@@ -1,0 +1,46 @@
+{
+ "name": "Ouroboros",
+ "palette": {
+  "a": "#2a1a0a",
+  "b": "#c8902a",
+  "c": "#f0d070",
+  "m": "#101010",
+  "w": "#fff4d0",
+  "r": "#d04040"
+ },
+ "base": [
+  ".................",
+  ".....aaaaaaa.....",
+  "...aabcbcbcbaa...",
+  "..abbaaaaaaabba..",
+  ".abba.......abba.",
+  ".acba.......abca.",
+  ".abca.......acba.",
+  ".abba.......abba.",
+  "..abbaaaaaaabwma.",
+  "...aabcbcbcbbbra.",
+  ".....aaaaaaaaaa..",
+  "................."
+ ],
+ "poses": {
+  "closed": {
+   "8": "-------------aa--"
+  },
+  "left": {
+   "8": "------------wmb--"
+  },
+  "right": {
+   "8": "-------------b---"
+  },
+  "fidget": {
+   "9": "--------------b--"
+  },
+  "inhale": {
+   "8": "-a--------------a"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

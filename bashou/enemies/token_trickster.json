@@ -1,0 +1,50 @@
+{
+ "name": "Token Trickster",
+ "palette": {
+  "a": "#1a1a1a",
+  "b": "#3a3a5a",
+  "c": "#f0c030",
+  "d": "#b08010",
+  "f": "#e8c8a8",
+  "m": "#101010",
+  "w": "#ffffff"
+ },
+ "base": [
+  "....aaaaaaaaa....",
+  "...abbbbbbbbba...",
+  ".aaaaaaaaaaaaaaa.",
+  "...affffffffffa..",
+  "...ammwmmmwmmma..",
+  "...affffffffffa..",
+  "...afffmmmmfffa..",
+  "....affffffffa...",
+  ".cc..aaaaaaaa....",
+  "cddc.abbbbbba....",
+  "cddc.abbbbbba....",
+  ".cc..aaaaaaaa...."
+ ],
+ "poses": {
+  "closed": {
+   "4": "----aaaaaaaaaa---"
+  },
+  "left": {
+   "4": "-----wm--wm--b---"
+  },
+  "right": {
+   "4": "----b-mw--mw-----"
+  },
+  "fidget": {
+   "8": "-..--------------",
+   "9": ".cc.-------------",
+   "10": "-----------------",
+   "11": "cddc-------------"
+  },
+  "inhale": {
+   "6": "--a------------a-"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

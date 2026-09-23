@@ -1,0 +1,46 @@
+{
+ "name": "Injection Imp",
+ "palette": {
+  "a": "#3a0a0a",
+  "b": "#d04030",
+  "c": "#c0d8e8",
+  "n": "#e8e8e8",
+  "m": "#200505",
+  "w": "#ffe070"
+ },
+ "base": [
+  "..a.......a......",
+  "..aa.....aa......",
+  "...abaaaaba......",
+  "...abbbbbba......",
+  "..abwmbbwmba.....",
+  "..abbbbbbbba.....",
+  "..abmmmmmmba.....",
+  "nccc.abbbba......",
+  "...caabbbbba.....",
+  "....abbbbbba.....",
+  "....aba..aba.....",
+  "....aa....aa....."
+ ],
+ "poses": {
+  "closed": {
+   "4": "----aa--aa-------"
+  },
+  "left": {
+   "4": "---wmb-wmb-------"
+  },
+  "right": {
+   "4": "----bwm-bwm------"
+  },
+  "fidget": {
+   "7": ".n--c.a---ba-----"
+  },
+  "inhale": {
+   "9": "---ab------ba----"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

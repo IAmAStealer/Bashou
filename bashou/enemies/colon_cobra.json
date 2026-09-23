@@ -1,0 +1,46 @@
+{
+ "name": "Colon Cobra",
+ "palette": {
+  "a": "#1f3d1a",
+  "b": "#5fae4a",
+  "c": "#e8d44d",
+  "m": "#101010",
+  "w": "#f4f4e8",
+  "r": "#d8404a"
+ },
+ "base": [
+  "......aaaa.......",
+  ".....abbbba......",
+  "....abwmbbba.....",
+  "...aabbbbbbba....",
+  "..rrammmbbbba....",
+  "......abcbba.....",
+  ".....abbbbbba....",
+  ".....abbcbbba....",
+  "......abbbbaa....",
+  "..aaaaabbbbbbbaa.",
+  ".abbbbbbbbbbbbbba",
+  "..aaaaaaaaaaaaaa."
+ ],
+ "poses": {
+  "closed": {
+   "2": "------aa---------"
+  },
+  "left": {
+   "2": "-----wmb---------"
+  },
+  "right": {
+   "2": "------bwm--------"
+  },
+  "fidget": {
+   "4": "--..-------------"
+  },
+  "inhale": {
+   "6": "----ab------ba---"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

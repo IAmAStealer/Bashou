@@ -40,7 +40,18 @@ class JudgeTest(unittest.TestCase):
     def test_every_reference_solution_hits(self):
         for ch in challenges.ALL:
             cmd = SOLUTIONS[ch.id][0].replace("{x}", "x").replace("{{", "{").replace("}}", "}")
+            if ch.verify and ch in challenges.code.ALL:                  # fix fights: edit, then run it
+                cmd = "gcc prog.c -o prog" if "gcc" in ch.tools else "python3 prog.py"
             self.assertEqual(duel.judge(ch, 0, cmd), "hit", ch.id)
+
+
+    def test_code_fights(self):
+        """Fix fights: opening an editor is free, building or running your program hits."""
+        leech, slug = challenges.BY_ID["list_leech"], challenges.BY_ID["semicolon_slug"]
+        self.assertIsNone(duel.judge(leech, 0, "nano hosts.py"))
+        self.assertEqual(duel.judge(leech, 1, "python3 hosts.py"), "hurt")
+        self.assertEqual(duel.judge(slug, 0, "./hello"), "hit")
+        self.assertEqual(duel.judge(slug, 0, "gcc hello.c -o hello && ./hello"), "hit")
 
 
 class ScoreTest(TempState):

@@ -1,0 +1,46 @@
+{
+ "name": "Dict Djinn",
+ "palette": {
+  "a": "#1d2a52",
+  "b": "#5a7de0",
+  "c": "#f0c040",
+  "m": "#101830",
+  "w": "#f4f8ff"
+ },
+ "base": [
+  "......aaaaa......",
+  ".....abbbbba.....",
+  "....abwmbwmba....",
+  "....abbbbbbba....",
+  "....abbmmmbba....",
+  ".cc..abbbbba..cc.",
+  "c..aabbbbbbbaa..c",
+  ".cabbbbbbbbbbbac.",
+  "c..aabbbbbbbaa..c",
+  ".cc...abbbba..cc.",
+  "........abba.....",
+  "..........aa....."
+ ],
+ "poses": {
+  "closed": {
+   "2": "------aa-aa------"
+  },
+  "left": {
+   "2": "-----wmbwmb------"
+  },
+  "right": {
+   "2": "------bwmbwm-----"
+  },
+  "fidget": {
+   "10": "-------ab-a.-----",
+   "11": "--------aa..-----"
+  },
+  "inhale": {
+   "7": "cab-----------bac"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

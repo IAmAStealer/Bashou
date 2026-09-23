@@ -34,6 +34,10 @@ class CompletionTest(unittest.TestCase):
         parser_src = Path(cli.__file__).read_text()
         commands = re.findall(r'sub\.add_parser\("([\w-]+)"', parser_src)
         self.assertEqual(set(words("_bashou_commands")), set(commands))
+        from bashou import explain
+        for lang, topics in explain.NOTES.items():
+            self.assertEqual(complete(f"bashou explain {lang} "), list(topics))
+        self.assertEqual(complete("bashou explain "), list(explain.NOTES))
         dev = re.search(r'choices=\[("unlock-all".*?)\]', parser_src).group(1)
         self.assertEqual(words("_bashou_dev"), re.findall(r'"([\w-]+)"', dev))
 

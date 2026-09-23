@@ -1,0 +1,45 @@
+{
+ "name": "Base64 Banshee",
+ "palette": {
+  "a": "#3a2a50",
+  "b": "#d8c8f0",
+  "c": "#8a70b0",
+  "m": "#201830",
+  "w": "#ffffff"
+ },
+ "base": [
+  ".....aaaaaaa.....",
+  "...aabbbbbbbaa...",
+  "..abbbbbbbbbbba..",
+  "..abwmbbbbbwmba..",
+  "..abbbbbbbbbbba..",
+  "..abbbbammabbba..",
+  "..abbbbammabbba..",
+  "..abbbbbbbbbbba..",
+  "..abcbccbcbbcba..",
+  "..abbbbbbbbbbba..",
+  "..abba.aba.abba..",
+  "...aa...a...aa..."
+ ],
+ "poses": {
+  "closed": {
+   "3": "----aa-----aa----"
+  },
+  "left": {
+   "3": "---wmb----wmb----"
+  },
+  "right": {
+   "3": "----bwm----bwm---"
+  },
+  "fidget": {
+   "8": "---cbcbbcbccbc---"
+  },
+  "inhale": {
+   "6": "-a-------------a-"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

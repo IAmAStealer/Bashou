@@ -26,6 +26,26 @@ SOLUTIONS = {
     "sed_serpent": ("sed -i 's/teh/the/g; s/Teh/The/g' letter.txt", None),
     "ps_phantom": ("pgrep -f '^{x}'", r"named (phantom-\w+)"),
     "pipe_eel": ("grep ' 404$' access.log | cut -d' ' -f1 | sort -u | wc -l", None),
+    # code fights: fix the file, or a python3 one-liner
+    "colon_cobra": ("sed -i 's/^def greet(names)$/def greet(names):/' greet.py", None),
+    "semicolon_slug": ("sed -i 's/\")$/\");/' hello.c", None),
+    "list_leech": ("sed -i 's/^    for i, host in enumerate(hosts):$/    return list(dict.fromkeys(hosts))\\n&/' hosts.py",
+                   None),
+    "dict_djinn": ("sed -i 's/counts\\[level\\] += 1/counts[level] = counts.get(level, 0) + 1/' tally.py", None),
+    "loop_lich": ("sed -i 's/^        delay = delay \\* 2$/&\\n        i += 1/' retry.py", None),
+    "ouroboros": ("sed -i 's/^            total(item)$/            size += total(item)/' du.py", None),
+    "json_jinn": ("python3 -c \"import json; print(json.load(open('config.json'))['database']['port'])\"", None),
+    "base64_banshee": ("python3 -c \"import base64; print(base64.b64decode(open('secret.txt').read()).split()[-1]"
+                       ".decode())\"", None),
+    "percent_poltergeist": ("python3 -c \"import re, urllib.parse as u; "
+                            "print(re.search(r'etc/(\\w+)', u.unquote(open('access.log').read())).group(1))\"", None),
+    "injection_imp": ("sed -i 's/os.system(\"echo checking \" + host)/print(\"checking\", host)/' check_hosts.py", None),
+    "token_trickster": ("python3 -c \"import base64, json; p = open('token.txt').read().split('.')[1]; "
+                        "print(json.loads(base64.urlsafe_b64decode(p + '=='))['sub'])\"", None),
+    "leak_lurker": ("sed -i 's/^        fputs(loud, stdout);$/&\\n        free(loud);/' shout.c", None),
+    "fencepost_fiend": ("sed -i 's/i <= count/i < count/' average.c", None),
+    "stack_specter": ("sed -i 's/^    return n + sum_to(n - 1);$/    if (n <= 0)\\n        return 0;\\n&/' sum.c", None),
+    "overflow_ogre": ("sed -i '/strcpy/d; s/, name);/, argv[1]);/' greet.c", None),
     # security
     "hidden_file": ("cat .[!.]*", None),
     "encoded_note": ("base64 -d note.txt | cut -d' ' -f2", None),
@@ -80,6 +100,14 @@ class ChallengeTest(unittest.TestCase):
                     finally:
                         if ch.cleanup:
                             ch.cleanup(meta)
+
+    def test_code_fights_start_broken(self):
+        """The file as handed out must fail its own tests (else there is nothing to fix)."""
+        for ch in challenges.code.ALL:
+            if ch.verify and ch.available():
+                with self.subTest(ch.id), tempfile.TemporaryDirectory() as tmp:
+                    meta = ch.setup(Path(tmp), random.Random(1))
+                    self.assertFalse(ch.check(Path(tmp), meta, "done"))
 
     def test_the_pipe_eel_needs_a_real_pipeline(self):
         with tempfile.TemporaryDirectory() as base:

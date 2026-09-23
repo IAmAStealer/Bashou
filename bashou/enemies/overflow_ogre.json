@@ -1,0 +1,50 @@
+{
+ "name": "Overflow Ogre",
+ "palette": {
+  "a": "#2a2010",
+  "b": "#90a050",
+  "c": "#f0a030",
+  "m": "#201808",
+  "t": "#f0f0e0",
+  "w": "#ffffff"
+ },
+ "base": [
+  "....aaaaaaaaa....",
+  "...abbbbbbbbba...",
+  ".abbwwbbbbbwwbba.",
+  ".abbwmbbbbbwmbba.",
+  ".abbbbbbaabbbbba.",
+  ".abbbbbbbbbbbbba.",
+  ".abmmmmmmmmmmmba.",
+  ".abmtmmmmmmmtmba.",
+  "..abbbbbbbbbbba..",
+  "...aaaaaaaaaaac..",
+  ".....c.c.c.c.c.c.",
+  "....c.c.c.c.c.c.."
+ ],
+ "poses": {
+  "closed": {
+   "2": "----aa-----aa----",
+   "3": "----aa-----aa----"
+  },
+  "left": {
+   "2": "---w-b----w-b----",
+   "3": "---wmb----wmb----"
+  },
+  "right": {
+   "2": "----b-w----b-w---",
+   "3": "----bwm----bwm---"
+  },
+  "fidget": {
+   "10": "----c.c.c.c.c.c.-",
+   "11": "----.c.c.c.c.c.c-"
+  },
+  "inhale": {
+   "5": "ab-------------ba"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

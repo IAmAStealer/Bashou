@@ -1,0 +1,49 @@
+{
+ "name": "Stack Specter",
+ "palette": {
+  "a": "#1a1a2a",
+  "b": "#d0d8f0",
+  "c": "#6070c0",
+  "d": "#8090e0",
+  "m": "#101020",
+  "w": "#ffffff"
+ },
+ "base": [
+  "......aaaaa......",
+  ".....abbbbba.....",
+  "....abwmbwmba....",
+  "....abbbmbbba....",
+  "....aaaaaaaaa....",
+  "....acccccccca...",
+  "....aaaaaaaaa....",
+  "...addddddddda...",
+  "...aaaaaaaaaaa...",
+  "..accccccccccca..",
+  "..aaaaaaaaaaaaa..",
+  ".aaaaaaaaaaaaaaa."
+ ],
+ "poses": {
+  "closed": {
+   "2": "------aa-aa------"
+  },
+  "left": {
+   "2": "-----wmbwmb------"
+  },
+  "right": {
+   "2": "------bwmbwm-----"
+  },
+  "fidget": {
+   "0": "-----a----.------",
+   "1": "----ab----a.-----",
+   "2": "---abwmbwmba.----",
+   "3": "---ab--mb--a.----"
+  },
+  "inhale": {
+   "6": "---a---------a---"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

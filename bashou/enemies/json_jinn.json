@@ -1,0 +1,46 @@
+{
+ "name": "JSON Jinn",
+ "palette": {
+  "a": "#0e3a3a",
+  "b": "#40c0b0",
+  "c": "#f0f0a0",
+  "m": "#08201f",
+  "w": "#ffffff"
+ },
+ "base": [
+  "......aaaaa......",
+  "....aabbbbbaa....",
+  "...abbbbbbbbba...",
+  "...acwmcbcwmca...",
+  "...abbbbbbbbba...",
+  "....abbmmmbba....",
+  "..aaaabbbbbaaaa..",
+  ".abbbbbbbbbbbbba.",
+  "..aaaabbbbbaaaa..",
+  "......abbba......",
+  ".......abba......",
+  "........aa......."
+ ],
+ "poses": {
+  "closed": {
+   "3": "-----aa---aa-----"
+  },
+  "left": {
+   "3": "----wmc--wmc-----"
+  },
+  "right": {
+   "3": "-----cwm--cwm----"
+  },
+  "fidget": {
+   "10": "------ab-a.------",
+   "11": "------aa..-------"
+  },
+  "inhale": {
+   "7": "ab-------------ba"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

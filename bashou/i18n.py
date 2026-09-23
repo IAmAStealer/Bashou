@@ -126,6 +126,8 @@ def messages():
     found += [m for flags in learn.FLAGS.values() for m in flags.values()]
     found += [m for subs in learn.SUBCOMMANDS.values() for m in subs.values()]
     found += [m for roles in learn.ARGS.values() for m in roles]
+    from . import explain
+    found += [text for topics in explain.NOTES.values() for text, example in topics.values()]
     for ch in challenges.ALL + challenges.SECURITY + challenges.TRIALS:
         found += [ch.threat, ch.task, *ch.hints]
     return list(dict.fromkeys(found))

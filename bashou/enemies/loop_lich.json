@@ -1,0 +1,50 @@
+{
+ "name": "Loop Lich",
+ "palette": {
+  "a": "#1a1420",
+  "b": "#e8e0d0",
+  "c": "#7af0c0",
+  "d": "#503a70",
+  "m": "#101010",
+  "w": "#7af0c0"
+ },
+ "base": [
+  "....ccccccccc....",
+  "...c.........c...",
+  "...c.aaaaaaa.cc..",
+  "....abbbbbbba.c..",
+  "...abwwbbbwwba...",
+  "...abmwbbbmwba...",
+  "...abbbbabbbba...",
+  "....abbbbbbba....",
+  ".....abmbmba.....",
+  "....aaaaaaaaa....",
+  "...addddddddda...",
+  "..addddddddddda.."
+ ],
+ "poses": {
+  "closed": {
+   "4": "-----aa---aa-----",
+   "5": "-----aa---aa-----"
+  },
+  "left": {
+   "4": "----w-b--w-b-----",
+   "5": "----mwb--mwb-----"
+  },
+  "right": {
+   "4": "-----b-w--b-w----",
+   "5": "-----bmw--bmw----"
+  },
+  "fidget": {
+   "1": "--c.---------.c--",
+   "2": "--c.---------.-c-"
+  },
+  "inhale": {
+   "6": "--a-----------a--"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

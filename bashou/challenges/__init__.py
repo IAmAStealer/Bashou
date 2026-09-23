@@ -57,10 +57,10 @@ class Challenge:
         return all(shutil.which(t) for t in (self.requires or [self.tool]))
 
 
-from . import awk, basics, find, grep, pipe, ps, sed, security, trials, uniq  # noqa: E402
+from . import awk, basics, code, find, grep, pipe, ps, sed, security, trials, uniq  # noqa: E402
 
 ALL = basics.ALL + [grep.CHALLENGE, awk.CHALLENGE, find.CHALLENGE, uniq.CHALLENGE,
-                    sed.CHALLENGE, ps.CHALLENGE, pipe.CHALLENGE]   # fights, sent as threats
+                    sed.CHALLENGE, ps.CHALLENGE, pipe.CHALLENGE] + code.ALL   # fights, sent as threats
 SECURITY = security.SECURITY        # `bashou security`, in order
 TRIALS = trials.TRIALS              # locked chests in `bashou adventure`
 BY_ID = {c.id: c for c in ALL + SECURITY + TRIALS}
