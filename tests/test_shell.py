@@ -310,7 +310,7 @@ class AdventureShellTest(unittest.TestCase):
             try:
                 self.assertTrue(sh.expect(b"The Sleepy Meadow"))
                 sh.send("\r", 0.5)                        # set off
-                self.assertTrue(sh.expect(b"The road splits"))
+                self.assertTrue(sh.expect("▶".encode()))                # the paths are named on the road
                 sh.send("\r", 0.5)                        # first path
                 sh.send(" ", 1.5)                         # auto-walk
                 sh.send("s", 0)
