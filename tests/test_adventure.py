@@ -84,16 +84,34 @@ class GameTest(unittest.TestCase):
         self.assertIn("Chapter 1", g.caption())
         self.assertIn("Enter", g.hud())
         self.go("\r")
-        top = g.caption()
-        for topic in world.fork_options(g.adv):
-            self.assertIn(topic_name(topic), top)
-        self.assertIn("▶", top)
-        self.assertIn("←/→", g.hud())
-        g.draw(0.0, 0)
-        self.go("\r")                                    # off we go: the top line is sky again
         self.assertEqual(g.caption(), "")
+        self.assertIn("←/→", g.hud())
+
+    def test_the_road_splits_with_the_paths_written_on_it(self):
+        """Owner: the fork was only a line on top; draw a Y narrowing away, the names on the paths."""
+        g = self.game
         g.draw(0.0, 0)
-        self.assertIn((0, 0), g.canvas.shown)
+        self.assertEqual(g.signs, [])                          # the start: the road, no names yet
+        self.go("\r")
+        frame = g.draw(0.0, 0)
+        options = world.fork_options(g.adv)
+        self.assertEqual(len(g.signs), len(options))
+        for (line, col, text, picked), topic in zip(g.signs, options):
+            self.assertIn(topic_name(topic), text)
+            self.assertIn(text, frame)
+            self.assertTrue(1 < line < g.rows and 1 <= col <= g.cols - len(text), (line, col))
+        self.assertEqual([s[3] for s in g.signs], [True] + [False] * (len(options) - 1))
+        self.assertLess(g.signs[0][1], g.signs[-1][1])        # left path on the left
+        mid = g.canvas.w // 2
+        road = lambda y: sum(g.canvas.px[y][x] in (scene.ROAD, scene.ROAD_LIT) for x in range(g.canvas.w))
+        self.assertGreater(road(g.canvas.h - 1), road(int(g.canvas.h * scene.HORIZON) + 2))   # narrows away
+        self.assertIn(g.canvas.px[g.canvas.h - 1][mid], (scene.ROAD, scene.ROAD_LIT))
+        self.go("\x1b[C")
+        g.draw(0.0, 0)
+        self.assertEqual([s[3] for s in g.signs][:2], [False, True])
+        self.go("\r")                                          # off we go: names gone, sky repainted
+        g.draw(0.0, 0)
+        self.assertEqual(g.signs, [])
 
     def test_monster_right_and_wrong(self):
         g = self.game

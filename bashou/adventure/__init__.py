@@ -68,6 +68,7 @@ class Game:
         self.choice = 0                 # highlighted fork path or answer
         self.question = None            # the question on screen
         self.result = None              # (good?, lines) after an answer
+        self.signs = []                 # the paths' names written on the road at a fork
         self.boss = None                # {"left": questions left, "total", "deadline"}
         self.panel_rect = None
         self.captioned = False          # the top line holds a caption (repaint the sky when it goes)
@@ -268,8 +269,7 @@ class Game:
 
     def draw(self, t, now):
         adv, c = self.adv, self.canvas
-        d = adv["distance"]
-        scene.draw(c, world.biome(adv), d, t, 17 * self.scale)
+        signs = self.draw_fork(t)
         lines = self.panel(now)
         rect = self.panel_box(lines)
         step = int(adv["walked"] * 1.5) % len(self.frames) if self.walking(now) else 0
@@ -284,25 +284,50 @@ class Game:
             for col in range(c.w):
                 c.shown.pop((0, col), None)
         self.captioned = bool(caption)
-        return c.render() + self.panel_text(lines, rect) + caption
+        return c.render() + self.panel_text(lines, rect) + caption + self.fork_signs(signs)
+
+    def draw_fork(self, t):
+        """Paint the scene. At the start and at a fork the road splits into the paths you can take
+        (a Y, or three); returns their names and where they go on screen (line, column, text, picked)."""
+        adv = self.adv
+        fork = None
+        if adv["phase"] in ("intro", "fork") and not self.result:
+            options = world.fork_options(adv, self.topics)
+            picked = self.choice if adv["phase"] == "fork" else None
+            fork = (len(options), picked, 12 * self.scale)
+        spots = scene.draw(self.canvas, world.biome(adv), adv["distance"], t, 17 * self.scale, fork)
+        if not fork or fork[1] is None:
+            return []
+        signs = []
+        for i, (topic, (x, y)) in enumerate(zip(options, spots)):
+            name = f"{topic_name(topic)} · " + _("level {n}").format(n=world.level(adv, topic))
+            text = f"▶ {name} ◀" if i == picked else f" {name} "
+            col = int(x) - render.width(text) // 2 + 1
+            col = max(1, min(col, self.cols - render.width(text)))
+            signs.append((max(2, int(y) // 2 + 1), col, text, i == picked))
+        return signs
+
+    def fork_signs(self, signs):
+        """Write the paths' names on the road; the canvas repaints where old names were."""
+        for line, col, text, _picked in self.signs:
+            if (line, col, text, _picked) not in signs:
+                for k in range(render.width(text)):
+                    self.canvas.shown.pop((line - 1, col - 1 + k), None)
+        self.signs = signs
+        out = []
+        for line, col, text, picked in signs:
+            color = ACCENT if picked else PANEL_FG
+            out.append(f"{ESC}[{line};{col}H{ESC}[0m{ESC}[48;2;%d;%d;%dm" % PANEL_BG
+                       + (f"{ESC}[1m" if picked else "") + f"{ESC}[38;2;%d;%d;%dm" % color + text + f"{ESC}[0m")
+        return "".join(out)
 
     def caption(self):
-        """At the start and at a fork no box hides the road: one line on top says where you are or
-        which ways you can go (← left, → right), the keys are on the bottom line."""
+        """At the start no box hides the road: one line on top names the chapter, the keys are on
+        the bottom line. At a fork the paths' names are written on the road (draw_fork)."""
         adv = self.adv
         if adv["phase"] == "intro":
             ch = world.chapter(adv["chapter"])
             parts = [(_("Chapter {n}: {title}").format(n=adv["chapter"], title=world.title(ch)), ACCENT, True)]
-        elif adv["phase"] == "fork" and not self.result:
-            parts = [(_("The road splits:") + "  ", PANEL_FG, False)]
-            for i, topic in enumerate(world.fork_options(adv, self.topics)):
-                name = f"{topic_name(topic)} · " + _("level {n}").format(n=world.level(adv, topic))
-                picked = i == self.choice
-                parts.append((f"▶ {name} ◀" if picked else f"  {name}  ", ACCENT if picked else PANEL_FG, picked))
-                parts.append(("   ", PANEL_FG, False))
-            parts.pop()
-            if sum(render.width(t) for t, _c, _b in parts) > self.cols - 2:
-                parts.pop(0)                                  # three ways on a small screen
         else:
             return ""
         width = sum(render.width(text) for text, _c, _b in parts)
@@ -319,8 +344,8 @@ class Game:
         adv = self.adv
         phase = adv["phase"]
         if phase in ("fork", "intro"):
-            kind, rel = "fork", 6.0
-        elif phase == "walk":
+            return                                            # the road itself splits: draw_fork()
+        if phase == "walk":
             kind = world.events(adv)[adv["segment"]]
             rel = world.next_event_at(adv) - adv["distance"] + 3
         elif phase in ("monster", "boss", "chest", "lesson"):
