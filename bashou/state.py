@@ -3,6 +3,8 @@
 import fcntl
 import json
 import os
+import sys
+import time
 from contextlib import contextmanager
 from pathlib import Path
 
@@ -89,14 +91,56 @@ def parse_range(text):
 
 def load():
     try:
-        data = json.loads(STATE.read_text())
-    except (FileNotFoundError, json.JSONDecodeError):
+        text = STATE.read_text()
+    except FileNotFoundError:
         return default()
+    try:
+        return read(text)
+    except Exception:           # a damaged file or a save we can't migrate: never lose it silently
+        return recover(text)
+
+
+def read(text):
+    data = json.loads(text)
+    if not isinstance(data, dict):
+        raise ValueError("not a save")
     state = {**default(), **data}
+    for key, value in default().items():                  # a field of the wrong type: its default
+        if value is None or key == "skills":
+            continue
+        kind = (int, float) if isinstance(value, (int, float)) else type(value)
+        if not isinstance(state[key], kind):
+            state[key] = value
     for key in ("starter_best", "ladder_best", "reviews"):
         if key not in data:
             del state[key]                                 # an old save: migrate() sets it
     return migrate(state)
+
+
+def prev():
+    """A copy of a good save, at most a day old."""
+    return STATE.with_name("state.json.prev")
+
+
+def recover(text):
+    """Keep the unreadable save next to it, then start again from the newest copy that reads."""
+    broken = STATE.with_name(f"state.json.broken-{time.strftime('%Y%m%d-%H%M%S')}")
+    try:
+        if STATE.read_text() != text:                     # another terminal saved meanwhile
+            return read(STATE.read_text())
+        os.replace(STATE, broken)
+    except FileNotFoundError:                              # another terminal is already on it
+        return load() if STATE.exists() else default()
+    for copy in [prev(), *sorted(STATE.parent.glob("state.json.bak-*"), reverse=True)]:
+        try:
+            state = read(copy.read_text())
+        except Exception:
+            continue
+        save(state)
+        print(f"bashou: your save couldn't be read, kept as {broken}; restored {copy.name}.", file=sys.stderr)
+        return state
+    print(f"bashou: your save couldn't be read, kept as {broken}; starting over.", file=sys.stderr)
+    return default()
 
 
 def migrate(state):
@@ -162,10 +206,18 @@ def migrate_ladder(state):
 
 
 def save(state):
-    DATA.mkdir(parents=True, exist_ok=True)
+    STATE.parent.mkdir(parents=True, exist_ok=True)
     tmp = STATE.with_suffix(".tmp")
-    tmp.write_text(json.dumps(state, indent=1))
+    text = json.dumps(state, indent=1)
+    tmp.write_text(text)
     os.replace(tmp, STATE)
+    try:
+        stale = time.time() - prev().stat().st_mtime > 24 * 3600
+    except FileNotFoundError:
+        stale = True
+    if stale:
+        tmp.write_text(text)
+        os.replace(tmp, prev())
 
 
 @contextmanager

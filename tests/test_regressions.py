@@ -8,6 +8,7 @@ hints without an example (test_dialogue), unlock message using the wrong stage n
 
 import contextlib
 import io
+import json
 import os
 import random
 import subprocess
@@ -430,3 +431,42 @@ class StarterScreenTest(unittest.TestCase):
         with contextlib.redirect_stdout(out):
             starter.draw(0, False)
         self.assertNotIn("→ ?", out.getvalue())
+
+
+class SaveSafetyTest(TempState):
+    """An unreadable save (damaged, or an old shape migrate() chokes on) is never overwritten."""
+
+    def test_damaged_save_is_kept_and_the_last_good_copy_restored(self):
+        with contextlib.redirect_stderr(io.StringIO()):
+            with state.locked() as s:
+                s["commands"] = 42
+            state.STATE.write_text('{"commands": 43, "pe')         # cut in the middle
+            s = state.load()
+        self.assertEqual(s["commands"], 42)                          # from state.json.prev
+        broken = list(state.DATA.glob("state.json.broken-*"))
+        self.assertEqual(len(broken), 1)
+        self.assertEqual(broken[0].read_text(), '{"commands": 43, "pe')
+        self.assertEqual(state.load()["commands"], 42)               # restored on disk too
+
+    def test_newest_readable_backup_when_no_copy(self):
+        (state.DATA / "state.json.bak-20260101-000000-000").write_text('{"commands": 7}')
+        (state.DATA / "state.json.bak-20260102-000000-000").write_text("garbage")
+        state.STATE.write_text("[]")
+        with contextlib.redirect_stderr(io.StringIO()) as err:
+            self.assertEqual(state.load()["commands"], 7)
+        self.assertIn("bak-20260101", err.getvalue())
+
+    def test_nothing_to_restore_starts_over_but_keeps_the_file(self):
+        state.STATE.write_text("\x00\x00")
+        with contextlib.redirect_stderr(io.StringIO()) as err:
+            self.assertEqual(state.load(), state.default())
+        self.assertIn("broken", err.getvalue())
+        self.assertEqual(len(list(state.DATA.glob("state.json.broken-*"))), 1)
+
+    def test_wrong_types_fall_back_to_defaults_and_keep_the_rest(self):
+        state.STATE.write_text(json.dumps({"pets": None, "achievements": "tally", "commands": 12,
+                                           "starter": "cat", "tools": {"ls": 3}, "skills": ["bash"]}))
+        s = state.load()
+        self.assertEqual((s["pets"], s["achievements"], s["commands"]), ([], [], 12))
+        self.assertEqual((s["starter"], s["tools"], s["skills"]), ("star", {"ls": 3}, ["bash"]))
+        self.assertEqual(list(state.DATA.glob("state.json.broken-*")), [])
