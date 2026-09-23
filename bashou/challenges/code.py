@@ -311,6 +311,11 @@ def b64_setup(work, rng):
     return {"answer": word}
 
 
+def url_verify(work, meta, value):
+    """shadow, /etc/shadow or etc/shadow."""
+    return value.strip().rstrip("/").rsplit("/", 1)[-1] == meta["answer"]
+
+
 def url_setup(work, rng):
     target = rng.choice(("passwd", "shadow", "sudoers", "hosts", "crontab", "fstab"))
     ips = [f"10.1.{rng.randint(0, 9)}.{rng.randint(1, 254)}" for _i in range(8)]
@@ -607,7 +612,7 @@ ALL = [
               hints=["urllib.parse.unquote turns %2e%2e%2f back into ../ : bashou explain python url",
                      "Try: python3 -c \"import urllib.parse; print(urllib.parse.unquote(open('access.log').read()))\""
                      " | grep etc"],
-              setup=url_setup),
+              setup=url_setup, verify=url_verify),
     Challenge(level=3, id="injection_imp", pet="snake", threat="Injection Imp", after=("list_leech",), **PY,
               task="The Injection Imp slipped a command into hosts.txt, and check_hosts.py runs it.\n"
                    "Fix check_hosts.py (its first lines say what it must do). Run it: python3 check_hosts.py\n"

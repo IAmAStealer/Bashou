@@ -26,8 +26,8 @@ def sh(*cmd):
 
 
 def same_version(value, version):
-    """With or without the epoch (2:4.0.4-9 or 4.0.4-9)."""
-    value = value.strip()
+    """With or without the epoch (2:4.0.4-9 or 4.0.4-9), alone or after the name (dpkg-query -W)."""
+    value = (value.split() or [""])[-1]
     return value == version or value == version.split(":", 1)[-1]
 
 

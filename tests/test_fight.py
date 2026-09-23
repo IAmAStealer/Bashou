@@ -204,6 +204,17 @@ class PackageFightTest(unittest.TestCase):
                 self.assertFalse(hare.check(Path(tmp), {"answer": "coreutils"}, "coreutils-extra"))
 
 
+class LenientAnswerTest(unittest.TestCase):
+    def test_the_same_answer_written_another_way(self):
+        from bashou.challenges import code, packages
+        self.assertTrue(code.url_verify(None, {"answer": "shadow"}, "/etc/shadow"))
+        self.assertTrue(code.url_verify(None, {"answer": "shadow"}, "shadow"))
+        self.assertFalse(code.url_verify(None, {"answer": "shadow"}, "passwd"))
+        self.assertTrue(packages.same_version("bash 5.2.37-2+b9", "5.2.37-2+b9"))       # dpkg-query -W
+        self.assertTrue(packages.same_version("4.0.4-9", "2:4.0.4-9"))
+        self.assertFalse(packages.same_version("", "2:4.0.4-9"))
+
+
 class RepoFightTest(unittest.TestCase):
     def test_planted_files_fail_and_fixed_ones_pass(self):
         for seed in range(20):
@@ -257,6 +268,12 @@ class RepoFightTest(unittest.TestCase):
             Path(tmp, "rocky.repo").write_text("[baseos]\nenabled=1\n[crb]\nenabled=0\n[appstream]\nname=x\n")
             Path(tmp, "broken.repo").write_text("not a repo file")
             self.assertEqual(repos.enabled_repos(tmp), ["baseos", "appstream"])
+
+    def test_the_named_editor_is_installed(self):
+        import importlib
+        with mock.patch("shutil.which", lambda e: "/usr/bin/vi" if e in ("vi", "sed") else None):
+            self.assertEqual(importlib.reload(repos).EDITORS[0], "vi")
+        importlib.reload(repos)
 
     def test_red_hat_file_fight(self):
         with mock.patch.object(challenges, "family", return_value=frozenset({"rocky", "rhel"})):
@@ -317,6 +334,11 @@ class OrderTest(unittest.TestCase):
         self.assertFalse(fight.ready(s, eel))                                  # never piped 3 commands
         s["adventure"] = {"lessons": ["pipes"]}                                # the owl's lesson counts
         self.assertTrue(fight.ready(s, eel))
+
+    def test_each_tool_to_discover_once(self):
+        """7 Python fights listed python3 7 times: the pets talked about nothing else."""
+        tools = fight.to_discover(state.default())
+        self.assertEqual(len(tools), len(set(tools)))
 
     def test_pets_hint_the_tool_before_its_fight(self):
         from bashou import dialogue

@@ -82,8 +82,8 @@ def ready(s, ch):
 
 def to_discover(s):
     """Tools of the next fights you can't get yet only because you haven't met them."""
-    return [ch.tool for ch in remaining(s)
-            if not ready(s, ch) and all(a in s["challenges"] for a in ch.after)]
+    return list(dict.fromkeys(ch.tool for ch in remaining(s)       # once each: the pets pick one at random
+                              if not ready(s, ch) and all(a in s["challenges"] for a in ch.after)))
 
 
 def threats_per_day(s):

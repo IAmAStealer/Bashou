@@ -7,12 +7,14 @@ letter: http or https, a trailing slash, extra components or backports are all f
 
 import configparser
 import shlex
+import shutil
 from pathlib import Path
 
 from . import Challenge
 from ..analyze import parse_log
 
-EDITORS = ("nano", "vim", "vi", "nvim", "emacs", "micro", "sed")
+# The first one installed is the one the threat names (a minimal Rocky has vi, not nano).
+EDITORS = tuple(sorted(("nano", "vim", "vi", "nvim", "emacs", "micro", "sed"), key=lambda e: not shutil.which(e)))
 KEYRINGS = {"/usr/share/keyrings/debian-archive-keyring.gpg", "/usr/share/keyrings/debian-archive-keyring.pgp"}
 REPOS = Path("/etc/yum.repos.d")
 
