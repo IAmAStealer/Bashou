@@ -95,6 +95,8 @@ SOLUTIONS = {
     "trial_awk_names": ("awk '{{print $1}}' people.txt > names.txt", None),
     "trial_awk_sum": ("awk '{{s += $2}} END {{print s}}' prices.txt", None),
     "trial_pipe_cities": ("awk '{{print $3}}' people.txt | sort -u | wc -l", None),
+    "trial_sort_scores": ("sort -n scores.txt | tail -1", None),
+    "trial_sort_visitors": ("sort visitors.txt | uniq -c | sort -rn | head -1 | awk '{{print $2}}'", None),
 }
 
 
@@ -517,6 +519,13 @@ class UniqTipTest(unittest.TestCase):
 
     def test_sort_then_uniq_gets_no_tip(self):
         self.assertNotIn("TIP-UNIQ", self.run_arena(["sort f.txt | uniq -c"]))
+
+    def test_plain_sort_gets_the_scores_chest_wrong(self):
+        for seed in range(20):
+            with tempfile.TemporaryDirectory() as tmp:
+                meta = challenges.BY_ID["trial_sort_scores"].setup(Path(tmp), random.Random(seed))
+                text_last = sorted((Path(tmp) / "scores.txt").read_text().split())[-1]
+                self.assertNotEqual(text_last, str(meta["answer"]))
 
     def test_the_owl_and_the_chest_say_why_sort_comes_first(self):
         from bashou.adventure import lessons

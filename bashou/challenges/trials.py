@@ -234,5 +234,40 @@ CITIES = trial("trial_pipe_cities", 2, "How many different cities are in people.
                people_setup, lambda w, m, v: v.strip() == str(m["cities"]), requires=["sort", "wc"], teaches=["|"])
 
 
+def scores_setup(work, rng):
+    # a 9x beats every 1xx-8xx in text order, so plain `sort` gives the wrong answer: -n is needed
+    scores = [rng.randint(2, 9), rng.randint(90, 99), rng.randint(10, 89)] + [rng.randint(100, 899) for _ in range(2)]
+    scores += [rng.randint(10, 899) for _ in range(3)]
+    rng.shuffle(scores)
+    (work / "scores.txt").write_text("".join(f"{n}\n" for n in scores))
+    return {"answer": max(scores)}
+
+
+SCORES = trial("trial_sort_scores", 2, "scores.txt has one score per line. Sort it to find the highest one. "
+               "Then: answer <number>",
+               ["sort alone compares text: 95 comes after 120, because the character 9 comes after 1. "
+                "-n compares numbers.",
+                "Try: sort -n scores.txt | tail -1   (or: sort -rn scores.txt | head -1)"],
+               scores_setup, lambda w, m, v: v.strip() == str(m["answer"]), requires=["sort"], teaches=["sort"])
+
+
+def visitors_setup(work, rng):
+    names = rng.sample(["ada", "linus", "grace", "ken", "dennis", "margaret", "alan"], 4)
+    counts = rng.sample(range(1, 6), 3) + [6]                       # one clear winner
+    visits = [n for n, c in zip(names, counts) for _ in range(c)]
+    rng.shuffle(visits)
+    (work / "visitors.txt").write_text("".join(f"{n}\n" for n in visits))
+    return {"answer": names[3]}
+
+
+VISITORS = trial("trial_sort_visitors", 2, "visitors.txt has one name per visit. Who came most often? "
+                 "Then: answer <name>",
+                 ["Group identical names with sort, count each group with uniq -c, then sort those counts "
+                  "with sort -rn: the biggest comes first.",
+                  "Try: sort visitors.txt | uniq -c | sort -rn | head -1"],
+                 visitors_setup, lambda w, m, v: v.strip() == m["answer"], requires=["sort", "uniq"],
+                 teaches=["sort"])
+
+
 TRIALS = [DIRS, NOTE, MOVE, COPY, RENAME, CLEAN, SPELL, LINK, JOURNAL, GEMS, LOOT, LETTER, SCROLLS,
-          NAMES_COL, PRICES, CITIES]
+          NAMES_COL, PRICES, CITIES, SCORES, VISITORS]

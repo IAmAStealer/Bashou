@@ -2,6 +2,17 @@
 
 # Each page: (text, example). A lesson counts as "met" for the tool (see fight.learned).
 LESSONS = [
+    {"id": "sort", "tool": "sort", "topics": ("bash", "linux"), "title": "sort, the organizer", "pages": [
+        ("sort prints the lines of a file in alphabetical order. The file itself doesn't change.",
+         "sort names.txt"),
+        ("Numbers sorted as text go wrong: 10 comes before 9, because the character 1 comes before 9. "
+         "-n compares them as numbers.", "sort -n scores.txt"),
+        ("-r reverses the order, biggest first. Together, -rn and then head keep the top of the list.",
+         "sort -rn scores.txt | head -3"),
+        ("sort puts identical lines side by side. That's what uniq needs, since it only merges lines that "
+         "follow each other: uniq -c then counts each group. sort -u keeps one of each.",
+         "sort visitors.txt | uniq -c"),
+    ]},
     {"id": "pipes", "tool": "|", "topics": ("bash", "linux"), "title": "Pipes", "pages": [
         ("A pipe | sends what one command prints into the next command, as if it were a file.",
          "ls | wc -l     # how many files here?"),

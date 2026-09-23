@@ -156,6 +156,32 @@
   "explain": "A command has two outputs: stdout (number 1) for its results and stderr (number 2) for errors and warnings. Keeping them apart means cmd > out.txt saves only the results in the file while errors still show on screen, and 2> errors.txt saves the errors on their own."
  },
  {
+  "id": "bash-1-13",
+  "level": 1,
+  "q": "`cut -d' ' -f3 people.txt | uniq -c` shows nantes on three separate lines. Why?",
+  "choices": [
+   "uniq only merges identical lines that are next to each other",
+   "cut left a space after some cities",
+   "uniq -c counts letters, not lines",
+   "people.txt spells nantes three ways"
+  ],
+  "answer": 0,
+  "explain": "uniq compares each line with the one just before it, nothing more. When the nantes lines are spread through the file, each one starts a new group. Put sort before it: cut -d' ' -f3 people.txt | sort | uniq -c. sort puts identical lines side by side, then uniq counts each group once."
+ },
+ {
+  "id": "bash-1-14",
+  "level": 1,
+  "q": "`sort scores.txt` puts 100 before 9, and 95 after 120. What is going on?",
+  "choices": [
+   "sort compares text; sort -n compares numbers",
+   "The file has hidden spaces",
+   "sort needs -r for numbers",
+   "sort only looks at the last digit"
+  ],
+  "answer": 0,
+  "explain": "By default sort compares lines as text, character by character, like words in a dictionary: '1' comes before '9', so 100 comes before 9. -n tells sort to read each line as a number. Add -r to get the biggest first: sort -rn scores.txt | head -3 gives the top three."
+ },
+ {
   "id": "bash-2-01",
   "level": 2,
   "q": "A cron job's errors vanish. Which line logs them along with the output?",
@@ -284,5 +310,18 @@
   ],
   "answer": 0,
   "explain": "Every user can write in /tmp. If someone creates /tmp/myscript.tmp first, for example as a link to one of your files, your script writes into that file instead. mktemp creates a new file with a random name that only you can read, so nobody can prepare the trap in advance."
+ },
+ {
+  "id": "bash-2-11",
+  "level": 2,
+  "q": "You want the 3 most frequent lines of access.log, with their counts. Which pipeline gives them?",
+  "choices": [
+   "sort access.log | uniq -c | sort -rn | head -3",
+   "uniq -c access.log | head -3",
+   "sort -rn access.log | uniq | head -3",
+   "sort -u access.log | head -3"
+  ],
+  "answer": 0,
+  "explain": "Read it step by step: sort groups identical lines, uniq -c turns each group into one line with its count, sort -rn orders those counts from biggest to smallest, head -3 keeps the top three. Without the first sort, uniq counts the same line several times. It's one of the most useful pipelines for reading logs."
  }
 ]

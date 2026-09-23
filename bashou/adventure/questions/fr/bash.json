@@ -156,6 +156,32 @@
   "explain": "Une commande a deux sorties : stdout (numéro 1) pour ses résultats et stderr (numéro 2) pour les erreurs et avertissements. Comme elles sont séparées, cmd > out.txt (un chevron) met seulement les résultats dans le fichier et les erreurs restent à l'écran, et 2> erreurs.txt garde les erreurs à part."
  },
  {
+  "id": "bash-1-13",
+  "level": 1,
+  "q": "`cut -d' ' -f3 people.txt | uniq -c` affiche nantes sur trois lignes séparées. Pourquoi ?",
+  "choices": [
+   "uniq ne fusionne que les lignes identiques qui se suivent",
+   "cut a laissé un espace après certaines villes",
+   "uniq -c compte les lettres, pas les lignes",
+   "people.txt écrit nantes de trois façons"
+  ],
+  "answer": 0,
+  "explain": "uniq compare chaque ligne avec celle juste avant, rien de plus. Quand les lignes nantes sont éparpillées dans le fichier, chacune commence un nouveau groupe. Mets sort avant : cut -d' ' -f3 people.txt | sort | uniq -c. sort met les lignes identiques côte à côte, puis uniq compte chaque groupe une fois."
+ },
+ {
+  "id": "bash-1-14",
+  "level": 1,
+  "q": "`sort scores.txt` met 100 avant 9, et 95 après 120. Que se passe-t-il ?",
+  "choices": [
+   "sort compare du texte ; sort -n compare des nombres",
+   "Le fichier a des espaces cachés",
+   "sort a besoin de -r pour les nombres",
+   "sort ne regarde que le dernier chiffre"
+  ],
+  "answer": 0,
+  "explain": "Par défaut, sort compare les lignes comme du texte, caractère par caractère, comme les mots d'un dictionnaire : '1' vient avant '9', donc 100 passe avant 9. -n dit à sort de lire chaque ligne comme un nombre. Ajoute -r pour avoir le plus grand d'abord : sort -rn scores.txt | head -3 donne les trois premiers."
+ },
+ {
   "id": "bash-2-01",
   "level": 2,
   "q": "Les erreurs d'une tâche cron disparaissent. Quelle ligne les journalise avec la sortie ?",
@@ -284,5 +310,18 @@
   ],
   "answer": 0,
   "explain": "Tout le monde peut écrire dans /tmp. Si quelqu'un crée /tmp/monscript.tmp avant toi, par exemple comme lien vers un de tes fichiers, ton script écrit dans ce fichier-là. mktemp crée un nouveau fichier au nom aléatoire, lisible par toi seul : personne ne peut préparer le piège à l'avance."
+ },
+ {
+  "id": "bash-2-11",
+  "level": 2,
+  "q": "Tu veux les 3 lignes les plus fréquentes de access.log, avec leur nombre. Quel pipe les donne ?",
+  "choices": [
+   "sort access.log | uniq -c | sort -rn | head -3",
+   "uniq -c access.log | head -3",
+   "sort -rn access.log | uniq | head -3",
+   "sort -u access.log | head -3"
+  ],
+  "answer": 0,
+  "explain": "Lis-le étape par étape : sort regroupe les lignes identiques, uniq -c transforme chaque groupe en une ligne avec son nombre, sort -rn range ces nombres du plus grand au plus petit, head -3 garde les trois premiers. Sans le premier sort, uniq compte plusieurs fois la même ligne. C'est un des pipes les plus utiles pour lire des logs."
  }
 ]
