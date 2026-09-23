@@ -34,14 +34,19 @@ class Canvas:
                     for dx in range(scale):
                         self.set(x0 + c * scale + dx, y0 + r * scale + dy, color)
 
-    def render(self, top=1, force=False):
-        """Escape sequence for the cells that changed since the last render (all of them if `force`)."""
+    def render(self, top=1, force=False, hide=None):
+        """Escape sequence for the cells that changed since the last render (all of them if `force`).
+        `hide` = (first line, last line, first col, last col), 0-based: a box drawn over the canvas.
+        Cells under it are left alone, so nothing flashes there before the box covers it again."""
         if force:
             self.shown = {}
         out, last = [], None
         for line in range(self.h // 2):
             up, down = self.px[2 * line], self.px[2 * line + 1]
+            under = hide and hide[0] <= line <= hide[1]
             for col in range(self.w):
+                if under and hide[2] <= col <= hide[3]:
+                    continue
                 cell = (up[col], down[col])
                 if self.shown.get((line, col)) == cell:
                     continue

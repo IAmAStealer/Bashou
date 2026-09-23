@@ -147,6 +147,26 @@ class GameTest(unittest.TestCase):
         self.assertEqual(g.adv["leg_start"], g.adv["distance"])     # the new checkpoint
         self.assertEqual(adventure.load()["leg"], 1)                  # saved right away
 
+    def test_nothing_is_painted_under_the_question_box(self):
+        """Owner: at a boss the pet under the question flashed at every frame before the box covered it."""
+        import re
+        g = self.game
+        self.go("\r", "\r")
+        g.adv["segment"] = len(world.events(g.adv)) - 1
+        self.assertEqual(self.walk_to_event(), "boss")
+        for t in (0.0, 0.4, 0.8, 1.3):                         # the boss bobs, the grass sways
+            frame = g.draw(t, 0)
+            top, left, width, wrapped = g.panel_rect
+            canvas_part = frame.split("\x1b[%d;%dH" % (top, left))[0]  # what comes before the box
+            for line, col in re.findall(r"\x1b\[(\d+);(\d+)H", canvas_part):
+                inside = top <= int(line) <= top + len(wrapped) + 1 and left <= int(col) < left + width
+                self.assertFalse(inside, (t, line, col))
+        while g.adv["phase"] == "boss":                         # beat it: the box goes, the scene comes back
+            g.answer(g.question["answer"], 0)
+            g.close_result(0)
+        g.draw(2.0, 0)
+        self.assertIn((top, left), g.canvas.shown)              # the cell under the box's old top-left
+
     def test_boss_hits_take_a_heart_each(self):
         g = self.game
         self.go("\r", "\r")

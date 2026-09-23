@@ -284,7 +284,8 @@ class Game:
             for col in range(c.w):
                 c.shown.pop((0, col), None)
         self.captioned = bool(caption)
-        return c.render() + self.panel_text(lines, rect) + caption + self.fork_signs(signs)
+        hide = rect and (rect[0] - 1, rect[0] + len(rect[3]), rect[1] - 1, rect[1] + rect[2] - 2)
+        return c.render(hide=hide) + self.panel_text(lines, rect) + caption + self.fork_signs(signs)
 
     def draw_fork(self, t):
         """Paint the scene. At the start and at a fork the road splits into the paths you can take
