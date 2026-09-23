@@ -10,12 +10,12 @@
    "/proc"
   ],
   "answer": 0,
-  "explain": "/etc holds config, /var changing data (logs, databases), /home the users. Keeping /etc in git (etckeeper) helps."
+  "explain": "Almost every setting of a Linux server lives as a text file under /etc: users, services, network, ssh. /bin only holds programs you can reinstall, /tmp is wiped, /proc is made up by the kernel. Changing data (logs, databases) is in /var: back it up too."
  },
  {
   "id": "linux-1-02",
   "level": 1,
-  "q": "An app misbehaves. Where do you look first?",
+  "q": "An app on your server starts failing and you don't know why. Where do you look first?",
   "choices": [
    "Its logs: journalctl -u app or /var/log",
    "Its config in /etc, to rewrite it",
@@ -23,7 +23,7 @@
    "The kernel source"
   ],
   "answer": 0,
-  "explain": "Read the error before changing anything: the log usually names the file or setting at fault."
+  "explain": "The program usually writes why it fails: a missing file, a wrong setting, a port already taken. journalctl -u app shows the log of a service, /var/log holds the others. Read the error first: changing the config at random often adds a second problem."
  },
  {
   "id": "linux-1-03",
@@ -36,7 +36,7 @@
    "root has no shell"
   ],
   "answer": 0,
-  "explain": "root (UID 0) can do everything; sudo gives it for one command, and leaves a trace of who did what."
+  "explain": "root can do anything, including breaking the system with one typo. With sudo you are only root for the one command you asked for, and the system logs who ran it. So mistakes are rarer, and you can find out later who changed what."
  },
  {
   "id": "linux-1-04",
@@ -49,7 +49,7 @@
    "uptime -v"
   ],
   "answer": 0,
-  "explain": "top (or htop) sorts live by CPU; M sorts by memory. ps aux is a snapshot, handy in scripts."
+  "explain": "top shows the running programs, refreshed every few seconds, the busiest first. Press M to sort by memory instead, q to quit (htop is a friendlier version). ps aux takes a single snapshot: handy in a script, less for watching."
  },
  {
   "id": "linux-1-05",
@@ -62,7 +62,7 @@
    "history"
   ],
   "answer": 0,
-  "explain": "last reads the login records: user, source address, time. who shows who is logged in right now."
+  "explain": "last reads the record of past logins: who, from which address, when, and for how long. who only shows who is connected right now. A login from an address you don't know is worth a closer look."
  },
  {
   "id": "linux-1-06",
@@ -75,7 +75,7 @@
    "uname -a"
   ],
   "answer": 0,
-  "explain": "df = disk free, per filesystem. Then du -sh /var/* finds the folder that grew (often logs)."
+  "explain": "The message means a disk is full. df -h (disk free, in readable sizes) shows how full each disk is. free is about memory, not disk. Then du -sh /var/* shows which folder grew: often logs that nobody cleans."
  },
  {
   "id": "linux-1-07",
@@ -88,7 +88,7 @@
    "Yes, the machine is swapping"
   ],
   "answer": 0,
-  "explain": "Linux fills idle RAM with file cache. 'available' is what programs can still get."
+  "explain": "Linux uses RAM nobody needs to keep recently read files, which makes the machine faster. That cache is handed back as soon as a program asks for memory. So look at 'available', not 'free': it is what programs can still get."
  },
  {
   "id": "linux-1-08",
@@ -101,7 +101,7 @@
    "Nobody"
   ],
   "answer": 0,
-  "explain": "Three blocks: owner, group, others; r read, w write, x run. That is chmod 644."
+  "explain": "After the first character (- for a file), read three blocks of rwx: owner, group, everyone else. r = read, w = write (change), x = run. Here only the owner has a w: rw-, then r--, r--. In numbers that is chmod 644."
  },
  {
   "id": "linux-1-09",
@@ -114,12 +114,12 @@
    "Anyone can run it"
   ],
   "answer": 0,
-  "explain": "chmod 600 keeps it to its owner. SSH even refuses private keys that others can read."
+  "explain": "The last r-- is for everyone else: any user or service on the machine can read the password. chmod 600 file keeps it to its owner only (rw-------). SSH even refuses to use a private key that others can read."
  },
  {
   "id": "linux-1-10",
   "level": 1,
-  "q": "What is ~/.ssh/authorized_keys?",
+  "q": "On a server, what is the file ~/.ssh/authorized_keys for?",
   "choices": [
    "The public keys allowed to log in as you",
    "Your private keys",
@@ -127,7 +127,7 @@
    "Your saved passwords"
   ],
   "answer": 0,
-  "explain": "One key per line. An unknown line there is a door someone left open: check it."
+  "explain": "Each line is a public key. Whoever holds the matching private key can log in as you, without a password. Your private keys are elsewhere (~/.ssh/id_*), the servers you trust are in known_hosts. A line you don't recognise is an open door: remove it."
  },
  {
   "id": "linux-1-11",
@@ -140,7 +140,7 @@
    "Nothing: -9 first is fine"
   ],
   "answer": 0,
-  "explain": "kill sends TERM (15), which it can handle; KILL (9) can't be caught: no cleanup, half-written files."
+  "explain": "kill PID politely asks the program to stop: it can save its work and close its files. kill -9 stops it at once, with no cleanup: half-written files, leftover lock files. Try kill first, wait a few seconds, and keep -9 for when it really won't stop."
  },
  {
   "id": "linux-1-12",
@@ -153,7 +153,7 @@
    "less /var/log/app.log --live"
   ],
   "answer": 0,
-  "explain": "Ctrl+C stops following. journalctl -fu app does the same for a systemd service."
+  "explain": "tail -f (follow) prints the end of the file, then each new line as the app writes it. cat prints the file once and stops. Ctrl+C stops following. For a systemd service, journalctl -fu app does the same."
  },
  {
   "id": "linux-2-01",

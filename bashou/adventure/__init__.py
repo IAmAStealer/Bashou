@@ -52,6 +52,11 @@ def topic_name(topic):
     return world.TOPICS[topic][0]
 
 
+
+def solution(q):
+    """What the player reads after answering: the right choice, then why (a few sentences)."""
+    return [f"✔ {q['choices'][q['answer']]}", q["explain"]]
+
 class Game:
     def __init__(self, cols, rows, rng=random):
         self.adv = load()
@@ -146,7 +151,7 @@ class Game:
         right = i == q["answer"]
         if right:
             adv["correct"] = adv.get("correct", 0) + 1         # 20 bring the Frog
-        explain = [f"{q['choices'][q['answer']]}: {q['explain']}"]
+        explain = solution(q)
         if adv["phase"] == "monster":
             if right:
                 self.result = (True, [_("Right! The monster runs away.")] + explain)
@@ -257,7 +262,7 @@ class Game:
         if adv["phase"] == "boss" and self.question and now > self.boss["deadline"]:
             q = self.question
             self.question = None
-            self.boss_answer(False, [_("Too slow!"), f"{q['choices'][q['answer']]}: {q['explain']}"], now)
+            self.boss_answer(False, [_("Too slow!")] + solution(q), now)
 
     # --- drawing ---------------------------------------------------------------------------------
 
@@ -386,7 +391,7 @@ class Game:
             return None
         width = min(self.cols - 4, 76)
         wrapped = [(part, color) for text, color in lines
-                   for part in (render.wrap(text, width - 4, 3) if text else [""])]
+                   for part in (render.wrap(text, width - 4, 8) if text else [""])]
         top = max(1, self.rows - 2 - len(wrapped))          # just above the status line
         return (top, (self.cols - width) // 2 + 1, width, wrapped)
 

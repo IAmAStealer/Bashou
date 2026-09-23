@@ -10,12 +10,12 @@
    "/proc"
   ],
   "answer": 0,
-  "explain": "/etc contient la config, /var les données qui changent (logs, bases), /home les utilisateurs. Garder /etc dans git (etckeeper) aide."
+  "explain": "Presque tous les réglages d'un serveur Linux sont des fichiers texte dans /etc : utilisateurs, services, réseau, ssh. /bin ne contient que des programmes qu'on réinstalle, /tmp est vidé, /proc est fabriqué par le noyau. Les données qui changent (logs, bases) sont dans /var : sauvegarde-les aussi."
  },
  {
   "id": "linux-1-02",
   "level": 1,
-  "q": "Une appli se comporte mal. Où regardes-tu d'abord ?",
+  "q": "Une appli de ton serveur se met à planter et tu ne sais pas pourquoi. Où regardes-tu d'abord ?",
   "choices": [
    "Ses logs : journalctl -u appli ou /var/log",
    "Sa config dans /etc, pour la réécrire",
@@ -23,7 +23,7 @@
    "Les sources du noyau"
   ],
   "answer": 0,
-  "explain": "Lis l'erreur avant de changer quoi que ce soit : le log nomme souvent le fichier ou le réglage en cause."
+  "explain": "Le programme écrit presque toujours pourquoi il échoue : fichier manquant, réglage faux, port déjà pris. journalctl -u appli montre le log d'un service, /var/log contient les autres. Lis l'erreur d'abord : changer la config au hasard ajoute souvent un deuxième problème."
  },
  {
   "id": "linux-1-03",
@@ -36,7 +36,7 @@
    "root n'a pas de shell"
   ],
   "answer": 0,
-  "explain": "root (UID 0) peut tout ; sudo le donne pour une commande, et laisse une trace de qui a fait quoi."
+  "explain": "root peut tout faire, y compris casser le système avec une faute de frappe. Avec sudo, tu n'es root que pour la commande demandée, et le système note qui l'a lancée. Moins d'erreurs, et on peut retrouver plus tard qui a changé quoi."
  },
  {
   "id": "linux-1-04",
@@ -49,7 +49,7 @@
    "uptime -v"
   ],
   "answer": 0,
-  "explain": "top (ou htop) trie en direct par CPU ; M trie par mémoire. ps aux est une photo, pratique dans les scripts."
+  "explain": "top montre les programmes en cours, rafraîchis toutes les quelques secondes, les plus gourmands en premier. Appuie sur M pour trier par mémoire, q pour quitter (htop en est une version plus agréable). ps aux prend une seule photo : pratique dans un script, moins pour surveiller."
  },
  {
   "id": "linux-1-05",
@@ -62,7 +62,7 @@
    "history"
   ],
   "answer": 0,
-  "explain": "last lit les traces de connexion : utilisateur, adresse, heure. who montre qui est connecté maintenant."
+  "explain": "last lit l'historique des connexions : qui, depuis quelle adresse, quand, et combien de temps. who montre seulement qui est connecté maintenant. Une connexion depuis une adresse inconnue mérite qu'on regarde de plus près."
  },
  {
   "id": "linux-1-06",
@@ -75,7 +75,7 @@
    "uname -a"
   ],
   "answer": 0,
-  "explain": "df = disk free, par système de fichiers. Puis du -sh /var/* trouve le dossier qui a grossi (souvent des logs)."
+  "explain": "Le message veut dire qu'un disque est plein. df -h (disk free, en tailles lisibles) montre le remplissage de chaque disque. free parle de la mémoire, pas du disque. Ensuite du -sh /var/* montre quel dossier a grossi : souvent des logs que personne ne nettoie."
  },
  {
   "id": "linux-1-07",
@@ -88,7 +88,7 @@
    "Oui, la machine swappe"
   ],
   "answer": 0,
-  "explain": "Linux remplit la RAM inutilisée avec du cache de fichiers. 'available' est ce que les programmes peuvent encore obtenir."
+  "explain": "Linux utilise la RAM dont personne n'a besoin pour garder les fichiers lus récemment, ce qui accélère la machine. Ce cache est rendu dès qu'un programme demande de la mémoire. Regarde donc 'available', pas 'free' : c'est ce que les programmes peuvent encore obtenir."
  },
  {
   "id": "linux-1-08",
@@ -101,7 +101,7 @@
    "Personne"
   ],
   "answer": 0,
-  "explain": "Trois blocs : propriétaire, groupe, autres ; r lire, w écrire, x lancer. C'est chmod 644."
+  "explain": "Après le premier caractère (- pour un fichier), lis trois blocs rwx : propriétaire, groupe, tous les autres. r = lire, w = écrire (modifier), x = lancer. Ici seul le propriétaire a un w : rw-, puis r--, r--. En chiffres, c'est chmod 644."
  },
  {
   "id": "linux-1-09",
@@ -114,12 +114,12 @@
    "Tout le monde peut le lancer"
   ],
   "answer": 0,
-  "explain": "chmod 600 le réserve à son propriétaire. SSH refuse même les clés privées que d'autres peuvent lire."
+  "explain": "Le dernier r-- concerne tous les autres : n'importe quel utilisateur ou service de la machine peut lire le mot de passe. chmod 600 fichier le réserve à son propriétaire (rw-------). SSH refuse même d'utiliser une clé privée que d'autres peuvent lire."
  },
  {
   "id": "linux-1-10",
   "level": 1,
-  "q": "Qu'est-ce que ~/.ssh/authorized_keys ?",
+  "q": "Sur un serveur, à quoi sert le fichier ~/.ssh/authorized_keys ?",
   "choices": [
    "Les clés publiques autorisées à se connecter en tant que toi",
    "Tes clés privées",
@@ -127,7 +127,7 @@
    "Tes mots de passe enregistrés"
   ],
   "answer": 0,
-  "explain": "Une clé par ligne. Une ligne inconnue, c'est une porte que quelqu'un a laissée ouverte : vérifie-la."
+  "explain": "Chaque ligne est une clé publique. Qui possède la clé privée qui va avec peut se connecter en tant que toi, sans mot de passe. Tes clés privées sont ailleurs (~/.ssh/id_*), les serveurs de confiance dans known_hosts. Une ligne que tu ne reconnais pas est une porte ouverte : supprime-la."
  },
  {
   "id": "linux-1-11",
@@ -140,7 +140,7 @@
    "Rien : -9 d'abord, ça va"
   ],
   "answer": 0,
-  "explain": "kill envoie TERM (15), qu'il peut gérer ; KILL (9) ne s'attrape pas : pas de ménage, fichiers à moitié écrits."
+  "explain": "kill PID demande poliment au programme de s'arrêter : il peut sauver son travail et fermer ses fichiers. kill -9 l'arrête net, sans ménage : fichiers à moitié écrits, verrous qui restent. Essaie kill d'abord, attends quelques secondes, et garde -9 pour quand il ne s'arrête vraiment pas."
  },
  {
   "id": "linux-1-12",
@@ -153,7 +153,7 @@
    "less /var/log/app.log --live"
   ],
   "answer": 0,
-  "explain": "Ctrl+C arrête le suivi. journalctl -fu appli fait pareil pour un service systemd."
+  "explain": "tail -f (follow) affiche la fin du fichier, puis chaque nouvelle ligne quand l'appli l'écrit. cat affiche le fichier une fois et s'arrête. Ctrl+C arrête le suivi. Pour un service systemd, journalctl -fu appli fait la même chose."
  },
  {
   "id": "linux-2-01",
