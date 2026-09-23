@@ -111,6 +111,28 @@ class CliBugs(TempState):
         self.assertEqual(state.load()["active"], "starter")
 
 
+    def test_swap_board_never_spills_past_the_screen(self):
+        """Owner: moving on the board left pieces of lines on screen ('atus`', 'alctl -u`'): preview lines wider
+        than the terminal wrapped onto the next line, and lines written below the last one scrolled the screen."""
+        import inspect
+        import re
+        from bashou import board as board_mod
+        board = board_mod.Board()
+        board.pos = board.ids.index("bee")                 # long achievement lines: `systemctl enable --now`…
+        for cols, lines in ((80, 24), (60, 20), (70, 16)):
+            with self.subTest(cols=cols, lines=lines):
+                out = io.StringIO()
+                size = os.terminal_size((cols, lines))
+                with mock.patch.object(board_mod.os, "get_terminal_size", return_value=size), \
+                        contextlib.redirect_stdout(out):
+                    board.draw()
+                rows = [int(r) for r, c in re.findall(r"\x1b\[(\d+);(\d+)H", out.getvalue())]
+                self.assertLessEqual(max(rows), lines)
+        run = inspect.getsource(board_mod.Board.run)
+        self.assertIn("?7l", run)                          # no autowrap while the board is open…
+        self.assertIn("?7h", run)                          # …and it comes back on the way out
+
+
 class ScrollTrailTest(unittest.TestCase):
     def test_cells_above_the_pet_are_painted(self):
         """Enter on an empty line scrolled the pet up without erasing it: the Pebble left stripes above it."""

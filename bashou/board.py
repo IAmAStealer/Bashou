@@ -130,7 +130,12 @@ class Board:
             n=f"{len(creatures.owned(self.s))}/{len(self.ids) - 1}") + RESET, ""] + self.tile(0)
         preview = self.preview()
         side = cols >= COLS * TILE_W + 40
-        fixed = len(head) + 1                                         # + the message line
+        dim = self.message.startswith(DIM)
+        text = self.message.replace(DIM, "").replace(RESET, "")
+        width = max(20, (cols - COLS * TILE_W - 6) if side else cols - 2)
+        message = [(DIM if dim else "") + part + (RESET if dim else "")
+                   for part in render.wrap(text, width, 3)] if text else [""]
+        fixed = len(head) + len(message)                              # the message wraps on a few lines
         if side:
             room = lines - fixed
         else:
@@ -148,7 +153,7 @@ class Board:
             for line in range(TILE_H):
                 grid.append("".join(t[line] if t[line] else " " * TILE_W for t in tiles))
         more = shown < self.rows()
-        grid.append(self.message or (DIM + _("↑↓ more pets") + RESET if more else ""))
+        grid += message if text else [DIM + _("↑↓ more pets") + RESET if more else ""]
         return grid, preview, side
 
     def draw(self):
@@ -156,12 +161,12 @@ class Board:
         grid, preview, side = self.layout(size.columns, size.lines)
         out = [f"{ESC}[H{ESC}[2J"]
         for i, line in enumerate(grid):
-            out.append(f"{ESC}[{i + 1};1H{line}")
+            if i < size.lines:
+                out.append(f"{ESC}[{i + 1};1H{line}")
         for i, line in enumerate(preview):
-            if side:
-                out.append(f"{ESC}[{i + 3};{COLS * TILE_W + 4}H{line}")
-            else:
-                out.append(f"{ESC}[{len(grid) + i + 2};2H{line}")
+            row = i + 3 if side else len(grid) + i + 2
+            if row <= size.lines:                          # below the last line the terminal would scroll
+                out.append(f"{ESC}[{row};{COLS * TILE_W + 4 if side else 2}H{line}")
         sys.stdout.write("".join(out))
         sys.stdout.flush()
 
@@ -219,7 +224,7 @@ class Board:
     def run(self):
         fd = sys.stdin.fileno()
         old = termios.tcgetattr(fd)
-        sys.stdout.write(f"{ESC}[?1049h{ESC}[?25l")
+        sys.stdout.write(f"{ESC}[?1049h{ESC}[?25l{ESC}[?7l")         # no autowrap: a long line never spills
         try:
             tty.setcbreak(fd)
             running = True
@@ -233,7 +238,7 @@ class Board:
                 running = self.key(KEYS.get(data, ""))
         finally:
             termios.tcsetattr(fd, termios.TCSADRAIN, old)
-            sys.stdout.write(f"{ESC}[?25h{ESC}[?1049l")
+            sys.stdout.write(f"{ESC}[?7h{ESC}[?25h{ESC}[?1049l")
             sys.stdout.flush()
         print("  " + _("{name} is your pet.").format(name=progress.current(self.s)[2]))
 
