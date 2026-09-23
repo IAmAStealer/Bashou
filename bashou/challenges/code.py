@@ -27,7 +27,7 @@ HOSTS = ("web1", "web2", "db1", "db2", "cache", "mail", "proxy", "backup", "auth
 
 
 def header(style, lines):
-    lines = lines + [_("When it works, type: answer done")]
+    lines = lines + [_("When it works, type: verify")]
     if style == "#":
         return "\n".join("# " + line for line in lines) + "\n"
     return "/*\n" + "".join(" * " + line + "\n" for line in lines) + " */\n"
@@ -548,7 +548,7 @@ ALL = [
     Challenge(level=1, id="colon_cobra", fix=True, pet="snake", threat="Colon Cobra", **PY,
               task="The Colon Cobra swallowed a character in greet.py: Python stops at a SyntaxError.\n"
                    "Fix greet.py (its first lines say what it must do). Run it: python3 greet.py\n"
-                   "When it works, type: answer done",
+                   "When it works, type: verify",
               hints=["Read the error from the bottom: the last line names the problem, the lines above "
                      "point at where. A def or a for line ends with something.",
                      "Add the missing : at the end of the def line, then run python3 greet.py."],
@@ -556,14 +556,14 @@ ALL = [
     Challenge(level=1, id="semicolon_slug", fix=True, pet="beaver", threat="Semicolon Slug", **C,
               task="The Semicolon Slug ate a character in hello.c: gcc refuses to build it.\n"
                    "Fix hello.c (its first lines say what it must do). Run it: gcc hello.c -o hello && ./hello\n"
-                   "When it works, type: answer done",
+                   "When it works, type: verify",
               hints=["gcc prints file:line:column: error. In C every statement ends with the same character.",
                      "Add the missing ; after the printf(...) line, then build and run again."],
               setup=semicolon_setup, verify=c_tests("hello.c")),
     Challenge(level=2, id="list_leech", fix=True, pet="snake", threat="List Leech", **PY,
               task="The List Leech clings to hosts.py: unique() leaves duplicates and changes its input.\n"
                    "Fix hosts.py (its first lines say what it must do). Run it: python3 hosts.py\n"
-                   "When it works, type: answer done",
+                   "When it works, type: verify",
               hints=["Removing items from a list while a for loop walks over it makes the loop skip some. "
                      "Build a new list instead: bashou explain python list",
                      "Try: seen = [] then for host in hosts: if host not in seen: seen.append(host), "
@@ -572,7 +572,7 @@ ALL = [
     Challenge(level=2, id="dict_djinn", fix=True, pet="snake", threat="Dict Djinn", **PY,
               task="The Dict Djinn hid a key: tally.py crashes with KeyError: '{level}'.\n"
                    "Fix tally.py (its first lines say what it must do). Run it: python3 tally.py\n"
-                   "When it works, type: answer done",
+                   "When it works, type: verify",
               hints=["counts[level] += 1 reads counts[level] first, and the first time it isn't there. "
                      "bashou explain python dict",
                      "Try: counts[level] = counts.get(level, 0) + 1"],
@@ -580,7 +580,7 @@ ALL = [
     Challenge(level=2, id="loop_lich", fix=True, pet="snake", threat="Loop Lich", **PY,
               task="The Loop Lich traps retry.py in a loop that never ends.\n"
                    "Fix retry.py (its first lines say what it must do). Run it: python3 retry.py\n"
-                   "When it works, type: answer done",
+                   "When it works, type: verify",
               hints=["A while loop stops when its condition turns false. What in the loop changes i? "
                      "bashou explain python loop",
                      "Add i += 1 inside the loop (or write: for i in range(tries):)."],
@@ -588,7 +588,7 @@ ALL = [
     Challenge(level=2, id="ouroboros", fix=True, pet="snake", threat="Ouroboros", **PY,
               task="The Ouroboros bites its own tail: du.py forgets the files in subfolders.\n"
                    "Fix du.py (its first lines say what it must do). Run it: python3 du.py\n"
-                   "When it works, type: answer done",
+                   "When it works, type: verify",
               hints=["total(item) is called for each subfolder, but where does its result go? "
                      "bashou explain python recursion",
                      "Write: size += total(item)"],
@@ -616,7 +616,7 @@ ALL = [
     Challenge(level=3, id="injection_imp", fix=True, pet="snake", threat="Injection Imp", after=("list_leech",), **PY,
               task="The Injection Imp slipped a command into hosts.txt, and check_hosts.py runs it.\n"
                    "Fix check_hosts.py (its first lines say what it must do). Run it: python3 check_hosts.py\n"
-                   "When it works, type: answer done",
+                   "When it works, type: verify",
               hints=["os.system hands the whole string to a shell, so ; $( ) | in the data become commands. "
                      "bashou explain python subprocess",
                      "Try: subprocess.run(['echo', 'checking', host]) (import subprocess), or just print."],
@@ -633,7 +633,7 @@ ALL = [
               task="The Leak Lurker feeds on memory nobody frees in shout.c.\n"
                    "Fix shout.c (its first lines say what it must do). "
                    "Run it: gcc -g -fsanitize=address shout.c -o shout && ./shout < names.txt\n"
-                   "When it works, type: answer done",
+                   "When it works, type: verify",
               hints=["AddressSanitizer names the line where the leaked memory was allocated. "
                      "Who should free it once it's printed? bashou explain c malloc",
                      "Add free(loud); right after fputs(loud, stdout);"],
@@ -642,7 +642,7 @@ ALL = [
               task="The Fencepost Fiend moved a fence post in average.c: a loop goes one step too far.\n"
                    "Fix average.c (its first lines say what it must do). "
                    "Run it: gcc -g -fsanitize=address average.c -o average && ./average 2 4 9\n"
-                   "When it works, type: answer done",
+                   "When it works, type: verify",
               hints=["An array of count items goes from 0 to count - 1. Compare the two loops. "
                      "bashou explain c array",
                      "In the second loop, write i < count instead of i <= count."],
@@ -650,7 +650,7 @@ ALL = [
     Challenge(level=2, id="stack_specter", fix=True, pet="beaver", threat="Stack Specter", **C,
               task="The Stack Specter haunts sum.c: sum_to() never stops calling itself.\n"
                    "Fix sum.c (its first lines say what it must do). Run it: gcc -g sum.c -o sum && ./sum 4\n"
-                   "When it works, type: answer done",
+                   "When it works, type: verify",
               hints=["Every recursion needs a case that returns without calling itself. "
                      "bashou explain c recursion",
                      "Add at the start of sum_to: if (n <= 0) return 0;"],
@@ -659,7 +659,7 @@ ALL = [
               task="The Overflow Ogre stuffs long names into an 8-byte box in greet.c.\n"
                    "Fix greet.c (its first lines say what it must do). "
                    "Run it: gcc -g -fsanitize=address greet.c -o greet && ./greet averyveryverylongname\n"
-                   "When it works, type: answer done",
+                   "When it works, type: verify",
               hints=["strcpy never checks the size of the target. Does the name need copying at all? "
                      "bashou explain c string",
                      "Simplest: printf(\"Hello, %s!\\n\", argv[1]); or malloc(strlen(argv[1]) + 1) and free it."],

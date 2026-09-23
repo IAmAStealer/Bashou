@@ -220,7 +220,7 @@ ALL = [
               threat="Mirror Mimic",
               task="The Mirror Mimic copied debian.sources and slipped in 3 mistakes.\n"
                    "Fix it for Debian 13 trixie: main archive with trixie-updates, plus security. Look up the "
-                   "right values online, or in your own /etc/apt/sources.list.d. Then: answer done",
+                   "right values online, or in your own /etc/apt/sources.list.d. Then: verify",
               hints=["Official lines: wiki.debian.org/SourcesList. `man sources.list` explains each field. "
                      "Since Debian 11, security uses <release>-security.",
                      "Compare: diff debian.sources /etc/apt/sources.list.d/debian.sources (if you run trixie)."],
@@ -229,7 +229,7 @@ ALL = [
               threat="Repo Revenant",
               task="The Repo Revenant haunts rocky.repo: 3 mistakes in the BaseOS and AppStream repos.\n"
                    "Fix it for Rocky Linux 9 (browse dl.rockylinux.org/pub/rocky/9/ to check paths). "
-                   "Then: answer done",
+                   "Then: verify",
               hints=["Paths are case-sensitive: open dl.rockylinux.org/pub/rocky/9/ in a browser and follow them. "
                      "gpgcheck must stay 1, and the key must be Rocky 9's.",
                      "Compare with /etc/yum.repos.d/rocky.repo on a Rocky 9 machine: "
@@ -239,7 +239,7 @@ ALL = [
               uses=restricted, threat="Enabled Ettin",
               task="The Enabled Ettin has one head per repository. Cut all but one, for one command:\n"
                    "run a dnf command (search, list, repolist…) that uses only the {repo} repository, "
-                   "without editing any file. Then: answer done",
+                   "without editing any file. Then: verify",
               hints=["dnf takes --disablerepo and --enablerepo on the command line: disable them all, "
                      "then enable the one you need. Quote the * so bash leaves it alone.",
                      "Try: dnf --disablerepo='*' --enablerepo={repo} repolist   (or: dnf --repo={repo} repolist)"],

@@ -460,13 +460,12 @@ class FixFightTest(unittest.TestCase):
     def test_every_answer_done_fight_is_flagged(self):
         for ch in challenges.ALL:
             with self.subTest(ch.id):
-                self.assertEqual(ch.fix, "answer done" in ch.task, ch.id)
+                self.assertEqual(ch.fix, "verify" in ch.task, ch.id)
 
     def test_banner_explains_answer_done(self):
         ch = challenges.BY_ID["colon_cobra"]
         banner = fight.banner(ch, "task")
-        self.assertIn("answer done", banner)
-        self.assertIn("commands go at the prompt", banner)
+        self.assertIn("verify", banner)
         self.assertNotIn("answer <value>", banner)
         self.assertIn("answer <value>", fight.banner(challenges.BY_ID["line_moth"], "task"))
 
@@ -479,4 +478,18 @@ class FixFightTest(unittest.TestCase):
         with contextlib.redirect_stdout(out), mock.patch.object(challenges.Challenge, "check") as check:
             self.assertEqual(fight.cmd_answer(str(base), "python3 greet.py"), 1)
         check.assert_not_called()
-        self.assertIn("type `python3 greet.py` at the prompt", out.getvalue())
+        self.assertIn("run `python3 greet.py` at the prompt", out.getvalue())
+
+    def test_verify_strikes_fix_fights_only(self):
+        base = Path(tempfile.mkdtemp())
+        self.addCleanup(__import__("shutil").rmtree, base)
+        (base / "arena").mkdir()
+        (base / "meta.json").write_text('{"challenge": "line_moth", "answer": 3}')
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(fight.cmd_verify(str(base)), 1)
+        self.assertIn("answer <value>", out.getvalue())
+        (base / "meta.json").write_text('{"challenge": "colon_cobra"}')
+        with mock.patch.object(challenges.Challenge, "check", return_value=True) as check, \
+                mock.patch.object(fight, "used_tool", return_value=True):
+            self.assertEqual(fight.cmd_verify(str(base)), 0)
+        self.assertEqual(check.call_args.args[2], "done")

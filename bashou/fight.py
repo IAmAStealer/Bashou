@@ -44,6 +44,7 @@ _arena_log() {
 PROMPT_COMMAND=_arena_log
 _arena() { python3 "$BASHOU_SRC/launch.py" bashou.fight "$@" "$BASHOU_ARENA"; }
 answer() { _arena answer "$*" && exit 42; }
+verify() { _arena verify && exit 42; }
 hint() { _arena hint; }
 task() { _arena task; }
 flee() { exit 3; }
@@ -208,8 +209,7 @@ def cmd_answer(base, value):
     meta = load_meta(base)
     ch = challenges.BY_ID[meta["challenge"]]
     if ch.fix and value.strip() not in ("done", ""):
-        print(ACCENT + "✗ " + _("answer doesn't run commands: type `{value}` at the prompt. "
-                                "When it works, type `answer done` and Bashou checks the result.")
+        print(ACCENT + "✗ " + _("Nothing to answer here: run `{value}` at the prompt, and when it works type `verify`.")
               .format(value=value.strip()) + RESET)
         return 1
     if not ch.check(Path(base) / "arena", meta, value):
@@ -227,6 +227,15 @@ def cmd_answer(base, value):
               .format(tool=ch.tool, threat=_(ch.threat)) + RESET)
         return 1
     return 0
+
+
+def cmd_verify(base):
+    """`verify`: the same strike as `answer`, named for fights where you do the job (fix a file…)."""
+    ch = challenges.BY_ID[load_meta(base)["challenge"]]
+    if not ch.fix:
+        print(ACCENT + _("This one asks a question: answer <value>") + RESET)
+        return 1
+    return cmd_answer(base, "done")
 
 
 def cmd_hint(base):
@@ -264,7 +273,7 @@ def banner(ch, task, review=None):
 
 def strike_done(ch):
     """Fights where you fix a file: `answer` takes no value, Bashou checks the result itself."""
-    return "  answer done      " + _("strike when it works: Bashou checks it (commands go at the prompt)") + "\n"
+    return "  verify           " + _("strike when it works: Bashou checks your work") + "\n"
 
 
 BEGINNER_WINS = 5          # until then, a fight's first hint teaches `tool --help` (owner)
@@ -358,6 +367,8 @@ def main():
     cmd = sys.argv[1] if len(sys.argv) > 1 else "run"
     if cmd == "answer":
         sys.exit(cmd_answer(sys.argv[3], sys.argv[2]))
+    if cmd == "verify":
+        sys.exit(cmd_verify(sys.argv[2]))
     if cmd == "hint":
         sys.exit(cmd_hint(sys.argv[2]))
     if cmd == "task":

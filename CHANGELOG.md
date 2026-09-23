@@ -24,6 +24,11 @@ Every release has a section here, written for players. CI refuses to tag a relea
   fast-forward" can't update themselves. Move them to this release once:
   `git -C ~/.bashou fetch --tags && git -C ~/.bashou checkout v0.4.2`. Your progress is kept.
 - The starter screen no longer shows a line of question marks under each starter.
+- **`verify` for hands-on fights.** Fights where you fix a file or run commands end with `verify`
+  (Bashou checks your work); fights that ask a question still end with `answer <value>`. Typing a
+  command after `answer` in a hands-on fight now tells you to run it at the prompt.
+- After an update, your save is upgraded to the new format on disk, and a copy of the old one is
+  kept next to it.
 
 ## v0.4.1 — 2026-09-23
 
