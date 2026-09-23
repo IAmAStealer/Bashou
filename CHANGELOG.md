@@ -11,6 +11,8 @@ Every release has a section here, written for players. CI refuses to tag a relea
 - **Choose what you learn.** At the first launch, pick a bit of everything or tick your skills
   (Bash, Linux, systemd, Debian, Rocky, Python, C, Rust, Logic, CI/CD): threats and adventure paths
   follow. `bashou skills` changes it any time.
+- `bashou config` asks you a few questions and saves the answers (bubble length, pet size, how often
+  your pet talks, updates, skills, language). `bashou config list` still lists everything.
 - Bashou no longer runs a `bashou` folder found in the directory you're in instead of its own code.
 
 ## v0.4.1 — 2026-09-23

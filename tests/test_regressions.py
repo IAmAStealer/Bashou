@@ -283,6 +283,33 @@ class ConfigTest(TempState):
             self.assertEqual(cli.config("size", "large"), 0)
             self.assertEqual(state.setting(state.load(), "size"), "large")
 
+    def answer(self, *replies):
+        replies = iter(replies)
+
+        def ask(prompt):
+            reply = next(replies)
+            if isinstance(reply, BaseException):
+                raise reply
+            return reply
+        with contextlib.redirect_stdout(io.StringIO()), mock.patch("bashou.update.packaged", return_value=None):
+            return cli.ask_settings(ask)
+
+    def test_questions(self):
+        """bashou config asks each setting (Enter keeps it, a wrong value is asked again), saves once."""
+        with state.locked() as s:
+            s["settings"]["size"] = "large"
+        # bubble, updates, size, talk (wrong, then off), quiet, skills?, language?
+        self.assertEqual(self.answer("3", "", "default", "loud", "off", "", "n", ""), 0)
+        s = state.load()
+        self.assertEqual(state.setting(s, "bubble"), (3, 3))
+        self.assertEqual(state.setting(s, "size"), "small")
+        self.assertEqual(state.setting(s, "talk"), "off")
+        self.assertEqual(s["settings"], {"bubble": [3, 3], "talk": "off"})
+
+    def test_ctrl_c_saves_nothing(self):
+        self.assertEqual(self.answer("3", "", KeyboardInterrupt()), 1)
+        self.assertEqual(state.load()["settings"], {})
+
 
 class BoardTest(TempState):
     @mock.patch("bashou.which.installed", return_value=True)       # every pet, so the grid is fixed

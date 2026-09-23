@@ -85,7 +85,7 @@ _bashou_complete() {
   case "$COMP_CWORD:${COMP_WORDS[1]}:${COMP_WORDS[2]}" in
     1:*)              words=$_bashou_commands ;;
     2:swap:*)         words="starter $_bashou_pets" ;;
-    2:config:*)       words="bubble updates size talk quiet" ;;
+    2:config:*)       words="list bubble updates size talk quiet" ;;
     2:update:*)       words="--version" ;;
     2:explain:*)      words="python rust c" ;;
     3:explain:rust)   words="mut shadowing const integers" ;;

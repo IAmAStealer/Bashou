@@ -137,9 +137,56 @@ def stats():
         print(f"\n  {BOLD}{_('Constructs')}{RESET}   " + "  ".join(f"{name} {DIM}{n}{RESET}" for name, n in used))
 
 
+def ask_settings(ask=input):
+    """`bashou config` in a terminal: one question per setting (Enter keeps it), saved together at the end.
+    Then your skills and the language, which have their own screens. Ctrl+C leaves without saving."""
+    from . import update
+    s = state.load()
+    print(f"  {BOLD}" + _("Configure Bashou") + f"{RESET}  {DIM}" +
+          _("Enter keeps the value in [brackets], `default` resets it, Ctrl+C leaves without saving.") + RESET)
+    answers = {}
+    try:
+        for key, (default, text) in state.SETTINGS.items():
+            if key == "updates" and update.packaged():
+                continue                                 # apt or dnf update it
+            print(f"\n  {_(text)}")
+            while True:
+                value = ask(f"  {key} [{state.show(state.setting(s, key))}]: ").strip()
+                if not value:
+                    break
+                try:
+                    answers[key] = None if value == "default" else state.parse(key, value)
+                    break
+                except ValueError:
+                    print("  " + _("Not a valid value for {name}: {value}").format(name=key, value=value))
+        from . import skills
+        current = s.get("skills", "all")
+        change = ask("\n  " + _("Change what you learn? (y/N) ")).strip().lower()
+        language = ask("  " + _("Change the language? (y/N) ")).strip().lower()
+    except (KeyboardInterrupt, EOFError):
+        print("\n  " + _("Nothing changed."))
+        return 1
+    with state.locked() as s:
+        for key, new in answers.items():
+            s.setdefault("settings", {}).pop(key, None)
+            if new is not None:
+                s["settings"][key] = new
+    if change in ("y", "yes", "o", "oui"):
+        skills.show(skills.ask(current))
+    if language in ("y", "yes", "o", "oui"):
+        from . import starter
+        starter.language_main()
+    print("  " + _("Saved. Every terminal uses it right away."))
+    return 0
+
+
 def config(name, value):
-    """`bashou config`: list settings; `bashou config NAME VALUE` sets one ("default" resets it)."""
-    if not name:
+    """`bashou config`: questions (or the list, outside a terminal); `bashou config list`;
+    `bashou config NAME VALUE` sets one ("default" resets it)."""
+    import sys
+    if not name and sys.stdin.isatty():
+        return ask_settings()
+    if not name or name == "list":
         s = state.load()
         for key, (default, text) in state.SETTINGS.items():
             print(f"  {BOLD}{key}{RESET} {state.show(state.setting(s, key))}  "
@@ -277,7 +324,7 @@ def main():
     sub.add_parser("adventure", help="walk into the world with your starter")
     sc = sub.add_parser("security", help="security challenges, easy to hard")
     sc.add_argument("which", nargs="?", help="number or id (see the list)")
-    cf = sub.add_parser("config", help="settings, e.g. bashou config bubble 5-10")
+    cf = sub.add_parser("config", help="answer a few questions to set Bashou up; or: bashou config list, bashou config bubble 5-10")
     cf.add_argument("name", nargs="?")
     cf.add_argument("value", nargs="?")
     sub.add_parser("reset", help="start over with a new starter")

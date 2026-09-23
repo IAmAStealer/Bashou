@@ -79,7 +79,7 @@ bashou swap             # board to pick your pet (or: bashou swap fox); f switch
 bashou off / on         # hide / show the pet
 bashou stats            # commands, top tools, constructs, streaks
 bashou skills           # what you learn: a bit of everything, or the skills you tick
-bashou config           # list settings (see Configuration)
+bashou config           # a few questions to set Bashou up (see Configuration)
 bashou version          # which version this is (and if a newer one is out)
 bashou update           # get the new version from GitHub (--version v0.2.0: a given one, older too)
 bashou setup            # add Bashou to your ~/.bashrc (after installing the apt or dnf package)
@@ -101,10 +101,12 @@ still has its adventure questions. Tick Rust without `rustc`, and your pet tells
 
 ## Configuration
 
-`bashou config` lists the settings with their current value and default.
+`bashou config` asks one question per setting, showing the current value in [brackets]: Enter keeps
+it, `default` resets it. Then it offers to change your skills and the language, and saves everything
+at once (Ctrl+C leaves without saving). The settings can also be set one by one:
 
 ```bash
-bashou config                   # list all settings
+bashou config list              # list all settings
 bashou config bubble            # show one
 bashou config bubble 3-8        # a speech bubble stays for 3 to 8 commands (random in the range)
 bashou config bubble 5          # always 5 commands
