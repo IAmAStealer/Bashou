@@ -10,7 +10,7 @@
    "zypper get nom"
   ],
   "answer": 0,
-  "explain": "yum marche encore comme alias de dnf."
+  "explain": "Rocky Linux, comme RHEL, Alma et Fedora, utilise dnf : dnf install nom télécharge le paquet et ses dépendances depuis les dépôts et les installe. yum marche encore comme autre nom de dnf. apt est l'outil de Debian et Ubuntu, pacman celui d'Arch, zypper celui d'openSUSE : la commande te dit dans quelle famille tu es."
  },
  {
   "id": "rocky-1-02",
@@ -23,7 +23,7 @@
    "Il n'a pas besoin de mises à jour"
   ],
   "answer": 0,
-  "explain": "Environ dix ans de mises à jour par version majeure, construites à partir des sources de Red Hat."
+  "explain": "Rocky est reconstruit à partir des sources de Red Hat Enterprise Linux : les mêmes paquets et le même comportement que RHEL, gratuitement. Chaque version majeure reçoit environ dix ans de mises à jour de sécurité : un serveur peut tourner des années sans gros changement. Le revers : les versions sont plus anciennes que sur Fedora ou Debian testing."
  },
  {
   "id": "rocky-1-03",
@@ -36,7 +36,7 @@
    "Quels services utilisent openssl"
   ],
   "answer": 0,
-  "explain": "rpm -qa liste chaque paquet installé avec sa version : premier réflexe quand une faille est annoncée."
+  "explain": "rpm -qa liste chaque paquet installé avec sa version complète ; grep garde les lignes qui contiennent openssl. Quand une faille est annoncée pour une version donnée, c'est la première vérification : le paquet est-il là, et en quelle version ? Il ne montre ni les mises à jour en attente (dnf check-update le fait) ni les services qui l'utilisent."
  },
  {
   "id": "rocky-1-04",
@@ -49,7 +49,7 @@
    "IPv6 est activé"
   ],
   "answer": 0,
-  "explain": "firewall-cmd --add-service=http --permanent, puis firewall-cmd --reload."
+  "explain": "Sur Rocky, firewalld est actif par défaut et ne laisse entrer que quelques services, comme ssh. Un serveur web qui écoute sur le port 80 reste injoignable tant que tu ne l'autorises pas. firewall-cmd --add-service=http --permanent, puis firewall-cmd --reload. Vérifie que le serveur écoute vraiment avec ss -tlnp."
  },
  {
   "id": "rocky-1-05",
@@ -62,7 +62,7 @@
    "Il chiffre les fichiers"
   ],
   "answer": 0,
-  "explain": "Un serveur web compromis ne peut toujours pas lire /home ni ouvrir des ports inattendus. getenforce montre le mode."
+  "explain": "SELinux donne à chaque service la liste de ce qu'il a le droit de toucher. Même si un attaquant prend le serveur web, il ne peut toujours pas lire /home, lancer des programmes étranges ou ouvrir d'autres ports. Le couper enlève ce deuxième mur. getenforce montre le mode : Enforcing est ce que tu veux. Quand quelque chose est bloqué, corrige la règle, ne le coupe pas."
  },
  {
   "id": "rocky-1-06",
@@ -75,7 +75,7 @@
    "/var/lib/rpm/"
   ],
   "answer": 0,
-  "explain": "Un fichier .repo chacun ; gpgcheck=1 et une ligne gpgkey= veulent dire paquets vérifiés. dnf repolist montre les actifs."
+  "explain": "Chaque dépôt est un fichier .repo dans /etc/yum.repos.d/. Dedans, gpgcheck=1 et une ligne gpgkey= veulent dire que dnf vérifie la signature de chaque paquet avant de l'installer. Tout dépôt listé là peut installer du code en root : un dépôt inconnu mérite une question. dnf repolist montre ceux qui sont activés."
  },
  {
   "id": "rocky-1-07",
@@ -88,7 +88,7 @@
    "dnf refresh"
   ],
   "answer": 0,
-  "explain": "Il sort avec 100 quand des mises à jour attendent, 0 sinon : pratique dans les scripts de supervision."
+  "explain": "dnf check-update rafraîchit les données des dépôts et liste chaque paquet qui a une nouvelle version en attente, sans rien installer. Son code de retour vaut 100 quand des mises à jour attendent et 0 quand il n'y en a pas : un script de supervision peut lever une alerte là-dessus. dnf upgrade les installerait."
  },
  {
   "id": "rocky-1-08",
@@ -101,7 +101,7 @@
    "Il coupe SELinux"
   ],
   "answer": 0,
-  "explain": "Extra Packages for Enterprise Linux : utile et signé, mais un éditeur de plus à qui tu fais confiance."
+  "explain": "EPEL (Extra Packages for Enterprise Linux) ajoute des milliers de paquets que Rocky ne fournit pas. Ils sont signés et bien entretenus, mais par la communauté Fedora, pas par Rocky. L'activer, c'est faire confiance à un éditeur de plus pour installer du code en root, et ses paquets n'ont pas le même support de dix ans."
  },
  {
   "id": "rocky-1-09",
@@ -114,7 +114,7 @@
    "/etc/issue.net"
   ],
   "answer": 0,
-  "explain": "Source-le et utilise $ID et $VERSION_ID. uname ne connaît que le noyau."
+  "explain": "Toutes les distributions modernes ont /etc/os-release, avec des lignes comme ID=rocky et VERSION_ID=9.4 (ID=debian sur Debian). Un script peut le charger avec . /etc/os-release et tester $ID. /etc/rocky-release n'existe que sur Rocky, et uname -r ne donne que la version du noyau, pas la distribution."
  },
  {
   "id": "rocky-1-10",
@@ -127,7 +127,7 @@
    "rpm -U --security"
   ],
   "answer": 0,
-  "explain": "dnf updateinfo list --security les montre d'abord, avec leur bulletin."
+  "explain": "Rocky marque les mises à jour qui corrigent des failles comme bulletins de sécurité. dnf upgrade --security n'installe que celles-là et laisse le reste pour plus tard. Pour les voir d'abord, avec le bulletin de chacune : dnf updateinfo list --security. Pratique quand tu veux les correctifs tout de suite, mais aucun autre changement."
  },
  {
   "id": "rocky-1-11",
@@ -140,7 +140,7 @@
    "cockpit"
   ],
   "answer": 0,
-  "explain": "yum-cron était l'outil d'EL7 ; depuis EL8 c'est dnf-automatic. unattended-upgrades est celui de Debian."
+  "explain": "Sur Rocky 8 et suivants, dnf-automatic installe les mises à jour à heure fixe, lancé par un timer systemd. yum-cron le faisait sur l'ancien EL7 et a disparu. unattended-upgrades est la même idée sur Debian. cockpit est une console d'administration web, pas un outil de mise à jour."
  },
  {
   "id": "rocky-2-01",
@@ -153,7 +153,7 @@
    "Il n'autorise que root"
   ],
   "answer": 0,
-  "explain": "Utile pour diagnostiquer ; ne le laisse pas. setenforce 1 revient en enforcing."
+  "explain": "En mode permissive, SELinux vérifie toujours tout et note ce qu'il aurait bloqué, mais le laisse passer. C'est un outil de diagnostic : si l'appli marche en permissive et pas en enforcing, SELinux est en cause, et le journal dit quelle règle. Reviens ensuite avec setenforce 1 et corrige la règle."
  },
  {
   "id": "rocky-2-02",
@@ -166,7 +166,7 @@
    "firewalld le bloque"
   ],
   "answer": 0,
-  "explain": "mv garde l'étiquette (user_home_t) ; restorecon -Rv /var/www remet la bonne. ls -Z montre les étiquettes."
+  "explain": "SELinux colle une étiquette sur chaque fichier. mv garde l'ancienne, ici user_home_t (un fichier de home), et Apache ne peut lire que les fichiers étiquetés httpd_sys_content_t. restorecon -Rv /var/www remet les étiquettes prévues pour cet endroit. ls -Z les montre. cp au lieu de mv aurait pris l'étiquette de la destination."
  },
  {
   "id": "rocky-2-03",
@@ -179,7 +179,7 @@
    "/etc/selinux/config"
   ],
   "answer": 0,
-  "explain": "Pas de ligne AVC, pas SELinux. sealert explique un refus et propose une solution."
+  "explain": "Chaque refus est écrit dans le journal d'audit comme refus AVC, avec le programme, le fichier ou le port, et la permission qui manque. ausearch -m avc -ts recent montre les derniers. Pas de ligne AVC au moment de l'échec ? Alors SELinux n'y est pour rien : cherche ailleurs. sealert explique un refus en mots simples et propose une solution."
  },
  {
   "id": "rocky-2-04",
@@ -192,7 +192,7 @@
    "Les dépendances du paquet"
   ],
   "answer": 0,
-  "explain": "Sortie vide = rien de changé. Un 5 veut dire contenu modifié : normal pour une config, inquiétant pour un binaire."
+  "explain": "rpm -V compare chaque fichier installé avec ce que le paquet a livré : taille, somme de contrôle, droits, propriétaire. Pas de sortie veut dire rien de changé. Chaque lettre sur une ligne nomme une différence : 5 veut dire que le contenu a changé. Pour un fichier de config (marqué c) c'est normal ; pour un programme de /usr/bin c'est inquiétant."
  },
  {
   "id": "rocky-2-05",
@@ -205,7 +205,7 @@
    "which -p nom"
   ],
   "answer": 0,
-  "explain": "'not owned by any package' sur un chemin système mérite un examen. dnf provides cherche dans les paquets absents."
+  "explain": "rpm -qf /usr/sbin/nom demande à la base des paquets quel paquet installé possède ce fichier. « not owned by any package » sur un dossier système veut dire que quelqu'un l'a posé à la main : un admin, un script, ou un intrus. Cherche lequel. dnf provides cherche dans les paquets que tu n'as pas."
  },
  {
   "id": "rocky-2-06",
@@ -218,12 +218,12 @@
    "firewall-cmd --open 8080"
   ],
   "answer": 0,
-  "explain": "Sans --permanent, ça disparaît au rechargement."
+  "explain": "firewalld garde deux jeux de règles : celles en cours et celles enregistrées. --permanent écrit dans les règles enregistrées, et --reload les charge dans le pare-feu en marche. Sans --permanent, le port s'ouvre tout de suite mais se referme au prochain rechargement ou redémarrage. iptables et ufw sont d'autres outils."
  },
  {
   "id": "rocky-2-07",
   "level": 2,
-  "q": "Quelle commande annule une transaction dnf ?",
+  "q": "Une installation ou une mise à jour avec dnf a mal tourné. Quelle commande annule cette transaction ?",
   "choices": [
    "dnf history undo <id>",
    "dnf revert",
@@ -231,7 +231,7 @@
    "dnf downgrade --all"
   ],
   "answer": 0,
-  "explain": "dnf history liste les transactions."
+  "explain": "dnf enregistre chaque installation, mise à jour ou suppression comme une transaction numérotée. dnf history les liste avec leurs dates, dnf history info <id> montre ce qui a changé, et dnf history undo <id> l'annule. Pour une mise à jour, les anciennes versions doivent encore être disponibles dans les dépôts."
  },
  {
   "id": "rocky-2-08",
@@ -244,7 +244,7 @@
    "Arrêter firewalld"
   ],
   "answer": 0,
-  "explain": "Les booléens activent des comportements permis ; getsebool -a les liste, -P garde le réglage au redémarrage."
+  "explain": "SELinux a des interrupteurs appelés booléens pour les besoins courants. httpd_can_network_connect_db permet au serveur web de se connecter aux ports de bases de données, rien de plus. -P le garde après un redémarrage, getsebool -a les liste tous. setenforce 0 couperait toute la protection pour un seul besoin, et chmod 777 n'a rien à voir."
  },
  {
   "id": "rocky-2-09",
@@ -257,7 +257,7 @@
    "systemctl status firewalld"
   ],
   "answer": 0,
-  "explain": "Il montre les services, ports et règles de la zone. ss montre ce qui écoute, pas ce que le pare-feu permet."
+  "explain": "firewall-cmd --list-all montre la zone active : les services et ports autorisés à entrer, et les règles en plus. ss -tlnp répond à une autre question : quels programmes écoutent. Un port peut écouter et être bloqué par le pare-feu, ou être autorisé sans rien derrière. Compare les deux."
  },
  {
   "id": "rocky-2-10",
@@ -270,7 +270,7 @@
    "Il cherche des virus dans les images"
   ],
   "answer": 0,
-  "explain": "Sans root, une évasion atterrit dans ton compte, pas en root. Les commandes sont presque celles de docker."
+  "explain": "Le docker classique fait tourner un démon en root, et quiconque peut lui parler est en pratique root. podman n'a pas de démon, et les conteneurs peuvent tourner sous ton propre utilisateur (rootless). Si un attaquant s'échappe d'un conteneur, il atterrit dans ton compte, pas en root. La plupart des commandes sont celles de docker."
  },
  {
   "id": "rocky-2-11",
@@ -283,7 +283,7 @@
    "Une ligne dans crontab -e"
   ],
   "answer": 0,
-  "explain": "Modifie /etc/dnf/automatic.conf, puis systemctl enable --now dnf-automatic.timer. Par défaut il ne fait que télécharger."
+  "explain": "Installer dnf-automatic ne change encore rien. Dans /etc/dnf/automatic.conf, apply_updates = yes lui dit d'installer et pas seulement de télécharger ; puis systemctl enable --now dnf-automatic.timer démarre le passage quotidien. Par défaut, il ne fait que télécharger et t'attend."
  },
  {
   "id": "rocky-2-12",
@@ -296,7 +296,7 @@
    "Un nouveau fichier dans /etc/yum.repos.d"
   ],
   "answer": 0,
-  "explain": "Il n'applique alors que les mises à jour marquées comme bulletins de sécurité : `dnf updateinfo list --security` les montre."
+  "explain": "Dans /etc/dnf/automatic.conf, upgrade_type = security lui fait appliquer seulement les mises à jour marquées comme bulletins de sécurité. Tout le reste t'attend. dnf updateinfo list --security montre quelles mises à jour comptent comme sécurité. C'est le choix prudent pour un serveur que personne ne surveille chaque jour."
  },
  {
   "id": "rocky-2-13",
@@ -309,7 +309,7 @@
    "journalctl -k"
   ],
   "answer": 0,
-  "explain": "Ce qu'il a fait ensuite : journalctl -u dnf-automatic, et dnf history pour les transactions."
+  "explain": "dnf-automatic est lancé par un timer systemd, et systemctl list-timers montre le dernier et le prochain passage de chaque timer. Pour voir ce qu'il a fait : journalctl -u dnf-automatic pour ses messages, et dnf history pour les transactions. Aucune crontab n'intervient."
  },
  {
   "id": "rocky-3-01",
@@ -322,7 +322,7 @@
    "rpm -qa glibc"
   ],
   "answer": 0,
-  "explain": "Le code de sortie 1 veut dire redémarrer. needs-restarting -s liste les services à relancer quand ce n'est pas nécessaire."
+  "explain": "Un nouveau noyau ou une nouvelle glibc ne servent qu'après un redémarrage : d'ici là, l'ancien code reste en mémoire. dnf needs-restarting -r répond à la question, et sort avec 1 quand il faut redémarrer, pratique dans les scripts. Si seuls certains services sont concernés, needs-restarting -s les liste. uname -r montre le noyau en marche, pas celui installé."
  },
  {
   "id": "rocky-3-02",
@@ -335,7 +335,7 @@
    "dnf clean all"
   ],
   "answer": 0,
-  "explain": "dnf history info <id> liste ce qui a changé. L'annulation demande que les anciens paquets soient encore dans les dépôts."
+  "explain": "dnf history montre la transaction de la nuit avec son numéro et son heure ; dnf history info <id> liste chaque paquet et version qu'elle a changés. dnf history undo <id> remet les versions précédentes, tant qu'elles sont encore dans les dépôts. Cherche ensuite ce qui a cassé avant de mettre à jour à nouveau."
  },
  {
   "id": "rocky-3-03",
@@ -348,6 +348,6 @@
    "Ça active SELinux"
   ],
   "answer": 0,
-  "explain": "Les signatures sont le seul contrôle qui reste quand aucun humain ne lit la transaction. Pareil pour Signed-By avec apt."
+  "explain": "Avec les mises à jour automatiques, personne ne lit la liste avant l'installation : tout ce que sert un dépôt s'installe en root. gpgcheck=1 fait vérifier par dnf la signature de chaque paquet, le seul contrôle qui reste : un miroir piraté ne peut pas glisser un paquet modifié. Sur Debian, Signed-By joue le même rôle."
  }
 ]
