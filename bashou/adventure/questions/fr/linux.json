@@ -166,12 +166,12 @@
    "Il redémarre sudo"
   ],
   "answer": 0,
-  "explain": "Mieux encore : un fichier dans /etc/sudoers.d/ avec visudo -f, et un shell root ouvert pendant le test."
+  "explain": "sudo lit /etc/sudoers à chaque appel. Si tu l'enregistres avec une faute, sudo refuse de marcher pour tout le monde, et sans mot de passe root tu es bloqué dehors. visudo modifie une copie et vérifie la syntaxe avant d'enregistrer. Encore plus sûr : mets ta règle dans un fichier de /etc/sudoers.d/ (visudo -f), et garde un shell root ouvert pendant le test."
  },
  {
   "id": "linux-2-02",
   "level": 2,
-  "q": "Où voir les connexions SSH ratées ?",
+  "q": "Quelqu'un essaie peut-être de deviner les mots de passe de ton serveur. Où vois-tu les connexions SSH ratées ?",
   "choices": [
    "journalctl -u ssh, ou le journal auth dans /var/log",
    "~/.ssh/known_hosts",
@@ -179,7 +179,7 @@
    "/var/log/ssh.err"
   ],
   "answer": 0,
-  "explain": "Des centaines d'échecs depuis une adresse = force brute ; fail2ban ou les clés seules l'arrêtent. Rocky écrit dans /var/log/secure."
+  "explain": "Le service SSH note chaque tentative de connexion : journalctl -u ssh les montre, tout comme /var/log/auth.log sur Debian (/var/log/secure sur Rocky). Des centaines d'échecs depuis une adresse veulent dire qu'un robot devine des mots de passe. fail2ban bloque ces adresses ; n'accepter que les clés supprime l'attaque."
  },
  {
   "id": "linux-2-03",
@@ -192,7 +192,7 @@
    "Seul root peut le lancer"
   ],
   "answer": 0,
-  "explain": "SUID. passwd en a besoin ; un SUID inattendu est un signal d'alarme. find / -perm -4000 les liste."
+  "explain": "Un s à la place du x du propriétaire, c'est le bit SUID : le programme tourne avec les droits de son propriétaire, ici root, quel que soit qui le lance. passwd en a besoin pour écrire /etc/shadow. Un programme SUID root que tu ne reconnais pas est un moyen classique de devenir root : find / -perm -4000 les liste tous, à comparer avec une machine saine."
  },
  {
   "id": "linux-2-04",
@@ -205,7 +205,7 @@
    "systemctl restart fstab"
   ],
   "answer": 0,
-  "explain": "Une mauvaise ligne fstab peut bloquer le démarrage. mount -a (ou findmnt --verify) montre l'erreur tant que tu peux la corriger."
+  "explain": "/etc/fstab liste les disques à monter au démarrage. Une ligne fausse peut bloquer la machine au démarrage, pénible sur un serveur distant. mount -a monte tout de suite tout ce qui est listé et pas encore monté : une erreur apparaît tant que tu peux la corriger. findmnt --verify vérifie le fichier sans monter."
  },
  {
   "id": "linux-2-05",
@@ -218,7 +218,7 @@
    "Il écoute sur le port 0"
   ],
   "answer": 0,
-  "explain": "127.0.0.1:5432 serait local seulement. N'écoute que là où c'est utile et filtre le reste."
+  "explain": "L'adresse avant le port dit où le programme écoute. 0.0.0.0 veut dire toutes les interfaces réseau : toute machine qui peut joindre le serveur peut essayer de se connecter à ta base. 127.0.0.1 voudrait dire cette machine seulement. Fais écouter les services seulement là où il faut, et laisse un pare-feu bloquer le reste."
  },
  {
   "id": "linux-2-06",
@@ -231,7 +231,7 @@
    "/proc"
   ],
   "answer": 0,
-  "explain": "Chaque fichier prend un inode ; des millions de petits fichiers (sessions, cache) les épuisent avant la place."
+  "explain": "Un système de fichiers a deux limites : la place, et le nombre de fichiers. Chaque fichier utilise un inode, et leur nombre est fixé au formatage du disque. Des millions de petits fichiers (sessions, cache, files de mails) peuvent tous les utiliser alors qu'il reste de la place. df -i montre l'usage des inodes ; trouve le dossier qui a le plus de fichiers et nettoie-le."
  },
  {
   "id": "linux-2-07",
@@ -244,12 +244,12 @@
    "rm ne fait que cacher les fichiers"
   ],
   "answer": 0,
-  "explain": "lsof +L1 liste les fichiers supprimés encore ouverts. Redémarre ce processus ; la prochaine fois, vide un log avec `> fichier`, pas rm."
+  "explain": "rm enlève le nom du fichier, mais tant qu'un programme garde le fichier ouvert, ses données restent sur le disque. Le service qui écrit ce log le garde, et df ne voit aucun changement. lsof +L1 liste les fichiers supprimés encore ouverts ; redémarrer ce service libère la place. La prochaine fois, vide un log avec le chevron > fichier au lieu de rm."
  },
  {
   "id": "linux-2-08",
   "level": 2,
-  "q": "Quelle différence entre un lien physique et un lien symbolique ?",
+  "q": "ln crée des liens. Quelle différence entre un lien physique et un lien symbolique ?",
   "choices": [
    "Le symbolique vise un chemin, le physique l'inode",
    "Il n'y en a pas",
@@ -257,7 +257,7 @@
    "Les liens symboliques copient le fichier"
   ],
   "answer": 0,
-  "explain": "Supprime la cible : un lien symbolique casse, un lien physique non."
+  "explain": "Un lien symbolique (ln -s) est un petit fichier qui contient un chemin : supprime ou déplace la cible et le lien ne pointe plus sur rien. Un lien physique est un deuxième nom pour les mêmes données (le même inode) : elles restent jusqu'à ce que le dernier nom soit supprimé. Les liens physiques ne marchent que sur le même disque ; les symboliques vont partout."
  },
  {
   "id": "linux-2-09",
@@ -270,7 +270,7 @@
    "cron ignore la ligne shebang"
   ],
   "answer": 0,
-  "explain": "Mets des chemins complets ou PATH dans la crontab, et journalise la sortie (>> fichier 2>&1) pour voir l'erreur."
+  "explain": "Quand tu lances un script à la main, il hérite de tout ton environnement : ton PATH, tes variables, ton dossier courant. cron le lance avec presque rien : un PATH court, pas de variables, depuis ton home. Mets des chemins complets (/usr/local/bin/outil) ou définis PATH en haut de la crontab, et garde la sortie avec >> fichier 2>&1 (deux chevrons) pour voir l'erreur."
  },
  {
   "id": "linux-2-10",
@@ -283,12 +283,12 @@
    "Une clé sans phrase de passe commune à tous les scripts"
   ],
   "answer": 0,
-  "explain": "Une clé par tâche : tu peux la révoquer seule, et command=\"…\", from=\"…\" limitent ce qu'elle peut faire."
+  "explain": "Donne à chaque tâche automatique sa propre clé. Si elle fuit, tu révoques cette seule clé sans toucher aux autres. Dans authorized_keys tu peux la limiter : command=\"…\" n'autorise qu'une commande, from=\"…\" qu'une adresse d'origine. Ta clé personnelle, ou une clé partagée partout, donnerait au script, et à qui la vole, bien plus que nécessaire."
  },
  {
   "id": "linux-3-01",
   "level": 3,
-  "q": "À quoi sert /etc/passwd ?",
+  "q": "Malgré son nom, /etc/passwd ne contient plus de mot de passe. À quoi sert-il ?",
   "choices": [
    "À lister les comptes : nom, identifiant, maison et shell",
    "À lister les mots de passe, chiffrés",
@@ -296,7 +296,7 @@
    "À lister les utilisateurs connectés"
   ],
   "answer": 0,
-  "explain": "Une ligne par compte : nom:x:uid:gid:commentaire:maison:shell. Aucun secret dedans, d'où sa lecture par tous."
+  "explain": "Il liste les comptes : une ligne par utilisateur, nom:x:uid:gid:commentaire:home:shell. Les programmes le lisent pour transformer un identifiant en nom, c'est pour ça que tout le monde peut le lire. Le x veut dire que le mot de passe est ailleurs, dans /etc/shadow. Un deuxième compte avec l'uid 0 est un deuxième root : toujours suspect."
  },
  {
   "id": "linux-3-02",
@@ -309,7 +309,7 @@
    "/var/lib/pam/passwords"
   ],
   "answer": 0,
-  "explain": "C'est pour cela que /etc/passwd reste lisible par tous : il ne contient aucun secret."
+  "explain": "Le système ne garde pas les mots de passe mais des empreintes (hash) : une valeur calculée à partir du mot de passe, impossible à retransformer en mot de passe. Elles sont dans /etc/shadow, lisible par root seulement, car une empreinte volée peut encore être attaquée hors ligne en devinant. C'est pour ça que /etc/passwd, qui n'en contient aucune, peut rester lisible par tous."
  },
  {
   "id": "linux-3-03",
@@ -322,7 +322,7 @@
    "Un champ vide"
   ],
   "answer": 0,
-  "explain": "$y$ = yescrypt (défaut actuel), $6$ = SHA-512, $2b$ = bcrypt. `!` et `*` bloquent le mot de passe, vide = aucun."
+  "explain": "Une valeur qui commence par $ est une empreinte : les lettres entre les deux premiers $ nomment la méthode. $y$ = yescrypt (le défaut actuel), $6$ = SHA-512, $2b$ = bcrypt. ! ou * dans ce champ bloquent la connexion par mot de passe (le compte peut encore utiliser des clés SSH), et un champ vide veut dire aucun mot de passe : dangereux."
  },
  {
   "id": "linux-3-04",
@@ -335,7 +335,7 @@
    "Fermer ta session, puis te reconnecter"
   ],
   "answer": 0,
-  "explain": "sshd -t vérifie le fichier. Une config cassée peut te bloquer dehors : teste une nouvelle connexion avant de fermer l'ancienne."
+  "explain": "sshd -t lit la config et signale toute erreur sans toucher au service en marche. Même avec un fichier valide, un mauvais réglage peut refuser ta connexion. Alors recharge, garde ta session actuelle ouverte (elle reste connectée), et essaie une nouvelle connexion depuis un autre terminal. Ne ferme l'ancienne que quand la nouvelle marche."
  },
  {
   "id": "linux-3-05",
@@ -348,7 +348,7 @@
    "Rien : /tmp est temporaire"
   ],
   "answer": 0,
-  "explain": "ls -l /proc/PID/exe et ss -p montrent ce que c'est et à qui il parle ; le tuer d'abord détruit les preuves. Puis isole la machine."
+  "explain": "Un programme au nom aléatoire qui tourne depuis /tmp est typique d'une intrusion (un mineur de crypto, une porte dérobée). Si tu le tues d'abord, tu perds ce qu'il pouvait t'apprendre. ls -l /proc/PID/exe montre son fichier, ss -tnp ses connexions réseau : note-les. Puis coupe la machine du réseau et cherche par où il est entré."
  },
  {
   "id": "linux-3-06",
@@ -361,12 +361,12 @@
    "PermitEmptyPasswords no"
   ],
   "answer": 0,
-  "explain": "Changer de port réduit juste le bruit dans les logs ; les clés seules suppriment l'attaque. Vérifie d'abord que ta clé marche."
+  "explain": "Avec PasswordAuthentication no, sshd n'accepte que les clés : plus de mot de passe à deviner, les robots échouent à chaque fois. Passer au port 2222 réduit seulement le bruit dans les logs ; l'attaque marche encore. Avant de basculer, vérifie dans une autre session que ta connexion par clé marche, sinon tu t'enfermes dehors."
  },
  {
   "id": "linux-3-07",
   "level": 3,
-  "q": "Que montre `sudo -l` ?",
+  "q": "Tu te connectes à un nouveau serveur. Que t'apprend `sudo -l` ?",
   "choices": [
    "Les commandes que tu peux lancer avec sudo",
    "Les dernières commandes sudo lancées",
@@ -374,12 +374,12 @@
    "Le fichier de log de sudo"
   ],
   "answer": 0,
-  "explain": "Les attaquants le lancent en premier aussi : (ALL) NOPASSWD: /usr/bin/vim, c'est root pour qui connaît :!sh."
+  "explain": "sudo -l liste ce que ton compte peut lancer avec sudo sur cette machine, et s'il faut un mot de passe. Les attaquants le lancent en premier aussi : une ligne comme (ALL) NOPASSWD: /usr/bin/vim, c'est root pour n'importe qui, car vim peut lancer un shell (:!sh). Autorise des commandes précises, jamais des éditeurs ou des shells."
  },
  {
   "id": "linux-3-08",
   "level": 3,
-  "q": "À quoi sert /run ?",
+  "q": "Les services rangent leurs fichiers PID et leurs sockets dans /run. Quel genre de dossier est /run ?",
   "choices": [
    "Aux fichiers d'exécution, en mémoire, vidés au démarrage",
    "Aux programmes que vous installez vous-même",
@@ -387,12 +387,12 @@
    "Aux fichiers temporaires gardés 10 jours"
   ],
   "answer": 0,
-  "explain": "Les fichiers PID et les sockets y vivent ; /var/run est un lien vers lui."
+  "explain": "/run vit en mémoire (tmpfs) et se vide à chaque démarrage. Les programmes y rangent ce qui ne compte que pendant qu'ils tournent : leur fichier PID, leur socket, des verrous. Donc rien n'y survit à un redémarrage, et rien n'y est à sauvegarder. /var/run n'est qu'un lien vers lui."
  },
  {
   "id": "linux-3-09",
   "level": 3,
-  "q": "Que met-on dans /usr/local ?",
+  "q": "Tu compiles un outil depuis ses sources sur un serveur. Pourquoi l'installer sous /usr/local et pas /usr ?",
   "choices": [
    "Les logiciels installés hors du gestionnaire de paquets",
    "Les dossiers personnels",
@@ -400,7 +400,7 @@
    "Une copie locale du cache de paquets"
   ],
   "answer": 0,
-  "explain": "Le gestionnaire de paquets possède /usr ; /usr/local est à vous."
+  "explain": "Le gestionnaire de paquets possède /usr : il peut écraser ou supprimer des fichiers là à la prochaine mise à jour, et il ne connaît pas les tiens. /usr/local est laissé à l'admin pour les logiciels installés à la main. make install utilise /usr/local par défaut, et il passe en premier dans le PATH."
  },
  {
   "id": "linux-3-10",
@@ -413,6 +413,6 @@
    "Ils s'écrivent plus vite là-bas"
   ],
   "answer": 0,
-  "explain": "rsyslog ou systemd-journal-upload les transfèrent ; la copie ailleurs est celle qu'on lit après un incident."
+  "explain": "La première chose que fait un intrus devenu root, c'est effacer ses traces dans les logs locaux. Une copie envoyée en direct vers une autre machine, qu'il ne peut pas atteindre, reste intacte. rsyslog ou systemd-journal-upload font l'envoi. Après un incident, c'est à cette copie distante qu'on fait confiance."
  }
 ]

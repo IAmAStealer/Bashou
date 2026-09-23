@@ -166,12 +166,12 @@
    "It restarts sudo"
   ],
   "answer": 0,
-  "explain": "Better still, add a file in /etc/sudoers.d/ with visudo -f, and keep a root shell open while testing."
+  "explain": "sudo reads /etc/sudoers on every call. If you save it with a typo, sudo refuses to work for everyone, and without a root password you are locked out. visudo edits a copy and checks the syntax before saving. Even safer: put your rule in a file of /etc/sudoers.d/ (visudo -f), and keep a root shell open while you test."
  },
  {
   "id": "linux-2-02",
   "level": 2,
-  "q": "Where do you see failed SSH logins?",
+  "q": "Someone may be trying to guess passwords on your server. Where do you see failed SSH logins?",
   "choices": [
    "journalctl -u ssh, or the auth log in /var/log",
    "~/.ssh/known_hosts",
@@ -179,7 +179,7 @@
    "/var/log/ssh.err"
   ],
   "answer": 0,
-  "explain": "Hundreds of failures from one address = brute force; fail2ban or keys-only logins stop it. Rocky logs to /var/log/secure."
+  "explain": "The SSH service logs every login attempt: journalctl -u ssh shows them, and so does /var/log/auth.log on Debian (/var/log/secure on Rocky). Hundreds of failures from one address mean a robot is guessing passwords. fail2ban blocks such addresses; allowing keys only removes the attack."
  },
  {
   "id": "linux-2-03",
@@ -192,7 +192,7 @@
    "Only root can start it"
   ],
   "answer": 0,
-  "explain": "SUID. passwd needs it; an unexpected one is a red flag. find / -perm -4000 lists them all."
+  "explain": "An s where the owner's x should be is the SUID bit: the program runs with its owner's rights, here root, whoever starts it. passwd needs it to write /etc/shadow. An SUID root program you don't recognise is a classic way to become root: find / -perm -4000 lists them all, to compare with a clean machine."
  },
  {
   "id": "linux-2-04",
@@ -205,7 +205,7 @@
    "systemctl restart fstab"
   ],
   "answer": 0,
-  "explain": "A bad fstab line can stop the boot. mount -a (or findmnt --verify) shows the mistake while you can still fix it."
+  "explain": "/etc/fstab lists the disks to mount at boot. A wrong line can stop the machine at boot, which is painful on a remote server. mount -a mounts everything listed that isn't mounted yet, right now: a mistake shows up while you can still fix it. findmnt --verify checks the file without mounting."
  },
  {
   "id": "linux-2-05",
@@ -218,7 +218,7 @@
    "It listens on port 0"
   ],
   "answer": 0,
-  "explain": "127.0.0.1:5432 would be local only. Listen only where needed and firewall the rest."
+  "explain": "The address before the port says where the program listens. 0.0.0.0 means every network interface, so any machine that can reach the server can try to connect to your database. 127.0.0.1 would mean this machine only. Make services listen only where needed, and let a firewall block the rest."
  },
  {
   "id": "linux-2-06",
@@ -231,7 +231,7 @@
    "/proc"
   ],
   "answer": 0,
-  "explain": "Each file takes an inode; millions of tiny files (sessions, cache) use them up before the space."
+  "explain": "A filesystem has two limits: space, and the number of files. Each file uses one inode, and their number is fixed when the disk is formatted. Millions of tiny files (sessions, cache, mail queues) can use them all while space remains. df -i shows inode use; find the folder with the most files and clean it."
  },
  {
   "id": "linux-2-07",
@@ -244,12 +244,12 @@
    "rm only hides files"
   ],
   "answer": 0,
-  "explain": "lsof +L1 lists deleted files still open. Restart that process; next time empty a log with `> file`, not rm."
+  "explain": "rm removes the file's name, but while a program still has the file open, its data stays on disk. The service writing that log keeps it, and df sees no change. lsof +L1 lists deleted files still open; restarting that service frees the space. Next time, empty a log with > file (truncate) instead of rm."
  },
  {
   "id": "linux-2-08",
   "level": 2,
-  "q": "What is the difference between a hard and a soft link?",
+  "q": "ln creates links. What is the difference between a hard link and a soft (symbolic) link?",
   "choices": [
    "A soft link points to a path, a hard link to the inode",
    "There is none",
@@ -257,7 +257,7 @@
    "Soft links copy the file"
   ],
   "answer": 0,
-  "explain": "Delete the target and a soft link breaks, a hard link doesn't."
+  "explain": "A soft link (ln -s) is a small file holding a path: delete or move the target and the link points to nothing. A hard link is a second name for the same data (the same inode): the data stays until the last name is removed. Hard links only work on the same disk; soft links go anywhere."
  },
  {
   "id": "linux-2-09",
@@ -270,7 +270,7 @@
    "cron ignores the shebang line"
   ],
   "answer": 0,
-  "explain": "Use full paths or set PATH in the crontab, and log the output (>> file 2>&1) to see the error."
+  "explain": "When you run a script by hand, it inherits your whole environment: your PATH, your variables, your current folder. cron starts it with almost nothing: a short PATH, no variables, from your home. Use full paths (/usr/local/bin/tool) or set PATH at the top of the crontab, and log the output with >> file 2>&1 to see the error."
  },
  {
   "id": "linux-2-10",
@@ -283,12 +283,12 @@
    "One passphrase-less key shared by all scripts"
   ],
   "answer": 0,
-  "explain": "One key per job: you can revoke it alone, and command=\"…\", from=\"…\" restrict what it may do."
+  "explain": "Give each automated job its own key. If it leaks, you revoke that one key without touching the others. In authorized_keys you can restrict it: command=\"…\" allows only one command, from=\"…\" only one source address. Your personal key, or a key shared everywhere, would give the script, and whoever steals it, far more than it needs."
  },
  {
   "id": "linux-3-01",
   "level": 3,
-  "q": "What is /etc/passwd for?",
+  "q": "Despite its name, /etc/passwd holds no password today. What is it for?",
   "choices": [
    "The list of accounts: name, id, home and shell",
    "The list of passwords, encrypted",
@@ -296,7 +296,7 @@
    "The list of users logged in right now"
   ],
   "answer": 0,
-  "explain": "One line per account: name:x:uid:gid:comment:home:shell. No secret in it, which is why everyone can read it."
+  "explain": "It lists the accounts: one line per user, name:x:uid:gid:comment:home:shell. Programs read it to turn a user id into a name, which is why everyone can read it. The x means the password is elsewhere, in /etc/shadow. A second account with uid 0 is a second root: always suspicious."
  },
  {
   "id": "linux-3-02",
@@ -309,7 +309,7 @@
    "/var/lib/pam/passwords"
   ],
   "answer": 0,
-  "explain": "That is why /etc/passwd stays world-readable: it holds no secret."
+  "explain": "The system doesn't store passwords but hashes: a fingerprint computed from the password that can't be turned back into it. They are in /etc/shadow, readable by root only, since a stolen hash can still be attacked offline by guessing. That's why /etc/passwd, which holds none, can stay readable by all."
  },
  {
   "id": "linux-3-03",
@@ -322,7 +322,7 @@
    "An empty field"
   ],
   "answer": 0,
-  "explain": "$y$ is yescrypt (today's default), $6$ SHA-512, $2b$ bcrypt. `!` and `*` block the password, empty means none."
+  "explain": "A value starting with $ is a hash: the letters between the first two $ name the method. $y$ is yescrypt (today's default), $6$ SHA-512, $2b$ bcrypt. ! or * in that field block password login (the account may still use SSH keys), and an empty field means no password at all: dangerous."
  },
  {
   "id": "linux-3-04",
@@ -335,7 +335,7 @@
    "Close your session, then reconnect"
   ],
   "answer": 0,
-  "explain": "sshd -t checks the file. A broken config can lock you out: test a new login before closing the old one."
+  "explain": "sshd -t reads the config and reports any error without touching the running service. Even with a valid file, a wrong setting can refuse your login. So reload, keep your current session open (it stays connected), and try a new login from another terminal. Only close the old one when the new one works."
  },
  {
   "id": "linux-3-05",
@@ -348,7 +348,7 @@
    "Ignore it: /tmp is temporary"
   ],
   "answer": 0,
-  "explain": "ls -l /proc/PID/exe and ss -p show what and who it talks to; killing it first destroys evidence. Then isolate the machine."
+  "explain": "A program with a random name running from /tmp is typical of an intrusion (a crypto miner, a backdoor). If you kill it first, you lose what it could teach you. ls -l /proc/PID/exe shows its file, ss -tnp its network connections: note them. Then cut the machine off the network and investigate how it got in."
  },
  {
   "id": "linux-3-06",
@@ -361,12 +361,12 @@
    "PermitEmptyPasswords no"
   ],
   "answer": 0,
-  "explain": "A new port only cuts the noise in the logs; keys only removes the attack. Make sure your key works first."
+  "explain": "With PasswordAuthentication no, sshd accepts only keys, so there's no password left to guess and the robots fail every time. Moving to port 2222 only reduces the noise in the logs; the attack still works. Before switching, check in another session that your key login works, or you lock yourself out."
  },
  {
   "id": "linux-3-07",
   "level": 3,
-  "q": "What does `sudo -l` show?",
+  "q": "You log in to a new server. What does `sudo -l` tell you?",
   "choices": [
    "The commands you may run with sudo",
    "The last sudo commands run",
@@ -374,12 +374,12 @@
    "The sudo log file"
   ],
   "answer": 0,
-  "explain": "Attackers run it first too: (ALL) NOPASSWD: /usr/bin/vim is root for anyone who knows :!sh."
+  "explain": "sudo -l lists what your account may run with sudo on this machine, and whether it needs a password. Attackers run it first too: a line like (ALL) NOPASSWD: /usr/bin/vim is root for anyone, because vim can start a shell (:!sh). Allow full commands with care, never editors or shells."
  },
  {
   "id": "linux-3-08",
   "level": 3,
-  "q": "What is /run for?",
+  "q": "Services keep PID files and sockets in /run. What kind of folder is /run?",
   "choices": [
    "Runtime files, in memory, emptied at each boot",
    "Programs you installed yourself",
@@ -387,12 +387,12 @@
    "Temporary files kept for 10 days"
   ],
   "answer": 0,
-  "explain": "PID files and sockets live there; /var/run is a link to it."
+  "explain": "/run lives in memory (tmpfs) and is emptied at each boot. Running programs keep there what only matters while they run: their PID file, their socket, lock files. So nothing there survives a reboot, and nothing there should be backed up. /var/run is only a link to it."
  },
  {
   "id": "linux-3-09",
   "level": 3,
-  "q": "What belongs in /usr/local?",
+  "q": "You build a tool from source on a server. Why install it under /usr/local and not /usr?",
   "choices": [
    "Software you installed outside the package manager",
    "The user home directories",
@@ -400,7 +400,7 @@
    "Local copies of the package cache"
   ],
   "answer": 0,
-  "explain": "The package manager owns /usr; /usr/local is yours."
+  "explain": "The package manager owns /usr: it may overwrite or remove files there at the next upgrade, and it doesn't know about yours. /usr/local is left to the admin for software installed by hand. make install uses /usr/local by default, and it comes first in PATH."
  },
  {
   "id": "linux-3-10",
@@ -413,6 +413,6 @@
    "Logs are faster to write there"
   ],
   "answer": 0,
-  "explain": "rsyslog or systemd-journal-upload forward them; the copy elsewhere is what you read after an incident."
+  "explain": "The first thing an intruder who becomes root does is erase their traces in the local logs. A copy sent live to another machine, which they can't reach, stays intact. rsyslog or systemd-journal-upload do the sending. After an incident, that remote copy is the one you trust."
  }
 ]
