@@ -420,3 +420,13 @@ class CurrentFolderTest(unittest.TestCase):
     def test_no_module_launch_left(self):
         for text in ((self.ROOT / "bashou.bash").read_text(), fight.RC):
             self.assertNotIn("-m bashou", text)
+
+
+class StarterScreenTest(unittest.TestCase):
+    def test_no_evolution_line(self):
+        """The starter screen showed 'Stardust → ? → ? …' under each starter, running into the next one."""
+        from bashou import starter
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            starter.draw(0, False)
+        self.assertNotIn("→ ?", out.getvalue())
