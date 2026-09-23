@@ -17,6 +17,10 @@ Every release has a section here, written for players. CI refuses to tag a relea
   after a few lines, `and` / `or` / `not`, how many times a loop runs, where a counter starts, indexes
   from 0, `return` versus `print`, then loops that never end, off-by-one, short-circuits and De Morgan.
   30 questions and a Paradox Sphinx.
+- **Automatic security updates** in the Debian and Rocky questions: turning on unattended-upgrades
+  and dnf-automatic, keeping them to security fixes, a dry run, their timers, keeping one package
+  out, and what's still left to do after they ran (restarting services, rebooting, going back with
+  `dnf history undo`). Rocky gets its first level 3 questions.
 - Four new first-level Rust questions in `bashou adventure`: `mut`, shadowing, `const`, overflow.
 - Once you have 15 achievements and no Rust yet, your pet sometimes offers to start: it gives the
   install command for your system (`apt`, `dnf`, or rustup, read before you run it).

@@ -130,6 +130,19 @@
   "explain": "Lis sa liste : un outil que tu utilises mais installé comme dépendance part aussi (apt-mark manual le garde). apt clean vide le cache."
  },
  {
+  "id": "debian-1-11",
+  "level": 1,
+  "q": "Les correctifs doivent s'installer même sans connexion pendant des semaines. Que mets-tu en place ?",
+  "choices": [
+   "unattended-upgrades",
+   "Un redémarrage chaque semaine",
+   "apt-mark hold sur chaque paquet",
+   "apt clean dans une tâche cron"
+  ],
+  "answer": 0,
+  "explain": "Il installe seul les mises à jour de sécurité chaque jour. Sur un serveur où tu vas rarement, c'est la première chose à activer."
+ },
+ {
   "id": "debian-2-01",
   "level": 2,
   "q": "Comment voir ce que ferait `apt remove nom`, sans le faire ?",
@@ -260,6 +273,45 @@
   "explain": "dpkg -L liste ce que le paquet a posé sur le disque ; sa config est sous /etc. dpkg -S fait l'inverse."
  },
  {
+  "id": "debian-2-11",
+  "level": 2,
+  "q": "unattended-upgrades est installé. Quelle commande l'active ?",
+  "choices": [
+   "dpkg-reconfigure -plow unattended-upgrades",
+   "systemctl enable unattended",
+   "apt auto on",
+   "unattended-upgrades --enable"
+  ],
+  "answer": 0,
+  "explain": "Elle écrit /etc/apt/apt.conf.d/20auto-upgrades avec APT::Periodic::Update-Package-Lists et Unattended-Upgrade à \"1\"."
+ },
+ {
+  "id": "debian-2-12",
+  "level": 2,
+  "q": "Par défaut sur Debian, qu'installe unattended-upgrades ?",
+  "choices": [
+   "Seulement l'archive de sécurité",
+   "Toutes les mises à jour disponibles",
+   "Seulement les nouveaux noyaux",
+   "Rien tant que tu ne listes pas de paquets"
+  ],
+  "answer": 0,
+  "explain": "Origins-Pattern dans /etc/apt/apt.conf.d/50unattended-upgrades décide. La sécurité seule est le choix prudent par défaut."
+ },
+ {
+  "id": "debian-2-13",
+  "level": 2,
+  "q": "Comment voir ce que ferait unattended-upgrades, sans rien installer ?",
+  "choices": [
+   "unattended-upgrade --dry-run --debug",
+   "apt upgrade -y",
+   "systemctl status apt",
+   "cat /etc/apt/sources.list"
+  ],
+  "answer": 0,
+  "explain": "Ensuite, ce qu'il a vraiment fait est dans /var/log/unattended-upgrades/."
+ },
+ {
   "id": "debian-3-01",
   "level": 3,
   "q": "Quelle commande montre la version candidate d'un paquet et d'où elle vient ?",
@@ -388,5 +440,44 @@
   ],
   "answer": 0,
   "explain": "update-grub écrit ensuite les entrées de démarrage qui pointent dessus."
+ },
+ {
+  "id": "debian-3-11",
+  "level": 3,
+  "q": "Quels timers lancent les mises à jour automatiques d'apt sur une Debian récente ?",
+  "choices": [
+   "apt-daily.timer et apt-daily-upgrade.timer",
+   "Seulement /etc/cron.daily/apt",
+   "unattended.service au démarrage",
+   "systemd-update.timer"
+  ],
+  "answer": 0,
+  "explain": "Le premier rafraîchit les listes, le second installe. `systemctl list-timers 'apt*'` montre leur prochain passage."
+ },
+ {
+  "id": "debian-3-12",
+  "level": 3,
+  "q": "Une base de données ne doit jamais se mettre à jour seule. Comment l'écarter des mises à jour automatiques ?",
+  "choices": [
+   "Package-Blacklist (50unattended-upgrades) ou apt-mark hold",
+   "Retirer sa ligne de sources.list",
+   "chattr +i sur son binaire",
+   "Arrêter apt-daily.timer"
+  ],
+  "answer": 0,
+  "explain": "Tout le reste garde ses correctifs de sécurité. Note pourquoi, et mets ce paquet à jour à la main pendant une fenêtre prévue."
+ },
+ {
+  "id": "debian-3-13",
+  "level": 3,
+  "q": "unattended-upgrades a installé un nouvel openssl et un nouveau noyau. Qu'est-ce qui reste vrai ?",
+  "choices": [
+   "Services lancés et noyau gardent encore l'ancien code",
+   "Tout est corrigé d'un coup",
+   "La machine redémarre seule par défaut",
+   "Les anciens fichiers restent utilisés pour toujours"
+  ],
+  "answer": 0,
+  "explain": "Jusqu'au redémarrage. needrestart liste les services à relancer ; /var/run/reboot-required apparaît pour un noyau. Automatic-Reboot est désactivé par défaut."
  }
 ]

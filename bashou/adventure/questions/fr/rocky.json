@@ -130,6 +130,19 @@
   "explain": "dnf updateinfo list --security les montre d'abord, avec leur bulletin."
  },
  {
+  "id": "rocky-1-11",
+  "level": 1,
+  "q": "Qu'est-ce qui donne des mises à jour automatiques à Rocky Linux ?",
+  "choices": [
+   "dnf-automatic",
+   "yum-cron",
+   "unattended-upgrades",
+   "cockpit"
+  ],
+  "answer": 0,
+  "explain": "yum-cron était l'outil d'EL7 ; depuis EL8 c'est dnf-automatic. unattended-upgrades est celui de Debian."
+ },
+ {
   "id": "rocky-2-01",
   "level": 2,
   "q": "Que fait le mode permissive de SELinux ?",
@@ -258,5 +271,83 @@
   ],
   "answer": 0,
   "explain": "Sans root, une évasion atterrit dans ton compte, pas en root. Les commandes sont presque celles de docker."
+ },
+ {
+  "id": "rocky-2-11",
+  "level": 2,
+  "q": "dnf-automatic est installé. Qu'est-ce qui lui fait vraiment installer les mises à jour ?",
+  "choices": [
+   "apply_updates = yes dans automatic.conf, et son timer actif",
+   "Rien de plus : l'installer suffit",
+   "systemctl start dnf",
+   "Une ligne dans crontab -e"
+  ],
+  "answer": 0,
+  "explain": "Modifie /etc/dnf/automatic.conf, puis systemctl enable --now dnf-automatic.timer. Par défaut il ne fait que télécharger."
+ },
+ {
+  "id": "rocky-2-12",
+  "level": 2,
+  "q": "Comment limiter dnf-automatic aux mises à jour de sécurité ?",
+  "choices": [
+   "upgrade_type = security dans /etc/dnf/automatic.conf",
+   "security=1 dans /etc/dnf/dnf.conf",
+   "Désactiver AppStream",
+   "Un nouveau fichier dans /etc/yum.repos.d"
+  ],
+  "answer": 0,
+  "explain": "Il n'applique alors que les mises à jour marquées comme bulletins de sécurité : `dnf updateinfo list --security` les montre."
+ },
+ {
+  "id": "rocky-2-13",
+  "level": 2,
+  "q": "Comment voir quand dnf-automatic passera la prochaine fois ?",
+  "choices": [
+   "systemctl list-timers 'dnf-automatic*'",
+   "dnf history",
+   "crontab -l",
+   "journalctl -k"
+  ],
+  "answer": 0,
+  "explain": "Ce qu'il a fait ensuite : journalctl -u dnf-automatic, et dnf history pour les transactions."
+ },
+ {
+  "id": "rocky-3-01",
+  "level": 3,
+  "q": "dnf-automatic a mis à jour glibc et le noyau cette nuit. Comment savoir s'il faut redémarrer ?",
+  "choices": [
+   "dnf needs-restarting -r",
+   "uname -r",
+   "dnf check-update",
+   "rpm -qa glibc"
+  ],
+  "answer": 0,
+  "explain": "Le code de sortie 1 veut dire redémarrer. needs-restarting -s liste les services à relancer quand ce n'est pas nécessaire."
+ },
+ {
+  "id": "rocky-3-02",
+  "level": 3,
+  "q": "La mise à jour automatique de cette nuit a cassé une appli. Comment la voir et revenir en arrière ?",
+  "choices": [
+   "dnf history, puis dnf history undo <id>",
+   "journalctl -k",
+   "rpm -V sur chaque paquet",
+   "dnf clean all"
+  ],
+  "answer": 0,
+  "explain": "dnf history info <id> liste ce qui a changé. L'annulation demande que les anciens paquets soient encore dans les dépôts."
+ },
+ {
+  "id": "rocky-3-03",
+  "level": 3,
+  "q": "Avant d'activer les mises à jour automatiques, pourquoi vérifier que chaque dépôt a gpgcheck=1 ?",
+  "choices": [
+   "Sans regard humain, ce que sert un dépôt s'installe en root",
+   "dnf-automatic refuse sinon",
+   "Ça accélère les mises à jour",
+   "Ça active SELinux"
+  ],
+  "answer": 0,
+  "explain": "Les signatures sont le seul contrôle qui reste quand aucun humain ne lit la transaction. Pareil pour Signed-By avec apt."
  }
 ]

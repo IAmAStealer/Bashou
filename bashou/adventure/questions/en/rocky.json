@@ -130,6 +130,19 @@
   "explain": "dnf updateinfo list --security shows them first, with their advisory."
  },
  {
+  "id": "rocky-1-11",
+  "level": 1,
+  "q": "What gives Rocky Linux automatic updates?",
+  "choices": [
+   "dnf-automatic",
+   "yum-cron",
+   "unattended-upgrades",
+   "cockpit"
+  ],
+  "answer": 0,
+  "explain": "yum-cron was the EL7 tool; since EL8 it's dnf-automatic. unattended-upgrades is Debian's."
+ },
+ {
   "id": "rocky-2-01",
   "level": 2,
   "q": "What does SELinux's permissive mode do?",
@@ -258,5 +271,83 @@
   ],
   "answer": 0,
   "explain": "Rootless containers mean an escape lands in your account, not root. Commands are mostly docker's."
+ },
+ {
+  "id": "rocky-2-11",
+  "level": 2,
+  "q": "dnf-automatic is installed. What makes it actually install updates?",
+  "choices": [
+   "apply_updates = yes in automatic.conf, and its timer on",
+   "Nothing more: installing it is enough",
+   "systemctl start dnf",
+   "A line in crontab -e"
+  ],
+  "answer": 0,
+  "explain": "Edit /etc/dnf/automatic.conf, then systemctl enable --now dnf-automatic.timer. By default it only downloads."
+ },
+ {
+  "id": "rocky-2-12",
+  "level": 2,
+  "q": "How do you limit dnf-automatic to security updates?",
+  "choices": [
+   "upgrade_type = security in /etc/dnf/automatic.conf",
+   "security=1 in /etc/dnf/dnf.conf",
+   "Disable AppStream",
+   "A new file in /etc/yum.repos.d"
+  ],
+  "answer": 0,
+  "explain": "It then applies only updates flagged as security advisories: `dnf updateinfo list --security` shows them."
+ },
+ {
+  "id": "rocky-2-13",
+  "level": 2,
+  "q": "How do you see when dnf-automatic will run next?",
+  "choices": [
+   "systemctl list-timers 'dnf-automatic*'",
+   "dnf history",
+   "crontab -l",
+   "journalctl -k"
+  ],
+  "answer": 0,
+  "explain": "What it did afterwards: journalctl -u dnf-automatic, and dnf history for the transactions."
+ },
+ {
+  "id": "rocky-3-01",
+  "level": 3,
+  "q": "dnf-automatic updated glibc and the kernel overnight. How do you know if a reboot is needed?",
+  "choices": [
+   "dnf needs-restarting -r",
+   "uname -r",
+   "dnf check-update",
+   "rpm -qa glibc"
+  ],
+  "answer": 0,
+  "explain": "Exit code 1 means reboot. needs-restarting -s lists the services to restart when a reboot isn't needed."
+ },
+ {
+  "id": "rocky-3-02",
+  "level": 3,
+  "q": "Last night's automatic update broke an app. How do you see it and go back?",
+  "choices": [
+   "dnf history, then dnf history undo <id>",
+   "journalctl -k",
+   "rpm -V on every package",
+   "dnf clean all"
+  ],
+  "answer": 0,
+  "explain": "dnf history info <id> lists what changed. Undo needs the old packages still in the repos."
+ },
+ {
+  "id": "rocky-3-03",
+  "level": 3,
+  "q": "Before turning on automatic updates, why check every repo has gpgcheck=1?",
+  "choices": [
+   "Nobody watches: what a repo serves gets installed as root",
+   "dnf-automatic refuses otherwise",
+   "It makes updates faster",
+   "It turns SELinux on"
+  ],
+  "answer": 0,
+  "explain": "Signatures are the only check left when no human reads the transaction. The same goes for apt's Signed-By."
  }
 ]

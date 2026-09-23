@@ -130,6 +130,19 @@
   "explain": "Read its list: a tool you use but got as a dependency goes too (apt-mark manual keeps it). apt clean empties the cache."
  },
  {
+  "id": "debian-1-11",
+  "level": 1,
+  "q": "Security fixes should install even when nobody logs in for weeks. What do you set up?",
+  "choices": [
+   "unattended-upgrades",
+   "A weekly reboot",
+   "apt-mark hold on every package",
+   "apt clean in a cron job"
+  ],
+  "answer": 0,
+  "explain": "It installs security updates by itself every day. On a server you rarely visit, it's the first thing to turn on."
+ },
+ {
   "id": "debian-2-01",
   "level": 2,
   "q": "How do you see what `apt remove name` would do, without doing it?",
@@ -260,6 +273,45 @@
   "explain": "dpkg -L lists what the package put on disk; its config sits under /etc. dpkg -S does the reverse."
  },
  {
+  "id": "debian-2-11",
+  "level": 2,
+  "q": "unattended-upgrades is installed. Which command turns it on?",
+  "choices": [
+   "dpkg-reconfigure -plow unattended-upgrades",
+   "systemctl enable unattended",
+   "apt auto on",
+   "unattended-upgrades --enable"
+  ],
+  "answer": 0,
+  "explain": "It writes /etc/apt/apt.conf.d/20auto-upgrades with APT::Periodic::Update-Package-Lists and Unattended-Upgrade set to \"1\"."
+ },
+ {
+  "id": "debian-2-12",
+  "level": 2,
+  "q": "Out of the box on Debian, what does unattended-upgrades install?",
+  "choices": [
+   "Updates from the security archive only",
+   "Every available update",
+   "Only new kernels",
+   "Nothing until you list packages"
+  ],
+  "answer": 0,
+  "explain": "Origins-Pattern in /etc/apt/apt.conf.d/50unattended-upgrades decides. Security only is the safe default."
+ },
+ {
+  "id": "debian-2-13",
+  "level": 2,
+  "q": "How do you see what unattended-upgrades would do, without installing anything?",
+  "choices": [
+   "unattended-upgrade --dry-run --debug",
+   "apt upgrade -y",
+   "systemctl status apt",
+   "cat /etc/apt/sources.list"
+  ],
+  "answer": 0,
+  "explain": "Afterwards, what it really did is in /var/log/unattended-upgrades/."
+ },
+ {
   "id": "debian-3-01",
   "level": 3,
   "q": "Which command shows a package's candidate version and where it comes from?",
@@ -388,5 +440,44 @@
   ],
   "answer": 0,
   "explain": "update-grub then writes the boot entries that point at it."
+ },
+ {
+  "id": "debian-3-11",
+  "level": 3,
+  "q": "Which timers run apt's automatic updates on a modern Debian?",
+  "choices": [
+   "apt-daily.timer and apt-daily-upgrade.timer",
+   "Only /etc/cron.daily/apt",
+   "unattended.service at boot",
+   "systemd-update.timer"
+  ],
+  "answer": 0,
+  "explain": "The first refreshes the lists, the second installs. `systemctl list-timers 'apt*'` shows when they run next."
+ },
+ {
+  "id": "debian-3-12",
+  "level": 3,
+  "q": "A database must never be upgraded by itself. How do you keep automatic updates off it?",
+  "choices": [
+   "Package-Blacklist in 50unattended-upgrades, or apt-mark hold",
+   "Remove its line from sources.list",
+   "chattr +i on its binary",
+   "Stop apt-daily.timer"
+  ],
+  "answer": 0,
+  "explain": "Everything else keeps its security fixes. Note why, and upgrade that package by hand in a planned window."
+ },
+ {
+  "id": "debian-3-13",
+  "level": 3,
+  "q": "unattended-upgrades installed a new openssl and a new kernel. What is still true?",
+  "choices": [
+   "Running services and the kernel keep the old code for now",
+   "Everything is patched at once",
+   "The machine reboots by itself by default",
+   "The old files stay in use forever"
+  ],
+  "answer": 0,
+  "explain": "Until restarted. needrestart lists services to restart; /var/run/reboot-required appears for a kernel. Automatic-Reboot is off by default."
  }
 ]
