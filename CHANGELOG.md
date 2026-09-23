@@ -17,6 +17,13 @@ Every release has a section here, written for players. CI refuses to tag a relea
   itself (`wc --help`), how to read the Usage line and the options, and what to look for this time.
   `--help` and `man` are free moves in a duel.
 - Bashou no longer runs a `bashou` folder found in the directory you're in instead of its own code.
+- **Your progress is safer.** If your save gets damaged, Bashou keeps it aside
+  (`state.json.broken-…`) and brings back the last good copy (it keeps one a day) instead of
+  crashing or starting over. Saves from every earlier version still load.
+- Very old installs (from before 0.1.0) whose `bashou update` stops with "Not possible to
+  fast-forward" can't update themselves. Move them to this release once:
+  `git -C ~/.bashou fetch --tags && git -C ~/.bashou checkout v0.4.2`. Your progress is kept.
+- The starter screen no longer shows a line of question marks under each starter.
 
 ## v0.4.1 — 2026-09-23
 
