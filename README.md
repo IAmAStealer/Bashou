@@ -20,10 +20,15 @@ tokens spent to learn what a command does.
   `tar -tf`…
 - **Threats** show up now and then. `bashou fight` opens a sandbox shell where you beat them with the
   right tool: `grep` against the Log Hydra, `awk` against the Ledger Golem. A successful command with
-  the right tool hits the enemy; other commands cost you a heart.
+  the right tool hits the enemy; other commands cost you a heart. Code fights hand you a small broken
+  Python or C file to fix (a missing `;`, a loop that never ends, a memory leak, a shell injection);
+  package fights ask your own machine with `apt`, `dpkg` or `rpm`, or have you fix a repository file.
+- **`bashou explain python list`** (or `dict`, `loop`, `recursion`; `bashou explain c malloc`…): a
+  short note with an example, for the code fights.
 - **`bashou security`**: small investigations (a hidden file, a cron backdoor, a SUID binary).
-- **`bashou adventure`**: a walk through 8 topics (bash, Linux, Python, Rust, C, Debian, Rocky Linux,
-  CI/CD) with 166 questions, bosses, and chests that open with real commands.
+- **`bashou adventure`**: a walk through 9 topics (bash, Linux, systemd, Python, Rust, C, Debian,
+  Rocky Linux, CI/CD) with 206 questions about what goes wrong and what to check first, bosses, and
+  chests that open with real commands.
 
 ![bashou fight: a Planet and its hearts face the Log Hydra, the task in a bubble, and the arena
 shell below](doc/img/duel.svg)

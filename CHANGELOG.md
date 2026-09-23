@@ -3,7 +3,7 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
-## v0.3.2 — 2026-09-23
+## v0.4.0 — 2026-09-23
 
 - **Code fights.** Fifteen new threats, in Python and C. Most hand you a small broken file whose
   first lines say what goes in, what should come out and how to run it; fix it, and Bashou runs its
