@@ -2,7 +2,7 @@
 
 In the arena, every command is judged (`judge`): a successful command with the fight's tool hits the
 enemy, looking around is free, anything else (or a failed command with the tool) hurts you. At 0
-hearts you're knocked out. `start()` runs `python3 -m bashou.duel <arena> <shell pid>`, which draws
+hearts you're knocked out. `start()` runs `python3 launch.py bashou.duel <arena> <shell pid>`, which draws
 it at the top right, flashing whoever was hit; the arena's prompt runs `judge` after each command.
 """
 
@@ -187,8 +187,8 @@ def room(base):
 
 def start(base, shell):
     """The drawing process for the arena shell `shell` (its pid)."""
-    return subprocess.Popen([sys.executable, "-m", "bashou.duel", str(base), str(shell)],
-                            cwd=Path(__file__).resolve().parent.parent)
+    root = Path(__file__).resolve().parent.parent
+    return subprocess.Popen([sys.executable, str(root / "launch.py"), "bashou.duel", str(base), str(shell)], cwd=root)
 
 
 def stop(proc):

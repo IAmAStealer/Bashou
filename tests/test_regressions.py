@@ -10,6 +10,7 @@ import contextlib
 import io
 import os
 import random
+import subprocess
 import tempfile
 import time
 import unittest
@@ -371,3 +372,24 @@ class PanelPercentTest(unittest.TestCase):
         line = ("backup-$(date +%F).tar.gz", (200, 200, 200))
         out = Game(80, 30).panel_text([line], (1, 1, 40, [line]))
         self.assertIn("date +%F", out)
+
+
+class CurrentFolderTest(unittest.TestCase):
+    """`python3 -m bashou` imported a bashou/ folder from wherever you were instead of this install."""
+
+    ROOT = Path(__file__).resolve().parent.parent
+
+    def test_a_bashou_folder_here_is_not_run(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            fake = Path(tmp) / "bashou"
+            fake.mkdir()
+            (fake / "__init__.py").write_text("")
+            (fake / "__main__.py").write_text("print('HIJACKED')")
+            out = subprocess.run(["python3", str(self.ROOT / "launch.py"), "bashou", "version"], cwd=tmp,
+                                 capture_output=True, text=True, env={**os.environ, "BASHOU_DATA": tmp})
+        self.assertNotIn("HIJACKED", out.stdout)
+        self.assertIn("Bashou", out.stdout)
+
+    def test_no_module_launch_left(self):
+        for text in ((self.ROOT / "bashou.bash").read_text(), fight.RC):
+            self.assertNotIn("-m bashou", text)

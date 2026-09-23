@@ -1,6 +1,6 @@
 """Per-terminal background process: animates the pet, counts commands, shows speech bubbles.
 
-Started by bashou.bash as `python3 -m bashou.companion <shell pid>` with stdout on the terminal.
+Started by bashou.bash as `python3 launch.py bashou.companion <shell pid>` with stdout on the terminal.
 """
 
 import datetime
@@ -334,7 +334,7 @@ class Companion:
         self.save_resume()
         # A handler doesn't survive exec, an ignored signal does: no SIGUSR1 death in between.
         signal.signal(signal.SIGUSR1, signal.SIG_IGN)
-        os.execv(sys.executable, [sys.executable, "-m", "bashou.companion", str(self.shell)])
+        os.execv(sys.executable, [sys.executable, str(SOURCE.parent / "launch.py"), "bashou.companion", str(self.shell)])
 
     def save_resume(self):
         self.resume_file.write_text(json.dumps({k: getattr(self, k) for k in self.HANDOVER}))

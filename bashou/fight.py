@@ -1,7 +1,7 @@
 """The arena: a bash sub-shell in a sandbox folder where you beat a threat with a real tool.
 
 `bashou fight` runs `run()`. Inside the arena, the shell functions `answer`, `hint` and
-`task` call back into this module (`python3 -m bashou.fight answer <base> <value>`).
+`task` call back into this module (`python3 launch.py bashou.fight answer <base> <value>`).
 """
 
 import datetime
@@ -34,7 +34,7 @@ _arena_log() {
     printf '%s\t' "$s" >> "$BASHOU_ARENA/log"
     HISTTIMEFORMAT= history 1 >> "$BASHOU_ARENA/log"
     if [[ -n $BASHOU_DUEL ]]; then
-      PYTHONPATH=$BASHOU_SRC python3 -m bashou.duel judge "$BASHOU_ARENA"
+      python3 "$BASHOU_SRC/launch.py" bashou.duel judge "$BASHOU_ARENA"
       (( $? == 4 )) && exit 4
     fi
   fi
@@ -42,7 +42,7 @@ _arena_log() {
   return "$s"
 }
 PROMPT_COMMAND=_arena_log
-_arena() { PYTHONPATH=$BASHOU_SRC python3 -m bashou.fight "$@" "$BASHOU_ARENA"; }
+_arena() { python3 "$BASHOU_SRC/launch.py" bashou.fight "$@" "$BASHOU_ARENA"; }
 answer() { _arena answer "$*" && exit 42; }
 hint() { _arena hint; }
 task() { _arena task; }

@@ -65,11 +65,11 @@ bashou() {
     on)
       [[ -z $BASHOU_PID ]] || return 0
       # SIGUSR1 ignored until Python installs its handler (the default action would kill it).
-      { (trap '' USR1; PYTHONPATH=$BASHOU_DIR exec python3 -m bashou.companion "$$") </dev/null 2>/dev/null & } 2>/dev/null
+      { (trap '' USR1; exec python3 "$BASHOU_DIR/launch.py" bashou.companion "$$") </dev/null 2>/dev/null & } 2>/dev/null
       BASHOU_PID=$!
       disown "$BASHOU_PID"
       ;;
-    *) PYTHONPATH=$BASHOU_DIR python3 -m bashou "$@" ;;
+    *) python3 "$BASHOU_DIR/launch.py" bashou "$@" ;;
   esac
 }
 
