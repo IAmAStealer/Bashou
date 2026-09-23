@@ -48,6 +48,7 @@ def problems(items):
             found.append(f"{where}: answer is the index (0-3) of the right choice")
         if not q.get("q") or not q.get("explain"):
             found.append(f"{where}: needs q and explain")
-        if len(q.get("q", "")) > 110 or any(len(c) > 60 for c in q.get("choices", [])):
-            found.append(f"{where}: too long for the screen (question 110, choices 60 characters)")
+        if len(q.get("q", "")) > 150 or any(len(c) > 60 for c in q.get("choices", [])) \
+                or len(q.get("explain", "")) > 400:
+            found.append(f"{where}: too long for the screen (question 150, choices 60, explain 400 characters)")
     return found

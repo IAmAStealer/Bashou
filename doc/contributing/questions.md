@@ -14,16 +14,17 @@ pseudocode). Translations go in `questions/<lang>/<topic>.json` (same ids, level
 answer positions); a missing translation falls back to English. See [translations.md](translations.md).
 
 ```json
-{"id": "linux-2-11", "level": 2,
- "q": "Which command shows the last boot's kernel messages?",
- "choices": ["journalctl -k -b", "cat /boot/log", "dmesg --all-boots", "uname -m"],
+{"id": "linux-1-11", "level": 1,
+ "q": "A process ignores Ctrl+C. What do you try before kill -9?",
+ "choices": ["kill PID, which lets it clean up", "A reboot", "Deleting its program file", "Nothing: -9 first is fine"],
  "answer": 0,
- "explain": "-k keeps kernel messages, -b this boot (dmesg works too)."}
+ "explain": "kill PID politely asks the program to stop: it can save its work and close its files. kill -9 stops it at once, with no cleanup: half-written files, leftover lock files. Try kill first, wait a few seconds, and keep -9 for when it really won't stop."}
 ```
 
 - `id`: `<topic>-<level>-<number>`, unique. `answer`: the index (0-3) of the right choice. The game
   shuffles the choices anyway, so the right one can stay first.
-- `explain`: one short sentence shown after the answer, right or wrong. It's what people remember.
+- `explain`: shown after the answer, right or wrong, under the right choice. It's what people
+  remember, so write it like a teacher (see below): 2 to 4 short sentences, at most 400 characters.
 
 ## A good question
 
@@ -39,7 +40,12 @@ answer positions); a missing translation falls back to English. See [translation
   half-done upgrade. A few "build the command, the help is there" questions are welcome; niche flags
   and trivia are not.
 - **One right answer**, and three wrong ones that look plausible (no joke choices).
-- **Short**: 110 characters for the question, 60 per choice (it must fit a small terminal).
+- **Teacher style** (owner, after players found the answers too terse): players are often beginners.
+  The question gives enough context to picture the situation (who, where, what just happened). The
+  explanation, in plain words: (1) why the right answer is right, (2) what the tempting wrong answer
+  really does or why it doesn't fit, (3) what to do or remember next. Explain a term the first time it
+  appears (`df` = disk free); no unexplained jargon (UID, SIGTERM…) at level 1.
+- **Fits the screen**: 150 characters for the question, 60 per choice, 400 for the explanation.
 - **Level 1**: everyday basics. **Level 2**: things you meet after a few months. **Level 3**: the
   details that bite in production.
 - **Your own words**: don't copy questions from quizzes, certifications or courses.
