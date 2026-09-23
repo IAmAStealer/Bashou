@@ -12,6 +12,7 @@ Most contributions don't need any code: you edit a JSON file (or draw PNGs) and 
 | Improve a pet's pixel art | `bashou/pets/<pet>.json` | [pixel-art.md](../doc/contributing/pixel-art.md) |
 | Draw bigger pets (16/32/64 px) | `art/<pet>/<size>/<pose>.png` | [pixel-art.md](../doc/contributing/pixel-art.md) |
 | Write a security challenge | Python (a small setup function) | [security-challenges.md](../doc/contributing/security-challenges.md) |
+| Package releases (apt, dnf) | `tools/package.py`, `.github/workflows/packages.yml` | [packaging.md](../doc/contributing/packaging.md) |
 
 Translating with an AI agent: see [doc/agents/translation.md](../doc/agents/translation.md).
 

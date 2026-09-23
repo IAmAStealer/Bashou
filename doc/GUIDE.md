@@ -59,7 +59,8 @@ A pixel-art pet that lives in the top-right corner of your terminal and grows as
 ## Install
 
 Requires bash 4.4+, Python 3.9+, and a terminal with 24-bit color. See the one-line install in the
-[README](../README.md).
+[README](../README.md), or the apt and dnf packages: once the package is installed, `bashou setup` adds
+Bashou to your `~/.bashrc` (a package turns it on for nobody by itself).
 
 ## Commands
 
@@ -80,6 +81,7 @@ bashou stats            # commands, top tools, constructs, streaks
 bashou config           # list settings (see Configuration)
 bashou version          # which version this is (and if a newer one is out)
 bashou update           # get the new version from GitHub (--version v0.2.0: a given one, older too)
+bashou setup            # add Bashou to your ~/.bashrc (after installing the apt or dnf package)
 bashou security         # security challenges (bashou security 3 starts the third)
 bashou adventure        # walk into the world with your starter (s: save & quit)
 bashou reset            # start over with a new starter (asks first, keeps a backup)
@@ -108,7 +110,7 @@ bashou config quiet 120         # and only after 2 minutes without typing
 | `size` | `small` | `large` shows big pixel art for the pets that have some (for now the Tarantula), when the terminal is wide enough. |
 | `talk` | `10-20` | Minutes between the things your pet says on its own (tips, hints, invitations). `off` keeps it quiet; what you earn (achievements, evolutions, threats, `command not found`) still shows. |
 | `quiet` | `60` | Seconds without a command or a keypress before it says one: it waits for a pause instead of cutting into your work. |
-| `updates` | `on` | Once a day, your pet looks for a new release on GitHub (a `git fetch` of the install folder, nothing about you is sent) and tells you in a bubble. `bashou update` installs it; running pets switch to it by themselves. |
+| `updates` | `on` | Once a day, your pet looks for a new release on GitHub (a `git fetch` of the install folder, nothing about you is sent) and tells you in a bubble. `bashou update` installs it; running pets switch to it by themselves. Installed with apt or dnf? They update Bashou instead. |
 
 Settings are saved in `~/.local/share/bashou/state.json` (only the ones you changed) and apply to
 every terminal right away. `bashou reset` keeps your language but resets settings. The language is

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bashou packages</title>
+<meta name="description" content="Install Bashou, a terminal pet that teaches bash, with apt or dnf.">
+<style>
+  :root { --bg: #fdfcf8; --fg: #1d1d1b; --muted: #5b5b55; --code: #f0eee6; --link: #1a5fb4; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #16161a; --fg: #e8e6e0; --muted: #a09e97; --code: #25252b; --link: #78aeed; }
+  }
+  body { background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, sans-serif; margin: 0 auto;
+         max-width: 46rem; padding: 2rem 16px; }
+  pre { background: var(--code); padding: .8rem 1rem; overflow-x: auto; border-radius: 6px; font-size: 14px; }
+  a { color: var(--link); }
+  p.note { color: var(--muted); }
+</style>
+</head>
+<body>
+<h1>Bashou packages</h1>
+<p>A pet in your terminal that grows as you learn bash.
+Source and guide: <a href="https://github.com/IAmAStealer/Bashou">github.com/IAmAStealer/Bashou</a>.</p>
+<p>Packages and repository data are signed with the <a href="bashou.asc">Bashou key</a>:
+apt and dnf refuse anything else.</p>
+
+<h2>Debian, Ubuntu</h2>
+<pre>sudo install -dm755 /etc/apt/keyrings
+sudo curl -fsSLo /etc/apt/keyrings/bashou.asc https://iamastealer.github.io/Bashou/bashou.asc
+printf '%s\n' 'Types: deb' 'URIs: https://iamastealer.github.io/Bashou/deb/' 'Suites: ./' \
+  'Signed-By: /etc/apt/keyrings/bashou.asc' | sudo tee /etc/apt/sources.list.d/bashou.sources
+sudo apt update &amp;&amp; sudo apt install bashou</pre>
+
+<h2>Rocky, Alma, RHEL, Fedora</h2>
+<pre>sudo curl -fsSLo /etc/yum.repos.d/bashou.repo https://iamastealer.github.io/Bashou/bashou.repo
+sudo dnf install bashou</pre>
+
+<h2>Then, for each user who wants a pet</h2>
+<pre>bashou setup</pre>
+<p class="note">It adds one line to your <code>~/.bashrc</code>. Updates come with the rest of the system
+(<code>apt upgrade</code>, <code>dnf upgrade</code>).</p>
+</body>
+</html>

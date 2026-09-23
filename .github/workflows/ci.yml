@@ -60,11 +60,14 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      version: ${{ steps.tag.outputs.version }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           fetch-depth: 0
       - name: Tag and publish a release commit
+        id: tag
         env:
           GH_TOKEN: ${{ github.token }}
           MESSAGE: ${{ github.event.head_commit.message }}
@@ -77,3 +80,15 @@ jobs:
           git tag "$version"
           git push origin "$version"
           gh release create "$version" --title "Bashou $version" --notes-file notes.md
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+  # The new release in the apt and dnf repositories.
+  packages:
+    needs: release
+    if: needs.release.outputs.version != ''
+    uses: ./.github/workflows/packages.yml
+    with:
+      version: ${{ needs.release.outputs.version }}
+    secrets: inherit
+    permissions:
+      contents: write

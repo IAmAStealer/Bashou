@@ -37,3 +37,12 @@ jobs:
           git tag "v$VERSION"
           git push origin "v$VERSION"
           gh release create "v$VERSION" --title "Bashou v$VERSION" --notes-file notes.md
+
+  packages:
+    needs: release
+    uses: ./.github/workflows/packages.yml
+    with:
+      version: v${{ inputs.version }}
+    secrets: inherit
+    permissions:
+      contents: write

@@ -57,6 +57,10 @@ git clone https://github.com/IAmAStealer/Bashou.git ~/.bashou && echo 'source ~/
 
 You need bash and python3 (already there on most Linux systems).
 
+Or as a package, signed, updated with the rest of your system: on Debian, Ubuntu, Rocky, Alma, RHEL
+or Fedora, follow the two steps on the [packages page](https://iamastealer.github.io/Bashou/), then
+`bashou setup` for each user who wants a pet.
+
 ## Use
 
 ```bash
@@ -70,6 +74,9 @@ bashou update   # get the new version (your pet tells you when there is one)
 ```bash
 sed -i '/\.bashou\/bashou\.bash/d' ~/.bashrc && rm -rf ~/.bashou
 ```
+
+Installed as a package: `sudo apt remove bashou` or `sudo dnf remove bashou`, then remove the
+`source /usr/share/bashou/bashou.bash` line from `~/.bashrc`.
 
 Your progress stays in `~/.local/share/bashou` (delete it too to forget everything).
 

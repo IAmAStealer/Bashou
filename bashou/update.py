@@ -2,6 +2,7 @@
 
 Installs are a git clone, so no HTTP code here and nothing about you is sent: git only asks
 GitHub for new release tags. The pet restarts itself once the new code is on disk.
+A .deb or .rpm install has no .git but a VERSION file: apt or dnf update it, not Bashou.
 """
 
 import subprocess
@@ -71,8 +72,26 @@ def check():
     return note(tag)
 
 
+def packaged():
+    """The version written in a .deb/.rpm install, or None for a git clone."""
+    try:
+        return None if (ROOT / ".git").exists() else (ROOT / "VERSION").read_text().strip() or None
+    except OSError:
+        return None
+
+
+def package_command():
+    """How this system's package manager updates Bashou."""
+    from .challenges import family
+    if family() & {"rhel", "fedora", "centos"}:
+        return "sudo dnf upgrade bashou"
+    return "sudo apt update && sudo apt install --only-upgrade bashou"
+
+
 def version():
     """This install's version: its release tag, "v0.2.1-3-gabc1234" between releases, or None."""
+    if packaged():
+        return packaged()
     try:
         out = git("describe", "--tags", "--match", "v*.*.*")
         return out.stdout.strip() if out.returncode == 0 else None
@@ -109,6 +128,9 @@ def switch(tag):
 
 def run(version=None):
     """`bashou update`, or `bashou update --version v0.2.0` for a given release (older ones too)."""
+    if packaged():
+        print("  " + _("Bashou came from a package: your package manager updates it.") + " " + package_command())
+        return 1
     if not (ROOT / ".git").exists():
         print("  " + _("This copy of Bashou isn't a git clone, so it can't update itself."))
         return 1

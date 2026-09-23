@@ -3,6 +3,13 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.4.2 — 2026-09-23
+
+- **Install with apt or dnf.** Bashou now has its own signed repositories for Debian, Ubuntu, Rocky,
+  Alma, RHEL and Fedora: add the repository once, then `apt install bashou` or `dnf install bashou`,
+  and updates come with the rest of the system. Each user who wants a pet runs `bashou setup`.
+- Bashou no longer runs a `bashou` folder found in the directory you're in instead of its own code.
+
 ## v0.4.1 — 2026-09-23
 
 - **Beaten fights come back, so you keep what you learned.** A fight you win returns the next day,

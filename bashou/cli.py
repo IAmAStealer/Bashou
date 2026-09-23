@@ -269,6 +269,7 @@ def main():
     dv.add_argument("stage", nargs="?", type=int, choices=[1, 2, 3], default=3)
     sub.add_parser("start", help="choose your starter (once)")
     sub.add_parser("language", help="choose the language")
+    sub.add_parser("setup", help="load Bashou from your ~/.bashrc (after installing the package)")
     sub.add_parser("version", help="which version of Bashou this is")
     up = sub.add_parser("update", help="get the new version from GitHub")
     up.add_argument("--version", help="install this release instead, even an older one (e.g. v0.2.0)")
@@ -320,6 +321,9 @@ def main():
     elif args.cmd == "update":
         from . import update
         raise SystemExit(update.run(args.version))
+    elif args.cmd == "setup":
+        from . import setup
+        raise SystemExit(setup.run())
     elif args.cmd == "config":
         raise SystemExit(config(args.name, args.value))
     elif args.cmd == "language":
