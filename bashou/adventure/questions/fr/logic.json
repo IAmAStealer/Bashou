@@ -10,7 +10,7 @@
    "x + 2"
   ],
   "answer": 0,
-  "explain": "Le côté droit est calculé d'abord, avec l'ancien x (3), puis rangé dans x."
+  "explain": "= n'est pas le « égal » des maths : il veut dire « calcule le côté droit, puis range le résultat dans la variable de gauche ». Ici le côté droit est x + 2 avec le x actuel, 3, ce qui donne 5 ; puis 5 est rangé dans x, à la place de 3. Lis x = x + 2 comme « x devient x plus 2 »."
  },
  {
   "id": "logic-1-02",
@@ -23,7 +23,7 @@
    "Une erreur"
   ],
   "answer": 0,
-  "explain": "b a reçu une copie de la valeur de a à ce moment-là. Changer a ensuite ne touche pas b (pour les nombres et le texte)."
+  "explain": "b = a copie la valeur que contient a à ce moment-là, 1, dans b. Les deux variables vivent ensuite séparément : a = 5 change seulement a, et b contient toujours 1. Attention : pour les listes en Python, b = a ne copie pas la liste, les deux noms partagent la même."
  },
  {
   "id": "logic-1-03",
@@ -36,7 +36,7 @@
    "a = a; b = b"
   ],
   "answer": 0,
-  "explain": "Sans variable de secours, la première affectation écrase une valeur. Python sait aussi écrire a, b = b, a."
+  "explain": "Essaie a = b; b = a avec a=1, b=2 : après a = b, les deux valent 2, et le 1 est perdu pour de bon. Il faut donc d'abord garder a dans une variable de secours : t = a (t=1), a = b (a=2), b = t (b=1). Échangés. Python permet aussi a, b = b, a, qui fait la même chose en une ligne."
  },
  {
   "id": "logic-1-04",
@@ -49,7 +49,7 @@
    "C'est une erreur"
   ],
   "answer": 0,
-  "explain": "> veut dire strictement plus grand, >= plus grand ou égal. Beaucoup de bugs « à un près » sont un > qui aurait dû être un >=."
+  "explain": ">= se lit « supérieur ou égal », donc 18 >= 18 est vrai et le bloc s'exécute. > seul veut dire strictement supérieur : 18 > 18 est faux. Choisir entre > et >= est la source de beaucoup de bugs « à un près » : dis la règle à voix haute (« 18 ans et plus ») avant de l'écrire."
  },
  {
   "id": "logic-1-05",
@@ -62,7 +62,7 @@
    "Ça dépend du langage"
   ],
   "answer": 0,
-  "explain": "and demande que les deux côtés soient vrais. 10 < 10 est faux, donc tout le test est faux."
+  "explain": "and n'est vrai que si les deux côtés sont vrais. Vérifie chaque côté avec x = 10 : 10 > 5 est vrai, mais 10 < 10 est faux, car 10 n'est pas plus petit que lui-même. Un seul côté faux suffit pour que tout le test soit faux."
  },
  {
   "id": "logic-1-06",
@@ -75,7 +75,7 @@
    "100"
   ],
   "answer": 0,
-  "explain": "or demande un seul côté vrai. Le test veut dire « hors de 0..100 » : une façon courante de refuser une mauvaise saisie."
+  "explain": "or est vrai dès qu'un côté est vrai. Pour 150 : 150 < 0 est faux, mais 150 > 100 est vrai, donc le test est vrai. 50, 0 et 100 rendent les deux côtés faux. Lis-le comme « x est en dehors de 0 à 100 » : une façon courante de refuser une mauvaise valeur saisie."
  },
  {
   "id": "logic-1-07",
@@ -88,7 +88,7 @@
    "x > 3"
   ],
   "answer": 0,
-  "explain": "not inverse vrai et faux. != se lit « est différent de »."
+  "explain": "not change vrai en faux et faux en vrai. not (x == 3) est vrai exactement quand x ne vaut pas 3, et c'est ce que veut dire != : « est différent de ». x < 3 ou x > 3 ne couvrent chacun qu'un côté. Préfère le simple x != 3 : il se lit mieux."
  },
  {
   "id": "logic-1-08",
@@ -101,7 +101,7 @@
    "1"
   ],
   "answer": 0,
-  "explain": "range s'arrête avant sa fin : i vaut 1, 2, 3, 4. La plupart des langages comptent ainsi (début inclus, fin exclue)."
+  "explain": "range(1, 5) commence à 1 et s'arrête juste avant 5, donc i prend les valeurs 1, 2, 3, 4 : quatre tours. Début inclus, fin exclue : c'est ainsi que comptent la plupart des langages. Vérification rapide : le nombre de tours vaut fin moins début, 5 - 1 = 4."
  },
  {
   "id": "logic-1-09",
@@ -114,7 +114,7 @@
    "À l'infini"
   ],
   "answer": 0,
-  "explain": "n passe de 3 → 2 → 1 → 0 ; à 0 le test est faux et la boucle s'arrête. Suis-la sur papier en cas de doute."
+  "explain": "Suis-la pas à pas. n=3 : 3 > 0 est vrai, n devient 2 (tour 1). 2 > 0, n devient 1 (tour 2). 1 > 0, n devient 0 (tour 3). Maintenant 0 > 0 est faux : la boucle s'arrête. Trois tours. Quand une boucle t'embrouille, écris les valeurs dans un petit tableau comme ça."
  },
  {
   "id": "logic-1-10",
@@ -127,7 +127,7 @@
    "Nulle part, il part de 0"
   ],
   "answer": 0,
-  "explain": "Dans la boucle, il serait remis à zéro à chaque tour, et tu ne compterais jamais que 0 ou 1."
+  "explain": "Le compteur doit démarrer à 0 une seule fois, puis grandir pendant la boucle. Mets count = 0 dans la boucle et il revient à 0 à chaque tour : à la fin tu obtiens 0 ou 1, jamais le vrai nombre. Après la boucle, c'est trop tard. Et une variable doit recevoir une valeur avant qu'on s'en serve."
  },
  {
   "id": "logic-1-11",
@@ -140,7 +140,7 @@
    "246"
   ],
   "answer": 0,
-  "explain": "Le motif de l'accumulateur : partir de 0, ajouter chaque élément. Même forme pour compter, assembler du texte, construire une liste."
+  "explain": "total démarre à 0, puis chaque tour ajoute un élément : 0 + 2 = 2, 2 + 4 = 6, 6 + 6 = 12. C'est le motif de l'accumulateur : une valeur de départ, puis un petit pas par élément. La même forme compte des choses, assemble du texte ou construit une liste. '246' serait du texte collé, pas une addition."
  },
  {
   "id": "logic-1-12",
@@ -153,7 +153,7 @@
    "100"
   ],
   "answer": 0,
-  "explain": "Partir de 0 échoue quand tous les nombres sont négatifs. Pars d'une vraie donnée, puis compare le reste."
+  "explain": "best doit démarrer avec une valeur qui est vraiment dans la liste, puis chaque autre élément lui est comparé. Si best démarre à 0 et que la liste est [-5, -2, -9], aucun nombre ne bat 0 et la réponse est 0, qui n'est pas dans la liste. Partir du premier élément marche toujours."
  },
  {
   "id": "logic-1-13",
@@ -166,7 +166,7 @@
    "-2"
   ],
   "answer": 0,
-  "explain": "Les indices commencent à 0, donc le dernier est len(xs) - 1. Beaucoup de langages lisent aussi xs[-1] comme le dernier."
+  "explain": "Les positions se comptent à partir de 0 : \"a\" est à l'indice 0, \"b\" à 1, \"c\" à 2. Le dernier indice vaut donc toujours la longueur moins un, ici 3 - 1 = 2. Python et beaucoup de langages acceptent aussi xs[-1] pour le dernier élément, en comptant depuis la fin."
  },
  {
   "id": "logic-1-14",
@@ -179,7 +179,7 @@
    "0"
   ],
   "answer": 0,
-  "explain": "De 0 à 4. Lire l'indice 5, c'est un pas trop loin : une erreur en Python, un bug mémoire en C."
+  "explain": "Les indices commencent à 0 : 5 éléments sont aux indices 0, 1, 2, 3 et 4. L'indice 5 est un pas après la fin. Python s'arrête avec une IndexError ; le C lit la mémoire qui suit, un bug bien pire. Retiens : le dernier indice vaut la longueur moins un."
  },
  {
   "id": "logic-1-15",
@@ -192,7 +192,7 @@
    "C'est une erreur"
   ],
   "answer": 0,
-  "explain": "Un booléen est déjà vrai ou faux : inutile d'écrire == True. Nomme-les comme des questions : is_admin, has_key."
+  "explain": "if exécute son bloc seulement quand la condition est vraie. is_admin contient déjà une valeur vrai/faux (un booléen), ici False, donc le bloc est sauté. Inutile d'écrire if is_admin == True. Nomme les booléens comme des questions oui/non (is_admin, has_key) : le if se lit alors comme une phrase."
  },
  {
   "id": "logic-1-16",
@@ -205,7 +205,7 @@
    "n est positif"
   ],
   "answer": 0,
-  "explain": "% donne le reste d'une division. n % 3 == 0 : un élément sur trois ; n % 10 : le dernier chiffre."
+  "explain": "% (modulo) donne le reste d'une division. Un nombre pair divisé par 2 laisse 0 : 8 % 2 = 0, alors que 7 % 2 = 1. C'est pratique ailleurs aussi : n % 3 == 0 est vrai un nombre sur trois, et n % 10 donne le dernier chiffre."
  },
  {
   "id": "logic-1-17",
@@ -218,7 +218,7 @@
    "Rien"
   ],
   "answer": 0,
-  "explain": "L'appel lance la fonction avec x = 4, et return renvoie 8 là où elle a été appelée."
+  "explain": "double(4) lance la fonction avec x qui vaut 4. Elle calcule 4 * 2 = 8, et return renvoie 8 là où la fonction a été appelée : y = double(4) range donc 8 dans y. Définir une fonction ne lance rien : seul l'appel le fait."
  },
  {
   "id": "logic-1-18",
@@ -231,7 +231,7 @@
    "La fonction elle-même"
   ],
   "answer": 0,
-  "explain": "print montre une valeur à un humain ; return la donne au code. Un script a besoin de return pour réutiliser un résultat."
+  "explain": "print affiche seulement du texte à l'écran, pour un humain. Le code ne récupère rien. Une fonction sans return renvoie « rien » (None en Python, null ailleurs). Pour réutiliser un résultat dans ton code, la fonction doit le renvoyer avec return ; afficher n'est qu'un affichage."
  },
  {
   "id": "logic-1-19",
@@ -244,7 +244,7 @@
    "Aucun"
   ],
   "answer": 0,
-  "explain": "Seule la première branche vraie s'exécute. Teste d'abord le cas le plus précis : >= 90 avant >= 50."
+  "explain": "Dans une suite if / elif, les tests sont essayés dans l'ordre, et seul le premier vrai s'exécute ; les autres sont sautés. 95 >= 50 est vrai, donc grade devient \"pass\" et le test >= 90 n'est jamais atteint. Mets le test le plus précis en premier : >= 90 avant >= 50."
  },
  {
   "id": "logic-1-20",
@@ -257,7 +257,7 @@
    "f"
   ],
   "answer": 0,
-  "explain": "Un bon nom dit ce qu'est la valeur : le code se lit alors comme une phrase, et les bugs se voient."
+  "explain": "Un bon nom dit ce que veut dire la valeur, et le code s'explique tout seul : if failed_logins > 5 se lit comme une phrase, if x > 5 ne dit rien. data et f pourraient être n'importe quoi. Le code est lu bien plus souvent qu'écrit, y compris par toi dans six mois."
  },
  {
   "id": "logic-2-01",
@@ -270,7 +270,7 @@
    "Elle s'arrête à x = 10"
   ],
   "answer": 0,
-  "explain": "x vaut 0, 3, 6, 9, 12… et jamais exactement 10. Teste avec < plutôt que != quand le pas peut sauter."
+  "explain": "Suis-la : x vaut 0, 3, 6, 9, 12, 15… Chaque valeur est différente de 10, donc x != 10 reste vrai pour toujours et la boucle ne s'arrête jamais. Quand le pas peut sauter la cible, teste plutôt avec < : while x < 10 s'arrête à 12. Les boucles avec != sont une source courante de programmes bloqués."
  },
  {
   "id": "logic-2-02",
@@ -283,7 +283,7 @@
    "2"
   ],
   "answer": 0,
-  "explain": "La boucle intérieure tourne entièrement à chaque tour de l'extérieure : 3 × 2. C'est ainsi qu'on parcourt grilles et paires."
+  "explain": "À chaque tour de la boucle extérieure, la boucle intérieure tourne entièrement. i=0 affiche j=0 et j=1, i=1 pareil, puis i=2 : 3 tours fois 2 lignes = 6 lignes. C'est comme ça qu'on parcourt chaque case d'une grille, ou chaque paire de deux listes."
  },
  {
   "id": "logic-2-03",
@@ -296,7 +296,7 @@
    "Aucune raison, l'ordre ne compte pas"
   ],
   "answer": 0,
-  "explain": "and s'arrête au premier côté faux (court-circuit). Mets la vérification de sécurité d'abord ; or s'arrête au premier côté vrai."
+  "explain": "and s'arrête dès qu'un côté est faux (on appelle ça le court-circuit). Si user vaut None, le premier test est faux et user.age n'est jamais lu : pas de plantage. Dans l'autre ordre, user.age serait lu sur rien et planterait avant. or fait pareil dans l'autre sens : il s'arrête au premier côté vrai."
  },
  {
   "id": "logic-2-04",
@@ -309,7 +309,7 @@
    "Rien, tout s'affiche"
   ],
   "answer": 0,
-  "explain": "Une erreur à un près : les indices vont jusqu'à len(xs) - 1. Parcourir les éléments eux-mêmes (for x in xs) l'évite."
+  "explain": "Avec 3 éléments, len(xs) + 1 vaut 4, donc i vaut 0, 1, 2, 3. Les indices de 3 éléments vont de 0 à 2 : xs[3] est un pas après la fin, et le dernier tour plante. C'est une erreur « à un près ». Parcourir les éléments eux-mêmes, for x in xs, évite complètement les indices."
  },
  {
   "id": "logic-2-05",
@@ -322,7 +322,7 @@
    "La boucle recommence"
   ],
   "answer": 0,
-  "explain": "Retirer décale les éléments suivants vers la gauche, sous les pieds de la boucle. Construis plutôt une nouvelle liste avec ce que tu gardes."
+  "explain": "La boucle avance d'une position par tour. Quand tu retires l'élément courant, le suivant glisse à sa place, et le pas suivant de la boucle le saute. Avec [1, 2, 2, 3], retirer les 2 en laisse un. Construis plutôt une nouvelle liste avec ce que tu gardes : [x for x in xs if x != 2]."
  },
  {
   "id": "logic-2-06",
@@ -335,7 +335,7 @@
    "Rien : c'est une factorielle"
   ],
   "answer": 0,
-  "explain": "Toute récursion a besoin d'un cas qui répond sans s'appeler, sinon elle s'appelle jusqu'à planter."
+  "explain": "Une fonction récursive s'appelle elle-même sur un problème plus petit. Il lui faut un cas de base : une valeur à laquelle elle répond directement, sans s'appeler, comme if n <= 1: return 1. Sans lui, f(3) appelle f(2), f(1), f(0), f(-1)… sans fin, jusqu'au plantage (RecursionError en Python, débordement de pile en C)."
  },
  {
   "id": "logic-2-07",
@@ -348,7 +348,7 @@
    "Jamais"
   ],
   "answer": 0,
-  "explain": "or n'est faux que dans un cas ; and n'est vrai que dans un cas. Écrire les 4 cas dans un petit tableau règle tout doute."
+  "explain": "a or b est vrai dès qu'un côté est vrai : il ne reste qu'un cas où il est faux, quand a et b sont tous les deux faux. and est le miroir : vrai seulement quand les deux sont vrais. En cas de doute, écris les quatre cas (vrai/vrai, vrai/faux, faux/vrai, faux/faux) dans un petit tableau."
  },
  {
   "id": "logic-2-08",
@@ -361,7 +361,7 @@
    "not a and b"
   ],
   "answer": 0,
-  "explain": "De Morgan : not transforme and en or (et l'inverse). Pratique pour simplifier une condition illisible."
+  "explain": "« Pas les deux » veut dire « au moins un manque » : (not a) or (not b). C'est la loi de De Morgan : quand not entre dans les parenthèses, and devient or, et or devient and. Exemple : not (riche and célèbre) = pas riche, ou pas célèbre. Pratique pour réécrire une condition illisible."
  },
  {
   "id": "logic-2-09",
@@ -374,7 +374,7 @@
    "Pour trier la liste"
   ],
   "answer": 0,
-  "explain": "Une clause de garde traite le cas bizarre d'abord et laisse le reste de la fonction simple."
+  "explain": "Une liste vide a une longueur de 0, et diviser par 0 fait planter le programme. Tester if not items d'abord traite ce cas bizarre et quitte la fonction. C'est une clause de garde : régler les cas spéciaux en haut, et le reste de la fonction reste simple, sans imbrications profondes."
  },
  {
   "id": "logic-2-10",
@@ -387,6 +387,6 @@
    "Jamais"
   ],
   "answer": 0,
-  "explain": "Le motif du drapeau : posé une fois, jamais remis à faux dans la boucle. Beaucoup de langages ont any() pour ça."
+  "explain": "found démarre à False et passe à True la première fois qu'un nombre négatif apparaît. Rien ne le remet jamais à False, donc il reste True jusqu'à la fin. Il répond à « y en a-t-il au moins un ? » : c'est le motif du drapeau. En Python, any(n < 0 for n in nums) fait la même chose en une ligne."
  }
 ]

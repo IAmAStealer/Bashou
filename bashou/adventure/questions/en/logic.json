@@ -10,7 +10,7 @@
    "x + 2"
   ],
   "answer": 0,
-  "explain": "The right side is computed first, with the old x (3), then stored back in x."
+  "explain": "= is not 'equals' as in maths: it means 'compute the right side, then store the result in the variable on the left'. Here the right side is x + 2 with the current x, 3, which gives 5; then 5 is stored in x, replacing 3. Read x = x + 2 as 'x becomes x plus 2'."
  },
  {
   "id": "logic-1-02",
@@ -23,7 +23,7 @@
    "An error"
   ],
   "answer": 0,
-  "explain": "b got a copy of the value a had at that moment. Changing a later doesn't touch b (for numbers and text)."
+  "explain": "b = a copies the value a holds at that moment, 1, into b. The two variables then live separately: a = 5 changes a only, and b still holds 1. Careful: for lists in Python, b = a doesn't copy the list, both names share the same one."
  },
  {
   "id": "logic-1-03",
@@ -36,7 +36,7 @@
    "a = a; b = b"
   ],
   "answer": 0,
-  "explain": "Without a spare variable, the first assignment erases one value. Python can also write a, b = b, a."
+  "explain": "Try a = b; b = a with a=1, b=2: after a = b, both hold 2, and the 1 is lost for good. So first keep a in a spare variable: t = a (t=1), a = b (a=2), b = t (b=1). Swapped. Python also lets you write a, b = b, a, which does the same in one line."
  },
  {
   "id": "logic-1-04",
@@ -49,7 +49,7 @@
    "It's an error"
   ],
   "answer": 0,
-  "explain": "> means strictly above, >= above or equal. Many 'off by one' bugs are a > that should be >=."
+  "explain": ">= reads 'greater than or equal to', so 18 >= 18 is true and the block runs. > alone means strictly greater: 18 > 18 is false. Choosing between > and >= is where many 'off by one' bugs come from: say the rule out loud ('18 and over') before you write it."
  },
  {
   "id": "logic-1-05",
@@ -62,7 +62,7 @@
    "It depends on the language"
   ],
   "answer": 0,
-  "explain": "and needs both sides true. 10 < 10 is false, so the whole test is false."
+  "explain": "and is true only when both sides are true. Check each side with x = 10: 10 > 5 is true, but 10 < 10 is false, since 10 is not smaller than itself. One false side is enough to make the whole test false."
  },
  {
   "id": "logic-1-06",
@@ -75,7 +75,7 @@
    "100"
   ],
   "answer": 0,
-  "explain": "or needs one side true. The test means 'outside 0..100': a common way to reject bad input."
+  "explain": "or is true as soon as one side is true. For 150: 150 < 0 is false, but 150 > 100 is true, so the test is true. 50, 0 and 100 make both sides false. Read it as 'x is outside 0 to 100': a common way to reject a bad value typed by a user."
  },
  {
   "id": "logic-1-07",
@@ -88,7 +88,7 @@
    "x > 3"
   ],
   "answer": 0,
-  "explain": "not flips true and false. != reads 'is not equal to'."
+  "explain": "not turns true into false and false into true. not (x == 3) is true exactly when x is not 3, and that's what != means: 'is different from'. x < 3 or x > 3 each only cover one side. Prefer the simple x != 3: it's easier to read."
  },
  {
   "id": "logic-1-08",
@@ -101,7 +101,7 @@
    "1"
   ],
   "answer": 0,
-  "explain": "range stops before its end: i is 1, 2, 3, 4. Most languages count this way (start included, end excluded)."
+  "explain": "range(1, 5) starts at 1 and stops just before 5, so i takes the values 1, 2, 3, 4: four turns. Start included, end excluded is how most languages count. A quick check: the number of turns is end minus start, 5 - 1 = 4."
  },
  {
   "id": "logic-1-09",
@@ -114,7 +114,7 @@
    "Forever"
   ],
   "answer": 0,
-  "explain": "n goes 3 → 2 → 1 → 0; at 0 the test is false and the loop stops. Trace it on paper when in doubt."
+  "explain": "Follow it step by step. n=3: 3 > 0 is true, n becomes 2 (turn 1). 2 > 0, n becomes 1 (turn 2). 1 > 0, n becomes 0 (turn 3). Now 0 > 0 is false: the loop stops. Three turns. When a loop confuses you, write the values in a small table like this."
  },
  {
   "id": "logic-1-10",
@@ -127,7 +127,7 @@
    "Nowhere, it starts at 0"
   ],
   "answer": 0,
-  "explain": "Inside the loop it would reset at every turn, and you'd only ever count 0 or 1."
+  "explain": "The counter must start at 0 once, then grow during the loop. Put count = 0 inside the loop and it goes back to 0 at every turn: at the end you get 0 or 1, never the real count. After the loop is too late. And a variable must get a value before you use it."
  },
  {
   "id": "logic-1-11",
@@ -140,7 +140,7 @@
    "246"
   ],
   "answer": 0,
-  "explain": "The accumulator pattern: start at 0, add each item. Same shape to count, to join text, to build a list."
+  "explain": "total starts at 0, then each turn adds one item: 0 + 2 = 2, 2 + 4 = 6, 6 + 6 = 12. This is the accumulator pattern: a starting value, then one small step per item. The same shape counts things, joins text or builds a list. '246' would be sticking text together, not adding numbers."
  },
  {
   "id": "logic-1-12",
@@ -153,7 +153,7 @@
    "100"
   ],
   "answer": 0,
-  "explain": "Starting at 0 fails when every number is negative. Start from real data, then compare the rest."
+  "explain": "best must start as a value that really is in the list, then each other item is compared to it. If best starts at 0 and the list is [-5, -2, -9], no number beats 0 and the answer is 0, which isn't in the list. Starting from the first item always works."
  },
  {
   "id": "logic-1-13",
@@ -166,7 +166,7 @@
    "-2"
   ],
   "answer": 0,
-  "explain": "Indexes start at 0, so the last one is len(xs) - 1. Many languages also read xs[-1] as the last item."
+  "explain": "Counting positions starts at 0: \"a\" is at index 0, \"b\" at 1, \"c\" at 2. So the last index is always the length minus one, here 3 - 1 = 2. Python and many languages also accept xs[-1] for the last item, counting from the end."
  },
  {
   "id": "logic-1-14",
@@ -179,7 +179,7 @@
    "0"
   ],
   "answer": 0,
-  "explain": "0 to 4. Reading index 5 is one past the end: an error in Python, a memory bug in C."
+  "explain": "Indexes start at 0, so 5 items sit at 0, 1, 2, 3 and 4. Index 5 is one step past the end. Python stops with an IndexError; C reads whatever memory comes next, a much worse bug. Remember: the last index is the length minus one."
  },
  {
   "id": "logic-1-15",
@@ -192,7 +192,7 @@
    "It's an error"
   ],
   "answer": 0,
-  "explain": "A boolean is already true or false: no need to write == True. Name them like questions: is_admin, has_key."
+  "explain": "if runs its block only when the condition is true. is_admin already holds a true/false value (a boolean), here False, so the block is skipped. No need to write if is_admin == True. Name booleans like yes/no questions (is_admin, has_key): the if then reads like a sentence."
  },
  {
   "id": "logic-1-16",
@@ -205,7 +205,7 @@
    "n is positive"
   ],
   "answer": 0,
-  "explain": "% gives the remainder of a division. n % 3 == 0: every third item; n % 10: the last digit."
+  "explain": "% (modulo) gives the remainder of a division. An even number divided by 2 leaves 0: 8 % 2 = 0, while 7 % 2 = 1. It's handy elsewhere too: n % 3 == 0 is true every third number, and n % 10 gives the last digit."
  },
  {
   "id": "logic-1-17",
@@ -218,7 +218,7 @@
    "Nothing"
   ],
   "answer": 0,
-  "explain": "The call runs the function with x = 4, and return hands 8 back to where it was called."
+  "explain": "double(4) runs the function with x set to 4. It computes 4 * 2 = 8, and return sends 8 back to where the function was called, so y = double(4) stores 8 in y. Defining a function runs nothing: only calling it does."
  },
  {
   "id": "logic-1-18",
@@ -231,7 +231,7 @@
    "The function itself"
   ],
   "answer": 0,
-  "explain": "print shows a value to a human; return gives it to the code. Scripts need return to reuse a result."
+  "explain": "print only shows text on the screen, for a human to read. The code gets nothing back. A function without return gives back 'nothing' (None in Python, null elsewhere). To reuse a result in your code, the function must return it; printing is only a display."
  },
  {
   "id": "logic-1-19",
@@ -244,7 +244,7 @@
    "None"
   ],
   "answer": 0,
-  "explain": "Only the first true branch runs. Test the most specific case first: >= 90 before >= 50."
+  "explain": "In an if / elif chain, the tests are tried in order, and only the first true one runs; the rest are skipped. 95 >= 50 is true, so grade becomes \"pass\" and the >= 90 test is never reached. Put the most specific test first: >= 90 before >= 50."
  },
  {
   "id": "logic-1-20",
@@ -257,7 +257,7 @@
    "f"
   ],
   "answer": 0,
-  "explain": "A good name says what the value is: the code then reads like a sentence, and bugs stand out."
+  "explain": "A good name says what the value means, so the code explains itself: if failed_logins > 5 reads like a sentence, if x > 5 says nothing. data and f could be anything. Code is read far more often than it's written, including by you in six months."
  },
  {
   "id": "logic-2-01",
@@ -270,7 +270,7 @@
    "It stops at x = 10"
   ],
   "answer": 0,
-  "explain": "x goes 0, 3, 6, 9, 12… and is never exactly 10. Test with < rather than != when the step can jump."
+  "explain": "Trace it: x goes 0, 3, 6, 9, 12, 15… Each value is different from 10, so x != 10 stays true forever and the loop never stops. When the step can jump over the target, test with < instead: while x < 10 stops at 12. Loops with != are a common source of programs that hang."
  },
  {
   "id": "logic-2-02",
@@ -283,7 +283,7 @@
    "2"
   ],
   "answer": 0,
-  "explain": "The inner loop runs fully for each turn of the outer one: 3 × 2. That's how grids and pairs are walked."
+  "explain": "For each turn of the outer loop, the inner loop runs completely. i=0 prints j=0 and j=1, i=1 does the same, then i=2: 3 turns times 2 lines = 6 lines. This is how you go through every cell of a grid, or every pair of two lists."
  },
  {
   "id": "logic-2-03",
@@ -296,7 +296,7 @@
    "No reason, order doesn't matter"
   ],
   "answer": 0,
-  "explain": "and stops at the first false side (short-circuit). Put the safety check first; or stops at the first true side."
+  "explain": "and stops as soon as one side is false (this is called short-circuit). If user is None, the first test is false and user.age is never read, so there's no crash. In the other order, user.age would be read on nothing and crash first. or does the same the other way: it stops at the first true side."
  },
  {
   "id": "logic-2-04",
@@ -309,7 +309,7 @@
    "Nothing, it prints them all"
   ],
   "answer": 0,
-  "explain": "An off-by-one: indexes go to len(xs) - 1. Looping over the items themselves (for x in xs) avoids it."
+  "explain": "With 3 items, len(xs) + 1 is 4, so i goes 0, 1, 2, 3. The indexes of 3 items are 0 to 2: xs[3] is one past the end, and the last turn crashes. This is an off-by-one error. Walking the items themselves, for x in xs, avoids indexes entirely."
  },
  {
   "id": "logic-2-05",
@@ -322,7 +322,7 @@
    "The loop restarts"
   ],
   "answer": 0,
-  "explain": "Removing shifts the next items left, under the loop's feet. Build a new list with what you keep instead."
+  "explain": "The loop moves forward one position per turn. When you remove the current item, the next one slides into its place, and the loop's next step jumps over it. With [1, 2, 2, 3], removing the 2s leaves one 2. Build a new list with the items you keep instead: [x for x in xs if x != 2]."
  },
  {
   "id": "logic-2-06",
@@ -335,7 +335,7 @@
    "Nothing: it's a factorial"
   ],
   "answer": 0,
-  "explain": "Every recursion needs a case that answers without calling itself, or it calls itself until it crashes."
+  "explain": "A recursive function calls itself on a smaller problem. It needs a base case: a value it answers directly, without calling itself, like if n <= 1: return 1. Without it, f(3) calls f(2), f(1), f(0), f(-1)… forever, until the program crashes (RecursionError in Python, stack overflow in C)."
  },
  {
   "id": "logic-2-07",
@@ -348,7 +348,7 @@
    "Never"
   ],
   "answer": 0,
-  "explain": "or is false in one case only; and is true in one case only. Writing the 4 cases in a small table settles any doubt."
+  "explain": "a or b is true as soon as one side is true, so there's only one case left where it's false: when a and b are both false. and is the mirror: true only when both are true. When in doubt, write the four cases (true/true, true/false, false/true, false/false) in a small table."
  },
  {
   "id": "logic-2-08",
@@ -361,7 +361,7 @@
    "not a and b"
   ],
   "answer": 0,
-  "explain": "De Morgan: not flips and into or (and the other way). Handy to simplify a condition you can't read."
+  "explain": "'Not both' means 'at least one is missing': (not a) or (not b). This is De Morgan's law: when not goes inside the brackets, and becomes or, and or becomes and. Example: not (rich and famous) = not rich, or not famous. Handy to rewrite a condition you can't read."
  },
  {
   "id": "logic-2-09",
@@ -374,7 +374,7 @@
    "To sort the list"
   ],
   "answer": 0,
-  "explain": "A guard clause handles the odd case first and leaves the rest of the function simple."
+  "explain": "An empty list has a length of 0, and dividing by 0 crashes the program. Testing if not items first handles that odd case and leaves the function. This is a guard clause: deal with the special cases at the top, and the rest of the function stays simple, with no deep nesting."
  },
  {
   "id": "logic-2-10",
@@ -387,6 +387,6 @@
    "Never"
   ],
   "answer": 0,
-  "explain": "The flag pattern: set once, never reset in the loop. Many languages have any() for exactly this."
+  "explain": "found starts False and is set to True the first time a negative number shows up. Nothing ever sets it back to False, so it stays True until the end. It answers 'is there at least one?': this is the flag pattern. Python's any(n < 0 for n in nums) does the same in one line."
  }
 ]
