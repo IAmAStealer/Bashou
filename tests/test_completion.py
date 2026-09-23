@@ -42,7 +42,7 @@ class CompletionTest(unittest.TestCase):
         self.assertEqual(words("_bashou_dev"), re.findall(r'"([\w-]+)"', dev))
 
     def test_completes(self):
-        self.assertEqual(complete("bashou s"), ["swap", "stats", "start", "setup", "security"])
+        self.assertEqual(complete("bashou s"), ["swap", "stats", "start", "skills", "setup", "security"])
         self.assertEqual(complete("bashou swap st"), ["starter"])
         self.assertEqual(complete("bashou swap f"), ["frog", "fox"])
         self.assertEqual(complete("bashou dev st"), ["stage", "stage-all"])

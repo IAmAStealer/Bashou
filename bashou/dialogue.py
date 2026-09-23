@@ -230,7 +230,9 @@ def invite(state, rng):
     """Suggest a mode you haven't tried yet (None once you tried them all), or Rust once you're at ease."""
     todo = [mode for mode, tried in (("adventure", state.get("adventure")), ("security", state.get("security")))
             if not tried]
-    if len(state["achievements"]) >= RUST_AT and not shutil.which("rustc"):
+    rust_ok = state.get("skills", "all") == "all" and len(state["achievements"]) >= RUST_AT or \
+        state.get("skills", "all") != "all" and "rust" in state["skills"]
+    if rust_ok and not shutil.which("rustc"):
         todo.append("rust")
     if not todo:
         return None

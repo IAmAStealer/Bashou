@@ -8,6 +8,9 @@ Every release has a section here, written for players. CI refuses to tag a relea
 - **Install with apt or dnf.** Bashou now has its own signed repositories for Debian, Ubuntu, Rocky,
   Alma, RHEL and Fedora: add the repository once, then `apt install bashou` or `dnf install bashou`,
   and updates come with the rest of the system. Each user who wants a pet runs `bashou setup`.
+- **Choose what you learn.** At the first launch, pick a bit of everything or tick your skills
+  (Bash, Linux, systemd, Debian, Rocky, Python, C, Rust, Logic, CI/CD): threats and adventure paths
+  follow. `bashou skills` changes it any time.
 - Bashou no longer runs a `bashou` folder found in the directory you're in instead of its own code.
 
 ## v0.4.1 — 2026-09-23

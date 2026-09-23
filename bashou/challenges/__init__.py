@@ -35,6 +35,7 @@ class Challenge:
     kind: str = "fight"       # "fight": sent as a threat; "security": picked in `bashou security`
     after: tuple = ()         # fights to beat before this one comes (beginners first)
     distro: tuple = ()        # only on these families (os-release ID or ID_LIKE), e.g. ("debian",)
+    skill: str = "bash"       # what it teaches (skills.SKILLS): only sent if you learn that
 
     @property
     def tool(self):

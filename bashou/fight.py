@@ -15,7 +15,7 @@ import tempfile
 import time
 from pathlib import Path
 
-from . import challenges, duel, progress, state
+from . import challenges, duel, progress, skills, state
 from .analyze import analyze, parse_log
 from .i18n import _, cap
 
@@ -61,7 +61,8 @@ def level(s):
 
 
 def remaining(s):
-    return [c for c in challenges.ALL if c.id not in s["challenges"] and c.available()]
+    return [c for c in challenges.ALL if c.id not in s["challenges"] and c.available()
+            and skills.wanted(s, c.skill)]
 
 
 def learned(s, tool):

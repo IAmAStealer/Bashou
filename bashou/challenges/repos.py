@@ -216,7 +216,7 @@ DEBIAN = ("debian",)
 REDHAT = ("rhel", "fedora", "centos")
 
 ALL = [
-    Challenge(level=2, id="mirror_mimic", pet="ant", tools=EDITORS, distro=DEBIAN, requires=["sed"],
+    Challenge(level=2, id="mirror_mimic", pet="ant", tools=EDITORS, distro=DEBIAN, skill="debian", requires=["sed"],
               threat="Mirror Mimic",
               task="The Mirror Mimic copied debian.sources and slipped in 3 mistakes.\n"
                    "Fix it for Debian 13 trixie: main archive with trixie-updates, plus security. Look up the "
@@ -225,7 +225,7 @@ ALL = [
                      "Since Debian 11, security uses <release>-security.",
                      "Compare: diff debian.sources /etc/apt/sources.list.d/debian.sources (if you run trixie)."],
               setup=debian_setup, verify=debian_verify),
-    Challenge(level=2, id="repo_revenant", pet="ant", tools=EDITORS, distro=REDHAT, requires=["sed"],
+    Challenge(level=2, id="repo_revenant", pet="ant", tools=EDITORS, distro=REDHAT, skill="rocky", requires=["sed"],
               threat="Repo Revenant",
               task="The Repo Revenant haunts rocky.repo: 3 mistakes in the BaseOS and AppStream repos.\n"
                    "Fix it for Rocky Linux 9 (browse dl.rockylinux.org/pub/rocky/9/ to check paths). "
@@ -235,7 +235,7 @@ ALL = [
                      "Compare with /etc/yum.repos.d/rocky.repo on a Rocky 9 machine: "
                      "baseurl=https://dl.rockylinux.org/pub/rocky/$releasever/BaseOS/$basearch/os/"],
               setup=rocky_setup, verify=rocky_verify),
-    Challenge(level=2, id="enabled_ettin", pet="ant", tools=("dnf", "yum"), distro=REDHAT, requires=["dnf"],
+    Challenge(level=2, id="enabled_ettin", pet="ant", tools=("dnf", "yum"), distro=REDHAT, skill="rocky", requires=["dnf"],
               uses=restricted, threat="Enabled Ettin",
               task="The Enabled Ettin has one head per repository. Cut all but one, for one command:\n"
                    "run a dnf command (search, list, repolist…) that uses only the {repo} repository, "

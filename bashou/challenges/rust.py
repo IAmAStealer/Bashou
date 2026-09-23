@@ -130,7 +130,7 @@ def temps_setup(work, rng):
     return {"expected": f"{sum(readings) // 4}\n"}
 
 
-RUST = dict(tools=("rustc", "cargo"), uses=rust_used, requires=["rustc"])
+RUST = dict(tools=("rustc", "cargo"), uses=rust_used, requires=["rustc"], skill="rust")
 
 ALL = [
     Challenge(level=1, id="mut_marmot", pet="beaver", threat="Mut Marmot", **RUST,

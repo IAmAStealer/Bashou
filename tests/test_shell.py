@@ -235,17 +235,25 @@ class ShellTest(unittest.TestCase):
 
 class FirstLaunchTest(unittest.TestCase):
     def test_first_launch_asks_for_a_starter(self):
-        """No save yet: language, then starter, then the pet appears."""
+        """No save yet: language, skills, then starter, then the pet appears."""
         with tempfile.TemporaryDirectory() as tmp:
             sh = Shell(tmp, state=False)
             try:
                 self.assertTrue(sh.expect(b"Language"))
                 sh.send("\r", 0)                         # English
+                self.assertTrue(sh.expect(b"What do you want to learn?"))
+                sh.send("\x1b[B", 0.3)                   # ↓ Pick my skills
+                sh.send("\r", 0)
+                self.assertTrue(sh.expect(b"Pick your skills"))
+                sh.send(" ", 0.3)                        # untick Bash
+                sh.send("\r", 0)
                 self.assertTrue(sh.expect(b"Choose your starter"))
                 sh.send("\x1b[C", 0.3)                   # → Seedling
                 sh.send("\r", 0)
                 self.assertTrue(sh.wait_state(lambda s: s["starter"] == "sprout"))
                 self.assertEqual(sh.state()["language"], "en")
+                self.assertNotIn("bash", sh.state()["skills"])
+                self.assertIn("python", sh.state()["skills"])
                 self.assertTrue(alive(int(sh.value("BASHOU_PID"))))
             finally:
                 sh.close()

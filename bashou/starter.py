@@ -41,8 +41,9 @@ def draw(pos, breath):
     sys.stdout.flush()
 
 
-def pick(draw, count, keys=KEYS, start=0):
-    """Full-screen picker: draw(pos, breath) until Enter (returns pos) or q (returns None)."""
+def pick(draw, count, keys=KEYS, start=0, toggle=None):
+    """Full-screen picker: draw(pos, breath) until Enter (returns pos) or q (returns None).
+    With `toggle`, Space calls toggle(pos) (a checklist)."""
     fd = sys.stdin.fileno()
     old = termios.tcgetattr(fd)
     pos, breath, chosen = start, False, None
@@ -60,6 +61,8 @@ def pick(draw, count, keys=KEYS, start=0):
                 break
             if key in ("q", "\x1b", "\x04", "\x03"):   # also Ctrl+D, Ctrl+C
                 break
+            if key == " " and toggle:
+                toggle(pos)
             pos = (pos + keys.get(key, 0)) % count
     finally:
         termios.tcsetattr(fd, termios.TCSADRAIN, old)
@@ -119,6 +122,8 @@ def main():
         return 0
     if not sys.stdin.isatty():
         return 1
+    from . import skills
+    skills.show(skills.ask(s.get("skills", "all")))
     line = choose()
     if not line:
         print(f"  {DIM}" + _("No starter yet. Run `bashou start` when you're ready.") + RESET)

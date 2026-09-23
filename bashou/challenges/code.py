@@ -541,8 +541,8 @@ def overflow_setup(work, rng):
 
 # --- the fights -----------------------------------------------------------------
 
-PY = dict(tools=PYTHON, requires=["python3"])
-C = dict(tools=COMPILERS, uses=c_used, requires=["gcc"])
+PY = dict(tools=PYTHON, requires=["python3"], skill="python")
+C = dict(tools=COMPILERS, uses=c_used, requires=["gcc"], skill="c")
 
 ALL = [
     Challenge(level=1, id="colon_cobra", pet="snake", threat="Colon Cobra", **PY,

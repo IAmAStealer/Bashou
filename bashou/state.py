@@ -28,6 +28,7 @@ def default():
         "fights_lost": 0,   # knocked out or fled (the Living sofa comforts you)
         "ladder_best": {},  # pet -> highest form reached on a command ladder (the Slime): never goes back
         "challenges": [],   # challenges beaten
+        "skills": "all",    # "all" or the skills you ticked (`bashou skills`, asked before the starter)
         "reviews": {},      # beaten fight -> {"step": reviews won, "due": ISO date}: it comes back (fight.py)
         "security": [],     # security challenges solved (`bashou security`)
         "adventure": None,  # `bashou adventure` progress (see bashou/adventure)

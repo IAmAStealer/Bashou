@@ -13,7 +13,7 @@ import time
 import tty
 from pathlib import Path
 
-from .. import challenges, fight, progress, render, state
+from .. import challenges, fight, progress, render, skills, state
 from ..i18n import _, cap
 from . import canvas, lessons, quiz, scene, sprites, world
 
@@ -57,6 +57,7 @@ class Game:
         self.adv = load()
         self.rng = rng
         s = state.load()
+        self.topics = skills.picked(s)
         self.frames, self.palette = sprites.hero(progress.current(s, "starter")[0])
         self.quit = False
         self.choice = 0                 # highlighted fork path or answer
@@ -205,7 +206,7 @@ class Game:
         if phase == "intro" and (k in ENTER or k == " "):
             adv["phase"] = "fork"
         elif phase == "fork":
-            options = world.fork_options(adv)
+            options = world.fork_options(adv, self.topics)
             if k in (LEFT, UP, "h"):
                 self.choice = (self.choice - 1) % len(options)
             elif k in (RIGHT, DOWN, "l"):
@@ -289,7 +290,7 @@ class Game:
             parts = [(_("Chapter {n}: {title}").format(n=adv["chapter"], title=world.title(ch)), ACCENT, True)]
         elif adv["phase"] == "fork" and not self.result:
             parts = [(_("The road splits:") + "  ", PANEL_FG, False)]
-            for i, topic in enumerate(world.fork_options(adv)):
+            for i, topic in enumerate(world.fork_options(adv, self.topics)):
                 name = f"{topic_name(topic)} · " + _("level {n}").format(n=world.level(adv, topic))
                 picked = i == self.choice
                 parts.append((f"▶ {name} ◀" if picked else f"  {name}  ", ACCENT if picked else PANEL_FG, picked))

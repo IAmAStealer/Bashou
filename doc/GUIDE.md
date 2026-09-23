@@ -78,6 +78,7 @@ bashou evolve           # watch your pets evolve (s skips)
 bashou swap             # board to pick your pet (or: bashou swap fox); f switches its form
 bashou off / on         # hide / show the pet
 bashou stats            # commands, top tools, constructs, streaks
+bashou skills           # what you learn: a bit of everything, or the skills you tick
 bashou config           # list settings (see Configuration)
 bashou version          # which version this is (and if a newer one is out)
 bashou update           # get the new version from GitHub (--version v0.2.0: a given one, older too)
@@ -88,6 +89,15 @@ bashou reset            # start over with a new starter (asks first, keeps a bac
 ```
 
 Tab completion works for commands, pet names and `dev` arguments.
+
+## Skills
+
+At the first launch, before the starter, Bashou asks what you want to learn: a bit of everything, or
+the skills you tick (Bash, Linux, systemd, Debian, Rocky, Python, C, Rust, Logic, CI/CD). Threats
+and the adventure's paths then come from those skills; fights you already won still come back for
+review. A skill whose program isn't installed (no `gcc`, no `rustc`) or that is for another system
+still has its adventure questions. Tick Rust without `rustc`, and your pet tells you how to install it.
+`bashou skills` changes your choice.
 
 ## Configuration
 
