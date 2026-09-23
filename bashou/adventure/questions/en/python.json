@@ -10,7 +10,7 @@
    "Raise nothing, just stop"
   ],
   "answer": 0,
-  "explain": "sys.exit(1) (or an uncaught exception) gives a non-zero $?, so && chains and cron alerts notice."
+  "explain": "Whoever runs your script (the shell, cron, a CI job) only looks at its exit code: 0 means success, anything else a failure. Printing ERROR and exiting normally returns 0, so everyone believes it worked. Write the message to stderr (print(msg, file=sys.stderr)) and call sys.exit(1); an uncaught exception also gives a non-zero code."
  },
  {
   "id": "python-1-02",
@@ -23,7 +23,7 @@
    "import config.json"
   ],
   "answer": 0,
-  "explain": "eval runs whatever code is in the file: never on data. json.load only parses."
+  "explain": "json.load(fh) reads the file and turns it into Python dicts, lists, strings and numbers, and nothing more. eval would run the file's content as Python code: a config file that someone else can edit would then run anything on your machine. Never use eval on data."
  },
  {
   "id": "python-1-03",
@@ -36,12 +36,12 @@
    "The script's name"
   ],
   "answer": 0,
-  "explain": "os.environ['API_TOKEN']. Code gets shared and committed; the token then leaks with it."
+  "explain": "Code gets copied, shared and committed to git, and a token written in it leaks along with it. Read it at run time instead: os.environ['API_TOKEN'] takes it from an environment variable, or read it from a file only you can read (chmod 600). The same code then works with different tokens."
  },
  {
   "id": "python-1-04",
   "level": 1,
-  "q": "Which module builds file paths cleanly?",
+  "q": "Your script builds paths like '/srv' + '/' + name. Which standard module does it cleanly?",
   "choices": [
    "pathlib",
    "string",
@@ -49,12 +49,12 @@
    "re"
   ],
   "answer": 0,
-  "explain": "Path('/srv') / 'app' / 'config.json'. Also .exists(), .read_text(), .glob('*.log')."
+  "explain": "pathlib gives Path objects: Path('/srv') / 'app' / 'config.json' joins the pieces with the right separators, without counting slashes. A Path also knows useful things: .exists(), .read_text(), .glob('*.log'), .parent. Gluing strings works until one piece has a slash too many or missing."
  },
  {
   "id": "python-1-05",
   "level": 1,
-  "q": "What marks a block (the body of an if or a loop)?",
+  "q": "In Python, how does the code show which lines belong to an if or a loop?",
   "choices": [
    "Indentation",
    "Braces { }",
@@ -62,12 +62,12 @@
    "Semicolons"
   ],
   "answer": 0,
-  "explain": "Four spaces per level is the convention."
+  "explain": "Python uses indentation: the lines shifted right under the if: are its body, and the block ends when the shift ends. There are no braces as in C. The convention is 4 spaces per level. Mixing tabs and spaces gives errors that are hard to see: let your editor insert spaces."
  },
  {
   "id": "python-1-06",
   "level": 1,
-  "q": "Which keyword defines a function?",
+  "q": "You want to reuse a piece of code under a name. Which Python keyword defines a function?",
   "choices": [
    "def",
    "func",
@@ -75,7 +75,7 @@
    "fn"
   ],
   "answer": 0,
-  "explain": "def name(args): then an indented body."
+  "explain": "def starts a function: def greet(name):, then the indented body. Calling greet(\"Ada\") runs that body with name set to \"Ada\". func, function and fn come from other languages (Go, JavaScript, Rust). Defining a function runs nothing; only calling it does."
  },
  {
   "id": "python-1-07",
@@ -88,7 +88,7 @@
    "os.environ['ARGS']"
   ],
   "answer": 0,
-  "explain": "argv[0] is the script's name, and 3 arrives as '3'. argparse adds --help and checks for free."
+  "explain": "sys.argv is the list of words on the command line: argv[0] is the script's name, argv[1] is 'alice', argv[2] is '3'. They are always strings: int(sys.argv[2]) makes 3 a number. For real tools, argparse reads them for you, checks them and adds --help."
  },
  {
   "id": "python-1-08",
@@ -101,12 +101,12 @@
    "first(xs)"
   ],
   "answer": 0,
-  "explain": "Indexes start at 0; xs[-1] is the last one."
+  "explain": "Positions in a list start at 0, so the first item is xs[0] and xs[1] is the second. xs[-1] counts from the end and gives the last one. On an empty list, xs[0] raises IndexError: check if xs: first when the list may be empty."
  },
  {
   "id": "python-1-09",
   "level": 1,
-  "q": "Which value means \"nothing\"?",
+  "q": "A Python function found nothing to return. Which value means \"nothing\" in Python?",
   "choices": [
    "None",
    "null",
@@ -114,7 +114,7 @@
    "undefined"
   ],
   "answer": 0,
-  "explain": "Compare with `is None`."
+  "explain": "Python's 'nothing' is None, with a capital N. null, nil and undefined are the same idea in other languages (JavaScript, Ruby…). Test it with x is None rather than x == None, and remember that a function without return gives back None."
  },
  {
   "id": "python-1-10",
@@ -127,7 +127,7 @@
    "Reinstall Python"
   ],
   "answer": 0,
-  "explain": "The distro protects its own Python. python3 -m venv .venv, then .venv/bin/pip install requests."
+  "explain": "Your distribution's own tools rely on its Python, so it refuses pip installs that could break them. Make a virtual environment for your project: python3 -m venv .venv, then .venv/bin/pip install requests. Or install the distro's package (apt install python3-requests). sudo pip is exactly what the message protects you from."
  },
  {
   "id": "python-1-11",
@@ -140,12 +140,12 @@
    "3 only"
   ],
   "answer": 0,
-  "explain": "range stops before its end."
+  "explain": "range(3) counts from 0 and stops just before 3: 0, 1, 2. That's 3 turns, one per number. range(1, 4) gives 1, 2, 3 when you need to start at 1. Start included, end excluded: the same rule everywhere in Python, slices too."
  },
  {
   "id": "python-1-12",
   "level": 1,
-  "q": "How do you read a whole file?",
+  "q": "A script needs the whole content of a small text file as one string. Which line reads it?",
   "choices": [
    "open(\"f\").read()",
    "read(\"f\")",
@@ -153,7 +153,7 @@
    "cat(\"f\")"
   ],
   "answer": 0,
-  "explain": "Better with `with open(\"f\") as fh:` so it closes."
+  "explain": "open(\"f\") opens the file and .read() returns everything as a single string. Better, write with open(\"f\") as fh: text = fh.read(): the file is closed as soon as the block ends, even after an error. pathlib offers Path(\"f\").read_text(). read, file().all and cat don't exist in Python."
  },
  {
   "id": "python-2-01",
@@ -166,12 +166,12 @@
    "Nothing more than open()"
   ],
   "answer": 0,
-  "explain": "It's a context manager."
+  "explain": "with runs a setup and a guaranteed cleanup around its block. For a file, the cleanup is closing it: when the block ends, normally or through an error, the file is closed. Without with, an error between open() and close() leaves the file open, and written data may not be saved."
  },
  {
   "id": "python-2-02",
   "level": 2,
-  "q": "What is `[x * 2 for x in xs]`?",
+  "q": "You see `[x * 2 for x in xs]` in a script. What is it?",
   "choices": [
    "A list comprehension",
    "A generator function",
@@ -179,12 +179,12 @@
    "A syntax error"
   ],
   "answer": 0,
-  "explain": "Same with ( ) gives a lazy generator."
+  "explain": "It's a list comprehension: it builds a new list by applying x * 2 to each item of xs. It's a short way to write a loop that appends to a list. You can filter too: [x for x in xs if x > 0]. With round brackets instead, (x * 2 for x in xs) gives a generator that computes items one by one, when asked."
  },
  {
   "id": "python-2-03",
   "level": 2,
-  "q": "Which is immutable?",
+  "q": "Which of these Python types can never be changed once created (immutable)?",
   "choices": [
    "tuple",
    "list",
@@ -192,7 +192,7 @@
    "set"
   ],
   "answer": 0,
-  "explain": "Tuples can be dict keys; lists can't."
+  "explain": "A tuple, written (1, 2), can't be changed after creation: no append, no item replaced. Lists, dicts and sets can all be modified in place. Because a tuple never changes, it can be a dict key or go in a set; a list can't. Use it for fixed groups of values, like coordinates."
  },
  {
   "id": "python-2-04",
@@ -205,7 +205,7 @@
    "safe_load checks the spelling"
   ],
   "answer": 0,
-  "explain": "A crafted YAML file can then run code. safe_load only builds plain data: dicts, lists, strings, numbers."
+  "explain": "yaml.load can build any Python object the file describes, and building some objects runs code. So a crafted YAML file can run commands on your machine. yaml.safe_load only builds plain data: dicts, lists, strings, numbers. A config file never needs more, so always use safe_load."
  },
  {
   "id": "python-2-05",
@@ -218,7 +218,7 @@
    "It only catches syntax errors"
   ],
   "answer": 0,
-  "explain": "Catch the errors you expect (except FileNotFoundError:) and let the rest crash loudly."
+  "explain": "A bare except: catches every error, including your own typos (NameError) and even Ctrl+C. The script carries on as if nothing happened and the bug stays hidden. Catch only what you expect and know how to handle: except FileNotFoundError:. Let everything else crash with a clear message."
  },
  {
   "id": "python-2-06",
@@ -231,7 +231,7 @@
    "The module is named main"
   ],
   "answer": 0,
-  "explain": "Code under it doesn't run on import."
+  "explain": "When you run a file directly, Python sets its __name__ to \"__main__\"; when another file imports it, __name__ is the module's name. So the code under this if runs only when the file is launched as a script, not when it's imported for its functions, for example by tests."
  },
  {
   "id": "python-2-07",
@@ -244,12 +244,12 @@
    "Import them in a try block"
   ],
   "answer": 0,
-  "explain": "name==1.2.3 in requirements.txt; pip install -r requirements.txt in a fresh venv rebuilds it."
+  "explain": "Write the exact versions in requirements.txt (requests==2.32.3) or a lock file. On any machine, a fresh venv plus pip install -r requirements.txt then gives the same set. 'Latest' changes over time and one day breaks your script without any change on your side. Updating becomes a visible, reviewed change."
  },
  {
   "id": "python-2-08",
   "level": 2,
-  "q": "What does `dict.get(\"k\", 0)` return if k is missing?",
+  "q": "A dict may not have the key \"k\". What does `d.get(\"k\", 0)` return when it's missing?",
   "choices": [
    "0",
    "None",
@@ -257,12 +257,12 @@
    "\"k\""
   ],
   "answer": 0,
-  "explain": "Square brackets would raise KeyError."
+  "explain": ".get(key, default) returns the value if the key exists, and the default otherwise, here 0. Without a default it returns None. d[\"k\"] with square brackets raises KeyError when the key is missing. Handy for counting: counts[w] = counts.get(w, 0) + 1."
  },
  {
   "id": "python-2-09",
   "level": 2,
-  "q": "Which runs a shell command safely?",
+  "q": "A script must run an external command. Which call is safe, even with values typed by a user?",
   "choices": [
    "subprocess.run([\"ls\", \"-l\"])",
    "os.system(\"ls -l \" + user_input)",
@@ -270,7 +270,7 @@
    "exec(\"ls\")"
   ],
   "answer": 0,
-  "explain": "A list of arguments: no shell, no injection."
+  "explain": "With a list of arguments, subprocess.run starts the program directly, with no shell in between: each item is passed as it is, even if it contains ; or $( ). os.system with a string glued to user input goes through a shell, so input like '; rm -rf ~' runs as a command: that is command injection. eval and exec run Python code, not commands."
  },
  {
   "id": "python-2-10",
@@ -283,6 +283,6 @@
    "text=True"
   ],
   "answer": 0,
-  "explain": "Without check=True the failure is only in result.returncode, which nobody read."
+  "explain": "subprocess.run doesn't raise an error when the command fails: it stores the exit code in result.returncode and carries on. With check=True, a non-zero exit code raises CalledProcessError and the script stops, like set -e in bash. Otherwise, read returncode yourself."
  }
 ]

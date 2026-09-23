@@ -10,7 +10,7 @@
    "Ne rien lever, juste s'arrêter"
   ],
   "answer": 0,
-  "explain": "sys.exit(1) (ou une exception non rattrapée) donne un $? non nul, que les && et les alertes cron remarquent."
+  "explain": "Celui qui lance ton script (le shell, cron, un job de CI) ne regarde que son code de retour : 0 veut dire succès, tout le reste un échec. Afficher ERROR puis sortir normalement renvoie 0, et tout le monde croit que ça a marché. Écris le message sur stderr (print(msg, file=sys.stderr)) et appelle sys.exit(1) ; une exception non rattrapée donne aussi un code non nul."
  },
  {
   "id": "python-1-02",
@@ -23,7 +23,7 @@
    "import config.json"
   ],
   "answer": 0,
-  "explain": "eval lance le code que contient le fichier : jamais sur des données. json.load ne fait qu'analyser."
+  "explain": "json.load(fh) lit le fichier et le transforme en dicts, listes, chaînes et nombres Python, rien de plus. eval lancerait le contenu du fichier comme du code Python : un fichier de config que quelqu'un d'autre peut modifier lancerait alors n'importe quoi sur ta machine. Jamais d'eval sur des données."
  },
  {
   "id": "python-1-03",
@@ -36,12 +36,12 @@
    "Le nom du script"
   ],
   "answer": 0,
-  "explain": "os.environ['API_TOKEN']. Le code se partage et se commite ; le jeton fuit avec lui."
+  "explain": "Le code se copie, se partage et se commite dans git, et un jeton écrit dedans fuit avec lui. Lis-le plutôt à l'exécution : os.environ['API_TOKEN'] le prend dans une variable d'environnement, ou lis-le dans un fichier que toi seul peux lire (chmod 600). Le même code marche alors avec des jetons différents."
  },
  {
   "id": "python-1-04",
   "level": 1,
-  "q": "Quel module construit proprement des chemins de fichiers ?",
+  "q": "Ton script construit des chemins comme '/srv' + '/' + nom. Quel module standard le fait proprement ?",
   "choices": [
    "pathlib",
    "string",
@@ -49,12 +49,12 @@
    "re"
   ],
   "answer": 0,
-  "explain": "Path('/srv') / 'app' / 'config.json'. Il y a aussi .exists(), .read_text(), .glob('*.log')."
+  "explain": "pathlib donne des objets Path : Path('/srv') / 'app' / 'config.json' assemble les morceaux avec les bons séparateurs, sans compter les slashs. Un Path sait aussi faire des choses utiles : .exists(), .read_text(), .glob('*.log'), .parent. Coller des chaînes marche jusqu'au jour où un morceau a un slash en trop ou en moins."
  },
  {
   "id": "python-1-05",
   "level": 1,
-  "q": "Qu'est-ce qui délimite un bloc (le corps d'un if ou d'une boucle) ?",
+  "q": "En Python, comment le code montre-t-il quelles lignes appartiennent à un if ou à une boucle ?",
   "choices": [
    "L'indentation",
    "Les accolades { }",
@@ -62,12 +62,12 @@
    "Les points-virgules"
   ],
   "answer": 0,
-  "explain": "Quatre espaces par niveau, c'est la convention."
+  "explain": "Python utilise l'indentation : les lignes décalées à droite sous le if: forment son corps, et le bloc se termine quand le décalage s'arrête. Pas d'accolades comme en C. La convention est 4 espaces par niveau. Mélanger tabulations et espaces donne des erreurs difficiles à voir : laisse ton éditeur insérer des espaces."
  },
  {
   "id": "python-1-06",
   "level": 1,
-  "q": "Quel mot-clé définit une fonction ?",
+  "q": "Tu veux réutiliser un bout de code sous un nom. Quel mot-clé Python définit une fonction ?",
   "choices": [
    "def",
    "func",
@@ -75,7 +75,7 @@
    "fn"
   ],
   "answer": 0,
-  "explain": "def nom(args): puis un corps indenté."
+  "explain": "def commence une fonction : def greet(name):, puis le corps indenté. Appeler greet(\"Ada\") exécute ce corps avec name qui vaut \"Ada\". func, function et fn viennent d'autres langages (Go, JavaScript, Rust). Définir une fonction ne lance rien ; seul l'appel le fait."
  },
  {
   "id": "python-1-07",
@@ -88,7 +88,7 @@
    "os.environ['ARGS']"
   ],
   "answer": 0,
-  "explain": "argv[0] est le nom du script, et 3 arrive en '3'. argparse ajoute --help et les contrôles gratuitement."
+  "explain": "sys.argv est la liste des mots de la ligne de commande : argv[0] est le nom du script, argv[1] vaut 'alice', argv[2] vaut '3'. Ce sont toujours des chaînes : int(sys.argv[2]) fait de 3 un nombre. Pour de vrais outils, argparse les lit pour toi, les vérifie et ajoute --help."
  },
  {
   "id": "python-1-08",
@@ -101,12 +101,12 @@
    "first(xs)"
   ],
   "answer": 0,
-  "explain": "Les indices commencent à 0 ; xs[-1] est le dernier."
+  "explain": "Les positions dans une liste commencent à 0 : le premier élément est xs[0] et xs[1] est le deuxième. xs[-1] compte depuis la fin et donne le dernier. Sur une liste vide, xs[0] lève IndexError : teste if xs: d'abord quand la liste peut être vide."
  },
  {
   "id": "python-1-09",
   "level": 1,
-  "q": "Quelle valeur veut dire « rien » ?",
+  "q": "Une fonction Python n'a rien trouvé à renvoyer. Quelle valeur veut dire « rien » en Python ?",
   "choices": [
    "None",
    "null",
@@ -114,7 +114,7 @@
    "undefined"
   ],
   "answer": 0,
-  "explain": "Compare avec `is None`."
+  "explain": "Le « rien » de Python est None, avec une majuscule. null, nil et undefined sont la même idée dans d'autres langages (JavaScript, Ruby…). Teste-le avec x is None plutôt que x == None, et souviens-toi qu'une fonction sans return renvoie None."
  },
  {
   "id": "python-1-10",
@@ -127,7 +127,7 @@
    "Réinstaller Python"
   ],
   "answer": 0,
-  "explain": "La distribution protège son propre Python. python3 -m venv .venv, puis .venv/bin/pip install requests."
+  "explain": "Les outils de ta distribution s'appuient sur son Python, donc elle refuse les installations pip qui pourraient les casser. Crée un environnement virtuel pour ton projet : python3 -m venv .venv, puis .venv/bin/pip install requests. Ou installe le paquet de la distribution (apt install python3-requests). sudo pip, c'est justement ce dont le message te protège."
  },
  {
   "id": "python-1-11",
@@ -140,12 +140,12 @@
    "3 seulement"
   ],
   "answer": 0,
-  "explain": "range s'arrête avant sa fin."
+  "explain": "range(3) compte à partir de 0 et s'arrête juste avant 3 : 0, 1, 2. Ça fait 3 tours, un par nombre. range(1, 4) donne 1, 2, 3 quand il faut commencer à 1. Début inclus, fin exclue : la même règle partout en Python, les tranches aussi."
  },
  {
   "id": "python-1-12",
   "level": 1,
-  "q": "Comment lire tout un fichier ?",
+  "q": "Un script a besoin de tout le contenu d'un petit fichier texte en une chaîne. Quelle ligne le lit ?",
   "choices": [
    "open(\"f\").read()",
    "read(\"f\")",
@@ -153,7 +153,7 @@
    "cat(\"f\")"
   ],
   "answer": 0,
-  "explain": "Mieux avec `with open(\"f\") as fh:` pour qu'il se ferme."
+  "explain": "open(\"f\") ouvre le fichier et .read() renvoie tout en une seule chaîne. Mieux, écris with open(\"f\") as fh: texte = fh.read() : le fichier est fermé dès la fin du bloc, même après une erreur. pathlib propose Path(\"f\").read_text(). read, file().all et cat n'existent pas en Python."
  },
  {
   "id": "python-2-01",
@@ -166,12 +166,12 @@
    "Rien de plus que open()"
   ],
   "answer": 0,
-  "explain": "C'est un gestionnaire de contexte."
+  "explain": "with lance une préparation et un nettoyage garanti autour de son bloc. Pour un fichier, le nettoyage est la fermeture : quand le bloc se termine, normalement ou par une erreur, le fichier est fermé. Sans with, une erreur entre open() et close() laisse le fichier ouvert, et des données écrites peuvent ne pas être enregistrées."
  },
  {
   "id": "python-2-02",
   "level": 2,
-  "q": "Qu'est-ce que `[x * 2 for x in xs]` ?",
+  "q": "Tu vois `[x * 2 for x in xs]` dans un script. Qu'est-ce que c'est ?",
   "choices": [
    "Une liste en compréhension",
    "Une fonction génératrice",
@@ -179,12 +179,12 @@
    "Une erreur de syntaxe"
   ],
   "answer": 0,
-  "explain": "Avec ( ) à la place, on obtient un générateur paresseux."
+  "explain": "C'est une liste en compréhension : elle construit une nouvelle liste en appliquant x * 2 à chaque élément de xs. C'est une façon courte d'écrire une boucle qui ajoute à une liste. On peut aussi filtrer : [x for x in xs if x > 0]. Avec des parenthèses à la place, (x * 2 for x in xs) donne un générateur qui calcule les éléments un par un, à la demande."
  },
  {
   "id": "python-2-03",
   "level": 2,
-  "q": "Lequel est immuable ?",
+  "q": "Lequel de ces types Python ne peut jamais changer une fois créé (immuable) ?",
   "choices": [
    "tuple",
    "list",
@@ -192,7 +192,7 @@
    "set"
   ],
   "answer": 0,
-  "explain": "Un tuple peut servir de clé de dict ; une liste, non."
+  "explain": "Un tuple, écrit (1, 2), ne peut pas changer après sa création : pas d'append, pas d'élément remplacé. Les listes, dicts et sets se modifient tous sur place. Comme un tuple ne change jamais, il peut servir de clé de dict ou aller dans un set ; une liste non. Utilise-le pour des groupes fixes de valeurs, comme des coordonnées."
  },
  {
   "id": "python-2-04",
@@ -205,7 +205,7 @@
    "safe_load vérifie l'orthographe"
   ],
   "answer": 0,
-  "explain": "Un YAML piégé peut alors lancer du code. safe_load ne crée que des données simples : dicts, listes, chaînes, nombres."
+  "explain": "yaml.load peut construire n'importe quel objet Python que décrit le fichier, et construire certains objets lance du code. Un fichier YAML piégé peut donc lancer des commandes sur ta machine. yaml.safe_load ne construit que des données simples : dicts, listes, chaînes, nombres. Un fichier de config n'a jamais besoin de plus : utilise toujours safe_load."
  },
  {
   "id": "python-2-05",
@@ -218,7 +218,7 @@
    "Il n'attrape que les erreurs de syntaxe"
   ],
   "answer": 0,
-  "explain": "Attrape les erreurs attendues (except FileNotFoundError:) et laisse le reste planter bruyamment."
+  "explain": "Un except: nu attrape toutes les erreurs, y compris tes propres fautes de frappe (NameError) et même Ctrl+C. Le script continue comme si de rien n'était et le bug reste caché. N'attrape que ce que tu attends et sais traiter : except FileNotFoundError:. Laisse tout le reste planter avec un message clair."
  },
  {
   "id": "python-2-06",
@@ -231,7 +231,7 @@
    "Que le module s'appelle main"
   ],
   "answer": 0,
-  "explain": "Le code en dessous ne tourne pas à l'import."
+  "explain": "Quand tu lances un fichier directement, Python met son __name__ à \"__main__\" ; quand un autre fichier l'importe, __name__ vaut le nom du module. Le code sous ce if ne tourne donc que quand le fichier est lancé comme script, pas quand il est importé pour ses fonctions, par des tests par exemple."
  },
  {
   "id": "python-2-07",
@@ -244,12 +244,12 @@
    "Les importer dans un try"
   ],
   "answer": 0,
-  "explain": "nom==1.2.3 dans requirements.txt ; pip install -r requirements.txt dans un venv neuf le reconstruit."
+  "explain": "Écris les versions exactes dans requirements.txt (requests==2.32.3) ou un fichier lock. Sur n'importe quelle machine, un venv neuf plus pip install -r requirements.txt redonne alors le même ensemble. « La dernière » change avec le temps et un jour casse ton script sans que tu aies rien changé. Mettre à jour devient un changement visible et relu."
  },
  {
   "id": "python-2-08",
   "level": 2,
-  "q": "Que renvoie `dict.get(\"k\", 0)` si k n'existe pas ?",
+  "q": "Un dict n'a peut-être pas la clé \"k\". Que renvoie `d.get(\"k\", 0)` quand elle manque ?",
   "choices": [
    "0",
    "None",
@@ -257,12 +257,12 @@
    "\"k\""
   ],
   "answer": 0,
-  "explain": "Les crochets lèveraient KeyError."
+  "explain": ".get(clé, défaut) renvoie la valeur si la clé existe, et le défaut sinon, ici 0. Sans défaut, il renvoie None. d[\"k\"] avec des crochets lève KeyError quand la clé manque. Pratique pour compter : counts[w] = counts.get(w, 0) + 1."
  },
  {
   "id": "python-2-09",
   "level": 2,
-  "q": "Laquelle lance une commande shell sans risque ?",
+  "q": "Un script doit lancer une commande externe. Quel appel est sûr, même avec des valeurs tapées par un utilisateur ?",
   "choices": [
    "subprocess.run([\"ls\", \"-l\"])",
    "os.system(\"ls -l \" + user_input)",
@@ -270,7 +270,7 @@
    "exec(\"ls\")"
   ],
   "answer": 0,
-  "explain": "Une liste d'arguments : pas de shell, pas d'injection."
+  "explain": "Avec une liste d'arguments, subprocess.run lance le programme directement, sans shell au milieu : chaque élément est passé tel quel, même s'il contient ; ou $( ). os.system avec une chaîne collée à une saisie passe par un shell : une saisie comme '; rm -rf ~' tourne comme une commande, c'est l'injection de commande. eval et exec lancent du code Python, pas des commandes."
  },
  {
   "id": "python-2-10",
@@ -283,6 +283,6 @@
    "text=True"
   ],
   "answer": 0,
-  "explain": "Sans check=True, l'échec n'est que dans result.returncode, que personne n'a lu."
+  "explain": "subprocess.run ne lève pas d'erreur quand la commande échoue : il range le code de retour dans result.returncode et continue. Avec check=True, un code non nul lève CalledProcessError et le script s'arrête, comme set -e en bash. Sinon, lis returncode toi-même."
  }
 ]
