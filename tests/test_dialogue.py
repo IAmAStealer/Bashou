@@ -178,3 +178,28 @@ class GremlinTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class RustInviteTest(unittest.TestCase):
+    def test_rust_is_suggested_to_people_at_ease_without_it(self):
+        from unittest import mock
+        s = state.default()
+        s.update(adventure={"chapter": 1}, security={"done": []})
+        with mock.patch("shutil.which", return_value=None):
+            self.assertIsNone(dialogue.invite(s, random.Random(0)))                  # a beginner: not yet
+            s["achievements"] = [f"a{i}" for i in range(dialogue.RUST_AT)]
+            said = dialogue.invite(s, random.Random(0))
+            self.assertIn("Rust", said)
+            self.assertIn(dialogue.rust_install(), said)
+        with mock.patch("shutil.which", return_value="/usr/bin/rustc"):
+            self.assertIsNone(dialogue.invite(s, random.Random(0)))                  # already there
+
+    def test_install_command_follows_the_distro(self):
+        from unittest import mock
+        from bashou import challenges
+        with mock.patch.object(challenges, "family", return_value=frozenset({"ubuntu", "debian"})):
+            self.assertIn("apt install rustc cargo", dialogue.rust_install())
+        with mock.patch.object(challenges, "family", return_value=frozenset({"rocky", "rhel"})):
+            self.assertIn("dnf install rust", dialogue.rust_install())
+        with mock.patch.object(challenges, "family", return_value=frozenset({"arch"})):
+            self.assertIn("less rustup.sh", dialogue.rust_install())                  # read it first

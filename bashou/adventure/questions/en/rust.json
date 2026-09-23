@@ -130,6 +130,58 @@
   "explain": "match must cover every case."
  },
  {
+  "id": "rust-1-11",
+  "level": 1,
+  "q": "rustc says 'cannot assign twice to immutable variable `count`'. What is the fix?",
+  "choices": [
+   "Declare it with let mut count",
+   "Add a semicolon after count",
+   "Write count = count + 1 instead",
+   "Use var instead of let"
+  ],
+  "answer": 0,
+  "explain": "Rust variables are fixed unless you say mut. rustc's 'help:' line usually shows the exact change."
+ },
+ {
+  "id": "rust-1-12",
+  "level": 1,
+  "q": "`let n = \"42\";` then `let n: u32 = n.parse().unwrap();`. Why does it compile?",
+  "choices": [
+   "The second let makes a new variable: shadowing",
+   "n was mutable all along",
+   "parse changes the type of the old n",
+   "Rust ignores types on let"
+  ],
+  "answer": 0,
+  "explain": "Shadowing reuses a name with a new value and even a new type. mut can change the value, never the type."
+ },
+ {
+  "id": "rust-1-13",
+  "level": 1,
+  "q": "What does a const need that a let doesn't?",
+  "choices": [
+   "A written type, and a value known at build time",
+   "The mut keyword",
+   "A function around it",
+   "Nothing: they are the same"
+  ],
+  "answer": 0,
+  "explain": "const MAX: u32 = 100; lives for the whole program, often at the top of the file, in capitals by habit."
+ },
+ {
+  "id": "rust-1-14",
+  "level": 1,
+  "q": "A u8 holding 250 gets + 10 in a debug build. What happens?",
+  "choices": [
+   "The program panics: attempt to add with overflow",
+   "It becomes 260",
+   "It quietly wraps to 4",
+   "rustc refuses to build"
+  ],
+  "answer": 0,
+  "explain": "u8 stops at 255. Debug builds panic; release builds wrap. Pick a bigger type (u16, u32) or checked_add."
+ },
+ {
   "id": "rust-2-01",
   "level": 2,
   "q": "How many mutable borrows of a value can exist at once?",

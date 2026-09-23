@@ -1,0 +1,46 @@
+{
+ "name": "Byte Basilisk",
+ "palette": {
+  "a": "#102010",
+  "b": "#40a040",
+  "c": "#c0f060",
+  "d": "#f04040",
+  "m": "#101010",
+  "w": "#fff060"
+ },
+ "base": [
+  "....aaaaa........",
+  "...abbbbba.......",
+  "..abwmbbbba......",
+  "..abbbbbbba......",
+  "ddabbmmbbba......",
+  "...aabbbba.......",
+  ".....abbba..aaa..",
+  "....abcbcba.abba.",
+  "...abbbbbbbabcba.",
+  "...abcbcbcbbbba..",
+  "....abbbbbbbba...",
+  ".....aaaaaaaa...."
+ ],
+ "poses": {
+  "closed": {
+   "2": "----aa-----------"
+  },
+  "left": {
+   "2": "---wmb-----------"
+  },
+  "right": {
+   "2": "----bwm----------"
+  },
+  "fidget": {
+   "4": ".----------------"
+  },
+  "inhale": {
+   "5": "--a-------a------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

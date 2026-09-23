@@ -49,6 +49,13 @@ SOLUTIONS = {
     "fencepost_fiend": ("sed -i 's/i <= count/i < count/' average.c", None),
     "stack_specter": ("sed -i 's/^    return n + sum_to(n - 1);$/    if (n <= 0)\\n        return 0;\\n&/' sum.c", None),
     "overflow_ogre": ("sed -i '/strcpy/d; s/, name);/, argv[1]);/' greet.c", None),
+    # rust fights (rustc): fix the file
+    "mut_marmot": ("sed -i 's/let errors = 0;/let mut errors = 0;/' counter.rs", None),
+    "const_condor": ("sed -i 's/^const MAX_POINTS = /const MAX_POINTS: u32 = /' points.rs", None),
+    "shadow_shade": ("sed -i 's/let mut guess = /let guess = /; s/^    guess = guess.trim/    let guess: u32 = guess.trim/'"
+                     " guess.rs", None),
+    "byte_basilisk": ("sed -i 's/let mut total: u8 = 0;/let mut total: u32 = 0;/; s/total += r;/total += r as u32;/'"
+                      " temps.rs", None),
     # package fights (Debian here; Red Hat through a fake rpm, see PackageFightTest)
     "version_vole": ("dpkg-query -W -f '${{Version}}' {x}", r"version of (\S+) is installed"),
     "candidate_crow": ("apt-cache policy {x} | awk '/Candidate:/ {{print $2}}'", r"version of (\S+) would"),
@@ -118,7 +125,7 @@ class ChallengeTest(unittest.TestCase):
 
     def test_code_fights_start_broken(self):
         """The file as handed out must fail its own tests (else there is nothing to fix)."""
-        for ch in challenges.code.ALL:
+        for ch in challenges.code.ALL + challenges.rust.ALL:
             if ch.verify and ch.available():
                 with self.subTest(ch.id), tempfile.TemporaryDirectory() as tmp:
                     meta = ch.setup(Path(tmp), random.Random(1))

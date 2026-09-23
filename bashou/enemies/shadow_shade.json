@@ -1,0 +1,46 @@
+{
+ "name": "Shadow Shade",
+ "palette": {
+  "a": "#08080c",
+  "b": "#2a2a3a",
+  "c": "#4a4a6a",
+  "m": "#e0e0ff",
+  "w": "#8080c0"
+ },
+ "base": [
+  "......aaaaa......",
+  "....aabbbbbaa....",
+  "...abbbbbbbbba...",
+  "...abwmbbbwmba...",
+  "...abbbbbbbbba...",
+  "...abbbmmmbbba...",
+  "..abbbbbbbbbbba..",
+  "..abcbbbbbbbcba..",
+  ".abccbbbbbbbccba.",
+  ".abcccbbbbbcccba.",
+  "..acccaacaacccaa.",
+  "...aa..a..a..aa.."
+ ],
+ "poses": {
+  "closed": {
+   "3": "-----aa---aa-----"
+  },
+  "left": {
+   "3": "----wmb--wmb-----"
+  },
+  "right": {
+   "3": "-----bwm--bwm----"
+  },
+  "fidget": {
+   "10": "---a-----------.-",
+   "11": "--a-.--------.-a-"
+  },
+  "inhale": {
+   "6": "-a-------------a-"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

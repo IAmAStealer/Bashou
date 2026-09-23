@@ -1,0 +1,47 @@
+{
+ "name": "Mut Marmot",
+ "palette": {
+  "a": "#2a1a0a",
+  "b": "#a07848",
+  "c": "#e0c8a0",
+  "d": "#b0e0f8",
+  "m": "#101010",
+  "w": "#ffffff"
+ },
+ "base": [
+  ".....aa...aa.....",
+  "....abbaaabba....",
+  "....abbbbbbba....",
+  "...abwmbbbwmba...",
+  "...abbbcmcbbba...",
+  "...abbccmccbba...",
+  "..addabbbbbadda..",
+  ".adddabcccbaddda.",
+  ".adddabcccbaddda.",
+  "..addabbbbbadda..",
+  "....abba.abba....",
+  "....aaa...aaa...."
+ ],
+ "poses": {
+  "closed": {
+   "3": "-----aa---aa-----"
+  },
+  "left": {
+   "3": "----wmb--wmb-----"
+  },
+  "right": {
+   "3": "-----bwm--bwm----"
+  },
+  "fidget": {
+   "6": "------.---.------",
+   "9": "------.---.------"
+  },
+  "inhale": {
+   "6": "-a-------------a-"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

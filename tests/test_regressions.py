@@ -45,6 +45,7 @@ class ArenaBugs(unittest.TestCase):
                     "pipe_eel": "|"}
         expected.update({ch.id: "gcc" if "gcc" in ch.tools else "python3" for ch in challenges.code.ALL})
         expected.update({ch.id: "apt" if "apt" in ch.tools else "rpm" for ch in challenges.packages.ALL})
+        expected.update({ch.id: "rustc" for ch in challenges.rust.ALL})
         editor = challenges.BY_ID["mirror_mimic"].tools[0]                  # the first editor installed
         expected.update({"mirror_mimic": editor, "repo_revenant": editor, "enabled_ettin": "dnf"})
         for ch in challenges.ALL:

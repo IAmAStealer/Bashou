@@ -130,6 +130,58 @@
   "explain": "match doit couvrir tous les cas."
  },
  {
+  "id": "rust-1-11",
+  "level": 1,
+  "q": "rustc dit 'cannot assign twice to immutable variable `count`'. Quelle est la correction ?",
+  "choices": [
+   "La déclarer avec let mut count",
+   "Ajouter un point-virgule après count",
+   "Écrire count = count + 1 à la place",
+   "Utiliser var au lieu de let"
+  ],
+  "answer": 0,
+  "explain": "Les variables Rust sont figées sauf si tu dis mut. La ligne 'help:' de rustc montre souvent la modification exacte."
+ },
+ {
+  "id": "rust-1-12",
+  "level": 1,
+  "q": "`let n = \"42\";` puis `let n: u32 = n.parse().unwrap();`. Pourquoi ça compile ?",
+  "choices": [
+   "Le deuxième let crée une nouvelle variable : le shadowing",
+   "n était mutable depuis le début",
+   "parse change le type de l'ancien n",
+   "Rust ignore les types sur let"
+  ],
+  "answer": 0,
+  "explain": "Le shadowing réutilise un nom avec une nouvelle valeur et même un nouveau type. mut change la valeur, jamais le type."
+ },
+ {
+  "id": "rust-1-13",
+  "level": 1,
+  "q": "De quoi un const a-t-il besoin, contrairement à un let ?",
+  "choices": [
+   "Un type écrit, et une valeur connue à la compilation",
+   "Le mot-clé mut",
+   "Une fonction autour",
+   "Rien : ce sont les mêmes"
+  ],
+  "answer": 0,
+  "explain": "const MAX: u32 = 100; vit tout le programme, souvent en haut du fichier, en majuscules par habitude."
+ },
+ {
+  "id": "rust-1-14",
+  "level": 1,
+  "q": "Un u8 qui vaut 250 reçoit + 10 dans une version debug. Que se passe-t-il ?",
+  "choices": [
+   "Le programme panique : attempt to add with overflow",
+   "Il vaut 260",
+   "Il repasse discrètement à 4",
+   "rustc refuse de compiler"
+  ],
+  "answer": 0,
+  "explain": "u8 s'arrête à 255. En debug le programme panique ; en release il reboucle. Prends un type plus grand (u16, u32) ou checked_add."
+ },
+ {
   "id": "rust-2-01",
   "level": 2,
   "q": "Combien d'emprunts mutables d'une valeur peuvent exister en même temps ?",

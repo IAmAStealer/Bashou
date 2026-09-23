@@ -31,6 +31,21 @@ NOTES = {
                        "; $( ) and | in the data stay plain text. os.system and shell=True pass it to a shell.",
                        "subprocess.run(['echo', 'checking', host], check=True)"),
     },
+    "rust": {
+        "mut": ("In Rust a variable can't change unless you say so: let x = 5 is fixed, let mut x = 5 "
+                "can change. rustc stops at 'cannot assign twice to immutable variable' and suggests mut.",
+                "let mut count = 0;\ncount += 1;"),
+        "shadowing": ("A new let with the same name hides the old variable: that's shadowing. Unlike mut, "
+                      "the new one can have another type, handy to turn text into a number.",
+                      "let guess = \"  42  \";\nlet guess: u32 = guess.trim().parse().unwrap();"),
+        "const": ("A const is fixed forever and known when the program is built. It always says its type; "
+                  "the name is in capitals by habit.",
+                  "const MAX_POINTS: u32 = 100_000;"),
+        "integers": ("Integer types say their size: u8 holds 0 to 255, u32 up to about 4 billion, i32 can be "
+                     "negative. In a debug build, going past the limit panics ('attempt to add with overflow'). "
+                     "`as` converts between them.",
+                     "let total: u32 = small as u32 + 300;"),
+    },
     "c": {
         "malloc": ("malloc(n) gives you n bytes on the heap, or NULL. Every malloc needs exactly one free "
                    "once you're done, or the memory leaks.",

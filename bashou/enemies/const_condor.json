@@ -1,0 +1,48 @@
+{
+ "name": "Const Condor",
+ "palette": {
+  "a": "#101010",
+  "b": "#303030",
+  "c": "#f0f0f0",
+  "d": "#e09080",
+  "e": "#f0c040",
+  "m": "#000000",
+  "w": "#ffffff"
+ },
+ "base": [
+  ".................",
+  "......cccc.......",
+  ".....cddddc......",
+  "....adwmddda.....",
+  "..eeaddddda......",
+  "...eaccccccaa....",
+  "..abbbbbbbbbbba..",
+  ".abbbbbbbbbbbbbba",
+  "abbba.abbbba.abbb",
+  "bba...abbbba...ab",
+  ".......ae.ea.....",
+  "......ee...ee...."
+ ],
+ "poses": {
+  "closed": {
+   "3": "------aa---------"
+  },
+  "left": {
+   "3": "-----wmd---------"
+  },
+  "right": {
+   "3": "------dwm--------"
+  },
+  "fidget": {
+   "7": "ab--------------b",
+   "8": "b-a..ab------..a-"
+  },
+  "inhale": {
+   "6": "-a-------------a-"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

@@ -183,7 +183,10 @@ INVITES = {
                   "I want to see the world. Take me with you: `bashou adventure`",
                   "Grass, hills, dungeons… `bashou adventure` is waiting for us."],
     "security": ["Feel like a detective? `bashou security` has small investigations."],
+    "rust": ["You know your way around now. Want to learn Rust? `{cmd}` installs it, and Rust fights will come.",
+             "Rust next? The compiler explains every mistake. Install it with `{cmd}`, then `bashou explain rust mut`."],
 }
+RUST_AT = 15                    # achievements before the pets suggest Rust (owner)
 
 
 # A first look at a tool, before its fight can come (see fight.to_discover).
@@ -198,6 +201,7 @@ DISCOVER = {
     "python3": ["`python3 -c \"print(2 ** 10)\"` runs one line of Python, right from bash.",
                 "Python reads JSON too: `python3 -m json.tool data.json` prints it neatly."],
     "gcc": ["`gcc hello.c -o hello && ./hello` builds a C program and runs it."],
+    "rustc": ["`rustc main.rs && ./main` builds a Rust program. rustc's errors say what to change."],
 }
 
 
@@ -212,11 +216,28 @@ def discover(state, rng):
     return _(rng.choice(DISCOVER[tool])) + (" " + _("(bashou adventure teaches it too)") if taught else "")
 
 
+def rust_install():
+    """How to install Rust here: the distro's packages, or rustup (read the script before running it)."""
+    from .challenges import family
+    if "debian" in family():
+        return "sudo apt install rustc cargo"
+    if family() & {"rhel", "fedora", "centos"}:
+        return "sudo dnf install rust cargo"
+    return "curl -sSf https://sh.rustup.rs -o rustup.sh && less rustup.sh && sh rustup.sh"
+
+
 def invite(state, rng):
-    """Suggest a mode you haven't tried yet (None once you tried them all)."""
+    """Suggest a mode you haven't tried yet (None once you tried them all), or Rust once you're at ease."""
     todo = [mode for mode, tried in (("adventure", state.get("adventure")), ("security", state.get("security")))
             if not tried]
-    return rng.choice(INVITES[rng.choice(todo)]) if todo else None
+    if len(state["achievements"]) >= RUST_AT and not shutil.which("rustc"):
+        todo.append("rust")
+    if not todo:
+        return None
+    mode = rng.choice(todo)
+    if mode == "rust":
+        return _(rng.choice(INVITES["rust"])).format(cmd=rust_install())
+    return rng.choice(INVITES[mode])
 
 
 def line(state, pet, rng=random):

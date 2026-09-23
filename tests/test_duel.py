@@ -42,6 +42,8 @@ class JudgeTest(unittest.TestCase):
             cmd = SOLUTIONS[ch.id][0].replace("{x}", "x").replace("{{", "{").replace("}}", "}")
             if ch.verify and ch in challenges.code.ALL:                  # fix fights: edit, then run it
                 cmd = "gcc prog.c -o prog" if "gcc" in ch.tools else "python3 prog.py"
+            if ch in challenges.rust.ALL:
+                cmd = "rustc prog.rs && ./counter"
             if "micro" in ch.tools:                                      # repository files: edit them
                 cmd = f"{ch.tool} the.repo"
             self.assertEqual(duel.judge(ch, 0, cmd), "hit", ch.id)

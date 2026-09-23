@@ -3,6 +3,16 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.4.1 — 2026-09-23
+
+- **Rust fights**, where `rustc` is installed: a counter that isn't `mut`, a `const` without its
+  type, text that should become a number (shadowing, since `mut` can't change a type), and a `u8`
+  total that overflows. Each file says what it must print and how to build it (`rustc counter.rs`).
+- `bashou explain rust mut` (or shadowing, const, integers).
+- Four new first-level Rust questions in `bashou adventure`: `mut`, shadowing, `const`, overflow.
+- Once you have 15 achievements and no Rust yet, your pet sometimes offers to start: it gives the
+  install command for your system (`apt`, `dnf`, or rustup, read before you run it).
+
 ## v0.4.0 — 2026-09-23
 
 - **Code fights.** Fifteen new threats, in Python and C. Most hand you a small broken file whose
