@@ -26,8 +26,8 @@ tokens spent to learn what a command does.
 - **`bashou explain python list`** (or `dict`, `loop`, `recursion`; `bashou explain c malloc`…): a
   short note with an example, for the code fights.
 - **`bashou security`**: small investigations (a hidden file, a cron backdoor, a SUID binary).
-- **`bashou adventure`**: a walk through 9 topics (bash, Linux, systemd, Python, Rust, C, Debian,
-  Rocky Linux, CI/CD) with 206 questions about what goes wrong and what to check first, bosses, and
+- **`bashou adventure`**: a walk through 10 topics (coding logic, bash, Linux, systemd, Python, Rust,
+  C, Debian, Rocky Linux, CI/CD) with 240 questions about what goes wrong and what to check first, bosses, and
   chests that open with real commands.
 
 ![bashou fight: a Planet and its hearts face the Log Hydra, the task in a bubble, and the arena

@@ -23,6 +23,7 @@ TOPICS = {
     "rocky": ("Rocky Linux", "hills", "Stone Titan"),
     "cicd": ("CI/CD", "water", "Pipeline Hydra"),
     "systemd": ("systemd", "dungeon", "Unit Wyrm"),
+    "logic": ("Logic", "meadow", "Paradox Sphinx"),
 }
 
 CHAPTERS = [

@@ -1,0 +1,392 @@
+[
+ {
+  "id": "logic-1-01",
+  "level": 1,
+  "q": "`x = 3` puis `x = x + 2`. Que contient x maintenant ?",
+  "choices": [
+   "5",
+   "3",
+   "2",
+   "x + 2"
+  ],
+  "answer": 0,
+  "explain": "Le côté droit est calculé d'abord, avec l'ancien x (3), puis rangé dans x."
+ },
+ {
+  "id": "logic-1-02",
+  "level": 1,
+  "q": "`a = 1`, `b = a`, puis `a = 5`. Que vaut b ?",
+  "choices": [
+   "1",
+   "5",
+   "6",
+   "Une erreur"
+  ],
+  "answer": 0,
+  "explain": "b a reçu une copie de la valeur de a à ce moment-là. Changer a ensuite ne touche pas b (pour les nombres et le texte)."
+ },
+ {
+  "id": "logic-1-03",
+  "level": 1,
+  "q": "Quelles lignes échangent les valeurs de a et b ?",
+  "choices": [
+   "t = a; a = b; b = t",
+   "a = b; b = a",
+   "b = a; a = b",
+   "a = a; b = b"
+  ],
+  "answer": 0,
+  "explain": "Sans variable de secours, la première affectation écrase une valeur. Python sait aussi écrire a, b = b, a."
+ },
+ {
+  "id": "logic-1-04",
+  "level": 1,
+  "q": "age vaut 18. Le bloc sous `if age >= 18:` s'exécute-t-il ?",
+  "choices": [
+   "Oui : >= inclut 18",
+   "Non : 18 n'est pas au-dessus de 18",
+   "Seulement avec else",
+   "C'est une erreur"
+  ],
+  "answer": 0,
+  "explain": "> veut dire strictement plus grand, >= plus grand ou égal. Beaucoup de bugs « à un près » sont un > qui aurait dû être un >=."
+ },
+ {
+  "id": "logic-1-05",
+  "level": 1,
+  "q": "x vaut 10. `x > 5 and x < 10` est-il vrai ou faux ?",
+  "choices": [
+   "Faux",
+   "Vrai",
+   "Une erreur",
+   "Ça dépend du langage"
+  ],
+  "answer": 0,
+  "explain": "and demande que les deux côtés soient vrais. 10 < 10 est faux, donc tout le test est faux."
+ },
+ {
+  "id": "logic-1-06",
+  "level": 1,
+  "q": "Quel x rend `x < 0 or x > 100` vrai ?",
+  "choices": [
+   "150",
+   "50",
+   "0",
+   "100"
+  ],
+  "answer": 0,
+  "explain": "or demande un seul côté vrai. Le test veut dire « hors de 0..100 » : une façon courante de refuser une mauvaise saisie."
+ },
+ {
+  "id": "logic-1-07",
+  "level": 1,
+  "q": "`not (x == 3)` veut dire la même chose que…",
+  "choices": [
+   "x != 3",
+   "x == -3",
+   "x < 3",
+   "x > 3"
+  ],
+  "answer": 0,
+  "explain": "not inverse vrai et faux. != se lit « est différent de »."
+ },
+ {
+  "id": "logic-1-08",
+  "level": 1,
+  "q": "Combien de fois `for i in range(1, 5):` exécute-t-il son corps ?",
+  "choices": [
+   "4",
+   "5",
+   "6",
+   "1"
+  ],
+  "answer": 0,
+  "explain": "range s'arrête avant sa fin : i vaut 1, 2, 3, 4. La plupart des langages comptent ainsi (début inclus, fin exclue)."
+ },
+ {
+  "id": "logic-1-09",
+  "level": 1,
+  "q": "`n = 3`, puis `while n > 0: n = n - 1`. Combien de tours fait la boucle ?",
+  "choices": [
+   "3",
+   "2",
+   "4",
+   "À l'infini"
+  ],
+  "answer": 0,
+  "explain": "n passe de 3 → 2 → 1 → 0 ; à 0 le test est faux et la boucle s'arrête. Suis-la sur papier en cas de doute."
+ },
+ {
+  "id": "logic-1-10",
+  "level": 1,
+  "q": "Tu comptes des éléments dans une boucle. Où va `count = 0` ?",
+  "choices": [
+   "Une fois, avant la boucle",
+   "Dans la boucle",
+   "Après la boucle",
+   "Nulle part, il part de 0"
+  ],
+  "answer": 0,
+  "explain": "Dans la boucle, il serait remis à zéro à chaque tour, et tu ne compterais jamais que 0 ou 1."
+ },
+ {
+  "id": "logic-1-11",
+  "level": 1,
+  "q": "`total = 0`, puis `for n in [2, 4, 6]: total = total + n`. Que vaut total ?",
+  "choices": [
+   "12",
+   "6",
+   "0",
+   "246"
+  ],
+  "answer": 0,
+  "explain": "Le motif de l'accumulateur : partir de 0, ajouter chaque élément. Même forme pour compter, assembler du texte, construire une liste."
+ },
+ {
+  "id": "logic-1-12",
+  "level": 1,
+  "q": "Pour trouver le plus grand nombre d'une liste, par quoi `best` doit-il commencer ?",
+  "choices": [
+   "Le premier élément de la liste",
+   "0",
+   "Le dernier indice",
+   "100"
+  ],
+  "answer": 0,
+  "explain": "Partir de 0 échoue quand tous les nombres sont négatifs. Pars d'une vraie donnée, puis compare le reste."
+ },
+ {
+  "id": "logic-1-13",
+  "level": 1,
+  "q": "xs = [\"a\", \"b\", \"c\"]. À quel indice est \"c\" ?",
+  "choices": [
+   "2",
+   "3",
+   "1",
+   "-2"
+  ],
+  "answer": 0,
+  "explain": "Les indices commencent à 0, donc le dernier est len(xs) - 1. Beaucoup de langages lisent aussi xs[-1] comme le dernier."
+ },
+ {
+  "id": "logic-1-14",
+  "level": 1,
+  "q": "Une liste a 5 éléments. Quel est son dernier indice valide ?",
+  "choices": [
+   "4",
+   "5",
+   "6",
+   "0"
+  ],
+  "answer": 0,
+  "explain": "De 0 à 4. Lire l'indice 5, c'est un pas trop loin : une erreur en Python, un bug mémoire en C."
+ },
+ {
+  "id": "logic-1-15",
+  "level": 1,
+  "q": "`is_admin = False`, puis `if is_admin:`. Le bloc s'exécute-t-il ?",
+  "choices": [
+   "Non",
+   "Oui",
+   "Une seule fois",
+   "C'est une erreur"
+  ],
+  "answer": 0,
+  "explain": "Un booléen est déjà vrai ou faux : inutile d'écrire == True. Nomme-les comme des questions : is_admin, has_key."
+ },
+ {
+  "id": "logic-1-16",
+  "level": 1,
+  "q": "Que t'apprend `n % 2 == 0` ?",
+  "choices": [
+   "n est pair",
+   "n est impair",
+   "n est la moitié de 2",
+   "n est positif"
+  ],
+  "answer": 0,
+  "explain": "% donne le reste d'une division. n % 3 == 0 : un élément sur trois ; n % 10 : le dernier chiffre."
+ },
+ {
+  "id": "logic-1-17",
+  "level": 1,
+  "q": "`def double(x): return x * 2`, puis `y = double(4)`. Que vaut y ?",
+  "choices": [
+   "8",
+   "4",
+   "double",
+   "Rien"
+  ],
+  "answer": 0,
+  "explain": "L'appel lance la fonction avec x = 4, et return renvoie 8 là où elle a été appelée."
+ },
+ {
+  "id": "logic-1-18",
+  "level": 1,
+  "q": "Une fonction affiche son résultat mais n'a pas de return. `y = f()` : que contient y ?",
+  "choices": [
+   "Rien (None, null)",
+   "Le texte affiché",
+   "0",
+   "La fonction elle-même"
+  ],
+  "answer": 0,
+  "explain": "print montre une valeur à un humain ; return la donne au code. Un script a besoin de return pour réutiliser un résultat."
+ },
+ {
+  "id": "logic-1-19",
+  "level": 1,
+  "q": "score vaut 95. `if score >= 50: grade = \"pass\"` puis `elif score >= 90: grade = \"great\"`. grade ?",
+  "choices": [
+   "pass",
+   "great",
+   "Les deux",
+   "Aucun"
+  ],
+  "answer": 0,
+  "explain": "Seule la première branche vraie s'exécute. Teste d'abord le cas le plus précis : >= 90 avant >= 50."
+ },
+ {
+  "id": "logic-1-20",
+  "level": 1,
+  "q": "Quel nom convient le mieux à une variable qui contient le nombre de connexions ratées ?",
+  "choices": [
+   "failed_logins",
+   "x",
+   "data",
+   "f"
+  ],
+  "answer": 0,
+  "explain": "Un bon nom dit ce qu'est la valeur : le code se lit alors comme une phrase, et les bugs se voient."
+ },
+ {
+  "id": "logic-2-01",
+  "level": 2,
+  "q": "`x = 0`, puis `while x != 10: x = x + 3`. Que se passe-t-il ?",
+  "choices": [
+   "Elle ne s'arrête jamais : x saute 10",
+   "Elle tourne 4 fois",
+   "Elle tourne 3 fois",
+   "Elle s'arrête à x = 10"
+  ],
+  "answer": 0,
+  "explain": "x vaut 0, 3, 6, 9, 12… et jamais exactement 10. Teste avec < plutôt que != quand le pas peut sauter."
+ },
+ {
+  "id": "logic-2-02",
+  "level": 2,
+  "q": "`for i in range(3):` contient `for j in range(2): print(i, j)`. Combien de lignes s'affichent ?",
+  "choices": [
+   "6",
+   "5",
+   "3",
+   "2"
+  ],
+  "answer": 0,
+  "explain": "La boucle intérieure tourne entièrement à chaque tour de l'extérieure : 3 × 2. C'est ainsi qu'on parcourt grilles et paires."
+ },
+ {
+  "id": "logic-2-03",
+  "level": 2,
+  "q": "Pourquoi écrire `if user is not None and user.age > 18`, dans cet ordre ?",
+  "choices": [
+   "Premier test faux : le second est sauté, pas de plantage",
+   "C'est seulement plus rapide",
+   "La syntaxe l'impose",
+   "Aucune raison, l'ordre ne compte pas"
+  ],
+  "answer": 0,
+  "explain": "and s'arrête au premier côté faux (court-circuit). Mets la vérification de sécurité d'abord ; or s'arrête au premier côté vrai."
+ },
+ {
+  "id": "logic-2-04",
+  "level": 2,
+  "q": "`for i in range(len(xs) + 1): print(xs[i])`. Qu'est-ce qui ne va pas ?",
+  "choices": [
+   "Le dernier tour lit après la fin",
+   "Il saute le premier élément",
+   "Elle ne finit jamais",
+   "Rien, tout s'affiche"
+  ],
+  "answer": 0,
+  "explain": "Une erreur à un près : les indices vont jusqu'à len(xs) - 1. Parcourir les éléments eux-mêmes (for x in xs) l'évite."
+ },
+ {
+  "id": "logic-2-05",
+  "level": 2,
+  "q": "Tu retires des éléments d'une liste pendant qu'une boucle for la parcourt. Que se passe-t-il ?",
+  "choices": [
+   "Certains éléments sont sautés",
+   "Chaque élément est bien vu",
+   "La liste double",
+   "La boucle recommence"
+  ],
+  "answer": 0,
+  "explain": "Retirer décale les éléments suivants vers la gauche, sous les pieds de la boucle. Construis plutôt une nouvelle liste avec ce que tu gardes."
+ },
+ {
+  "id": "logic-2-06",
+  "level": 2,
+  "q": "`def f(n): return n * f(n - 1)`. Qu'est-ce qui manque ?",
+  "choices": [
+   "Un cas de base, comme if n <= 1: return 1",
+   "Une boucle autour",
+   "Un print",
+   "Rien : c'est une factorielle"
+  ],
+  "answer": 0,
+  "explain": "Toute récursion a besoin d'un cas qui répond sans s'appeler, sinon elle s'appelle jusqu'à planter."
+ },
+ {
+  "id": "logic-2-07",
+  "level": 2,
+  "q": "Quand `a or b` est-il faux ?",
+  "choices": [
+   "Seulement quand les deux sont faux",
+   "Quand l'un est faux",
+   "Quand les deux sont vrais",
+   "Jamais"
+  ],
+  "answer": 0,
+  "explain": "or n'est faux que dans un cas ; and n'est vrai que dans un cas. Écrire les 4 cas dans un petit tableau règle tout doute."
+ },
+ {
+  "id": "logic-2-08",
+  "level": 2,
+  "q": "`not (a and b)` revient à…",
+  "choices": [
+   "(not a) or (not b)",
+   "(not a) and (not b)",
+   "a or b",
+   "not a and b"
+  ],
+  "answer": 0,
+  "explain": "De Morgan : not transforme and en or (et l'inverse). Pratique pour simplifier une condition illisible."
+ },
+ {
+  "id": "logic-2-09",
+  "level": 2,
+  "q": "Pourquoi tester `if not items: return 0` avant `return total / len(items)` ?",
+  "choices": [
+   "Une liste vide diviserait par zéro",
+   "Ça va plus vite",
+   "len l'exige",
+   "Pour trier la liste"
+  ],
+  "answer": 0,
+  "explain": "Une clause de garde traite le cas bizarre d'abord et laisse le reste de la fonction simple."
+ },
+ {
+  "id": "logic-2-10",
+  "level": 2,
+  "q": "`found = False`, puis `for n in nums: if n < 0: found = True`. Quand found est-il vrai à la fin ?",
+  "choices": [
+   "Si au moins un nombre est négatif",
+   "Si le dernier nombre est négatif",
+   "Si tous sont négatifs",
+   "Jamais"
+  ],
+  "answer": 0,
+  "explain": "Le motif du drapeau : posé une fois, jamais remis à faux dans la boucle. Beaucoup de langages ont any() pour ça."
+ }
+]

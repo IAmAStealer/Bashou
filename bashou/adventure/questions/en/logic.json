@@ -1,0 +1,392 @@
+[
+ {
+  "id": "logic-1-01",
+  "level": 1,
+  "q": "`x = 3` then `x = x + 2`. What does x hold now?",
+  "choices": [
+   "5",
+   "3",
+   "2",
+   "x + 2"
+  ],
+  "answer": 0,
+  "explain": "The right side is computed first, with the old x (3), then stored back in x."
+ },
+ {
+  "id": "logic-1-02",
+  "level": 1,
+  "q": "`a = 1`, `b = a`, then `a = 5`. What is b?",
+  "choices": [
+   "1",
+   "5",
+   "6",
+   "An error"
+  ],
+  "answer": 0,
+  "explain": "b got a copy of the value a had at that moment. Changing a later doesn't touch b (for numbers and text)."
+ },
+ {
+  "id": "logic-1-03",
+  "level": 1,
+  "q": "Which lines swap the values of a and b?",
+  "choices": [
+   "t = a; a = b; b = t",
+   "a = b; b = a",
+   "b = a; a = b",
+   "a = a; b = b"
+  ],
+  "answer": 0,
+  "explain": "Without a spare variable, the first assignment erases one value. Python can also write a, b = b, a."
+ },
+ {
+  "id": "logic-1-04",
+  "level": 1,
+  "q": "age is 18. Does the block under `if age >= 18:` run?",
+  "choices": [
+   "Yes: >= includes 18",
+   "No: 18 is not above 18",
+   "Only with else",
+   "It's an error"
+  ],
+  "answer": 0,
+  "explain": "> means strictly above, >= above or equal. Many 'off by one' bugs are a > that should be >=."
+ },
+ {
+  "id": "logic-1-05",
+  "level": 1,
+  "q": "x is 10. Is `x > 5 and x < 10` true or false?",
+  "choices": [
+   "False",
+   "True",
+   "An error",
+   "It depends on the language"
+  ],
+  "answer": 0,
+  "explain": "and needs both sides true. 10 < 10 is false, so the whole test is false."
+ },
+ {
+  "id": "logic-1-06",
+  "level": 1,
+  "q": "Which x makes `x < 0 or x > 100` true?",
+  "choices": [
+   "150",
+   "50",
+   "0",
+   "100"
+  ],
+  "answer": 0,
+  "explain": "or needs one side true. The test means 'outside 0..100': a common way to reject bad input."
+ },
+ {
+  "id": "logic-1-07",
+  "level": 1,
+  "q": "`not (x == 3)` means the same as…",
+  "choices": [
+   "x != 3",
+   "x == -3",
+   "x < 3",
+   "x > 3"
+  ],
+  "answer": 0,
+  "explain": "not flips true and false. != reads 'is not equal to'."
+ },
+ {
+  "id": "logic-1-08",
+  "level": 1,
+  "q": "How many times does `for i in range(1, 5):` run its body?",
+  "choices": [
+   "4",
+   "5",
+   "6",
+   "1"
+  ],
+  "answer": 0,
+  "explain": "range stops before its end: i is 1, 2, 3, 4. Most languages count this way (start included, end excluded)."
+ },
+ {
+  "id": "logic-1-09",
+  "level": 1,
+  "q": "`n = 3`, then `while n > 0: n = n - 1`. How many times does the loop run?",
+  "choices": [
+   "3",
+   "2",
+   "4",
+   "Forever"
+  ],
+  "answer": 0,
+  "explain": "n goes 3 → 2 → 1 → 0; at 0 the test is false and the loop stops. Trace it on paper when in doubt."
+ },
+ {
+  "id": "logic-1-10",
+  "level": 1,
+  "q": "You count items in a loop. Where does `count = 0` go?",
+  "choices": [
+   "Once, before the loop",
+   "Inside the loop",
+   "After the loop",
+   "Nowhere, it starts at 0"
+  ],
+  "answer": 0,
+  "explain": "Inside the loop it would reset at every turn, and you'd only ever count 0 or 1."
+ },
+ {
+  "id": "logic-1-11",
+  "level": 1,
+  "q": "`total = 0`, then `for n in [2, 4, 6]: total = total + n`. What is total?",
+  "choices": [
+   "12",
+   "6",
+   "0",
+   "246"
+  ],
+  "answer": 0,
+  "explain": "The accumulator pattern: start at 0, add each item. Same shape to count, to join text, to build a list."
+ },
+ {
+  "id": "logic-1-12",
+  "level": 1,
+  "q": "To find the biggest number of a list, what should `best` start as?",
+  "choices": [
+   "The first item of the list",
+   "0",
+   "The last index",
+   "100"
+  ],
+  "answer": 0,
+  "explain": "Starting at 0 fails when every number is negative. Start from real data, then compare the rest."
+ },
+ {
+  "id": "logic-1-13",
+  "level": 1,
+  "q": "xs = [\"a\", \"b\", \"c\"]. At which index is \"c\"?",
+  "choices": [
+   "2",
+   "3",
+   "1",
+   "-2"
+  ],
+  "answer": 0,
+  "explain": "Indexes start at 0, so the last one is len(xs) - 1. Many languages also read xs[-1] as the last item."
+ },
+ {
+  "id": "logic-1-14",
+  "level": 1,
+  "q": "A list has 5 items. What is its last valid index?",
+  "choices": [
+   "4",
+   "5",
+   "6",
+   "0"
+  ],
+  "answer": 0,
+  "explain": "0 to 4. Reading index 5 is one past the end: an error in Python, a memory bug in C."
+ },
+ {
+  "id": "logic-1-15",
+  "level": 1,
+  "q": "`is_admin = False`, then `if is_admin:`. Does the block run?",
+  "choices": [
+   "No",
+   "Yes",
+   "Only once",
+   "It's an error"
+  ],
+  "answer": 0,
+  "explain": "A boolean is already true or false: no need to write == True. Name them like questions: is_admin, has_key."
+ },
+ {
+  "id": "logic-1-16",
+  "level": 1,
+  "q": "What does `n % 2 == 0` tell you?",
+  "choices": [
+   "n is even",
+   "n is odd",
+   "n is half of 2",
+   "n is positive"
+  ],
+  "answer": 0,
+  "explain": "% gives the remainder of a division. n % 3 == 0: every third item; n % 10: the last digit."
+ },
+ {
+  "id": "logic-1-17",
+  "level": 1,
+  "q": "`def double(x): return x * 2`, then `y = double(4)`. What is y?",
+  "choices": [
+   "8",
+   "4",
+   "double",
+   "Nothing"
+  ],
+  "answer": 0,
+  "explain": "The call runs the function with x = 4, and return hands 8 back to where it was called."
+ },
+ {
+  "id": "logic-1-18",
+  "level": 1,
+  "q": "A function prints its result but has no return. `y = f()`: what is in y?",
+  "choices": [
+   "Nothing (None, null)",
+   "The printed text",
+   "0",
+   "The function itself"
+  ],
+  "answer": 0,
+  "explain": "print shows a value to a human; return gives it to the code. Scripts need return to reuse a result."
+ },
+ {
+  "id": "logic-1-19",
+  "level": 1,
+  "q": "score is 95. `if score >= 50: grade = \"pass\"` then `elif score >= 90: grade = \"great\"`. Grade?",
+  "choices": [
+   "pass",
+   "great",
+   "Both",
+   "None"
+  ],
+  "answer": 0,
+  "explain": "Only the first true branch runs. Test the most specific case first: >= 90 before >= 50."
+ },
+ {
+  "id": "logic-1-20",
+  "level": 1,
+  "q": "Which name is best for a variable holding the number of failed logins?",
+  "choices": [
+   "failed_logins",
+   "x",
+   "data",
+   "f"
+  ],
+  "answer": 0,
+  "explain": "A good name says what the value is: the code then reads like a sentence, and bugs stand out."
+ },
+ {
+  "id": "logic-2-01",
+  "level": 2,
+  "q": "`x = 0`, then `while x != 10: x = x + 3`. What happens?",
+  "choices": [
+   "It never stops: x jumps over 10",
+   "It runs 4 times",
+   "It runs 3 times",
+   "It stops at x = 10"
+  ],
+  "answer": 0,
+  "explain": "x goes 0, 3, 6, 9, 12… and is never exactly 10. Test with < rather than != when the step can jump."
+ },
+ {
+  "id": "logic-2-02",
+  "level": 2,
+  "q": "`for i in range(3):` holds `for j in range(2): print(i, j)`. How many lines print?",
+  "choices": [
+   "6",
+   "5",
+   "3",
+   "2"
+  ],
+  "answer": 0,
+  "explain": "The inner loop runs fully for each turn of the outer one: 3 × 2. That's how grids and pairs are walked."
+ },
+ {
+  "id": "logic-2-03",
+  "level": 2,
+  "q": "Why write `if user is not None and user.age > 18`, in that order?",
+  "choices": [
+   "If the first test is false, the second is skipped: no crash",
+   "It's only faster",
+   "The syntax requires it",
+   "No reason, order doesn't matter"
+  ],
+  "answer": 0,
+  "explain": "and stops at the first false side (short-circuit). Put the safety check first; or stops at the first true side."
+ },
+ {
+  "id": "logic-2-04",
+  "level": 2,
+  "q": "`for i in range(len(xs) + 1): print(xs[i])`. What goes wrong?",
+  "choices": [
+   "The last turn reads past the end",
+   "It skips the first item",
+   "It never ends",
+   "Nothing, it prints them all"
+  ],
+  "answer": 0,
+  "explain": "An off-by-one: indexes go to len(xs) - 1. Looping over the items themselves (for x in xs) avoids it."
+ },
+ {
+  "id": "logic-2-05",
+  "level": 2,
+  "q": "You remove items from a list while a for loop walks over it. What happens?",
+  "choices": [
+   "Some items get skipped",
+   "Every item is checked fine",
+   "The list doubles",
+   "The loop restarts"
+  ],
+  "answer": 0,
+  "explain": "Removing shifts the next items left, under the loop's feet. Build a new list with what you keep instead."
+ },
+ {
+  "id": "logic-2-06",
+  "level": 2,
+  "q": "`def f(n): return n * f(n - 1)`. What is missing?",
+  "choices": [
+   "A base case, like if n <= 1: return 1",
+   "A loop around it",
+   "A print",
+   "Nothing: it's a factorial"
+  ],
+  "answer": 0,
+  "explain": "Every recursion needs a case that answers without calling itself, or it calls itself until it crashes."
+ },
+ {
+  "id": "logic-2-07",
+  "level": 2,
+  "q": "When is `a or b` false?",
+  "choices": [
+   "Only when both are false",
+   "When one is false",
+   "When both are true",
+   "Never"
+  ],
+  "answer": 0,
+  "explain": "or is false in one case only; and is true in one case only. Writing the 4 cases in a small table settles any doubt."
+ },
+ {
+  "id": "logic-2-08",
+  "level": 2,
+  "q": "`not (a and b)` is the same as…",
+  "choices": [
+   "(not a) or (not b)",
+   "(not a) and (not b)",
+   "a or b",
+   "not a and b"
+  ],
+  "answer": 0,
+  "explain": "De Morgan: not flips and into or (and the other way). Handy to simplify a condition you can't read."
+ },
+ {
+  "id": "logic-2-09",
+  "level": 2,
+  "q": "Why test `if not items: return 0` before `return total / len(items)`?",
+  "choices": [
+   "An empty list would divide by zero",
+   "It makes it faster",
+   "len needs it",
+   "To sort the list"
+  ],
+  "answer": 0,
+  "explain": "A guard clause handles the odd case first and leaves the rest of the function simple."
+ },
+ {
+  "id": "logic-2-10",
+  "level": 2,
+  "q": "`found = False`, then `for n in nums: if n < 0: found = True`. When is found true at the end?",
+  "choices": [
+   "If at least one number is negative",
+   "If the last number is negative",
+   "If all are negative",
+   "Never"
+  ],
+  "answer": 0,
+  "explain": "The flag pattern: set once, never reset in the loop. Many languages have any() for exactly this."
+ }
+]
