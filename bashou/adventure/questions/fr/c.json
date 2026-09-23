@@ -2,7 +2,7 @@
  {
   "id": "c-1-01",
   "level": 1,
-  "q": "Pourquoi vérifier ce que renvoie malloc ?",
+  "q": "Ton programme demande de la mémoire avec p = malloc(1000). Pourquoi la ligne suivante doit-elle vérifier p ?",
   "choices": [
    "Il renvoie NULL quand la mémoire manque",
    "Il renvoie la taille",
@@ -10,12 +10,12 @@
    "Il n'échoue jamais, inutile"
   ],
   "answer": 0,
-  "explain": "Utiliser NULL plante, ou pire. if (!p) { perror(\"malloc\"); exit(1); }"
+  "explain": "Quand le système ne peut pas donner la mémoire, malloc renvoie NULL, un pointeur vers rien. Écrire à travers NULL fait planter le programme, ou sur certains systèmes abîme la mémoire en silence. Vérifie tout de suite : if (!p) { perror(\"malloc\"); exit(1); }. malloc ne renvoie jamais une taille ou un nombre négatif, seulement une adresse ou NULL."
  },
  {
   "id": "c-1-02",
   "level": 1,
-  "q": "Par où commence tout programme C ?",
+  "q": "Tu ouvres un programme C que tu n'as jamais vu. Quelle fonction tourne en premier ?",
   "choices": [
    "main",
    "start",
@@ -23,12 +23,12 @@
    "run"
   ],
   "answer": 0,
-  "explain": "int main(void) ou int main(int argc, char **argv)."
+  "explain": "Tout programme C commence dans la fonction nommée main ; les autres ne tournent que si main (ou une fonction qu'elle appelle) les appelle. Elle s'écrit int main(void), ou int main(int argc, char **argv) pour recevoir les arguments de la ligne de commande. Tu lis un nouveau programme ? Commence par main."
  },
  {
   "id": "c-1-03",
   "level": 1,
-  "q": "Comment compiler hello.c avec gcc ?",
+  "q": "Tu as écrit hello.c. Comment le transformer en programme que tu peux lancer, avec gcc ?",
   "choices": [
    "gcc hello.c -o hello",
    "gcc run hello.c",
@@ -36,12 +36,12 @@
    "make hello.c"
   ],
   "answer": 0,
-  "explain": "Puis lance ./hello."
+  "explain": "gcc hello.c traduit le code C en code machine ; -o hello nomme le résultat hello (sans ça tu obtiens un fichier a.out). Ensuite ./hello le lance : le ./ veut dire « celui de ce dossier ». make est un autre outil qui lit un Makefile, il ne prend pas un .c comme ça."
  },
  {
   "id": "c-1-04",
   "level": 1,
-  "q": "Qu'est-ce qui termine une chaîne en C ?",
+  "q": "C n'a pas de type chaîne, seulement des tableaux de caractères. Comment une fonction sait-elle où le texte s'arrête ?",
   "choices": [
    "Un octet nul '\\0'",
    "Un retour à la ligne",
@@ -49,12 +49,12 @@
    "Un espace"
   ],
   "answer": 0,
-  "explain": "strlen compte jusqu'à l'octet nul."
+  "explain": "Une chaîne C se termine par un octet nul, écrit '\\0', rangé juste après la dernière lettre. strlen, printf(\"%s\") et les autres lisent jusqu'à le rencontrer. Donc \"hi\" prend 3 octets. Oublie l'octet nul et ils continuent de lire après ton texte, dans la mémoire qui suit."
  },
  {
   "id": "c-1-05",
   "level": 1,
-  "q": "Qu'est-ce que `int *p` ?",
+  "q": "Un programme déclare `int *p;`. Quel genre de variable est p ?",
   "choices": [
    "Un pointeur vers un int",
    "Un int multiplié",
@@ -62,12 +62,12 @@
    "Un int constant"
   ],
   "answer": 0,
-  "explain": "*p lit l'int pointé."
+  "explain": "L'étoile dans une déclaration veut dire pointeur : p contient l'adresse d'un int quelque part en mémoire, pas un int lui-même. Ensuite, *p (l'étoile dans une expression) veut dire « l'int à cette adresse » : x = *p le lit, *p = 5 le change. Un tableau d'ints s'écrirait int a[10]."
  },
  {
   "id": "c-1-06",
   "level": 1,
-  "q": "Que donne `&x` ?",
+  "q": "En C, qu'obtiens-tu en écrivant `&x` devant une variable x ?",
   "choices": [
    "L'adresse de x",
    "x et 1",
@@ -75,12 +75,12 @@
    "Un x à compteur de références"
   ],
   "answer": 0,
-  "explain": "Les pointeurs contiennent des adresses."
+  "explain": "& donne l'adresse où x est rangé en mémoire. C'est ce qu'on met dans un pointeur : int *p = &x;. C'est ainsi qu'une fonction peut changer ta variable : scanf(\"%d\", &x) reçoit l'adresse, donc elle peut écrire dans x. Ce n'est pas une copie de x."
  },
  {
   "id": "c-1-07",
   "level": 1,
-  "q": "Quelle fonction alloue de la mémoire sur le tas ?",
+  "q": "Ton programme C a besoin de mémoire dont la taille n'est connue qu'à l'exécution. Quelle fonction la demande ?",
   "choices": [
    "malloc",
    "new",
@@ -88,12 +88,12 @@
    "heap"
   ],
   "answer": 0,
-  "explain": "Chaque malloc a besoin de son free."
+  "explain": "malloc(taille) réserve ce nombre d'octets sur le tas, une mémoire qui reste jusqu'à ce que tu la rendes. Chaque malloc doit avoir son free(p) quand tu as fini, sinon le programme fuit et grossit avec le temps. new, c'est du C++, pas du C."
  },
  {
   "id": "c-1-08",
   "level": 1,
-  "q": "Que fait `#include` ?",
+  "q": "La plupart des fichiers C commencent par des lignes comme `#include <stdio.h>`. Que fait cette ligne ?",
   "choices": [
    "Colle ici un autre fichier (un en-tête)",
    "Lie une bibliothèque",
@@ -101,12 +101,12 @@
    "Définit une macro"
   ],
   "answer": 0,
-  "explain": "Le préprocesseur passe avant le compilateur."
+  "explain": "Avant la compilation, le préprocesseur remplace la ligne #include par tout le contenu de ce fichier d'en-tête. stdio.h décrit printf et les autres, pour que le compilateur sache comment les appeler. Le code de printf lui-même est ajouté plus tard, à l'édition de liens."
  },
  {
   "id": "c-1-09",
   "level": 1,
-  "q": "Que veut dire un main qui renvoie 0 ?",
+  "q": "Ton programme se termine par `return 0;` dans main. Que dit ce 0 à celui qui l'a lancé ?",
   "choices": [
    "Succès",
    "Échec",
@@ -114,12 +114,12 @@
    "Redémarrage"
   ],
   "answer": 0,
-  "explain": "Le shell le voit dans $?."
+  "explain": "La valeur que renvoie main devient le code de retour du programme : 0 veut dire succès, tout autre nombre une erreur. Le shell le montre avec echo $?, et les scripts s'en servent (./prog && echo ok). Renvoie 1 quand ça s'est mal passé, pour que les scripts le voient."
  },
  {
   "id": "c-1-10",
   "level": 1,
-  "q": "Quelle option active les avertissements courants de gcc ?",
+  "q": "gcc compile ton code sans rien dire, et pourtant il a des bugs. Quelle option fait signaler les erreurs courantes ?",
   "choices": [
    "-Wall",
    "-W0",
@@ -127,12 +127,12 @@
    "-O2"
   ],
   "answer": 0,
-  "explain": "Ajoute -Wextra aussi, et corrige-les tous."
+  "explain": "-Wall active les avertissements courants : une variable utilisée avant d'avoir une valeur, un mauvais format de printf, une comparaison toujours vraie. Ajoute -Wextra pour plus. Un avertissement est souvent un vrai bug, alors corrige-les tous. -O2 concerne la vitesse, pas les avertissements."
  },
  {
   "id": "c-2-01",
   "level": 2,
-  "q": "Qu'est-ce qu'une segfault ?",
+  "q": "Ton programme s'arrête avec « Segmentation fault ». Que s'est-il passé ?",
   "choices": [
    "Toucher de la mémoire interdite",
    "Une erreur de disque",
@@ -140,12 +140,12 @@
    "Un dépassement d'entier"
   ],
   "answer": 0,
-  "explain": "Souvent un pointeur NULL ou pendouillant."
+  "explain": "Le programme a touché de la mémoire qui ne lui appartient pas, et le système l'a arrêté. Causes courantes : utiliser un pointeur NULL, lire après la fin d'un tableau, ou utiliser de la mémoire après free. Compile avec -g -fsanitize=address et relance : il montre la ligne exacte."
  },
  {
   "id": "c-2-02",
   "level": 2,
-  "q": "Que provoque `free(p)` deux fois ?",
+  "q": "Un bug fait appeler free(p) deux fois sur le même pointeur. Que se passe-t-il ?",
   "choices": [
    "Un comportement indéfini (double free)",
    "Rien",
@@ -153,7 +153,7 @@
    "La mémoire est libérée deux fois plus vite"
   ],
   "answer": 0,
-  "explain": "Mets p = NULL après le free."
+  "explain": "Le second free rend une mémoire qui appartient peut-être déjà à autre chose : c'est un comportement indéfini. Ça peut planter, abîmer des données en silence, ou même servir à un attaquant. Le compilateur ne le voit pas. Habitude : écris p = NULL; juste après free(p), car free(NULL) ne fait rien."
  },
  {
   "id": "c-2-03",
@@ -166,12 +166,12 @@
    "Il ne lit qu'un caractère"
   ],
   "answer": 0,
-  "explain": "Utilise fgets(buf, size, stdin)."
+  "explain": "gets(buf) lit une ligne entière dans buf sans savoir quelle taille fait buf. Une ligne plus longue écrit après la fin, par-dessus d'autres variables : un débordement de tampon, un moyen classique de prendre le contrôle d'un programme. Elle a été retirée du langage. fgets(buf, sizeof buf, stdin) s'arrête à la taille donnée."
  },
  {
   "id": "c-2-04",
   "level": 2,
-  "q": "Que fait `static` sur une fonction ?",
+  "q": "Dans un fichier C, une fonction est déclarée `static int helper(void)`. Qu'est-ce que static change ?",
   "choices": [
    "La garde privée à son fichier",
    "La rend plus rapide",
@@ -179,7 +179,7 @@
    "La range sur le tas"
   ],
   "answer": 0,
-  "explain": "Sur une variable locale, elle garde sa valeur entre les appels."
+  "explain": "Sur une fonction, static la rend visible seulement dans son propre fichier .c : les autres fichiers ne peuvent pas l'appeler, et son nom ne peut pas entrer en conflit avec les leurs. À utiliser pour les fonctions d'aide. Sur une variable dans une fonction, static veut dire autre chose : elle garde sa valeur d'un appel à l'autre."
  },
  {
   "id": "c-2-05",
@@ -192,12 +192,12 @@
    "Il n'affiche pas les accents"
   ],
   "answer": 0,
-  "explain": "Une faille de chaîne de format. Écris toujours printf(\"%s\", saisie). -Wformat-security prévient."
+  "explain": "printf traite son premier argument comme un format. Si l'utilisateur tape %x %x, printf lit des valeurs sur la pile et les affiche ; %n écrit même en mémoire. C'est une faille de chaîne de format. Écris toujours printf(\"%s\", saisie) : la saisie n'est alors que du texte. gcc -Wformat-security le signale."
  },
  {
   "id": "c-2-06",
   "level": 2,
-  "q": "Quel outil trouve les erreurs mémoire à l'exécution ?",
+  "q": "Ton programme C plante parfois, parfois pas. Quel outil surveille sa mémoire pendant qu'il tourne ?",
   "choices": [
    "valgrind",
    "gdb seulement",
@@ -205,7 +205,7 @@
    "lint"
   ],
   "answer": 0,
-  "explain": "Ou compile avec -fsanitize=address."
+  "explain": "valgrind ./prog lance le programme dans un vérificateur qui signale les lectures après un tableau, l'usage après free et les fuites, avec les numéros de ligne. Autre moyen : compiler avec -fsanitize=address (AddressSanitizer), plus rapide. gdb montre où ça a planté, pas le mauvais accès d'avant."
  },
  {
   "id": "c-2-07",
@@ -218,12 +218,12 @@
    "Rien, malloc vérifie"
   ],
   "answer": 0,
-  "explain": "Écrire ensuite n éléments déborde le tampon. calloc(n, taille) vérifie la multiplication."
+  "explain": "Les nombres en C ont un maximum. Un n énorme multiplié par la taille fait le tour et donne un petit nombre, donc malloc réserve un petit bloc. Le programme écrit ensuite n éléments dedans et dépasse la fin : un débordement de tampon. calloc(n, taille) vérifie la multiplication et échoue proprement à la place."
  },
  {
   "id": "c-2-08",
   "level": 2,
-  "q": "À quoi sert une garde d'en-tête ?",
+  "q": "Un fichier d'en-tête commence par #ifndef CONFIG_H / #define CONFIG_H. À quoi sert cette « garde d'en-tête » ?",
   "choices": [
    "À n'inclure un en-tête qu'une fois",
    "À protéger des secrets",
@@ -231,12 +231,12 @@
    "À vérifier les types"
   ],
   "answer": 0,
-  "explain": "#ifndef X / #define X / #endif, ou #pragma once."
+  "explain": "Dans un gros projet, le même en-tête est souvent inclus deux fois via d'autres en-têtes, et définir deux fois la même struct est une erreur. La première fois, CONFIG_H n'est pas défini : le contenu est pris et CONFIG_H est défini. La deuxième fois, il est sauté. #pragma once fait pareil en une ligne."
  },
  {
   "id": "c-2-09",
   "level": 2,
-  "q": "Que contient `argv[0]` ?",
+  "q": "Tu lances ./prog entree.txt. Dans main(int argc, char **argv), que contient argv[0] ?",
   "choices": [
    "Le nom du programme",
    "Le premier argument",
@@ -244,12 +244,12 @@
    "L'environnement"
   ],
   "answer": 0,
-  "explain": "Les arguments commencent à argv[1] ; argc les compte tous."
+  "explain": "argv[0] est le nom du programme tel qu'il a été tapé : ./prog. Les vrais arguments commencent à argv[1], ici entree.txt, et argc compte tout, donc argc vaut 2. Bug classique : lire argv[1] sans vérifier argc avant, ce qui plante quand aucun argument n'est donné."
  },
  {
   "id": "c-2-10",
   "level": 2,
-  "q": "Que lit `make` ?",
+  "q": "Un projet dit « lance juste make ». Quel fichier make lit-il pour savoir quoi construire ?",
   "choices": [
    "Un Makefile",
    "Directement CMakeLists.txt",
@@ -257,6 +257,6 @@
    "Seulement build.ninja"
   ],
   "answer": 0,
-  "explain": "Règles : cible: dépendances, puis une tabulation et les commandes."
+  "explain": "make lit un Makefile dans le dossier courant. Chaque règle dit cible: fichiers dont elle dépend, puis les commandes sur des lignes qui commencent par une tabulation (pas des espaces). make ne reconstruit que ce qui a changé depuis la dernière fois. CMake et Ninja sont d'autres outils, avec leurs propres fichiers."
  }
 ]

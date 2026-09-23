@@ -10,7 +10,7 @@
    "Writing the tests for you"
   ],
   "answer": 0,
-  "explain": "Problems show up minutes after a push, while the change is still fresh in mind."
+  "explain": "Continuous integration means a server builds the project and runs its tests every time someone pushes a change. If something broke, you know within minutes, while you still remember what you changed. It doesn't write tests for you: it runs the ones you have."
  },
  {
   "id": "cicd-1-02",
@@ -23,7 +23,7 @@
    "Opening the IDE"
   ],
   "answer": 0,
-  "explain": "Also schedules and manual runs."
+  "explain": "The pipeline is started by an event on the repository: most often a push to a branch, or opening or updating a pull request (a merge request on GitLab). It can also run on a schedule, like a nightly build, or when someone clicks Run by hand."
  },
  {
   "id": "cicd-1-03",
@@ -36,7 +36,7 @@
    "Copied from your laptop"
   ],
   "answer": 0,
-  "explain": "Pinned versions make the build the same today and in six months, and changes to them go through review."
+  "explain": "Pinning means writing down the exact version (tool 2.4.1, not 'latest'). The build then behaves the same today and in six months, and moving to a new version is a visible change that someone reviews. 'Latest' can break a build overnight, and a tool installed by hand on one runner is forgotten when that runner is replaced."
  },
  {
   "id": "cicd-1-04",
@@ -49,7 +49,7 @@
    ".travis.yml"
   ],
   "answer": 0,
-  "explain": "GitLab uses .gitlab-ci.yml, Jenkins a Jenkinsfile."
+  "explain": "GitHub Actions reads every YAML file in the .github/workflows/ folder of the repository; each file is one workflow. The others belong to other CI systems: .gitlab-ci.yml for GitLab, Jenkinsfile for Jenkins, .travis.yml for Travis. Recognizing the file tells you which CI a project uses."
  },
  {
   "id": "cicd-1-05",
@@ -62,7 +62,7 @@
    "Artifacts are encrypted"
   ],
   "answer": 0,
-  "explain": "Rebuilding per environment can pull other versions. Artifacts: binaries, packages, images, reports."
+  "explain": "An artifact is what the build produces: a binary, a package, a container image. If you build again for production, the build may pull newer dependencies and give something you never tested. Build once, test that artifact, and send that same artifact to staging and then production."
  },
  {
   "id": "cicd-1-06",
@@ -75,7 +75,7 @@
    "In a commit message"
   ],
   "answer": 0,
-  "explain": "Secrets there are masked in logs and never committed. Give each one only to the jobs that need it."
+  "explain": "The CI's secret storage (GitHub secrets, GitLab CI variables) keeps passwords outside the code: they are hidden in the job logs and never end up in git. Anything written in the YAML, the README or a commit message is readable by everyone who can read the repository. Give each secret only to the jobs that need it."
  },
  {
   "id": "cicd-1-07",
@@ -88,7 +88,7 @@
    "Yes, after git gc"
   ],
   "answer": 0,
-  "explain": "Anyone with a clone has it. Rotate first; rewriting history comes after, if at all. Secret scanners catch it early."
+  "explain": "Git keeps every version of every file: the old commit still contains the password, and every clone already has a copy. Private repos get shared, forked or leaked too. So first revoke it and create a new one; cleaning the history comes after, if at all. Secret scanners (gitleaks) catch this before the push."
  },
  {
   "id": "cicd-1-08",
@@ -101,7 +101,7 @@
    "To use more servers"
   ],
   "answer": 0,
-  "explain": "It catches \"works on my machine\"."
+  "explain": "Your laptop has things the project never declared: a tool installed long ago, a file left around, another version of a library. CI starts from a clean, identical machine for every change, so a test that passes there passes for everyone. That is how it catches \"it works on my machine\"."
  },
  {
   "id": "cicd-1-09",
@@ -114,7 +114,7 @@
    "Nothing"
   ],
   "answer": 0,
-  "explain": "Protected branches can require a green pipeline."
+  "explain": "Red means a step failed: a test, the build, a linter or a security check. Merging now would bring that failure into the main branch for everyone. Open the failed job's log, fix it, and push again. Teams often protect the main branch so it only accepts green pipelines."
  },
  {
   "id": "cicd-1-10",
@@ -127,7 +127,7 @@
    "Blank lines"
   ],
   "answer": 0,
-  "explain": "Indentation decides what belongs to what, like in Python. Tabs are not allowed; a CI lint catches it."
+  "explain": "In YAML the spaces at the start of a line decide what belongs to what, like in Python: one space off and a step lands in the wrong job, or the file no longer parses. Tabs are forbidden, only spaces. Your editor's YAML support or a lint step shows the mistake before the pipeline does."
  },
  {
   "id": "cicd-2-01",
@@ -140,7 +140,7 @@
    "To save space"
   ],
   "answer": 0,
-  "explain": "Bashou's own CI does this."
+  "explain": "uses: some/action@v3 follows a tag, and whoever controls that repository can move the tag to new code, which then runs in your pipeline with your secrets. A commit SHA (the long hexadecimal id) always means exactly the same code. Pin to the SHA and add the version in a comment; Bashou's own CI does this."
  },
  {
   "id": "cicd-2-02",
@@ -153,7 +153,7 @@
    "They don't support Linux"
   ],
   "answer": 0,
-  "explain": "A fork's PR edits the workflow or the tests: that code runs with your runner's access. Use throwaway hosted runners."
+  "explain": "A pull request from a fork can change the workflow file or the tests, and that code then runs on your runner. On a machine you host, it can read files, steal tokens, or stay installed after the job. GitHub's hosted runners are thrown away after each job, so run strangers' code there."
  },
  {
   "id": "cicd-2-03",
@@ -166,7 +166,7 @@
    "A parallel deploy"
   ],
   "answer": 0,
-  "explain": "e.g. Python 3.9 and 3.13."
+  "explain": "A matrix lists values (Python 3.9 and 3.13, Ubuntu and Rocky…) and the CI runs the same job once for each combination, in parallel. You find out that your code breaks on the oldest supported version before a user does, without copying the job by hand."
  },
  {
   "id": "cicd-2-04",
@@ -179,7 +179,7 @@
    "Fewer tests"
   ],
   "answer": 0,
-  "explain": "Keyed by the lock file's hash."
+  "explain": "Downloading every dependency on each run is slow. A cache keeps them between runs, keyed by the hash of the lock file: as long as the lock file is unchanged the cache is reused, and when it changes a fresh download happens. It saves time; it doesn't make anything safer or smaller."
  },
  {
   "id": "cicd-2-05",
@@ -192,7 +192,7 @@
    "Deploying twice"
   ],
   "answer": 0,
-  "explain": "Rollback = switch back."
+  "explain": "You keep two identical environments. Blue serves users while you deploy the new version to green and test it; then the load balancer switches traffic to green. If something goes wrong, you switch back to blue in seconds, since it was never touched."
  },
  {
   "id": "cicd-2-06",
@@ -205,7 +205,7 @@
    "A nightly build"
   ],
   "answer": 0,
-  "explain": "Watch the metrics, then widen."
+  "explain": "Like the canary miners took underground to detect gas: a small share of users (say 5%) gets the new version first. You watch errors and response times; if they stay normal you widen step by step, otherwise you roll back having hurt only a few users."
  },
  {
   "id": "cicd-2-07",
@@ -218,7 +218,7 @@
    "admin"
   ],
   "answer": 0,
-  "explain": "Least privilege for the token."
+  "explain": "Each job gets a token that can act on the repository. permissions: lists what that token may do, for example contents: read. If a step is compromised, it can only do what the token allows: a read-only token can't push code or publish a release. Grant each job only what it needs."
  },
  {
   "id": "cicd-2-08",
@@ -231,7 +231,7 @@
    "A key written in the repo"
   ],
   "answer": 0,
-  "explain": "A token that expires in minutes is worth little if it leaks. Scope it to that job's environment."
+  "explain": "With OIDC the CI proves to the cloud which repository and job is asking, and gets a token that expires within minutes. Nothing long-lived is stored, so a leaked token is soon useless. A permanent admin key in a secret works until someone notices the leak, possibly months later."
  },
  {
   "id": "cicd-2-09",
@@ -244,7 +244,7 @@
    "It replaces backups"
   ],
   "answer": 0,
-  "explain": "Infrastructure as code: git log tells who changed what, and a new server is built the same way."
+  "explain": "When servers are described in files (infrastructure as code), a change is a commit: someone reviews it, git log tells who changed what and why, and a revert undoes it. A new server is built the same way as the old one. It doesn't replace backups: your data still needs them."
  },
  {
   "id": "cicd-2-10",
@@ -257,6 +257,6 @@
    "It can't be undone"
   ],
   "answer": 0,
-  "explain": "'Ensure this line is in the file', not 'append this line': safe to rerun after a failure. Ansible reports changed=0."
+  "explain": "An idempotent task describes the result, not an action: 'this line is in the file', rather than 'add this line'. The first run makes the change, the next runs see it's already done and change nothing. You can safely run it again after a failure; Ansible then reports changed=0."
  }
 ]

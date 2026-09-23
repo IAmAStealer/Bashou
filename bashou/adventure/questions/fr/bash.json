@@ -10,7 +10,7 @@
    "Le premier trouvé dans $PATH"
   ],
   "answer": 0,
-  "explain": "Un chemin relatif part du dossier courant (pwd). Un script fait d'abord cd vers un endroit connu, ou utilise des chemins absolus."
+  "explain": "Un chemin sans / au début est relatif : il part du dossier où tu te trouves quand tu lances le script (affiché par pwd), pas de là où est rangé le script. Lance-le depuis ton home et il supprime ~/build. Un script sûr fait d'abord cd vers un dossier connu, ou utilise des chemins complets comme /srv/app/build."
  },
  {
   "id": "bash-1-02",
@@ -23,7 +23,7 @@
    "Aucun : HTTPS rend ça sûr"
   ],
   "answer": 0,
-  "explain": "HTTPS prouve qui envoie le script, pas ce qu'il fait. Télécharge-le, lis-le, puis lance-le."
+  "explain": "Le pipe envoie ce que renvoie le site directement dans un shell root : tu ne le vois jamais, et il peut tout faire à la machine. HTTPS prouve seulement quel site l'envoie, pas ce que fait le script. Plus sûr : curl -o install.sh URL, lis-le (less install.sh), puis lance-le."
  },
  {
   "id": "bash-1-03",
@@ -36,7 +36,7 @@
    "Ils sont vides"
   ],
   "answer": 0,
-  "explain": "ls -a les montre. Une bonne partie de ta config (et des restes d'un intrus) se cache derrière ce point."
+  "explain": "Sous Linux, un fichier dont le nom commence par un point est caché : ls le saute pour garder un affichage lisible. Il n'est pas protégé, juste pas montré. ls -a (all) les montre. Tes réglages sont là (.bashrc, .ssh), et aussi ce qu'un intrus pourrait laisser : regarde avec ls -a."
  },
  {
   "id": "bash-1-04",
@@ -49,12 +49,12 @@
    "Il le crée dans ton dossier personnel"
   ],
   "answer": 0,
-  "explain": "Un script doit pouvoir tourner deux fois sans casse (idempotent). -p crée aussi les dossiers parents manquants."
+  "explain": "mkdir logs s'arrête sur une erreur si logs existe déjà : le script échoue à la deuxième exécution. mkdir -p accepte les deux cas, et crée aussi les dossiers parents manquants (mkdir -p a/b/c). Un bon script peut tourner deux fois sans casser : on dit qu'il est idempotent."
  },
  {
   "id": "bash-1-05",
   "level": 1,
-  "q": "Tu veux ajouter une ligne à /etc/hosts sans perdre le reste. Tu utilises quoi ?",
+  "q": "Tu veux ajouter une ligne à /etc/hosts sans perdre le reste. Quel chevron (les signes > et <) utilises-tu ?",
   "choices": [
    ">>",
    ">",
@@ -62,7 +62,7 @@
    "<"
   ],
   "answer": 0,
-  "explain": "> vide d'abord le fichier : un > de travers l'efface. `set -o noclobber` empêche > d'écraser."
+  "explain": "Les signes > et < s'appellent des chevrons. >> (deux chevrons) ajoute à la fin du fichier et garde ce qui y est déjà. Un seul chevron > vide d'abord le fichier, puis écrit : un > de travers et /etc/hosts a disparu. | envoie la sortie à une autre commande, le chevron < lit un fichier en entrée. Astuce : set -o noclobber empêche > d'écraser un fichier."
  },
  {
   "id": "bash-1-06",
@@ -75,7 +75,7 @@
    "Le code de retour de grep"
   ],
   "answer": 0,
-  "explain": "Le pipe envoie les lignes trouvées par grep à wc -l, qui compte les lignes. grep -c le fait seul."
+  "explain": "grep affiche chaque ligne qui contient error ; le pipe | passe ces lignes à wc -l, qui compte les lignes. Donc 12 lignes contiennent le mot au moins une fois. Une ligne avec deux fois error compte une seule fois. grep -c error app.log donne le même nombre tout seul."
  },
  {
   "id": "bash-1-07",
@@ -88,7 +88,7 @@
    "cat /var/log/commands"
   ],
   "answer": 0,
-  "explain": "L'historique est dans ~/.bash_history. Les mots de passe tapés en ligne de commande y finissent aussi."
+  "explain": "Ctrl+R cherche dans ton historique à mesure que tu tapes : Ctrl+R encore pour des résultats plus anciens, Entrée pour lancer, → pour la modifier avant. L'historique est enregistré dans ~/.bash_history. Attention : un mot de passe tapé en ligne de commande y est enregistré aussi."
  },
  {
   "id": "bash-1-08",
@@ -101,7 +101,7 @@
    "Ton historique du shell"
   ],
   "answer": 0,
-  "explain": "L'aide livrée avec l'outil correspond à ta version. q quitte man, / y cherche."
+  "explain": "L'aide installée avec l'outil décrit exactement ta version ; une réponse de forum peut viser une autre version ou un autre système. cmd --help donne un résumé, man cmd le manuel complet : / y cherche, n passe au résultat suivant, q quitte."
  },
  {
   "id": "bash-1-09",
@@ -114,7 +114,7 @@
    "Si cp a affiché OK"
   ],
   "answer": 0,
-  "explain": "Chaque commande rend un code de retour, dans $?. `if cp a b; then …` le teste directement."
+  "explain": "Chaque commande se termine par un nombre, son code de retour : 0 veut dire succès, tout le reste une erreur. Beaucoup de commandes n'affichent rien quand tout va bien, donc le silence ne prouve rien. echo $? montre le dernier code, et if cp a b; then … else … fi le teste directement."
  },
  {
   "id": "bash-1-10",
@@ -127,7 +127,7 @@
    "Ça ne marche qu'une fois"
   ],
   "answer": 0,
-  "explain": "Tout le monde sur la machine voit les lignes de commande avec ps. Laisse l'outil le demander, ou un fichier lisible par toi seul."
+  "explain": "Toute la ligne de commande, mot de passe compris, est enregistrée dans l'historique, et pendant qu'elle tourne n'importe quel utilisateur de la machine peut la lire avec ps. Mieux : tape -p seul et laisse mysql demander le mot de passe, ou mets-le dans un fichier de config lisible par toi seul (chmod 600)."
  },
  {
   "id": "bash-1-11",
@@ -140,7 +140,7 @@
    "Ajouter -r pour être sûr"
   ],
   "answer": 0,
-  "explain": "Le motif est développé avant que rm tourne : ls avec le même motif montre exactement ce qui part."
+  "explain": "Avant même que rm démarre, bash remplace *.log par la liste des noms qui correspondent. ls *.log fait le même remplacement, donc il montre exactement ce que rm supprimerait. -f enlève seulement les questions de sécurité, et -r entrerait aussi dans les dossiers : les deux aggravent une erreur."
  },
  {
   "id": "bash-1-12",
@@ -153,7 +153,7 @@
    "À un fichier de log dans /var/log"
   ],
   "answer": 0,
-  "explain": "stdout (1) porte les résultats, stderr (2) les erreurs : `cmd > out.txt` garde les résultats et affiche encore les erreurs."
+  "explain": "Une commande a deux sorties : stdout (numéro 1) pour ses résultats et stderr (numéro 2) pour les erreurs et avertissements. Comme elles sont séparées, cmd > out.txt (un chevron) met seulement les résultats dans le fichier et les erreurs restent à l'écran, et 2> erreurs.txt garde les erreurs à part."
  },
  {
   "id": "bash-2-01",
@@ -166,7 +166,7 @@
    "job | tee 2"
   ],
   "answer": 0,
-  "explain": "L'ordre compte : d'abord stdout vers le fichier, puis stderr (2) là où va maintenant stdout (1)."
+  "explain": "Les redirections (les chevrons > et >>) se lisent de gauche à droite. >> job.log envoie stdout dans le fichier, puis 2>&1 dit : envoie stderr là où va stdout maintenant, le fichier. Dans l'autre ordre, 2>&1 recopie stdout quand il pointe encore vers l'écran, et les erreurs n'arrivent jamais au log. Cron n'a pas d'écran : elles sont perdues."
  },
  {
   "id": "bash-2-02",
@@ -179,7 +179,7 @@
    "Une erreur : date n'est pas une variable"
   ],
   "answer": 0,
-  "explain": "$( ) lance la commande et met sa sortie à cet endroit. date +%F donne AAAA-MM-JJ, qui se trie bien."
+  "explain": "$( ) lance la commande à l'intérieur et met sa sortie à sa place, avant que le reste tourne : c'est la substitution de commande. date +%F écrit la date en AAAA-MM-JJ. Ce format se trie dans l'ordre des dates avec un simple ls, pratique pour les sauvegardes. Entre apostrophes, elle resterait telle quelle."
  },
  {
   "id": "bash-2-03",
@@ -192,7 +192,7 @@
    "for f in \"$(ls)\"; do gzip \"$f\"; done"
   ],
   "answer": 0,
-  "explain": "Le motif donne un mot par fichier ; $(ls) est coupé aux espaces. Mets toujours \"$f\" entre guillemets."
+  "explain": "*.log donne un élément par fichier, même si le nom a des espaces. $(ls) produit du texte que bash coupe à chaque espace, donc 'mon app.log' devient deux noms faux. Ensuite \"$f\" entre guillemets passe le nom d'un seul bloc. Habitude : boucler sur un motif, et toujours mettre les variables entre guillemets."
  },
  {
   "id": "bash-2-04",
@@ -205,7 +205,7 @@
    "Il lance le script en root"
   ],
   "answer": 0,
-  "explain": "Sans lui, un script continue après un cd raté et lance le rm suivant au mauvais endroit. set -x affiche les commandes."
+  "explain": "Par défaut bash continue après une erreur. -e arrête à la première commande ratée, -u arrête sur une variable jamais définie (une faute de frappe devient une erreur, pas un texte vide), -o pipefail fait échouer un pipe si une partie échoue. Sans eux, un cd raté est suivi d'un rm au mauvais endroit."
  },
  {
   "id": "bash-2-05",
@@ -218,7 +218,7 @@
    "read file line"
   ],
   "answer": 0,
-  "explain": "for sur $(cat) découpe sur les espaces, pas sur les lignes."
+  "explain": "read lit une ligne entière à la fois, et le chevron < fichier lui donne le fichier. IFS= garde les espaces au début et à la fin de la ligne, -r garde les antislashs tels quels. for line in $(cat fichier) coupe le texte à chaque espace : on obtient des mots, pas des lignes."
  },
  {
   "id": "bash-2-06",
@@ -231,7 +231,7 @@
    "&& lance les deux en même temps"
   ],
   "answer": 0,
-  "explain": "&& continue seulement si ça a marché, || seulement si ça a échoué, ; toujours."
+  "explain": "&& lance la commande suivante seulement si la précédente a réussi. Si /srv/app n'existe pas, cd échoue et rm -rf ne tourne jamais. Avec ; le rm tourne quand même, dans le dossier où tu étais. || fait l'inverse : il tourne seulement après un échec (cmd || echo raté)."
  },
  {
   "id": "bash-2-07",
@@ -244,7 +244,7 @@
    "Rien"
   ],
   "answer": 0,
-  "explain": "Une variable sans guillemets est coupée aux espaces et développée comme un motif. Écris rm \"$f\"."
+  "explain": "Sans guillemets, bash coupe la valeur de la variable aux espaces avant de lancer la commande : rm reçoit deux noms, vieilles et notes.txt. Si un fichier vieilles existe, il part. Écrit rm \"$f\", la valeur reste d'un seul bloc. Mets chaque variable entre guillemets sauf si tu veux vraiment la couper."
  },
  {
   "id": "bash-2-08",
@@ -257,7 +257,7 @@
    "Un script doit finir en .exe"
   ],
   "answer": 0,
-  "explain": "chmod +x deploy.sh, ou bash deploy.sh. Un disque monté noexec le bloque aussi."
+  "explain": "Posséder un fichier ne le rend pas exécutable : il lui faut le droit x (exécution), visible dans ls -l comme -rwxr-xr-x. chmod +x deploy.sh l'ajoute. bash deploy.sh marche aussi, car bash se contente de lire le fichier. Sur un disque monté noexec, ./ ne marche jamais."
  },
  {
   "id": "bash-2-09",
@@ -270,7 +270,7 @@
    "mktemp --autoremove"
   ],
   "answer": 0,
-  "explain": "trap … EXIT tourne à toute sortie, erreur ou Ctrl+C. À utiliser avec tmp=$(mktemp)."
+  "explain": "trap 'commande' EXIT enregistre une commande que bash lance quand le script se termine : fin normale, erreur avec set -e, ou Ctrl+C. Un rm sur la dernière ligne ne tourne jamais si le script s'arrête avant. Duo habituel : tmp=$(mktemp) puis trap 'rm -f \"$tmp\"' EXIT."
  },
  {
   "id": "bash-2-10",
@@ -283,6 +283,6 @@
    "Les noms fixes sont trop longs"
   ],
   "answer": 0,
-  "explain": "/tmp est partagé : un lien symbolique posé là fait écraser un autre fichier. mktemp choisit un nom unique, privé."
+  "explain": "Tout le monde peut écrire dans /tmp. Si quelqu'un crée /tmp/monscript.tmp avant toi, par exemple comme lien vers un de tes fichiers, ton script écrit dans ce fichier-là. mktemp crée un nouveau fichier au nom aléatoire, lisible par toi seul : personne ne peut préparer le piège à l'avance."
  }
 ]

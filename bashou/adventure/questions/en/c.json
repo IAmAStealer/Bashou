@@ -2,7 +2,7 @@
  {
   "id": "c-1-01",
   "level": 1,
-  "q": "Why check what malloc returns?",
+  "q": "Your program asks for memory with p = malloc(1000). Why should the very next line check p?",
   "choices": [
    "It returns NULL when memory runs out",
    "It returns the size",
@@ -10,12 +10,12 @@
    "It never fails, no need"
   ],
   "answer": 0,
-  "explain": "Using NULL crashes, or worse. if (!p) { perror(\"malloc\"); exit(1); }"
+  "explain": "When the system can't give the memory, malloc returns NULL, a pointer to nothing. Writing through NULL crashes the program, or on some systems corrupts memory silently. Check right away: if (!p) { perror(\"malloc\"); exit(1); }. malloc never returns a size or a negative number, only an address or NULL."
  },
  {
   "id": "c-1-02",
   "level": 1,
-  "q": "What does every C program start from?",
+  "q": "You open a C program you have never seen. Which function runs first?",
   "choices": [
    "main",
    "start",
@@ -23,12 +23,12 @@
    "run"
   ],
   "answer": 0,
-  "explain": "int main(void) or int main(int argc, char **argv)."
+  "explain": "Every C program starts in the function called main; the others only run when main (or a function it calls) calls them. It is written int main(void), or int main(int argc, char **argv) to receive the command-line arguments. Reading a new program? Start at main."
  },
  {
   "id": "c-1-03",
   "level": 1,
-  "q": "How do you compile hello.c with gcc?",
+  "q": "You wrote hello.c. How do you turn it into a program you can run, with gcc?",
   "choices": [
    "gcc hello.c -o hello",
    "gcc run hello.c",
@@ -36,12 +36,12 @@
    "make hello.c"
   ],
   "answer": 0,
-  "explain": "Then run ./hello."
+  "explain": "gcc hello.c translates the C code into machine code; -o hello names the result hello (without it you get a file called a.out). Then ./hello runs it: the ./ says 'the one in this folder'. make is another tool that reads a Makefile, it doesn't take a .c file like this."
  },
  {
   "id": "c-1-04",
   "level": 1,
-  "q": "What ends a string in C?",
+  "q": "C has no string type, only arrays of characters. How does a function know where the text ends?",
   "choices": [
    "A zero byte '\\0'",
    "A newline",
@@ -49,12 +49,12 @@
    "A space"
   ],
   "answer": 0,
-  "explain": "strlen counts until the zero byte."
+  "explain": "A C string ends with a zero byte, written '\\0', stored right after the last letter. strlen, printf(\"%s\") and friends read until they meet it. So \"hi\" takes 3 bytes. Forget the zero byte and they keep reading past your text into whatever memory comes next."
  },
  {
   "id": "c-1-05",
   "level": 1,
-  "q": "What is `int *p`?",
+  "q": "A program declares `int *p;`. What kind of variable is p?",
   "choices": [
    "A pointer to an int",
    "An int multiplied",
@@ -62,12 +62,12 @@
    "A constant int"
   ],
   "answer": 0,
-  "explain": "*p reads the int it points to."
+  "explain": "The * in a declaration means pointer: p holds the address of an int somewhere in memory, not an int itself. Later, *p (with the star in an expression) means 'the int at that address': x = *p reads it, *p = 5 changes it. An array of ints would be written int a[10]."
  },
  {
   "id": "c-1-06",
   "level": 1,
-  "q": "What does `&x` give?",
+  "q": "In C, what do you get when you write `&x` in front of a variable x?",
   "choices": [
    "The address of x",
    "x and 1",
@@ -75,12 +75,12 @@
    "A reference-counted x"
   ],
   "answer": 0,
-  "explain": "Pointers hold addresses."
+  "explain": "& gives the address where x is stored in memory. That is what you put in a pointer: int *p = &x;. It is how a function can change your variable: scanf(\"%d\", &x) receives the address, so it can write into x. It is not a copy of x."
  },
  {
   "id": "c-1-07",
   "level": 1,
-  "q": "Which function allocates memory on the heap?",
+  "q": "Your C program needs memory whose size is only known while it runs. Which function asks for it?",
   "choices": [
    "malloc",
    "new",
@@ -88,12 +88,12 @@
    "heap"
   ],
   "answer": 0,
-  "explain": "Every malloc needs a free."
+  "explain": "malloc(size) reserves that many bytes on the heap, memory that stays until you give it back. Every malloc needs a matching free(p) once you're done, otherwise the program leaks memory and grows over time. new belongs to C++, not C."
  },
  {
   "id": "c-1-08",
   "level": 1,
-  "q": "What does `#include` do?",
+  "q": "Most C files start with lines like `#include <stdio.h>`. What does that line do?",
   "choices": [
    "Pastes another file (a header) here",
    "Links a library",
@@ -101,12 +101,12 @@
    "Defines a macro"
   ],
   "answer": 0,
-  "explain": "The preprocessor runs before the compiler."
+  "explain": "Before compiling, the preprocessor replaces the #include line with the whole content of that header file. stdio.h describes printf and friends, so the compiler knows how to call them. The code of printf itself is added later, when the program is linked."
  },
  {
   "id": "c-1-09",
   "level": 1,
-  "q": "What does main returning 0 mean?",
+  "q": "Your program ends with `return 0;` in main. What does that 0 tell whoever ran it?",
   "choices": [
    "Success",
    "Failure",
@@ -114,12 +114,12 @@
    "Restart"
   ],
   "answer": 0,
-  "explain": "The shell sees it as $?."
+  "explain": "The value main returns becomes the program's exit code: 0 means success, any other number an error. The shell shows it with echo $?, and scripts use it (./prog && echo ok). Return 1 when something went wrong, so scripts can notice."
  },
  {
   "id": "c-1-10",
   "level": 1,
-  "q": "Which flag turns on common warnings with gcc?",
+  "q": "gcc builds your code without a word, yet it has bugs. Which option makes gcc point out the usual mistakes?",
   "choices": [
    "-Wall",
    "-W0",
@@ -127,12 +127,12 @@
    "-O2"
   ],
   "answer": 0,
-  "explain": "Add -Wextra too, and fix them all."
+  "explain": "-Wall turns on the common warnings: a variable used before it gets a value, a wrong printf format, a comparison that is always true. Add -Wextra for more. A warning is often a real bug, so fix them all. -O2 is about speed, not warnings."
  },
  {
   "id": "c-2-01",
   "level": 2,
-  "q": "What is a segfault?",
+  "q": "Your program stops with 'Segmentation fault'. What happened?",
   "choices": [
    "Touching memory you're not allowed to",
    "A disk error",
@@ -140,12 +140,12 @@
    "Integer overflow"
   ],
   "answer": 0,
-  "explain": "Often a NULL or dangling pointer."
+  "explain": "The program touched memory it doesn't own, and the system stopped it. Usual causes: using a NULL pointer, reading past the end of an array, or using memory after free. Build with -g -fsanitize=address and run it again: it shows the exact line."
  },
  {
   "id": "c-2-02",
   "level": 2,
-  "q": "What does `free(p)` twice cause?",
+  "q": "A bug makes your program call free(p) twice on the same pointer. What happens?",
   "choices": [
    "Undefined behavior (double free)",
    "Nothing",
@@ -153,7 +153,7 @@
    "The memory is freed twice as fast"
   ],
   "answer": 0,
-  "explain": "Set p = NULL after free."
+  "explain": "The second free hands back memory that may already belong to something else: this is undefined behavior. It may crash, silently corrupt data, or even be used by an attacker. The compiler can't see it. Habit: write p = NULL; right after free(p), since free(NULL) does nothing."
  },
  {
   "id": "c-2-03",
@@ -166,12 +166,12 @@
    "It only reads one char"
   ],
   "answer": 0,
-  "explain": "Use fgets(buf, size, stdin)."
+  "explain": "gets(buf) reads a whole line into buf without knowing how big buf is. A longer line writes past the end, over other variables: a buffer overflow, a classic way to take control of a program. It was removed from the language. fgets(buf, sizeof buf, stdin) stops at the size you give."
  },
  {
   "id": "c-2-04",
   "level": 2,
-  "q": "What does `static` on a function do?",
+  "q": "In a C file, a function is declared `static int helper(void)`. What does static change?",
   "choices": [
    "Keeps it private to its file",
    "Makes it faster",
@@ -179,7 +179,7 @@
    "Stores it on the heap"
   ],
   "answer": 0,
-  "explain": "On a local variable, it keeps its value between calls."
+  "explain": "On a function, static makes it visible only inside its own .c file: other files can't call it, and its name can't clash with theirs. Use it for helpers. On a variable inside a function, static means something else: it keeps its value from one call to the next."
  },
  {
   "id": "c-2-05",
@@ -192,12 +192,12 @@
    "It can't print accents"
   ],
   "answer": 0,
-  "explain": "A format string bug. Always write printf(\"%s\", user_input). -Wformat-security warns."
+  "explain": "printf treats its first argument as a format. If a user types %x %x, printf reads values off the stack and shows them; %n even writes to memory. That is a format string bug. Always write printf(\"%s\", user_input): the input is then only text. gcc -Wformat-security warns about it."
  },
  {
   "id": "c-2-06",
   "level": 2,
-  "q": "Which tool finds memory errors at run time?",
+  "q": "Your C program sometimes crashes, sometimes not. Which tool watches its memory use while it runs?",
   "choices": [
    "valgrind",
    "gdb only",
@@ -205,7 +205,7 @@
    "lint"
   ],
   "answer": 0,
-  "explain": "Or build with -fsanitize=address."
+  "explain": "valgrind ./prog runs the program in a checker that reports reads past an array, use after free, and leaks, with the line numbers. Another way: compile with -fsanitize=address (AddressSanitizer), which is faster. gdb shows where it crashed, not the bad access that came before."
  },
  {
   "id": "c-2-07",
@@ -218,12 +218,12 @@
    "Nothing, malloc checks it"
   ],
   "answer": 0,
-  "explain": "Then writing count items overflows the buffer. calloc(count, size) checks the multiplication."
+  "explain": "Numbers in C have a maximum. A huge count times size wraps around to a small number, so malloc reserves a small block. The program then writes count items into it and runs past the end: a buffer overflow. calloc(count, size) checks the multiplication and fails cleanly instead."
  },
  {
   "id": "c-2-08",
   "level": 2,
-  "q": "What is a header guard for?",
+  "q": "A header file starts with #ifndef CONFIG_H / #define CONFIG_H. What is this 'header guard' for?",
   "choices": [
    "Including a header only once",
    "Protecting secrets",
@@ -231,12 +231,12 @@
    "Checking types"
   ],
   "answer": 0,
-  "explain": "#ifndef X / #define X / #endif, or #pragma once."
+  "explain": "In a big project, the same header often gets included twice through other headers, and defining the same struct twice is an error. The first time, CONFIG_H is not defined: the content is used and CONFIG_H gets defined. The second time it's skipped. #pragma once does the same in one line."
  },
  {
   "id": "c-2-09",
   "level": 2,
-  "q": "What does `argv[0]` hold?",
+  "q": "You run ./prog input.txt. In main(int argc, char **argv), what is in argv[0]?",
   "choices": [
    "The program's name",
    "The first argument",
@@ -244,12 +244,12 @@
    "The environment"
   ],
   "answer": 0,
-  "explain": "Arguments start at argv[1]; argc counts them all."
+  "explain": "argv[0] is the program's name as it was typed: ./prog. The real arguments start at argv[1], here input.txt, and argc counts everything, so argc is 2. Classic bug: reading argv[1] without checking argc first, which crashes when no argument is given."
  },
  {
   "id": "c-2-10",
   "level": 2,
-  "q": "What does `make` read?",
+  "q": "A project says 'just run make'. Which file does make read to know what to build?",
   "choices": [
    "A Makefile",
    "CMakeLists.txt directly",
@@ -257,6 +257,6 @@
    "build.ninja only"
   ],
   "answer": 0,
-  "explain": "Rules: target: dependencies, then a tab and commands."
+  "explain": "make reads a Makefile in the current folder. Each rule says target: files it depends on, then the commands on lines that start with a tab (not spaces). make only rebuilds what changed since last time. CMake and Ninja are other tools, with their own files."
  }
 ]

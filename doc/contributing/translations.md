@@ -74,5 +74,10 @@ python3 -m unittest tests.test_i18n tests.test_adventure   # placeholders, JSON,
 BASHOU_LANG=de bashou talk                                  # see your language in the game
 ```
 
+## French words
+
+- `>` and `<` are **chevrons** (owner): write « le chevron > », « >> (deux chevrons) », and the first
+  time a text uses them, say that > and < are called chevrons.
+
 Then open a pull request. Everything you send must be your own work, shared under the project's MIT
 license.

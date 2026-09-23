@@ -10,7 +10,7 @@
    "Écrire les tests à ta place"
   ],
   "answer": 0,
-  "explain": "Les problèmes apparaissent quelques minutes après un push, quand le changement est encore frais."
+  "explain": "L'intégration continue, c'est un serveur qui construit le projet et lance ses tests à chaque fois que quelqu'un pousse un changement. Si quelque chose casse, tu le sais en quelques minutes, pendant que tu te souviens encore de ce que tu as changé. Elle n'écrit pas les tests : elle lance ceux que tu as."
  },
  {
   "id": "cicd-1-02",
@@ -23,7 +23,7 @@
    "L'ouverture de l'IDE"
   ],
   "answer": 0,
-  "explain": "Aussi des horaires planifiés et des lancements manuels."
+  "explain": "Le pipeline est lancé par un événement sur le dépôt : le plus souvent un push sur une branche, ou l'ouverture ou la mise à jour d'une pull request (merge request sur GitLab). Il peut aussi tourner à heure fixe, comme un build de nuit, ou quand quelqu'un clique sur Lancer à la main."
  },
  {
   "id": "cicd-1-03",
@@ -36,7 +36,7 @@
    "Copiée depuis ton portable"
   ],
   "answer": 0,
-  "explain": "Des versions figées donnent le même build aujourd'hui et dans six mois, et leurs changements passent en relecture."
+  "explain": "Figer, c'est noter la version exacte (outil 2.4.1, pas 'latest'). Le build se comporte alors pareil aujourd'hui et dans six mois, et passer à une nouvelle version est un changement visible que quelqu'un relit. 'Latest' peut casser un build du jour au lendemain, et un outil installé à la main sur un runner est oublié quand ce runner est remplacé."
  },
  {
   "id": "cicd-1-04",
@@ -49,7 +49,7 @@
    ".travis.yml"
   ],
   "answer": 0,
-  "explain": "GitLab utilise .gitlab-ci.yml, Jenkins un Jenkinsfile."
+  "explain": "GitHub Actions lit chaque fichier YAML du dossier .github/workflows/ du dépôt ; chaque fichier est un workflow. Les autres appartiennent à d'autres CI : .gitlab-ci.yml pour GitLab, Jenkinsfile pour Jenkins, .travis.yml pour Travis. Reconnaître le fichier te dit quelle CI utilise un projet."
  },
  {
   "id": "cicd-1-05",
@@ -62,7 +62,7 @@
    "Les artefacts sont chiffrés"
   ],
   "answer": 0,
-  "explain": "Reconstruire par environnement peut tirer d'autres versions. Artefacts : binaires, paquets, images, rapports."
+  "explain": "Un artefact, c'est ce que produit le build : un binaire, un paquet, une image de conteneur. Si tu reconstruis pour la production, le build peut tirer des dépendances plus récentes et donner quelque chose que tu n'as jamais testé. Construis une fois, teste cet artefact, puis envoie ce même artefact en préproduction et en production."
  },
  {
   "id": "cicd-1-06",
@@ -75,7 +75,7 @@
    "Dans un message de commit"
   ],
   "answer": 0,
-  "explain": "Là, les secrets sont masqués dans les logs et jamais commités. Ne les donne qu'aux jobs qui en ont besoin."
+  "explain": "Le stockage de secrets de la CI (secrets GitHub, variables CI de GitLab) garde les mots de passe hors du code : ils sont masqués dans les logs des jobs et n'arrivent jamais dans git. Tout ce qui est écrit dans le YAML, le README ou un message de commit est lisible par quiconque peut lire le dépôt. Ne donne chaque secret qu'aux jobs qui en ont besoin."
  },
  {
   "id": "cicd-1-07",
@@ -88,7 +88,7 @@
    "Oui, après git gc"
   ],
   "answer": 0,
-  "explain": "Tout clone l'a. D'abord changer le secret ; réécrire l'historique vient après, si besoin. Les scanners de secrets l'attrapent tôt."
+  "explain": "Git garde chaque version de chaque fichier : l'ancien commit contient toujours le mot de passe, et chaque clone en a déjà une copie. Les dépôts privés aussi finissent partagés, forkés ou fuités. Donc d'abord le révoquer et en créer un nouveau ; nettoyer l'historique vient après, si besoin. Les scanners de secrets (gitleaks) l'attrapent avant le push."
  },
  {
   "id": "cicd-1-08",
@@ -101,7 +101,7 @@
    "Pour utiliser plus de serveurs"
   ],
   "answer": 0,
-  "explain": "Ça attrape les « chez moi ça marche »."
+  "explain": "Ton portable a des choses que le projet n'a jamais déclarées : un outil installé il y a longtemps, un fichier qui traîne, une autre version d'une bibliothèque. La CI part d'une machine propre et identique pour chaque changement : un test qui passe là passe pour tout le monde. C'est comme ça qu'elle attrape les « chez moi ça marche »."
  },
  {
   "id": "cicd-1-09",
@@ -114,7 +114,7 @@
    "Rien"
   ],
   "answer": 0,
-  "explain": "Les branches protégées peuvent exiger un pipeline vert."
+  "explain": "Rouge veut dire qu'une étape a échoué : un test, le build, un linter ou une vérification de sécurité. Merger maintenant amènerait cet échec dans la branche principale, pour tout le monde. Ouvre le log du job en échec, corrige, et pousse à nouveau. Les équipes protègent souvent la branche principale pour qu'elle n'accepte que des pipelines verts."
  },
  {
   "id": "cicd-1-10",
@@ -127,7 +127,7 @@
    "Les lignes vides"
   ],
   "answer": 0,
-  "explain": "L'indentation dit qui appartient à quoi, comme en Python. Les tabulations sont interdites ; un lint de la CI le voit."
+  "explain": "En YAML, les espaces en début de ligne décident de qui appartient à quoi, comme en Python : un espace de travers et une étape atterrit dans le mauvais job, ou le fichier ne se lit plus. Les tabulations sont interdites, seulement des espaces. Le support YAML de ton éditeur ou une étape de lint montre l'erreur avant le pipeline."
  },
  {
   "id": "cicd-2-01",
@@ -140,7 +140,7 @@
    "Pour gagner de la place"
   ],
   "answer": 0,
-  "explain": "La CI de Bashou le fait."
+  "explain": "uses: une/action@v3 suit un tag, et qui contrôle ce dépôt peut déplacer le tag vers du nouveau code, qui tourne alors dans ton pipeline avec tes secrets. Un SHA de commit (le long identifiant hexadécimal) désigne toujours exactement le même code. Épingle sur le SHA et note la version en commentaire ; la CI de Bashou le fait."
  },
  {
   "id": "cicd-2-02",
@@ -153,7 +153,7 @@
    "Ils ne gèrent pas Linux"
   ],
   "answer": 0,
-  "explain": "La PR d'un fork modifie le workflow ou les tests : ce code tourne avec les accès de ton runner. Utilise des runners hébergés jetables."
+  "explain": "Une pull request venant d'un fork peut modifier le workflow ou les tests, et ce code tourne alors sur ton runner. Sur une machine que tu héberges, il peut lire des fichiers, voler des jetons, ou rester installé après le job. Les runners hébergés par GitHub sont jetés après chaque job : fais tourner le code des inconnus là."
  },
  {
   "id": "cicd-2-03",
@@ -166,7 +166,7 @@
    "Un déploiement en parallèle"
   ],
   "answer": 0,
-  "explain": "Par exemple Python 3.9 et 3.13."
+  "explain": "Une matrice liste des valeurs (Python 3.9 et 3.13, Ubuntu et Rocky…) et la CI lance le même job une fois par combinaison, en parallèle. Tu découvres que ton code casse sur la plus vieille version supportée avant un utilisateur, sans recopier le job à la main."
  },
  {
   "id": "cicd-2-04",
@@ -179,7 +179,7 @@
    "Moins de tests"
   ],
   "answer": 0,
-  "explain": "Indexé par le hash du fichier de lock."
+  "explain": "Télécharger toutes les dépendances à chaque passage est lent. Un cache les garde entre deux passages, indexé par le hash du fichier lock : tant que le lock ne change pas, le cache sert, et quand il change on retélécharge. Ça fait gagner du temps ; ça ne rend rien plus sûr ni plus petit."
  },
  {
   "id": "cicd-2-05",
@@ -192,7 +192,7 @@
    "Déployer deux fois"
   ],
   "answer": 0,
-  "explain": "Revenir en arrière = rebasculer."
+  "explain": "On garde deux environnements identiques. Blue sert les utilisateurs pendant qu'on déploie la nouvelle version sur green et qu'on la teste ; puis le load balancer bascule le trafic vers green. Si ça tourne mal, on rebascule vers blue en quelques secondes, puisqu'il n'a pas été touché."
  },
  {
   "id": "cicd-2-06",
@@ -205,7 +205,7 @@
    "Un build de nuit"
   ],
   "answer": 0,
-  "explain": "Surveille les métriques, puis élargis."
+  "explain": "Comme le canari que les mineurs emmenaient pour détecter le gaz : une petite part des utilisateurs (disons 5 %) reçoit d'abord la nouvelle version. On surveille les erreurs et les temps de réponse ; s'ils restent normaux on élargit pas à pas, sinon on revient en arrière en n'ayant gêné que quelques utilisateurs."
  },
  {
   "id": "cicd-2-07",
@@ -218,7 +218,7 @@
    "admin"
   ],
   "answer": 0,
-  "explain": "Le moindre privilège pour le jeton."
+  "explain": "Chaque job reçoit un jeton qui peut agir sur le dépôt. permissions: liste ce que ce jeton a le droit de faire, par exemple contents: read. Si une étape est compromise, elle ne peut faire que ce que le jeton permet : un jeton en lecture seule ne peut ni pousser du code ni publier une release. Donne à chaque job seulement ce qu'il lui faut."
  },
  {
   "id": "cicd-2-08",
@@ -231,7 +231,7 @@
    "Une clé écrite dans le dépôt"
   ],
   "answer": 0,
-  "explain": "Un jeton qui expire en quelques minutes vaut peu s'il fuit. Limite-le à l'environnement de ce job."
+  "explain": "Avec OIDC, la CI prouve au cloud quel dépôt et quel job demandent, et reçoit un jeton qui expire en quelques minutes. Rien de durable n'est stocké : un jeton qui fuit devient vite inutile. Une clé admin permanente dans un secret marche jusqu'à ce que quelqu'un remarque la fuite, parfois des mois plus tard."
  },
  {
   "id": "cicd-2-09",
@@ -244,7 +244,7 @@
    "Ça remplace les sauvegardes"
   ],
   "answer": 0,
-  "explain": "Infrastructure as code : git log dit qui a changé quoi, et un nouveau serveur se construit pareil."
+  "explain": "Quand les serveurs sont décrits dans des fichiers (infrastructure as code), un changement est un commit : quelqu'un le relit, git log dit qui a changé quoi et pourquoi, et un revert l'annule. Un nouveau serveur se construit comme l'ancien. Ça ne remplace pas les sauvegardes : tes données en ont toujours besoin."
  },
  {
   "id": "cicd-2-10",
@@ -257,6 +257,6 @@
    "On ne peut pas l'annuler"
   ],
   "answer": 0,
-  "explain": "« Assurer que la ligne est dans le fichier », pas « ajouter la ligne » : on peut relancer après un échec. Ansible affiche changed=0."
+  "explain": "Une tâche idempotente décrit le résultat, pas une action : « cette ligne est dans le fichier », plutôt que « ajoute cette ligne ». Le premier passage fait le changement, les suivants voient que c'est déjà fait et ne changent rien. On peut relancer sans risque après un échec ; Ansible affiche alors changed=0."
  }
 ]

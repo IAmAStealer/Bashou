@@ -10,7 +10,7 @@
    "The first one found in $PATH"
   ],
   "answer": 0,
-  "explain": "Relative paths start from the current folder (pwd). Scripts cd to a known place first, or use absolute paths."
+  "explain": "A path without a leading / is relative: it starts from the folder you are in when you run the script (shown by pwd), not from where the script file lives. Run it from your home and it deletes ~/build. Safe scripts first cd to a known folder, or use full paths like /srv/app/build."
  },
  {
   "id": "bash-1-02",
@@ -23,7 +23,7 @@
    "None: HTTPS makes it safe"
   ],
   "answer": 0,
-  "explain": "HTTPS proves who sent the script, not what it does. Download it, read it, then run it."
+  "explain": "The pipe sends whatever the site returns straight into a root shell: you never see it, and it can do anything to the machine. HTTPS only proves which site sent it, not what the script does. Safer: curl -o install.sh URL, read it (less install.sh), then run it."
  },
  {
   "id": "bash-1-03",
@@ -36,7 +36,7 @@
    "They are empty"
   ],
   "answer": 0,
-  "explain": "ls -a shows them. Much of your config (and an attacker's leftovers) hides behind that dot."
+  "explain": "On Linux, a file whose name starts with a dot is hidden: ls skips it to keep the listing tidy. It is not protected, just not shown. ls -a (all) shows them. Your settings live there (.bashrc, .ssh), and so do things an intruder may leave behind: look with ls -a."
  },
  {
   "id": "bash-1-04",
@@ -49,7 +49,7 @@
    "It creates it in your home"
   ],
   "answer": 0,
-  "explain": "A script must be safe to run twice (idempotent). -p also creates missing parent folders."
+  "explain": "mkdir logs stops with an error if logs already exists, so the second run of the script fails. mkdir -p is happy either way, and also creates missing parent folders (mkdir -p a/b/c). A good script can run twice without breaking: that is called idempotent."
  },
  {
   "id": "bash-1-05",
@@ -62,7 +62,7 @@
    "<"
   ],
   "answer": 0,
-  "explain": "> empties the file first: one wrong > wipes it. `set -o noclobber` makes > refuse to overwrite."
+  "explain": ">> adds at the end of the file and keeps what is already there. A single > empties the file first, then writes: one wrong > and /etc/hosts is gone. | sends output to another command, < reads a file as input. Tip: set -o noclobber makes > refuse to overwrite an existing file."
  },
  {
   "id": "bash-1-06",
@@ -75,7 +75,7 @@
    "grep's exit code"
   ],
   "answer": 0,
-  "explain": "The pipe feeds grep's matching lines into wc -l, which counts lines. grep -c does it alone."
+  "explain": "grep prints each line that contains error; the pipe | hands those lines to wc -l, which counts lines. So 12 lines have the word at least once. A line with error twice still counts once. grep -c error app.log gives the same count on its own."
  },
  {
   "id": "bash-1-07",
@@ -88,7 +88,7 @@
    "cat /var/log/commands"
   ],
   "answer": 0,
-  "explain": "History lives in ~/.bash_history. Passwords typed on a command line land there too."
+  "explain": "Ctrl+R searches your history backwards as you type: press Ctrl+R again for older matches, Enter to run, → to edit first. The history is saved in ~/.bash_history. Careful: a password typed on a command line is saved there too."
  },
  {
   "id": "bash-1-08",
@@ -101,7 +101,7 @@
    "Your shell history"
   ],
   "answer": 0,
-  "explain": "The help that ships with the tool matches the version you have. q quits man, / searches in it."
+  "explain": "The help installed with the tool describes exactly the version you have; a forum answer may be for another version or another system. cmd --help gives a short summary, man cmd the full manual: / searches in it, n goes to the next match, q quits."
  },
  {
   "id": "bash-1-09",
@@ -114,7 +114,7 @@
    "Whether cp printed OK"
   ],
   "answer": 0,
-  "explain": "Every command returns an exit code, in $?. `if cp a b; then …` tests it directly."
+  "explain": "Every command ends with a number called its exit code: 0 means success, anything else is an error. Many commands print nothing when all is well, so silence proves nothing. echo $? shows the last code, and if cp a b; then … else … fi tests it directly."
  },
  {
   "id": "bash-1-10",
@@ -127,7 +127,7 @@
    "It only works once"
   ],
   "answer": 0,
-  "explain": "Anyone on the machine can see command lines with ps. Let the tool prompt, or use a root-only config file."
+  "explain": "The whole command line, password included, is saved in your shell history, and while it runs any user on the machine can read it with ps. Better: type -p alone and let mysql ask for the password, or put it in a config file only you can read (chmod 600)."
  },
  {
   "id": "bash-1-11",
@@ -140,7 +140,7 @@
    "Add -r to be thorough"
   ],
   "answer": 0,
-  "explain": "The glob is expanded before rm runs: ls with the same pattern shows exactly what goes."
+  "explain": "Before rm even starts, bash replaces *.log with the list of matching names. ls *.log does the same replacement, so it shows exactly what rm would delete. -f only removes the safety questions, and -r would also go into folders: both make a mistake worse."
  },
  {
   "id": "bash-1-12",
@@ -153,7 +153,7 @@
    "A log file in /var/log"
   ],
   "answer": 0,
-  "explain": "stdout (1) carries results, stderr (2) errors: `cmd > out.txt` saves results and still shows the errors."
+  "explain": "A command has two outputs: stdout (number 1) for its results and stderr (number 2) for errors and warnings. Keeping them apart means cmd > out.txt saves only the results in the file while errors still show on screen, and 2> errors.txt saves the errors on their own."
  },
  {
   "id": "bash-2-01",
@@ -166,7 +166,7 @@
    "job | tee 2"
   ],
   "answer": 0,
-  "explain": "Order matters: send stdout to the file first, then point stderr (2) where stdout (1) now goes."
+  "explain": "Redirections are read left to right. >> job.log sends stdout to the file, then 2>&1 says: send stderr where stdout goes now, the file. In the other order, 2>&1 copies stdout while it still points to the screen, so errors never reach the log. Cron has no screen: those errors are lost."
  },
  {
   "id": "bash-2-02",
@@ -179,7 +179,7 @@
    "An error: date is not a variable"
   ],
   "answer": 0,
-  "explain": "$( ) runs the command and puts its output there. date +%F gives YYYY-MM-DD, which sorts well."
+  "explain": "$( ) runs the command inside and puts its output in its place, before the rest runs: this is command substitution. date +%F prints the date as YYYY-MM-DD. That format sorts in date order with a plain ls, handy for backups. In single quotes it would stay as written."
  },
  {
   "id": "bash-2-03",
@@ -192,7 +192,7 @@
    "for f in \"$(ls)\"; do gzip \"$f\"; done"
   ],
   "answer": 0,
-  "explain": "The glob gives one word per file; $(ls) is split on spaces. Always quote \"$f\"."
+  "explain": "*.log gives one item per file, even when the name has spaces. $(ls) produces text that bash then cuts at every space, so 'my app.log' becomes two wrong names. Then \"$f\" in quotes passes the name as one piece. Habit: loop over a glob, and always quote your variables."
  },
  {
   "id": "bash-2-04",
@@ -205,7 +205,7 @@
    "It runs the script as root"
   ],
   "answer": 0,
-  "explain": "Without it, a script goes on after a failed cd and runs the next rm in the wrong place. set -x prints commands."
+  "explain": "By default bash carries on after an error. -e stops at the first failed command, -u stops on a variable that was never set (a typo becomes an error, not an empty string), -o pipefail makes a pipe fail if any part fails. Without them, a failed cd is followed by an rm in the wrong folder."
  },
  {
   "id": "bash-2-05",
@@ -218,7 +218,7 @@
    "read file line"
   ],
   "answer": 0,
-  "explain": "for over $(cat) splits on spaces, not lines."
+  "explain": "read reads one whole line at a time, and < file feeds it the file. IFS= keeps spaces at the start and end of the line, -r keeps backslashes as they are. for line in $(cat file) cuts the text at every space, so you get words, not lines."
  },
  {
   "id": "bash-2-06",
@@ -231,7 +231,7 @@
    "&& runs both at once"
   ],
   "answer": 0,
-  "explain": "&& goes on only on success, || only on failure, ; always."
+  "explain": "&& runs the next command only if the previous one succeeded. If /srv/app doesn't exist, cd fails and rm -rf never runs. With ; the rm runs anyway, in whatever folder you were in. || is the opposite: it runs only after a failure (cmd || echo failed)."
  },
  {
   "id": "bash-2-07",
@@ -244,7 +244,7 @@
    "Nothing"
   ],
   "answer": 0,
-  "explain": "Unquoted variables are split on spaces and expanded as globs. Write rm \"$f\"."
+  "explain": "Without quotes, bash cuts the variable's value at spaces before running the command: rm receives two names, old and notes.txt. If a file called old exists, it goes. Written rm \"$f\", the value stays one piece. Quote every variable unless you really want it cut."
  },
  {
   "id": "bash-2-08",
@@ -257,7 +257,7 @@
    "Scripts need a .exe name"
   ],
   "answer": 0,
-  "explain": "chmod +x deploy.sh, or bash deploy.sh. A disk mounted noexec blocks it too."
+  "explain": "Owning a file doesn't make it runnable: it needs the x (execute) permission, visible in ls -l as -rwxr-xr-x. chmod +x deploy.sh adds it. bash deploy.sh also works, since bash then only reads the file. On a disk mounted noexec, ./ never works."
  },
  {
   "id": "bash-2-09",
@@ -270,7 +270,7 @@
    "mktemp --autoremove"
   ],
   "answer": 0,
-  "explain": "trap … EXIT runs on any exit, error or Ctrl+C. Pair it with tmp=$(mktemp)."
+  "explain": "trap 'command' EXIT registers a command that bash runs whenever the script ends: normal end, an error with set -e, or Ctrl+C. An rm on the last line never runs if the script stops earlier. Usual pair: tmp=$(mktemp) then trap 'rm -f \"$tmp\"' EXIT."
  },
  {
   "id": "bash-2-10",
@@ -283,6 +283,6 @@
    "Fixed names are too long"
   ],
   "answer": 0,
-  "explain": "/tmp is shared: a planted symlink makes your script overwrite another file. mktemp picks a unique name, private to you."
+  "explain": "Every user can write in /tmp. If someone creates /tmp/myscript.tmp first, for example as a link to one of your files, your script writes into that file instead. mktemp creates a new file with a random name that only you can read, so nobody can prepare the trap in advance."
  }
 ]
