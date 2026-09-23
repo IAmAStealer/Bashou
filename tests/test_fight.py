@@ -1,9 +1,11 @@
+import os
 import random
 import re
 import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from bashou import challenges, fight, state
 
@@ -46,6 +48,14 @@ SOLUTIONS = {
     "fencepost_fiend": ("sed -i 's/i <= count/i < count/' average.c", None),
     "stack_specter": ("sed -i 's/^    return n + sum_to(n - 1);$/    if (n <= 0)\\n        return 0;\\n&/' sum.c", None),
     "overflow_ogre": ("sed -i '/strcpy/d; s/, name);/, argv[1]);/' greet.c", None),
+    # package fights (Debian here; Red Hat through a fake rpm, see PackageFightTest)
+    "version_vole": ("dpkg-query -W -f '${{Version}}' {x}", r"version of (\S+) is installed"),
+    "candidate_crow": ("apt-cache policy {x} | awk '/Candidate:/ {{print $2}}'", r"version of (\S+) would"),
+    "stowaway_stoat": ("dpkg -S {x} | cut -d: -f1", r"put (\S+) on"),
+    "autoremove_adder": ("apt-mark showmanual | grep -qx {x} && echo manual || echo auto", r"Is (\S+) marked"),
+    "release_raven": ("rpm -q --qf '%{{VERSION}}-%{{RELEASE}}' {x}", r"version of (\S+) is installed"),
+    "hitchhiker_hare": ("rpm -qf --qf '%{{NAME}}' {x}", r"put (\S+) on"),
+    "census_centipede": ("rpm -qa | wc -l", None),
     # security
     "hidden_file": ("cat .[!.]*", None),
     "encoded_note": ("base64 -d note.txt | cut -d' ' -f2", None),
@@ -126,6 +136,67 @@ class ChallengeTest(unittest.TestCase):
             self.assertFalse(fight.used_tool(base, ch))
             log.write_text(log.read_text() + "0\t    3  grep -c ERROR app.log | head\n")
             self.assertTrue(fight.used_tool(base, ch))
+
+
+FAKE_RPM = r"""#!/bin/bash
+qf=""; mode=""; args=()
+while [ $# -gt 0 ]; do
+  case $1 in --qf) qf=$2; shift ;; -q|-ql|-qf|-qa) mode=$1 ;; *) args+=("$1") ;; esac; shift
+done
+name=${args[0]}
+nl() { [[ $qf == *'\n' ]] && echo; }
+case $mode in
+  -qa) printf 'bash-5.1.8-9.el9.x86_64\ncoreutils-8.32-35.el9.x86_64\nrpm-4.16.1.3-29.el9.x86_64\n' ;;
+  -q) case $name in bash) v=5.1.8-9.el9 ;; coreutils) v=8.32-35.el9 ;; rpm) v=4.16.1.3-29.el9 ;;
+        *) echo "package $name is not installed"; exit 1 ;; esac
+      if [ -n "$qf" ]; then printf %s "$v"; nl; else echo "$name-$v.x86_64"; fi ;;
+  -ql) [ "$name" = coreutils ] && echo /usr/bin/env ;;
+  -qf) if [ "$name" = /usr/bin/env ]; then
+         if [ -n "$qf" ]; then printf coreutils; nl; else echo coreutils-8.32-35.el9.x86_64; fi
+       else echo "file $name is not owned by any package"; exit 1; fi ;;
+esac
+"""
+
+
+class PackageFightTest(unittest.TestCase):
+    def test_they_follow_the_distro(self):
+        with mock.patch.object(challenges, "family", return_value=frozenset({"ubuntu", "debian"})):
+            self.assertFalse(challenges.BY_ID["release_raven"].available())
+        with mock.patch.object(challenges, "family", return_value=frozenset({"rocky", "rhel", "centos", "fedora"})):
+            self.assertFalse(challenges.BY_ID["version_vole"].available())
+
+    def test_os_release_family(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "os-release"
+            path.write_text('NAME="Rocky Linux"\nID="rocky"\nID_LIKE="rhel centos fedora"\n')
+            self.assertEqual(challenges.family.__wrapped__(str(path)), {"rocky", "rhel", "centos", "fedora"})
+            self.assertEqual(challenges.family.__wrapped__(str(path) + "-missing"), frozenset())
+
+    def test_red_hat_fights_with_a_fake_rpm(self):
+        with tempfile.TemporaryDirectory() as bin_dir, tempfile.TemporaryDirectory() as tmp:
+            fake = Path(bin_dir) / "rpm"
+            fake.write_text(FAKE_RPM)
+            fake.chmod(0o755)
+            path = f"{bin_dir}:{os.environ['PATH']}"
+            with mock.patch.dict(os.environ, {"PATH": path}), \
+                    mock.patch.object(challenges, "family", return_value=frozenset({"rocky", "rhel"})):
+                for cid in ("release_raven", "hitchhiker_hare", "census_centipede"):
+                    ch = challenges.BY_ID[cid]
+                    self.assertTrue(ch.available(), cid)
+                    meta = ch.setup(Path(tmp), random.Random(0))
+                    cmd, pattern = SOLUTIONS[cid]
+                    x = re.search(pattern, ch.task_text(meta)).group(1) if pattern else ""
+                    out = subprocess.run(["bash", "-c", cmd.format(x=x)], capture_output=True, text=True,
+                                         env={**os.environ}).stdout.strip()
+                    self.assertTrue(ch.check(Path(tmp), meta, out), f"{cid}: {out!r} {meta}")
+                    self.assertFalse(ch.check(Path(tmp), meta, "nope"), cid)
+                raven = challenges.BY_ID["release_raven"]
+                meta = raven.setup(Path(tmp), random.Random(0))
+                self.assertTrue(raven.check(Path(tmp), meta, subprocess.run(
+                    ["rpm", "-q", meta["args"]["pkg"]], capture_output=True, text=True).stdout))  # full name too
+                hare = challenges.BY_ID["hitchhiker_hare"]
+                self.assertTrue(hare.check(Path(tmp), {"answer": "coreutils"}, "coreutils-8.32-35.el9.x86_64"))
+                self.assertFalse(hare.check(Path(tmp), {"answer": "coreutils"}, "coreutils-extra"))
 
 
 class TrialTest(unittest.TestCase):

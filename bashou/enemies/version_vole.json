@@ -1,0 +1,48 @@
+{
+ "name": "Version Vole",
+ "palette": {
+  "a": "#2a1c14",
+  "b": "#8a6a50",
+  "c": "#e8d8b0",
+  "d": "#c04040",
+  "m": "#101010",
+  "w": "#ffffff",
+  "p": "#e89090"
+ },
+ "base": [
+  ".................",
+  ".................",
+  "...aa.....aa.....",
+  "..apba...abpa....",
+  "..aabbbbbbbaa....",
+  ".abwmbbbbbwmba...",
+  "papbbbbbbbbbba...",
+  ".aabbbmmbbbbba.cc",
+  "..abbbbbbbbbba.cd",
+  "..abcccccccbbaccc",
+  "...abbbbbbbbba...",
+  "....aa....aa....."
+ ],
+ "poses": {
+  "closed": {
+   "5": "---aa-----aa-----"
+  },
+  "left": {
+   "5": "--wmb----wmb-----"
+  },
+  "right": {
+   "5": "---bwm----bwm----"
+  },
+  "fidget": {
+   "7": "----------------d",
+   "8": "----------------c"
+  },
+  "inhale": {
+   "5": "a-------------a--"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

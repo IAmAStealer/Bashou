@@ -1,0 +1,47 @@
+{
+ "name": "Release Raven",
+ "palette": {
+  "a": "#101010",
+  "b": "#303038",
+  "c": "#e0e0e0",
+  "d": "#c02020",
+  "m": "#000000",
+  "w": "#ffffff"
+ },
+ "base": [
+  "......ddddd......",
+  ".....ddddddd.....",
+  "....aaaaaaaa.....",
+  "...abwmbbbbba....",
+  ".ccabbbbbbbbba...",
+  "..cabbbbbbbbbba..",
+  "....abbbbbbbbbba.",
+  "....abbbbbbbbbbba",
+  ".....abbbbbbbbbba",
+  "......abbbbbaaaa.",
+  ".......ac..ac....",
+  "......cc..cc....."
+ ],
+ "poses": {
+  "closed": {
+   "3": "-----aa----------"
+  },
+  "left": {
+   "3": "----wmb----------"
+  },
+  "right": {
+   "3": "-----bwm---------"
+  },
+  "fidget": {
+   "0": "-----d----.------",
+   "1": "----d------.-----"
+  },
+  "inhale": {
+   "7": "---ab------------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

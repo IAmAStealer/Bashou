@@ -4,8 +4,10 @@ Each challenge fills the arena folder with random data in `setup` and returns th
 task text plus what `verify` needs (stored as JSON in the arena's meta file).
 """
 
+import functools
 import shutil
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Callable, Optional
 
 
@@ -32,6 +34,7 @@ class Challenge:
     level: int = 1            # 1 easy, 2 medium, 3 hard
     kind: str = "fight"       # "fight": sent as a threat; "security": picked in `bashou security`
     after: tuple = ()         # fights to beat before this one comes (beginners first)
+    distro: tuple = ()        # only on these families (os-release ID or ID_LIKE), e.g. ("debian",)
 
     @property
     def tool(self):
@@ -54,13 +57,30 @@ class Challenge:
         return value.strip() == str(meta["answer"])
 
     def available(self):
+        if self.distro and not set(self.distro) & family():
+            return False
         return all(shutil.which(t) for t in (self.requires or [self.tool]))
 
 
-from . import awk, basics, code, find, grep, pipe, ps, sed, security, trials, uniq  # noqa: E402
+@functools.lru_cache(maxsize=None)
+def family(path="/etc/os-release"):
+    """{ID} plus ID_LIKE from os-release: {"ubuntu", "debian"}, {"rocky", "rhel", "centos", "fedora"}…"""
+    try:
+        text = Path(path).read_text()
+    except OSError:
+        return frozenset()
+    found = set()
+    for line in text.splitlines():
+        key, _, value = line.partition("=")
+        if key in ("ID", "ID_LIKE"):
+            found |= set(value.strip().strip('"').split())
+    return frozenset(found)
+
+
+from . import awk, basics, code, find, grep, packages, pipe, ps, sed, security, trials, uniq  # noqa: E402
 
 ALL = basics.ALL + [grep.CHALLENGE, awk.CHALLENGE, find.CHALLENGE, uniq.CHALLENGE,
-                    sed.CHALLENGE, ps.CHALLENGE, pipe.CHALLENGE] + code.ALL   # fights, sent as threats
+                    sed.CHALLENGE, ps.CHALLENGE, pipe.CHALLENGE] + code.ALL + packages.ALL   # fights
 SECURITY = security.SECURITY        # `bashou security`, in order
 TRIALS = trials.TRIALS              # locked chests in `bashou adventure`
 BY_ID = {c.id: c for c in ALL + SECURITY + TRIALS}

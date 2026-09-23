@@ -12,6 +12,12 @@ Every release has a section here, written for players. CI refuses to tag a relea
   recursion and a buffer overflow in C, checked with AddressSanitizer. Others take a `python3 -c`
   one-liner: read a JSON config, decode base64, decode a URL-encoded attack, read what a JWT says.
   One more asks you to stop a shell injection.
+- **Package fights, on your own machine.** On Debian and Ubuntu: which version of a package is
+  installed (`apt list --installed`), which version apt would install (`apt search`, `apt policy`),
+  which package put a file in /usr/bin (`dpkg -S`), and whether a package is marked manual or auto
+  (what `apt autoremove` looks at). On Rocky, Alma, Fedora and Red Hat: the installed version
+  (`rpm -q`), which package owns a file (`rpm -qf`), how many packages are installed. Bashou reads
+  /etc/os-release and only sends the ones for your system.
 - `bashou explain python list` (or dict, loop, recursion, json, url, base64, subprocess;
   `bashou explain c malloc`, array, string, recursion, asan) gives a short note with an example,
   offline.

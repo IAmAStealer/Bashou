@@ -1,0 +1,48 @@
+{
+ "name": "Autoremove Adder",
+ "palette": {
+  "a": "#102a20",
+  "b": "#40a070",
+  "c": "#c0e8a0",
+  "d": "#707880",
+  "e": "#a0a8b0",
+  "m": "#101010",
+  "w": "#ffffff",
+  "r": "#d04050"
+ },
+ "base": [
+  ".....aaaa........",
+  "....abbbba.......",
+  "...abwmbbba......",
+  "rraabbbbbba......",
+  "...aaabbbba......",
+  "......abcba......",
+  "....aaabbbaaaaa..",
+  "...adddddddddda..",
+  "...aeeeeeeeeeea..",
+  "....aeedeedeea...",
+  "....aeedeedeea...",
+  ".....aaaaaaaa...."
+ ],
+ "poses": {
+  "closed": {
+   "2": "-----aa----------"
+  },
+  "left": {
+   "2": "----wmb----------"
+  },
+  "right": {
+   "2": "-----bwm---------"
+  },
+  "fidget": {
+   "3": ".----------------"
+  },
+  "inhale": {
+   "6": "---a-------------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

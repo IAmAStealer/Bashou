@@ -1,0 +1,48 @@
+{
+ "name": "Hitchhiker Hare",
+ "palette": {
+  "a": "#2a2a2a",
+  "b": "#d8d0c0",
+  "c": "#f0a0b0",
+  "d": "#8a5a30",
+  "e": "#b07a40",
+  "m": "#101010",
+  "w": "#ffffff"
+ },
+ "base": [
+  "....aa..aa.......",
+  "...abca.abca.....",
+  "...abca.abca.....",
+  "...abbaaabba.....",
+  "..abwmbbbwmba....",
+  "..abbbbcbbbba....",
+  "...abbmmbbba.....",
+  "..a.abbbbbaddda..",
+  ".aba.abbbbadeeda.",
+  ".abbabbbbbadeeda.",
+  "...abbbbbbaddda..",
+  "...aa.....aa....."
+ ],
+ "poses": {
+  "closed": {
+   "4": "----aa---aa------"
+  },
+  "left": {
+   "4": "---wmb--wmb------"
+  },
+  "right": {
+   "4": "----bwm--bwm-----"
+  },
+  "fidget": {
+   "7": "-----------------",
+   "8": "-.---------------"
+  },
+  "inhale": {
+   "9": "----------bad-eda"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

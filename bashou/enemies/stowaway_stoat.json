@@ -1,0 +1,52 @@
+{
+ "name": "Stowaway Stoat",
+ "palette": {
+  "a": "#2a1a0a",
+  "b": "#b07840",
+  "c": "#f4ecd8",
+  "d": "#806040",
+  "e": "#a08060",
+  "m": "#101010",
+  "w": "#ffffff"
+ },
+ "base": [
+  ".....a...a.......",
+  "....aba.aba......",
+  "....abbbbba......",
+  "...abwmbwmba.....",
+  "...abcccccba.....",
+  "...abccmccba.....",
+  ".aaaaaaaaaaaaaaa.",
+  ".adddddddddddddda",
+  ".adeeeeeeeeeeeda.",
+  ".adeeeeeeeeeeeda.",
+  ".adddddddddddddda",
+  ".aaaaaaaaaaaaaaa."
+ ],
+ "poses": {
+  "closed": {
+   "3": "-----aa-aa-------"
+  },
+  "left": {
+   "3": "----wmbwmb-------"
+  },
+  "right": {
+   "3": "-----bwmbwm------"
+  },
+  "fidget": {
+   "0": "-----.---.-------",
+   "1": "----.a.-.a.------",
+   "2": "------a.a--------",
+   "3": "---.abb-bba.-----",
+   "4": "-----wmbwm-------",
+   "5": "-----------------"
+  },
+  "inhale": {
+   "7": "-----------------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

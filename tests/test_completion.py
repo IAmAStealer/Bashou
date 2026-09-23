@@ -46,7 +46,7 @@ class CompletionTest(unittest.TestCase):
         self.assertEqual(complete("bashou swap st"), ["starter"])
         self.assertEqual(complete("bashou swap f"), ["frog", "fox"])
         self.assertEqual(complete("bashou dev st"), ["stage", "stage-all"])
-        self.assertEqual(complete("bashou dev threat a"), ["awk_golem"])
+        self.assertEqual(complete("bashou dev threat aw"), ["awk_golem"])
         self.assertEqual(complete("bashou dev stage fox "), ["1", "2", "3"])
         self.assertEqual(complete("bashou level "), [])
 
