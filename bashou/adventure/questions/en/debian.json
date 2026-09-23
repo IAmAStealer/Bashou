@@ -10,7 +10,7 @@
    "apt skips the dependencies"
   ],
   "answer": 0,
-  "explain": "A lone .deb gets no security updates unless its site adds an apt repository. apt install ./file.deb still resolves dependencies."
+  "explain": "apt installs from repositories whose packages are signed, so it can tell they weren't tampered with, and apt upgrade brings their security fixes later. A .deb downloaded by hand never updates itself: it stays at that version, holes included, unless its site also offers an apt repository. If you must, apt install ./file.deb at least pulls its dependencies."
  },
  {
   "id": "debian-1-02",
@@ -23,7 +23,7 @@
    "Adding -y"
   ],
   "answer": 0,
-  "explain": "apt update fetches what the repositories offer now; upgrade then installs the new versions."
+  "explain": "apt keeps a local copy of the list of packages each repository offers. apt update downloads a fresh copy of those lists; it installs nothing. apt upgrade then compares that list with what you have. Without update, it compares against an old list and sees no new version. Always: apt update, then apt upgrade."
  },
  {
   "id": "debian-1-03",
@@ -36,7 +36,7 @@
    "Only kernel updates"
   ],
   "answer": 0,
-  "explain": "Stable is predictable, which is why servers use it. testing and unstable (sid) change every day."
+  "explain": "On Debian stable, a package keeps the same version for the life of the release; only security and important bug fixes are added. Nothing changes behaviour under your feet, which is why servers use it. testing and unstable (sid) receive new versions every day: great for trying things, risky for a server."
  },
  {
   "id": "debian-1-04",
@@ -49,7 +49,7 @@
    "/usr/share/apt/"
   ],
   "answer": 0,
-  "explain": "Each entry is a repository that can install code as root: an unknown one deserves a question."
+  "explain": "apt reads its repositories from /etc/apt/sources.list and from every file in /etc/apt/sources.list.d/ (.list or the newer .sources files). Each repository there can install and run code as root on the machine, so a line you can't explain deserves a question. /etc/yum.repos.d/ is the Red Hat equivalent."
  },
  {
   "id": "debian-1-05",
@@ -62,7 +62,7 @@
    "apt check"
   ],
   "answer": 0,
-  "explain": "Handy before a maintenance window: you know what will move."
+  "explain": "After apt update has refreshed the lists, apt list --upgradable shows each package with a newer version waiting, and both versions. Nothing is installed. Useful before a maintenance window: you know what is going to change, and you can spot a big one (kernel, database) that needs care."
  },
  {
   "id": "debian-1-06",
@@ -75,7 +75,7 @@
    "apt clean name"
   ],
   "answer": 0,
-  "explain": "apt remove keeps /etc files, so a reinstall finds your settings; purge deletes them too."
+  "explain": "apt remove takes away the program but leaves its configuration files in /etc, so reinstalling it later finds your settings. apt purge removes those configuration files too. Your own data (a database's files in /var/lib, for example) may still stay: check before you reuse the machine."
  },
  {
   "id": "debian-1-07",
@@ -88,7 +88,7 @@
    "apt policy word"
   ],
   "answer": 0,
-  "explain": "apt show name then gives the description, version and dependencies."
+  "explain": "apt search word looks for the word in every package's name and description, so it finds a package even when its name isn't the tool's name. Then apt show name gives its description, version and dependencies before you install. dpkg -S does something else: it tells which installed package owns a file."
  },
  {
   "id": "debian-1-08",
@@ -101,7 +101,7 @@
    "ls /etc/nginx"
   ],
   "answer": 0,
-  "explain": "ii at the start of the line means installed. /etc/nginx can remain after a remove."
+  "explain": "dpkg -l nginx asks the database of installed packages. The line starts with a two-letter status: ii means installed and fine, rc means removed but its config remains. The version column follows. ls /etc/nginx proves little: that folder can stay after apt remove."
  },
  {
   "id": "debian-1-09",
@@ -114,7 +114,7 @@
    "The licence text"
   ],
   "answer": 0,
-  "explain": "To solve a conflict apt may remove packages you need. A long removal list means stop and look."
+  "explain": "To solve a conflict, apt sometimes decides to remove packages, and it lists them under 'The following packages will be REMOVED'. That list may contain something your server needs. Read it every time; if it's long or surprising, answer n and find out why first."
  },
  {
   "id": "debian-1-10",
@@ -127,7 +127,7 @@
    "The downloaded .deb cache"
   ],
   "answer": 0,
-  "explain": "Read its list: a tool you use but got as a dependency goes too (apt-mark manual keeps it). apt clean empties the cache."
+  "explain": "apt remembers whether you asked for a package (manual) or it came in as a dependency (auto). autoremove removes auto packages that nothing needs any more. Catch: a tool you use every day but that arrived as a dependency goes too. Read its list; apt-mark manual name keeps it. The download cache is emptied by apt clean, not this."
  },
  {
   "id": "debian-1-11",
@@ -140,7 +140,7 @@
    "apt clean in a cron job"
   ],
   "answer": 0,
-  "explain": "It installs security updates by itself every day. On a server you rarely visit, it's the first thing to turn on."
+  "explain": "unattended-upgrades downloads and installs security updates by itself every day, with no one logged in. A holey server you forget to update is how most break-ins happen, so on a machine you rarely visit it's the first thing to turn on. A weekly reboot installs nothing by itself."
  },
  {
   "id": "debian-2-01",
@@ -153,7 +153,7 @@
    "dpkg -r --preview name"
   ],
   "answer": 0,
-  "explain": "-s (--simulate) prints the plan and changes nothing. Good habit in scripts and on production."
+  "explain": "-s (or --simulate) makes apt print everything it would do (install, upgrade, remove) and stop there, changing nothing. You see if removing one package would also drag others away. Good habit before any removal on a production server, and in scripts you are testing."
  },
  {
   "id": "debian-2-02",
@@ -166,7 +166,7 @@
    "Stop running apt upgrade"
   ],
   "answer": 0,
-  "explain": "A hold also blocks its security fixes: note why, and apt-mark unhold once it's solved."
+  "explain": "apt-mark hold name freezes the package at its current version: upgrades skip it, and apt-mark showhold lists what is held. The price: it also misses its security fixes. Write down why you held it, fix the real problem, then apt-mark unhold name."
  },
  {
   "id": "debian-2-03",
@@ -179,7 +179,7 @@
    "It removes old kernels only"
   ],
   "answer": 0,
-  "explain": "Settings in /etc/apt/apt.conf.d/50unattended-upgrades; what it did is in /var/log/unattended-upgrades/."
+  "explain": "Security holes are exploited within days of being published. unattended-upgrades installs the fixes daily even when nobody logs in, so the window stays short. Its settings are in /etc/apt/apt.conf.d/50unattended-upgrades, and what it did each day is in /var/log/unattended-upgrades/. It never moves you to the next Debian release."
  },
  {
   "id": "debian-2-04",
@@ -192,7 +192,7 @@
    "~/.apt_history"
   ],
   "answer": 0,
-  "explain": "Each run: date, command line, packages and versions. /var/log/dpkg.log has every step."
+  "explain": "apt writes every run to /var/log/apt/history.log: the date, the command that ran, and each package with its old and new version. Compare those times with when the problem started. /var/log/dpkg.log gives every step in detail, and older logs are compressed next to them (.gz, read with zless)."
  },
  {
   "id": "debian-2-05",
@@ -205,7 +205,7 @@
    "Edit /var/lib/dpkg/status"
   ],
   "answer": 0,
-  "explain": "dpkg-reconfigure reruns a package's setup questions; it works for locales, keyboard and more."
+  "explain": "Some packages ask questions when installed: timezone, language, keyboard. dpkg-reconfigure name asks them again and applies the new answers. Reinstalling doesn't ask again, since the answers are remembered, and editing dpkg's own files by hand can break the package database."
  },
  {
   "id": "debian-2-06",
@@ -218,7 +218,7 @@
    "Bugs in the packages"
   ],
   "answer": 0,
-  "explain": "It proves origin and integrity, not that the code is good: only add publishers you trust."
+  "explain": "The publisher signs the repository with its key, and apt checks the signature before trusting any package. If a mirror, a proxy or an attacker changes a package on the way, the signature no longer matches and apt refuses it. It proves who published it and that it is intact, not that the code is good: only add publishers you trust."
  },
  {
   "id": "debian-2-07",
@@ -231,7 +231,7 @@
    "They only work on desktops"
   ],
   "answer": 0,
-  "explain": "Mixing releases makes a 'FrankenDebian' that upgrades badly. Prefer backports or a container."
+  "explain": "A package from testing often needs newer libraries, and apt installs them too, under every other program of the system. You end up with a mix of releases nobody tested together (Debian calls it a FrankenDebian) that breaks at the next upgrade. Prefer the backports repository, made for stable, or run the new version in a container."
  },
  {
   "id": "debian-2-08",
@@ -244,12 +244,12 @@
    "md5sum -r /usr"
   ],
   "answer": 0,
-  "explain": "It compares against the checksums shipped in each package: a changed binary in /usr/bin is a warning sign."
+  "explain": "Each package ships a checksum for every file it installs. dpkg --verify (or debsums -c) recomputes them and lists the files that changed since installation. Config files in /etc change normally. A modified program in /usr/bin or /usr/sbin is a warning sign that someone may have replaced it."
  },
  {
   "id": "debian-2-09",
   "level": 2,
-  "q": "What does `apt full-upgrade` allow that upgrade doesn't?",
+  "q": "`apt upgrade` leaves some packages 'kept back'. What does `apt full-upgrade` allow that upgrade doesn't?",
   "choices": [
    "Removing packages to finish the upgrade",
    "Upgrading the kernel",
@@ -257,7 +257,7 @@
    "Skipping signatures"
   ],
   "answer": 0,
-  "explain": "Used for release upgrades."
+  "explain": "apt upgrade never removes a package, so an update that needs to swap one package for another stays 'kept back'. apt full-upgrade may remove or replace packages to finish the job: that's what moving to a new Debian release needs. Read its removal list before saying yes."
  },
  {
   "id": "debian-2-10",
@@ -270,7 +270,7 @@
    "apt files name"
   ],
   "answer": 0,
-  "explain": "dpkg -L lists what the package put on disk; its config sits under /etc. dpkg -S does the reverse."
+  "explain": "dpkg -L name lists every file the package put on disk: programs, config under /etc, the systemd unit, the docs. Much quicker and more exact than searching the whole disk with find. dpkg -S does the reverse: give it a file, it tells you the package."
  },
  {
   "id": "debian-2-11",
@@ -283,7 +283,7 @@
    "unattended-upgrades --enable"
   ],
   "answer": 0,
-  "explain": "It writes /etc/apt/apt.conf.d/20auto-upgrades with APT::Periodic::Update-Package-Lists and Unattended-Upgrade set to \"1\"."
+  "explain": "Installing unattended-upgrades isn't enough: it must be switched on. dpkg-reconfigure -plow unattended-upgrades asks 'Automatically download and install stable updates?' and, on yes, writes /etc/apt/apt.conf.d/20auto-upgrades with the two daily settings set to \"1\": refresh the lists, and run the upgrade."
  },
  {
   "id": "debian-2-12",
@@ -296,7 +296,7 @@
    "Nothing until you list packages"
   ],
   "answer": 0,
-  "explain": "Origins-Pattern in /etc/apt/apt.conf.d/50unattended-upgrades decides. Security only is the safe default."
+  "explain": "By default it only takes packages from Debian's security archive, the ones that fix known holes. Other updates wait for you to install them by hand, when you can watch. The list of allowed origins is Origins-Pattern in /etc/apt/apt.conf.d/50unattended-upgrades. Security only is the careful choice."
  },
  {
   "id": "debian-2-13",
@@ -309,7 +309,7 @@
    "cat /etc/apt/sources.list"
   ],
   "answer": 0,
-  "explain": "Afterwards, what it really did is in /var/log/unattended-upgrades/."
+  "explain": "--dry-run goes through the whole process without installing anything, and --debug explains each decision: which packages it would take and why others are skipped. Handy right after changing its settings. Afterwards, what it really did each day is in /var/log/unattended-upgrades/."
  },
  {
   "id": "debian-3-01",
@@ -322,7 +322,7 @@
    "apt-get priority name"
   ],
   "answer": 0,
-  "explain": "It lists every source with its pin priority, so you see which one wins."
+  "explain": "apt policy name shows the installed version, the candidate (the one apt would install), and every repository offering the package with its priority. When two repositories offer it, the highest priority wins. This is how you understand why apt picks a version from backports or from a third-party repository."
  },
  {
   "id": "debian-3-02",
@@ -335,7 +335,7 @@
    "Nothing: apt trusts any repository you add"
   ],
   "answer": 0,
-  "explain": "The signature proves the packages come from that publisher, unchanged. apt-key is gone, and trusted=yes just turns the check off."
+  "explain": "Save the publisher's public key as a file in /etc/apt/keyrings/ and add Signed-By: pointing to it in that repository's entry. apt then accepts that key only for that repository, not for all of them. apt-key, which trusted a key everywhere, is gone; trusted=yes simply turns the check off."
  },
  {
   "id": "debian-3-03",
@@ -348,7 +348,7 @@
    "The package list is corrupted, run apt clean"
   ],
   "answer": 0,
-  "explain": "Fetch the publisher's key, dearmor it into /etc/apt/keyrings, and point Signed-By at it."
+  "explain": "NO_PUBKEY followed by an id means the repository is signed with a key apt doesn't have, so apt ignores it: it isn't broken, it's being careful. Fetch the key from the publisher's official site, convert it with gpg --dearmor into /etc/apt/keyrings/, and name it with Signed-By in the repository entry."
  },
  {
   "id": "debian-3-04",
@@ -361,7 +361,7 @@
    "Lists the editors in the repositories"
   ],
   "answer": 0,
-  "explain": "Alternatives are symlinks managed by Debian: editor, java, x-www-browser…"
+  "explain": "Some commands can be provided by several programs: editor can be nano or vim, java several JDKs. Debian keeps a link (/usr/bin/editor) pointing to the chosen one. update-alternatives --config editor shows the choices and switches the link for the whole system. Your own EDITOR variable still wins for you."
  },
  {
   "id": "debian-3-05",
@@ -374,7 +374,7 @@
    "ldconfig -p"
   ],
   "answer": 0,
-  "explain": "Running programs keep the old library in memory until restarted: the fix isn't active until then."
+  "explain": "A running program loaded the library when it started and keeps that old copy in memory. The file on disk is fixed, but the service is still vulnerable until it restarts. needrestart lists those services and offers to restart them. After a kernel update, only a reboot helps."
  },
  {
   "id": "debian-3-06",
@@ -387,7 +387,7 @@
    "apt-file list /usr/bin/name"
   ],
   "answer": 0,
-  "explain": "dpkg -S searches installed packages; apt-file search looks in packages you don't have."
+  "explain": "dpkg -S /usr/bin/name searches the installed packages for that path and prints the package that owns it. If no package owns it, someone put it there by hand: a script, another admin, or an intruder. Worth finding out which. apt-file search does the same for packages you haven't installed."
  },
  {
   "id": "debian-3-07",
@@ -400,7 +400,7 @@
    "The package is reinstalled at the next boot"
   ],
   "answer": 0,
-  "explain": "`apt-mark manual` does the opposite; `apt-mark showauto` lists them."
+  "explain": "apt-mark auto marks the package as if it had only come in as a dependency. Once nothing depends on it any more, apt autoremove will remove it. apt-mark manual does the opposite and protects it; apt-mark showauto and showmanual list each group."
  },
  {
   "id": "debian-3-08",
@@ -413,7 +413,7 @@
    "/etc/apt/apt.conf.d/pins"
   ],
   "answer": 0,
-  "explain": "Package, Pin (release or version) and Pin-Priority go together in that file."
+  "explain": "Pinning lives in a file of /etc/apt/preferences.d/: one block with Package: (which package), Pin: (which release or version) and Pin-Priority: (how much to prefer it). sources.list only says where packages come from, not which to prefer. Check the result with apt policy name."
  },
  {
   "id": "debian-3-09",
@@ -426,7 +426,7 @@
    "dpkg --audit --fix"
   ],
   "answer": 0,
-  "explain": "`apt --fix-broken install` is the next step when dependencies are missing too."
+  "explain": "When an upgrade is cut (lost connection, power, Ctrl+C), packages stay unpacked but not configured, and apt complains. dpkg --configure -a finishes configuring everything that was left half done. If dependencies are missing too, apt --fix-broken install is the next step."
  },
  {
   "id": "debian-3-10",
@@ -439,7 +439,7 @@
    "The alternatives, with update-alternatives --all"
   ],
   "answer": 0,
-  "explain": "update-grub then writes the boot entries that point at it."
+  "explain": "The initramfs is a small image the kernel loads at boot, with the modules and settings needed to reach the real disk (an encrypted disk, for example). If you change what boot needs, rebuild it with update-initramfs -u, or the machine may not find its disk at the next boot."
  },
  {
   "id": "debian-3-11",
@@ -452,7 +452,7 @@
    "systemd-update.timer"
   ],
   "answer": 0,
-  "explain": "The first refreshes the lists, the second installs. `systemctl list-timers 'apt*'` shows when they run next."
+  "explain": "Two systemd timers do the work: apt-daily.timer refreshes the package lists, then apt-daily-upgrade.timer runs unattended-upgrades to install. systemctl list-timers 'apt*' shows when each last ran and runs next. The old /etc/cron.daily/apt script only steps aside when systemd is there."
  },
  {
   "id": "debian-3-12",
@@ -465,7 +465,7 @@
    "Stop apt-daily.timer"
   ],
   "answer": 0,
-  "explain": "Everything else keeps its security fixes. Note why, and upgrade that package by hand in a planned window."
+  "explain": "List it in Unattended-Upgrade::Package-Blacklist in 50unattended-upgrades, or apt-mark hold it: automatic updates then skip that package while everything else keeps getting its fixes. Write down why, and upgrade it by hand in a planned window, with a backup. Stopping the timer would stop all security updates."
  },
  {
   "id": "debian-3-13",
@@ -478,6 +478,6 @@
    "The old files stay in use forever"
   ],
   "answer": 0,
-  "explain": "Until restarted. needrestart lists services to restart; /var/run/reboot-required appears for a kernel. Automatic-Reboot is off by default."
+  "explain": "New files are on disk, but running services keep the old openssl in memory and the machine still runs the old kernel, until restarted. needrestart lists the services to restart, and the file /var/run/reboot-required appears when a reboot is needed. Automatic reboots are off by default: schedule one."
  }
 ]

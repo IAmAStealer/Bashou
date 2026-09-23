@@ -10,7 +10,7 @@
    "apt saute les dépendances"
   ],
   "answer": 0,
-  "explain": "Un .deb isolé n'a pas de mises à jour de sécurité, sauf si le site fournit un dépôt apt. apt install ./fichier.deb gère quand même les dépendances."
+  "explain": "apt installe depuis des dépôts dont les paquets sont signés : il sait qu'ils n'ont pas été modifiés, et apt upgrade apporte ensuite leurs correctifs de sécurité. Un .deb téléchargé à la main ne se met jamais à jour : il reste à cette version, failles comprises, sauf si son site propose aussi un dépôt apt. S'il le faut, apt install ./fichier.deb récupère au moins ses dépendances."
  },
  {
   "id": "debian-1-02",
@@ -23,7 +23,7 @@
    "Ajouter -y"
   ],
   "answer": 0,
-  "explain": "apt update récupère ce que proposent les dépôts ; upgrade installe ensuite les nouvelles versions."
+  "explain": "apt garde une copie locale de la liste des paquets que propose chaque dépôt. apt update télécharge une copie fraîche de ces listes ; il n'installe rien. apt upgrade compare ensuite cette liste avec ce que tu as. Sans update, il compare avec une vieille liste et ne voit aucune nouvelle version. Toujours : apt update, puis apt upgrade."
  },
  {
   "id": "debian-1-03",
@@ -36,7 +36,7 @@
    "Seulement le noyau"
   ],
   "answer": 0,
-  "explain": "Stable est prévisible, c'est pour ça que les serveurs l'utilisent. testing et unstable (sid) bougent chaque jour."
+  "explain": "Sur Debian stable, un paquet garde la même version pendant toute la vie de la version de Debian ; seuls les correctifs de sécurité et de bugs importants s'ajoutent. Rien ne change de comportement sous tes pieds, c'est pour ça que les serveurs l'utilisent. testing et unstable (sid) reçoivent de nouvelles versions chaque jour : bien pour essayer, risqué pour un serveur."
  },
  {
   "id": "debian-1-04",
@@ -49,7 +49,7 @@
    "/usr/share/apt/"
   ],
   "answer": 0,
-  "explain": "Chaque entrée est un dépôt qui peut installer du code en root : un dépôt inconnu mérite une question."
+  "explain": "apt lit ses dépôts dans /etc/apt/sources.list et dans chaque fichier de /etc/apt/sources.list.d/ (.list ou les nouveaux .sources). Chaque dépôt listé peut installer et lancer du code en root sur la machine : une ligne que tu ne sais pas expliquer mérite une question. /etc/yum.repos.d/ est l'équivalent Red Hat."
  },
  {
   "id": "debian-1-05",
@@ -62,7 +62,7 @@
    "apt check"
   ],
   "answer": 0,
-  "explain": "Pratique avant une maintenance : tu sais ce qui va bouger."
+  "explain": "Après qu'apt update a rafraîchi les listes, apt list --upgradable montre chaque paquet qui a une nouvelle version en attente, avec les deux versions. Rien n'est installé. Utile avant une maintenance : tu sais ce qui va changer, et tu repères un gros morceau (noyau, base de données) qui demande de l'attention."
  },
  {
   "id": "debian-1-06",
@@ -75,7 +75,7 @@
    "apt clean nom"
   ],
   "answer": 0,
-  "explain": "apt remove garde les fichiers de /etc, pour qu'une réinstallation les retrouve ; purge les supprime aussi."
+  "explain": "apt remove enlève le programme mais laisse ses fichiers de configuration dans /etc : une réinstallation plus tard retrouve tes réglages. apt purge supprime aussi ces fichiers de configuration. Tes propres données (les fichiers d'une base dans /var/lib, par exemple) peuvent rester : vérifie avant de réutiliser la machine."
  },
  {
   "id": "debian-1-07",
@@ -88,7 +88,7 @@
    "apt policy mot"
   ],
   "answer": 0,
-  "explain": "apt show nom donne ensuite la description, la version et les dépendances."
+  "explain": "apt search mot cherche le mot dans le nom et la description de chaque paquet : il trouve un paquet même quand son nom n'est pas celui de l'outil. Ensuite apt show nom donne sa description, sa version et ses dépendances avant d'installer. dpkg -S fait autre chose : il dit quel paquet installé possède un fichier."
  },
  {
   "id": "debian-1-08",
@@ -101,7 +101,7 @@
    "ls /etc/nginx"
   ],
   "answer": 0,
-  "explain": "ii en début de ligne veut dire installé. /etc/nginx peut rester après un remove."
+  "explain": "dpkg -l nginx interroge la base des paquets installés. La ligne commence par un état en deux lettres : ii veut dire installé et en ordre, rc veut dire supprimé mais sa config reste. La colonne version suit. ls /etc/nginx ne prouve pas grand-chose : ce dossier peut rester après apt remove."
  },
  {
   "id": "debian-1-09",
@@ -114,7 +114,7 @@
    "Le texte de la licence"
   ],
   "answer": 0,
-  "explain": "Pour résoudre un conflit, apt peut supprimer des paquets utiles. Une longue liste de suppressions : on s'arrête et on regarde."
+  "explain": "Pour résoudre un conflit, apt décide parfois de supprimer des paquets, et il les liste sous « Les paquets suivants seront ENLEVÉS ». Cette liste peut contenir quelque chose dont ton serveur a besoin. Lis-la à chaque fois ; si elle est longue ou surprenante, réponds n et cherche d'abord pourquoi."
  },
  {
   "id": "debian-1-10",
@@ -127,7 +127,7 @@
    "Le cache des .deb téléchargés"
   ],
   "answer": 0,
-  "explain": "Lis sa liste : un outil que tu utilises mais installé comme dépendance part aussi (apt-mark manual le garde). apt clean vide le cache."
+  "explain": "apt retient si tu as demandé un paquet (manual) ou s'il est venu comme dépendance (auto). autoremove supprime les paquets auto dont plus rien n'a besoin. Piège : un outil que tu utilises tous les jours mais arrivé comme dépendance part aussi. Lis sa liste ; apt-mark manual nom le garde. Le cache des téléchargements se vide avec apt clean, pas ça."
  },
  {
   "id": "debian-1-11",
@@ -140,7 +140,7 @@
    "apt clean dans une tâche cron"
   ],
   "answer": 0,
-  "explain": "Il installe seul les mises à jour de sécurité chaque jour. Sur un serveur où tu vas rarement, c'est la première chose à activer."
+  "explain": "unattended-upgrades télécharge et installe seul les mises à jour de sécurité chaque jour, sans que personne ne se connecte. Un serveur troué qu'on oublie de mettre à jour, c'est comme ça que se font la plupart des intrusions : sur une machine où tu vas rarement, c'est la première chose à activer. Un redémarrage hebdomadaire n'installe rien tout seul."
  },
  {
   "id": "debian-2-01",
@@ -153,7 +153,7 @@
    "dpkg -r --preview nom"
   ],
   "answer": 0,
-  "explain": "-s (--simulate) affiche le plan sans rien changer. Bonne habitude dans les scripts et en production."
+  "explain": "-s (ou --simulate) fait afficher à apt tout ce qu'il ferait (installer, mettre à jour, supprimer) et s'arrêter là, sans rien changer. Tu vois si supprimer un paquet en entraînerait d'autres. Bonne habitude avant toute suppression sur un serveur de production, et dans les scripts que tu testes."
  },
  {
   "id": "debian-2-02",
@@ -166,7 +166,7 @@
    "Ne plus lancer apt upgrade"
   ],
   "answer": 0,
-  "explain": "Un hold bloque aussi ses correctifs de sécurité : note pourquoi, et apt-mark unhold une fois réglé."
+  "explain": "apt-mark hold nom fige le paquet à sa version actuelle : les mises à jour le sautent, et apt-mark showhold liste ce qui est bloqué. Le prix : il rate aussi ses correctifs de sécurité. Note pourquoi tu l'as bloqué, règle le vrai problème, puis apt-mark unhold nom."
  },
  {
   "id": "debian-2-03",
@@ -179,7 +179,7 @@
    "Il supprime seulement les vieux noyaux"
   ],
   "answer": 0,
-  "explain": "Réglages dans /etc/apt/apt.conf.d/50unattended-upgrades ; ce qu'il a fait est dans /var/log/unattended-upgrades/."
+  "explain": "Les failles sont exploitées quelques jours après leur publication. unattended-upgrades installe les correctifs chaque jour même si personne ne se connecte : la fenêtre reste courte. Ses réglages sont dans /etc/apt/apt.conf.d/50unattended-upgrades, et ce qu'il a fait chaque jour dans /var/log/unattended-upgrades/. Il ne passe jamais à la version suivante de Debian."
  },
  {
   "id": "debian-2-04",
@@ -192,7 +192,7 @@
    "~/.apt_history"
   ],
   "answer": 0,
-  "explain": "Chaque passage : date, commande, paquets et versions. /var/log/dpkg.log détaille chaque étape."
+  "explain": "apt note chaque passage dans /var/log/apt/history.log : la date, la commande lancée, et chaque paquet avec son ancienne et sa nouvelle version. Compare ces heures avec le début du problème. /var/log/dpkg.log détaille chaque étape, et les anciens logs sont compressés à côté (.gz, à lire avec zless)."
  },
  {
   "id": "debian-2-05",
@@ -205,7 +205,7 @@
    "Modifier /var/lib/dpkg/status"
   ],
   "answer": 0,
-  "explain": "dpkg-reconfigure relance les questions d'installation d'un paquet ; ça marche pour les locales, le clavier…"
+  "explain": "Certains paquets posent des questions à l'installation : fuseau horaire, langue, clavier. dpkg-reconfigure nom les repose et applique les nouvelles réponses. Réinstaller ne les repose pas, car les réponses sont mémorisées, et modifier à la main les fichiers de dpkg peut casser la base des paquets."
  },
  {
   "id": "debian-2-06",
@@ -218,7 +218,7 @@
    "Les bugs des paquets"
   ],
   "answer": 0,
-  "explain": "Elle prouve l'origine et l'intégrité, pas que le code est bon : n'ajoute que des éditeurs de confiance."
+  "explain": "L'éditeur signe le dépôt avec sa clé, et apt vérifie la signature avant de faire confiance à un paquet. Si un miroir, un proxy ou un attaquant modifie un paquet en route, la signature ne correspond plus et apt le refuse. Elle prouve qui l'a publié et qu'il est intact, pas que le code est bon : n'ajoute que des éditeurs de confiance."
  },
  {
   "id": "debian-2-07",
@@ -231,7 +231,7 @@
    "Ils ne marchent que sur un poste de bureau"
   ],
   "answer": 0,
-  "explain": "Mélanger les versions donne une « FrankenDebian » qui se met mal à jour. Préfère backports ou un conteneur."
+  "explain": "Un paquet de testing demande souvent des bibliothèques plus récentes, et apt les installe aussi, sous tous les autres programmes du système. On obtient un mélange de versions que personne n'a testé ensemble (Debian l'appelle FrankenDebian) qui casse à la mise à jour suivante. Préfère le dépôt backports, fait pour stable, ou fais tourner la nouvelle version dans un conteneur."
  },
  {
   "id": "debian-2-08",
@@ -244,12 +244,12 @@
    "md5sum -r /usr"
   ],
   "answer": 0,
-  "explain": "Il compare aux sommes de contrôle livrées dans chaque paquet : un binaire modifié dans /usr/bin est un signal d'alerte."
+  "explain": "Chaque paquet livre une somme de contrôle pour chaque fichier qu'il installe. dpkg --verify (ou debsums -c) les recalcule et liste les fichiers qui ont changé depuis l'installation. Les fichiers de config dans /etc changent normalement. Un programme modifié dans /usr/bin ou /usr/sbin est un signal d'alerte : quelqu'un l'a peut-être remplacé."
  },
  {
   "id": "debian-2-09",
   "level": 2,
-  "q": "Que permet `apt full-upgrade` de plus que upgrade ?",
+  "q": "`apt upgrade` laisse des paquets « retenus ». Que permet `apt full-upgrade` de plus que upgrade ?",
   "choices": [
    "Supprimer des paquets pour finir la mise à jour",
    "Mettre à jour le noyau",
@@ -257,7 +257,7 @@
    "Sauter les signatures"
   ],
   "answer": 0,
-  "explain": "Sert pour changer de version de Debian."
+  "explain": "apt upgrade ne supprime jamais de paquet : une mise à jour qui doit remplacer un paquet par un autre reste « retenue ». apt full-upgrade peut supprimer ou remplacer des paquets pour finir le travail : c'est ce qu'il faut pour passer à une nouvelle version de Debian. Lis sa liste de suppressions avant de dire oui."
  },
  {
   "id": "debian-2-10",
@@ -270,7 +270,7 @@
    "apt files nom"
   ],
   "answer": 0,
-  "explain": "dpkg -L liste ce que le paquet a posé sur le disque ; sa config est sous /etc. dpkg -S fait l'inverse."
+  "explain": "dpkg -L nom liste chaque fichier que le paquet a posé sur le disque : programmes, config sous /etc, unité systemd, documentation. Bien plus rapide et plus exact que chercher dans tout le disque avec find. dpkg -S fait l'inverse : donne-lui un fichier, il te dit le paquet."
  },
  {
   "id": "debian-2-11",
@@ -283,7 +283,7 @@
    "unattended-upgrades --enable"
   ],
   "answer": 0,
-  "explain": "Elle écrit /etc/apt/apt.conf.d/20auto-upgrades avec APT::Periodic::Update-Package-Lists et Unattended-Upgrade à \"1\"."
+  "explain": "Installer unattended-upgrades ne suffit pas : il faut l'activer. dpkg-reconfigure -plow unattended-upgrades demande s'il faut télécharger et installer automatiquement les mises à jour et, si oui, écrit /etc/apt/apt.conf.d/20auto-upgrades avec les deux réglages quotidiens à \"1\" : rafraîchir les listes, et lancer la mise à jour."
  },
  {
   "id": "debian-2-12",
@@ -296,7 +296,7 @@
    "Rien tant que tu ne listes pas de paquets"
   ],
   "answer": 0,
-  "explain": "Origins-Pattern dans /etc/apt/apt.conf.d/50unattended-upgrades décide. La sécurité seule est le choix prudent par défaut."
+  "explain": "Par défaut, il ne prend que les paquets de l'archive de sécurité de Debian, ceux qui corrigent des failles connues. Les autres mises à jour attendent que tu les installes à la main, quand tu peux surveiller. La liste des origines permises est Origins-Pattern dans /etc/apt/apt.conf.d/50unattended-upgrades. La sécurité seule est le choix prudent."
  },
  {
   "id": "debian-2-13",
@@ -309,7 +309,7 @@
    "cat /etc/apt/sources.list"
   ],
   "answer": 0,
-  "explain": "Ensuite, ce qu'il a vraiment fait est dans /var/log/unattended-upgrades/."
+  "explain": "--dry-run fait tout le parcours sans rien installer, et --debug explique chaque décision : quels paquets il prendrait et pourquoi d'autres sont écartés. Pratique juste après avoir changé ses réglages. Ensuite, ce qu'il a vraiment fait chaque jour est dans /var/log/unattended-upgrades/."
  },
  {
   "id": "debian-3-01",
@@ -322,7 +322,7 @@
    "apt-get priority nom"
   ],
   "answer": 0,
-  "explain": "Elle liste chaque source avec sa priorité de pin : on voit laquelle gagne."
+  "explain": "apt policy nom montre la version installée, la candidate (celle qu'apt installerait), et chaque dépôt qui propose le paquet avec sa priorité. Quand deux dépôts le proposent, la priorité la plus haute gagne. C'est comme ça qu'on comprend pourquoi apt choisit une version de backports ou d'un dépôt tiers."
  },
  {
   "id": "debian-3-02",
@@ -335,7 +335,7 @@
    "Rien : apt fait confiance à tout dépôt ajouté"
   ],
   "answer": 0,
-  "explain": "La signature prouve que les paquets viennent de cet éditeur, intacts. apt-key a disparu, et trusted=yes ne fait que désactiver la vérification."
+  "explain": "Enregistre la clé publique de l'éditeur comme fichier dans /etc/apt/keyrings/ et ajoute Signed-By: qui pointe dessus dans l'entrée de ce dépôt. apt accepte alors cette clé seulement pour ce dépôt, pas pour tous. apt-key, qui faisait confiance à une clé partout, a disparu ; trusted=yes coupe simplement la vérification."
  },
  {
   "id": "debian-3-03",
@@ -348,7 +348,7 @@
    "La liste des paquets est abîmée, lancez apt clean"
   ],
   "answer": 0,
-  "explain": "Récupérez la clé de l'éditeur, dearmorez-la dans /etc/apt/keyrings et citez-la avec Signed-By."
+  "explain": "NO_PUBKEY suivi d'un identifiant veut dire que le dépôt est signé avec une clé qu'apt n'a pas : apt l'ignore. Rien n'est cassé, il est prudent. Récupère la clé sur le site officiel de l'éditeur, convertis-la avec gpg --dearmor dans /etc/apt/keyrings/, et cite-la avec Signed-By dans l'entrée du dépôt."
  },
  {
   "id": "debian-3-04",
@@ -361,7 +361,7 @@
    "Liste les éditeurs des dépôts"
   ],
   "answer": 0,
-  "explain": "Les alternatives sont des liens gérés par Debian : editor, java, x-www-browser…"
+  "explain": "Certaines commandes peuvent être fournies par plusieurs programmes : editor peut être nano ou vim, java plusieurs JDK. Debian garde un lien (/usr/bin/editor) vers celui qui est choisi. update-alternatives --config editor montre les choix et change le lien pour tout le système. Ta propre variable EDITOR passe toujours devant pour toi."
  },
  {
   "id": "debian-3-05",
@@ -374,7 +374,7 @@
    "ldconfig -p"
   ],
   "answer": 0,
-  "explain": "Les programmes lancés gardent l'ancienne bibliothèque en mémoire jusqu'au redémarrage : le correctif n'agit pas avant."
+  "explain": "Un programme lancé a chargé la bibliothèque à son démarrage et garde cette ancienne copie en mémoire. Le fichier sur le disque est corrigé, mais le service reste vulnérable jusqu'à son redémarrage. needrestart liste ces services et propose de les relancer. Après une mise à jour du noyau, seul un redémarrage aide."
  },
  {
   "id": "debian-3-06",
@@ -387,7 +387,7 @@
    "apt-file list /usr/bin/nom"
   ],
   "answer": 0,
-  "explain": "dpkg -S cherche dans les paquets installés ; apt-file search cherche dans ceux que vous n'avez pas."
+  "explain": "dpkg -S /usr/bin/nom cherche ce chemin dans les paquets installés et affiche celui qui le possède. Si aucun paquet ne le possède, quelqu'un l'a posé à la main : un script, un autre admin, ou un intrus. Ça vaut la peine de savoir lequel. apt-file search fait pareil pour les paquets non installés."
  },
  {
   "id": "debian-3-07",
@@ -400,7 +400,7 @@
    "Le paquet est réinstallé au prochain démarrage"
   ],
   "answer": 0,
-  "explain": "`apt-mark manual` fait l'inverse ; `apt-mark showauto` les liste."
+  "explain": "apt-mark auto marque le paquet comme s'il n'était venu que comme dépendance. Dès que plus rien n'en dépend, apt autoremove le supprimera. apt-mark manual fait l'inverse et le protège ; apt-mark showauto et showmanual listent chaque groupe."
  },
  {
   "id": "debian-3-08",
@@ -413,7 +413,7 @@
    "/etc/apt/apt.conf.d/pins"
   ],
   "answer": 0,
-  "explain": "Package, Pin (version ou distribution) et Pin-Priority vont ensemble dans ce fichier."
+  "explain": "Le pinning se fait dans un fichier de /etc/apt/preferences.d/ : un bloc avec Package: (quel paquet), Pin: (quelle distribution ou version) et Pin-Priority: (à quel point le préférer). sources.list dit seulement d'où viennent les paquets, pas lesquels préférer. Vérifie le résultat avec apt policy nom."
  },
  {
   "id": "debian-3-09",
@@ -426,7 +426,7 @@
    "dpkg --audit --fix"
   ],
   "answer": 0,
-  "explain": "`apt --fix-broken install` est l'étape suivante si des dépendances manquent aussi."
+  "explain": "Quand une mise à jour est coupée (connexion perdue, courant, Ctrl+C), des paquets restent dépaquetés mais pas configurés, et apt proteste. dpkg --configure -a termine la configuration de tout ce qui est resté à moitié fait. S'il manque aussi des dépendances, apt --fix-broken install est l'étape suivante."
  },
  {
   "id": "debian-3-10",
@@ -439,7 +439,7 @@
    "Les alternatives, avec update-alternatives --all"
   ],
   "answer": 0,
-  "explain": "update-grub écrit ensuite les entrées de démarrage qui pointent dessus."
+  "explain": "L'initramfs est une petite image que le noyau charge au démarrage, avec les modules et réglages nécessaires pour atteindre le vrai disque (un disque chiffré, par exemple). Si tu changes ce dont le démarrage a besoin, reconstruis-la avec update-initramfs -u, sinon la machine risque de ne plus trouver son disque au prochain démarrage."
  },
  {
   "id": "debian-3-11",
@@ -452,7 +452,7 @@
    "systemd-update.timer"
   ],
   "answer": 0,
-  "explain": "Le premier rafraîchit les listes, le second installe. `systemctl list-timers 'apt*'` montre leur prochain passage."
+  "explain": "Deux timers systemd font le travail : apt-daily.timer rafraîchit les listes de paquets, puis apt-daily-upgrade.timer lance unattended-upgrades pour installer. systemctl list-timers 'apt*' montre quand chacun est passé et quand il repassera. L'ancien script /etc/cron.daily/apt s'efface quand systemd est là."
  },
  {
   "id": "debian-3-12",
@@ -465,7 +465,7 @@
    "Arrêter apt-daily.timer"
   ],
   "answer": 0,
-  "explain": "Tout le reste garde ses correctifs de sécurité. Note pourquoi, et mets ce paquet à jour à la main pendant une fenêtre prévue."
+  "explain": "Mets-la dans Unattended-Upgrade::Package-Blacklist de 50unattended-upgrades, ou fais apt-mark hold : les mises à jour automatiques sautent alors ce paquet et tout le reste reçoit ses correctifs. Note pourquoi, et mets-la à jour à la main pendant une fenêtre prévue, avec une sauvegarde. Arrêter le timer couperait toutes les mises à jour de sécurité."
  },
  {
   "id": "debian-3-13",
@@ -478,6 +478,6 @@
    "Les anciens fichiers restent utilisés pour toujours"
   ],
   "answer": 0,
-  "explain": "Jusqu'au redémarrage. needrestart liste les services à relancer ; /var/run/reboot-required apparaît pour un noyau. Automatic-Reboot est désactivé par défaut."
+  "explain": "Les nouveaux fichiers sont sur le disque, mais les services lancés gardent l'ancien openssl en mémoire et la machine tourne toujours sur l'ancien noyau, jusqu'au redémarrage. needrestart liste les services à relancer, et le fichier /var/run/reboot-required apparaît quand un redémarrage est nécessaire. Les redémarrages automatiques sont désactivés par défaut : planifie-en un."
  }
 ]
