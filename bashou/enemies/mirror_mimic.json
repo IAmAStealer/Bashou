@@ -1,0 +1,47 @@
+{
+ "name": "Mirror Mimic",
+ "palette": {
+  "a": "#2a1808",
+  "b": "#a06a30",
+  "c": "#e0b040",
+  "m": "#200808",
+  "t": "#f4f0e0",
+  "r": "#d04050",
+  "w": "#ffffff"
+ },
+ "base": [
+  ".................",
+  "...aaaaaaaaaaa...",
+  ".abbbbbcccbbbbba.",
+  ".abwmbbcacbbwmba.",
+  ".aaaaaaaaaaaaaaa.",
+  ".amtmtmtmtmtmtma.",
+  ".ammmmmrrrmmmmma.",
+  ".amtmtmtmtmtmtma.",
+  ".aaaaaaaaaaaaaaa.",
+  ".abbbbbcccbbbbba.",
+  ".abbbbbbbbbbbbba.",
+  "..aaaaaaaaaaaaa.."
+ ],
+ "poses": {
+  "closed": {
+   "3": "---aa-------aa---"
+  },
+  "left": {
+   "3": "--wmb------wmb---"
+  },
+  "right": {
+   "3": "---bwm------bwm--"
+  },
+  "fidget": {
+   "6": "------r---r------"
+  },
+  "inhale": {
+   "6": "a---------------a"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

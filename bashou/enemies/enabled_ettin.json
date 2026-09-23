@@ -1,0 +1,47 @@
+{
+ "name": "Enabled Ettin",
+ "palette": {
+  "a": "#20180c",
+  "b": "#b08a60",
+  "c": "#6a8a40",
+  "d": "#4a6a28",
+  "m": "#101010",
+  "w": "#ffffff"
+ },
+ "base": [
+  "..aaaa.....aaaa..",
+  ".abbbba...abbbba.",
+  ".abwmba...abwmba.",
+  ".abmmba...abmmba.",
+  "..aaaa.....aaaa..",
+  "..aabaaaaaaabaa..",
+  ".acccccccccccccca",
+  "abccccccccccccccb",
+  "ab.accccccccca.ba",
+  "...addddddddda...",
+  "...ada.....ada...",
+  "...aa.......aa..."
+ ],
+ "poses": {
+  "closed": {
+   "2": "---aa-------aa---"
+  },
+  "left": {
+   "2": "--wmb------wmb---"
+  },
+  "right": {
+   "2": "---bwm------bwm--"
+  },
+  "fidget": {
+   "2": "------------mw---",
+   "3": "-----------------"
+  },
+  "inhale": {
+   "5": "-a-------------a-"
+  }
+ },
+ "particles": [
+  0,
+  7
+ ]
+}

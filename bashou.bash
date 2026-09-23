@@ -77,7 +77,7 @@ bashou() {
 _bashou_commands="level pets achievements fight talk learn explain evolve swap stats start language config update version security adventure reset dev on off"
 _bashou_pets="bat frog turtle mushroom slime sofa octopus dragon fox owl mole snake ghost spider ant axolotl gremlin snail beaver squirrel pigeon hedgehog bee whale meerkat"
 _bashou_dev="unlock-all stage stage-all level threat restore"
-_bashou_challenges="line_moth column_crab jumble_sprite last_word_wisp first_line_imp needle_gnat field_wasp dust_bunny verse_viper peak_harpy grep_hydra awk_golem find_wraith uniq_swarm sed_serpent ps_phantom pipe_eel colon_cobra semicolon_slug list_leech dict_djinn loop_lich ouroboros json_jinn base64_banshee percent_poltergeist injection_imp token_trickster leak_lurker fencepost_fiend stack_specter overflow_ogre version_vole candidate_crow stowaway_stoat autoremove_adder release_raven hitchhiker_hare census_centipede"
+_bashou_challenges="line_moth column_crab jumble_sprite last_word_wisp first_line_imp needle_gnat field_wasp dust_bunny verse_viper peak_harpy grep_hydra awk_golem find_wraith uniq_swarm sed_serpent ps_phantom pipe_eel colon_cobra semicolon_slug list_leech dict_djinn loop_lich ouroboros json_jinn base64_banshee percent_poltergeist injection_imp token_trickster leak_lurker fencepost_fiend stack_specter overflow_ogre version_vole candidate_crow stowaway_stoat autoremove_adder release_raven hitchhiker_hare census_centipede mirror_mimic repo_revenant enabled_ettin"
 _bashou_security="1 2 3 4 5 6"
 
 _bashou_complete() {

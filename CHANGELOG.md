@@ -18,6 +18,10 @@ Every release has a section here, written for players. CI refuses to tag a relea
   (what `apt autoremove` looks at). On Rocky, Alma, Fedora and Red Hat: the installed version
   (`rpm -q`), which package owns a file (`rpm -qf`), how many packages are installed. Bashou reads
   /etc/os-release and only sends the ones for your system.
+- **Repository fights.** Fix a `debian.sources` (or a Rocky `.repo`) with three planted mistakes:
+  look the right values up online or in your own /etc. On Red Hat, the Enabled Ettin asks for one
+  dnf command limited to a single repository: `--disablerepo='*' --enablerepo=<id>`.
+- `python3 -m bashou.creatures show <pet or fight id>` draws a fight's enemy with all its poses.
 - `bashou explain python list` (or dict, loop, recursion, json, url, base64, subprocess;
   `bashou explain c malloc`, array, string, recursion, asan) gives a short note with an example,
   offline.

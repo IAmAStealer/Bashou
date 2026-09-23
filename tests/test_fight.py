@@ -8,6 +8,7 @@ from pathlib import Path
 from unittest import mock
 
 from bashou import challenges, fight, state
+from bashou.challenges import repos
 
 # Reference solutions, run with bash in the arena folder. {x} is filled from the task text.
 SOLUTIONS = {
@@ -56,6 +57,10 @@ SOLUTIONS = {
     "release_raven": ("rpm -q --qf '%{{VERSION}}-%{{RELEASE}}' {x}", r"version of (\S+) is installed"),
     "hitchhiker_hare": ("rpm -qf --qf '%{{NAME}}' {x}", r"put (\S+) on"),
     "census_centipede": ("rpm -qa | wc -l", None),
+    # repository fights: write the right file back, or one dnf command limited to one repo
+    "mirror_mimic": ("cat > debian.sources <<'X'\n" + repos.DEBIAN_OK + "X", None),
+    "repo_revenant": ("cat > rocky.repo <<'X'\n" + repos.ROCKY_OK + "X", None),
+    "enabled_ettin": ("dnf --disablerepo='*' --enablerepo={x} repolist", r"only the (\S+) repository"),
     # security
     "hidden_file": ("cat .[!.]*", None),
     "encoded_note": ("base64 -d note.txt | cut -d' ' -f2", None),
@@ -197,6 +202,66 @@ class PackageFightTest(unittest.TestCase):
                 hare = challenges.BY_ID["hitchhiker_hare"]
                 self.assertTrue(hare.check(Path(tmp), {"answer": "coreutils"}, "coreutils-8.32-35.el9.x86_64"))
                 self.assertFalse(hare.check(Path(tmp), {"answer": "coreutils"}, "coreutils-extra"))
+
+
+class RepoFightTest(unittest.TestCase):
+    def test_planted_files_fail_and_fixed_ones_pass(self):
+        for seed in range(20):
+            with tempfile.TemporaryDirectory() as tmp:
+                work, rng = Path(tmp), random.Random(seed)
+                repos.debian_setup(work, rng)
+                repos.rocky_setup(work, rng)
+                self.assertFalse(repos.debian_verify(work, {}, "done"), (work / "debian.sources").read_text())
+                self.assertFalse(repos.rocky_verify(work, {}, "done"), (work / "rocky.repo").read_text())
+        for right, wrong in repos.DEBIAN_MISTAKES + repos.ROCKY_MISTAKES:     # each mistake alone breaks it
+            with tempfile.TemporaryDirectory() as tmp:
+                work = Path(tmp)
+                (work / "debian.sources").write_text(repos.DEBIAN_OK.replace(right, wrong, 1))
+                (work / "rocky.repo").write_text(repos.ROCKY_OK.replace(right, wrong, 1))
+                self.assertFalse(repos.debian_verify(work, {}, "") and repos.rocky_verify(work, {}, ""), wrong)
+
+    def test_the_fix_is_read_by_meaning(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            work = Path(tmp)
+            (work / "debian.sources").write_text(
+                repos.DEBIAN_OK.replace("https://deb.debian.org/debian", "http://deb.debian.org/debian/")
+                .replace("trixie trixie-updates", "trixie trixie-updates trixie-backports")
+                .replace("Components: main\nSigned", "Components: main contrib non-free-firmware\nSigned"))
+            self.assertTrue(repos.debian_verify(work, {}, "done"))
+            (work / "rocky.repo").write_text(repos.ROCKY_OK.replace(
+                "baseurl=https://dl.rockylinux.org/pub/rocky/$releasever/BaseOS/$basearch/os/",
+                "mirrorlist=https://mirrors.rockylinux.org/mirrorlist?arch=$basearch&repo=BaseOS-$releasever$rltype"))
+            self.assertTrue(repos.rocky_verify(work, {}, "done"))
+
+    def test_one_repository_per_command(self):
+        cases = {"dnf --disablerepo='*' --enablerepo=epel search nginx": "epel",
+                 "dnf --disablerepo '*' --enablerepo epel list": "epel",
+                 "dnf --repo=crb repolist": "crb",
+                 "dnf --enablerepo=epel --disablerepo='*' search x": None,      # the order matters
+                 "dnf --enablerepo=epel search x": None,
+                 "dnf --disablerepo='*' --enablerepo=epel,crb list": None}
+        import shlex
+        for cmd, want in cases.items():
+            self.assertEqual(repos.only_repo(shlex.split(cmd)), want, cmd)
+        with tempfile.TemporaryDirectory() as base:
+            (Path(base) / "arena").mkdir()
+            log = Path(base) / "log"
+            log.write_text("0\t    1  dnf repolist\n1\t    2  sudo dnf --disablerepo='*' --enablerepo=epel list\n")
+            meta = {"args": {"repo": "epel"}}
+            self.assertFalse(repos.enabled_verify(Path(base) / "arena", meta, "done"))
+            log.write_text(log.read_text() + "0\t    3  sudo dnf --disablerepo='*' --enablerepo=epel list\n")
+            self.assertTrue(repos.enabled_verify(Path(base) / "arena", meta, "done"))
+
+    def test_enabled_repos_are_read_from_the_config(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            Path(tmp, "rocky.repo").write_text("[baseos]\nenabled=1\n[crb]\nenabled=0\n[appstream]\nname=x\n")
+            Path(tmp, "broken.repo").write_text("not a repo file")
+            self.assertEqual(repos.enabled_repos(tmp), ["baseos", "appstream"])
+
+    def test_red_hat_file_fight(self):
+        with mock.patch.object(challenges, "family", return_value=frozenset({"rocky", "rhel"})):
+            self.assertTrue(challenges.BY_ID["repo_revenant"].available())
+            self.assertFalse(challenges.BY_ID["mirror_mimic"].available())
 
 
 class TrialTest(unittest.TestCase):

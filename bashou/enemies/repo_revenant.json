@@ -1,0 +1,48 @@
+{
+ "name": "Repo Revenant",
+ "palette": {
+  "a": "#101820",
+  "b": "#506070",
+  "c": "#80e0f0",
+  "d": "#303a48",
+  "m": "#081018",
+  "w": "#c0f8ff"
+ },
+ "base": [
+  "......aaaaa......",
+  ".....abbbbba.....",
+  "....abbbbbbba....",
+  "....abmmmmmba....",
+  "....abwmmmwba....",
+  "....abmmmmmba....",
+  "...adbbbbbbbda...",
+  "..addbbbbbbbdda..",
+  ".c.addbbbbbdda.c.",
+  ".c..adbbbbbda..c.",
+  ".c...adbdbda...c.",
+  "......a.a.a......"
+ ],
+ "poses": {
+  "closed": {
+   "4": "------aaaaa------"
+  },
+  "left": {
+   "4": "-----wm--wb------"
+  },
+  "right": {
+   "4": "------bw--mw-----"
+  },
+  "fidget": {
+   "8": "c.-------------.c",
+   "9": "c.-------------.c",
+   "10": "c.-------------.c"
+  },
+  "inhale": {
+   "6": "--a-----------a--"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}
