@@ -321,6 +321,7 @@ def main():
     sub.add_parser("version", help="which version of Bashou this is")
     up = sub.add_parser("update", help="get the new version from GitHub")
     up.add_argument("--version", help="install this release instead, even an older one (e.g. v0.2.0)")
+    up.add_argument("--packages", action="store_true", help="move to Bashou's apt or dnf repository (shows every command first)")
     sub.add_parser("adventure", help="walk into the world with your starter")
     sc = sub.add_parser("security", help="security challenges, easy to hard")
     sc.add_argument("which", nargs="?", help="number or id (see the list)")
@@ -368,7 +369,7 @@ def main():
             print("  🆕 " + _("Bashou {version} is out: bashou update").format(version=newer))
     elif args.cmd == "update":
         from . import update
-        raise SystemExit(update.run(args.version))
+        raise SystemExit(update.run(args.version, args.packages))
     elif args.cmd == "skills":
         from . import skills
         raise SystemExit(skills.main())

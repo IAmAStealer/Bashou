@@ -1,12 +1,13 @@
 # Bashou
 
-A little pixel-art pet that lives in the corner of your terminal and grows while you learn bash.
-Run commands, try new tools, and collect new pets along the way.
+A little pixel-art pet that lives in the corner of your terminal and grows while you learn the command
+line: bash first, then Linux, systemd, packages, gpg and pass, SQL, CI/CD, Python, C and Rust, whichever
+you pick. Run commands, try new tools, and collect new pets along the way.
 
 ![A small pixel-art stardust in the corner of the terminal, with a tip in its speech bubble, above
 a `bashou learn` explanation of a tar command](doc/img/prompt.svg)
 
-## Learn bash without asking an AI
+## Learn the terminal without asking an AI
 
 Bashou teaches in your real terminal, while you work. It runs offline: no account, no AI model, no
 tokens spent to learn what a command does.
@@ -55,34 +56,56 @@ Droplet after 10 commands, a Mouseling after 10 programs, a Spore after 5 script
 
 ## Install
 
-Copy this line into your terminal:
+Bashou has its own signed repositories: install it once, and it updates with the rest of your system.
+
+**Debian, Ubuntu** (apt):
+
+```bash
+sudo install -dm755 /etc/apt/keyrings
+sudo curl -fsSLo /etc/apt/keyrings/bashou.asc https://iamastealer.github.io/Bashou/bashou.asc
+printf '%s\n' 'Types: deb' 'URIs: https://iamastealer.github.io/Bashou/deb/' 'Suites: ./' \
+  'Signed-By: /etc/apt/keyrings/bashou.asc' | sudo tee /etc/apt/sources.list.d/bashou.sources
+sudo apt update && sudo apt install bashou
+```
+
+**Rocky, Alma, RHEL, Fedora** (dnf):
+
+```bash
+sudo curl -fsSLo /etc/yum.repos.d/bashou.repo https://iamastealer.github.io/Bashou/bashou.repo
+sudo dnf install bashou
+```
+
+Then each user who wants a pet runs `bashou setup` (it adds one line to their `~/.bashrc`). Updates come
+with `apt upgrade` or `dnf upgrade`.
+
+**Any other Linux**, or to follow the code as it's written, with git:
 
 ```bash
 git clone https://github.com/IAmAStealer/Bashou.git ~/.bashou && echo 'source ~/.bashou/bashou.bash' >> ~/.bashrc && source ~/.bashrc
 ```
 
-You need bash and python3 (already there on most Linux systems).
-
-Or as a package, signed, updated with the rest of your system: on Debian, Ubuntu, Rocky, Alma, RHEL
-or Fedora, follow the two steps on the [packages page](https://iamastealer.github.io/Bashou/), then
-`bashou setup` for each user who wants a pet.
+You need bash and python3 (already there on most Linux systems). Installed with git on Debian or Red Hat
+and want the repository instead? `bashou update --packages` shows every command it will run, asks, then
+moves you over; your pets and progress are kept.
 
 ## Use
 
 ```bash
 bashou          # see how your pet is doing
 bashou -h       # all commands
-bashou update   # get the new version (your pet tells you when there is one)
+bashou update   # get the new version (your pet tells you when there is one; apt or dnf for packages)
 ```
 
 ## Uninstall
 
+Installed as a package: `sudo apt remove bashou` or `sudo dnf remove bashou`, then remove the
+`source /usr/share/bashou/bashou.bash` line from `~/.bashrc`.
+
+Installed with git:
+
 ```bash
 sed -i '/\.bashou\/bashou\.bash/d' ~/.bashrc && rm -rf ~/.bashou
 ```
-
-Installed as a package: `sudo apt remove bashou` or `sudo dnf remove bashou`, then remove the
-`source /usr/share/bashou/bashou.bash` line from `~/.bashrc`.
 
 Your progress stays in `~/.local/share/bashou` (delete it too to forget everything).
 

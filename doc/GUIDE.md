@@ -84,6 +84,7 @@ bashou skills           # what you learn: a bit of everything, or the skills you
 bashou config           # a few questions to set Bashou up (see Configuration)
 bashou version          # which version this is (and if a newer one is out)
 bashou update           # get the new version from GitHub (--version v0.2.0: a given one, older too)
+bashou update --packages  # a git install moves to the apt or dnf repository (every command shown, asked first)
 bashou setup            # add Bashou to your ~/.bashrc (after installing the apt or dnf package)
 bashou security         # security challenges (bashou security 3 starts the third)
 bashou adventure        # walk into the world with your starter (s: save & quit)

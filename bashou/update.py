@@ -2,7 +2,8 @@
 
 Installs are a git clone, so no HTTP code here and nothing about you is sent: git only asks
 GitHub for new release tags. The pet restarts itself once the new code is on disk.
-A .deb or .rpm install has no .git but a VERSION file: apt or dnf update it, not Bashou.
+A .deb or .rpm install has no .git but a VERSION file: apt or dnf update it, not Bashou (see
+repo_setup.py, which also moves a git clone to those repositories if you want).
 """
 
 import subprocess
@@ -80,14 +81,6 @@ def packaged():
         return None
 
 
-def package_command():
-    """How this system's package manager updates Bashou."""
-    from .challenges import family
-    if family() & {"rhel", "fedora", "centos"}:
-        return "sudo dnf upgrade bashou"
-    return "sudo apt update && sudo apt install --only-upgrade bashou"
-
-
 def version():
     """This install's version: its release tag, "v0.2.1-3-gabc1234" between releases, or None."""
     if packaged():
@@ -126,16 +119,28 @@ def switch(tag):
     return 0
 
 
-def run(version=None):
-    """`bashou update`, or `bashou update --version v0.2.0` for a given release (older ones too)."""
+def run(version=None, packages=False):
+    """`bashou update`, or `bashou update --version v0.2.0` for a given release (older ones too).
+    A git clone on Debian or Red Hat is offered to move to the apt or dnf repository, once (or with --packages)."""
+    import sys
+    from . import repo_setup
     if packaged():
-        print("  " + _("Bashou came from a package: your package manager updates it.") + " " + package_command())
-        return 1
+        return repo_setup.upgrade()
     if not (ROOT / ".git").exists():
         print("  " + _("This copy of Bashou isn't a git clone, so it can't update itself."))
         return 1
+    if packages:
+        return repo_setup.offer(ROOT / "bashou.bash")
     if version:
         return switch("v" + version.lstrip("v"))
+    if sys.stdin.isatty() and repo_setup.system() and not state.load().get("packages_declined"):
+        moved = repo_setup.offer(ROOT / "bashou.bash")
+        if moved == 0:
+            return 0
+        if moved == 2:                                     # "no": don't ask again, update with git
+            with state.locked() as s:
+                s["packages_declined"] = True
+        print()
     tag = available()
     with state.locked() as s:
         s["update_available"] = ""

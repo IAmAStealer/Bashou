@@ -23,6 +23,11 @@ Every release has a section here, written for players. CI refuses to tag a relea
   Ferret), read a password store (Vault Vole) and take a password out of a script with
   `$(pass show …)` (Cleartext Cricket). The fights bring their own practice key and store: your keys
   and passwords are never touched. In fights, gpg now asks for passphrases right in the terminal.
+- **`bashou update` helps you move to apt or dnf.** On a git install on Debian, Ubuntu or the Red Hat
+  family, it offers once to switch to Bashou's signed repository: it shows every command first (key,
+  repository file, install), asks, runs them in front of you and updates your `~/.bashrc` (with a backup).
+  Later: `bashou update --packages`. On a package install, it shows the apt or dnf command and offers
+  to run it. The README now shows the apt and dnf install first.
 - **What you type stays private.** Bashou's folders were readable by other accounts on systems where
   home folders are (Debian's default): they are now yours only, and existing ones are tightened. Events
   left by terminals that closed badly are removed. `.github/SECURITY.md` lists everything Bashou writes.

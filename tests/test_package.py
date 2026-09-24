@@ -73,9 +73,8 @@ class PackagedInstallTest(unittest.TestCase):
     def test_update_points_at_the_package_manager(self):
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
-            self.assertEqual(update.run(), 1)
-        self.assertIn("bashou", out.getvalue())
-        self.assertRegex(out.getvalue(), "apt|dnf")
+            self.assertEqual(update.run(), 0)                  # no terminal here: shown, not run
+        self.assertRegex(out.getvalue(), r"apt install --only-upgrade bashou|dnf upgrade bashou")
 
     def test_a_clone_ignores_a_stray_version_file(self):
         (update.ROOT / ".git").mkdir()
