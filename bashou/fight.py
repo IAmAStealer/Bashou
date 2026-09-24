@@ -27,6 +27,7 @@ THREAT_MINUTES = 30
 RC = r"""
 [[ -f ~/.bash_aliases ]] && source ~/.bash_aliases
 PS1='\[\e[38;2;240;110;110m\]⚔ arena\[\e[0m\] \W \$ '
+export GPG_TTY=$(tty)                              # gpg asks for passphrases in this terminal
 HISTFILE=$BASHOU_ARENA/history
 _arena_log() {
   local s=$?
@@ -315,6 +316,7 @@ def arena(ch, intro, rng=None, fight=False, help_first=False):
         print(intro(ch.task_text(meta)), flush=True)
         env = {**os.environ, "BASHOU_ARENA": str(base),
                "BASHOU_SRC": str(Path(__file__).resolve().parent.parent)}
+        env.update(meta.get("env", {}))                   # a fight's own practice folders (GNUPGHOME…)
         env.pop("BASHOU_DUEL", None)
         if top:
             env["BASHOU_DUEL"] = "1"

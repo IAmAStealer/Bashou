@@ -17,6 +17,12 @@ Every release has a section here, written for players. CI refuses to tag a relea
   chest to open and 22 questions. Six new threats hand you a database to query or fix, from the Query
   Quokka to the Upsert Unicorn. SQLite keeps a whole database in one file, so nothing is left behind:
   delete the file and it's gone. No sqlite3 yet? Your pet tells you how to install it.
+- **Keep secrets with gpg and pass.** The Sage Owl explains locking files, key pairs, signatures and
+  the pass password store, with a chest to open and 6 new Linux questions. Five new threats: lock a file
+  (Plaintext Pixie), open one (Cipher Crow), tell a genuine download from a forged one with gpgv (Forger
+  Ferret), read a password store (Vault Vole) and take a password out of a script with
+  `$(pass show …)` (Cleartext Cricket). The fights bring their own practice key and store: your keys
+  and passwords are never touched. In fights, gpg now asks for passphrases right in the terminal.
 - Pets and fights no longer slow down when many tools are missing (on WSL, looking for a missing
   command searched every Windows folder).
 

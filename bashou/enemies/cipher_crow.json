@@ -1,0 +1,45 @@
+{
+ "name": "Cipher Crow",
+ "palette": {
+  "b": "#2b3345",
+  "B": "#46557a",
+  "y": "#f2b33d",
+  "w": "#ffffff",
+  "m": "#141414"
+ },
+ "base": [
+  ".................",
+  "....bbbbbbbbb....",
+  "...bbbbbbbbbbb...",
+  "..bbwmbbbbbmwbb..",
+  "..bbbbbyyybbbbb..",
+  "..bbbbbbybbbbbb..",
+  ".bbBBBBBBBBBBBbb.",
+  "bbbBBBBBBBBBBBbbb",
+  "bb.BBBBBBBBBBB.bb",
+  "...BBBBBBBBBBB...",
+  ".....y.....y.....",
+  "....yy.....yy...."
+ ],
+ "poses": {
+  "closed": {
+   "3": "----bb-----bb----"
+  },
+  "left": {
+   "3": "----mw-----------"
+  },
+  "right": {
+   "3": "-----------wm----"
+  },
+  "inhale": {
+   "1": "---b---------b---"
+  },
+  "fidget": {
+   "11": "----.-y----.-y---"
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}

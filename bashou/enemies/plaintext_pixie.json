@@ -1,0 +1,48 @@
+{
+ "name": "Plaintext Pixie",
+ "palette": {
+  "h": "#f7a8d8",
+  "f": "#ffe0c8",
+  "W": "#bfe6ff",
+  "k": "#ff9fb0",
+  "d": "#8fd8a8",
+  "w": "#ffffff",
+  "m": "#2a2040"
+ },
+ "base": [
+  "......hhhhh......",
+  "....hhhhhhhhh....",
+  "...hhfffffffhh...",
+  "WW.hfwmfffmwfh.WW",
+  "WWW.fkfffffkf.WWW",
+  "WWWW..ddddd..WWWW",
+  "WWW..ddddddd..WWW",
+  "WW..ddddddddd..WW",
+  "W..ddddddddddd..W",
+  "...ddddddddddd...",
+  "......f...f......",
+  "......f...f......"
+ ],
+ "poses": {
+  "closed": {
+   "3": "-----ff---ff-----"
+  },
+  "left": {
+   "3": "-----mw----------"
+  },
+  "right": {
+   "3": "----------wm-----"
+  },
+  "inhale": {
+   "0": "-----h-----h-----"
+  },
+  "fidget": {
+   "3": "..-------------..",
+   "4": "...-----------..."
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}

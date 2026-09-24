@@ -94,10 +94,10 @@ def family(path="/etc/os-release"):
     return frozenset(found)
 
 
-from . import awk, basics, cicd, code, find, grep, packages, pipe, ps, repos, rust, sed, security, sql, trials, uniq  # noqa: E402
+from . import awk, basics, cicd, code, find, grep, packages, pipe, ps, repos, rust, secrets, sed, security, sql, trials, uniq  # noqa: E402
 
 ALL = basics.ALL + [grep.CHALLENGE, awk.CHALLENGE, find.CHALLENGE, uniq.CHALLENGE,
-                    sed.CHALLENGE, ps.CHALLENGE, pipe.CHALLENGE] + code.ALL + rust.ALL + packages.ALL + repos.ALL + cicd.ALL + sql.ALL   # fights
+                    sed.CHALLENGE, ps.CHALLENGE, pipe.CHALLENGE] + code.ALL + rust.ALL + packages.ALL + repos.ALL + cicd.ALL + sql.ALL + secrets.ALL   # fights
 SECURITY = security.SECURITY        # `bashou security`, in order
-TRIALS = trials.TRIALS + [cicd.INDENT_CHEST, sql.CHEST]   # locked chests in `bashou adventure`
+TRIALS = trials.TRIALS + [cicd.INDENT_CHEST, sql.CHEST, secrets.CHEST]   # locked chests in `bashou adventure`
 BY_ID = {c.id: c for c in ALL + SECURITY + TRIALS}

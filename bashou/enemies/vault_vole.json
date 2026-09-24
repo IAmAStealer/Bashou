@@ -1,0 +1,47 @@
+{
+ "name": "Vault Vole",
+ "palette": {
+  "a": "#4a3526",
+  "o": "#9c7552",
+  "k": "#e8a0a0",
+  "g": "#b8bcc6",
+  "K": "#3a3d45",
+  "w": "#ffffff",
+  "m": "#141414"
+ },
+ "base": [
+  ".................",
+  "...aa.......aa...",
+  "..aooaaaaaaaooa..",
+  ".aoooooooooooooa.",
+  ".aoowmooooomwooa.",
+  ".aoooookkkoooooa.",
+  ".aoooooooooooooa.",
+  "..aogggggggggoa..",
+  "..aoggggKggggoa..",
+  "..aoggggKggggoa..",
+  "..aogggggggggoa..",
+  "...aaaaaaaaaaa..."
+ ],
+ "poses": {
+  "closed": {
+   "4": "----aa-----aa----"
+  },
+  "left": {
+   "4": "----mw-----------"
+  },
+  "right": {
+   "4": "-----------wm----"
+  },
+  "inhale": {
+   "1": "--a-----------a--"
+  },
+  "fidget": {
+   "11": "---.----------a--"
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}

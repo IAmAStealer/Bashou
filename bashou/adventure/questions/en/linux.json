@@ -414,5 +414,83 @@
   ],
   "answer": 0,
   "explain": "The first thing an intruder who becomes root does is erase their traces in the local logs. A copy sent live to another machine, which they can't reach, stays intact. rsyslog or systemd-journal-upload do the sending. After an incident, that remote copy is the one you trust."
+ },
+ {
+  "id": "linux-1-13",
+  "level": 1,
+  "q": "You run gpg -c notes.txt and type a passphrase. What do you have now?",
+  "choices": [
+   "notes.txt.gpg, and notes.txt still in clear",
+   "Only notes.txt.gpg",
+   "A key pair",
+   "notes.txt, now unreadable"
+  ],
+  "answer": 0,
+  "explain": "gpg -c writes a locked copy, notes.txt.gpg, and leaves the original untouched. Until you delete notes.txt, the secret is still readable on the disk. Check the .gpg opens (gpg -d notes.txt.gpg), then remove the clear file."
+ },
+ {
+  "id": "linux-1-14",
+  "level": 1,
+  "q": "Why keep passwords in pass instead of a passwords.txt file?",
+  "choices": [
+   "Each one is encrypted with your gpg key",
+   "pass files are hidden from ls",
+   "pass makes them shorter",
+   "passwords.txt is fine if chmod 600"
+  ],
+  "answer": 0,
+  "explain": "pass stores each password in its own file, encrypted with your gpg key: a copied disk or a backup shows nothing without your private key. A text file, even with chmod 600, is readable by root, by any program you run, and in every backup."
+ },
+ {
+  "id": "linux-1-15",
+  "level": 1,
+  "q": "A script starts with DB_PASSWORD=\"s3cret\". What is the real problem?",
+  "choices": [
+   "Whoever reads the script, or its git history, has it",
+   "The quotes are wrong",
+   "Variables can't hold passwords",
+   "It makes the script slower"
+  ],
+  "answer": 0,
+  "explain": "A password written in a script travels with it: into git, backups, screenshots, a colleague's copy. Fetch it when the script runs instead: DB_PASSWORD=\"$(pass show db/prod)\". A password that was ever committed must be changed, since the history keeps it."
+ },
+ {
+  "id": "linux-2-11",
+  "level": 2,
+  "q": "A project gives tool.tar.gz, tool.tar.gz.sig and its public key. What does gpgv tell you?",
+  "choices": [
+   "Who signed it, and that nothing changed since",
+   "That the file has no virus",
+   "That the download was fast",
+   "That the key is not expired only"
+  ],
+  "answer": 0,
+  "explain": "A signature is made with the project's private key; its public key checks it. Good signature: the file comes from whoever holds that key and wasn't changed. It says nothing about viruses, and it's only worth something if you got the right public key, from the project's site."
+ },
+ {
+  "id": "linux-2-12",
+  "level": 2,
+  "q": "You encrypt a file for a colleague with gpg -e -r colleague. Who can open it?",
+  "choices": [
+   "Only the colleague, with their private key",
+   "Anyone with the colleague's public key",
+   "Anyone who knows your passphrase",
+   "You and the colleague both, always"
+  ],
+  "answer": 0,
+  "explain": "-e encrypts for a public key: only the matching private key opens it. Their public key can lock files for them, never unlock them. Even you can't open it again unless you also add yourself with a second -r."
+ },
+ {
+  "id": "linux-2-13",
+  "level": 2,
+  "q": "pass init asks for a gpg key id. Why does the store need your key?",
+  "choices": [
+   "Every password is encrypted for that key",
+   "To name the folder",
+   "To log in to a server",
+   "To sign your commits"
+  ],
+  "answer": 0,
+  "explain": "pass encrypts every password it stores for the key(s) listed in ~/.password-store/.gpg-id, and decrypts with your private key when you run pass show. Lose the private key and the passwords are gone: keep a backup of it (gpg --export-secret-keys) somewhere safe and offline."
  }
 ]

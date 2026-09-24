@@ -218,6 +218,8 @@ DISCOVER = {
                 "Python reads JSON too: `python3 -m json.tool data.json` prints it neatly."],
     "gcc": ["`gcc hello.c -o hello && ./hello` builds a C program and runs it."],
     "rustc": ["`rustc main.rs && ./main` builds a Rust program. rustc's errors say what to change."],
+    "gpg": ["`gpg -c notes.txt` locks a file with a passphrase; `gpg -d notes.txt.gpg` opens it again."],
+    "pass": ["`pass show web/forum` prints a password from your store, so scripts never have to hold one."],
     "sqlite3": ["`sqlite3 shop.db .tables` lists the tables of a database: SQLite keeps it all in one file."],
 }
 

@@ -1,0 +1,47 @@
+{
+ "name": "Cleartext Cricket",
+ "palette": {
+  "A": "#4d7a3a",
+  "g": "#6fbf5a",
+  "G": "#9ad97f",
+  "p": "#2d4a22",
+  "L": "#4d7a3a",
+  "w": "#ffffff",
+  "m": "#141414"
+ },
+ "base": [
+  "....A.......A....",
+  ".....A.....A.....",
+  "....ggggggggg....",
+  "...gwmgggggmwg...",
+  "...ggggggggggg...",
+  "....ggpppppgg....",
+  "...gGGGGGGGGGg...",
+  "..LgGGGGGGGGGgL..",
+  ".L.gGGGGGGGGGg.L.",
+  "L..gGGGGGGGGGg..L",
+  "L....g.....g....L",
+  "L....g.....g....L"
+ ],
+ "poses": {
+  "closed": {
+   "3": "----gg-----gg----"
+  },
+  "left": {
+   "3": "----mw-----------"
+  },
+  "right": {
+   "3": "-----------wm----"
+  },
+  "inhale": {
+   "0": "---A---------A---"
+  },
+  "fidget": {
+   "11": ".L---.g----.g---."
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}

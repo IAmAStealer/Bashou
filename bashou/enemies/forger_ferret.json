@@ -1,0 +1,47 @@
+{
+ "name": "Forger Ferret",
+ "palette": {
+  "a": "#5b4636",
+  "o": "#d9c3a5",
+  "k": "#6b5444",
+  "c": "#f6ecdf",
+  "n": "#3a2a20",
+  "w": "#ffffff",
+  "m": "#141414"
+ },
+ "base": [
+  ".................",
+  "...aa.......aa...",
+  "..aoooooooooooa..",
+  ".aoooooooooooooa.",
+  ".akkwmkoookmwkka.",
+  ".akkkkkoookkkkka.",
+  "..aooocccccoooa..",
+  "...accccncccca...",
+  "....accccccca....",
+  "...aoooooooooa...",
+  "..aoooooooooooa..",
+  "..aaaaaaaaaaaaa.."
+ ],
+ "poses": {
+  "closed": {
+   "4": "----kk-----kk----"
+  },
+  "left": {
+   "4": "----mw-----------"
+  },
+  "right": {
+   "4": "-----------wm----"
+  },
+  "inhale": {
+   "1": "--a-----------a--"
+  },
+  "fidget": {
+   "11": "--.------------a-"
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}

@@ -71,6 +71,24 @@ LESSONS = [
          "in one statement. INSERT OR REPLACE looks similar but deletes the old row first: its other columns are lost.",
          "INSERT INTO stock (item, qty) VALUES ('mug', 5) ON CONFLICT(item) DO UPDATE SET qty = qty + excluded.qty;"),
     ]},
+    {"id": "secrets", "tool": "gpg", "topics": ("linux",), "title": "gpg and pass, for secrets", "pages": [
+        ("A file in clear can be read by anyone who gets the disk, a backup or your repository. gpg (GnuPG) locks "
+         "files. -c locks one with a passphrase, and the same passphrase opens it.", "gpg -c notes.txt   # writes notes.txt.gpg"),
+        ("gpg -d opens a locked file and prints it; -o writes it to a file instead. gpg keeps the clear original "
+         "when it locks one: delete it yourself once the .gpg is made.", "gpg -d notes.txt.gpg"),
+        ("A key pair has two halves: the public key you give to anyone, and the private key only you keep. What "
+         "is encrypted for your public key opens only with your private key.", "gpg --full-generate-key"),
+        ("It works the other way for signatures: a project signs its downloads with its private key, and you "
+         "check them with its public key. \"Good signature\": it's from them, and nothing changed since.",
+         "gpgv --keyring ./vendor.gpg tool.tar.gz.sig tool.tar.gz"),
+        ("pass is the Unix password store: each password in its own file under ~/.password-store, encrypted with "
+         "your gpg key. pass init <your key> starts it; pass generate makes a strong password; pass show prints one.",
+         "pass generate web/forum 24"),
+        ("A script should never hold a password: it ends up in backups, screenshots and git history. $( ) lets it "
+         "fetch the password when it runs, so the file stays safe to share.", "DB_PASSWORD=\"$(pass show db/prod)\""),
+        ("Not installed yet? On Debian and Ubuntu: sudo apt install gnupg pass. On Rocky, Alma and RHEL: sudo dnf "
+         "install gnupg2, then pass from EPEL (sudo dnf install epel-release first).", "sudo apt install gnupg pass"),
+    ]},
 ]
 BY_ID = {lesson["id"]: lesson for lesson in LESSONS}
 

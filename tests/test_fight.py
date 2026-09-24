@@ -3,6 +3,7 @@ import io
 import os
 import random
 import re
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -10,7 +11,7 @@ from pathlib import Path
 from unittest import mock
 
 from bashou import challenges, fight, state
-from bashou.challenges import cicd, repos, sql
+from bashou.challenges import cicd, repos, secrets, sql
 
 # Reference solutions, run with bash in the arena folder. {x} is filled from the task text.
 SOLUTIONS = {
@@ -89,6 +90,17 @@ SOLUTIONS = {
     "upsert_unicorn": ("printf \"INSERT INTO stock (item, qty) VALUES ('%s', %s) ON CONFLICT(item) DO UPDATE SET qty = qty + excluded.qty;\" "
                        "$(sed -E 's/([0-9]+) × (\\w+).*/\\2 \\1/' <<< '{x}') > restock.sql", r"(\d+ × \w+)"),
     "trial_sql_loot": ("sqlite3 loot.db \"SELECT COUNT(*) FROM loot WHERE rarity = 'rare';\"", None),
+    # gpg and pass (run with a throwaway GNUPGHOME, or the fight's practice one: never your own keys)
+    "plaintext_pixie": ("gpg --batch --pinentry-mode loopback --passphrase {x} -c secrets.txt && rm secrets.txt",
+                        r"passphrase (\S+), then"),
+    "cipher_crow": ("gpg --batch --pinentry-mode loopback --passphrase {x} -d message.txt.gpg | sed -n 's/.*code is \\(.*\\)\\./\\1/p'",
+                    r"passphrase (\S+)\."),
+    "trial_gpg_note": ("gpg --batch --pinentry-mode loopback --passphrase {x} -d note.txt.gpg | sed -n 's/.*code is \\(.*\\)\\./\\1/p'",
+                       r"passphrase (\S+)\."),
+    "forger_ferret": ("for m in mirror1 mirror2; do gpgv --keyring ./vendor.gpg $m/tool-1.4.tar.gz.sig $m/tool-1.4.tar.gz "
+                      "2>/dev/null && echo $m; done", None),
+    "vault_vole": ("pass show backup/server", None),
+    "cleartext_cricket": ("sed -i 's|^DB_PASSWORD=.*|DB_PASSWORD=\"$(pass show db/prod)\"|' deploy.sh", None),
     "mirror_mimic": ("cat > debian.sources <<'X'\n" + repos.DEBIAN_OK + "X", None),
     "repo_revenant": ("cat > rocky.repo <<'X'\n" + repos.ROCKY_OK + "X", None),
     "enabled_ettin": ("dnf --disablerepo='*' --enablerepo={x} repolist", r"only the (\S+) repository"),
@@ -131,9 +143,11 @@ class ChallengeTest(unittest.TestCase):
             if not ch.available():
                 continue
             for seed in range(3):
-                with self.subTest(ch.id, seed=seed), tempfile.TemporaryDirectory() as tmp:
+                with self.subTest(ch.id, seed=seed), tempfile.TemporaryDirectory() as tmp, \
+                        tempfile.TemporaryDirectory() as gnupg:
                     work = Path(tmp)
                     meta = ch.setup(work, random.Random(seed))
+                    env = {**os.environ, "GNUPGHOME": gnupg, **meta.get("env", {})}
                     try:
                         cmd, pattern = SOLUTIONS[ch.id]
                         if pattern:
@@ -141,13 +155,14 @@ class ChallengeTest(unittest.TestCase):
                         else:
                             cmd = cmd.format()
                         out = subprocess.run(["bash", "-c", cmd], cwd=work, capture_output=True,
-                                             text=True).stdout.strip()
+                                             text=True, env=env).stdout.strip()
                         self.assertTrue(ch.check(work, meta, out or "done"), f"{ch.id}: {out!r}")
                         self.assertFalse(ch.check(work, {**meta, "expected": "nope"}, "wrong")
                                          and ch.verify is None)
                     finally:
                         if ch.cleanup:
                             ch.cleanup(meta)
+                        secrets.stop_agent(gnupg)
 
     def test_code_fights_start_broken(self):
         """The file as handed out must fail its own tests (else there is nothing to fix)."""
@@ -345,6 +360,61 @@ class CicdFightTest(unittest.TestCase):
         self.assertTrue(self.fixed("secret_sprite", swap("${{secrets.API_TOKEN}}")))
         self.assertFalse(self.fixed("secret_sprite", swap("$API_TOKEN")))
         self.assertFalse(self.fixed("secret_sprite", lambda text, meta: text + "# old: " + meta["token"] + "\n"))
+
+
+@unittest.skipUnless(shutil.which("gpg") and shutil.which("gpgconf"), "needs gpg")
+class SecretsFightTest(unittest.TestCase):
+    """gpg and pass fights: they start unsolved, cheats lose, and Bashou's own gpg never uses ~/.gnupg."""
+
+    def setup(self, fight, seed=0):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        ch = challenges.BY_ID[fight]
+        meta = ch.setup(Path(tmp.name), random.Random(seed))
+        if ch.cleanup:
+            self.addCleanup(ch.cleanup, meta)
+        return ch, Path(tmp.name), meta
+
+    def test_the_clear_file_must_go_and_the_passphrase_must_open_it(self):
+        ch, work, meta = self.setup("plaintext_pixie")
+        self.assertFalse(ch.check(work, meta, "done"))
+        secrets.lock(work / "secrets.txt", work / "secrets.txt.gpg", "not-the-one")
+        (work / "secrets.txt").unlink()
+        self.assertFalse(ch.check(work, meta, "done"))                     # another passphrase
+        (work / "secrets.txt").write_text(meta["secret"])
+        secrets.lock(work / "secrets.txt", work / "secrets.txt.gpg", meta["args"]["pw"])
+        self.assertFalse(ch.check(work, meta, "done"))                     # the clear copy is still there
+        (work / "secrets.txt").unlink()
+        self.assertTrue(ch.check(work, meta, "done"))
+
+    def test_the_forged_download_fails_its_signature(self):
+        ch, work, meta = self.setup("forger_ferret", seed=4)
+        results = {m: subprocess.run(["gpgv", "--keyring", "./vendor.gpg", f"{m}/{secrets.RELEASE}.sig",
+                                      f"{m}/{secrets.RELEASE}"], cwd=work, capture_output=True).returncode
+                   for m in ("mirror1", "mirror2")}
+        self.assertEqual(results[meta["answer"]], 0)
+        self.assertNotEqual(results["mirror1" if meta["answer"] == "mirror2" else "mirror2"], 0)
+
+    @unittest.skipUnless(shutil.which("pass"), "needs pass")
+    def test_the_script_must_read_the_store(self):
+        ch, work, meta = self.setup("cleartext_cricket")
+        self.assertFalse(ch.check(work, meta, "done"))                     # the password is in clear
+        script = work / "deploy.sh"
+        original = script.read_text()
+        script.write_text(original.replace(meta["pw"], "wrong"))
+        self.assertFalse(ch.check(work, meta, "done"))                     # gone, but no login
+        script.write_text(original.replace(f'"{meta["pw"]}"', '"$(pass show db/prod)"'))
+        self.assertTrue(ch.check(work, meta, "done"))
+        self.assertIn("login ok", subprocess.run(["bash", "deploy.sh"], cwd=work, capture_output=True, text=True,
+                                                 env={**os.environ, **meta["env"]}).stdout)
+
+    def test_bashou_never_touches_your_keys(self):
+        with tempfile.TemporaryDirectory() as home:
+            with mock.patch.dict(os.environ, {"GNUPGHOME": home + "/mine", "HOME": home}):
+                for fight in ("plaintext_pixie", "cipher_crow", "forger_ferret"):
+                    ch, work, meta = self.setup(fight)
+                    ch.check(work, meta, "done")
+            self.assertEqual(sorted(os.listdir(home)), [])
 
 
 class SqlFightTest(unittest.TestCase):

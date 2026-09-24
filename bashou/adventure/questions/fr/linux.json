@@ -414,5 +414,83 @@
   ],
   "answer": 0,
   "explain": "La première chose que fait un intrus devenu root, c'est effacer ses traces dans les logs locaux. Une copie envoyée en direct vers une autre machine, qu'il ne peut pas atteindre, reste intacte. rsyslog ou systemd-journal-upload font l'envoi. Après un incident, c'est à cette copie distante qu'on fait confiance."
+ },
+ {
+  "id": "linux-1-13",
+  "level": 1,
+  "q": "Tu lances gpg -c notes.txt et tapes une phrase secrète. Qu'as-tu maintenant ?",
+  "choices": [
+   "notes.txt.gpg, et notes.txt toujours en clair",
+   "Seulement notes.txt.gpg",
+   "Une paire de clés",
+   "notes.txt, devenu illisible"
+  ],
+  "answer": 0,
+  "explain": "gpg -c écrit une copie verrouillée, notes.txt.gpg, et ne touche pas à l'original. Tant que tu n'as pas supprimé notes.txt, le secret reste lisible sur le disque. Vérifie que le .gpg s'ouvre (gpg -d notes.txt.gpg), puis supprime le fichier en clair."
+ },
+ {
+  "id": "linux-1-14",
+  "level": 1,
+  "q": "Pourquoi garder ses mots de passe dans pass plutôt que dans passwords.txt ?",
+  "choices": [
+   "Chacun est chiffré avec ta clé gpg",
+   "ls ne montre pas les fichiers de pass",
+   "pass les rend plus courts",
+   "passwords.txt suffit avec chmod 600"
+  ],
+  "answer": 0,
+  "explain": "pass range chaque mot de passe dans son propre fichier, chiffré avec ta clé gpg : un disque copié ou une sauvegarde ne montrent rien sans ta clé privée. Un fichier texte, même en chmod 600, reste lisible par root, par tout programme que tu lances, et dans chaque sauvegarde."
+ },
+ {
+  "id": "linux-1-15",
+  "level": 1,
+  "q": "Un script commence par DB_PASSWORD=\"s3cret\". Quel est le vrai problème ?",
+  "choices": [
+   "Qui lit le script, ou son historique git, l'a",
+   "Les guillemets sont faux",
+   "Une variable ne peut pas contenir de mot de passe",
+   "Ça ralentit le script"
+  ],
+  "answer": 0,
+  "explain": "Un mot de passe écrit dans un script voyage avec lui : dans git, les sauvegardes, les captures d'écran, la copie d'un collègue. Va le chercher quand le script tourne : DB_PASSWORD=\"$(pass show db/prod)\". Un mot de passe déjà commité doit être changé, car l'historique le garde."
+ },
+ {
+  "id": "linux-2-11",
+  "level": 2,
+  "q": "Un projet fournit tool.tar.gz, tool.tar.gz.sig et sa clé publique. Que t'apprend gpgv ?",
+  "choices": [
+   "Qui l'a signé, et que rien n'a changé depuis",
+   "Que le fichier n'a pas de virus",
+   "Que le téléchargement était rapide",
+   "Seulement que la clé n'a pas expiré"
+  ],
+  "answer": 0,
+  "explain": "Une signature est faite avec la clé privée du projet ; sa clé publique la vérifie. Good signature : le fichier vient de qui détient cette clé et n'a pas été modifié. Elle ne dit rien des virus, et ne vaut que si tu as la bonne clé publique, prise sur le site du projet."
+ },
+ {
+  "id": "linux-2-12",
+  "level": 2,
+  "q": "Tu chiffres un fichier pour un collègue avec gpg -e -r collegue. Qui peut l'ouvrir ?",
+  "choices": [
+   "Seul le collègue, avec sa clé privée",
+   "Quiconque a sa clé publique",
+   "Quiconque connaît ta phrase secrète",
+   "Toi et le collègue, toujours"
+  ],
+  "answer": 0,
+  "explain": "-e chiffre pour une clé publique : seule la clé privée correspondante l'ouvre. Sa clé publique sert à verrouiller des fichiers pour lui, jamais à les ouvrir. Même toi, tu ne pourras pas le rouvrir, sauf si tu t'ajoutes avec un second -r."
+ },
+ {
+  "id": "linux-2-13",
+  "level": 2,
+  "q": "pass init demande l'id d'une clé gpg. Pourquoi le coffre a-t-il besoin de ta clé ?",
+  "choices": [
+   "Chaque mot de passe est chiffré pour cette clé",
+   "Pour nommer le dossier",
+   "Pour se connecter à un serveur",
+   "Pour signer tes commits"
+  ],
+  "answer": 0,
+  "explain": "pass chiffre chaque mot de passe pour la ou les clés listées dans ~/.password-store/.gpg-id, et déchiffre avec ta clé privée quand tu lances pass show. Perds la clé privée et les mots de passe sont perdus : garde-en une sauvegarde (gpg --export-secret-keys) en lieu sûr, hors ligne."
  }
 ]
