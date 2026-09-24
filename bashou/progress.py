@@ -105,13 +105,16 @@ def tool_uses(state, tools):
 
 def stage(state, pet):
     """1, 2 or 3 depending on the achievements earned in the pet's family; the Slime by your command
-    count. A form once reached stays (`ladder_best`)."""
+    count. A form once reached stays (`ladder_best`). A family with more forms (the Duck) takes a new
+    one with each achievement, and its last when the family is complete."""
     if pet in COMMAND_LADDER:
         by_count = sum(1 for n in COMMAND_LADDER[pet] if state["commands"] >= n)
         return max(1, by_count, state.get("ladder_best", {}).get(pet, 1))
     earned = sum(a.id in state["achievements"] for a in achievements.family(pet))
     total = len(achievements.family(pet))
     forms = len(creatures.FORMS.get(pet, ("",) * 3))
+    if forms > 3:
+        return forms if total and earned == total else min(forms - 1, max(1, earned))
     return min(forms, 3 if total and earned == total else 2 if earned >= 2 else 1)
 
 

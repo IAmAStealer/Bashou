@@ -133,7 +133,7 @@ EXAMPLES = {
     "pods": "kubectl get pods -A", "describer": "kubectl describe pod <name>", "tailer": "kubectl logs -f <pod>",
     "diver": "kubectl exec -it <pod> -- sh", "disk": "df -h", "sizer": "du -sh *", "memory": "free -h",
     "watcher": "watch -n 2 df -h",
-    "quack": "bashou learn", "xray": "bash -x deploy.sh", "exit_code": "ls /nope; echo $?",
+    "quack": "bashou learn", "xray": "bash -x deploy.sh", "dry_run": "bash -n deploy.sh", "exit_code": "ls /nope; echo $?",
     "linter": "shellcheck deploy.sh",
     "sealed": "gpg -c notes.txt", "keymaker": "gpg --full-generate-key", "vault": "pass init <your key id>",
     "generator": "pass generate web/forum 24", "keeper": "curl -u \"admin:$(pass show web/admin)\" https://example.org",

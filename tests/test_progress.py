@@ -123,6 +123,16 @@ class ProgressTest(unittest.TestCase):
         self.run_cmd("ls /nope; echo $?")
         self.assertIn("exit_code", self.s["achievements"])
 
+    def test_the_duck_takes_a_form_per_achievement(self):
+        """Four forms (owner: a White duck, then a Mandarin duck): one per achievement, the last when all are done."""
+        from bashou import creatures
+        with mock.patch("bashou.which.installed", side_effect=lambda name: name != "shellcheck"):
+            seen = []
+            for line in ("bashou learn", "bash -x a.sh", "bash -n a.sh", "ls; echo $?"):
+                self.run_cmd(line)
+                seen.append(creatures.form("duck", progress.stage(self.s, "duck")))
+        self.assertEqual(seen, ["duckling", "duck", "white_duck", "mandarin_duck"])
+
     def test_new_rules_need_the_right_arguments(self):
         for line in ("git log --oneline", "git checkout main", "tar -xf a.tgz", "tar -cf a.tar d",
                      "curl https://x", "ssh host", "dig example.com", "chmod +x f", "chown root f",

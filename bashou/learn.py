@@ -75,7 +75,8 @@ COMMANDS = {
 
 FLAGS = {
     "awk": {"-F": "the column separator (here: {value})"},
-    "bash": {"-c": "run this text as a command: {value}", "-x": "trace: print each command before running it"},
+    "bash": {"-c": "run this text as a command: {value}", "-x": "trace: print each command before running it",
+             "-n": "read the script and check its syntax, without running anything"},
     "chmod": {},
     "cp": {"-r": "recursive: copy the folder and everything in it"},
     "curl": {"-u": "the user:password to log in with", "-f": "fail on HTTP errors instead of saving the error page", "-s": "silent: no progress bar",

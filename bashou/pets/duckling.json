@@ -5,7 +5,8 @@
   "y": "#ffe066",
   "Y": "#f2c230",
   "o": "#f08a24",
-  "m": "#141414"
+  "m": "#141414",
+  "O": "#c9731a"
  },
  "base": [
   ".................",
@@ -13,8 +14,8 @@
   "....kkkk.........",
   "...kyyyyk........",
   "..kyymyyyk.......",
-  "kookyyyyyk.......",
-  ".kkkyyyyk........",
+  "oookyyyyyk.......",
+  ".OOkyyyyk........",
   "...kyyyyykkk.....",
   "..kyyyYYyyyyk....",
   "..kyyyYYYyyyk....",

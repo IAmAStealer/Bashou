@@ -1,0 +1,49 @@
+{
+ "name": "White duck",
+ "palette": {
+  "k": "#4a4d57",
+  "w": "#f8f8f4",
+  "g": "#d6dbe0",
+  "p": "#f7b5c4",
+  "o": "#f5a623",
+  "m": "#141414",
+  "y": "#f5b83a",
+  "Y": "#d98f1c"
+ },
+ "base": [
+  "....kkkkk........",
+  "...kwwwwwk.......",
+  "..kwwwwwwwk......",
+  "..kwmwwwwwk......",
+  "yyyyypwwwwk......",
+  ".YYYkwwwwwkkk....",
+  "...kwwwwwwwwk..k.",
+  "..kwwwwwwwwwwkwk.",
+  "..kwwwwkkkkwwwwk.",
+  "..kwwwwwwwkkwwk..",
+  "...kggwwwwwwgk...",
+  "....kook.kook...."
+ ],
+ "poses": {
+  "inhale": {
+   "8": "-kw------------wk"
+  },
+  "closed": {
+   "3": "----w------------"
+  },
+  "left": {
+   "3": "---mw------------"
+  },
+  "right": {
+   "3": "----wm-----------"
+  },
+  "fidget": {
+   "6": "---------------k.",
+   "7": "--------------kk."
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

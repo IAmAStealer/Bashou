@@ -1,0 +1,53 @@
+{
+ "name": "Mandarin duck",
+ "palette": {
+  "k": "#3b3b44",
+  "c": "#2f5e5a",
+  "f": "#f3d7a0",
+  "W": "#f6f3ea",
+  "s": "#e8772e",
+  "P": "#6b3f7a",
+  "b": "#c9a26a",
+  "d": "#a88450",
+  "o": "#f08a24",
+  "r": "#d8322a",
+  "R": "#9e1f1a",
+  "m": "#141414"
+ },
+ "base": [
+  "....kkkkk........",
+  "...kfcccck.......",
+  "..kffccccck......",
+  "..kWmWWWWWk......",
+  "rrrrrffsssk......",
+  ".RRRkssssskkk....",
+  "...kPPbbbsssk..k.",
+  "..kPPPbbbssssksk.",
+  "..kPPPbkkkkbbbbk.",
+  "..kPPPbbbbkkbbk..",
+  "...kddbbbbbbdk...",
+  "....kook.kook...."
+ ],
+ "poses": {
+  "inhale": {
+   "8": "-kP------------bk"
+  },
+  "closed": {
+   "3": "----W------------"
+  },
+  "left": {
+   "3": "---mW------------"
+  },
+  "right": {
+   "3": "----Wm-----------"
+  },
+  "fidget": {
+   "6": "---------------k.",
+   "7": "--------------kk."
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

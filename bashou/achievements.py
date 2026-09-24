@@ -274,6 +274,7 @@ ALL = [
     # Duck: debugging, like the rubber duck you explain your code to (owner: "ducks are awesome")
     A("quack", "duck", "Quack", "explain a command to your duck: `bashou learn <command>`", cmd=lambda c: c.sub("bashou", "learn")),
     A("xray", "duck", "X-ray", "watch a script run line by line with `bash -x`", cmd=lambda c: c.flag("bash", "x")),
+    A("dry_run", "duck", "Dry run", "check a script's syntax without running it: `bash -n`", cmd=lambda c: c.flag("bash", "n")),
     A("exit_code", "duck", "Exit code", "check how the last command ended: `echo $?`",
       cmd=lambda c: "$?" in c.line and bool(c.args("echo", "printf"))),
     A("linter", "duck", "Linter", "find bugs before they bite with `shellcheck`", cmd=lambda c: bool(c.args("shellcheck")),

@@ -140,7 +140,7 @@ STAGES = {
     "whale": ("Calf", "Whale", "Leviathan"),
     "meerkat": ("Pup", "Meerkat", "Sentinel"),
     "leopard": ("Snow cub", "Snow leopard", "Mountain ghost"),
-    "duck": ("Duckling", "Duck", "Rubber duck"),
+    "duck": ("Duckling", "Duck", "White duck", "Mandarin duck"),
 }
 
 
@@ -174,7 +174,7 @@ FORMS = {
     "whale": ("calf", "whale", "leviathan"),
     "meerkat": ("pup", "meerkat", "sentinel"),
     "leopard": ("snow_cub", "snow_leopard", "mountain_ghost"),
-    "duck": ("duckling", "duck", "rubber_duck"),
+    "duck": ("duckling", "duck", "white_duck", "mandarin_duck"),
 }
 
 
