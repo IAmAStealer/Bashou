@@ -73,10 +73,11 @@ BACK = {
         "....gghhehhgg....",
         "......ggggg......",
     ],
-    "seedling": mirrored([
-        ".........", ".........", ".........", "...LL....", "..LlLL...", "...LLLL.g",
-        "........g", ".....aaaa", "....aoooo", "...aooooo", "...aooooo", "....aaaaa",
-    ]),
+    "seedling": [
+        ".................", ".................", "......LL.........", "......LlL........", ".......Lg........",
+        "........g........", "......aagaa......", ".....aoooooa.....", "....aoooooooa....", "....aoooooooa....",
+        ".....aoooooa.....", "......aaaaa......",
+    ],
     "sprout": mirrored([
         "...LL....", "..LlLL...", ".LlllL...", ".LLLLLLLg", "..LL....g", "........g",
         "...aaaaaa", "..aoooooo", ".aooooooo", ".aooooooo", "..aoooooo", "...aaaaaa",
