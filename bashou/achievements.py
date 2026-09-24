@@ -271,6 +271,16 @@ ALL = [
     A("watcher", "meerkat", "Watcher", "rerun a command every few seconds with `watch -n`",
       cmd=lambda c: c.flag("watch", "n", ("--interval",)), needs=("watch",)),
 
+    # Snow leopard: secrets (gpg, pass). Never hidden when gpg or pass is missing: the pets invite you to install them.
+    A("sealed", "leopard", "Sealed", "encrypt a file with `gpg -c` (a passphrase) or `gpg -e` (a key)",
+      cmd=lambda c: c.flag(("gpg", "gpg2"), "ce", ("--symmetric", "--encrypt"))),
+    A("keymaker", "leopard", "Keymaker", "make your own key pair with `gpg --full-generate-key`",
+      cmd=lambda c: c.arg(("gpg", "gpg2"), r"^--(full-gen|gen|quick-gen|full-generate|generate|quick-generate)-key$")),
+    A("vault", "leopard", "Vault", "start a password store with `pass init`", cmd=lambda c: c.sub("pass", "init")),
+    A("generator", "leopard", "Generator", "let `pass generate` make a strong password", cmd=lambda c: c.sub("pass", "generate")),
+    A("keeper", "leopard", "Keeper", "hand a password to a command with `$(pass show …)`, never in clear",
+      cmd=lambda c: c.sub("pass", "show") and "subst" in c.analysis.constructs),
+
     A("raw", "axolotl", "Raw", "print raw strings with `jq -r`", cmd=lambda c: c.flag("jq", "r", ("--raw-output",))),
     A("selector", "axolotl", "Selector", "filter with `select()`", cmd=lambda c: c.arg("jq", r"select\(")),
     A("mapper", "axolotl", "Mapper", "transform arrays with `map()`", cmd=lambda c: c.arg("jq", r"map\(")),
@@ -322,9 +332,9 @@ BY_ID = {a.id: a for a in ALL}
 # How hard an achievement is to learn: hints suggest the easiest ones left first.
 EASY = {"builder", "copycat", "historian", "loop", "ranges", "capture", "tally", "unique", "plumber", "inspector", "checksum",
         "tight", "digger", "census", "global", "stasher", "peeker", "headers", "octal", "status",
-        "pods", "disk"}
+        "pods", "disk", "sealed"}
 HARD = {"nested", "substitute", "pruner", "scribe", "accountant", "parallel", "null", "mapper", "follow",
-        "summary", "filter", "bisector", "tunneler", "reload", "diver", "tracer"}
+        "summary", "filter", "bisector", "tunneler", "reload", "diver", "tracer", "keymaker", "keeper"}
 
 
 def difficulty(a):

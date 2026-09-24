@@ -88,7 +88,7 @@ ROSTER = [
     ("ghost", "Ghost"), ("spider", "Spider"), ("ant", "Ant"), ("axolotl", "Axolotl"),
     ("gremlin", "Gremlin"), ("snail", "Snail"),
     ("beaver", "Beaver"), ("squirrel", "Squirrel"), ("pigeon", "Pigeon"), ("hedgehog", "Hedgehog"),
-    ("bee", "Bee"), ("whale", "Whale"), ("meerkat", "Meerkat"),
+    ("bee", "Bee"), ("whale", "Whale"), ("meerkat", "Meerkat"), ("leopard", "Snow leopard"),
     ("cat", "Hacker cat"),
 ]
 NAMES = dict(ROSTER)
@@ -139,6 +139,7 @@ STAGES = {
     "cat": ("Hacker cat",),                      # secret, one form only
     "whale": ("Calf", "Whale", "Leviathan"),
     "meerkat": ("Pup", "Meerkat", "Sentinel"),
+    "leopard": ("Snow cub", "Snow leopard", "Mountain ghost"),
 }
 
 
@@ -171,6 +172,7 @@ FORMS = {
     "mole": ("molekin", "mole", "mole_king"),
     "whale": ("calf", "whale", "leviathan"),
     "meerkat": ("pup", "meerkat", "sentinel"),
+    "leopard": ("snow_cub", "snow_leopard", "mountain_ghost"),
 }
 
 

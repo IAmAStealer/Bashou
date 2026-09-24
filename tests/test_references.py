@@ -141,7 +141,7 @@ class TablesTest(unittest.TestCase):
         voices = set(creatures.NAMES) | set(creatures.STARTERS)
         for table in (dialogue.VOICE, dialogue.TIPS, dialogue.PERSONAL, dialogue.TRAITS):
             self.assertIn_all(table, voices | set(achievements.BY_ID), sorted(table)[:3])
-        self.assertIn_all(dialogue.INVITES, {"adventure", "security", "rust"}, "INVITES")    # modes, and Rust
+        self.assertIn_all(dialogue.INVITES, {"adventure", "security", "rust", "gpg", "pass", "sqlite3"}, "INVITES")    # modes, and tools to install
         self.assertIn_all(dialogue.EXAMPLES, achievements.BY_ID, "EXAMPLES")
         tools = {t for ch in challenges.ALL for t in ch.tools} | {"|"}
         self.assertIn_all(dialogue.DISCOVER, tools, "DISCOVER")

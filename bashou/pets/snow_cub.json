@@ -1,0 +1,47 @@
+{
+ "name": "Snow cub",
+ "palette": {
+  "a": "#5b6070",
+  "o": "#d7dbe3",
+  "w": "#f7f8fb",
+  "s": "#6e7384",
+  "e": "#8fcab8",
+  "m": "#1e1e24",
+  "p": "#d98c8c"
+ },
+ "base": [
+  ".................",
+  ".................",
+  ".aa...aa.........",
+  "aoaaaaaoa........",
+  "aooosoooa........",
+  "aemeoemea........",
+  "aooopoooa..aa....",
+  ".awwawwa..assa...",
+  ".aosoosa..aooa...",
+  "aoossosoa.asoa...",
+  "awwoooowwaaooa...",
+  ".aaaaaaaaaaaaa..."
+ ],
+ "poses": {
+  "inhale": {
+   "8": "ao-----oa--------"
+  },
+  "closed": {
+   "5": "-aaa-aaa---------"
+  },
+  "left": {
+   "5": "-me--me----------"
+  },
+  "right": {
+   "5": "--em--em---------"
+  },
+  "fidget": {
+   "2": ".a.--------------"
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

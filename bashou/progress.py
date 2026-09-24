@@ -31,13 +31,15 @@ TOOL_PETS = {
     "bee": ({"systemctl", "journalctl"}, 10),
     "whale": ({"kubectl"}, 10),
     "meerkat": ({"top", "htop", "btop", "free", "df", "du", "watch", "vmstat"}, 10),
+    "leopard": ({"gpg", "gpg2", "gpgv", "pass"}, 5),                    # keeps secrets
     "bat": ({"python", "python3", "cargo", "rustc", "gcc", "g++", "clang", "make", "cmake", "node", "npm",
              "go", "javac", "java", "ruby", "perl", "php"}, 10),              # a night coder
 }
 # How the unlock hint names a tool pet's tools (default: the first in alphabetical order).
 # Only the installed ones are named: no `dig` in the hint when dig is missing.
 TOOL_LABELS = {"bat": ("python3", "cargo", "gcc", "make", "node"), "ghost": ("ps", "kill"), "squirrel": ("tar", "gzip"), "pigeon": ("curl", "ssh", "dig"),
-               "hedgehog": ("chmod", "chown"), "bee": ("systemctl",), "meerkat": ("df", "du", "top")}
+               "hedgehog": ("chmod", "chown"), "bee": ("systemctl",), "meerkat": ("df", "du", "top"),
+               "leopard": ("gpg", "pass")}
 
 
 def tool_label(pet):

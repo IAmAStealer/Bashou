@@ -17,7 +17,7 @@ VOICE = {
     "sofa": "*creak*", "octopus": "Glub!", "dragon": "Rawr!", "fox": "*sniff*", "owl": "Hoo.",
     "mole": "*dig dig*", "snake": "Sss…", "ghost": "Boo~", "spider": "*tik-tik*", "ant": "*click*",
     "axolotl": "*wiggle*", "beaver": "*chomp*", "squirrel": "*chitter*", "pigeon": "Coo.", "hedgehog": "*huff*",
-    "bee": "Bzz.", "whale": "*whoosh*", "meerkat": "*peek*", "cat": "*purr*",
+    "bee": "Bzz.", "whale": "*whoosh*", "meerkat": "*peek*", "leopard": "*soft paws*", "cat": "*purr*",
 }
 
 TIPS = {
@@ -85,6 +85,9 @@ TIPS = {
               "kubectl logs -f pod : logs, live.", "kubectl config get-contexts : which cluster am I on?"],
     "meerkat": ["df -h : how full are the disks?", "du -sh * | sort -h : biggest last.",
                 "free -h : memory at a glance.", "watch -n 2 cmd : rerun it every 2 s."],
+    "leopard": ["gpg -c notes.txt : locks the file with a passphrase.", "gpg -d notes.txt.gpg : opens it again.",
+                "pass show db/prod : a password for a script, never written in it.",
+                "pass generate site 24 : a strong password you'll never have to type."],
     "cat": ["Only test what you're allowed to test. Written permission, always.",
             "Read the man page before the exploit.", "Keep your notes: half of security is notes.",
             "`nmap -sV host` tells you what's listening, and what version.",
@@ -127,6 +130,8 @@ EXAMPLES = {
     "pods": "kubectl get pods -A", "describer": "kubectl describe pod <name>", "tailer": "kubectl logs -f <pod>",
     "diver": "kubectl exec -it <pod> -- sh", "disk": "df -h", "sizer": "du -sh *", "memory": "free -h",
     "watcher": "watch -n 2 df -h",
+    "sealed": "gpg -c notes.txt", "keymaker": "gpg --full-generate-key", "vault": "pass init <your key id>",
+    "generator": "pass generate web/forum 24", "keeper": "curl -u \"admin:$(pass show web/admin)\" https://example.org",
 }
 
 # Trait (an achievement you earned) -> lines any pet may say.
@@ -158,6 +163,7 @@ PERSONAL = {
     "pigeon": ["I always find my way home. Even through a tunnel."], "hedgehog": ["Not everyone gets to touch my files."],
     "bee": ["Every service in the hive has its job."], "whale": ["So many containers on my back."],
     "meerkat": ["I keep watch. Disks, memory, all of it."],
+    "leopard": ["Nobody sees me in the snow. Nobody sees your passwords either."],
     "cat": ["I saw what you ran. Your secret is safe with me.", "Curiosity, with permission.",
             "Nice tools. Mind the scope."],
 }
@@ -185,8 +191,18 @@ INVITES = {
     "security": ["Feel like a detective? `bashou security` has small investigations."],
     "rust": ["You know your way around now. Want to learn Rust? `{cmd}` installs it, and Rust fights will come.",
              "Rust next? The compiler explains every mistake. Install it with `{cmd}`, then `bashou explain rust mut`."],
+    "gpg": ["Your files deserve a lock. `{cmd}` installs GnuPG, then `gpg -c notes.txt` locks a file.",
+            "Downloads can be faked. GnuPG checks who signed them. Install it: `{cmd}`"],
+    "pass": ["Passwords in scripts? Never in clear. `{cmd}` installs pass: scripts read `$(pass show db)`.",
+             "pass keeps each password in its own file, encrypted with gpg. Install it: `{cmd}`"],
+    "sqlite3": ["Want to learn SQL? `{cmd}` installs SQLite: a whole database in one file. SQL fights will come."],
 }
 RUST_AT = 15                    # achievements before the pets suggest Rust (owner)
+SECRETS_AT = 5                  # … and gpg, then pass, when they're missing (owner: entice to install them)
+
+# Packages that bring a tool: (Debian/Ubuntu, Red Hat family).
+PACKAGES = {"rustc": ("rustc cargo", "rust cargo"), "gpg": ("gnupg", "gnupg2"), "pass": ("pass", "pass"),
+            "sqlite3": ("sqlite3", "sqlite")}
 
 
 # A first look at a tool, before its fight can come (see fight.to_discover).
@@ -216,14 +232,27 @@ def discover(state, rng):
     return _(rng.choice(DISCOVER[tool])) + (" " + _("(bashou adventure teaches it too)") if taught else "")
 
 
-def rust_install():
-    """How to install Rust here: the distro's packages, or rustup (read the script before running it)."""
+def install(tool):
+    """How to install a tool here, with this system's package manager."""
     from .challenges import family
+    debian, redhat = PACKAGES[tool]
     if "debian" in family():
-        return "sudo apt install rustc cargo"
+        return f"sudo apt install {debian}"
+    if tool == "pass" and "rhel" in family():
+        return "sudo dnf install epel-release && sudo dnf install pass"     # pass lives in EPEL on RHEL, Rocky, Alma
     if family() & {"rhel", "fedora", "centos"}:
-        return "sudo dnf install rust cargo"
-    return "curl -sSf https://sh.rustup.rs -o rustup.sh && less rustup.sh && sh rustup.sh"
+        return f"sudo dnf install {redhat}"
+    if tool == "rustc":
+        return "curl -sSf https://sh.rustup.rs -o rustup.sh && less rustup.sh && sh rustup.sh"
+    return _("your package manager (package {name})").format(name=debian)
+
+
+def rust_install():
+    return install("rustc")
+
+
+def wanted(state, skill):
+    return state.get("skills", "all") == "all" or skill in state["skills"]
 
 
 def invite(state, rng):
@@ -234,11 +263,18 @@ def invite(state, rng):
         state.get("skills", "all") != "all" and "rust" in state["skills"]
     if rust_ok and not shutil.which("rustc"):
         todo.append("rust")
+    if len(state["achievements"]) >= SECRETS_AT:          # at ease with the shell first
+        if wanted(state, "linux"):
+            todo += [tool for tool in ("gpg", "pass") if not shutil.which(tool)][:1]     # gpg first: pass needs it
+        if wanted(state, "sql") and not shutil.which("sqlite3"):
+            todo.append("sqlite3")
     if not todo:
         return None
     mode = rng.choice(todo)
     if mode == "rust":
         return _(rng.choice(INVITES["rust"])).format(cmd=rust_install())
+    if mode in PACKAGES:
+        return _(rng.choice(INVITES[mode])).format(cmd=install(mode))
     return rng.choice(INVITES[mode])
 
 

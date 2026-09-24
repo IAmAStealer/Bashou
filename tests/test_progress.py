@@ -103,6 +103,15 @@ class ProgressTest(unittest.TestCase):
         self.run_cmd("watch -n 2 df -h", times=10)                     # a wrapper and its command both count
         self.assertIn("meerkat", self.s["pets"])
 
+    def test_secrets_bring_the_snow_leopard(self):
+        self.run_cmd("gpg -c notes.txt")
+        self.assertIn("sealed", self.s["achievements"])
+        self.run_cmd("pass show web/forum", times=4)
+        self.assertIn("leopard", self.s["pets"])
+        self.assertNotIn("keeper", self.s["achievements"])                     # printed, not handed to a command
+        self.run_cmd('curl -u "me:$(pass show web/api)" https://example.org')
+        self.assertIn("keeper", self.s["achievements"])
+
     def test_new_rules_need_the_right_arguments(self):
         for line in ("git log --oneline", "git checkout main", "tar -xf a.tgz", "tar -cf a.tar d",
                      "curl https://x", "ssh host", "dig example.com", "chmod +x f", "chown root f",

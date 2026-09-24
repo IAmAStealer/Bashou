@@ -8,6 +8,10 @@ Every release has a section here, written for players. CI refuses to tag a relea
 - The Seedling is now a little seed with one shoot, so you can tell it apart from the Sprout.
 - A speech bubble closes as soon as you run the command it suggests (`bashou fight`,
   `bashou evolve`…), and never stays more than 3 minutes.
+- **A new pet: the Snow leopard.** A shy cat that keeps secrets: use gpg or pass 5 times and the Snow cub
+  joins you, then grows into a Snow leopard and a Mountain ghost as you encrypt files, make a key, start a
+  password store and hand passwords to commands with `$(pass show …)`. No gpg or pass yet? Your pet tells
+  you how to install them.
 
 ## v0.4.2 — 2026-09-23
 

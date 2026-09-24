@@ -59,7 +59,7 @@ class CreaturesTest(unittest.TestCase):
 
     def test_roster_has_stage_names(self):
         from bashou.creatures import SECRET
-        self.assertEqual(len([p for p, _ in ROSTER if p not in SECRET]), 25)
+        self.assertEqual(len([p for p, _ in ROSTER if p not in SECRET]), 26)
         self.assertEqual({p for p, _ in ROSTER}, set(STAGES))
 
 
