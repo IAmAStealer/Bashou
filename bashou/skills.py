@@ -26,9 +26,10 @@ SKILLS = {
     "rust": "Rust: variables, types, the compiler",
     "logic": "Logic: coding basics, for beginners",
     "cicd": "CI/CD: pipelines, secrets, runners",
+    "sql": "SQL: databases with SQLite (SELECT, JOIN, UPDATE)",
 }
 # Fights need a program or a system: without it, the skill still has its adventure questions.
-NEEDS = {"python": "python3", "c": "gcc", "rust": "rustc"}
+NEEDS = {"python": "python3", "c": "gcc", "rust": "rustc", "sql": "sqlite3"}
 SYSTEMS = {"debian": {"debian"}, "rocky": {"rhel", "fedora", "centos"}}
 
 

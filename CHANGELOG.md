@@ -12,6 +12,13 @@ Every release has a section here, written for players. CI refuses to tag a relea
   joins you, then grows into a Snow leopard and a Mountain ghost as you encrypt files, make a key, start a
   password store and hand passwords to commands with `$(pass show …)`. No gpg or pass yet? Your pet tells
   you how to install them.
+- **Learn SQL with SQLite.** A new skill and adventure path: the Sage Owl explains databases, SELECT,
+  JOIN, CREATE TABLE, INSERT, UPDATE (always with a WHERE) and INSERT … ON CONFLICT DO UPDATE, with a
+  chest to open and 22 questions. Six new threats hand you a database to query or fix, from the Query
+  Quokka to the Upsert Unicorn. SQLite keeps a whole database in one file, so nothing is left behind:
+  delete the file and it's gone. No sqlite3 yet? Your pet tells you how to install it.
+- Pets and fights no longer slow down when many tools are missing (on WSL, looking for a missing
+  command searched every Windows folder).
 
 ## v0.4.2 — 2026-09-23
 

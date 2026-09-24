@@ -51,6 +51,7 @@ class ArenaBugs(unittest.TestCase):
         editor = challenges.BY_ID["mirror_mimic"].tools[0]                  # the first editor installed
         expected.update({"mirror_mimic": editor, "repo_revenant": editor, "enabled_ettin": "dnf"})
         expected.update({ch.id: editor for ch in challenges.cicd.ALL})
+        expected.update({ch.id: "sqlite3" for ch in challenges.sql.ALL})
         for ch in challenges.ALL:
             self.assertEqual(ch.tool, expected[ch.id])
 
@@ -531,3 +532,18 @@ class SaveSafetyTest(TempState):
         with state.locked():
             pass
         self.assertEqual(len(list(state.DATA.glob("state.json.bak-*"))), 1)   # once, not every save
+
+
+class WhichCacheTest(unittest.TestCase):
+    def test_lookups_are_remembered_then_refreshed(self):
+        """On WSL every lookup of a missing tool walked /mnt/c: the test of pet lines took minutes."""
+        from bashou import which
+        which.installed.cache_clear()
+        with mock.patch("shutil.which", return_value=None) as look:
+            self.assertFalse(which.installed("nothere"))
+            self.assertFalse(which.installed("nothere"))
+            self.assertEqual(look.call_count, 1)
+            which._seen["nothere"] = (which._seen["nothere"][0] - which.TTL - 1, False)
+        with mock.patch("shutil.which", return_value="/usr/bin/nothere"):
+            self.assertTrue(which.installed("nothere"))          # installed since: noticed
+        which.installed.cache_clear()

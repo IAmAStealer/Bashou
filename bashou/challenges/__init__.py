@@ -75,7 +75,8 @@ class Challenge:
     def available(self):
         if self.distro and not set(self.distro) & family():
             return False
-        return all(shutil.which(t) for t in (self.requires or [self.tool]))
+        from ..which import installed
+        return all(installed(t) for t in (self.requires or [self.tool]))
 
 
 @functools.lru_cache(maxsize=None)
@@ -93,10 +94,10 @@ def family(path="/etc/os-release"):
     return frozenset(found)
 
 
-from . import awk, basics, cicd, code, find, grep, packages, pipe, ps, repos, rust, sed, security, trials, uniq  # noqa: E402
+from . import awk, basics, cicd, code, find, grep, packages, pipe, ps, repos, rust, sed, security, sql, trials, uniq  # noqa: E402
 
 ALL = basics.ALL + [grep.CHALLENGE, awk.CHALLENGE, find.CHALLENGE, uniq.CHALLENGE,
-                    sed.CHALLENGE, ps.CHALLENGE, pipe.CHALLENGE] + code.ALL + rust.ALL + packages.ALL + repos.ALL + cicd.ALL   # fights
+                    sed.CHALLENGE, ps.CHALLENGE, pipe.CHALLENGE] + code.ALL + rust.ALL + packages.ALL + repos.ALL + cicd.ALL + sql.ALL   # fights
 SECURITY = security.SECURITY        # `bashou security`, in order
-TRIALS = trials.TRIALS + [cicd.INDENT_CHEST]   # locked chests in `bashou adventure`
+TRIALS = trials.TRIALS + [cicd.INDENT_CHEST, sql.CHEST]   # locked chests in `bashou adventure`
 BY_ID = {c.id: c for c in ALL + SECURITY + TRIALS}

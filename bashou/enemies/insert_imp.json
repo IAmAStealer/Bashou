@@ -1,0 +1,46 @@
+{
+ "name": "Insert Imp",
+ "palette": {
+  "h": "#f2d8a0",
+  "r": "#d9534f",
+  "R": "#a83a36",
+  "d": "#5a1a1a",
+  "w": "#ffffff",
+  "m": "#141414"
+ },
+ "base": [
+  "...h.........h...",
+  "...hh.......hh...",
+  "...rrrrrrrrrrr...",
+  "..rrrrrrrrrrrrr..",
+  ".rrwmwrrrrrwmwrr.",
+  ".rrrrrrrrrrrrrrr.",
+  ".rrdrrrrrrrrrdrr.",
+  ".rrrdddddddddrrr.",
+  "..rrrrrrrrrrrrr..",
+  "...rRRRRRRRRRr...",
+  "..rRRRRRRRRRRRr..",
+  "..rr...rrr...rr.."
+ ],
+ "poses": {
+  "closed": {
+   "4": "---rrr-----rrr---"
+  },
+  "left": {
+   "4": "---mw------mw----"
+  },
+  "right": {
+   "4": "----wm------wm---"
+  },
+  "inhale": {
+   "0": "--h-----------h--"
+  },
+  "fidget": {
+   "11": "--.-r--.--r--.-r-"
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}

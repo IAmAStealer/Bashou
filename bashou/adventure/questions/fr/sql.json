@@ -1,0 +1,288 @@
+[
+ {
+  "id": "sql-1-01",
+  "level": 1,
+  "q": "Tu lances sqlite3 notes.db, mais notes.db n'existe pas encore. Que se passe-t-il ?",
+  "choices": [
+   "SQLite crée le fichier dès que tu y écris",
+   "Une erreur : crée d'abord le fichier avec touch",
+   "Il ouvre une base au hasard",
+   "Il faut un serveur qui tourne"
+  ],
+  "answer": 0,
+  "explain": "sqlite3 ouvre un fichier de base de données et le crée dès que tu y écris quelque chose (une table, une ligne). Pas de serveur, rien à installer de plus : toute la base est ce fichier. C'est pour ça que SQLite est parfait pour apprendre : quand tu as fini, rm notes.db efface tout."
+ },
+ {
+  "id": "sql-1-02",
+  "level": 1,
+  "q": "Où SQLite range-t-il une base de données ?",
+  "choices": [
+   "Dans un seul fichier",
+   "Dans un serveur qui tourne en fond",
+   "Dans un cache caché de ton dossier",
+   "En mémoire seulement, perdue à la déconnexion"
+  ],
+  "answer": 0,
+  "explain": "SQLite n'a pas de serveur : la base, avec toutes ses tables, vit dans un fichier ordinaire. Tu peux le copier, le sauvegarder, l'envoyer ou le supprimer comme n'importe quel fichier. Les gros sites utilisent un serveur (PostgreSQL, MySQL), mais les téléphones et les navigateurs utilisent SQLite."
+ },
+ {
+  "id": "sql-1-03",
+  "level": 1,
+  "q": "Dans sqlite3, tu veux voir quelles tables contient la base. Que tapes-tu ?",
+  "choices": [
+   ".tables",
+   "SHOW TABLES;",
+   "ls",
+   "SELECT tables;"
+  ],
+  "answer": 0,
+  "explain": "Les commandes qui commencent par un point sont des aides de sqlite3, pas du SQL : .tables liste les tables, .schema nom montre comment une table est construite, .quit quitte. SHOW TABLES, c'est la façon de MySQL, et SQLite ne la connaît pas."
+ },
+ {
+  "id": "sql-1-04",
+  "level": 1,
+  "q": "SELECT name FROM products WHERE price > 20; Que fait WHERE ici ?",
+  "choices": [
+   "Garde seulement les lignes dont le prix dépasse 20",
+   "Trie les lignes par prix",
+   "Change le prix de chaque ligne",
+   "Choisit quelle table lire"
+  ],
+  "answer": 0,
+  "explain": "SELECT dit quelles colonnes tu veux, FROM quelle table, et WHERE filtre les lignes : seules celles où la condition est vraie sortent. Trier, c'est ORDER BY. SELECT ne modifie jamais rien : on peut toujours le lancer sans risque."
+ },
+ {
+  "id": "sql-1-05",
+  "level": 1,
+  "q": "Tu veux savoir combien de clients vivent à Lyon, pas tous les voir. Qu'utilises-tu ?",
+  "choices": [
+   "SELECT COUNT(*) FROM customers WHERE city = 'Lyon';",
+   "SELECT * FROM customers;",
+   "COUNT customers Lyon;",
+   "SELECT SUM(city) FROM customers;"
+  ],
+  "answer": 0,
+  "explain": "COUNT(*) compte les lignes gardées par WHERE et renvoie un seul nombre. SELECT * afficherait tous les clients et te laisserait compter. SUM additionne les nombres d'une colonne : ça n'a pas de sens sur des noms de villes."
+ },
+ {
+  "id": "sql-1-06",
+  "level": 1,
+  "q": "En SQL, pourquoi écrire 'Lyon' entre guillemets mais 20 sans ?",
+  "choices": [
+   "Le texte va entre guillemets, pas les nombres",
+   "Les guillemets accélèrent la recherche",
+   "Seuls les noms de villes en ont besoin",
+   "Ça ne change rien du tout"
+  ],
+  "answer": 0,
+  "explain": "Entre apostrophes, SQL lit du texte : 'Lyon' est un mot. Sans elles, il lit un nombre, ou le nom d'une colonne. WHERE city = Lyon chercherait une colonne appelée Lyon et échouerait."
+ },
+ {
+  "id": "sql-1-07",
+  "level": 1,
+  "q": "Que fait CREATE TABLE books (title TEXT, year INTEGER); ?",
+  "choices": [
+   "Crée une table vide avec deux colonnes",
+   "Ajoute un livre à la table",
+   "Liste les livres",
+   "Supprime l'ancienne table books"
+  ],
+  "answer": 0,
+  "explain": "CREATE TABLE construit une nouvelle table vide et nomme ses colonnes, chacune avec un type : TEXT pour les mots, INTEGER pour les nombres entiers. Les lignes viennent ensuite, avec INSERT INTO. Si une table books existe déjà, tu obtiens une erreur."
+ },
+ {
+  "id": "sql-1-08",
+  "level": 1,
+  "q": "Comment ajouter un nouveau livre à la table books ?",
+  "choices": [
+   "INSERT INTO books (title, year) VALUES ('Dune', 1965);",
+   "ADD books 'Dune' 1965;",
+   "UPDATE books SET title = 'Dune';",
+   "SELECT 'Dune' INTO books;"
+  ],
+  "answer": 0,
+  "explain": "INSERT INTO ajoute une ligne : d'abord les colonnes que tu remplis, puis VALUES dans le même ordre. UPDATE modifie des lignes qui existent déjà, et sans WHERE il renommerait tous les livres en Dune."
+ },
+ {
+  "id": "sql-1-09",
+  "level": 1,
+  "q": "UPDATE products SET price = 0; Que se passe-t-il ?",
+  "choices": [
+   "Tous les produits coûtent maintenant 0",
+   "Seul le premier produit change",
+   "Rien : un WHERE est obligatoire",
+   "SQLite demande une confirmation"
+  ],
+  "answer": 0,
+  "explain": "Sans WHERE, UPDATE modifie toutes les lignes, et SQLite ne demande rien. C'est un accident classique en production. Écris toujours le WHERE, et lance d'abord un SELECT avec le même WHERE pour voir exactement quelles lignes vont changer."
+ },
+ {
+  "id": "sql-1-10",
+  "level": 1,
+  "q": "Avant DELETE FROM users WHERE last_login < '2020-01-01'; quelle est la bonne habitude ?",
+  "choices": [
+   "Lancer un SELECT avec le même WHERE",
+   "Le lancer deux fois pour être sûr",
+   "Enlever le WHERE pour aller plus vite",
+   "Redémarrer la base avant"
+  ],
+  "answer": 0,
+  "explain": "SELECT … WHERE montre exactement les lignes que DELETE va supprimer, sans rien supprimer. Si la liste paraît fausse, tu corriges la condition avant le moindre dégât. Avec SQLite, un cp du fichier est aussi une sauvegarde rapide."
+ },
+ {
+  "id": "sql-1-11",
+  "level": 1,
+  "q": "Pourquoi tant d'applis mettent-elles une colonne id numérotée dans chaque table ?",
+  "choices": [
+   "Pour nommer chaque ligne de façon unique",
+   "Pour que la table ait l'air triée",
+   "Parce que SQL ne sait pas stocker des noms",
+   "Pour compter les lignes plus vite"
+  ],
+  "answer": 0,
+  "explain": "Deux clients peuvent avoir le même nom, jamais le même id. INTEGER PRIMARY KEY donne à chaque ligne son propre numéro, et les autres tables s'en servent pour la désigner (une commande garde l'id de son client). Un nom ne change alors qu'à un seul endroit."
+ },
+ {
+  "id": "sql-1-12",
+  "level": 1,
+  "q": "Tu as fini de t'entraîner avec SQLite. Comment supprimer la base d'entraînement ?",
+  "choices": [
+   "Supprimer son fichier : rm practice.db",
+   "DROP DATABASE practice;",
+   "Désinstaller le serveur SQLite",
+   "Elle disparaît au redémarrage"
+  ],
+  "answer": 0,
+  "explain": "Toute la base est le fichier, donc rm efface tout. SQLite n'a ni serveur ni DROP DATABASE. L'outil lui-même est un seul paquet : sudo apt remove sqlite3 (ou dnf remove sqlite) si tu veux l'enlever aussi."
+ },
+ {
+  "id": "sql-2-01",
+  "level": 2,
+  "q": "orders a customer_id, customers a id et name. Comment lister chaque commande avec le nom du client ?",
+  "choices": [
+   "JOIN customers ON orders.customer_id = customers.id",
+   "SELECT * FROM orders, names;",
+   "Faire une UNION des deux tables",
+   "Copier d'abord les noms dans orders"
+  ],
+  "answer": 0,
+  "explain": "JOIN met côte à côte les lignes de deux tables, et ON dit lesquelles vont ensemble : une commande et le client dont elle garde l'id. Copier les noms dans chaque commande les répéterait, et un client renommé serait à corriger partout."
+ },
+ {
+  "id": "sql-2-02",
+  "level": 2,
+  "q": "Tu oublies le ON dans un JOIN de 100 commandes et 10 clients. Qu'obtiens-tu ?",
+  "choices": [
+   "1 000 lignes : chaque commande avec chaque client",
+   "Une erreur",
+   "Les 100 commandes",
+   "10 lignes"
+  ],
+  "answer": 0,
+  "explain": "Sans condition, SQL associe chaque ligne d'une table à chaque ligne de l'autre (un produit cartésien). 100 × 10 = 1 000 lignes mélangées. Quand un JOIN renvoie beaucoup trop de lignes, cherche un ON oublié ou faux."
+ },
+ {
+  "id": "sql-2-03",
+  "level": 2,
+  "q": "Comment obtenir le total dépensé par client, une ligne chacun ?",
+  "choices": [
+   "SUM(total) avec GROUP BY customer_id",
+   "COUNT(*) FROM orders",
+   "ORDER BY total",
+   "SELECT DISTINCT total"
+  ],
+  "answer": 0,
+  "explain": "GROUP BY fait un groupe par client, et SUM(total) additionne chaque groupe. Sans GROUP BY, SUM donnerait un seul grand total pour tout le monde. ORDER BY ne fait que trier ; DISTINCT enlève seulement les lignes en double."
+ },
+ {
+  "id": "sql-2-04",
+  "level": 2,
+  "q": "Dans stock, item est la PRIMARY KEY. Tu insères un item déjà présent. Que se passe-t-il ?",
+  "choices": [
+   "Une erreur : la clé doit être unique",
+   "Une deuxième ligne avec le même item",
+   "L'ancienne ligne est mise à jour",
+   "L'insertion est ignorée en silence"
+  ],
+  "answer": 0,
+  "explain": "Une PRIMARY KEY ne peut pas apparaître deux fois, donc SQLite refuse avec UNIQUE constraint failed. Pour ajouter ou mettre à jour en une seule instruction, utilise INSERT … ON CONFLICT(item) DO UPDATE. INSERT OR IGNORE, lui, l'ignore en silence."
+ },
+ {
+  "id": "sql-2-05",
+  "level": 2,
+  "q": "Quelle différence entre INSERT OR REPLACE et INSERT … ON CONFLICT DO UPDATE ?",
+  "choices": [
+   "REPLACE supprime l'ancienne ligne et ses autres colonnes",
+   "Aucune, deux noms pour la même chose",
+   "REPLACE est plus rapide et plus sûr",
+   "DO UPDATE supprime l'ancienne ligne"
+  ],
+  "answer": 0,
+  "explain": "INSERT OR REPLACE supprime la ligne existante et en insère une nouvelle : chaque colonne que tu n'as pas donnée redevient vide (ou sa valeur par défaut). ON CONFLICT DO UPDATE garde la ligne et ne change que ce que tu mets dans SET, comme ajouter à une quantité."
+ },
+ {
+  "id": "sql-2-06",
+  "level": 2,
+  "q": "Dans ON CONFLICT(item) DO UPDATE SET qty = qty + excluded.qty, qu'est-ce que excluded.qty ?",
+  "choices": [
+   "La qty que tu voulais insérer",
+   "La qty d'avant l'insertion",
+   "Une colonne appelée excluded",
+   "Les lignes qui ont été supprimées"
+  ],
+  "answer": 0,
+  "explain": "excluded est la ligne que ton INSERT voulait écrire, et que le conflit a arrêtée. qty seul est la valeur déjà dans la table. qty + excluded.qty ajoute la livraison au stock au lieu de l'écraser."
+ },
+ {
+  "id": "sql-2-07",
+  "level": 2,
+  "q": "Un script construit son SQL ainsi : \"... WHERE name = '\" + name + \"'\". Quel est le danger ?",
+  "choices": [
+   "Un nom avec une apostrophe change la requête (injection)",
+   "C'est plus lent qu'un JOIN",
+   "Les noms ne peuvent pas avoir d'espaces",
+   "Aucun, les apostrophes protègent"
+  ],
+  "answer": 0,
+  "explain": "Si name vaut ' OR '1'='1, la requête devient WHERE name = '' OR '1'='1', qui correspond à toutes les lignes. C'est l'injection SQL. Passe plutôt les valeurs en paramètres (? avec sqlite3 en Python, $1 ailleurs) : la base ne les lit jamais comme du SQL."
+ },
+ {
+  "id": "sql-2-08",
+  "level": 2,
+  "q": "Plusieurs UPDATE doivent tous se faire, ou aucun. Dans quoi les mets-tu ?",
+  "choices": [
+   "BEGIN; … COMMIT; (une transaction)",
+   "Des parenthèses",
+   "Un JOIN",
+   "Des commandes sqlite3 séparées"
+  ],
+  "answer": 0,
+  "explain": "Une transaction regroupe des instructions : après BEGIN, rien n'est définitif avant COMMIT, et ROLLBACK annule tout. Si le programme plante au milieu, la base reste comme avant BEGIN, jamais à moitié modifiée."
+ },
+ {
+  "id": "sql-2-09",
+  "level": 2,
+  "q": "Tu veux d'abord essayer un changement risqué sur une base SQLite. Le plus simple ?",
+  "choices": [
+   "Copier le fichier et essayer sur la copie",
+   "Le lancer et espérer",
+   "Arrêter le serveur SQLite",
+   "Renommer les tables avant"
+  ],
+  "answer": 0,
+  "explain": "Comme toute la base est un fichier, cp shop.db test.db te donne une copie complète en une seconde. Essaie ton SQL sur test.db ; quand il fait ce que tu veux, lance-le sur la vraie. Ne copie pas pendant qu'un programme y écrit."
+ },
+ {
+  "id": "sql-2-10",
+  "level": 2,
+  "q": "Que veut dire un NULL dans une colonne ?",
+  "choices": [
+   "Aucune valeur, ni 0 ni ''",
+   "Le nombre zéro",
+   "Un texte vide",
+   "Une ligne supprimée"
+  ],
+  "answer": 0,
+  "explain": "NULL veut dire inconnu ou absent. Ce n'est ni 0 ni '' : c'est rien. Les comparaisons avec = ne le trouvent pas, même NULL = NULL ; on le teste avec IS NULL. COUNT(col) saute les NULL, alors que COUNT(*) compte toutes les lignes."
+ }
+]

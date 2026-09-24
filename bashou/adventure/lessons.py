@@ -45,6 +45,32 @@ LESSONS = [
          "CI keeps secrets for you: ${{ secrets.NAME }} on GitHub, a CI/CD variable on GitLab.",
          "grep -rni 'token\\|password' .github .gitlab-ci.yml"),
     ]},
+    {"id": "sql", "tool": "sqlite3", "topics": ("sql",), "title": "SQL with SQLite", "pages": [
+        ("A database keeps data in tables: rows and columns, like a spreadsheet the computer can search fast. "
+         "SQLite keeps a whole database in one file: sqlite3 opens it, and creates it if it doesn't exist yet. "
+         "Delete the file and the database is gone, nothing else to clean up.", "sqlite3 shop.db"),
+        ("Words that start with a dot are sqlite3's own commands: .tables lists the tables, .schema shows how "
+         "one is built (its columns and their types), .quit leaves. You can also give them right after the file.",
+         "sqlite3 shop.db .schema products"),
+        ("SQL itself reads almost like English. SELECT picks columns, FROM names the table, WHERE keeps only the "
+         "rows that match. A statement ends with a ;, and text goes between single quotes.",
+         "sqlite3 shop.db \"SELECT name, price FROM products WHERE price > 20;\""),
+        ("COUNT(*) counts the rows, SUM(col) adds up a column, ORDER BY sorts. They answer questions like "
+         "\"how many\" and \"how much\" without reading every row yourself.",
+         "SELECT COUNT(*) FROM products WHERE stock = 0;"),
+        ("Tables point at each other with numbers: an order keeps the id of its customer, not the name, so a "
+         "name is written only once. JOIN … ON puts the matching rows side by side again.",
+         "SELECT customers.name, orders.total FROM orders JOIN customers ON orders.customer_id = customers.id;"),
+        ("CREATE TABLE makes a table and gives each column a type: TEXT for words, INTEGER for whole numbers. "
+         "INSERT INTO adds a row: the columns, then the values in the same order.",
+         "INSERT INTO products (name, price, stock) VALUES ('lamp', 25, 12);"),
+        ("UPDATE changes rows, and WHERE picks which ones. Forget the WHERE and every row changes! Run a SELECT "
+         "with the same WHERE first: it shows exactly what the UPDATE (or a DELETE) will touch.",
+         "UPDATE products SET price = 30 WHERE name = 'lamp';"),
+        ("Add a row, or change it if it's already there? INSERT … ON CONFLICT DO UPDATE (an \"upsert\") does both "
+         "in one statement. INSERT OR REPLACE looks similar but deletes the old row first: its other columns are lost.",
+         "INSERT INTO stock (item, qty) VALUES ('mug', 5) ON CONFLICT(item) DO UPDATE SET qty = qty + excluded.qty;"),
+    ]},
 ]
 BY_ID = {lesson["id"]: lesson for lesson in LESSONS}
 

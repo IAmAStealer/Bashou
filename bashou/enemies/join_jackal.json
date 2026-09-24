@@ -1,0 +1,47 @@
+{
+ "name": "Join Jackal",
+ "palette": {
+  "a": "#6b4a2b",
+  "o": "#d4a15e",
+  "i": "#f0c8a8",
+  "c": "#f3e2c0",
+  "k": "#2a1a10",
+  "w": "#ffffff",
+  "m": "#141414"
+ },
+ "base": [
+  "...a.........a...",
+  "...aa.......aa...",
+  "..aia.......aia..",
+  "..aiia.....aiia..",
+  ".aoooaaaaaaaoooa.",
+  ".aoooooooooooooa.",
+  "aoowmooooooomwooa",
+  "aoooooooooooooooa",
+  ".aoocccckccccooa.",
+  "..aocccccccccoa..",
+  "...accccacccca...",
+  "....aaaaaaaaa...."
+ ],
+ "poses": {
+  "closed": {
+   "6": "---aa-------aa---"
+  },
+  "left": {
+   "6": "---mw------------"
+  },
+  "right": {
+   "6": "------------wm---"
+  },
+  "inhale": {
+   "0": "--a-----------a--"
+  },
+  "fidget": {
+   "11": "----.--------a---"
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}

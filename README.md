@@ -12,11 +12,11 @@ Bashou teaches in your real terminal, while you work. It runs offline: no accoun
 tokens spent to learn what a command does.
 
 - **`bashou learn <command>`** takes a command apart and explains every piece: the command, each
-  option, the arguments, pipes and redirections (55 commands, from `ls` to `tar`, `awk` and `kubectl`).
+  option, the arguments, pipes and redirections (59 commands, from `ls` to `tar`, `awk`, `gpg` and `kubectl`).
   With no command, it explains the last one your pet suggested.
 - **Your pet gives tips** as you go (Ctrl+R, `cd -`, `du -sh *`…) and notices the tools you haven't
   tried yet.
-- **99 achievements** reward real skills: a pipe of 3 commands, `find -exec`, `sed -i`, `git bisect`,
+- **104 achievements** reward real skills: a pipe of 3 commands, `find -exec`, `sed -i`, `git bisect`,
   `tar -tf`…
 - **Threats** show up now and then. `bashou fight` opens a sandbox shell where you beat them with the
   right tool: `grep` against the Log Hydra, `awk` against the Ledger Golem. A successful command with
@@ -24,13 +24,14 @@ tokens spent to learn what a command does.
   Python or C file to fix (a missing `;`, a loop that never ends, a memory leak, a shell injection);
   package fights ask your own machine with `apt`, `dpkg` or `rpm`, or have you fix a repository file;
   CI/CD fights hand you a GitHub Actions or GitLab CI file to fix (indentation, stages, a token in
-  clear, `needs:` and `if:`, `when: manual`).
+  clear, `needs:` and `if:`, `when: manual`); SQL fights hand you an SQLite database to query and fix
+  (`SELECT`, `JOIN`, `CREATE TABLE`, `INSERT`, `UPDATE`, `INSERT … ON CONFLICT DO UPDATE`).
   Beaten fights come back after 1, 7 and 30 days (spaced repetition), so what you learned stays.
 - **`bashou explain python list`** (or `dict`, `loop`, `recursion`; `bashou explain c malloc`…): a
   short note with an example, for the code fights.
 - **`bashou security`**: small investigations (a hidden file, a cron backdoor, a SUID binary).
-- **`bashou adventure`**: a walk through 10 topics (coding logic, bash, Linux, systemd, Python, Rust,
-  C, Debian, Rocky Linux, CI/CD) with 263 questions about what goes wrong and what to check first, bosses, and
+- **`bashou adventure`**: a walk through 11 topics (coding logic, bash, Linux, systemd, Python, Rust,
+  C, Debian, Rocky Linux, CI/CD, SQL) with 285 questions about what goes wrong and what to check first, bosses, and
   chests that open with real commands.
 
 ![bashou fight: a Planet and its hearts face the Log Hydra, the task in a bubble, and the arena
@@ -41,7 +42,7 @@ shell below](doc/img/duel.svg)
 Choose a starter: Stardust, Seedling or Pebble. It grows up to level 20 and changes shape along the
 way. What it becomes is for you to find out.
 
-25 more pets hide in your terminal. Each one comes from what it stands for: a Droplet after your
+26 more pets hide in your terminal. Each one comes from what it stands for: a Droplet after your
 first 10 commands (it keeps changing shape as you type), a night coder for your first programs, a
 mushroom for your own scripts, others for a new tool used often enough, a long pipe, a fight lost or
 won, a walk in the adventure… The swap board shows only their silhouette until you meet them.

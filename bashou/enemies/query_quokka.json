@@ -1,0 +1,47 @@
+{
+ "name": "Query Quokka",
+ "palette": {
+  "a": "#5a3b25",
+  "o": "#b98a5e",
+  "l": "#ecd3b0",
+  "k": "#e89a8a",
+  "p": "#3a2a20",
+  "w": "#ffffff",
+  "m": "#141414"
+ },
+ "base": [
+  "...aa.......aa...",
+  "...aoaaaaaaaoa...",
+  "..aoooooooooooa..",
+  "aoowmooooooomwooa",
+  "aokooollllloookoa",
+  "aooolllpppllloooa",
+  "aoooollalallooooa",
+  ".aoooolllllooooa.",
+  "..aoooooooooooa..",
+  ".aoolllllllllooa.",
+  ".aoolllllllllooa.",
+  "..aaaaaaaaaaaaa.."
+ ],
+ "poses": {
+  "closed": {
+   "3": "---aa-------aa---"
+  },
+  "left": {
+   "3": "---mw------------"
+  },
+  "right": {
+   "3": "------------wm---"
+  },
+  "inhale": {
+   "0": "--a-----------a--"
+  },
+  "fidget": {
+   "11": "--.------------a-"
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}

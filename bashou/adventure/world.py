@@ -24,6 +24,7 @@ TOPICS = {
     "cicd": ("CI/CD", "water", "Pipeline Hydra"),
     "systemd": ("systemd", "dungeon", "Unit Wyrm"),
     "logic": ("Logic", "meadow", "Paradox Sphinx"),
+    "sql": ("SQL", "forest", "Deadlock Wyvern"),
 }
 
 CHAPTERS = [

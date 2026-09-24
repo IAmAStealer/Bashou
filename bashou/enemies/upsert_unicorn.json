@@ -1,0 +1,49 @@
+{
+ "name": "Upsert Unicorn",
+ "palette": {
+  "a": "#6a6a8a",
+  "o": "#f4f4fa",
+  "y": "#f2c94c",
+  "h": "#e58fd0",
+  "i": "#f5b8d8",
+  "p": "#f3c9dd",
+  "n": "#9a5a7a",
+  "w": "#bfe0ff",
+  "m": "#202030"
+ },
+ "base": [
+  "........y........",
+  "........y........",
+  "..a....yyy....a..",
+  ".aia.aaaaaaa.aia.",
+  "haoooooooooooooah",
+  "haowmooooooomwoah",
+  "haoooooooooooooah",
+  ".haoooooooooooah.",
+  "..aopppppppppoa..",
+  "..aopnpppppnpoa..",
+  "...apppppppppa...",
+  "....aaaaaaaaa...."
+ ],
+ "poses": {
+  "closed": {
+   "5": "---oo-------oo---"
+  },
+  "left": {
+   "5": "---mw------------"
+  },
+  "right": {
+   "5": "------------wm---"
+  },
+  "inhale": {
+   "0": "-------y-y-------"
+  },
+  "fidget": {
+   "11": "----.--------a---"
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}

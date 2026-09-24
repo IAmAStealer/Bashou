@@ -1,0 +1,46 @@
+{
+ "name": "Update Urchin",
+ "palette": {
+  "s": "#6a3d8f",
+  "p": "#8a55b5",
+  "P": "#b98ae0",
+  "d": "#3a1d4f",
+  "w": "#ffffff",
+  "m": "#141414"
+ },
+ "base": [
+  "....s...s...s....",
+  "....p..p.p..p....",
+  "..ppppppppppppp..",
+  "sppPPPPPPPPPPPpps",
+  ".pPPwmPPPPPmwPPp.",
+  "spPPPPPPPPPPPPPps",
+  ".pPPPPdddddPPPPp.",
+  "spPPPPPPPPPPPPPps",
+  ".ppPPPPPPPPPPPpp.",
+  "..ppppppppppppp..",
+  ".s..p..p.p..p..s.",
+  "....s...s...s...."
+ ],
+ "poses": {
+  "closed": {
+   "4": "----PP-----PP----"
+  },
+  "left": {
+   "4": "----mw-----------"
+  },
+  "right": {
+   "4": "-----------wm----"
+  },
+  "inhale": {
+   "0": "---s---------s---"
+  },
+  "fidget": {
+   "11": "----.s--.s--.s---"
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}

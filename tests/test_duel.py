@@ -46,6 +46,8 @@ class JudgeTest(unittest.TestCase):
                 cmd = "rustc prog.rs && ./counter"
             if "micro" in ch.tools:                                      # repository files: edit them
                 cmd = f"{ch.tool} the.repo"
+            if ch.id == "upsert_unicorn":                                # write the file, then try it on a copy
+                cmd = "sqlite3 test.db < restock.sql"
             self.assertEqual(duel.judge(ch, 0, cmd), "hit", ch.id)
 
 

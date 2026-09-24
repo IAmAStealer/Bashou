@@ -10,7 +10,7 @@ from pathlib import Path
 from unittest import mock
 
 from bashou import challenges, fight, state
-from bashou.challenges import cicd, repos
+from bashou.challenges import cicd, repos, sql
 
 # Reference solutions, run with bash in the arena folder. {x} is filled from the task text.
 SOLUTIONS = {
@@ -73,6 +73,22 @@ SOLUTIONS = {
     "secret_sprite": ("sed -i 's/API_TOKEN: ghp_.*/API_TOKEN: ${{{{ secrets.API_TOKEN }}}}/' .github/workflows/ci.yml", None),
     "needs_newt": ("sed -i \"/^  deploy:/a\\    needs: test\\n    if: github.ref == 'refs/heads/main'\" .github/workflows/ci.yml", None),
     "manual_mole": ("printf '%s\\n' '  rules:' '    - if: $CI_COMMIT_BRANCH == \"main\"' '      when: manual' >> .gitlab-ci.yml", None),
+    # SQL fights: the sqlite3 command line (CI has it)
+    "query_quokka": ("sqlite3 shop.db 'SELECT COUNT(*) FROM products WHERE price > {x};'", r"more than (\d+)"),
+    "join_jackal": ("sqlite3 shop.db \"SELECT SUM(total) FROM orders JOIN customers ON orders.customer_id = customers.id "
+                    "WHERE customers.name = '{x}';\"", r"did (\w+) spend"),
+    "table_troll": ("f=$(ls ../*.db 2>/dev/null); sqlite3 \"$(sed -n 's/.*database \\(\\S*\\) with.*/\\1/p' <<< '{x}')\" "
+                    "\"CREATE TABLE $(sed -n 's/.*a table \\([a-z]*\\):.*/\\1/p' <<< '{x}') "
+                    "($(sed -n 's/.*a column \\([a-z]*\\) that holds text.*/\\1/p' <<< '{x}') TEXT, "
+                    "$(sed -n 's/.*a column \\([a-z]*\\) that holds whole.*/\\1/p' <<< '{x}') INTEGER);\"", r"(Create the database .*)"),
+    "insert_imp": ("x=$(tr '\\n' ' ' <<< '{x}'); sqlite3 shop.db \"INSERT INTO products (name, price, stock) VALUES "
+                   "($(sed -E \"s/the (\\w+) is missing.*price ([0-9]+), stock ([0-9]+).*/'\\1', \\2, \\3/\" <<< \"$x\"));\"",
+                   r"(?s)(the \w+ is missing.*?stock \d+)"),
+    "update_urchin": ("sqlite3 shop.db \"UPDATE products SET price = $(sed -E 's/.*to ([0-9]+).*/\\1/' <<< '{x}') "
+                      "WHERE name = '$(sed -E 's/.*price of (\\w+) .*/\\1/' <<< '{x}')';\"", r"(Set the price of \w+ to \d+)"),
+    "upsert_unicorn": ("printf \"INSERT INTO stock (item, qty) VALUES ('%s', %s) ON CONFLICT(item) DO UPDATE SET qty = qty + excluded.qty;\" "
+                       "$(sed -E 's/([0-9]+) × (\\w+).*/\\2 \\1/' <<< '{x}') > restock.sql", r"(\d+ × \w+)"),
+    "trial_sql_loot": ("sqlite3 loot.db \"SELECT COUNT(*) FROM loot WHERE rarity = 'rare';\"", None),
     "mirror_mimic": ("cat > debian.sources <<'X'\n" + repos.DEBIAN_OK + "X", None),
     "repo_revenant": ("cat > rocky.repo <<'X'\n" + repos.ROCKY_OK + "X", None),
     "enabled_ettin": ("dnf --disablerepo='*' --enablerepo={x} repolist", r"only the (\S+) repository"),
@@ -329,6 +345,62 @@ class CicdFightTest(unittest.TestCase):
         self.assertTrue(self.fixed("secret_sprite", swap("${{secrets.API_TOKEN}}")))
         self.assertFalse(self.fixed("secret_sprite", swap("$API_TOKEN")))
         self.assertFalse(self.fixed("secret_sprite", lambda text, meta: text + "# old: " + meta["token"] + "\n"))
+
+
+class SqlFightTest(unittest.TestCase):
+    """The SQL fights, played with Python's sqlite3 (the sqlite3 command may be missing here)."""
+
+    def play(self, fight, sql_text=None, seed=0):
+        with tempfile.TemporaryDirectory() as tmp:
+            work = Path(tmp)
+            ch = challenges.BY_ID[fight]
+            meta = ch.setup(work, random.Random(seed))
+            start = ch.check(work, meta, meta.get("answer", "done") if ch.verify is None else "done")
+            if sql_text:
+                if fight == "upsert_unicorn":
+                    (work / sql.UPSERT_FILE).write_text(sql_text(meta["args"]))
+                else:
+                    import sqlite3
+                    db = sqlite3.connect(work / (meta["args"].get("db") or "shop.db"))
+                    db.executescript(sql_text(meta["args"]))
+                    db.commit()
+                    db.close()
+            return start, ch.check(work, meta, meta.get("answer", "done") if ch.verify is None else "done")
+
+    def test_fix_fights_start_broken_and_the_right_sql_wins(self):
+        for seed in range(5):
+            self.assertEqual(self.play("table_troll", lambda a: f"CREATE TABLE {a['table']} ({a['text']} VARCHAR(80), "
+                                                                 f"{a['number']} INT);", seed), (False, True))
+            self.assertEqual(self.play("insert_imp", lambda a: f"INSERT INTO products (name, price, stock) VALUES "
+                                                                f"('{a['item']}', {a['price']}, {a['stock']});", seed), (False, True))
+            self.assertEqual(self.play("update_urchin", lambda a: f"UPDATE products SET price = {a['price']} "
+                                                                   f"WHERE name = '{a['item']}';", seed), (False, True))
+            self.assertEqual(self.play("upsert_unicorn", lambda a: f"INSERT INTO stock (item, qty) VALUES ('{a['item']}', "
+                                       f"{a['n']}) ON CONFLICT(item) DO UPDATE SET qty = qty + excluded.qty;", seed), (False, True))
+
+    def test_wrong_sql_loses(self):
+        self.assertFalse(self.play("table_troll", lambda a: f"CREATE TABLE {a['table']} ({a['text']} INTEGER, {a['number']} TEXT);")[1])
+        self.assertFalse(self.play("update_urchin", lambda a: f"UPDATE products SET price = {a['price']};")[1])   # no WHERE
+        self.assertFalse(self.play("insert_imp", lambda a: f"INSERT INTO products (name, price) VALUES ('{a['item']}', {a['price']});")[1])
+        self.assertFalse(self.play("upsert_unicorn", lambda a: f"INSERT OR REPLACE INTO stock (item, qty) VALUES "
+                                                               f"('{a['item']}', {a['n']});")[1])        # the old qty is lost
+
+    def test_the_players_sql_cannot_reach_other_files(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            for evil in (f"VACUUM INTO '{tmp}/copy.db';", f"ATTACH '{tmp}/other.db' AS o; CREATE TABLE o.t (a);",
+                         "CREATE TABLE extra (a);", "PRAGMA journal_mode = OFF;"):
+                self.assertFalse(self.play("upsert_unicorn", lambda a: evil)[1], evil)
+            self.assertEqual(list(Path(tmp).iterdir()), [])
+
+    def test_answers_come_from_the_database(self):
+        import sqlite3
+        with tempfile.TemporaryDirectory() as tmp:
+            work = Path(tmp)
+            meta = challenges.BY_ID["join_jackal"].setup(work, random.Random(3))
+            db = sqlite3.connect(work / "shop.db")
+            total, = db.execute("SELECT SUM(total) FROM orders JOIN customers ON orders.customer_id = customers.id "
+                                "WHERE customers.name = ?", (meta["args"]["name"],)).fetchone()
+            self.assertEqual(meta["answer"], str(total))
 
 
 class RepoFightTest(unittest.TestCase):

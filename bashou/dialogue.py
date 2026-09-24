@@ -218,6 +218,7 @@ DISCOVER = {
                 "Python reads JSON too: `python3 -m json.tool data.json` prints it neatly."],
     "gcc": ["`gcc hello.c -o hello && ./hello` builds a C program and runs it."],
     "rustc": ["`rustc main.rs && ./main` builds a Rust program. rustc's errors say what to change."],
+    "sqlite3": ["`sqlite3 shop.db .tables` lists the tables of a database: SQLite keeps it all in one file."],
 }
 
 

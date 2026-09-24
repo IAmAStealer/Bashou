@@ -1,0 +1,288 @@
+[
+ {
+  "id": "sql-1-01",
+  "level": 1,
+  "q": "You run sqlite3 notes.db, but notes.db doesn't exist yet. What happens?",
+  "choices": [
+   "SQLite creates the file when you first write to it",
+   "An error: create the file with touch first",
+   "It opens a random database",
+   "It needs a server running"
+  ],
+  "answer": 0,
+  "explain": "sqlite3 opens a database file and creates it as soon as you write something in it (a table, a row). No server, no setup: the whole database is that one file. That's why SQLite is perfect to learn: when you're done, rm notes.db removes everything."
+ },
+ {
+  "id": "sql-1-02",
+  "level": 1,
+  "q": "Where does SQLite keep a database?",
+  "choices": [
+   "In one single file",
+   "In a server running in the background",
+   "In your home folder's hidden cache",
+   "In memory only, lost at logout"
+  ],
+  "answer": 0,
+  "explain": "SQLite has no server: the database, with all its tables, lives in one ordinary file. You can copy it, back it up, send it or delete it like any file. Big websites use a server database (PostgreSQL, MySQL), but phones, browsers and many apps use SQLite."
+ },
+ {
+  "id": "sql-1-03",
+  "level": 1,
+  "q": "Inside sqlite3, you want to see which tables the database has. What do you type?",
+  "choices": [
+   ".tables",
+   "SHOW TABLES;",
+   "ls",
+   "SELECT tables;"
+  ],
+  "answer": 0,
+  "explain": "Commands starting with a dot are sqlite3's own helpers, not SQL: .tables lists the tables, .schema name shows how a table is built, .quit leaves. SHOW TABLES is MySQL's way, and SQLite doesn't know it."
+ },
+ {
+  "id": "sql-1-04",
+  "level": 1,
+  "q": "SELECT name FROM products WHERE price > 20; What does WHERE do here?",
+  "choices": [
+   "Keeps only the rows whose price is over 20",
+   "Sorts the rows by price",
+   "Changes the price of every row",
+   "Picks which table to read"
+  ],
+  "answer": 0,
+  "explain": "SELECT says which columns you want, FROM says which table, and WHERE filters the rows: only those where the condition is true come out. Sorting is ORDER BY. SELECT never changes anything: it's always safe to run."
+ },
+ {
+  "id": "sql-1-05",
+  "level": 1,
+  "q": "You want to know how many customers live in Lyon, not see them all. What do you use?",
+  "choices": [
+   "SELECT COUNT(*) FROM customers WHERE city = 'Lyon';",
+   "SELECT * FROM customers;",
+   "COUNT customers Lyon;",
+   "SELECT SUM(city) FROM customers;"
+  ],
+  "answer": 0,
+  "explain": "COUNT(*) counts the rows that the WHERE kept, and returns one number. SELECT * would print every customer and leave the counting to you. SUM adds up numbers in a column; it makes no sense on city names."
+ },
+ {
+  "id": "sql-1-06",
+  "level": 1,
+  "q": "In SQL, why write 'Lyon' in quotes but 20 without them?",
+  "choices": [
+   "Text goes between quotes, numbers don't",
+   "Quotes make the search faster",
+   "Only names of cities need quotes",
+   "It doesn't matter at all"
+  ],
+  "answer": 0,
+  "explain": "Between single quotes, SQL reads text: 'Lyon' is a word. Without quotes, it reads a number, or the name of a column. WHERE city = Lyon would look for a column called Lyon and fail."
+ },
+ {
+  "id": "sql-1-07",
+  "level": 1,
+  "q": "What does CREATE TABLE books (title TEXT, year INTEGER); do?",
+  "choices": [
+   "Makes an empty table with two columns",
+   "Adds a book to the table",
+   "Lists the books",
+   "Deletes the old books table"
+  ],
+  "answer": 0,
+  "explain": "CREATE TABLE builds a new, empty table and names its columns, each with a type: TEXT for words, INTEGER for whole numbers. Rows come later, with INSERT INTO. If a table books already exists, you get an error instead."
+ },
+ {
+  "id": "sql-1-08",
+  "level": 1,
+  "q": "How do you add a new book to the table books?",
+  "choices": [
+   "INSERT INTO books (title, year) VALUES ('Dune', 1965);",
+   "ADD books 'Dune' 1965;",
+   "UPDATE books SET title = 'Dune';",
+   "SELECT 'Dune' INTO books;"
+  ],
+  "answer": 0,
+  "explain": "INSERT INTO adds one row: first the columns you fill, then VALUES in the same order. UPDATE changes rows that already exist, and without a WHERE it would rename every book to Dune."
+ },
+ {
+  "id": "sql-1-09",
+  "level": 1,
+  "q": "UPDATE products SET price = 0; What happens?",
+  "choices": [
+   "Every product now costs 0",
+   "Only the first product changes",
+   "Nothing: a WHERE is required",
+   "SQLite asks for confirmation"
+  ],
+  "answer": 0,
+  "explain": "Without WHERE, UPDATE changes every row, and SQLite doesn't ask. It's a classic accident in production. Always write the WHERE, and first run a SELECT with the same WHERE to see exactly which rows will change."
+ },
+ {
+  "id": "sql-1-10",
+  "level": 1,
+  "q": "Before running DELETE FROM users WHERE last_login < '2020-01-01'; what is a good habit?",
+  "choices": [
+   "Run SELECT with the same WHERE to see what goes",
+   "Run it twice to be sure",
+   "Remove the WHERE to go faster",
+   "Restart the database first"
+  ],
+  "answer": 0,
+  "explain": "SELECT … WHERE shows the exact rows the DELETE will remove, without removing anything. If the list looks wrong, you fix the condition before any damage. With SQLite, a cp of the file is also a quick backup."
+ },
+ {
+  "id": "sql-1-11",
+  "level": 1,
+  "q": "Why do many apps use an id number column in each table?",
+  "choices": [
+   "To name each row uniquely, even if names repeat",
+   "To make the table look sorted",
+   "Because SQL can't store names",
+   "To count the rows faster"
+  ],
+  "answer": 0,
+  "explain": "Two customers can share a name, but never an id. INTEGER PRIMARY KEY gives each row its own number, and other tables use it to point at that row (an order keeps its customer's id). Names can then change in one place only."
+ },
+ {
+  "id": "sql-1-12",
+  "level": 1,
+  "q": "You're done practising with SQLite. How do you remove the practice database?",
+  "choices": [
+   "Delete its file: rm practice.db",
+   "DROP DATABASE practice;",
+   "Uninstall the SQLite server",
+   "It disappears at reboot"
+  ],
+  "answer": 0,
+  "explain": "The whole database is the file, so rm removes it all. SQLite has no server and no DROP DATABASE. The tool itself is one package: sudo apt remove sqlite3 (or dnf remove sqlite) if you want it gone too."
+ },
+ {
+  "id": "sql-2-01",
+  "level": 2,
+  "q": "orders has customer_id, customers has id and name. How do you list each order with its customer's name?",
+  "choices": [
+   "JOIN customers ON orders.customer_id = customers.id",
+   "SELECT * FROM orders, names;",
+   "UNION the two tables",
+   "Copy the names into orders first"
+  ],
+  "answer": 0,
+  "explain": "JOIN puts rows of two tables side by side, and ON says which ones belong together: an order and the customer whose id it keeps. Copying names into every order would repeat them, and a renamed customer would have to be fixed everywhere."
+ },
+ {
+  "id": "sql-2-02",
+  "level": 2,
+  "q": "You forget the ON in a JOIN of 100 orders and 10 customers. What comes out?",
+  "choices": [
+   "1,000 rows: every order with every customer",
+   "An error",
+   "The 100 orders",
+   "10 rows"
+  ],
+  "answer": 0,
+  "explain": "Without a condition, SQL pairs each row of one table with each row of the other (a cross join). 100 × 10 = 1,000 mixed-up rows. When a JOIN returns far too many rows, look for a missing or wrong ON."
+ },
+ {
+  "id": "sql-2-03",
+  "level": 2,
+  "q": "How do you get the total spent per customer, one line each?",
+  "choices": [
+   "SUM(total) with GROUP BY customer_id",
+   "COUNT(*) FROM orders",
+   "ORDER BY total",
+   "SELECT DISTINCT total"
+  ],
+  "answer": 0,
+  "explain": "GROUP BY makes one group per customer, and SUM(total) adds up each group. Without GROUP BY, SUM would give one grand total for everyone. ORDER BY only sorts; DISTINCT only removes duplicate lines."
+ },
+ {
+  "id": "sql-2-04",
+  "level": 2,
+  "q": "stock has item as PRIMARY KEY. You INSERT an item that is already there. What happens?",
+  "choices": [
+   "An error: the key must be unique",
+   "A second row with the same item",
+   "The old row is updated",
+   "The insert is ignored silently"
+  ],
+  "answer": 0,
+  "explain": "A PRIMARY KEY can't appear twice, so SQLite refuses with UNIQUE constraint failed. To add or update in one statement, use INSERT … ON CONFLICT(item) DO UPDATE. INSERT OR IGNORE skips it silently instead."
+ },
+ {
+  "id": "sql-2-05",
+  "level": 2,
+  "q": "What is the difference between INSERT OR REPLACE and INSERT … ON CONFLICT DO UPDATE?",
+  "choices": [
+   "REPLACE deletes the old row, losing its other columns",
+   "None, they're two names for it",
+   "REPLACE is faster and safer",
+   "DO UPDATE deletes the old row"
+  ],
+  "answer": 0,
+  "explain": "INSERT OR REPLACE removes the existing row and inserts a new one: every column you didn't give is back to empty (or its default). ON CONFLICT DO UPDATE keeps the row and changes only what you SET, like adding to a quantity."
+ },
+ {
+  "id": "sql-2-06",
+  "level": 2,
+  "q": "In ON CONFLICT(item) DO UPDATE SET qty = qty + excluded.qty, what is excluded.qty?",
+  "choices": [
+   "The qty you tried to insert",
+   "The qty before the insert",
+   "A column called excluded",
+   "The rows that were removed"
+  ],
+  "answer": 0,
+  "explain": "excluded is the row your INSERT wanted to write, which the conflict stopped. qty alone is the value already in the table. qty + excluded.qty adds the delivery to the stock instead of overwriting it."
+ },
+ {
+  "id": "sql-2-07",
+  "level": 2,
+  "q": "A script builds SQL like this: \"... WHERE name = '\" + name + \"'\". What's the danger?",
+  "choices": [
+   "A name with a quote can change the query (injection)",
+   "It's slower than a JOIN",
+   "Names can't have spaces",
+   "None, quotes protect it"
+  ],
+  "answer": 0,
+  "explain": "If name is ' OR '1'='1, the query becomes WHERE name = '' OR '1'='1', which matches every row. That's SQL injection. Give values as parameters instead (? in Python's sqlite3, $1 in others): the database never reads them as SQL."
+ },
+ {
+  "id": "sql-2-08",
+  "level": 2,
+  "q": "You run several UPDATEs that must all happen or none. What do you wrap them in?",
+  "choices": [
+   "BEGIN; … COMMIT; (a transaction)",
+   "Parentheses",
+   "A JOIN",
+   "Separate sqlite3 commands"
+  ],
+  "answer": 0,
+  "explain": "A transaction groups statements: after BEGIN, nothing is final until COMMIT, and ROLLBACK cancels everything. If the program crashes halfway, the database stays as it was before BEGIN, never half-updated."
+ },
+ {
+  "id": "sql-2-09",
+  "level": 2,
+  "q": "You want to try a risky change on a SQLite database first. What's the simplest way?",
+  "choices": [
+   "Copy the file and try it on the copy",
+   "Run it and hope",
+   "Stop the SQLite server",
+   "Rename the tables first"
+  ],
+  "answer": 0,
+  "explain": "Since the whole database is one file, cp shop.db test.db gives you a full copy in a second. Try your SQL on test.db; when it does what you want, run it on the real one. Don't copy while a program is writing to it."
+ },
+ {
+  "id": "sql-2-10",
+  "level": 2,
+  "q": "What does a NULL in a column mean?",
+  "choices": [
+   "No value at all, not even 0 or ''",
+   "The number zero",
+   "An empty text",
+   "A deleted row"
+  ],
+  "answer": 0,
+  "explain": "NULL means unknown or missing. It's not 0 and not '': it's nothing. Comparisons with = don't match it, even NULL = NULL; you test it with IS NULL. COUNT(col) skips NULLs, while COUNT(*) counts every row."
+ }
+]

@@ -1,0 +1,48 @@
+{
+ "name": "Table Troll",
+ "palette": {
+  "a": "#2f4a2a",
+  "g": "#7cb26a",
+  "n": "#5f9450",
+  "s": "#6f5fb0",
+  "t": "#a0703c",
+  "T": "#6e4a28",
+  "w": "#ffffff",
+  "m": "#141414"
+ },
+ "base": [
+  "...ttttttttttt...",
+  "....T.......T....",
+  "...TaaaaaaaaaT...",
+  "...aggggggggga...",
+  "..agwmgggggmwga..",
+  "..aggggnnngggga..",
+  "..aggwaaaaawgga..",
+  "..aggggggggggga..",
+  "...aggggggggga...",
+  "..asssssssssssa..",
+  ".asssssssssssssa.",
+  ".aaaaaaaaaaaaaaa."
+ ],
+ "poses": {
+  "closed": {
+   "4": "----aa-----aa----"
+  },
+  "left": {
+   "4": "----mw-----------"
+  },
+  "right": {
+   "4": "-----------wm----"
+  },
+  "inhale": {
+   "0": "--t-----------t--"
+  },
+  "fidget": {
+   "11": "-.--------------a"
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}
