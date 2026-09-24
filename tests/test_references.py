@@ -9,6 +9,7 @@ import ast
 import importlib
 import random
 import tempfile
+import re
 import unittest
 from pathlib import Path
 
@@ -266,3 +267,23 @@ class ScreenshotTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ReadmeCountsTest(unittest.TestCase):
+    def test_readme_numbers_match_the_game(self):
+        """The README said 59 commands and 108 achievements after the Duck brought more."""
+        import glob
+        import json
+        from bashou import achievements, creatures, learn
+        from bashou.adventure import world
+        text = (Path(__file__).resolve().parent.parent / "README.md").read_text()
+        root = Path(__file__).resolve().parent.parent / "bashou/adventure/questions/en"
+        counts = {
+            r"\((\d+) commands, from": len(learn.COMMANDS),
+            r"\*\*(\d+) achievements\*\*": len([a for a in achievements.ALL if not a.hidden]),
+            r"walk through (\d+) topics": len(world.TOPICS),
+            r"with (\d+) questions": sum(len(json.loads(Path(f).read_text())) for f in glob.glob(str(root / "*.json"))),
+            r"(\d+) more pets hide": len([p for p, _ in creatures.ROSTER if p not in creatures.SECRET]),
+        }
+        for pattern, real in counts.items():
+            self.assertEqual(int(re.search(pattern, text).group(1)), real, pattern)
