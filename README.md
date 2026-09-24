@@ -13,11 +13,11 @@ Bashou teaches in your real terminal, while you work. It runs offline: no accoun
 tokens spent to learn what a command does.
 
 - **`bashou learn <command>`** takes a command apart and explains every piece: the command, each
-  option, the arguments, pipes and redirections (59 commands, from `ls` to `tar`, `awk`, `gpg` and `kubectl`).
+  option, the arguments, pipes and redirections (60 commands, from `ls` to `tar`, `awk`, `gpg` and `kubectl`).
   With no command, it explains the last one your pet suggested.
 - **Your pet gives tips** as you go (Ctrl+R, `cd -`, `du -sh *`…) and notices the tools you haven't
   tried yet.
-- **108 achievements** reward real skills: a pipe of 3 commands, `find -exec`, `sed -i`, `git bisect`,
+- **109 achievements** reward real skills: a pipe of 3 commands, `find -exec`, `sed -i`, `git bisect`,
   `tar -tf`…
 - **Threats** show up now and then. `bashou fight` opens a sandbox shell where you beat them with the
   right tool: `grep` against the Log Hydra, `awk` against the Ledger Golem. A successful command with
