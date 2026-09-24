@@ -65,7 +65,7 @@ class CreaturesTest(unittest.TestCase):
 
 # Symmetric designs (their outline, not their highlights). A one-pixel slip broke the Droplet, the
 # Orc's tusk and the Snakelet (owner's bug report): they must stay mirror images.
-SYMMETRIC = ["barn_owl", "basilisk", "bat", "beanbag", "brood", "dragon_egg", "droplet", "goblin", "gremlin",
+SYMMETRIC = ["barn_owl", "basilisk", "bat", "beanbag", "brood", "dragon_egg", "droplet", "goblin", "gremlin", "ice_slime",
              "king_slime", "kitsune", "kraken", "molekin", "octopito", "orc", "planet", "porcupine", "pup",
              "snakelet", "spider", "spiderling", "spirit", "star", "throne", "vampire"]
 

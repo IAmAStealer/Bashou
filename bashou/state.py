@@ -11,7 +11,7 @@ from pathlib import Path
 DATA = Path(os.environ.get("BASHOU_DATA", Path.home() / ".local/share/bashou"))
 CACHE = Path(os.environ.get("BASHOU_CACHE", Path.home() / ".cache/bashou"))
 STATE = DATA / "state.json"
-SAVE_VERSION = 2        # bump with a step in migrate() whenever the save's shape changes
+SAVE_VERSION = 3        # bump with a step in migrate() whenever the save's shape changes
 
 
 def default():
@@ -158,6 +158,8 @@ def migrate(state):
         migrate_ladder(state)
     if "ladder_best" not in state:
         migrate_slime(state)
+    elif state.get("version", 1) < 3:
+        migrate_slime_ladder(state)
     if "reviews" not in state:
         migrate_reviews(state)
     state["version"] = SAVE_VERSION
@@ -170,6 +172,12 @@ def migrate_reviews(state):
     today = datetime.date.today()
     state["reviews"] = {cid: {"step": 0, "due": (today + datetime.timedelta(days=i + 1)).isoformat()}
                         for i, cid in enumerate(state["challenges"])}
+
+
+def migrate_slime_ladder(state):
+    """0.4.3 put the Ice slime and the Thunder slime in the Slime's ladder: a Cat or King slime stays one."""
+    best = state["ladder_best"]
+    best["slime"] = {6: 7, 7: 9}.get(best.get("slime"), best.get("slime", 1))
 
 
 def migrate_slime(state):

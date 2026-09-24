@@ -11,7 +11,7 @@ from .i18n import _
 # Total commands run -> pet unlocked.
 # The Slime grows with your command count: one form per count, as many as creatures.FORMS gives it
 # (round animals and elements join as they get drawn, the King slime stays last; see doc/PLAN.md).
-COMMAND_LADDER = {"slime": (10, 100, 200, 500, 1500, 5000, 10000)}
+COMMAND_LADDER = {"slime": (10, 100, 200, 500, 1500, 3500, 5000, 7500, 10000)}
 MILESTONES = [(COMMAND_LADDER["slime"][0], "slime")]
 
 # Pet -> (tools that count, successful uses needed).

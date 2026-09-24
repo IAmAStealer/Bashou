@@ -1,0 +1,47 @@
+{
+ "name": "Frog slime",
+ "palette": {
+  "m": "#191919",
+  "a": "#2f6a2a",
+  "o": "#7cc86a",
+  "w": "#ffffff",
+  "p": "#ffb0a0",
+  "q": "#1f4a1a"
+ },
+ "base": [
+  ".................",
+  "..aaa.....aaa....",
+  ".awma.....amwa...",
+  "..aaaoooooaaa....",
+  "...aoooooooa.....",
+  "..aoooooooooa....",
+  ".aoooooooooooa...",
+  ".aoooooooooooa...",
+  ".aopoooqooopoa...",
+  ".aoooooooooooa...",
+  "..aoooooooooa....",
+  "...aaaaaaaaa....."
+ ],
+ "poses": {
+  "inhale": {
+   "10": "-ao---------oa---",
+   "11": "--a---------a----"
+  },
+  "closed": {
+   "2": "--aa-------aa----"
+  },
+  "left": {
+   "2": "--mw-------mw----"
+  },
+  "right": {
+   "2": "--wm-------wm----"
+  },
+  "fidget": {
+   "9": "-------p---------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

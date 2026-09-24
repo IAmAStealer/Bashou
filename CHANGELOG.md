@@ -12,6 +12,9 @@ Every release has a section here, written for players. CI refuses to tag a relea
   joins you, then grows into a Snow leopard and a Mountain ghost as you encrypt files, make a key, start a
   password store and hand passwords to commands with `$(pass show …)`. No gpg or pass yet? Your pet tells
   you how to install them.
+- **Two new Slime forms.** At 3,500 commands your Slime freezes into an Ice slime, a little crystal
+  cluster, and at 7,500 it becomes a Thunder slime, a grumpy storm cloud. A Cat or King slime you
+  already have stays what it is.
 - **A new pet: the Duck.** Debug like a programmer with a rubber duck: explain a command with
   `bashou learn`, trace a script with `bash -x`, check it with `bash -n` or read `echo $?`, and a
   Duckling waddles in. Each new habit brings a new form: a Duck, a White duck, and at last a Mandarin

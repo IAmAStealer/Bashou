@@ -49,6 +49,16 @@ class ProgressTest(unittest.TestCase):
         self.assertEqual(progress.current(s, "slime")[0], "king_slime")
         self.assertEqual(progress.tier(s, "slime", progress.stage(s, "slime")), 3)
 
+    def test_new_slime_forms_keep_old_ones(self):
+        """0.4.3 added the Ice slime (3,500) and the Thunder slime (7,500): a King slime stays a King."""
+        for best, form in ((5, "rock_slime"), (6, "cat_slime"), (7, "king_slime")):
+            old = {**state.default(), "version": 2, "commands": 20, "ladder_best": {"slime": best}}
+            self.assertEqual(progress.current(state.migrate(old), "slime")[0], form)
+        s = {**state.default(), "commands": 3500}
+        self.assertEqual(progress.current(s, "slime")[0], "ice_slime")
+        s["commands"] = 7500
+        self.assertEqual(progress.current(s, "slime")[0], "thunder_slime")
+
     def test_tool_pet_needs_successes(self):
         self.run_cmd("find . -name x", status=1, times=20)
         self.assertNotIn("fox", self.s["pets"])
