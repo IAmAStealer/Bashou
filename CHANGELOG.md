@@ -35,6 +35,11 @@ Every release has a section here, written for players. CI refuses to tag a relea
 - **What you type stays private.** Bashou's folders were readable by other accounts on systems where
   home folders are (Debian's default): they are now yours only, and existing ones are tightened. Events
   left by terminals that closed badly are removed. `.github/SECURITY.md` lists everything Bashou writes.
+- On Rocky, Alma and RHEL, the Process Phantom could not be found (its name got lost), so that fight
+  couldn't be won. It shows up in `ps` again.
+- The Leak Lurker and the Fencepost Fiend only come where gcc can use AddressSanitizer: without it, their
+  bug was invisible and the fight was won before it started.
+- CI now also runs every test on Rocky Linux 9, and installs the .rpm there.
 - Pets and fights no longer slow down when many tools are missing (on WSL, looking for a missing
   command searched every Windows folder).
 

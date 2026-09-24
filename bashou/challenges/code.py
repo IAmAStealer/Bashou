@@ -629,7 +629,7 @@ ALL = [
                      "Try: python3 -c \"import base64; p = open('token.txt').read().split('.')[1]; "
                      "print(base64.urlsafe_b64decode(p + '=='))\""],
               setup=jwt_setup),
-    Challenge(level=2, id="leak_lurker", fix=True, pet="beaver", threat="Leak Lurker", **C,
+    Challenge(level=2, id="leak_lurker", fix=True, works=lambda: bool(sanitizer()), pet="beaver", threat="Leak Lurker", **C,
               task="The Leak Lurker feeds on memory nobody frees in shout.c.\n"
                    "Fix shout.c (its first lines say what it must do). "
                    "Run it: gcc -g -fsanitize=address shout.c -o shout && ./shout < names.txt\n"
@@ -638,7 +638,7 @@ ALL = [
                      "Who should free it once it's printed? bashou explain c malloc",
                      "Add free(loud); right after fputs(loud, stdout);"],
               setup=leak_setup, verify=c_tests("shout.c")),
-    Challenge(level=2, id="fencepost_fiend", fix=True, pet="beaver", threat="Fencepost Fiend", **C,
+    Challenge(level=2, id="fencepost_fiend", fix=True, works=lambda: bool(sanitizer()), pet="beaver", threat="Fencepost Fiend", **C,
               task="The Fencepost Fiend moved a fence post in average.c: a loop goes one step too far.\n"
                    "Fix average.c (its first lines say what it must do). "
                    "Run it: gcc -g -fsanitize=address average.c -o average && ./average 2 4 9\n"

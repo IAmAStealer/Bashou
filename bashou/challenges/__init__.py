@@ -44,6 +44,7 @@ class Challenge:
     skill: str = "bash"       # what it teaches (skills.SKILLS): only sent if you learn that
     help: str = ""            # what to look for in `tool --help`: beginners get that hint first
     fix: bool = False         # you fix a file (or run commands), then `verify`: Bashou checks the result
+    works: Optional[Callable] = None    # () -> bool: something else this system must have (AddressSanitizer…)
 
     @property
     def tool(self):
@@ -76,7 +77,7 @@ class Challenge:
         if self.distro and not set(self.distro) & family():
             return False
         from ..which import installed
-        return all(installed(t) for t in (self.requires or [self.tool]))
+        return all(installed(t) for t in (self.requires or [self.tool])) and (self.works is None or self.works())
 
 
 @functools.lru_cache(maxsize=None)

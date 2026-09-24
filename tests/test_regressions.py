@@ -119,7 +119,8 @@ class CliBugs(TempState):
         import inspect
         import re
         from bashou import board as board_mod
-        board = board_mod.Board()
+        with mock.patch("bashou.which.installed", return_value=True):      # the Bee needs systemctl
+            board = board_mod.Board()
         board.pos = board.ids.index("bee")                 # long achievement lines: `systemctl enable --now`…
         for cols, lines in ((80, 24), (60, 20), (70, 16)):
             with self.subTest(cols=cols, lines=lines):

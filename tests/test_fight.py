@@ -145,7 +145,8 @@ class ChallengeTest(unittest.TestCase):
             for seed in range(3):
                 with self.subTest(ch.id, seed=seed), tempfile.TemporaryDirectory() as tmp, \
                         tempfile.TemporaryDirectory() as gnupg:
-                    work = Path(tmp)
+                    work = Path(tmp) / "arena"                  # like the arena: the log lives next to it
+                    work.mkdir()
                     meta = ch.setup(work, random.Random(seed))
                     env = {**os.environ, "GNUPGHOME": gnupg, **meta.get("env", {})}
                     try:
@@ -154,8 +155,9 @@ class ChallengeTest(unittest.TestCase):
                             cmd = cmd.format(x=re.search(pattern, ch.task_text(meta)).group(1))
                         else:
                             cmd = cmd.format()
-                        out = subprocess.run(["bash", "-c", cmd], cwd=work, capture_output=True,
-                                             text=True, env=env).stdout.strip()
+                        done = subprocess.run(["bash", "-c", cmd], cwd=work, capture_output=True, text=True, env=env)
+                        out = done.stdout.strip()
+                        (work.parent / "log").write_text(f"{done.returncode}\t    1  {cmd}\n")   # as the arena logs it
                         self.assertTrue(ch.check(work, meta, out or "done"), f"{ch.id}: {out!r}")
                         self.assertFalse(ch.check(work, {**meta, "expected": "nope"}, "wrong")
                                          and ch.verify is None)

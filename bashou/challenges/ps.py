@@ -1,6 +1,8 @@
 import os
+import shlex
 import signal
 import subprocess
+import sys
 import time
 from pathlib import Path
 
@@ -10,8 +12,9 @@ from . import Challenge
 def setup(work, rng):
     name = f"phantom-{rng.randrange(16 ** 4):04x}"
     # Detached from Python; cleanup() kills it when the arena closes.
-    out = subprocess.run(["bash", "-c", f"(exec -a {name} sleep 3600) </dev/null >/dev/null 2>&1 & echo $!"],
-                         capture_output=True, text=True)
+    # python3, not sleep: on RHEL 9 sleep is a coreutils shebang script, and the new name got lost.
+    out = subprocess.run(["bash", "-c", f"(exec -a {name} {shlex.quote(sys.executable)} -c 'import time; time.sleep(3600)') "
+                                        "</dev/null >/dev/null 2>&1 & echo $!"], capture_output=True, text=True)
     pid = int(out.stdout)
     # `$!` comes back before the subshell has exec'd: wait until the process shows its name.
     for _ in range(100):

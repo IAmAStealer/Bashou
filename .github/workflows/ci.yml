@@ -53,9 +53,33 @@ jobs:
           tar -xzf gitleaks_8.30.1_linux_x64.tar.gz gitleaks
           ./gitleaks git . --no-banner --redact
 
+  # Rocky Linux 9 (Red Hat family, Python 3.9): rpm and dnf fights against a real rpm database, the
+  # coreutils and gcc of that family, and the .rpm package installed with dnf. As a normal user, with an
+  # init (--init) so finished processes are reaped like on a real system.
+  rocky:
+    runs-on: ubuntu-latest
+    container:
+      image: rockylinux:9
+      options: --init
+    steps:
+      - name: Tools
+        run: dnf install -y -q python3 git procps-ng findutils diffutils which gcc gnupg2 rpm-build
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - name: Unit and shell tests
+        run: |
+          useradd -m tester
+          cp -r . /home/tester/bashou && chown -R tester:tester /home/tester/bashou
+          su - tester -c "cd ~/bashou && python3 -m unittest -q"
+      - name: The .rpm installs and runs
+        run: |
+          python3 tools/package.py build v0.0.0 dist
+          dnf install -y -q dist/*.rpm
+          su - tester -c "bashou setup && bashou version"
+          dnf remove -y -q bashou
+
   # A commit on main with a line "release: v1.2.3" becomes that release once every check passed.
   release:
-    needs: [tests, security]
+    needs: [tests, security, rocky]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
