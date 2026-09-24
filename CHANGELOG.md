@@ -3,6 +3,12 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.4.3 — 2026-09-24
+
+- The Seedling is now a little seed with one shoot, so you can tell it apart from the Sprout.
+- A speech bubble closes as soon as you run the command it suggests (`bashou fight`,
+  `bashou evolve`…), and never stays more than 3 minutes.
+
 ## v0.4.2 — 2026-09-23
 
 - **Install with apt or dnf.** Bashou now has its own signed repositories for Debian, Ubuntu, Rocky,

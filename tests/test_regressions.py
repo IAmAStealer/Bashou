@@ -190,6 +190,27 @@ class BubbleTest(TempState):
         self.run_commands(2)
         self.assertEqual(self.pet.bubble[0], "second")
 
+    def test_running_the_command_closes_the_bubble(self):
+        """`→ bashou evolve` stayed on screen after you had evolved."""
+        self.pet.notes = ["Ready to grow → bashou evolve"]
+        self.pet.update_bubble()
+        with open(self.pet.events, "a") as f:
+            f.write("0\t    1  bashou fight\n")          # another bashou command: it stays
+        self.pet.read_events()
+        self.assertIsNotNone(self.pet.bubble)
+        with open(self.pet.events, "a") as f:
+            f.write("0\t    2  bashou evolve\n")
+        self.pet.read_events()
+        self.assertIsNone(self.pet.bubble)
+
+    def test_bubble_leaves_after_three_minutes(self):
+        """A bubble stayed for hours in a terminal where nobody typed."""
+        self.pet.notes = ["hello"]
+        self.pet.update_bubble()
+        self.pet.bubble_at -= 3 * 60_000 + 1
+        self.pet.update_bubble()
+        self.assertIsNone(self.pet.bubble)
+
 
 class CodeUpdateTest(TempState):
     def test_pet_notices_new_code(self):

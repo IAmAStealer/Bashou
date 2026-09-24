@@ -7,6 +7,7 @@ import datetime
 import json
 import os
 import random
+import re
 import signal
 import sys
 import threading
@@ -33,6 +34,16 @@ def now_ms():
     return int(time.time() * 1000)
 
 
+BUBBLE_MS = 3 * 60_000     # a bubble never stays longer, however few commands you run
+
+
+def answers(text, command):
+    """The bubble says `→ bashou fight`, `bashou evolve`…: running that command is its answer."""
+    words = command.split()
+    return (len(words) > 1 and os.path.basename(words[0]) == "bashou"
+            and re.search(rf"\bbashou {re.escape(words[1])}\b", text) is not None)
+
+
 class Companion:
     def __init__(self, shell):
         self.shell = shell
@@ -44,6 +55,7 @@ class Companion:
         self.code = code_version()
         self.notes = []            # notifications waiting for the bubble
         self.bubble = None         # (text, commands run since shown, commands it stays)
+        self.bubble_at = now_ms()  # when it was shown
         self.drawn = None          # (erase sequence of what is on screen)
         self.last_key = None
         self.tick = 0
@@ -102,7 +114,9 @@ class Companion:
         now = datetime.datetime.now()
         with state.locked() as s:
             for status, command in records:
-                if self.bubble:
+                if self.bubble and answers(self.bubble[0], command):
+                    self.bubble = None
+                elif self.bubble:
                     self.bubble = (self.bubble[0], self.bubble[1] + 1, self.bubble[2])
                 self.notes += progress.record(s, status, command, now.date().isoformat(), now.hour)
                 if status == 127:
@@ -243,13 +257,15 @@ class Companion:
         return "".join(out), erase
 
     def update_bubble(self):
-        """A bubble stays for a few commands (`bashou config bubble`), 2 at most when another note waits."""
+        """A bubble stays for a few commands (`bashou config bubble`), 2 at most when another note waits,
+        and 3 minutes at most."""
         if self.bubble:
             text, shown, stays = self.bubble
-            if shown >= (min(stays, 2) if self.notes else stays):
+            if shown >= (min(stays, 2) if self.notes else stays) or now_ms() - self.bubble_at > BUBBLE_MS:
                 self.bubble = None
         if not self.bubble and self.notes:
             self.bubble = (self.notes.pop(0), 0, random.randint(*state.setting(state.load(), "bubble")))
+            self.bubble_at = now_ms()
 
     def fit(self, cols):
         """The large sprite when asked for and the terminal has room for it, else the small one."""
@@ -320,7 +336,7 @@ class Companion:
             return False
         return newest != self.code and time.time() - newest > 2
 
-    HANDOVER = ("offset", "bubble", "notes", "talk_at", "warn_at", "threat", "threat_text", "threat_id",
+    HANDOVER = ("offset", "bubble", "bubble_at", "notes", "talk_at", "warn_at", "threat", "threat_text", "threat_id",
                 "threat_until", "fights_won")
 
     def restart(self):

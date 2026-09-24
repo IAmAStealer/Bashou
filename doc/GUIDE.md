@@ -120,7 +120,7 @@ bashou config quiet 120         # and only after 2 minutes without typing
 
 | Setting | Default | What it does |
 |---|---|---|
-| `bubble` | `5-10` | How many commands a speech bubble (tips, hints, achievements) stays on screen. When another message is waiting, the current one closes after 2 commands. |
+| `bubble` | `5-10` | How many commands a speech bubble (tips, hints, achievements) stays on screen. When another message is waiting, the current one closes after 2 commands. It also closes after 3 minutes, or as soon as you run the `bashou` command it suggests. |
 | `size` | `small` | `large` shows big pixel art for the pets that have some (for now the Tarantula), when the terminal is wide enough. |
 | `talk` | `10-20` | Minutes between the things your pet says on its own (tips, hints, invitations). `off` keeps it quiet; what you earn (achievements, evolutions, threats, `command not found`) still shows. |
 | `quiet` | `60` | Seconds without a command or a keypress before it says one: it waits for a pause instead of cutting into your work. |
