@@ -131,8 +131,13 @@ def offer(old_loader, bashrc=None, run=subprocess.run, asked=True):
         print("  " + _("These commands will run, in this order (sudo asks for your password):"))
         for cmd in steps:
             print(f"    $ {shown(cmd)}")
-        print("  " + _("Then in {file}, the line that loads {old} becomes: {new}").format(
-            file=bashrc, old=old_loader, new=setup.line(PACKAGE_LOADER)))
+        try:
+            loads_it = bool(loader_lines(bashrc.read_text(), old_loader))
+        except OSError:
+            loads_it = False
+        if loads_it:
+            print("  " + _("Then in {file}, the line that loads {old} becomes: {new}").format(
+                file=bashrc, old=old_loader, new=setup.line(PACKAGE_LOADER)))
         if asked and not ask(_("Go ahead?")):
             print("  " + _("Nothing changed. Later: bashou update --packages"))
             return 2

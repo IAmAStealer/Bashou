@@ -64,6 +64,11 @@ class RepoSetupTest(unittest.TestCase):
         self.assertEqual(ran[-1], ["sudo", "apt", "update"])                  # install never ran
         self.assertIn("source ~/.bashou/bashou.bash", self.bashrc.read_text())
 
+    def test_no_promise_about_a_bashrc_that_doesnt_load_this_copy(self):
+        self.bashrc.write_text("alias ll='ls -l'\n")
+        code, ran, out = self.offer({"debian"}, answer="")
+        self.assertNotIn("becomes", out)
+
     def test_other_systems_keep_git(self):
         code, ran, out = self.offer({"arch"})
         self.assertEqual((code, ran), (1, []))
