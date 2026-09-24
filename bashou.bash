@@ -8,7 +8,13 @@ _bashou_data=${BASHOU_DATA:-$HOME/.local/share/bashou}
 _bashou_events=$_bashou_data/events.$$
 _bashou_erase=${BASHOU_CACHE:-$HOME/.cache/bashou}/erase.$$
 _bashou_height=${BASHOU_CACHE:-$HOME/.cache/bashou}/height.$$
-mkdir -p "$_bashou_data"
+# The events file holds what you type, for your pet: yours only, whatever the umask (older versions
+# made the folders 755, readable by other accounts where home folders are).
+(umask 077; mkdir -p "$_bashou_data" "${_bashou_erase%/*}"; : >> "$_bashou_events") 2>/dev/null
+for _bashou_dir in "$_bashou_data" "${_bashou_erase%/*}"; do
+  [[ ${_bashou_dir##*/} == bashou && -O $_bashou_dir ]] && chmod 700 "$_bashou_dir" 2>/dev/null
+done
+unset _bashou_dir
 _bashou_restarts=0
 
 # Log each new history entry as "status<TAB>history line". No fork: builtins only.

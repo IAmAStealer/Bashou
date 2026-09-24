@@ -23,6 +23,9 @@ Every release has a section here, written for players. CI refuses to tag a relea
   Ferret), read a password store (Vault Vole) and take a password out of a script with
   `$(pass show …)` (Cleartext Cricket). The fights bring their own practice key and store: your keys
   and passwords are never touched. In fights, gpg now asks for passphrases right in the terminal.
+- **What you type stays private.** Bashou's folders were readable by other accounts on systems where
+  home folders are (Debian's default): they are now yours only, and existing ones are tightened. Events
+  left by terminals that closed badly are removed. `.github/SECURITY.md` lists everything Bashou writes.
 - Pets and fights no longer slow down when many tools are missing (on WSL, looking for a missing
   command searched every Windows folder).
 

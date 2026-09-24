@@ -190,7 +190,7 @@ def remember(text):
     found = re.search(r"`([^`]+)`", text or "")
     if found and not found.group(1).startswith("bashou learn"):
         try:
-            state.CACHE.mkdir(parents=True, exist_ok=True)
+            state.private(state.CACHE)
             (state.CACHE / "learn").write_text(found.group(1).replace(" ⏎ ", "\n"))
         except OSError:
             pass

@@ -220,6 +220,11 @@ class ShellTest(unittest.TestCase):
                 os.close(sh.fd)
                 self.assertEqual(os.waitstatus_to_exitcode(status), code, last)
 
+    def test_what_you_type_is_private(self):
+        """The events file holds every command: 600 in a 700 folder, whatever the umask."""
+        events = self.sh.data / f"events.{self.sh.value('$')}"
+        self.assertEqual(events.stat().st_mode & 0o777, 0o600)
+
     def test_exit_cleans_up(self):
         """On exit the pet stops and removes its events/erase files."""
         pet = int(self.sh.value("BASHOU_PID"))

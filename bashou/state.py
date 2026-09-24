@@ -207,8 +207,20 @@ def migrate_ladder(state):
             e["from"], e["to"] = new(e["from"]), new(e["to"])
 
 
+def private(folder):
+    """Bashou's folders hold what you type: yours only. Older versions made them 755; tighten those
+    (only folders named bashou: a BASHOU_DATA pointing elsewhere is left as it is)."""
+    folder.mkdir(parents=True, exist_ok=True, mode=0o700)
+    if folder.name == "bashou":
+        try:
+            if folder.stat().st_mode & 0o077:
+                folder.chmod(0o700)
+        except OSError:
+            pass
+
+
 def save(state):
-    STATE.parent.mkdir(parents=True, exist_ok=True)
+    private(STATE.parent)
     tmp = STATE.with_suffix(".tmp")
     text = json.dumps(state, indent=1)
     tmp.write_text(text)
@@ -236,7 +248,7 @@ def keep_old_format():
 @contextmanager
 def locked():
     """Load the state under an exclusive lock and save it on exit."""
-    DATA.mkdir(parents=True, exist_ok=True)
+    private(DATA)
     with open(DATA / ".lock", "w") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
         keep_old_format()

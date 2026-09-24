@@ -548,3 +548,33 @@ class WhichCacheTest(unittest.TestCase):
         with mock.patch("shutil.which", return_value="/usr/bin/nothere"):
             self.assertTrue(which.installed("nothere"))          # installed since: noticed
         which.installed.cache_clear()
+
+
+class PrivacyTest(unittest.TestCase):
+    """What you type is logged for your pet: other accounts must not read it (security review, 2026-09-24)."""
+
+    def test_folders_are_made_private_and_old_ones_tightened(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            old = Path(tmp) / "old" / "bashou"
+            old.mkdir(parents=True, mode=0o755)
+            os.chmod(old, 0o755)                                  # as older versions left it
+            state.private(old)
+            self.assertEqual(old.stat().st_mode & 0o777, 0o700)
+            new = Path(tmp) / "new" / "bashou"
+            state.private(new)
+            self.assertEqual(new.stat().st_mode & 0o777, 0o700)
+            elsewhere = Path(tmp) / "shared"
+            elsewhere.mkdir(mode=0o755)
+            os.chmod(elsewhere, 0o755)
+            state.private(elsewhere)                              # a BASHOU_DATA of the user's choice: untouched
+            self.assertEqual(elsewhere.stat().st_mode & 0o777, 0o755)
+
+    def test_events_of_dead_terminals_are_removed(self):
+        from bashou import companion
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(state, "DATA", Path(tmp)):
+            dead = subprocess.Popen(["true"])
+            dead.wait()
+            for name in (f"events.{os.getpid()}", f"events.{dead.pid}", "events.notes"):
+                (Path(tmp) / name).write_text("0\t    1  mysql -psecret\n")
+            companion.sweep_events()
+            self.assertEqual(sorted(p.name for p in Path(tmp).iterdir()), sorted([f"events.{os.getpid()}", "events.notes"]))

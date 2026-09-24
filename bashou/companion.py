@@ -368,7 +368,8 @@ class Companion:
             self.bubble = tuple(self.bubble)
 
     def run(self):
-        state.CACHE.mkdir(parents=True, exist_ok=True)
+        state.private(state.CACHE)
+        sweep_events()
         errors = 0
         try:
             while self.alive():
@@ -389,6 +390,21 @@ class Companion:
                     f.unlink()
                 except FileNotFoundError:
                     pass
+
+def sweep_events():
+    """Event files of terminals that are gone (a crash, a kill -9) still hold what was typed there:
+    remove them. Each pet removes its own when its terminal closes."""
+    for f in state.DATA.glob("events.*"):
+        try:
+            pid = int(f.suffix[1:])
+            os.kill(pid, 0)
+        except ValueError:
+            continue
+        except ProcessLookupError:
+            f.unlink(missing_ok=True)
+        except PermissionError:
+            pass                                        # alive, someone else's: not ours to touch
+
 
 def log_error():
     """Append the traceback to ~/.cache/bashou/errors.log (kept small)."""
