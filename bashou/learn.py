@@ -30,6 +30,7 @@ COMMANDS = {
     "find": "looks for files and folders, going down every folder",
     "free": "shows the memory in use and free",
     "gpg": "GnuPG: encrypts, decrypts and signs files, and checks signatures",
+    "shellcheck": "reads a shell script and points out bugs and risky lines, with a fix for each",
     "gpgv": "checks a signature against a keyring you choose, without touching yours",
     "pass": "the Unix password store: one file per password, encrypted with gpg",
     "sqlite3": "opens an SQLite database (the whole database is one file) and runs SQL on it",
@@ -74,7 +75,7 @@ COMMANDS = {
 
 FLAGS = {
     "awk": {"-F": "the column separator (here: {value})"},
-    "bash": {"-c": "run this text as a command: {value}"},
+    "bash": {"-c": "run this text as a command: {value}", "-x": "trace: print each command before running it"},
     "chmod": {},
     "cp": {"-r": "recursive: copy the folder and everything in it"},
     "curl": {"-u": "the user:password to log in with", "-f": "fail on HTTP errors instead of saving the error page", "-s": "silent: no progress bar",
@@ -132,7 +133,7 @@ FLAG_VALUE = {"awk": {"F"}, "bash": {"c"}, "curl": {"o", "d"}, "find": {"mtime",
 
 # Words right after a command that pick what it does (git switch, systemctl status…).
 SUBCOMMANDS = {
-    "bashou": {"fight": "enter the arena"},
+    "bashou": {"fight": "enter the arena", "learn": "take a command apart and explain each piece"},
     "pass": {"init": "create the store, encrypted for your gpg key", "show": "print a password",
              "insert": "type a new password in", "generate": "make a new random password and store it",
              "ls": "list the stored names", "rm": "remove a password", "edit": "change a password"},

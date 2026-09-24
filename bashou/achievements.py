@@ -271,6 +271,14 @@ ALL = [
     A("watcher", "meerkat", "Watcher", "rerun a command every few seconds with `watch -n`",
       cmd=lambda c: c.flag("watch", "n", ("--interval",)), needs=("watch",)),
 
+    # Duck: debugging, like the rubber duck you explain your code to (owner: "ducks are awesome")
+    A("quack", "duck", "Quack", "explain a command to your duck: `bashou learn <command>`", cmd=lambda c: c.sub("bashou", "learn")),
+    A("xray", "duck", "X-ray", "watch a script run line by line with `bash -x`", cmd=lambda c: c.flag("bash", "x")),
+    A("exit_code", "duck", "Exit code", "check how the last command ended: `echo $?`",
+      cmd=lambda c: "$?" in c.line and bool(c.args("echo", "printf"))),
+    A("linter", "duck", "Linter", "find bugs before they bite with `shellcheck`", cmd=lambda c: bool(c.args("shellcheck")),
+      needs=("shellcheck",)),
+
     # Snow leopard: secrets (gpg, pass). Never hidden when gpg or pass is missing: the pets invite you to install them.
     A("sealed", "leopard", "Sealed", "encrypt a file with `gpg -c` (a passphrase) or `gpg -e` (a key)",
       cmd=lambda c: c.flag(("gpg", "gpg2"), "ce", ("--symmetric", "--encrypt"))),
@@ -332,7 +340,7 @@ BY_ID = {a.id: a for a in ALL}
 # How hard an achievement is to learn: hints suggest the easiest ones left first.
 EASY = {"builder", "copycat", "historian", "loop", "ranges", "capture", "tally", "unique", "plumber", "inspector", "checksum",
         "tight", "digger", "census", "global", "stasher", "peeker", "headers", "octal", "status",
-        "pods", "disk", "sealed"}
+        "pods", "disk", "sealed", "quack", "exit_code"}
 HARD = {"nested", "substitute", "pruner", "scribe", "accountant", "parallel", "null", "mapper", "follow",
         "summary", "filter", "bisector", "tunneler", "reload", "diver", "tracer", "keymaker", "keeper"}
 

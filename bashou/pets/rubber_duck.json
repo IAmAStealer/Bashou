@@ -1,0 +1,47 @@
+{
+ "name": "Rubber duck",
+ "palette": {
+  "k": "#6b5520",
+  "y": "#ffd83a",
+  "Y": "#f2b820",
+  "o": "#f07a1a",
+  "s": "#fffbe6",
+  "m": "#141414"
+ },
+ "base": [
+  "...kkkk..........",
+  "..kyysyk.........",
+  ".kyymyyyk........",
+  "kooyyyyYk........",
+  "kookyyyk.........",
+  ".kk.kyyk.........",
+  "...kyyykkkkkkkk..",
+  "..kyyyyyyyyyyyyk.",
+  "..kyyyyyYYYYyyyk.",
+  "...kyyyyYYYYyyk..",
+  "....kkyyyyyykk...",
+  ".....kok..kok...."
+ ],
+ "poses": {
+  "inhale": {
+   "7": ".kyyyyyyyyyyyyyyk"
+  },
+  "closed": {
+   "2": "----Y------------"
+  },
+  "left": {
+   "2": "---my------------"
+  },
+  "right": {
+   "2": "----ym-----------"
+  },
+  "fidget": {
+   "6": "--------------kk-",
+   "7": "---------------kk"
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

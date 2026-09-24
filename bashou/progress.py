@@ -65,6 +65,8 @@ STATE_PETS = {
     "sofa": (lambda s: s.get("fights_lost", 0) >= 1, "lose (or flee) a fight: take a seat"),
     "dragon": (lambda s: s["fights_won"] >= 1, "win a fight: bashou fight"),
     "cat": (lambda s: bool(achievements.secrets(s)), "???"),          # a secret finds you
+    "duck": (lambda s: bool({a.id for a in achievements.family("duck")} & set(s["achievements"])),
+             "debug like a rubber duck: bashou learn <command>, bash -x or echo $?"),
 }
 
 

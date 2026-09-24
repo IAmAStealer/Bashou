@@ -112,6 +112,17 @@ class ProgressTest(unittest.TestCase):
         self.run_cmd('curl -u "me:$(pass show web/api)" https://example.org')
         self.assertIn("keeper", self.s["achievements"])
 
+    def test_debugging_brings_the_duck(self):
+        """Owner: "ducks are awesome". Rubber-duck debugging: explain, trace, check the exit code."""
+        self.run_cmd("bash script.sh")
+        self.assertNotIn("duck", self.s["pets"])
+        notes = self.run_cmd("bash -x script.sh")
+        self.assertIn("xray", self.s["achievements"])
+        self.assertIn("duck", self.s["pets"])
+        self.assertTrue(any("Duckling" in n for n in notes), notes)
+        self.run_cmd("ls /nope; echo $?")
+        self.assertIn("exit_code", self.s["achievements"])
+
     def test_new_rules_need_the_right_arguments(self):
         for line in ("git log --oneline", "git checkout main", "tar -xf a.tgz", "tar -cf a.tar d",
                      "curl https://x", "ssh host", "dig example.com", "chmod +x f", "chown root f",

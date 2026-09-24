@@ -17,7 +17,7 @@ tokens spent to learn what a command does.
   With no command, it explains the last one your pet suggested.
 - **Your pet gives tips** as you go (Ctrl+R, `cd -`, `du -sh *`…) and notices the tools you haven't
   tried yet.
-- **104 achievements** reward real skills: a pipe of 3 commands, `find -exec`, `sed -i`, `git bisect`,
+- **108 achievements** reward real skills: a pipe of 3 commands, `find -exec`, `sed -i`, `git bisect`,
   `tar -tf`…
 - **Threats** show up now and then. `bashou fight` opens a sandbox shell where you beat them with the
   right tool: `grep` against the Log Hydra, `awk` against the Ledger Golem. A successful command with
@@ -46,7 +46,7 @@ shell below](doc/img/duel.svg)
 Choose a starter: Stardust, Seedling or Pebble. It grows up to level 20 and changes shape along the
 way. What it becomes is for you to find out.
 
-26 more pets hide in your terminal. Each one comes from what it stands for: a Droplet after your
+27 more pets hide in your terminal. Each one comes from what it stands for: a Droplet after your
 first 10 commands (it keeps changing shape as you type), a night coder for your first programs, a
 mushroom for your own scripts, others for a new tool used often enough, a long pipe, a fight lost or
 won, a walk in the adventure… The swap board shows only their silhouette until you meet them.

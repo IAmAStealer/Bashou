@@ -12,6 +12,9 @@ Every release has a section here, written for players. CI refuses to tag a relea
   joins you, then grows into a Snow leopard and a Mountain ghost as you encrypt files, make a key, start a
   password store and hand passwords to commands with `$(pass show …)`. No gpg or pass yet? Your pet tells
   you how to install them.
+- **A new pet: the Duck.** Debug like a programmer with a rubber duck: explain a command with
+  `bashou learn`, trace a script with `bash -x` or check `echo $?`, and a Duckling waddles in. It grows
+  into a Duck, then a Rubber duck, as you keep debugging (and with `shellcheck`, if you have it).
 - **Learn SQL with SQLite.** A new skill and adventure path: the Sage Owl explains databases, SELECT,
   JOIN, CREATE TABLE, INSERT, UPDATE (always with a WHERE) and INSERT … ON CONFLICT DO UPDATE, with a
   chest to open and 22 questions. Six new threats hand you a database to query or fix, from the Query

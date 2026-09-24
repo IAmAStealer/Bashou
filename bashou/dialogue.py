@@ -17,7 +17,7 @@ VOICE = {
     "sofa": "*creak*", "octopus": "Glub!", "dragon": "Rawr!", "fox": "*sniff*", "owl": "Hoo.",
     "mole": "*dig dig*", "snake": "Sss…", "ghost": "Boo~", "spider": "*tik-tik*", "ant": "*click*",
     "axolotl": "*wiggle*", "beaver": "*chomp*", "squirrel": "*chitter*", "pigeon": "Coo.", "hedgehog": "*huff*",
-    "bee": "Bzz.", "whale": "*whoosh*", "meerkat": "*peek*", "leopard": "*soft paws*", "cat": "*purr*",
+    "bee": "Bzz.", "whale": "*whoosh*", "meerkat": "*peek*", "leopard": "*soft paws*", "duck": "Quack.", "cat": "*purr*",
 }
 
 TIPS = {
@@ -85,6 +85,9 @@ TIPS = {
               "kubectl logs -f pod : logs, live.", "kubectl config get-contexts : which cluster am I on?"],
     "meerkat": ["df -h : how full are the disks?", "du -sh * | sort -h : biggest last.",
                 "free -h : memory at a glance.", "watch -n 2 cmd : rerun it every 2 s."],
+    "duck": ["Stuck? Explain your script to me, line by line. It often fixes itself.",
+             "bash -x script.sh : every command, printed as it runs.", "echo $? : 0 means the last command worked.",
+             "`bashou learn` takes a command apart, piece by piece."],
     "leopard": ["gpg -c notes.txt : locks the file with a passphrase.", "gpg -d notes.txt.gpg : opens it again.",
                 "pass show db/prod : a password for a script, never written in it.",
                 "pass generate site 24 : a strong password you'll never have to type."],
@@ -130,6 +133,8 @@ EXAMPLES = {
     "pods": "kubectl get pods -A", "describer": "kubectl describe pod <name>", "tailer": "kubectl logs -f <pod>",
     "diver": "kubectl exec -it <pod> -- sh", "disk": "df -h", "sizer": "du -sh *", "memory": "free -h",
     "watcher": "watch -n 2 df -h",
+    "quack": "bashou learn", "xray": "bash -x deploy.sh", "exit_code": "ls /nope; echo $?",
+    "linter": "shellcheck deploy.sh",
     "sealed": "gpg -c notes.txt", "keymaker": "gpg --full-generate-key", "vault": "pass init <your key id>",
     "generator": "pass generate web/forum 24", "keeper": "curl -u \"admin:$(pass show web/admin)\" https://example.org",
 }
@@ -163,6 +168,7 @@ PERSONAL = {
     "pigeon": ["I always find my way home. Even through a tunnel."], "hedgehog": ["Not everyone gets to touch my files."],
     "bee": ["Every service in the hive has its job."], "whale": ["So many containers on my back."],
     "meerkat": ["I keep watch. Disks, memory, all of it."],
+    "duck": ["Explain it to me. Out loud. I'll wait."],
     "leopard": ["Nobody sees me in the snow. Nobody sees your passwords either."],
     "cat": ["I saw what you ran. Your secret is safe with me.", "Curiosity, with permission.",
             "Nice tools. Mind the scope."],
