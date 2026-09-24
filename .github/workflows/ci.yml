@@ -72,8 +72,8 @@ jobs:
           su - tester -c "cd ~/bashou && python3 -m unittest -q"
       - name: The .rpm installs and runs
         run: |
-          python3 tools/package.py build v0.0.0 dist
-          dnf install -y -q dist/*.rpm
+          su - tester -c "cd ~/bashou && python3 tools/package.py build v0.0.0 dist"   # git refuses root in the runner's checkout
+          dnf install -y -q /home/tester/bashou/dist/*.rpm
           su - tester -c "bashou setup && bashou version"
           dnf remove -y -q bashou
 
