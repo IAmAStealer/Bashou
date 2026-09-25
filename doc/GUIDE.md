@@ -162,9 +162,12 @@ gh attestation verify bashou_0.6.2_all.deb --repo IAmAStealer/Bashou
 
 To release, first add a `## v1.2.3 — YYYY-MM-DD` section to `CHANGELOG.md` (written for players:
 it becomes the release notes), then push a commit to `main` whose message has a line
-`release: v1.2.3`. Once the tests and security checks pass, CI creates the `v1.2.3` tag and the
+`release: v1.2.3`. Once the tests and security checks pass, CI creates the `v1.2.3` tag and a draft
 GitHub release; without a changelog section it stops before tagging (*Actions → Release → Run
-workflow* does the same by hand). Pets only offer these tags, never a plain commit on `main`.
+workflow* does the same by hand). The packages job then builds the `.deb` and `.rpm`, publishes the
+apt and dnf repositories, attaches the files to the draft and publishes it. Published releases are
+immutable (a repository setting), and release tags can't be moved or deleted (a ruleset on `v*.*.*`).
+Pets only offer these tags, never a plain commit on `main`.
 
 ## Contributing
 

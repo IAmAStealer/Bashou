@@ -115,7 +115,8 @@ jobs:
           python3 tools/changelog.py "$version" > notes.md || { echo "::error title=No changelog::Add '## $version' to CHANGELOG.md"; exit 1; }
           git tag "$version"
           git push origin "$version"
-          gh release create "$version" --title "Bashou $version" --notes-file notes.md
+          # A draft: releases are immutable once published, so the packages job attaches its files, then publishes.
+          gh release create "$version" --draft --title "Bashou $version" --notes-file notes.md
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
   # The new release in the apt and dnf repositories.
