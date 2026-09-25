@@ -413,7 +413,7 @@
    "Le DNS est cassé"
   ],
   "answer": 0,
-  "explain": "Un RST en réponse à un SYN, c'est le « Connection refused » vu dans la capture : la machine est là, le port est fermé. Un SYN répété sans aucune réponse ferait plutôt penser à un pare-feu ou à une machine éteinte. tcpdump -nr capture.pcap montre les drapeaux : [S] SYN, [S.] SYN-ACK, [.] ACK, [R.] RST."
+  "explain": "Un RST en réponse à un SYN, c'est le « Connection refused » vu dans la capture : la machine est là, le port est fermé. Un SYN répété sans aucune réponse ferait plutôt penser à un pare-feu ou à une machine éteinte. tcpdump -nnr capture.pcap montre les drapeaux : [S] SYN, [S.] SYN-ACK, [.] ACK, [R.] RST."
  },
  {
   "id": "network-3-08",

@@ -413,7 +413,7 @@
    "DNS is broken"
   ],
   "answer": 0,
-  "explain": "A RST in answer to a SYN is the \"Connection refused\" of the capture: the machine is there, the port is closed. A SYN repeated with no answer at all would point to a firewall or a dead host. tcpdump -nr capture.pcap shows the flags: [S] SYN, [S.] SYN-ACK, [.] ACK, [R.] RST."
+  "explain": "A RST in answer to a SYN is the \"Connection refused\" of the capture: the machine is there, the port is closed. A SYN repeated with no answer at all would point to a firewall or a dead host. tcpdump -nnr capture.pcap shows the flags: [S] SYN, [S.] SYN-ACK, [.] ACK, [R.] RST."
  },
  {
   "id": "network-3-08",

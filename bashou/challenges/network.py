@@ -330,10 +330,26 @@ def same_name(work, meta, value):
     return value.strip().rstrip(".").lower() == meta["answer"]
 
 
+SERVICES = Path("/etc/services")
+
+
+def service_port(name, services=None):
+    """The port /etc/services gives a name (tcpdump -n prints 10.0.0.1.redis), or None."""
+    try:
+        for line in (services or SERVICES).read_text(errors="replace").splitlines():
+            fields = line.split("#")[0].split()
+            if len(fields) >= 2 and fields[1].endswith("/tcp") and name in [fields[0]] + fields[2:]:
+                return fields[1].split("/")[0]
+    except OSError:
+        pass
+    return None
+
+
 def port_answer(work, meta, value):
-    """A port, alone or at the end of an address (10.0.0.5.51522, 10.0.0.5:51522)."""
+    """A port, alone or at the end of an address (10.0.0.5.51522, 10.0.0.5:51522), or its service name:
+    without -nn, tcpdump shows well-known ports by name (10.0.0.1.redis)."""
     last = value.strip().replace(":", ".").split(".")[-1]
-    return last == str(meta["answer"])
+    return last == str(meta["answer"]) or (not last.isdigit() and service_port(last) == str(meta["answer"]))
 
 
 # --- the fights -------------------------------------------------------------------------------------
@@ -390,24 +406,24 @@ ALL = [
               task="The Handshake Heron swallowed a connection in capture.pcap: one client sent SYN, "
                    "again and again, and never got an answer.\nWhich client port? Answer with: answer <port>",
               help="Here, find how to read a capture file instead of listening on the network.",
-              hints=["tcpdump -nr capture.pcap reads the file (no root needed). Flags: [S] SYN, [S.] SYN-ACK, "
+              hints=["tcpdump -nnr capture.pcap reads the file (no root needed); -nn keeps addresses and ports as numbers. Flags: [S] SYN, [S.] SYN-ACK, "
                      "[.] ACK. A filter keeps only some packets: 'tcp[tcpflags] == tcp-syn'.",
-                     "Try: tcpdump -nr capture.pcap 'tcp[tcpflags] == tcp-syn' | awk '{{print $3}}' | sort | uniq -c"],
+                     "Try: tcpdump -nnr capture.pcap 'tcp[tcpflags] == tcp-syn' | awk '{{print $3}}' | sort | uniq -c"],
               setup=heron_setup, verify=port_answer, **TCPDUMP, **NET),
     Challenge(level=2, id="refused_revenant", threat="Refused Revenant",
               task="The Refused Revenant knocked on six ports in capture.pcap. One refused at once (RST), "
                    "one never answered, the others opened.\nWhich server port refused? Answer with: answer <port>",
               hints=["A refused connection is a SYN answered by a RST: tcpdump shows [R.]. Silence is different: "
                      "that's a firewall dropping, or a machine that's down.",
-                     "Try: tcpdump -nr capture.pcap 'tcp[tcpflags] & tcp-rst != 0'"],
+                     "Try: tcpdump -nnr capture.pcap 'tcp[tcpflags] & tcp-rst != 0'"],
               setup=revenant_setup, verify=port_answer, after=("handshake_heron",), **TCPDUMP, **NET),
     Challenge(level=3, id="nxdomain_nixie", threat="NXDomain Nixie",
               task="The NXDomain Nixie hides in dns.pcap. One name doesn't exist (NXDOMAIN), another one "
                    "failed (SERVFAIL).\nWhich name doesn't exist? Answer with: answer <name>",
               hints=["Each DNS query and its answer share an id number: tcpdump prints it first, with + after a "
                      "query. Find the NXDomain answer's id, then the query with that id.",
-                     "Try: id=$(tcpdump -nr dns.pcap 2>/dev/null | awk '/NXDomain/ {{print $6}}'); "
-                     "tcpdump -nr dns.pcap 2>/dev/null | grep \" $id+ \""],
+                     "Try: id=$(tcpdump -nnr dns.pcap 2>/dev/null | awk '/NXDomain/ {{print $6}}'); "
+                     "tcpdump -nnr dns.pcap 2>/dev/null | grep \" $id+ \""],
               setup=dns_setup, verify=same_name, after=("refused_revenant",), **TCPDUMP, **NET),
     Challenge(level=3, id="established_ettin", tools=("ss", "netstat"), threat="Established Ettin",
               task="The Established Ettin holds connections open to 127.0.0.1:{port}.\n"

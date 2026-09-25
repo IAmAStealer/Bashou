@@ -75,7 +75,7 @@ class PackagedInstallTest(unittest.TestCase):
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
             self.assertEqual(update.run(), 0)                  # no terminal here: shown, not run
-        self.assertRegex(out.getvalue(), r"apt install --only-upgrade bashou|dnf upgrade bashou")
+        self.assertRegex(out.getvalue(), r"apt install --only-upgrade bashou|dnf upgrade --refresh bashou")
 
     def test_dnf_reads_the_repository_again(self):
         """0.5.0: players were told a new version was out, and `dnf upgrade bashou` said "Nothing to do"

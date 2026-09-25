@@ -71,3 +71,21 @@ class CaptureTest(unittest.TestCase):
         self.assertEqual(network.checksum(ip), 0)
         seg = frame[34:]
         self.assertEqual(network.checksum(network.pseudo("10.0.0.5", "10.0.0.1", 6, seg) + seg), 0)
+
+
+class AnswerTest(unittest.TestCase):
+    def test_a_port_by_its_service_name(self):
+        """Rocky's tcpdump -n printed 10.0.0.1.redis: a player who answers with what they see must win."""
+        with tempfile.TemporaryDirectory() as tmp:
+            services = Path(tmp) / "services"
+            services.write_text("# comment\nhttp            80/tcp          www    # WorldWideWeb\n"
+                                "redis           6379/tcp\nredis           6379/udp\n")
+            old, network.SERVICES = network.SERVICES, services
+            try:
+                for value, port in (("10.0.0.1.redis", 6379), ("http", 80), ("www", 80), ("10.0.0.1.6379", 6379),
+                                    ("10.0.0.1:6379", 6379)):
+                    self.assertTrue(network.port_answer(None, {"answer": port}, value), value)
+                self.assertFalse(network.port_answer(None, {"answer": 22}, "10.0.0.1.redis"))
+                self.assertFalse(network.port_answer(None, {"answer": 22}, "nope"))
+            finally:
+                network.SERVICES = old
