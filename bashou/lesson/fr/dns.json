@@ -1,0 +1,84 @@
+{
+ "title": "DNS : d'un nom à une adresse",
+ "summary": "Ce qui se passe entre le nom que tu tapes et l'adresse où tu te connectes : la chaîne de serveurs, les enregistrements, et pourquoi les changements prennent du temps.",
+ "pages": [
+  {
+   "scheme": [
+    " ton programme",
+    "   │ « example.org ? »",
+    "   ▼",
+    " /etc/hosts        trouvé ? fini",
+    "   │ non",
+    "   ▼",
+    " le résolveur      dans son cache ? fini"
+   ],
+   "point": 3,
+   "mark": [
+    "/etc/hosts"
+   ],
+   "text": [
+    "Un programme demande une adresse à la bibliothèque C. Elle regarde d'abord /etc/hosts, puis interroge un résolveur DNS : celui de ta box, de ton fournisseur, ou un que tu as choisi.",
+    "",
+    "- L'ordre est fixé par la ligne hosts: de /etc/nsswitch.conf (en général files, puis dns)."
+   ]
+  },
+  {
+   "scheme": [
+    " le résolveur",
+    "   │ 1 ──▶ serveur racine  « demande aux .org »",
+    "   │ 2 ──▶ serveur .org    « va voir example.org »",
+    "   │ 3 ──▶ example.org     « 104.20.26.136 »",
+    "   ▼",
+    " ton programme             104.20.26.136"
+   ],
+   "point": 3,
+   "mark": [
+    "example.org"
+   ],
+   "text": [
+    "Quand le résolveur ne sait pas, il descend depuis la racine. Chaque serveur ne connaît que l'étape suivante.",
+    "",
+    "- Le dernier fait autorité : il détient les enregistrements du domaine.",
+    "- Le résolveur garde chaque réponse en cache : la fois suivante, pas de descente.",
+    "$ dig +trace example.org"
+   ]
+  },
+  {
+   "scheme": [
+    " A      example.org   104.20.26.136    IPv4",
+    " AAAA   example.org   2606:4700:…      IPv6",
+    " CNAME  www           example.org      alias",
+    " MX     example.org   mail.example.org mail",
+    " TXT    example.org   \"v=spf1 …\"       texte",
+    " PTR    1.1.1.1       one.one.one.one  inverse"
+   ],
+   "point": 2,
+   "mark": [
+    "CNAME"
+   ],
+   "text": [
+    "Un domaine contient des enregistrements de différents types.",
+    "",
+    "- Un CNAME dit : ce nom est un autre nom, demande celui-là.",
+    "- PTR va dans l'autre sens, d'une adresse vers un nom (dig -x)."
+   ]
+  },
+  {
+   "scheme": [
+    " example.org.  3600  IN  A  104.20.26.136",
+    "               └┬─┘",
+    "   garder cette réponse 3600 s (1 heure)"
+   ],
+   "point": 1,
+   "mark": [
+    "3600"
+   ],
+   "text": [
+    "Chaque réponse vient avec un TTL : combien de temps les résolveurs peuvent la garder.",
+    "",
+    "- Change un enregistrement, et les caches gardent l'ancienne réponse jusqu'à expiration de leur copie.",
+    "- Avant un déménagement prévu, baisse le TTL (300) la veille, déménage, puis remonte-le."
+   ]
+  }
+ ]
+}

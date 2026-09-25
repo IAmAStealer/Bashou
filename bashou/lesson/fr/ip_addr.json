@@ -1,0 +1,93 @@
+{
+ "title": "IPv4 : adresses, réseaux, passerelle",
+ "summary": "Ce que veulent dire les quatre nombres d'une adresse, ce que dit /24, et où va un paquet qui quitte ton réseau.",
+ "pages": [
+  {
+   "scheme": [
+    " 192.168.1.20/24",
+    " └────┬─────┘└┬┘",
+    "      │       └─ 24 bits pour le réseau",
+    "      └─ 4 nombres, de 0 à 255 chacun",
+    "",
+    " 192.168.1 . 20",
+    " └───┬───┘   └┘",
+    "  réseau     cette machine"
+   ],
+   "point": 6,
+   "mark": [
+    "réseau",
+    "cette machine"
+   ],
+   "text": [
+    "Une adresse IPv4 fait 32 bits, écrits en 4 nombres. Le /24 qui suit (le préfixe) dit combien de bits nomment le réseau ; le reste numérote les machines dedans.",
+    "",
+    "- Comme une rue et un numéro : 192.168.1 est la rue, 20 la maison.",
+    "- Les machines qui ont la même partie réseau se parlent directement."
+   ]
+  },
+  {
+   "scheme": [
+    " /24   192.168.1.0 - 192.168.1.255       256",
+    " /22   10.4.0.0    - 10.4.3.255        1 024",
+    " /16   172.16.0.0  - 172.16.255.255   65 536",
+    "",
+    " privées : 10.0.0.0/8 · 172.16.0.0/12",
+    "           192.168.0.0/16"
+   ],
+   "point": 1,
+   "mark": [
+    "/22"
+   ],
+   "text": [
+    "Chaque bit de préfixe en moins double le réseau. Un /22, ce sont quatre /24 côte à côte.",
+    "",
+    "- La première adresse nomme le réseau, la dernière sert à la diffusion : un /24 en a 254 pour les machines.",
+    "- Les plages privées sont réutilisées dans des millions de maisons et de bureaux ; internet ne les achemine pas.",
+    "$ python3 -c \"import ipaddress; print(ipaddress.ip_network('10.4.0.0/22')[-1])\""
+   ]
+  },
+  {
+   "scheme": [
+    " $ ip -br addr",
+    " lo      UNKNOWN  127.0.0.1/8 ::1/128",
+    " wlan0   UP       192.168.1.20/24 fe80::…/64",
+    " └─┬─┘   └┘       └──────┬──────┘",
+    "  nom   état      adresse/préfixe"
+   ],
+   "point": 2,
+   "mark": [
+    "wlan0"
+   ],
+   "text": [
+    "ip -br addr affiche une ligne par interface réseau.",
+    "",
+    "- lo est la boucle locale : la machine qui se parle à elle-même.",
+    "- Ta vraie interface, c'est wlan0 (Wi-Fi), eth0 ou enp3s0 (câble)… Les noms varient selon la machine."
+   ]
+  },
+  {
+   "scheme": [
+    " 192.168.1.20 ──▶ 192.168.1.7     même réseau :",
+    "                                  en direct",
+    "",
+    " 192.168.1.20 ──▶ passerelle ──▶ 198.51.100.14",
+    "                  192.168.1.1    autre réseau",
+    "",
+    " $ ip route",
+    " default via 192.168.1.1 dev wlan0"
+   ],
+   "point": 3,
+   "mark": [
+    "passerelle",
+    "default via 192.168.1.1"
+   ],
+   "text": [
+    "Pour une adresse hors de son réseau, la machine confie le paquet à la passerelle (ta box), qui le fait suivre.",
+    "",
+    "- La route par défaut nomme cette passerelle. Pas de route par défaut : pas d'internet.",
+    "- ip route get demande quelle route prendrait une adresse, sans rien envoyer.",
+    "$ ip route get 1.1.1.1"
+   ]
+  }
+ ]
+}

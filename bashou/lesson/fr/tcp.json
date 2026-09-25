@@ -1,0 +1,84 @@
+{
+ "title": "TCP : connexions, ports, états",
+ "summary": "Comment s'ouvre une connexion TCP, ce qu'est un socket, et comment lire les états que montre ss.",
+ "pages": [
+  {
+   "scheme": [
+    " client                    serveur :443",
+    "   │ ──── SYN ────────────▶ │  parlons",
+    "   │ ◀─── SYN-ACK ───────── │  oui, et toi ?",
+    "   │ ──── ACK ────────────▶ │  oui",
+    "   │ ════ données ════════▶ │"
+   ],
+   "point": 2,
+   "mark": [
+    "SYN-ACK"
+   ],
+   "text": [
+    "Avant toute donnée, TCP ouvre une connexion par une poignée de main en trois temps.",
+    "",
+    "- Ensuite TCP numérote chaque octet, renvoie ce qui se perd et livre dans l'ordre.",
+    "- La plupart du web, SSH et les bases de données utilisent TCP. Les requêtes DNS et les appels vidéo utilisent surtout UDP : pas de connexion, pas de renvoi."
+   ]
+  },
+  {
+   "scheme": [
+    " 192.168.1.20:51522  ◀──▶  198.51.100.14:443",
+    " └─────┬────┘ └─┬─┘        └─────┬─────┘ └┬┘",
+    "    client  éphémère        serveur   service",
+    "             port                      port"
+   ],
+   "point": 2,
+   "mark": [
+    "51522",
+    "443"
+   ],
+   "text": [
+    "Une connexion, ce sont quatre nombres : les deux adresses et les deux ports.",
+    "",
+    "- Le port du serveur nomme le service (443, c'est HTTPS).",
+    "- Le port du client est choisi par le noyau, un port éphémère libre : c'est ainsi qu'une machine tient plein de connexions vers le même serveur."
+   ]
+  },
+  {
+   "scheme": [
+    " $ ss -tan",
+    " State      Local Address:Port  Peer Address:Port",
+    " LISTEN     0.0.0.0:22          0.0.0.0:*",
+    " ESTAB      192.168.1.20:51522  198.51.100.14:443",
+    " TIME-WAIT  192.168.1.20:51498  198.51.100.14:443"
+   ],
+   "point": 2,
+   "mark": [
+    "LISTEN",
+    "ESTAB",
+    "TIME-WAIT"
+   ],
+   "text": [
+    "ss liste les sockets : -t TCP, -a tous les états, -n des nombres (ses colonnes Recv-Q et Send-Q sont coupées ici).",
+    "",
+    "- LISTEN : un serveur qui attend. ESTAB : une connexion ouverte. TIME-WAIT : tout juste fermée, gardée un moment.",
+    "- ss -tln ne montre que ceux en écoute ; ajoute -p pour voir le programme."
+   ]
+  },
+  {
+   "scheme": [
+    " SYN ──▶ ◀── RST          « Connection refused »",
+    "                          là, mais rien n'écoute",
+    "",
+    " SYN ──▶ … SYN ──▶ …      « Connection timed out »",
+    "                          pas de réponse"
+   ],
+   "point": 0,
+   "mark": [
+    "RST"
+   ],
+   "text": [
+    "Les deux échecs classiques racontent des histoires différentes.",
+    "",
+    "- Refused revient aussitôt : la machine est là, le port est fermé. Vérifie que le serveur a démarré, et sur quelle adresse.",
+    "- Timed out prend du temps, jusqu'à deux minutes environ : rien ne répond. Regarde les pare-feux et les routes."
+   ]
+  }
+ ]
+}

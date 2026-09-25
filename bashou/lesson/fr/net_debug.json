@@ -1,0 +1,80 @@
+{
+ "title": "Quand le réseau casse : une échelle",
+ "summary": "Monte du câble jusqu'à l'application, une commande par marche, et laisse chaque réponse te dire où chercher.",
+ "pages": [
+  {
+   "scheme": [
+    " 6  l'appli          curl -v https://host",
+    " 5  le port          nc -zv host 443",
+    " 4  le nom           dig host · getent hosts",
+    " 3  la route         ip route get <adresse>",
+    " 2  une adresse      ip -br addr",
+    " 1  le lien          ip -br link  (UP ?)"
+   ],
+   "point": 5,
+   "mark": [
+    "1  le lien"
+   ],
+   "text": [
+    "« Le réseau est en panne » ne dit rien. Monte depuis le bas : chaque marche a besoin de celle du dessous.",
+    "",
+    "- Une commande par marche. La première qui échoue, c'est là qu'il faut chercher."
+   ]
+  },
+  {
+   "scheme": [
+    " 6  l'appli",
+    " 5  le port",
+    " 4  le nom     ✗ ping host :",
+    "                 Name or service not known",
+    " 3  la route   ✔ ping 192.0.2.10 répond",
+    " 2  une adresse ✔",
+    " 1  le lien    ✔"
+   ],
+   "point": 2,
+   "mark": [
+    "✗"
+   ],
+   "text": [
+    "Exemple : l'adresse répond, le nom non. Le réseau va bien, le DNS non.",
+    "",
+    "- Ensuite : resolvectl status, dig host, /etc/hosts, une faute dans le nom."
+   ]
+  },
+  {
+   "scheme": [
+    " 6  l'appli    ✗ curl: Could not connect",
+    " 5  le port    ✗ nc -zv host 443 : refused",
+    " 4  le nom     ✔ dig +short host : 192.0.2.10",
+    " 3  la route   ✔"
+   ],
+   "point": 1,
+   "mark": [
+    "refused"
+   ],
+   "text": [
+    "Autre cas : le nom et la route marchent, le port refuse. La machine est là ; le service n'écoute pas à cet endroit.",
+    "",
+    "- Sur le serveur : ss -tlnp. Est-il lancé ? Sur 127.0.0.1 seulement ? Sur un autre port ?"
+   ]
+  },
+  {
+   "scheme": [
+    " ✗ Name or service not known   marche 4 : DNS",
+    " ✗ Network is unreachable      marche 3 : route",
+    " ✗ Connection timed out        pare-feu ou éteinte",
+    " ✗ Connection refused          marche 5 : personne",
+    " ✗ certificate / 404 / 500     marche 6 : l'appli"
+   ],
+   "point": 2,
+   "mark": [
+    "timed out"
+   ],
+   "text": [
+    "Le message d'erreur nomme souvent la marche pour toi.",
+    "",
+    "- Lis-le, ne réessaie pas à l'aveugle. Chacun pointe vers une équipe ou un fichier différent."
+   ]
+  }
+ ]
+}

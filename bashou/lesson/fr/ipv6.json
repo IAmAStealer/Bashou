@@ -1,0 +1,78 @@
+{
+ "title": "IPv6 : des adresses plus longues, les mêmes idées",
+ "summary": "Pourquoi l'IPv6 existe, comment lire et raccourcir ses adresses, et les trois sortes que tu croiseras sur chaque machine.",
+ "pages": [
+  {
+   "scheme": [
+    " IPv4   32 bits    environ 4 milliards d'adresses",
+    " IPv6  128 bits    340 sextillions (3,4 × 10^38)"
+   ],
+   "point": 1,
+   "mark": [
+    "128 bits"
+   ],
+   "text": [
+    "L'IPv4 a manqué d'adresses : il y a plus de 4 milliards d'appareils. Les plages privées et le NAT l'ont étiré, l'IPv6 règle le problème.",
+    "",
+    "- Les mêmes idées qu'en IPv4 : une adresse, un préfixe, une passerelle.",
+    "- Beaucoup de réseaux donnent les deux (double pile) : le système préfère alors l'IPv6 et se rabat vite sur l'IPv4 (Happy Eyeballs)."
+   ]
+  },
+  {
+   "scheme": [
+    " 2001:0db8:0000:0000:0000:0000:0000:0001",
+    "",
+    " 1. sans zéros de tête 2001:db8:0:0:0:0:0:1",
+    " 2. une suite de zéros 2001:db8::1",
+    "    devient ::"
+   ],
+   "point": 3,
+   "mark": [
+    "2001:db8::1"
+   ],
+   "text": [
+    "8 groupes de 4 chiffres hexadécimaux. Deux règles les raccourcissent :",
+    "",
+    "- Dans chaque groupe, les zéros de tête partent : 0db8 devient db8.",
+    "- Une suite de groupes nuls devient :: (une seule fois, sinon personne ne saurait combien de zéros cache chaque ::).",
+    "- 2001:db8::/32 est réservée aux exemples et à la documentation."
+   ]
+  },
+  {
+   "scheme": [
+    " ::1                   boucle, comme 127.0.0.1",
+    " fe80::a1b2:…/64       link-local : ce lien seul",
+    " 2001:db8:…/64         globale : joignable",
+    " fd12:3456:…/64        privée, comme 10.x"
+   ],
+   "point": 1,
+   "mark": [
+    "fe80::"
+   ],
+   "text": [
+    "ip -6 addr montre plusieurs adresses par interface. C'est normal.",
+    "",
+    "- fe80:: existe dès que l'interface est active, et ne marche que sur ce câble ou ce Wi-Fi.",
+    "- La globale (qui commence souvent par 2) est celle que les autres réseaux joignent.",
+    "$ ip -6 addr"
+   ]
+  },
+  {
+   "scheme": [
+    " routeur :  2001:db8:12:3400::/64",
+    " adresse :  2001:db8:12:3400:1c2e:77ff:fe01:9a3b",
+    "            └─── 64 bits ──┘ └──── 64 bits ────┘",
+    "            par le routeur   par la machine"
+   ],
+   "point": 1,
+   "mark": [
+    "/64"
+   ],
+   "text": [
+    "Sur la plupart des réseaux IPv6, le routeur annonce la première moitié, le préfixe, et chaque machine choisit elle-même la seconde : SLAAC. Pas besoin de serveur DHCP.",
+    "",
+    "- Voilà pourquoi un réseau local est un /64 : SLAAC a besoin de 64 bits pour la moitié de la machine."
+   ]
+  }
+ ]
+}

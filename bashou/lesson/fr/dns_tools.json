@@ -1,0 +1,84 @@
+{
+ "title": "Les outils DNS : dig, getent, resolvectl",
+ "summary": "Lire une réponse de dig morceau par morceau, voir ce que les programmes obtiennent vraiment, et trouver quels serveurs DNS ta machine interroge.",
+ "pages": [
+  {
+   "scheme": [
+    " $ dig example.org",
+    " ;; ->>HEADER<<- opcode: QUERY, status: NOERROR",
+    " ;; ANSWER SECTION:",
+    " example.org.   3600  IN  A  104.20.26.136",
+    " ;; Query time: 12 msec",
+    " ;; SERVER: 192.168.1.1#53(192.168.1.1) (UDP)"
+   ],
+   "point": 1,
+   "mark": [
+    "status: NOERROR",
+    "SERVER"
+   ],
+   "text": [
+    "dig interroge directement le DNS et montre toute la réponse.",
+    "",
+    "- status: NOERROR veut dire que ça a marché. NXDOMAIN : ce nom n'existe pas. SERVFAIL : la recherche a échoué.",
+    "- ANSWER contient les enregistrements, SERVER dit qui a répondu.",
+    "- dig +short n'affiche que les réponses."
+   ]
+  },
+  {
+   "scheme": [
+    " $ dig AAAA example.org      ses adresses IPv6",
+    " $ dig MX example.org        ses serveurs de mail",
+    " $ dig -x 1.1.1.1            adresse → nom",
+    " $ dig @1.1.1.1 example.org  un autre résolveur"
+   ],
+   "point": 3,
+   "mark": [
+    "@1.1.1.1"
+   ],
+   "text": [
+    "- Mets le type d'enregistrement avant le nom pour le demander.",
+    "- @serveur interroge un résolveur précis : compare deux réponses quand l'une semble fausse."
+   ]
+  },
+  {
+   "scheme": [
+    " /etc/hosts     10.0.0.9   db.internal",
+    " DNS            10.0.0.5   db.internal",
+    "",
+    " $ dig +short db.internal         10.0.0.5",
+    " $ getent hosts db.internal       10.0.0.9"
+   ],
+   "point": 4,
+   "mark": [
+    "getent"
+   ],
+   "text": [
+    "dig n'interroge que le DNS. Les programmes (ping, curl, ton appli) passent par la bibliothèque C, qui lit d'abord /etc/hosts.",
+    "",
+    "- getent hosts montre ce que les programmes obtiendront vraiment.",
+    "- Quand dig et ton appli ne sont pas d'accord, regarde /etc/hosts.",
+    "- Avec systemd-resolved, dig interroge 127.0.0.53, qui lit aussi /etc/hosts : dig @192.168.1.1 l'évite."
+   ]
+  },
+  {
+   "scheme": [
+    " /etc/resolv.conf",
+    " nameserver 127.0.0.53     ◀ un relais local",
+    "",
+    " $ resolvectl status",
+    " Link 3 (wlan0)",
+    "   DNS Servers: 192.168.1.1"
+   ],
+   "point": 1,
+   "mark": [
+    "127.0.0.53"
+   ],
+   "text": [
+    "Beaucoup de systèmes font tourner systemd-resolved : les programmes interrogent un relais local sur 127.0.0.53, qui met en cache et transmet aux vrais serveurs.",
+    "",
+    "- resolvectl status liste les vrais serveurs, par interface (un VPN peut apporter les siens).",
+    "- Pas de systemd-resolved ? Les vrais serveurs sont dans /etc/resolv.conf lui-même."
+   ]
+  }
+ ]
+}
