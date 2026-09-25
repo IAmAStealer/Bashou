@@ -55,13 +55,33 @@ first 10 commands (it keeps changing shape as you type), a night coder for your 
 mushroom for your own scripts, others for a new tool used often enough, a long pipe, a fight lost or
 won, a walk in the adventure… The swap board shows only their silhouette until you meet them.
 
-Proud of your pet? **`bashou share`** shows a QR code: scan it, and your phone draws a banner of your
-pet and progress, ready to send on Signal, WhatsApp or anywhere. It lists exactly what it shares first
-(no commands, files or machine names), and the progress travels in the link itself, after the `#`,
-which is never sent to a server.
-
 ![The three starters, Stardust, Seedling and Pebble, then three of the first pets you can meet: a
 Droplet after 10 commands, a Mouseling after 10 programs, a Spore after 5 scripts](doc/img/pets.svg)
+
+## Show off your pet
+
+Proud of how far you got? **`bashou share`** shows a QR code in your terminal. Scan it, and your phone
+draws a banner of your pet, its family and your progress, with a button to send it on Signal, WhatsApp
+or anywhere you like. Add a nickname with `bashou share --name Nova`.
+
+![A Bashou banner: Alexis's Satellite, level 12, the ten forms of the Packet family from Bit to
+Constellation, 58 achievements, 14 pets, 23 fights won, 17 lessons read, and the skills Bash, Linux
+and Network](doc/img/share.png)
+
+Before the QR code, Bashou lists exactly what the card holds: no commands, files, machine names or
+dates. The progress travels inside the link, after the `#`, a part browsers never send to a server:
+the page draws the banner on your phone and keeps nothing.
+
+## Your data stays on your machine
+
+Bashou collects nothing. No account, no telemetry, no analytics, no ads: **you are not the product.**
+It reads your commands only to count tools and constructs, keeps those counters in
+`~/.local/share/bashou`, and never sends them anywhere. The only thing it asks the internet is whether
+a new version is out (once a day; `bashou config updates off` stops it, and apt or dnf installs leave it
+to your package manager).
+
+Bashou is a small side project, made with spare AI tokens by someone who likes teaching and helping
+people. There is nothing to sell.
 
 ## Install
 

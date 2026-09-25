@@ -163,6 +163,9 @@ Pixel art, security challenges, adventure questions and lessons are welcome as p
 
 ## Privacy
 
+Bashou collects nothing: no account, no telemetry, no analytics, no ads. You are not the product. It's
+a small side project, made with spare AI tokens by someone who likes teaching and helping people.
+
 Bashou reads each new history entry to count tools and constructs, then throws it away.
 Only counters are kept, in `~/.local/share/bashou/state.json`.
 
