@@ -85,6 +85,7 @@ enabled=1
 gpgcheck=1
 repo_gpgcheck=1
 gpgkey={PAGES}/bashou.asc
+metadata_expire=6h
 """
 
 

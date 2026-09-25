@@ -7,6 +7,7 @@ import shutil
 import subprocess
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 from bashou import setup, update
@@ -75,6 +76,17 @@ class PackagedInstallTest(unittest.TestCase):
         with contextlib.redirect_stdout(out):
             self.assertEqual(update.run(), 0)                  # no terminal here: shown, not run
         self.assertRegex(out.getvalue(), r"apt install --only-upgrade bashou|dnf upgrade bashou")
+
+    def test_dnf_reads_the_repository_again(self):
+        """0.5.0: players were told a new version was out, and `dnf upgrade bashou` said "Nothing to do"
+        (dnf keeps a repository's list 48 hours). The command must refresh it, like apt update does."""
+        from bashou import repo_setup
+        ran = []
+        with mock.patch.object(repo_setup, "system", return_value="redhat"), \
+                contextlib.redirect_stdout(io.StringIO()) as out:
+            repo_setup.upgrade(run=lambda *a, **k: ran.append(a))
+        self.assertIn("sudo dnf upgrade --refresh bashou", out.getvalue())
+        self.assertIn("expire", package.DNF_REPO)
 
     def test_a_clone_ignores_a_stray_version_file(self):
         (update.ROOT / ".git").mkdir()

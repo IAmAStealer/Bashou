@@ -162,7 +162,10 @@ def offer(old_loader, bashrc=None, run=subprocess.run, asked=True):
 def upgrade(run=subprocess.run):
     """A package install: show the command that upgrades it, and run it if you say so."""
     manager = "dnf" if system() == "redhat" else "apt"
-    text = "sudo dnf upgrade bashou" if manager == "dnf" else "sudo apt update && sudo apt install --only-upgrade bashou"
+    # --refresh: dnf re-reads a repository only every 48 hours, and Bashou knows about a release from GitHub
+    # right away: without it, dnf said "Nothing to do" for two days after 0.5.0.
+    text = ("sudo dnf upgrade --refresh bashou" if manager == "dnf"
+            else "sudo apt update && sudo apt install --only-upgrade bashou")
     print("  " + _("Bashou came from a package: {manager} updates it, with the rest of your system.").format(manager=manager))
     print(f"    $ {text}")
     if not sys.stdin.isatty() or not ask(_("Run it now?")):

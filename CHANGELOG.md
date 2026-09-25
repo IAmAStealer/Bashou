@@ -3,6 +3,12 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.5.1 — 2026-09-25
+
+- On Rocky, Fedora and Red Hat, `bashou update` now runs `sudo dnf upgrade --refresh bashou`: plain
+  `dnf upgrade` could say "Nothing to do" for two days after a release, because dnf keeps its list of
+  packages that long. The Bashou repository file now asks dnf to check it every 6 hours.
+
 ## v0.5.0 — 2026-09-25
 
 - **New: `bashou lesson`, the Sage Owl's library.** Hints tell you what to type; lessons show how things
