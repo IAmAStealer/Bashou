@@ -3,6 +3,12 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.6.3 — 2026-09-26
+
+- The Bat's night achievement is now called **Night shift** (it was "Night owl", and players looked for
+  an Owl to unlock). Every achievement note now says which pet family it grows: "🏆 Night shift (Bat
+  family): …".
+
 ## v0.6.2 — 2026-09-26
 
 - `bashou share` asks for a nickname the first time and puts it on every card, so the banner never

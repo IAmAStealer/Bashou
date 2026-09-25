@@ -248,7 +248,9 @@ def check(state, earned=()):
     for a in earned:
         if a.id not in state["achievements"]:
             state["achievements"].append(a.id)
-            notes.append(f"🏆 {_(a.name)}: {_(a.how)}")
+            notes.append(f"🏆 {_(a.name)}: {_(a.how)}" if a.hidden else     # a secret doesn't name its pet
+                         "🏆 " + _("{name} ({pet} family): {how}").format(
+                             name=_(a.name), pet=_(creatures.NAMES[a.pet]), how=_(a.how)))
     for count, pet in MILESTONES:
         if state["commands"] >= count:
             notes += unlock(state, pet, _("{count} commands").format(count=f"{count:,}"))

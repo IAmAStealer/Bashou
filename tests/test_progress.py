@@ -82,7 +82,7 @@ class ProgressTest(unittest.TestCase):
         self.assertIn("time_traveller", self.s["achievements"])
         self.assertEqual(progress.stage(self.s, "fox"), 1)
         notes = self.run_cmd("find . -name '*.log' -exec rm {} +")
-        self.assertIn("🏆 Executor: act on results with `find -exec`", notes)
+        self.assertIn("🏆 Executor (Fox family): act on results with `find -exec`", notes)
         self.assertIn("✨ Fennec is evolving! Watch it: `bashou evolve`", notes)
         self.assertEqual(progress.stage(self.s, "fox"), 2)
         self.assertEqual(progress.current(self.s, "fox")[1:3], (2, "Fennec"))   # new actions, old look until watched
@@ -338,3 +338,14 @@ class StarterTest(unittest.TestCase):
         s = state.migrate(old)
         self.assertEqual(s["evolving"], [{"who": "starter", "from": 1, "to": 5}])      # Stardust → Planet still
         self.assertEqual(progress.starter_form(s), 5)
+
+
+class AchievementNoteTest(unittest.TestCase):
+    def test_the_note_names_the_pet_it_grows(self):
+        """"Night owl" belonged to the Bat, and the player looked for an Owl pet (owner's report, 0.6.2)."""
+        s = state.default()
+        notes = progress.record(s, 0, "ls", "2026-09-26", 2)
+        self.assertIn("🏆 Night shift (Bat family): run a command between midnight and 5 am", notes)
+        for a in achievements.ALL:                   # no achievement name sounds like another family's pet
+            if a.pet != "owl":
+                self.assertNotIn("owl", a.name.lower(), a.id)
