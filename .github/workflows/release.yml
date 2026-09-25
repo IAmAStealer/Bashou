@@ -46,3 +46,13 @@ jobs:
     secrets: inherit
     permissions:
       contents: write
+
+  # The new release in the apt and dnf repositories, like a `release: v…` commit does (ci.yml).
+  packages:
+    needs: release
+    uses: ./.github/workflows/packages.yml
+    with:
+      version: v${{ inputs.version }}
+    secrets: inherit
+    permissions:
+      contents: write
