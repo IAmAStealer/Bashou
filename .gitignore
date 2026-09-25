@@ -7,3 +7,4 @@ bug_report
 bug_report
 *.swp
 .*.swp
+.claude/agents/pr-reviewer.md
