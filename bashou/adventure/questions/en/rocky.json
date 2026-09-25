@@ -54,19 +54,6 @@
  {
   "id": "rocky-1-05",
   "level": 1,
-  "q": "Why keep SELinux enforcing rather than turning it off?",
-  "choices": [
-   "It confines a hacked service to what it's allowed",
-   "It makes the system faster",
-   "dnf needs it",
-   "It encrypts the files"
-  ],
-  "answer": 0,
-  "explain": "SELinux gives each service a list of what it may touch. Even if an attacker takes over the web server, it still can't read /home, run odd programs or open other ports. Turning it off removes that second wall. getenforce shows the mode: Enforcing is what you want. When something is blocked, fix the rule, don't switch it off."
- },
- {
-  "id": "rocky-1-06",
-  "level": 1,
   "q": "Where do you see which repositories a Rocky server trusts?",
   "choices": [
    "/etc/yum.repos.d/",
@@ -78,7 +65,7 @@
   "explain": "Each repository is a .repo file in /etc/yum.repos.d/. Inside, gpgcheck=1 and a gpgkey= line mean dnf checks each package's signature before installing it. Any repository listed there can install code as root, so an unknown one deserves a question. dnf repolist shows the ones enabled."
  },
  {
-  "id": "rocky-1-07",
+  "id": "rocky-1-06",
   "level": 1,
   "q": "Which command lists the waiting updates without installing them?",
   "choices": [
@@ -91,8 +78,112 @@
   "explain": "dnf check-update refreshes the repository data and lists each package with a newer version waiting, without installing anything. Its exit code is 100 when updates are waiting and 0 when there are none: a monitoring script can raise an alert on that. dnf upgrade would install them."
  },
  {
+  "id": "rocky-1-07",
+  "level": 1,
+  "q": "Which command removes an installed package on Rocky?",
+  "choices": [
+   "sudo dnf remove name",
+   "sudo rpm --drop name",
+   "sudo dnf uninstall-all name",
+   "sudo apt remove name"
+  ],
+  "answer": 0,
+  "explain": "dnf remove name uninstalls the package, and also the packages that only it needed. dnf shows the list and asks before doing anything: read it, a remove can take more with it than you expect. apt remove does the same job, but on Debian and Ubuntu."
+ },
+ {
   "id": "rocky-1-08",
   "level": 1,
+  "q": "You need the command `semanage`, but it isn't installed. How do you find its package?",
+  "choices": [
+   "dnf provides semanage",
+   "dnf install semanage.cmd",
+   "rpm -qa semanage",
+   "which semanage"
+  ],
+  "answer": 0,
+  "explain": "dnf provides searches the repositories for the package that contains a file or a command: here it answers policycoreutils-python-utils. Then you dnf install that package. rpm -qa only lists what is already installed, and which only finds commands that are already there."
+ },
+ {
+  "id": "rocky-1-09",
+  "level": 1,
+  "q": "Why does `dnf install` need sudo?",
+  "choices": [
+   "It writes into system folders only root may change",
+   "dnf is slower without it",
+   "Downloading needs root",
+   "To install it in your home folder only"
+  ],
+  "answer": 0,
+  "explain": "A package puts files in /usr, /etc and other system folders, and can add services that start at boot. Only root may change those, so dnf needs sudo. That's also why you install only from repositories you trust: whatever a package runs, it runs as root."
+ },
+ {
+  "id": "rocky-1-10",
+  "level": 1,
+  "q": "How do you install every waiting update on a Rocky machine?",
+  "choices": [
+   "sudo dnf upgrade",
+   "sudo dnf install update",
+   "sudo rpm -qa",
+   "sudo dnf clean all"
+  ],
+  "answer": 0,
+  "explain": "dnf upgrade downloads the new version of every installed package that has one and installs it, after showing you the list. dnf update is an older name for the same thing. dnf clean all only empties dnf's cache, and rpm -qa only lists what is installed."
+ },
+ {
+  "id": "rocky-1-11",
+  "level": 1,
+  "q": "How do you see which Rocky version a machine runs?",
+  "choices": [
+   "cat /etc/rocky-release",
+   "rocky --version",
+   "dnf version",
+   "uname -r"
+  ],
+  "answer": 0,
+  "explain": "/etc/rocky-release holds one line, such as 'Rocky Linux release 9.4 (Blue Onyx)'. uname -r gives the kernel's version, which is not the same thing. In a script, prefer /etc/os-release: it exists on every distribution."
+ },
+ {
+  "id": "rocky-1-12",
+  "level": 1,
+  "q": "dnf asks 'Is this ok [y/N]:'. What happens if you just press Enter?",
+  "choices": [
+   "Nothing: N, the capital letter, is the default",
+   "It installs: Enter always means yes",
+   "dnf asks again forever",
+   "It installs half of the packages"
+  ],
+  "answer": 0,
+  "explain": "The capital letter is the answer Enter gives: here N, no. dnf plays it safe, because installing or removing changes the system. Read the list first, then type y. In scripts, dnf -y answers yes by itself; use it only when you know what will be installed."
+ },
+ {
+  "id": "rocky-1-13",
+  "level": 1,
+  "q": "What does `dnf search editor` do?",
+  "choices": [
+   "Lists packages whose name or summary mentions editor",
+   "Installs the best editor",
+   "Opens a text editor",
+   "Searches your files for the word editor"
+  ],
+  "answer": 0,
+  "explain": "dnf search looks through the names and short descriptions of every package in the repositories, installed or not. It's how you find what to install when you know what you need but not its name. Then dnf info name tells you more before you install it."
+ },
+ {
+  "id": "rocky-2-01",
+  "level": 2,
+  "q": "Why keep SELinux enforcing rather than turning it off?",
+  "choices": [
+   "It confines a hacked service to what it's allowed",
+   "It makes the system faster",
+   "dnf needs it",
+   "It encrypts the files"
+  ],
+  "answer": 0,
+  "explain": "SELinux gives each service a list of what it may touch. Even if an attacker takes over the web server, it still can't read /home, run odd programs or open other ports. Turning it off removes that second wall. getenforce shows the mode: Enforcing is what you want. When something is blocked, fix the rule, don't switch it off."
+ },
+ {
+  "id": "rocky-2-02",
+  "level": 2,
   "q": "What should you know before enabling EPEL?",
   "choices": [
    "Its packages come from the community, not from Rocky",
@@ -104,8 +195,8 @@
   "explain": "EPEL (Extra Packages for Enterprise Linux) adds thousands of packages Rocky doesn't ship. They are signed and well maintained, but by the Fedora community, not by Rocky. Enabling it means trusting one more publisher to install code as root, and its packages don't get the same ten-year support."
  },
  {
-  "id": "rocky-1-09",
-  "level": 1,
+  "id": "rocky-2-03",
+  "level": 2,
   "q": "A script must work on Rocky and Debian alike. Where does it read the distro?",
   "choices": [
    "/etc/os-release",
@@ -117,8 +208,8 @@
   "explain": "Every modern distribution has /etc/os-release, with lines like ID=rocky and VERSION_ID=9.4 (ID=debian on Debian). A script can load it with . /etc/os-release and test $ID. /etc/rocky-release only exists on Rocky, and uname -r only gives the kernel version, not the distribution."
  },
  {
-  "id": "rocky-1-10",
-  "level": 1,
+  "id": "rocky-2-04",
+  "level": 2,
   "q": "How do you apply only the security updates?",
   "choices": [
    "dnf upgrade --security",
@@ -130,8 +221,8 @@
   "explain": "Rocky flags updates that fix vulnerabilities as security advisories. dnf upgrade --security installs only those and leaves the rest for later. To see them first, with the advisory for each: dnf updateinfo list --security. Handy when you want the fixes now but no other changes."
  },
  {
-  "id": "rocky-1-11",
-  "level": 1,
+  "id": "rocky-2-05",
+  "level": 2,
   "q": "What gives Rocky Linux automatic updates?",
   "choices": [
    "dnf-automatic",
@@ -143,7 +234,7 @@
   "explain": "On Rocky 8 and later, dnf-automatic installs updates on a schedule, driven by a systemd timer. yum-cron did this on the older EL7 and is gone. unattended-upgrades is the same idea on Debian. cockpit is a web admin console, not an updater."
  },
  {
-  "id": "rocky-2-01",
+  "id": "rocky-2-06",
   "level": 2,
   "q": "What does SELinux's permissive mode do?",
   "choices": [
@@ -156,20 +247,7 @@
   "explain": "In permissive mode, SELinux still checks everything and logs what it would have blocked, but lets it happen. It's a diagnostic tool: if the app works in permissive and not in enforcing, SELinux is the cause, and the log says which rule. Then go back with setenforce 1 and fix the rule."
  },
  {
-  "id": "rocky-2-02",
-  "level": 2,
-  "q": "You moved a page from your home to /var/www; Apache answers 403. Why?",
-  "choices": [
-   "The file kept its home SELinux label",
-   "Apache can't read HTML",
-   "mv removed the read rights",
-   "firewalld blocks it"
-  ],
-  "answer": 0,
-  "explain": "SELinux sticks a label on every file. mv keeps the old one, here user_home_t (a home file), and Apache may only read files labelled httpd_sys_content_t. restorecon -Rv /var/www resets the labels expected for that place. ls -Z shows them. cp instead of mv would have taken the destination's label."
- },
- {
-  "id": "rocky-2-03",
+  "id": "rocky-2-07",
   "level": 2,
   "q": "An app fails and you suspect SELinux. Where is the proof?",
   "choices": [
@@ -182,20 +260,7 @@
   "explain": "Each refusal is written to the audit log as an AVC denial, naming the program, the file or port, and the missing permission. ausearch -m avc -ts recent shows the latest. No AVC line at the time of the failure? Then SELinux isn't the cause: look elsewhere. sealert explains a denial in plain words and suggests a fix."
  },
  {
-  "id": "rocky-2-04",
-  "level": 2,
-  "q": "What does `rpm -V package` check?",
-  "choices": [
-   "Installed files against the package: size, hash, rights",
-   "The package's signature online",
-   "Which version is newest",
-   "The package's dependencies"
-  ],
-  "answer": 0,
-  "explain": "rpm -V compares each installed file with what the package shipped: size, checksum, permissions, owner. No output means nothing changed. Each letter on a line names a difference: 5 means the content changed. For a config file (marked c) that's normal; for a program in /usr/bin it's alarming."
- },
- {
-  "id": "rocky-2-05",
+  "id": "rocky-2-08",
   "level": 2,
   "q": "A strange binary sits in /usr/sbin. How do you see which package owns it?",
   "choices": [
@@ -208,7 +273,7 @@
   "explain": "rpm -qf /usr/sbin/name asks the package database which installed package owns that file. 'not owned by any package' on a system folder means someone put it there by hand: an admin, a script, or an intruder. Find out which. dnf provides searches packages you don't have."
  },
  {
-  "id": "rocky-2-06",
+  "id": "rocky-2-09",
   "level": 2,
   "q": "How do you allow a port through firewalld for good?",
   "choices": [
@@ -221,7 +286,7 @@
   "explain": "firewalld keeps two sets of rules: the running ones and the saved ones. --permanent writes to the saved rules, and --reload loads them into the running firewall. Without --permanent the port is open right away but closes at the next reload or reboot. iptables and ufw are other tools."
  },
  {
-  "id": "rocky-2-07",
+  "id": "rocky-2-10",
   "level": 2,
   "q": "An install or update with dnf went wrong. Which command undoes that transaction?",
   "choices": [
@@ -234,20 +299,7 @@
   "explain": "dnf records each install, update or removal as a numbered transaction. dnf history lists them with their dates, dnf history info <id> shows what changed, and dnf history undo <id> reverses it. For an update, the old versions must still be available in the repositories."
  },
  {
-  "id": "rocky-2-08",
-  "level": 2,
-  "q": "httpd must reach a remote database and SELinux blocks it. The clean fix?",
-  "choices": [
-   "setsebool -P httpd_can_network_connect_db on",
-   "setenforce 0",
-   "chmod 777 /var/www",
-   "Stop firewalld"
-  ],
-  "answer": 0,
-  "explain": "SELinux has on/off switches called booleans for common needs. httpd_can_network_connect_db lets the web server connect to database ports and nothing more. -P keeps it after a reboot, getsebool -a lists them all. setenforce 0 would switch off all protection for one need, and chmod 777 is unrelated."
- },
- {
-  "id": "rocky-2-09",
+  "id": "rocky-2-11",
   "level": 2,
   "q": "How do you see everything firewalld lets in?",
   "choices": [
@@ -260,7 +312,7 @@
   "explain": "firewall-cmd --list-all shows the active zone: the services and ports allowed in, and any extra rules. ss -tlnp answers another question: which programs listen. A port can listen and still be blocked by the firewall, or be allowed with nothing behind it. Compare both."
  },
  {
-  "id": "rocky-2-10",
+  "id": "rocky-2-12",
   "level": 2,
   "q": "What is podman's security gain over classic docker?",
   "choices": [
@@ -273,7 +325,7 @@
   "explain": "Classic docker runs a daemon as root, and anyone who can talk to it is effectively root. podman has no daemon, and containers can run as your own user (rootless). If an attacker escapes a container, they land in your account, not as root. Most commands are the same as docker's."
  },
  {
-  "id": "rocky-2-11",
+  "id": "rocky-2-13",
   "level": 2,
   "q": "dnf-automatic is installed. What makes it actually install updates?",
   "choices": [
@@ -286,7 +338,7 @@
   "explain": "Installing dnf-automatic changes nothing yet. In /etc/dnf/automatic.conf, apply_updates = yes tells it to install and not only download; then systemctl enable --now dnf-automatic.timer starts the daily schedule. By default it only downloads updates and waits for you."
  },
  {
-  "id": "rocky-2-12",
+  "id": "rocky-2-14",
   "level": 2,
   "q": "How do you limit dnf-automatic to security updates?",
   "choices": [
@@ -299,7 +351,7 @@
   "explain": "In /etc/dnf/automatic.conf, upgrade_type = security makes it apply only updates flagged as security advisories. Everything else waits for you. dnf updateinfo list --security shows which updates count as security. It's the careful choice for a server nobody watches every day."
  },
  {
-  "id": "rocky-2-13",
+  "id": "rocky-2-15",
   "level": 2,
   "q": "How do you see when dnf-automatic will run next?",
   "choices": [
@@ -314,6 +366,45 @@
  {
   "id": "rocky-3-01",
   "level": 3,
+  "q": "You moved a page from your home to /var/www; Apache answers 403. Why?",
+  "choices": [
+   "The file kept its home SELinux label",
+   "Apache can't read HTML",
+   "mv removed the read rights",
+   "firewalld blocks it"
+  ],
+  "answer": 0,
+  "explain": "SELinux sticks a label on every file. mv keeps the old one, here user_home_t (a home file), and Apache may only read files labelled httpd_sys_content_t. restorecon -Rv /var/www resets the labels expected for that place. ls -Z shows them. cp instead of mv would have taken the destination's label."
+ },
+ {
+  "id": "rocky-3-02",
+  "level": 3,
+  "q": "What does `rpm -V package` check?",
+  "choices": [
+   "Installed files against the package: size, hash, rights",
+   "The package's signature online",
+   "Which version is newest",
+   "The package's dependencies"
+  ],
+  "answer": 0,
+  "explain": "rpm -V compares each installed file with what the package shipped: size, checksum, permissions, owner. No output means nothing changed. Each letter on a line names a difference: 5 means the content changed. For a config file (marked c) that's normal; for a program in /usr/bin it's alarming."
+ },
+ {
+  "id": "rocky-3-03",
+  "level": 3,
+  "q": "httpd must reach a remote database and SELinux blocks it. The clean fix?",
+  "choices": [
+   "setsebool -P httpd_can_network_connect_db on",
+   "setenforce 0",
+   "chmod 777 /var/www",
+   "Stop firewalld"
+  ],
+  "answer": 0,
+  "explain": "SELinux has on/off switches called booleans for common needs. httpd_can_network_connect_db lets the web server connect to database ports and nothing more. -P keeps it after a reboot, getsebool -a lists them all. setenforce 0 would switch off all protection for one need, and chmod 777 is unrelated."
+ },
+ {
+  "id": "rocky-3-04",
+  "level": 3,
   "q": "dnf-automatic updated glibc and the kernel overnight. How do you know if a reboot is needed?",
   "choices": [
    "dnf needs-restarting -r",
@@ -325,7 +416,7 @@
   "explain": "A new kernel or glibc is only used after a reboot: until then, the old code stays in memory. dnf needs-restarting -r answers the question, and exits with 1 when a reboot is needed, handy in scripts. If only some services need it, needs-restarting -s lists them. uname -r shows the running kernel, not the installed one."
  },
  {
-  "id": "rocky-3-02",
+  "id": "rocky-3-05",
   "level": 3,
   "q": "Last night's automatic update broke an app. How do you see it and go back?",
   "choices": [
@@ -338,7 +429,7 @@
   "explain": "dnf history shows the night's transaction with its number and time; dnf history info <id> lists every package and version it changed. dnf history undo <id> puts back the previous versions, as long as they are still in the repositories. Then find out what broke before updating again."
  },
  {
-  "id": "rocky-3-03",
+  "id": "rocky-3-06",
   "level": 3,
   "q": "Before turning on automatic updates, why check every repo has gpgcheck=1?",
   "choices": [

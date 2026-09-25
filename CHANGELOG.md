@@ -16,6 +16,8 @@ Every release has a section here, written for players. CI refuses to tag a relea
   - 37 adventure questions in a new topic, guarded by the Latency Kraken.
 - **New pet: the Packet**, from a single Bit to a Constellation of satellites, in ten forms. It comes
   after ten uses of `ip`, `ss`, `ping`, `getent` and friends, and grows with twelve network achievements.
+- The Rocky Linux path starts gentler: level 1 asks about installing, removing, searching and updating
+  with `dnf`, and SELinux, EPEL and automatic updates come at level 2, once the basics are known.
 - `bashou learn` now explains `ip`, `ss`, `ping`, `getent`, `host`, `resolvectl`, `tracepath`,
   `traceroute`, `nc` and `tcpdump`, and `bashou explain network` has notes on CIDR, IPv6, DNS and TCP.
 
