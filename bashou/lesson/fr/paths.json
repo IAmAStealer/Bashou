@@ -1,0 +1,125 @@
+{
+ "title": "L'arborescence et les chemins",
+ "summary": "Où vivent les fichiers, et les deux façons de dire où est un fichier : depuis la racine, ou depuis là où tu es.",
+ "pages": [
+  {
+   "scheme": [
+    " /",
+    " ├── etc/",
+    " │   └── hosts",
+    " ├── home/",
+    " │   └── sam/",
+    " │       ├── notes.txt",
+    " │       └── photos/",
+    " └── tmp/"
+   ],
+   "point": 4,
+   "mark": [
+    "sam/"
+   ],
+   "text": [
+    "Sous Linux, chaque fichier est quelque part dans un seul grand arbre. Il commence à la racine, écrite /.",
+    "",
+    "- Un dossier s'appelle aussi un répertoire. Ici, ils finissent par /.",
+    "- Ton dossier personnel est /home/<ton nom>. ~ est son petit nom.",
+    "- Pas de lettres de lecteur comme C: — une clé USB apparaît elle aussi comme un dossier."
+   ]
+  },
+  {
+   "scheme": [
+    " /",
+    " ├── etc/",
+    " │   └── hosts",
+    " ├── home/",
+    " │   └── sam/",
+    " │       ├── notes.txt",
+    " │       └── photos/",
+    " └── tmp/",
+    "",
+    " /home/sam/notes.txt"
+   ],
+   "point": 9,
+   "mark": [
+    "home/",
+    "sam/",
+    "notes.txt"
+   ],
+   "text": [
+    "Un chemin absolu commence par /. C'est tout le trajet depuis la racine, un dossier après l'autre.",
+    "",
+    "- Il veut dire la même chose où que tu sois.",
+    "- C'est pour ça que les scripts et les fichiers de configuration utilisent des chemins absolus."
+   ]
+  },
+  {
+   "scheme": [
+    " /",
+    " └── home/",
+    "     └── sam/            tu es ici",
+    "         ├── notes.txt",
+    "         └── photos/",
+    "             └── cat.png",
+    "",
+    " photos/cat.png"
+   ],
+   "point": 2,
+   "mark": [
+    "photos/",
+    "cat.png"
+   ],
+   "text": [
+    "Un chemin qui ne commence pas par / est relatif : il part du dossier où tu es, le répertoire courant.",
+    "",
+    "$ pwd            # affiche où tu es : /home/sam",
+    "$ ls photos/cat.png",
+    "$ cd photos      # entre dedans"
+   ]
+  },
+  {
+   "scheme": [
+    " /",
+    " └── home/",
+    "     └── sam/            ..  (un niveau au-dessus)",
+    "         ├── notes.txt",
+    "         └── photos/     .   (tu es ici)",
+    "             └── cat.png",
+    "",
+    " ../notes.txt"
+   ],
+   "point": 2,
+   "mark": [
+    "..",
+    "notes.txt"
+   ],
+   "text": [
+    "Chaque dossier a deux noms spéciaux :",
+    "",
+    "- . est le dossier lui-même : ./script.sh lance le script qui est ici.",
+    "- .. est le dossier au-dessus : depuis photos, ../notes.txt, ce sont les notes de sam.",
+    "",
+    "$ cd ..          # remonte d'un niveau"
+   ]
+  },
+  {
+   "scheme": [
+    " /",
+    " ├── etc/        réglages (fichiers de config)",
+    " ├── home/       les fichiers des gens",
+    " ├── tmp/        temporaire, peut être vidé",
+    " ├── usr/bin/    programmes (ls, grep, python3…)",
+    " └── var/log/    journaux (logs) des programmes"
+   ],
+   "point": 5,
+   "mark": [
+    "var/log/"
+   ],
+   "text": [
+    "Tu reviendras sans cesse aux mêmes quelques endroits.",
+    "",
+    "- Quelque chose est mal configuré ? Regarde dans /etc.",
+    "- Quelque chose a cassé ? Les journaux de /var/log (ou journalctl) disent souvent pourquoi.",
+    "- /tmp est souvent vidé au redémarrage, pas toujours : n'y garde jamais rien d'important."
+   ]
+  }
+ ]
+}

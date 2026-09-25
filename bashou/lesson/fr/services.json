@@ -1,0 +1,92 @@
+{
+ "title": "La vie d'un service avec systemd",
+ "summary": "Les fichiers d'unité, start contre enable, et où lire ce qui a mal tourné.",
+ "pages": [
+  {
+   "scheme": [
+    " /etc/systemd/system/web.service",
+    "       │  systemctl daemon-reload",
+    "       ▼",
+    "   loaded, inactive (dead)   systemd le connaît",
+    "       │  systemctl start web",
+    "       ▼",
+    "   active (running)"
+   ],
+   "point": 1,
+   "mark": [
+    "daemon-reload"
+   ],
+   "text": [
+    "Un service est un programme que systemd fait tourner en arrière-plan pour toi : un serveur web, une base de données.",
+    "",
+    "- Un fichier d'unité le décrit.",
+    "- Après en avoir écrit ou modifié un, lance daemon-reload : systemd relit ses fichiers d'unité."
+   ]
+  },
+  {
+   "scheme": [
+    "                    maintenant   à chaque boot",
+    " start              tourne       non",
+    " enable             non          le démarre",
+    " enable --now       tourne       le démarre"
+   ],
+   "point": 2,
+   "mark": [
+    "enable"
+   ],
+   "text": [
+    "start et enable sont deux choses différentes.",
+    "",
+    "- start le lance maintenant, une fois. Après un redémarrage, il est éteint.",
+    "- enable le fait démarrer au boot, mais ne le lance pas maintenant.",
+    "- Un nouveau service veut en général les deux : enable --now."
+   ]
+  },
+  {
+   "scheme": [
+    " [Unit]",
+    " Description=My web app",
+    " After=network.target",
+    "",
+    " [Service]",
+    " ExecStart=/usr/local/bin/web --port 8080",
+    " User=web",
+    " Restart=on-failure",
+    "",
+    " [Install]",
+    " WantedBy=multi-user.target"
+   ],
+   "point": 5,
+   "mark": [
+    "ExecStart"
+   ],
+   "text": [
+    "- ExecStart : la commande à lancer, avec un chemin absolu.",
+    "- User : la lancer avec cet utilisateur, pas en root.",
+    "- Restart : la relancer si elle plante.",
+    "- WantedBy : ce à quoi enable l'accroche (multi-user = un démarrage normal)."
+   ]
+  },
+  {
+   "scheme": [
+    " $ systemctl status web",
+    " ● web.service - My web app",
+    "    Loaded: loaded (…/web.service; enabled)",
+    "    Active: failed (Result: exit-code)",
+    "   Main PID: 912 (code=exited, status=1/FAILURE)"
+   ],
+   "point": 3,
+   "mark": [
+    "failed"
+   ],
+   "text": [
+    "Quelque chose ne va pas ? status donne le résumé et les dernières lignes de son journal.",
+    "",
+    "- Loaded … enabled : il démarre au boot.",
+    "- Active : ce qu'il fait maintenant.",
+    "",
+    "$ journalctl -u web -e      # tout son journal, saute à la fin"
+   ]
+  }
+ ]
+}

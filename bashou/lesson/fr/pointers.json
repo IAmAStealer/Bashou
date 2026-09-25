@@ -1,0 +1,115 @@
+{
+ "title": "Pointeurs, tableaux et chaînes en C",
+ "summary": "Les adresses, les tableaux qui commencent à 0, le '\\0' au bout des chaînes, et écrire après la fin.",
+ "pages": [
+  {
+   "scheme": [
+    "          x               p",
+    "      ┌────────┐      ┌────────┐",
+    "      │   42   │◀─────┼─ 0x10  │",
+    "      └────────┘      └────────┘",
+    " adresse 0x10",
+    "",
+    " int x = 42;",
+    " int *p = &x;"
+   ],
+   "point": 2,
+   "mark": [
+    "&x",
+    "0x10"
+   ],
+   "text": [
+    "Chaque variable vit à une adresse en mémoire. Un pointeur est une variable qui contient une adresse.",
+    "",
+    "- &x donne l'adresse de x.",
+    "- *p suit la flèche : c'est la valeur à cette adresse, 42.",
+    "- *p = 7; modifie x lui-même."
+   ]
+  },
+  {
+   "scheme": [
+    " int a[4] = {10, 20, 30, 40};",
+    "",
+    " ┌──────┬──────┬──────┬──────┐",
+    " │  10  │  20  │  30  │  40  │",
+    " └──────┴──────┴──────┴──────┘",
+    "   a[0]   a[1]   a[2]   a[3]"
+   ],
+   "point": 5,
+   "mark": [
+    "a[0]",
+    "a[3]"
+   ],
+   "text": [
+    "Un tableau, ce sont des boîtes côte à côte en mémoire.",
+    "",
+    "- La première boîte est a[0] : l'indice compte la distance depuis le début.",
+    "- Un tableau de 4 va donc de a[0] à a[3], jamais a[4]."
+   ]
+  },
+  {
+   "scheme": [
+    " ┌──────┬──────┬──────┬──────┐┌──────┐",
+    " │  10  │  20  │  30  │  40  ││  ??  │",
+    " └──────┴──────┴──────┴──────┘└──────┘",
+    "   a[0]   a[1]   a[2]   a[3]    a[4]",
+    "",
+    " for (i = 0; i <= 4; i++)    lit a[4]",
+    " for (i = 0; i <  4; i++)    s'arrête à a[3]"
+   ],
+   "point": 1,
+   "mark": [
+    "??",
+    "<="
+   ],
+   "text": [
+    "C ne vérifie pas les indices. a[4] lit ce qui se trouve après le tableau : c'est un comportement indéfini.",
+    "",
+    "- L'erreur classique est i <= n dans une boucle : un pas de trop.",
+    "- Écris i < n, et compte : une boucle sur 4 éléments tourne 4 fois."
+   ]
+  },
+  {
+   "scheme": [
+    " char s[] = \"cat\";",
+    "",
+    " ┌─────┬─────┬─────┬─────┐",
+    " │  c  │  a  │  t  │ \\0  │",
+    " └─────┴─────┴─────┴─────┘",
+    "",
+    " strlen(s) vaut 3    sizeof(s) vaut 4"
+   ],
+   "point": 3,
+   "mark": [
+    "\\0"
+   ],
+   "text": [
+    "Une chaîne en C, ce sont des caractères suivis d'un octet nul, '\\0'. C'est comme ça que les fonctions savent où elle finit.",
+    "",
+    "- strlen compte les lettres, pas le '\\0'.",
+    "- Une copie a besoin d'un octet de plus : malloc(strlen(s) + 1)."
+   ]
+  },
+  {
+   "scheme": [
+    " char name[8];",
+    "",
+    " ┌───┬───┬───┬───┬───┬───┬───┬───┐",
+    " │ a │ v │ e │ r │ y │ v │ e │ r │ yverylong…",
+    " └───┴───┴───┴───┴───┴───┴───┴───┘",
+    "",
+    " strcpy(name, argv[1]);"
+   ],
+   "point": 3,
+   "mark": [
+    "yverylong…"
+   ],
+   "text": [
+    "strcpy copie jusqu'au '\\0', quelle que soit la taille de la cible. Une entrée trop longue écrit après la fin, par-dessus ce qui vit à côté.",
+    "",
+    "- C'est un dépassement de tampon (buffer overflow), une faille de sécurité classique.",
+    "- snprintf(name, sizeof name, \"%s\", argv[1]) s'arrête à la taille et ajoute toujours le '\\0'."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,129 @@
+{
+ "title": "Les pipes : des petits outils à la chaîne",
+ "summary": "Envoyer la sortie d'une commande dans la suivante, et voir les données changer à chaque étape.",
+ "pages": [
+  {
+   "scheme": [
+    " ┌────┐ stdout      stdin ┌───────┐",
+    " │ ls │────────▶ | ──────▶│ wc -l │──▶ 12",
+    " └────┘         pipe      └───────┘",
+    "",
+    " $ ls | wc -l"
+   ],
+   "point": 1,
+   "mark": [
+    "|"
+   ],
+   "text": [
+    "Un pipe | branche le stdout d'une commande sur le stdin de la suivante.",
+    "",
+    "- ls affiche les noms de fichiers. Dans un pipe, il en écrit un par ligne.",
+    "- wc -l compte les lignes. Ensemble : combien de fichiers ici ?",
+    "- Rien n'est écrit sur le disque entre les deux."
+   ]
+  },
+  {
+   "scheme": [
+    " $ grep error app.log",
+    "",
+    " app.log              grep error",
+    " ok login",
+    " error disk      ──▶  error disk",
+    " ok save",
+    " error db        ──▶  error db",
+    " error disk      ──▶  error disk"
+   ],
+   "point": 4,
+   "mark": [
+    "grep error"
+   ],
+   "text": [
+    "Construisons une vraie chaîne, étape par étape : quelles erreurs arrivent le plus dans app.log ?",
+    "",
+    "- Étape 1 : grep ne garde que les lignes qui contiennent error."
+   ]
+  },
+  {
+   "scheme": [
+    " $ grep error app.log | sort",
+    "",
+    " grep error           sort",
+    " error disk      ──▶  error db",
+    " error db        ──▶  error disk",
+    " error disk      ──▶  error disk"
+   ],
+   "point": 4,
+   "mark": [
+    "| sort",
+    "sort"
+   ],
+   "text": [
+    "- Étape 2 : sort met les lignes dans l'ordre.",
+    "- Résultat : les lignes identiques sont maintenant côte à côte."
+   ]
+  },
+  {
+   "scheme": [
+    " $ grep error app.log | sort | uniq -c",
+    "",
+    " sort                 uniq -c",
+    " error db        ──▶  1 error db",
+    " error disk      ─┐",
+    " error disk      ─┴▶  2 error disk"
+   ],
+   "point": 5,
+   "mark": [
+    "| uniq -c",
+    "uniq -c"
+   ],
+   "text": [
+    "- Étape 3 : uniq -c fusionne les lignes identiques qui se suivent, et écrit combien il y en avait.",
+    "",
+    "Trois petits outils, un travail chacun, et tu vois que les erreurs disk sont les plus fréquentes."
+   ]
+  },
+  {
+   "scheme": [
+    " $ grep error app.log | uniq -c    (sans sort !)",
+    "",
+    " grep error           uniq -c",
+    " error disk      ──▶  1 error disk",
+    " error db        ──▶  1 error db",
+    " error disk      ──▶  1 error disk   compté 2 fois"
+   ],
+   "point": 5,
+   "mark": [
+    "compté 2 fois"
+   ],
+   "text": [
+    "Pourquoi sort d'abord ? uniq ne compare une ligne qu'avec celle juste avant.",
+    "",
+    "- Les deux lignes error disk ne sont pas voisines, alors uniq les compte à part.",
+    "- Règle simple : sort vient toujours avant uniq."
+   ]
+  },
+  {
+   "scheme": [
+    " $ … | uniq -c | sort -rn | head -3",
+    "",
+    " uniq -c              sort -rn",
+    " 1 error db      ──▶  2 error disk",
+    " 2 error disk    ──▶  1 error db"
+   ],
+   "point": 3,
+   "mark": [
+    "sort -rn"
+   ],
+   "text": [
+    "Une étape de plus transforme les comptes en top 3 :",
+    "",
+    "$ grep error app.log | sort | uniq -c | sort -rn | head -3",
+    "",
+    "- sort -rn trie par nombre (-n), le plus grand d'abord (-r).",
+    "- head -3 garde les 3 premières lignes.",
+    "",
+    "Construis un pipe de la même façon : lance la première commande, regarde, puis ajoute une étape à la fois."
+   ]
+  }
+ ]
+}

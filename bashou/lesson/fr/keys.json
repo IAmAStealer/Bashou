@@ -1,0 +1,86 @@
+{
+ "title": "Clés publiques et clés privées",
+ "summary": "Deux moitiés d'une même clé : chiffrer pour quelqu'un, et prouver qui a signé un fichier.",
+ "pages": [
+  {
+   "scheme": [
+    " ta paire de clés",
+    " ├── clé publique   donne-la à qui tu veux",
+    " └── clé privée     toi seul l'as",
+    "                    (sous ta phrase secrète)"
+   ],
+   "point": 2,
+   "mark": [
+    "clé privée"
+   ],
+   "text": [
+    "gpg -c verrouille un fichier avec une phrase secrète qu'il faut partager. Les paires de clés évitent ça.",
+    "",
+    "- Les deux moitiés sont fabriquées ensemble et marchent ensemble.",
+    "- On ne peut pas calculer la clé privée à partir de la publique."
+   ]
+  },
+  {
+   "scheme": [
+    " Ada ── clé publique de Sam ──▶ file.gpg",
+    "",
+    " file.gpg ── clé privée de Sam ──▶ ouvert",
+    " file.gpg ── n'importe qui ──────▶ refusé"
+   ],
+   "point": 2,
+   "mark": [
+    "clé privée de Sam"
+   ],
+   "text": [
+    "Pour envoyer un secret à Sam, chiffre-le avec la clé publique de Sam.",
+    "",
+    "- Seule la clé privée de Sam l'ouvre. Même Ada ne peut plus l'ouvrir.",
+    "- Aucune phrase secrète n'a eu besoin de voyager.",
+    "",
+    "$ gpg -e -r sam@example.org report.pdf"
+   ]
+  },
+  {
+   "scheme": [
+    " éditeur ── sa clé privée ──▶ tool.tar.gz.sig",
+    "",
+    " toi ── la clé publique de l'éditeur ──▶ vérif",
+    "        ├── Good signature : de lui, intact",
+    "        └── BAD signature : modifié, ou pas de lui"
+   ],
+   "point": 3,
+   "mark": [
+    "Good signature",
+    "BAD signature"
+   ],
+   "text": [
+    "Pour les signatures, ça marche dans l'autre sens.",
+    "",
+    "- Seul l'éditeur peut signer ; n'importe qui avec la clé publique peut vérifier.",
+    "- Un seul octet modifié dans le fichier, et la signature échoue.",
+    "",
+    "$ gpgv --keyring ./vendor.gpg tool.tar.gz.sig tool.tar.gz"
+   ]
+  },
+  {
+   "scheme": [
+    " clé téléchargée ── empreinte ──┐",
+    "                                ├─ pareil ? ✔",
+    " site officiel du projet ───────┘"
+   ],
+   "point": 1,
+   "mark": [
+    "empreinte"
+   ],
+   "text": [
+    "Une signature ne vaut que la clé publique avec laquelle tu la vérifies.",
+    "",
+    "- Prends la clé sur le site officiel du projet, ou dans ta distribution.",
+    "- Compare son empreinte (fingerprint) avec celle que le projet publie sur son site officiel.",
+    "- Une clé trouvée à côté du téléchargement sur un miroir ne prouve rien.",
+    "",
+    "$ gpg --fingerprint vendor@example.org"
+   ]
+  }
+ ]
+}

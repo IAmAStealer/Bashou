@@ -1,0 +1,109 @@
+{
+ "title": "Les permissions : qui peut faire quoi",
+ "summary": "Lire le -rwxr-x--- de ls -l, et le changer avec chmod sans tout ouvrir.",
+ "pages": [
+  {
+   "scheme": [
+    " $ ls -l deploy.sh",
+    " -rwxr-x---  1 sam devs  220 deploy.sh",
+    " │             │   │",
+    " │             │   └─ son groupe : devs",
+    " │             └───── son propriétaire : sam",
+    " └─ type : - fichier, d dossier, l lien"
+   ],
+   "point": 4,
+   "mark": [
+    "sam",
+    "devs"
+   ],
+   "text": [
+    "Chaque fichier a un propriétaire (un utilisateur) et un groupe (une équipe d'utilisateurs).",
+    "",
+    "- Le premier caractère est le type de l'entrée.",
+    "- Les neuf suivants disent ce que chaque sorte de personne peut en faire."
+   ]
+  },
+  {
+   "scheme": [
+    " -rwxr-x---  1 sam devs  220 deploy.sh",
+    "  └┬┘└┬┘└┬┘",
+    "   │  │  └─ les autres : ---  rien",
+    "   │  └──── le groupe :  r-x  lire, lancer",
+    "   └─────── le proprio : rwx  lire, écrire, lancer"
+   ],
+   "point": 3,
+   "mark": [
+    "rwx",
+    "r-x",
+    "---"
+   ],
+   "text": [
+    "Trois groupes de trois lettres : pour le propriétaire, pour le groupe, pour tous les autres.",
+    "",
+    "- r lire, w écrire, x exécuter (lancer). Un - veut dire : pas le droit.",
+    "- Ici sam peut modifier le script, l'équipe devs peut seulement le lire et le lancer, les autres ne peuvent rien."
+   ]
+  },
+  {
+   "scheme": [
+    "      sur un fichier     sur un dossier",
+    " r    lire son contenu   lister les noms (ls)",
+    " w    le modifier        créer, effacer, renommer",
+    " x    le lancer          y entrer (cd)"
+   ],
+   "point": 2,
+   "mark": [
+    "créer, effacer, renommer"
+   ],
+   "text": [
+    "Les mêmes lettres veulent dire autre chose sur un dossier.",
+    "",
+    "- Supprimer un fichier demande w sur le dossier, pas sur le fichier !",
+    "- Un dossier sans x ne peut pas être ouvert, même si tu peux lire ses noms."
+   ]
+  },
+  {
+   "scheme": [
+    " sam, alex (dans devs) et kim lancent ./deploy.sh",
+    "",
+    " est-ce le proprio, sam ?     oui : rwx",
+    "   │ non",
+    " est-ce dans le groupe devs ? oui : r-x",
+    "   │ non",
+    " tous les autres :                 ---"
+   ],
+   "point": 4,
+   "mark": [
+    "rwx",
+    "r-x",
+    "---"
+   ],
+   "text": [
+    "Linux vérifie dans cet ordre et s'arrête à la première réponse.",
+    "",
+    "- alex est dans devs, donc r-x s'applique : alex peut lancer le script mais pas le modifier.",
+    "- kim n'est ni l'un ni l'autre : --- , permission refusée.",
+    "- root, l'administrateur, saute ces vérifications (pour lancer un fichier, il lui faut quand même un x quelque part)."
+   ]
+  },
+  {
+   "scheme": [
+    "  r w x     r - x     - - -",
+    "  4+2+1     4+0+1     0+0+0",
+    "    7         5         0",
+    "",
+    " $ chmod 750 deploy.sh"
+   ],
+   "point": 4,
+   "mark": [
+    "750"
+   ],
+   "text": [
+    "chmod change les permissions. Avec des chiffres : r vaut 4, w vaut 2, x vaut 1, et tu les additionnes pour chaque groupe.",
+    "",
+    "- Ou avec des lettres : chmod u+x script.sh ajoute x pour l'utilisateur (le propriétaire).",
+    "- Jamais de chmod 777 pour faire taire une erreur : tout le monde pourrait modifier le fichier."
+   ]
+  }
+ ]
+}

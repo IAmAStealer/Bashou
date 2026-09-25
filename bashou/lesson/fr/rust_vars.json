@@ -1,0 +1,86 @@
+{
+ "title": "Rust : des variables qui ne changent pas",
+ "summary": "let, mut, le masquage et la taille des entiers : ce que rustc refuse, et pourquoi.",
+ "pages": [
+  {
+   "scheme": [
+    " let count = 0;",
+    " count += 1;       erreur : cannot assign twice",
+    "",
+    " let mut count = 0;",
+    " count += 1;       ok : count vaut 1"
+   ],
+   "point": 3,
+   "mark": [
+    "mut"
+   ],
+   "text": [
+    "En Rust, une variable ne peut pas changer, sauf si tu le dis.",
+    "",
+    "- let : fixe. Le compilateur refuse tout changement.",
+    "- let mut : celle-ci peut changer.",
+    "- Pourquoi ? En lisant le code, tu sais quelles valeurs bougent. Moins de surprises."
+   ]
+  },
+  {
+   "scheme": [
+    " let guess = \"42\";                  texte",
+    " let guess: u32 = guess.parse()…;   nombre",
+    "",
+    "   guess ──╳─▶ \"42\"",
+    "         ────▶ 42"
+   ],
+   "point": 4,
+   "mark": [
+    "u32"
+   ],
+   "text": [
+    "Un nouveau let avec le même nom cache l'ancienne variable : c'est le masquage (shadowing).",
+    "",
+    "- Contrairement à mut, la nouvelle variable peut avoir un autre type.",
+    "- Pratique pour transformer du texte en nombre en gardant un bon nom."
+   ]
+  },
+  {
+   "scheme": [
+    " u8     0 ………………………… 255",
+    " i8  -128 ……… 0 ……… 127",
+    " u32    0 ………………………… environ 4 milliards",
+    "",
+    " let x: u8 = read_number();   // 250",
+    " x + 10     build debug : panic, overflow",
+    "            build release : revient à 4"
+   ],
+   "point": 5,
+   "mark": [
+    "overflow"
+   ],
+   "text": [
+    "Un type entier dit sa taille : u est non signé (0 et plus), i peut être négatif, le nombre est celui des bits.",
+    "",
+    "- Un u8 contient 0 à 255. 250 + 10 ne rentre pas.",
+    "- En build debug, Rust s'arrête (panic) au lieu de revenir en silence à 4.",
+    "- Quand rustc voit les deux valeurs, il refuse x + 10 avant même que le programme tourne.",
+    "- as convertit : x as u32 + 10."
+   ]
+  },
+  {
+   "scheme": [
+    " const MAX_POINTS: u32 = 100_000;",
+    "       ─────┬────  ─┬─",
+    "            │       └─ le type : toujours écrit",
+    "            └───────── NOM en capitales (habitude)"
+   ],
+   "point": 2,
+   "mark": [
+    "u32"
+   ],
+   "text": [
+    "Une const est fixe pour toujours, connue quand le programme est construit.",
+    "",
+    "- Son type doit être écrit : rustc ne le devine pas.",
+    "- Le _ dans 100_000 est seulement là pour le lire facilement."
+   ]
+  }
+ ]
+}

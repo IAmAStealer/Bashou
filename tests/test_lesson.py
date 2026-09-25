@@ -78,6 +78,8 @@ class FilesTest(unittest.TestCase):
                         self.assertEqual(len(mine.get("scheme", [])), len(theirs.get("scheme", [])))
                         self.assertLessEqual(max(map(render.width, mine.get("scheme", [])), default=0),
                                              lesson.SCHEME_WIDTH)
+                        for word in mine.get("mark", []):
+                            self.assertTrue(any(word in line for line in mine["scheme"]), word)
             for le in lesson.load(folder.name):
                 for n in range(len(le["pages"])):
                     pieces = reader.page_screen(le, n, 80, 200)
@@ -169,6 +171,10 @@ class ReaderTest(unittest.TestCase):
         lib.key("enter")
         self.assertEqual(lib.page, 2)
         self.assertEqual(state.load()["lessons"]["read"], [])
+
+    def test_french_punctuation_stays_on_its_line(self):
+        lines = reader.text_lines(["mot " * 17 + "fin : la suite"], 72)
+        self.assertFalse(any(line.startswith(":") for line in lines))
 
     def test_list_screen_draws(self):
         lib = reader.Library(LESSONS)

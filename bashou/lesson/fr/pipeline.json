@@ -1,0 +1,92 @@
+{
+ "title": "Un pipeline de CI, étape par étape",
+ "summary": "Les étapes (stages), les jobs qui s'attendent, et les conditions : comment un pipeline décide ce qui tourne.",
+ "pages": [
+  {
+   "scheme": [
+    "  build        test           deploy",
+    " ┌───────┐    ┌──────────┐    ┌──────────┐",
+    " │compile│───▶│unit      │───▶│en prod   │",
+    " └───────┘    │lint      │    └──────────┘",
+    "              └──────────┘"
+   ],
+   "point": 2,
+   "mark": [
+    "test"
+   ],
+   "text": [
+    "À chaque push, le serveur de CI lance ton pipeline : des jobs rangés par étapes (stages).",
+    "",
+    "- Les étapes tournent l'une après l'autre.",
+    "- Les jobs d'une même étape tournent côte à côte : unit et lint ensemble.",
+    "- Un job échoue ? Les étapes suivantes ne tournent pas."
+   ]
+  },
+  {
+   "scheme": [
+    " stages: [build, test, deploy]",
+    "",
+    " unit:",
+    "   stage: test",
+    "   script: make test",
+    "",
+    " deploy:",
+    "   stage: deploy",
+    "   script: ./deploy.sh",
+    "   rules:",
+    "     - if: $CI_COMMIT_BRANCH == \"main\"",
+    "       when: manual"
+   ],
+   "point": 3,
+   "mark": [
+    "stage: test",
+    "when: manual"
+   ],
+   "text": [
+    "Sur GitLab, .gitlab-ci.yml liste les étapes ; chaque job en choisit une.",
+    "",
+    "- L'étape d'un job doit être dans cette liste, écrite pareil.",
+    "- rules décide quand un job existe. Ici : seulement sur main, et quelqu'un doit cliquer."
+   ]
+  },
+  {
+   "scheme": [
+    " jobs:",
+    "   test:",
+    "     runs-on: ubuntu-latest",
+    "   deploy:",
+    "     runs-on: ubuntu-latest",
+    "     needs: test",
+    "     if: github.ref == 'refs/heads/main'"
+   ],
+   "point": 5,
+   "mark": [
+    "needs: test"
+   ],
+   "text": [
+    "Sur GitHub Actions, les jobs tournent côte à côte, sauf si tu dis autre chose.",
+    "",
+    "- needs: test fait attendre test à deploy, et le saute si test échoue.",
+    "- if: le limite à la branche main.",
+    "- Sans needs, un build cassé peut quand même déployer !"
+   ]
+  },
+  {
+   "scheme": [
+    " env:",
+    "   PASSWORD: hunter2             ✗ dans le dépôt",
+    "   PASSWORD: ${{ secrets.DB }}   ✔ gardé par la CI"
+   ],
+   "point": 2,
+   "mark": [
+    "secrets.DB"
+   ],
+   "text": [
+    "Tous ceux qui peuvent lire le dépôt lisent le fichier du pipeline, et son historique pour toujours.",
+    "",
+    "- Garde les secrets dans les réglages de la CI : secrets sur GitHub, variables CI/CD sur GitLab.",
+    "- Un secret commité par erreur doit être changé, pas seulement supprimé."
+   ]
+  }
+ ]
+}

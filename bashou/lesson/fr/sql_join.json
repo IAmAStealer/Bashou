@@ -1,0 +1,68 @@
+{
+ "title": "SQL : des tables qui se désignent",
+ "summary": "Pourquoi une commande garde le numéro d'un client et pas son nom, et comment JOIN remet les lignes ensemble.",
+ "pages": [
+  {
+   "scheme": [
+    " customers              orders",
+    " id  name               id  customer_id  total",
+    " 1   Ada                10  1            30",
+    " 2   Bo                 11  2            12",
+    "                        12  1            25"
+   ],
+   "point": 2,
+   "mark": [
+    "customer_id"
+   ],
+   "text": [
+    "Une base de données range les données dans des tables, et chaque fait n'est écrit qu'une fois.",
+    "",
+    "- Une commande ne recopie pas le nom du client : elle garde son id.",
+    "- Ada change de nom ? Une seule ligne à mettre à jour, pas chaque commande."
+   ]
+  },
+  {
+   "scheme": [
+    " customers              orders",
+    " id  name               id  customer_id  total",
+    " 1   Ada   ◀────────────10  1            30",
+    " 2   Bo    ◀────────────11  2            12",
+    " 1   Ada   ◀────────────12  1            25"
+   ],
+   "point": 4,
+   "mark": [
+    "Ada"
+   ],
+   "text": [
+    "JOIN … ON remet côte à côte les lignes qui correspondent. Ada apparaît deux fois : une par commande.",
+    "",
+    "$ SELECT customers.name, orders.total",
+    "$ FROM orders JOIN customers",
+    "$ ON orders.customer_id = customers.id;"
+   ]
+  },
+  {
+   "scheme": [
+    " name   total",
+    " Ada    30",
+    " Bo     12",
+    " Ada    25",
+    "",
+    " GROUP BY customers.id, SUM(total) :",
+    " Ada    55",
+    " Bo     12"
+   ],
+   "point": 6,
+   "mark": [
+    "55"
+   ],
+   "text": [
+    "Les lignes jointes forment une table comme une autre : tu peux les filtrer, les additionner.",
+    "",
+    "- WHERE customers.name = 'Ada' garde ses commandes.",
+    "- SUM(orders.total) les additionne.",
+    "- GROUP BY customers.id donne une ligne par client (deux Ada restent séparées)."
+   ]
+  }
+ ]
+}

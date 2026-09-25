@@ -1,0 +1,94 @@
+{
+ "title": "Lire une ligne de commande",
+ "summary": "Ce que veut dire chaque mot tapé, comment le shell trouve le programme, et comment il dit que ça a marché.",
+ "pages": [
+  {
+   "scheme": [
+    " toi@pc:~$  ls   -l   /etc",
+    "            ▲    ▲    ▲",
+    "            │    │    └─ argument : sur quoi agir",
+    "            │    └────── option : comment le faire",
+    "            └─────────── commande : quel programme"
+   ],
+   "point": 4,
+   "mark": [
+    "ls"
+   ],
+   "text": [
+    "Tout ce qui est à gauche du $ est l'invite (le prompt). C'est le shell qui l'écrit : qui tu es, la machine, et où tu es (~ est ton dossier personnel).",
+    "",
+    "- Le premier mot que tu tapes est la commande : le programme à lancer.",
+    "- Les mots qui commencent par - sont des options : elles changent sa façon de faire.",
+    "- Les autres mots sont des arguments : les fichiers ou les choses sur lesquels il travaille."
+   ]
+  },
+  {
+   "scheme": [
+    " $ mkdir mes notes",
+    "         ▔▔▔ ▔▔▔▔▔",
+    "   deux arguments : deux dossiers, mes et notes",
+    "",
+    " $ mkdir \"mes notes\"",
+    "         ▔▔▔▔▔▔▔▔▔▔▔",
+    "   un argument : un dossier, mes notes"
+   ],
+   "point": 6,
+   "mark": [
+    "\"mes notes\""
+   ],
+   "text": [
+    "Le shell coupe ta ligne en mots à chaque espace, avant même que le programme démarre.",
+    "",
+    "- Les guillemets gardent les mots ensemble : \"mes notes\" est un seul argument.",
+    "- C'est pour ça que les noms avec des espaces sont pénibles en ligne de commande : mets-les entre guillemets, ou évite les espaces."
+   ]
+  },
+  {
+   "scheme": [
+    " $ ls",
+    "    │  le shell cherche dans chaque dossier",
+    "    │  de $PATH, dans l'ordre, un programme ls :",
+    "    ▼",
+    " /usr/local/bin/ls   pas là",
+    " /usr/bin/ls         trouvé : il lance celui-ci",
+    " /bin/ls             jamais regardé"
+   ],
+   "point": 5,
+   "mark": [
+    "/usr/bin/ls"
+   ],
+   "text": [
+    "Une commande, c'est juste un fichier programme quelque part sur le disque. $PATH est la liste des dossiers où le shell le cherche.",
+    "",
+    "$ echo $PATH",
+    "$ type -a ls      # tous les ls que le shell trouve, dans l'ordre",
+    "",
+    "« command not found » veut dire qu'aucun dossier de $PATH ne l'a : une faute de frappe, ou il n'est pas installé."
+   ]
+  },
+  {
+   "scheme": [
+    " $ ls /nothing",
+    " ls: cannot access '/nothing':",
+    "     No such file or directory",
+    " $ echo $?",
+    " 2",
+    "",
+    " 0          ça a marché",
+    " 1, 2, …    quelque chose s'est mal passé"
+   ],
+   "point": 4,
+   "mark": [
+    "2"
+   ],
+   "text": [
+    "Chaque commande se termine par un nombre, son code de retour. Tu ne le vois pas, mais $? garde le dernier.",
+    "",
+    "- 0 veut dire réussite. Tout le reste est un échec.",
+    "- && s'en sert : la deuxième commande ne tourne que si la première a renvoyé 0.",
+    "",
+    "$ mkdir build && cd build"
+   ]
+  }
+ ]
+}

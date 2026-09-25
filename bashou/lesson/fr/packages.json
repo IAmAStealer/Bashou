@@ -1,0 +1,97 @@
+{
+ "title": "Les paquets et les dépôts",
+ "summary": "Où apt et dnf trouvent leurs programmes, pourquoi une signature est vérifiée, et ce que sont les dépendances.",
+ "pages": [
+  {
+   "scheme": [
+    " dépôt  (un serveur, p. ex. deb.debian.org)",
+    " ├── la liste des paquets, signée",
+    " └── les paquets (fichiers .deb)",
+    "       │",
+    "       │  apt update : récupère la liste",
+    "       ▼",
+    " ta machine garde une copie de la liste",
+    "       │",
+    "       │  apt install jq",
+    "       ▼",
+    " jq et ce dont il a besoin, installés"
+   ],
+   "point": 4,
+   "mark": [
+    "apt update"
+   ],
+   "text": [
+    "Les programmes arrivent dans des paquets, rangés dans des dépôts.",
+    "",
+    "- apt update rafraîchit seulement la liste : rien n'est installé ni mis à jour.",
+    "- apt install lit cette liste, télécharge le paquet, et met ses fichiers en place."
+   ]
+  },
+  {
+   "scheme": [
+    " la liste des paquets",
+    "   signée avec la clé privée du dépôt",
+    "       │",
+    "       ▼  apt la vérifie avec la clé publique",
+    "       │  en qui tu as confiance, rangée dans",
+    "       │  /etc/apt/keyrings/, /usr/share/keyrings/",
+    "       ├── bonne signature : la liste sert",
+    "       └── NO_PUBKEY / Missing key : refusée"
+   ],
+   "point": 7,
+   "mark": [
+    "NO_PUBKEY",
+    "Missing key"
+   ],
+   "text": [
+    "N'importe qui pourrait monter un faux miroir. La signature prouve que la liste vient du vrai dépôt et n'a pas été modifiée.",
+    "",
+    "- NO_PUBKEY (« Missing key » sur Debian 13) : tu n'as pas encore la clé. Prends-la sur le site du projet lui-même.",
+    "- Ne coupe jamais la vérification pour faire taire l'erreur."
+   ]
+  },
+  {
+   "scheme": [
+    " $ sudo apt install jq",
+    " jq",
+    " └── libjq1",
+    "     └── libonig5",
+    "",
+    " trois paquets pour une commande"
+   ],
+   "point": 2,
+   "mark": [
+    "libjq1",
+    "libonig5"
+   ],
+   "text": [
+    "La plupart des paquets en ont besoin d'autres pour marcher : leurs dépendances. apt et dnf les installent pour toi.",
+    "",
+    "- Les bibliothèques (lib…) sont du code partagé par beaucoup de programmes.",
+    "- apt autoremove enlève les dépendances dont plus rien n'a besoin."
+   ]
+  },
+  {
+   "scheme": [
+    "           Debian, Ubuntu      Rocky, RHEL",
+    " liste     apt update          dnf makecache",
+    " installer apt install jq      dnf install jq",
+    " bas niv.  dpkg                rpm",
+    " quel pkg  dpkg -S /usr/bin/wc rpm -qf /usr/bin/wc",
+    " dépôts    /etc/apt/sources…   /etc/yum.repos.d/"
+   ],
+   "point": 4,
+   "mark": [
+    "dpkg -S",
+    "rpm -qf"
+   ],
+   "text": [
+    "Deux grandes familles, les mêmes idées.",
+    "",
+    "- apt et dnf parlent aux dépôts et gèrent les dépendances.",
+    "- dpkg et rpm travaillent sur les paquets déjà sur ta machine.",
+    "- « Quel paquet m'a donné ce fichier ? », c'est dpkg -S ou rpm -qf."
+   ]
+  }
+ ]
+}

@@ -50,10 +50,17 @@ def paint(line, marks):
     return line
 
 
+NO_BREAK = {" :": "\u00a0:", " ;": "\u00a0;", " ?": "\u00a0?", " !": "\u00a0!", "« ": "«\u00a0", " »": "\u00a0»"}
+
+
 def text_lines(text, width):
-    """Wrapped text: "- " starts a bullet, "$ " a command, "" leaves a blank line (air)."""
+    """Wrapped text: "- " starts a bullet, "$ " a command, "" leaves a blank line (air).
+    French spaces before : ; ? ! and inside « » never start or end a line."""
     out = []
     for line in text:
+        if not line.startswith("$ "):
+            for space, kept in NO_BREAK.items():
+                line = line.replace(space, kept)
         if not line:
             out.append("")
         elif line.startswith("$ "):

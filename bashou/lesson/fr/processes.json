@@ -1,0 +1,90 @@
+{
+ "title": "Les processus et les signaux",
+ "summary": "Un programme qui tourne est un processus : trouver son PID, voir qui l'a lancé, et l'arrêter proprement.",
+ "pages": [
+  {
+   "scheme": [
+    " systemd          PID 1",
+    " ├── cron         PID 640",
+    " └── sshd         PID 812",
+    "     └── bash     PID 2301   ton shell",
+    "         └── ps   PID 2350   ta commande"
+   ],
+   "point": 4,
+   "mark": [
+    "PID 2350"
+   ],
+   "text": [
+    "Un programme qui tourne est un processus. Chacun a un numéro, son PID.",
+    "",
+    "- Chaque processus a été lancé par un autre, son parent (PPID).",
+    "- Tes commandes sont des enfants de ton shell.",
+    "- Le PID 1 démarre en premier au boot : sur la plupart des Linux aujourd'hui, c'est systemd.",
+    "",
+    "$ ps -ef --forest"
+   ]
+  },
+  {
+   "scheme": [
+    " $ kill 2350      SIGTERM (15) : arrête-toi",
+    "     il peut sauver, fermer ses fichiers",
+    "",
+    " $ kill -9 2350   SIGKILL (9) : arrêté net",
+    "     pas de ménage : fichiers à moitié écrits",
+    "",
+    " Ctrl+C           SIGINT (2) : interruption"
+   ],
+   "point": 0,
+   "mark": [
+    "SIGTERM",
+    "SIGKILL"
+   ],
+   "text": [
+    "kill envoie un signal : un court message à un processus.",
+    "",
+    "- kill tout court demande poliment. Essaie-le d'abord, et attends quelques secondes.",
+    "- kill -9 ne peut être ni refusé ni suivi d'un ménage : garde-le pour un processus qui ne veut pas s'arrêter."
+   ]
+  },
+  {
+   "scheme": [
+    " $ sleep 300 &",
+    " [1] 2410                tâche 1, PID 2410",
+    " $ jobs",
+    " [1]+  Running   sleep 300 &",
+    " $ fg %1                 revient au premier plan",
+    " ^Z                      Ctrl+Z : pause",
+    " $ bg %1                 continue, en arrière-plan"
+   ],
+   "point": 1,
+   "mark": [
+    "&"
+   ],
+   "text": [
+    "Une commande qui finit par & tourne en arrière-plan : tu récupères ton invite tout de suite.",
+    "",
+    "- jobs liste ce qui tourne en arrière-plan dans ce shell.",
+    "- Ces tâches appartiennent à ton shell : ferme le terminal et elles s'arrêtent en général aussi."
+   ]
+  },
+  {
+   "scheme": [
+    " $ ps aux --sort=-%cpu | head -4",
+    " USER  PID %CPU %MEM COMMAND",
+    " web   912 97.0  2.1 /usr/bin/python3 app.py",
+    " sam  2301  0.3  0.1 -bash"
+   ],
+   "point": 2,
+   "mark": [
+    "97.0"
+   ],
+   "text": [
+    "Quelque chose rame ? Trouve qui utilise le processeur ou la mémoire.",
+    "",
+    "- ps aux liste tous les processus de tous les utilisateurs.",
+    "- top (ou htop) montre la même liste, en direct. q pour quitter.",
+    "- pgrep -a python trouve des processus par leur nom."
+   ]
+  }
+ ]
+}

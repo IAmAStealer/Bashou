@@ -1,0 +1,105 @@
+{
+ "title": "Python : les noms et les objets",
+ "summary": "Une variable est une étiquette sur un objet : pourquoi modifier une liste dans une fonction la modifie aussi dehors.",
+ "pages": [
+  {
+   "scheme": [
+    " hosts = [\"web\", \"db\"]",
+    "",
+    "   hosts ────▶ [\"web\", \"db\"]",
+    "",
+    "   nom         objet"
+   ],
+   "point": 2,
+   "mark": [
+    "hosts"
+   ],
+   "text": [
+    "En Python, une variable est un nom collé sur un objet, comme une étiquette.",
+    "",
+    "- La liste est l'objet. hosts n'est que son nom.",
+    "- Le signe = colle un nom sur un objet. Il ne copie rien."
+   ]
+  },
+  {
+   "scheme": [
+    " backup = hosts",
+    " hosts.append(\"cache\")",
+    "",
+    "   hosts  ──┐",
+    "            ├─▶ [\"web\", \"db\", \"cache\"]",
+    "   backup ──┘"
+   ],
+   "point": 4,
+   "mark": [
+    "backup",
+    "\"cache\""
+   ],
+   "text": [
+    "backup = hosts colle une deuxième étiquette sur la même liste.",
+    "",
+    "- Modifie la liste par un nom, et l'autre nom le voit aussi.",
+    "- print(backup) montre cache : il n'y a jamais eu de deuxième liste."
+   ]
+  },
+  {
+   "scheme": [
+    " backup = hosts.copy()     (ou list(hosts))",
+    "",
+    "   hosts  ────▶ [\"web\", \"db\", \"cache\"]",
+    "   backup ────▶ [\"web\", \"db\"]"
+   ],
+   "point": 3,
+   "mark": [
+    ".copy()"
+   ],
+   "text": [
+    "Pour avoir une deuxième liste, demande une copie.",
+    "",
+    "- Maintenant chaque nom a sa propre liste : en modifier une laisse l'autre tranquille.",
+    "- hosts[:] est aussi une copie ; tu la verras dans du code plus ancien.",
+    "- copy() copie la liste, pas ce qu'il y a dedans : les listes à l'intérieur restent partagées."
+   ]
+  },
+  {
+   "scheme": [
+    " def tidy(xs):",
+    "     xs.sort()      # modifie hosts aussi !",
+    "",
+    "   hosts ──┐",
+    "           ├─▶ [\"cache\", \"db\", \"web\"]",
+    "   xs    ──┘"
+   ],
+   "point": 1,
+   "mark": [
+    "xs.sort()"
+   ],
+   "text": [
+    "Une fonction reçoit le même objet, sous un nouveau nom.",
+    "",
+    "- xs.sort() ou xs.remove(…) modifient la liste de l'appelant.",
+    "- Construis plutôt une nouvelle liste et renvoie-la : sorted(xs) renvoie une nouvelle liste triée."
+   ]
+  },
+  {
+   "scheme": [
+    " name = \"sam\"",
+    " name = name.upper()",
+    "",
+    "   name ──╳─▶ \"sam\"          ne change jamais",
+    "        ────▶ \"SAM\"          une nouvelle chaîne"
+   ],
+   "point": 4,
+   "mark": [
+    "\"SAM\""
+   ],
+   "text": [
+    "Certains objets ne peuvent jamais changer : les nombres, les chaînes, les tuples.",
+    "",
+    "- .upper() ne modifie pas \"sam\" : elle fabrique une nouvelle chaîne.",
+    "- Il faut donc garder le résultat : name = name.upper().",
+    "- Les listes et les dicts peuvent changer sur place : c'est là que les étiquettes partagées te surprennent."
+   ]
+  }
+ ]
+}

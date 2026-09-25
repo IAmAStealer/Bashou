@@ -1,0 +1,192 @@
+{
+ "title": "La mémoire en C : la pile et le tas",
+ "summary": "Où vivent tes variables, pourquoi malloc a besoin de free, et ce que sont une fuite et un débordement de pile.",
+ "pages": [
+  {
+   "scheme": [
+    " adresses hautes",
+    " ┌──────────────────┐",
+    " │ pile         ↓   │  variables locales,",
+    " │                  │  appels de fonctions",
+    " │   espace libre   │",
+    " │                  │",
+    " │ tas          ↑   │  ce que malloc te donne",
+    " ├──────────────────┤",
+    " │ globales         │",
+    " │ code             │  ton programme compilé",
+    " └──────────────────┘",
+    " adresses basses"
+   ],
+   "point": 2,
+   "mark": [
+    "pile",
+    "tas"
+   ],
+   "text": [
+    "Un programme qui tourne reçoit sa mémoire en plusieurs parties. Deux comptent tous les jours :",
+    "",
+    "- la pile (stack), pour les variables de tes fonctions ;",
+    "- le tas (heap), pour la mémoire que tu demandes toi-même."
+   ]
+  },
+  {
+   "scheme": [
+    " pile",
+    " ┌───────────────────────┐",
+    " │ main    x = ?         │",
+    " ├───────────────────────┤",
+    " │ add     a = 2         │  empilée quand",
+    " │         b = 3         │  add(2, 3)",
+    " │         s = 5         │  est appelée",
+    " └───────────────────────┘",
+    "   ↓ le prochain appel va ici",
+    "",
+    " int add(int a, int b) { int s = a+b; return s; }",
+    " int x = add(2, 3);"
+   ],
+   "point": 4,
+   "mark": [
+    "add"
+   ],
+   "text": [
+    "- Chaque appel reçoit une boîte sur la pile, un cadre (frame), avec ses arguments et ses variables locales.",
+    "- Un appel dans un appel ajoute une nouvelle boîte en dessous : sur les PC sous Linux, la pile grandit vers le bas, vers les adresses basses.",
+    "- La boîte la plus récente s'appelle quand même « le sommet de la pile » : sommet veut dire la dernière ajoutée, pas la plus haute."
+   ]
+  },
+  {
+   "scheme": [
+    " pile",
+    " ┌───────────────────────┐",
+    " │ main    x = 5         │",
+    " └───────────────────────┘",
+    "",
+    "   add a terminé : sa boîte a disparu,",
+    "   a, b et s n'existent plus"
+   ],
+   "point": 2,
+   "mark": [
+    "x = 5"
+   ],
+   "text": [
+    "Quand une fonction se termine, sa boîte est jetée. Personne n'a besoin de la libérer : c'est automatique.",
+    "",
+    "- C'est pour ça que la pile est rapide et simple.",
+    "- Et pour ça que renvoyer l'adresse d'une variable locale est un bug : elle pointe dans une boîte qui n'existe plus."
+   ]
+  },
+  {
+   "scheme": [
+    " pile",
+    " ┌───────────────────────┐",
+    " │ main                  │",
+    " │ sum_to(4)             │",
+    " │ sum_to(3)             │",
+    " │ sum_to(2)             │",
+    " │ …  aucun cas d'arrêt  │",
+    " │ sum_to(-261000)       │",
+    " └───────────────────────┘",
+    "   pile pleine : segmentation fault"
+   ],
+   "point": 9,
+   "mark": [
+    "segmentation fault"
+   ],
+   "text": [
+    "Une fonction qui s'appelle elle-même empile une boîte par appel.",
+    "",
+    "- Sans cas de base (un cas qui se termine sans se rappeler), les boîtes s'entassent.",
+    "- La pile est petite (8 Mo par défaut sous Linux) : elle déborde et le programme plante."
+   ]
+  },
+  {
+   "scheme": [
+    " pile                      tas",
+    " ┌──────────────┐",
+    " │ main         │",
+    " ├──────────────┤          ┌─────────────┐",
+    " │ load   p ────┼─────────▶│ 100 octets  │",
+    " └──────────────┘          └─────────────┘",
+    "",
+    " char *p = malloc(100);    (dans load)"
+   ],
+   "point": 4,
+   "mark": [
+    "malloc",
+    "100 octets"
+   ],
+   "text": [
+    "malloc demande de la mémoire sur le tas et te donne son adresse.",
+    "",
+    "- p est un pointeur : une petite variable, sur la pile, qui contient cette adresse.",
+    "- La mémoire du tas reste après la fin de la fonction, jusqu'à ce que tu la libères.",
+    "- malloc renvoie NULL quand il ne peut pas donner de mémoire : vérifie toujours avant de t'en servir."
+   ]
+  },
+  {
+   "scheme": [
+    " pile                      tas",
+    " ┌──────────────┐          ┌─────────────┐",
+    " │ load   p ────┼─ ─ ─ ─ ─▶│ rendue      │",
+    " └──────────────┘          └─────────────┘",
+    "   free(p);  p garde l'ancienne adresse",
+    "",
+    " ┌──────────────┐",
+    " │ load   p NULL│",
+    " └──────────────┘",
+    "   p = NULL;  plus rien à suivre"
+   ],
+   "point": 2,
+   "mark": [
+    "free",
+    "rendue",
+    "NULL"
+   ],
+   "text": [
+    "free rend la mémoire à malloc, qui la réutilisera pour autre chose. Mais p garde l'ancienne adresse : un pointeur pendant (dangling).",
+    "",
+    "- Se servir de p après free est un bug « use after free » : ça peut marcher, planter, ou abîmer des données.",
+    "- p = NULL juste après free fait planter une erreur tout de suite, là où tu la trouves. Et free(NULL) ne fait rien : un deuxième free est sans danger."
+   ]
+  },
+  {
+   "scheme": [
+    " pile                      tas",
+    " ┌──────────────┐",
+    " │ main         │          ┌─────────────┐",
+    " └──────────────┘          │ 100 octets  │",
+    "   load a terminé :        └─────────────┘",
+    "   boîte et p disparus       ▲ aucun pointeur ici"
+   ],
+   "point": 5,
+   "mark": [
+    "100 octets"
+   ],
+   "text": [
+    "load s'est terminée sans free : p a disparu, les 100 octets non. Plus personne ne peut les libérer. C'est une fuite de mémoire.",
+    "",
+    "- Un programme qui fuit un peu à chaque requête grossit jusqu'à ce que le système le tue.",
+    "- La règle : chaque malloc a exactement un free.",
+    "",
+    "$ gcc -g -fsanitize=address prog.c -o prog && ./prog"
+   ]
+  },
+  {
+   "scheme": [
+    "             pile                tas",
+    " qui libère  automatique         toi, avec free",
+    " vit         jusqu'au return     jusqu'au free",
+    " taille      petite (Mo)         grande (Go)",
+    " pour        petit, éphémère     gros ou durable"
+   ],
+   "point": 1,
+   "mark": [
+    "toi, avec free"
+   ],
+   "text": [
+    "- Une variable locale va sur la pile : rien à faire.",
+    "- Des grosses données, ou qui doivent survivre à la fonction : malloc, et un free plus tard."
+   ]
+  }
+ ]
+}

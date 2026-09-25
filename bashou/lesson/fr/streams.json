@@ -1,0 +1,116 @@
+{
+ "title": "Où va la sortie",
+ "summary": "stdin, stdout et stderr : envoyer la sortie dans un fichier, garder les erreurs à part, ou les jeter.",
+ "pages": [
+  {
+   "scheme": [
+    "            ┌─────────┐",
+    " clavier ──▶│         │─▶ stdout (1) ─▶ écran",
+    "  stdin (0) │commande │",
+    "            │         │─▶ stderr (2) ─▶ écran",
+    "            └─────────┘"
+   ],
+   "point": 1,
+   "mark": [
+    "stdout (1)",
+    "stderr (2)"
+   ],
+   "text": [
+    "Chaque programme démarre avec trois flux, chacun avec un numéro :",
+    "",
+    "- stdin (0) : ce qu'il lit, le clavier par défaut.",
+    "- stdout (1) : sa sortie normale, les résultats.",
+    "- stderr (2) : ses messages d'erreur.",
+    "",
+    "Les deux sorties vont sur ton écran, alors elles se ressemblent. Elles ne sont pas pareilles."
+   ]
+  },
+  {
+   "scheme": [
+    " $ ls /etc /nothing > out.txt",
+    "",
+    "            ┌─────────┐",
+    "            │         │─▶ stdout (1) ─▶ out.txt",
+    "            │   ls    │",
+    "            │         │─▶ stderr (2) ─▶ écran",
+    "            └─────────┘"
+   ],
+   "point": 3,
+   "mark": [
+    "out.txt"
+   ],
+   "text": [
+    "> envoie stdout dans un fichier. Les erreurs, elles, s'affichent toujours à l'écran.",
+    "",
+    "- > vide d'abord le fichier ! Chaque lancement le remplace.",
+    "- >> ajoute à la fin du fichier à la place : parfait pour un journal.",
+    "",
+    "$ date >> history.log"
+   ]
+  },
+  {
+   "scheme": [
+    " $ ls /etc /nothing > out.txt 2> errors.txt",
+    "",
+    "            ┌─────────┐",
+    "            │         │─▶ stdout (1) ─▶ out.txt",
+    "            │   ls    │",
+    "            │         │─▶ stderr (2) ─▶ errors.txt",
+    "            └─────────┘"
+   ],
+   "point": 5,
+   "mark": [
+    "2>",
+    "errors.txt"
+   ],
+   "text": [
+    "2> envoie le flux numéro 2, les erreurs, ailleurs.",
+    "",
+    "- Les résultats dans un fichier, les problèmes dans un autre : facile à relire ensuite.",
+    "- 2> /dev/null jette les erreurs. /dev/null est une poubelle qui avale tout.",
+    "",
+    "$ find / -name '*.conf' 2> /dev/null"
+   ]
+  },
+  {
+   "scheme": [
+    " $ ./backup.sh > all.log 2>&1",
+    "",
+    "            ┌─────────┐",
+    "            │         │─▶ stdout (1) ─▶ all.log",
+    "            │ backup  │                  ▲",
+    "            │         │─▶ stderr (2) ────┘",
+    "            └─────────┘"
+   ],
+   "point": 5,
+   "mark": [
+    "2>&1"
+   ],
+   "text": [
+    "2>&1 veut dire : envoie 2 au même endroit que 1, maintenant.",
+    "",
+    "- L'ordre compte : d'abord > all.log, puis 2>&1. Dans l'autre sens, les erreurs vont encore à l'écran.",
+    "- Pratique pour les tâches cron et les scripts : toute l'histoire finit dans un seul fichier."
+   ]
+  },
+  {
+   "scheme": [
+    "            ┌─────────┐",
+    "names.txt ─▶│  sort   │─▶ stdout (1) ─▶ écran",
+    "  stdin (0) └─────────┘",
+    "",
+    " $ sort < names.txt"
+   ],
+   "point": 1,
+   "mark": [
+    "names.txt"
+   ],
+   "text": [
+    "< fait l'inverse : le programme lit un fichier comme si tu le tapais.",
+    "",
+    "- La plupart des outils prennent aussi le nom du fichier en argument : sort names.txt.",
+    "- < compte pour les programmes qui ne lisent que stdin, comme un script qui attend tes réponses."
+   ]
+  }
+ ]
+}
