@@ -44,7 +44,8 @@ def default():
         "looks": {},        # pet or "starter" -> form shown when not the latest (`f` in `bashou swap`)
         "starter_best": 1,  # the starter's highest form reached: it never goes back
         "evolving": [],     # evolutions waiting to be watched: {"who", "from", "to"} (`bashou evolve`)
-        "lessons": {"read": [], "opened": [], "page": {}, "met": []},   # `bashou lesson`: read, opened, page to resume, fights met
+        "lessons": {"read": [], "opened": [], "page": {}, "met": []},
+        "share_name": "",   # the nickname on `bashou share` cards (letters, digits, - and _)   # `bashou lesson`: read, opened, page to resume, fights met
     }
 
 
