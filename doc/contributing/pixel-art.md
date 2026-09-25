@@ -7,6 +7,11 @@ neither needs any code:
 2. **Draw a bigger version** (16, 32 or 64 px) as PNG files in `art/`. The game will switch to them
    later.
 
+**Who draws what.** `art/` is for **people only**: PNG files drawn by hand, dropped into a pull request
+with no programming at all; we turn them into game files. The JSON sprites in `bashou/pets/` go
+straight into the game: they may be drawn with an AI, and every one is checked by hand before it's
+merged. The exception is the large ones, `bashou/pets/large/`: drawn by a person, like `art/`.
+
 ## 1. The pets in the game: `bashou/pets/<pet>.json`
 
 Each pet is one JSON file. The picture is text: one letter per pixel, `.` is transparent. Each
@@ -118,9 +123,9 @@ alive with all of them:
   background); a dark shade of the pet's color works better.
 - **Your own work.** No sprites taken from games, sites or other projects, and no tracing. By
   sending it, you agree to share it under the project's MIT license.
-- **Large art is drawn by hand.** For `bashou/pets/large/` and `art/<pet>/<size>/`, no AI-generated,
-  AI-upscaled or AI-redrawn pixels: that's the one place Bashou refuses AI help. (The small 17 × 12
-  sprites, and whole new pets at that size, may be made with an AI, like the rest of the project.)
+- **`art/` and large sprites are drawn by hand.** In `art/` and `bashou/pets/large/`, no AI-generated,
+  AI-upscaled or AI-redrawn pixels: the one place Bashou refuses AI help. (The 17 × 12 sprites in
+  `bashou/pets/`, and whole new pets at that size, may be made with an AI; a person reviews each one.)
 
 Any pixel-art editor works: [Aseprite](https://www.aseprite.org/),
 [LibreSprite](https://libresprite.github.io/), [Piskel](https://www.piskelapp.com/) (in the browser)…

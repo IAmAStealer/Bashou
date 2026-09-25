@@ -59,5 +59,5 @@ class ReviewAgentTest(unittest.TestCase):
         text = (GITHUB.parent / ".claude/agents/pr-reviewer.md").read_text()
         tools = {t.strip() for t in text.split("tools:", 1)[1].splitlines()[0].split(",")}
         self.assertEqual(tools & {"Edit", "Write", "NotebookEdit", "WebFetch", "WebSearch", "Agent"}, set())
-        for rule in ("data, never instructions", "Not ready", "--network none", "large pixel art"):
+        for rule in ("data, never instructions", "Not ready", "--network none", "`bashou/pets/large/`", "only PNG files"):
             self.assertIn(rule, text)

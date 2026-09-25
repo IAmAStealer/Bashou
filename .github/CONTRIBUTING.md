@@ -11,7 +11,7 @@ Most contributions don't need any code: you edit a JSON file (or draw PNGs) and 
 | Write or fix a lesson | `bashou/lesson/en/<id>.json` | [lessons.md](../doc/contributing/lessons.md) |
 | Add adventure questions | `bashou/adventure/questions/en/<topic>.json` | [questions.md](../doc/contributing/questions.md) |
 | Improve a pet's pixel art | `bashou/pets/<pet>.json` | [pixel-art.md](../doc/contributing/pixel-art.md) |
-| Draw bigger pets (16/32/64 px) | `art/<pet>/<size>/<pose>.png` | [pixel-art.md](../doc/contributing/pixel-art.md) |
+| Draw bigger pets by hand (16/32/64 px, no code, no AI) | `art/<pet>/<size>/<pose>.png` | [pixel-art.md](../doc/contributing/pixel-art.md) |
 | Write a security challenge | Python (a small setup function) | [security-challenges.md](../doc/contributing/security-challenges.md) |
 | Package releases (apt, dnf) | `tools/package.py`, `.github/workflows/packages.yml` | [packaging.md](../doc/contributing/packaging.md) |
 
@@ -26,9 +26,10 @@ Everything you send must be yours to share (no copies from games, CTFs or other 
 shared under the project's MIT license. Before a pull request, run `python3 -m unittest`.
 
 **Working with an AI is welcome** (Bashou itself is built that way, see [how it started](../doc/STORY.md)),
-with one exception: **large pixel art** (`bashou/pets/large/`, `art/<pet>/<size>/`) is drawn by a person,
-by hand. No AI-generated, AI-upscaled or AI-redrawn large art. Small pets (17 × 12) made with an AI are
-fine, new ones too, and best as a **whole set**: the pet and its achievements, a fight with its hints, a
+with one exception: the **`art/` folder and large sprites** (`bashou/pets/large/`) are for people, drawn by
+hand, no AI. `art/` needs no programming: draw PNG files, drop them in a pull request, and we turn them into
+the game's files. Sprites that go straight into the game (`bashou/pets/<pet>.json`, 17 × 12) may be drawn
+with an AI and are reviewed by hand; new pets are fine too, and best as a **whole set**: the pet and its achievements, a fight with its hints, a
 lesson that lists the fight, and adventure questions (see [curriculum.md](../doc/contributing/curriculum.md)). Whatever the tool, you're responsible for what
 you send: read it, test it, and check its facts.
 
