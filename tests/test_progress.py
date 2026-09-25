@@ -173,6 +173,21 @@ class ProgressTest(unittest.TestCase):
                                 "beacon", "phoenix"])                    # 2 at once skip the Ember and the Blaze
         self.assertEqual(len(creatures.FORMS["spark"]), 10)
 
+    @mock.patch("bashou.which.installed", return_value=True)
+    def test_network_commands_bring_the_packet_up_to_the_constellation(self, _):
+        lines = ["ip -br addr", "ss -tlnp", "ip -6 addr", "ip route get 1.1.1.1", "ss -tn state established",
+                 "getent hosts example.org", "dig -x 1.1.1.1", "resolvectl status", "tracepath -n 1.1.1.1",
+                 "nc -zv localhost 22", "tcpdump -nn -r capture.pcap", "ip -br addr", "ss -tlnp"]
+        seen = []
+        for line in lines:
+            progress.record(self.s, 0, line, "2026-09-25", 14)
+            if "packet" in self.s["pets"]:
+                seen.append(creatures.form("packet", progress.stage(self.s, "packet")))
+        self.assertEqual(seen[-1], "satellite")
+        self.s["challenges"].append("loopback_lurker")
+        progress.check(self.s)
+        self.assertEqual(creatures.form("packet", progress.stage(self.s, "packet")), "constellation")
+
     def test_one_skill_can_reach_the_phoenix(self):
         """Read 20, master 10, three skills: a player who only learns Rust has fewer lessons than that,
         and the Phoenix must not be out of reach."""

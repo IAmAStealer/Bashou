@@ -28,6 +28,8 @@ TOOL_PETS = {
     "squirrel": ({"tar", "gzip", "gunzip", "zip", "unzip", "xz", "zstd"}, 10),
     "pigeon": ({"curl", "wget", "ssh", "scp", "rsync", "dig", "host", "nslookup"}, 10),
     "hedgehog": ({"chmod", "chown", "chgrp", "umask"}, 10),
+    "packet": ({"ip", "ss", "ping", "getent", "resolvectl", "tracepath", "traceroute", "mtr", "nc", "ncat",
+                "tcpdump"}, 10),
     "bee": ({"systemctl", "journalctl"}, 10),
     "whale": ({"kubectl"}, 10),
     "meerkat": ({"top", "htop", "btop", "free", "df", "du", "watch", "vmstat"}, 10),
@@ -39,7 +41,7 @@ TOOL_PETS = {
 # Only the installed ones are named: no `dig` in the hint when dig is missing.
 TOOL_LABELS = {"bat": ("python3", "cargo", "gcc", "make", "node"), "ghost": ("ps", "kill"), "squirrel": ("tar", "gzip"), "pigeon": ("curl", "ssh", "dig"),
                "hedgehog": ("chmod", "chown"), "bee": ("systemctl",), "meerkat": ("df", "du", "top"),
-               "leopard": ("gpg", "pass")}
+               "leopard": ("gpg", "pass"), "packet": ("ip", "ss", "ping")}
 
 
 def tool_label(pet):

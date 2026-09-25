@@ -18,7 +18,7 @@ VOICE = {
     "mole": "*dig dig*", "snake": "Sss…", "ghost": "Boo~", "spider": "*tik-tik*", "ant": "*click*",
     "axolotl": "*wiggle*", "beaver": "*chomp*", "squirrel": "*chitter*", "pigeon": "Coo.", "hedgehog": "*huff*",
     "bee": "Bzz.", "whale": "*whoosh*", "meerkat": "*peek*", "leopard": "*soft paws*", "duck": "Quack.", "cat": "*purr*",
-    "spark": "*crackle*",
+    "spark": "*crackle*", "packet": "*ping*",
 }
 
 TIPS = {
@@ -92,6 +92,11 @@ TIPS = {
     "spark": ["`bashou lesson` : the owl's library. Green means it's your next step.",
               "A lesson read once is a spark. Practice it, and it becomes a fire.",
               "Locked lessons say what opens them. Look at the list, then go and do it."],
+    "packet": ["ip -br addr : your addresses, one line per interface.",
+               "ip route get 1.1.1.1 : which way a packet would go, and nothing is sent.",
+               "ss -tlnp : who is listening, on which port, and which program.",
+               "getent hosts name : what programs really get. dig only asks DNS.",
+               "Refused? The machine answered: nothing listens there. Timed out? Nothing answered at all."],
     "leopard": ["gpg -c notes.txt : locks the file with a passphrase.", "gpg -d notes.txt.gpg : opens it again.",
                 "pass show db/prod : a password for a script, never written in it.",
                 "pass generate site 24 : a strong password you'll never have to type."],
@@ -131,6 +136,10 @@ EXAMPLES = {
     "headers": "curl -I https://example.com", "poster": "curl -d 'a=1' https://httpbin.org/post",
     "tunneler": "ssh -L 8080:localhost:80 server", "mirror": "rsync -av notes/ backup/",
     "resolver": "dig +short example.com", "tracer": "dig +trace example.com",
+    "interfaces": "ip -br addr", "six_sense": "ip -6 addr", "pathfinder": "ip route get 1.1.1.1",
+    "listener": "ss -tlnp", "established": "ss -tn state established", "nsswitch": "getent hosts example.org",
+    "reverse": "dig -x 1.1.1.1", "stub": "resolvectl status", "hops": "tracepath -n 1.1.1.1",
+    "knocker": "nc -zv localhost 22", "capture_reader": "tcpdump -nn -r capture.pcap",
     "octal": "chmod 644 notes.txt", "symbolic": "chmod g+w notes.txt", "owner": "sudo chown $USER:$USER f",
     "mode_reader": "stat -c %a notes.txt", "status": "systemctl status cron", "logbook": "journalctl -u cron",
     "enabler": "sudo systemctl enable --now cron", "reload": "sudo systemctl daemon-reload",
@@ -177,6 +186,8 @@ PERSONAL = {
     "spark": ["The Library of Alexandria burned. What you learn, nobody can burn.",
               "Books still get destroyed today. Keep what they teach where no fire can reach it: in your head.",
               "From the ashes, a phoenix. From a mistake, a lesson."],
+    "packet": ["I'm only a few bytes, but I cross oceans.", "Every hop, someone reads my address and points the way.",
+               "Lost packets get sent again. So can you."],
     "cat": ["I saw what you ran. Your secret is safe with me.", "Curiosity, with permission.",
             "Nice tools. Mind the scope."],
 }

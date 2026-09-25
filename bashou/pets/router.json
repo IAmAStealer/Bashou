@@ -1,0 +1,49 @@
+{
+ "name": "Router",
+ "palette": {
+  "n": "#1c2a4a",
+  "b": "#2f6fb0",
+  "c": "#5cc8e8",
+  "l": "#bdf0ff",
+  "m": "#191919",
+  "p": "#ff9fb0",
+  "g": "#50e070",
+  "y": "#ffd24a",
+  "t": "#5a6474"
+ },
+ "base": [
+  "..y.....y.....y..",
+  "..t.....t.....t..",
+  "..t.....t.....t..",
+  ".nnnnnnnnnnnnnnn.",
+  ".nllllllllllllln.",
+  ".nccccmcccmccccn.",
+  ".nccccpcncpccccn.",
+  ".nbbbbbbbbbbbbbn.",
+  ".nbgbgbybgbybgbn.",
+  ".nnnnnnnnnnnnnnn.",
+  "..tt.........tt..",
+  "................."
+ ],
+ "poses": {
+  "inhale": {
+   "0": "--g-----g-----g--"
+  },
+  "closed": {
+   "5": "------c---c------"
+  },
+  "left": {
+   "5": "-----mc--mc------"
+  },
+  "right": {
+   "5": "------cm--cm-----"
+  },
+  "fidget": {
+   "8": "---b-y-----g-b---"
+  }
+ },
+ "particles": [
+  0,
+  10
+ ]
+}

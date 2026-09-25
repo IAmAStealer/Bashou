@@ -89,7 +89,7 @@ ROSTER = [
     ("gremlin", "Gremlin"), ("snail", "Snail"),
     ("beaver", "Beaver"), ("squirrel", "Squirrel"), ("pigeon", "Pigeon"), ("hedgehog", "Hedgehog"),
     ("bee", "Bee"), ("whale", "Whale"), ("meerkat", "Meerkat"), ("leopard", "Snow leopard"), ("duck", "Duck"),
-    ("spark", "Spark"),
+    ("spark", "Spark"), ("packet", "Packet"),
     ("cat", "Hacker cat"),
 ]
 NAMES = dict(ROSTER)
@@ -143,6 +143,7 @@ STAGES = {
     "leopard": ("Snow cub", "Snow leopard", "Mountain ghost"),
     "duck": ("Duckling", "Duck", "White duck", "Mandarin duck"),
     "spark": ("Sparklings", "Spark", "Ember", "Candle", "Lantern", "Torch", "Campfire", "Beacon", "Blaze", "Phoenix"),
+    "packet": ("Bit", "Byte", "Packet", "Datagram", "Socket", "Relay", "Router", "Uplink", "Satellite", "Constellation"),
 }
 
 
@@ -178,6 +179,7 @@ FORMS = {
     "leopard": ("snow_cub", "snow_leopard", "mountain_ghost"),
     "duck": ("duckling", "duck", "white_duck", "mandarin_duck"),
     "spark": ("sparklings", "spark", "ember", "candle", "lantern", "torch", "campfire", "beacon", "blaze", "phoenix"),
+    "packet": ("bit", "byte", "packet", "datagram", "socket", "relay", "router", "uplink", "satellite", "constellation"),
 }
 
 

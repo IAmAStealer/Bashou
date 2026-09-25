@@ -73,6 +73,11 @@ class Achievement:
         return not self.needs or any(map(which.installed, self.needs))
 
 
+def won_network(s):
+    from . import challenges
+    return any(ch.id in s["challenges"] for ch in challenges.network.ALL)
+
+
 def tool(s, *names):
     return sum(s["tools"].get(n, 0) for n in names)
 
@@ -282,6 +287,31 @@ ALL = [
       needs=("dig",)),
     A("tracer", "pigeon", "Tracer", "follow a name from the root with `dig +trace`", cmd=lambda c: c.arg("dig", r"^\+trace$"),
       needs=("dig",)),
+
+    # Packet: the network, from an address to a packet on the wire
+    A("interfaces", "packet", "Interfaces", "list your addresses with `ip -br addr`",
+      cmd=lambda c: c.sub("ip", "addr") or c.sub("ip", "a") or c.sub("ip", "address"), needs=("ip",)),
+    A("six_sense", "packet", "Sixth sense", "show only your IPv6 addresses with `ip -6 addr`",
+      cmd=lambda c: c.flag("ip", "6"), needs=("ip",)),
+    A("pathfinder", "packet", "Pathfinder", "ask which way a packet would go with `ip route get 1.1.1.1`",
+      cmd=lambda c: c.sub("ip", "get"), needs=("ip",)),
+    A("listener", "packet", "Listener", "see who waits for connections with `ss -tlnp`",
+      cmd=lambda c: c.flag("ss", "l", ("--listening",)), needs=("ss",)),
+    A("established", "packet", "Established", "list the open connections with `ss -tn state established`",
+      cmd=lambda c: c.arg("ss", r"^(established|estab)$"), needs=("ss",)),
+    A("nsswitch", "packet", "Like a program", "look up a name the way programs do: `getent hosts example.org`",
+      cmd=lambda c: c.sub("getent", "hosts") or c.sub("getent", "ahosts"), needs=("getent",)),
+    A("reverse", "packet", "Reverse", "find the name of an address with `dig -x 1.1.1.1`",
+      cmd=lambda c: c.flag("dig", "x"), needs=("dig",)),
+    A("stub", "packet", "Behind the stub", "see your real DNS servers with `resolvectl status`",
+      cmd=lambda c: bool(c.args("resolvectl")), needs=("resolvectl",)),
+    A("hops", "packet", "Hops", "list the routers on the way with `tracepath` or `traceroute`",
+      cmd=lambda c: bool(c.args("tracepath", "traceroute", "mtr")), needs=("tracepath", "traceroute", "mtr")),
+    A("knocker", "packet", "Knocker", "check that a port answers with `nc -zv host 22`",
+      cmd=lambda c: c.flag(("nc", "ncat", "netcat"), "z"), needs=("nc", "ncat", "netcat")),
+    A("capture_reader", "packet", "Capture reader", "read a saved capture with `tcpdump -nn -r file.pcap`",
+      cmd=lambda c: c.flag("tcpdump", "r"), needs=("tcpdump",)),
+    A("net_fighter", "packet", "On the wire", "win a network fight: `bashou fight`", state=lambda s: won_network(s)),
 
     # Hedgehog: permissions
     A("octal", "hedgehog", "Octal", "set a mode in numbers: `chmod 644`", cmd=lambda c: c.arg("chmod", r"^0?[0-7]{3}$")),

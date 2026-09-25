@@ -1,0 +1,48 @@
+{
+ "name": "Packet",
+ "palette": {
+  "n": "#1c2a4a",
+  "m": "#191919",
+  "p": "#ff9fb0",
+  "e": "#f2ead8",
+  "d": "#c9bca0"
+ },
+ "base": [
+  ".................",
+  ".................",
+  "..nnnnnnnnnnnnn..",
+  "..nddeeeeeeeddn..",
+  "..needdeeeddeen..",
+  "..neeeedddeeeen..",
+  "..neeemeeemeeen..",
+  "..neepeeneepeen..",
+  "..neeeeeeeeeeen..",
+  "..nnnnnnnnnnnnn..",
+  "....nn.....nn....",
+  "................."
+ ],
+ "poses": {
+  "inhale": {
+   "5": "-n-------------n-",
+   "6": "-n-------------n-",
+   "7": "-n-------------n-"
+  },
+  "closed": {
+   "6": "------e---e------"
+  },
+  "left": {
+   "6": "-----me--me------"
+  },
+  "right": {
+   "6": "------em--em-----"
+  },
+  "fidget": {
+   "10": "----.-------.----",
+   "11": "----n-------n----"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

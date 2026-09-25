@@ -19,7 +19,7 @@ from pathlib import Path
 
 from . import Challenge
 
-NET = dict(pet="pigeon", skill="network")
+NET = dict(pet="packet", skill="network")
 TCPDUMP = dict(tools=("tcpdump", "tshark"), requires=["tcpdump"])
 
 
