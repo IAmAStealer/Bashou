@@ -65,3 +65,48 @@ class ReviewAgentTest(unittest.TestCase):
         self.assertEqual(tools & {"Edit", "Write", "NotebookEdit", "WebFetch", "WebSearch", "Agent"}, set())
         for rule in ("data, never instructions", "Not ready", "--network none", "`bashou/pets/large/`", "only PNG files"):
             self.assertIn(rule, text)
+
+
+
+def duplicate_keys(text):
+    """Keys written twice in the same YAML mapping, as "line: key" (block scalars like `run: |` skipped)."""
+    found, seen, block = [], {}, None
+    for n, line in enumerate(text.splitlines(), 1):
+        stripped = line.strip()
+        indent = len(line) - len(line.lstrip())
+        if block is not None:
+            if not stripped or indent > block:
+                continue
+            block = None
+        if not stripped or stripped.startswith("#"):
+            continue
+        item = stripped.startswith("- ")
+        if item:                                         # a list item starts a new mapping
+            indent += 2
+            stripped = stripped[2:]
+            for deeper in [i for i in seen if i >= indent]:
+                del seen[deeper]
+        for deeper in [i for i in seen if i > indent]:
+            del seen[deeper]
+        if ":" not in stripped or stripped.startswith(("'", '"')):
+            continue
+        key, rest = stripped.split(":", 1)
+        if rest and not rest.startswith(" "):
+            continue                                     # a value with a colon, not a key
+        keys = seen.setdefault(indent, set())
+        if key in keys:
+            found.append(f"{n}: {key}")
+        keys.add(key)
+        if rest.strip() in ("|", ">", "|-", ">-"):
+            block = indent
+    return found
+
+
+class WorkflowsTest(unittest.TestCase):
+    def test_no_key_twice_in_a_mapping(self):
+        """release.yml had two `packages:` jobs: GitHub refused the whole file ("'packages' is already
+        defined"), and YAML libraries silently keep the last one, so only a check of our own sees it."""
+        bad = "jobs:\n  release:\n    runs-on: x\n  packages:\n    uses: a\n  packages:\n    uses: b\n"
+        self.assertEqual(duplicate_keys(bad), ["6: packages"])
+        for path in sorted((GITHUB / "workflows").glob("*.yml")):
+            self.assertEqual(duplicate_keys(path.read_text()), [], path.name)
