@@ -18,6 +18,10 @@ Every release has a section here, written for players. CI refuses to tag a relea
   after ten uses of `ip`, `ss`, `ping`, `getent` and friends, and grows with twelve network achievements.
 - The Rocky Linux path starts gentler: level 1 asks about installing, removing, searching and updating
   with `dnf`, and SELinux, EPEL and automatic updates come at level 2, once the basics are known.
+- **New: `bashou share`.** It shows a QR code; scan it and your phone draws a banner of your pet, level
+  and progress, with a Share button for Signal, WhatsApp or any app. Before the QR code, it lists
+  exactly what the card contains. The data travels in the link after the `#`, which browsers never
+  send to a server, and `--name` adds a short nickname if you want one.
 - `bashou learn` now explains `ip`, `ss`, `ping`, `getent`, `host`, `resolvectl`, `tracepath`,
   `traceroute`, `nc` and `tcpdump`, and `bashou explain network` has notes on CIDR, IPv6, DNS and TCP.
 

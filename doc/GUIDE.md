@@ -87,6 +87,7 @@ bashou evolve           # watch your pets evolve (s skips)
 bashou swap             # board to pick your pet (or: bashou swap fox); f switches its form
 bashou off / on         # hide / show the pet
 bashou stats            # commands, top tools, constructs, streaks
+bashou share            # a QR code: your phone draws a banner of your progress to share (--name NICK)
 bashou skills           # what you learn: a bit of everything, or the skills you tick
 bashou config           # a few questions to set Bashou up (see Configuration)
 bashou version          # which version this is (and if a newer one is out)
@@ -164,6 +165,13 @@ Pixel art, security challenges, adventure questions and lessons are welcome as p
 
 Bashou reads each new history entry to count tools and constructs, then throws it away.
 Only counters are kept, in `~/.local/share/bashou/state.json`.
+
+`bashou share` sends nothing: it prints a QR code with a link to a static page on Bashou's GitHub
+Pages. The card's data (pet, level, a few counts, the skills you ticked and the nickname you chose with
+`--name`) sits after the `#`, which browsers keep to themselves: it never reaches GitHub or any
+server. The page draws the banner on the phone, keeps nothing, and refuses any link that doesn't match
+exactly what `bashou share` makes. Since anyone can write such a link, the page says the card isn't
+verified.
 
 ## Translations
 

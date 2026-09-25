@@ -55,6 +55,11 @@ first 10 commands (it keeps changing shape as you type), a night coder for your 
 mushroom for your own scripts, others for a new tool used often enough, a long pipe, a fight lost or
 won, a walk in the adventure… The swap board shows only their silhouette until you meet them.
 
+Proud of your pet? **`bashou share`** shows a QR code: scan it, and your phone draws a banner of your
+pet and progress, ready to send on Signal, WhatsApp or anywhere. It lists exactly what it shares first
+(no commands, files or machine names), and the progress travels in the link itself, after the `#`,
+which is never sent to a server.
+
 ![The three starters, Stardust, Seedling and Pebble, then three of the first pets you can meet: a
 Droplet after 10 commands, a Mouseling after 10 programs, a Spore after 5 scripts](doc/img/pets.svg)
 
