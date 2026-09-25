@@ -75,5 +75,5 @@ jobs:
           cd dist
           sha256sum -- *.deb *.rpm > SHA256SUMS
           gpg --batch --yes --armor --detach-sign SHA256SUMS
-          gh release upload "$VERSION" -- *.deb *.rpm SHA256SUMS SHA256SUMS.asc --clobber --repo "$GITHUB_REPOSITORY"
+          gh release upload "$VERSION" --clobber --repo "$GITHUB_REPOSITORY" -- *.deb *.rpm SHA256SUMS SHA256SUMS.asc
           gh release edit "$VERSION" --draft=false --latest --repo "$GITHUB_REPOSITORY"

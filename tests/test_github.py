@@ -128,3 +128,13 @@ class WorkflowsTest(unittest.TestCase):
             top = re.search(r"^permissions:(.*?)^\S", path.read_text(), re.M | re.S)
             self.assertIsNotNone(top, path.name)
             self.assertNotIn("write", top.group(1), path.name)
+
+    def test_no_option_after_double_dash(self):
+        """`gh release upload v0.6.2 -- *.deb --clobber` took --clobber for a file (0.6.2's release failed):
+        after `--`, every word is a file."""
+        import re
+        for path in sorted((GITHUB / "workflows").glob("*.yml")):
+            for n, line in enumerate(path.read_text().splitlines(), 1):
+                code = line.split(" #")[0]
+                if " -- " in code:
+                    self.assertNotRegex(code.split(" -- ", 1)[1], r"(^|\s)--?[A-Za-z]", f"{path.name}:{n}")
