@@ -17,7 +17,7 @@ Every release has a section here, written for players. CI refuses to tag a relea
 - **A new pet: the Spark, born from the library.** Fire, for the Library of Alexandria that burned and for
   the books still destroyed today: what you learn, nobody can burn. Read a lesson to the end and a few
   Sparklings twinkle next to you. They grow with each lesson achievement (read 3, 6, 12 and 20 lessons,
-  master 1, 5 and 10, three skills) through Spark, Ember, Candle, Lantern, Torch, Campfire, Bonfire and
+  master 1, 5 and 10, three skills) through Spark, Ember, Candle, Lantern, Torch, Campfire, Beacon and
   Blaze, and become a Phoenix when you've read every lesson of your skills. Learning only one skill? The
   counts stop at what your skills offer, so the Phoenix stays within reach.
 - **Fifteen short lessons for the basics**, each building on the one before: files (mkdir, cp, mv, rm),

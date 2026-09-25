@@ -142,7 +142,7 @@ STAGES = {
     "meerkat": ("Pup", "Meerkat", "Sentinel"),
     "leopard": ("Snow cub", "Snow leopard", "Mountain ghost"),
     "duck": ("Duckling", "Duck", "White duck", "Mandarin duck"),
-    "spark": ("Sparklings", "Spark", "Ember", "Candle", "Lantern", "Torch", "Campfire", "Bonfire", "Blaze", "Phoenix"),
+    "spark": ("Sparklings", "Spark", "Ember", "Candle", "Lantern", "Torch", "Campfire", "Beacon", "Blaze", "Phoenix"),
 }
 
 
@@ -177,7 +177,7 @@ FORMS = {
     "meerkat": ("pup", "meerkat", "sentinel"),
     "leopard": ("snow_cub", "snow_leopard", "mountain_ghost"),
     "duck": ("duckling", "duck", "white_duck", "mandarin_duck"),
-    "spark": ("sparklings", "spark", "ember", "candle", "lantern", "torch", "campfire", "bonfire", "blaze", "phoenix"),
+    "spark": ("sparklings", "spark", "ember", "candle", "lantern", "torch", "campfire", "beacon", "blaze", "phoenix"),
 }
 
 

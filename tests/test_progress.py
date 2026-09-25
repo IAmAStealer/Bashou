@@ -170,7 +170,7 @@ class ProgressTest(unittest.TestCase):
         read(*every[:20])                                                 # 20: Well read
         read(*every)                                                      # every one: Alexandria
         self.assertEqual(seen, ["sparklings", "spark", "candle", "lantern", "torch", "campfire",
-                                "bonfire", "phoenix"])                    # 2 at once skip the Ember and the Blaze
+                                "beacon", "phoenix"])                    # 2 at once skip the Ember and the Blaze
         self.assertEqual(len(creatures.FORMS["spark"]), 10)
 
     def test_one_skill_can_reach_the_phoenix(self):

@@ -945,7 +945,6 @@
  "Ember": "Braise",
  "Candle": "Bougie",
  "Campfire": "Feu de camp",
- "Bonfire": "Grand feu",
  "Blaze": "Brasier",
  "Phoenix": "Phénix",
  "breathe, blink, fidget, look around, sleep": "respirer, cligner des yeux, gigoter, regarder autour, dormir",
@@ -1665,5 +1664,6 @@
  "Well read": "Grand lecteur",
  "read 12 lessons to the end": "lire 12 leçons jusqu'au bout",
  "read 20 lessons to the end": "lire 20 leçons jusqu'au bout",
- "master 10 lessons you read": "maîtriser 10 leçons lues"
+ "master 10 lessons you read": "maîtriser 10 leçons lues",
+ "Beacon": "Fanal"
 }
