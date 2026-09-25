@@ -1,0 +1,111 @@
+{
+ "id": "ip_addr",
+ "order": 180,
+ "skill": "network",
+ "tools": [
+  "ip"
+ ],
+ "needs": [
+  "tool ip 1 | commands 150"
+ ],
+ "masters": [
+  "won address_adder",
+  "won subnet_sprite"
+ ],
+ "fights": [
+  "address_adder",
+  "subnet_sprite",
+  "route_raven"
+ ],
+ "title": "IPv4: addresses, networks, gateway",
+ "summary": "What the four numbers of an address mean, what /24 says, and where a packet goes when it leaves your network.",
+ "pages": [
+  {
+   "scheme": [
+    " 192.168.1.20/24",
+    " └────┬─────┘└┬┘",
+    "      │       └─ 24 bits for the network",
+    "      └─ 4 numbers, 0 to 255 each",
+    "",
+    " 192.168.1 . 20",
+    " └───┬───┘   └┘",
+    "  network    this machine"
+   ],
+   "point": 6,
+   "mark": [
+    "network",
+    "this machine"
+   ],
+   "text": [
+    "An IPv4 address is 32 bits, written as 4 numbers. The /24 after it (the prefix) says how many bits name the network; the rest numbers the machines in it.",
+    "",
+    "- Like a street and a house number: 192.168.1 is the street, 20 the house.",
+    "- Machines with the same network part talk to each other directly."
+   ]
+  },
+  {
+   "scheme": [
+    " /24   192.168.1.0 - 192.168.1.255       256",
+    " /22   10.4.0.0    - 10.4.3.255        1,024",
+    " /16   172.16.0.0  - 172.16.255.255   65,536",
+    "",
+    " private: 10.0.0.0/8 · 172.16.0.0/12",
+    "          192.168.0.0/16"
+   ],
+   "point": 1,
+   "mark": [
+    "/22"
+   ],
+   "text": [
+    "Each bit less in the prefix doubles the network. A /22 is four /24 side by side.",
+    "",
+    "- The first address names the network, the last one is broadcast: a /24 has 254 for machines.",
+    "- The private ranges are reused in millions of homes and offices; the internet doesn't route them.",
+    "$ python3 -c \"import ipaddress; print(ipaddress.ip_network('10.4.0.0/22')[-1])\""
+   ]
+  },
+  {
+   "scheme": [
+    " $ ip -br addr",
+    " lo      UNKNOWN  127.0.0.1/8 ::1/128",
+    " wlan0   UP       192.168.1.20/24 fe80::…/64",
+    " └─┬─┘   └┘       └──────┬──────┘",
+    " name   state      address/prefix"
+   ],
+   "point": 2,
+   "mark": [
+    "wlan0"
+   ],
+   "text": [
+    "ip -br addr prints one line per network interface.",
+    "",
+    "- lo is the loopback: the machine talking to itself.",
+    "- Your real interface is wlan0 (Wi-Fi), eth0 or enp3s0 (cable)… Names vary by machine."
+   ]
+  },
+  {
+   "scheme": [
+    " 192.168.1.20 ──▶ 192.168.1.7     same network:",
+    "                                  direct",
+    "",
+    " 192.168.1.20 ──▶ gateway ──▶ 198.51.100.14",
+    "                  192.168.1.1   other network",
+    "",
+    " $ ip route",
+    " default via 192.168.1.1 dev wlan0"
+   ],
+   "point": 3,
+   "mark": [
+    "gateway",
+    "default via 192.168.1.1"
+   ],
+   "text": [
+    "For an address outside its network, the machine hands the packet to the gateway (your router), which passes it on.",
+    "",
+    "- The default route names that gateway. No default route: no internet.",
+    "- ip route get asks which route an address would take, without sending anything.",
+    "$ ip route get 1.1.1.1"
+   ]
+  }
+ ]
+}

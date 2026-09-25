@@ -1,0 +1,93 @@
+{
+ "id": "ipv6",
+ "order": 182,
+ "skill": "network",
+ "tools": [
+  "ip"
+ ],
+ "needs": [
+  "tool ip 3 | commands 300"
+ ],
+ "masters": [
+  "won six_serpent"
+ ],
+ "fights": [
+  "six_serpent"
+ ],
+ "title": "IPv6: longer addresses, same ideas",
+ "summary": "Why IPv6 exists, how to read and shorten its addresses, and the three kinds you'll meet on every machine.",
+ "pages": [
+  {
+   "scheme": [
+    " IPv4   32 bits    about 4 billion addresses",
+    " IPv6  128 bits    340 undecillion (3.4 × 10^38)"
+   ],
+   "point": 1,
+   "mark": [
+    "128 bits"
+   ],
+   "text": [
+    "IPv4 ran out of addresses: there are more devices than 4 billion. Private ranges and NAT stretched it, IPv6 fixes it.",
+    "",
+    "- Same ideas as IPv4: an address, a prefix, a gateway.",
+    "- Many networks give both (dual stack): systems then prefer IPv6 and fall back quickly to IPv4 (Happy Eyeballs)."
+   ]
+  },
+  {
+   "scheme": [
+    " 2001:0db8:0000:0000:0000:0000:0000:0001",
+    "",
+    " 1. drop leading zeros  2001:db8:0:0:0:0:0:1",
+    " 2. one run of zeros    2001:db8::1",
+    "    becomes ::"
+   ],
+   "point": 3,
+   "mark": [
+    "2001:db8::1"
+   ],
+   "text": [
+    "8 groups of 4 hexadecimal digits. Two rules shorten them:",
+    "",
+    "- In each group, leading zeros go: 0db8 is db8.",
+    "- One run of zero groups becomes :: (only once, or nobody knows how many zeros each :: holds).",
+    "- 2001:db8::/32 is reserved for examples and documentation."
+   ]
+  },
+  {
+   "scheme": [
+    " ::1                   loopback, like 127.0.0.1",
+    " fe80::a1b2:…/64       link-local: this link only",
+    " 2001:db8:…/64         global: reachable",
+    " fd12:3456:…/64        private, like 10.x"
+   ],
+   "point": 1,
+   "mark": [
+    "fe80::"
+   ],
+   "text": [
+    "ip -6 addr shows several addresses per interface. That's normal.",
+    "",
+    "- fe80:: exists as soon as the interface is up, and works only on that cable or Wi-Fi.",
+    "- The global one (often starting with 2) is the one other networks reach.",
+    "$ ip -6 addr"
+   ]
+  },
+  {
+   "scheme": [
+    " router:   2001:db8:12:3400::/64",
+    " address:  2001:db8:12:3400:1c2e:77ff:fe01:9a3b",
+    "           └─── 64 bits ──┘ └──── 64 bits ────┘",
+    "           router announces machine picks"
+   ],
+   "point": 1,
+   "mark": [
+    "/64"
+   ],
+   "text": [
+    "On most IPv6 networks, the router announces the first half, the prefix, and each machine picks the second half itself: SLAAC. No DHCP server needed.",
+    "",
+    "- That's why a LAN is a /64: SLAAC needs 64 bits for the machine's half."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,103 @@
+{
+ "id": "dns_tools",
+ "order": 186,
+ "skill": "network",
+ "tools": [
+  "dig",
+  "getent",
+  "resolvectl"
+ ],
+ "needs": [
+  "tool dig 3 | tool getent 1 | commands 400"
+ ],
+ "masters": [
+  "won resolver_rook",
+  "won nxdomain_nixie"
+ ],
+ "fights": [
+  "resolver_rook",
+  "nxdomain_nixie"
+ ],
+ "title": "DNS tools: dig, getent, resolvectl",
+ "summary": "Read a dig answer part by part, see what programs really get, and find which DNS servers your machine asks.",
+ "pages": [
+  {
+   "scheme": [
+    " $ dig example.org",
+    " ;; ->>HEADER<<- opcode: QUERY, status: NOERROR",
+    " ;; ANSWER SECTION:",
+    " example.org.   3600  IN  A  104.20.26.136",
+    " ;; Query time: 12 msec",
+    " ;; SERVER: 192.168.1.1#53(192.168.1.1) (UDP)"
+   ],
+   "point": 1,
+   "mark": [
+    "status: NOERROR",
+    "SERVER"
+   ],
+   "text": [
+    "dig asks DNS directly and shows the whole answer.",
+    "",
+    "- status: NOERROR means it worked. NXDOMAIN: no such name. SERVFAIL: the lookup broke.",
+    "- ANSWER holds the records, SERVER says who answered.",
+    "- dig +short prints only the answers."
+   ]
+  },
+  {
+   "scheme": [
+    " $ dig AAAA example.org      its IPv6 addresses",
+    " $ dig MX example.org        its mail servers",
+    " $ dig -x 1.1.1.1            address → name",
+    " $ dig @1.1.1.1 example.org  ask another resolver"
+   ],
+   "point": 3,
+   "mark": [
+    "@1.1.1.1"
+   ],
+   "text": [
+    "- Put the record type before the name to ask for it.",
+    "- @server asks a given resolver: compare two answers when one looks wrong."
+   ]
+  },
+  {
+   "scheme": [
+    " /etc/hosts     10.0.0.9   db.internal",
+    " DNS            10.0.0.5   db.internal",
+    "",
+    " $ dig +short db.internal         10.0.0.5",
+    " $ getent hosts db.internal       10.0.0.9"
+   ],
+   "point": 4,
+   "mark": [
+    "getent"
+   ],
+   "text": [
+    "dig only asks DNS. Programs (ping, curl, your app) go through the C library, which reads /etc/hosts first.",
+    "",
+    "- getent hosts shows what programs will really get.",
+    "- When dig and your app disagree, look at /etc/hosts.",
+    "- With systemd-resolved, dig asks 127.0.0.53, which reads /etc/hosts too: dig @192.168.1.1 skips it."
+   ]
+  },
+  {
+   "scheme": [
+    " /etc/resolv.conf",
+    " nameserver 127.0.0.53     ◀ a local stub",
+    "",
+    " $ resolvectl status",
+    " Link 3 (wlan0)",
+    "   DNS Servers: 192.168.1.1"
+   ],
+   "point": 1,
+   "mark": [
+    "127.0.0.53"
+   ],
+   "text": [
+    "Many systems run systemd-resolved: programs ask a local stub at 127.0.0.53, which caches and forwards to the real servers.",
+    "",
+    "- resolvectl status lists the real servers, per interface (a VPN can bring its own).",
+    "- No systemd-resolved? The real servers are in /etc/resolv.conf itself."
+   ]
+  }
+ ]
+}

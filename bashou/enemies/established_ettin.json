@@ -1,0 +1,46 @@
+{
+ "name": "Established Ettin",
+ "palette": {
+  "a": "#4a3a2a",
+  "o": "#b08868",
+  "w": "#d8b898",
+  "m": "#191919"
+ },
+ "base": [
+  ".................",
+  "..aaa.....aaa....",
+  ".aomoa...aomoa...",
+  ".aoooa...aoooa...",
+  "..aoaaaaaaaoa....",
+  ".aoooooooooooa...",
+  "aooooowwwoooooa..",
+  "aoa.aoooooa..aoa.",
+  "aa..aoooooa...aa.",
+  "....aoo.ooa......",
+  "....aoa.aoa......",
+  "...aaa..aaa......"
+ ],
+ "poses": {
+  "inhale": {
+   "5": "--------------a--",
+   "6": "---------------a-"
+  },
+  "closed": {
+   "2": "---o-------o-----"
+  },
+  "left": {
+   "2": "--mo------mo-----"
+  },
+  "right": {
+   "2": "---om------om----"
+  },
+  "fidget": {
+   "7": ".----------------",
+   "8": "..---------------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

@@ -1,0 +1,99 @@
+{
+ "id": "dns",
+ "order": 184,
+ "skill": "network",
+ "tools": [
+  "dig"
+ ],
+ "needs": [
+  "tool dig 1 | tool ping 3 | commands 200"
+ ],
+ "masters": [
+  "achievement resolver"
+ ],
+ "fights": [
+  "nxdomain_nixie"
+ ],
+ "title": "DNS: from a name to an address",
+ "summary": "What happens between typing a name and connecting to an address: the chain of servers, the records, and why changes take time.",
+ "pages": [
+  {
+   "scheme": [
+    " your program",
+    "   │ \"example.org?\"",
+    "   ▼",
+    " /etc/hosts        found? done",
+    "   │ no",
+    "   ▼",
+    " the resolver      in its cache? done"
+   ],
+   "point": 3,
+   "mark": [
+    "/etc/hosts"
+   ],
+   "text": [
+    "A program asks the C library for an address. It looks in /etc/hosts first, then asks a DNS resolver: your router's, your provider's, or one you chose.",
+    "",
+    "- The order is set by the hosts: line of /etc/nsswitch.conf (usually files, then dns)."
+   ]
+  },
+  {
+   "scheme": [
+    " the resolver",
+    "   │ 1 ──▶ root server     \"ask the .org servers\"",
+    "   │ 2 ──▶ .org server     \"ask example.org's\"",
+    "   │ 3 ──▶ example.org's   \"104.20.26.136\"",
+    "   ▼",
+    " your program              104.20.26.136"
+   ],
+   "point": 3,
+   "mark": [
+    "example.org's"
+   ],
+   "text": [
+    "When the resolver doesn't know, it walks down from the root. Each server knows only the next step.",
+    "",
+    "- The last one is authoritative: it holds the domain's records.",
+    "- The resolver keeps each answer in its cache: next time, no walk.",
+    "$ dig +trace example.org"
+   ]
+  },
+  {
+   "scheme": [
+    " A      example.org   104.20.26.136    IPv4",
+    " AAAA   example.org   2606:4700:…      IPv6",
+    " CNAME  www           example.org      alias",
+    " MX     example.org   mail.example.org mail",
+    " TXT    example.org   \"v=spf1 …\"       text",
+    " PTR    1.1.1.1       one.one.one.one  reverse"
+   ],
+   "point": 2,
+   "mark": [
+    "CNAME"
+   ],
+   "text": [
+    "A domain holds records of different types.",
+    "",
+    "- A CNAME says: this name is another name, ask for that one.",
+    "- PTR goes backwards, from an address to a name (dig -x)."
+   ]
+  },
+  {
+   "scheme": [
+    " example.org.  3600  IN  A  104.20.26.136",
+    "               └┬─┘",
+    "   keep this answer 3600 s (1 hour)"
+   ],
+   "point": 1,
+   "mark": [
+    "3600"
+   ],
+   "text": [
+    "Every answer comes with a TTL: how long resolvers may keep it.",
+    "",
+    "- Change a record, and caches keep the old answer until their copy expires.",
+    "- Before a planned move, lower the TTL (300) a day ahead, move, then raise it again."
+   ]
+  }
+ ]
+}

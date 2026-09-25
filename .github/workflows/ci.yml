@@ -73,7 +73,7 @@ jobs:
         run: >
           dnf install -y -q --setopt=keepcache=True --setopt=fastestmirror=True --setopt=max_parallel_downloads=10
           --setopt=install_weak_deps=False --nodocs
-          python3 git procps-ng findutils diffutils which gcc gnupg2 rpm-build
+          python3 git procps-ng findutils diffutils which gcc gnupg2 rpm-build iproute tcpdump
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
       - name: Unit and shell tests
         run: |

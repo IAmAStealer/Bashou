@@ -59,6 +59,22 @@ SOLUTIONS = {
                             " | grep -o 'crash.c:[0-9]*' | head -1 | cut -d: -f2", None),
     "breakpoint_beetle": ("gcc -g loan.c -o loan && gdb -q -batch -ex 'break month_end if month == {x}' -ex run"
                           " -ex 'print balance' ./loan 2>/dev/null | sed -n 's/^[$]1 = //p'", r"for month (\d+)"),
+    "loopback_lurker": ("ss -tlnpH | grep 'pid={x},' | awk '{{sub(/.*:/, \"\", $4); print $4}}'", r"process (\d+)"),
+    "address_adder": ("ip -4 -br addr show {x} | awk '{{print $3}}'", r"address on (\S+)\?"),
+    "subnet_sprite": ("python3 -c \"import ipaddress as i; n = i.ip_network('{x}'); "
+                      "print(sum(i.ip_address(l.strip()) in n for l in open('hosts.txt')))\"", r"inside (\S+)\?"),
+    "route_raven": ("ip route get {x} | awk '{{for (i = 1; i < NF; i++) if ($i == \"via\") print $(i + 1)}}'",
+                    r"packet for (\S+) leaves"),
+    "resolver_rook": ("getent hosts {x} | awk '{{print $1}}' | head -1", r"own name, (.+)\.\n"),
+    "six_serpent": ("python3 -c \"import ipaddress as i; [print(i.ip_address(l.strip())) for l in open('addrs.txt')]\" "
+                    "| sort | uniq -d", None),
+    "handshake_heron": ("tcpdump -nr capture.pcap 'tcp[tcpflags] == tcp-syn' 2>/dev/null | awk '{{print $3}}' "
+                        "| sort | uniq -c | awk '$1 > 1 {{print $2}}'", None),
+    "refused_revenant": ("tcpdump -nr capture.pcap 'tcp[tcpflags] & tcp-rst != 0' 2>/dev/null | awk '{{print $3}}'", None),
+    "nxdomain_nixie": ("id=$(tcpdump -nr dns.pcap 2>/dev/null | awk '/NXDomain/ {{print $6}}'); "
+                       "tcpdump -nr dns.pcap 2>/dev/null | grep \" $id+ \" | awk '{{print $8}}'", None),
+    "established_ettin": ("ss -tnH state established '( dport = :{x} )' | wc -l", r"127\.0\.0\.1:(\d+)"),
+    "trial_ss_ipv6": ("ss -6tlnpH | grep 'pid={x},' | awk '{{sub(/.*:/, \"\", $4); print $4}}'", r"process (\d+)"),
     "trial_gdb_line": ("gcc -g count.c -o count && gdb -q -batch -ex run -ex bt ./count 2>&1"
                        " | grep -o 'count.c:[0-9]*' | head -1 | cut -d: -f2", None),
     # rust fights (rustc): fix the file

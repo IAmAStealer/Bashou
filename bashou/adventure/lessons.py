@@ -101,6 +101,16 @@ LESSONS = [
         ("One line, no typing inside gdb: -batch runs the -ex commands in order, then quits. Not installed yet? "
          "sudo apt install gdb, or sudo dnf install gdb.", "gdb -q -batch -ex run -ex bt ./crash"),
     ]},
+    {"id": "ss", "tool": "ss", "topics": ("network",), "title": "ss: who listens, who is connected", "pages": [
+        ("Programs talk over the network through sockets. A server opens one and listens on a port; each client "
+         "that connects gets a connection of its own. ss lists them all.", "ss -tln"),
+        ("-t keeps TCP, -l only the listening ones, -n prints numbers instead of names. The Local Address column says "
+         "where it listens: 127.0.0.1 or ::1 is this machine only, 0.0.0.0 or * is every network.", "ss -tln"),
+        ("-p adds the program and its PID (sudo shows other users' programs too). The fastest way to check a server "
+         "really started, and where.", "ss -tlnp"),
+        ("Without -l, ss shows connections: ESTAB is open, TIME-WAIT just closed. -6 keeps IPv6 only, and filters pick "
+         "a port: state established '( dport = :443 )'.", "ss -tn state established"),
+    ]},
 ]
 BY_ID = {lesson["id"]: lesson for lesson in LESSONS}
 

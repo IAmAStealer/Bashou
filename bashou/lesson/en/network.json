@@ -1,7 +1,10 @@
 {
  "id": "network",
  "order": 66,
- "skill": "linux",
+ "skill": [
+  "linux",
+  "network"
+ ],
  "needs": [
   "commands 400 | tool curl 3 | tool ssh 3"
  ],

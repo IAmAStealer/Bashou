@@ -1,0 +1,45 @@
+{
+ "name": "Refused Revenant",
+ "palette": {
+  "a": "#5a6a7a",
+  "o": "#b8c8d8",
+  "w": "#eef4fa",
+  "r": "#e03030",
+  "m": "#191919"
+ },
+ "base": [
+  ".................",
+  ".....aaaaaa......",
+  "....aowwwwwoa....",
+  "...aowmwwmwwoa...",
+  "...aowwwwwwwoa...",
+  "...aowrwwwrwoa...",
+  "...aowwrwrwwoa...",
+  "...aowwwrwwwoa...",
+  "...aowwrwrwwoa...",
+  "...aowrwwwrwoa...",
+  "...aowawowawoa...",
+  "...a.a..a..a.a..."
+ ],
+ "poses": {
+  "inhale": {
+   "4": "--a-----------a--"
+  },
+  "closed": {
+   "3": "------w--w-------"
+  },
+  "left": {
+   "3": "-----mw-mw-------"
+  },
+  "right": {
+   "3": "------wm-wm------"
+  },
+  "fidget": {
+   "11": "--a.---------.a--"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

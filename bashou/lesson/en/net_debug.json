@@ -1,0 +1,101 @@
+{
+ "id": "net_debug",
+ "order": 190,
+ "skill": "network",
+ "tools": [
+  "ping",
+  "ss",
+  "ip",
+  "dig"
+ ],
+ "needs": [
+  "tool ss 3 | tool ping 5 | commands 500"
+ ],
+ "masters": [
+  "won refused_revenant",
+  "won established_ettin"
+ ],
+ "fights": [
+  "refused_revenant",
+  "established_ettin",
+  "handshake_heron"
+ ],
+ "title": "When the network breaks: a ladder",
+ "summary": "Climb from the cable to the application, one command per step, and let each answer tell you where to look.",
+ "pages": [
+  {
+   "scheme": [
+    " 6  the app           curl -v https://host",
+    " 5  the port          nc -zv host 443",
+    " 4  the name          dig host · getent hosts",
+    " 3  the route         ip route get <address>",
+    " 2  an address        ip -br addr",
+    " 1  the link          ip -br link  (UP?)"
+   ],
+   "point": 5,
+   "mark": [
+    "1  the link"
+   ],
+   "text": [
+    "\"The network is down\" says nothing. Climb from the bottom: each step needs the one below.",
+    "",
+    "- One command per step. The first step that fails is where to look."
+   ]
+  },
+  {
+   "scheme": [
+    " 6  the app",
+    " 5  the port",
+    " 4  the name    ✗ ping host:",
+    "                  Name or service not known",
+    " 3  the route   ✔ ping 192.0.2.10 answers",
+    " 2  an address  ✔",
+    " 1  the link    ✔"
+   ],
+   "point": 2,
+   "mark": [
+    "✗"
+   ],
+   "text": [
+    "Example: the address answers, the name doesn't. The network is fine, DNS isn't.",
+    "",
+    "- Next: resolvectl status, dig host, /etc/hosts, a typo in the name."
+   ]
+  },
+  {
+   "scheme": [
+    " 6  the app     ✗ curl: Could not connect",
+    " 5  the port    ✗ nc -zv host 443: refused",
+    " 4  the name    ✔ dig +short host: 192.0.2.10",
+    " 3  the route   ✔"
+   ],
+   "point": 1,
+   "mark": [
+    "refused"
+   ],
+   "text": [
+    "Another: the name and the route work, the port refuses. The machine is up; the service isn't listening there.",
+    "",
+    "- On the server: ss -tlnp. Is it running? On 127.0.0.1 only? On another port?"
+   ]
+  },
+  {
+   "scheme": [
+    " ✗ Name or service not known   step 4: DNS",
+    " ✗ Network is unreachable      step 3: no route",
+    " ✗ Connection timed out        a firewall, or down",
+    " ✗ Connection refused          step 5: no listener",
+    " ✗ certificate / 404 / 500     step 6: the app"
+   ],
+   "point": 2,
+   "mark": [
+    "timed out"
+   ],
+   "text": [
+    "The error message often names the step for you.",
+    "",
+    "- Read it, don't retry blindly. Each one points to a different team or file."
+   ]
+  }
+ ]
+}

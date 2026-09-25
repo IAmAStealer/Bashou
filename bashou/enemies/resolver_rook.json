@@ -1,0 +1,44 @@
+{
+ "name": "Resolver Rook",
+ "palette": {
+  "a": "#3a3a44",
+  "o": "#a8a8b8",
+  "w": "#f4f4f8",
+  "m": "#191919"
+ },
+ "base": [
+  "..aaa.aaa.aaa....",
+  "..aoa.aoa.aoa....",
+  "..aoaaaoaaaoa....",
+  "..aoooooooooa....",
+  "...aoooooooa.....",
+  "...aowmowmoa.....",
+  "...aoooooooa.....",
+  "...aoooooooa.....",
+  "...aoooooooa.....",
+  "..aoooooooooa....",
+  ".aoooooooooooa...",
+  ".aaaaaaaaaaaaa..."
+ ],
+ "poses": {
+  "inhale": {
+   "4": "--a---------a----"
+  },
+  "closed": {
+   "5": "------o--o-------"
+  },
+  "left": {
+   "5": "-----mo-mo-------"
+  },
+  "right": {
+   "5": "------wm-wm------"
+  },
+  "fidget": {
+   "0": "--.---------.----"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

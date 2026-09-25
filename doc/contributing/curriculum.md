@@ -105,6 +105,16 @@ Lessons in library order (`order`), with the fights they prepare.
 2. `sql_write` — CREATE, INSERT, UPDATE, upsert · Table Troll, Insert Imp, Update Urchin, Upsert Unicorn
 3. `sql_join` · Join Jackal
 
+### Network
+
+1. `network` — addresses and ports (also in Linux)
+2. `ip_addr` — IPv4 addresses, prefixes, the gateway · Address Adder, Subnet Sprite, Route Raven
+3. `ipv6` — reading and shortening, link-local, /64 and SLAAC · Six Serpent
+4. `dns` — the resolution chain, records, TTL · NXDomain Nixie
+5. `dns_tools` — dig, getent, resolvectl · Resolver Rook, NXDomain Nixie
+6. `tcp` — the handshake, ports, states · Loopback Lurker, Handshake Heron, Established Ettin
+7. `net_debug` — the troubleshooting ladder · Refused Revenant, Established Ettin, Handshake Heron
+
 ### CI/CD
 
 1. `pipeline` — stages, needs, rules, secrets · Indent Imp, Stage Specter, Needs Newt, Secret Sprite,

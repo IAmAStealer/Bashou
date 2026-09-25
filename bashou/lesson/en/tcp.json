@@ -1,0 +1,102 @@
+{
+ "id": "tcp",
+ "order": 188,
+ "skill": "network",
+ "tools": [
+  "ss"
+ ],
+ "needs": [
+  "tool ss 1 | tool curl 5 | commands 300"
+ ],
+ "masters": [
+  "won loopback_lurker",
+  "won handshake_heron"
+ ],
+ "fights": [
+  "loopback_lurker",
+  "handshake_heron",
+  "established_ettin"
+ ],
+ "title": "TCP: connections, ports, states",
+ "summary": "How a TCP connection opens, what a socket is, and how to read the states that ss shows.",
+ "pages": [
+  {
+   "scheme": [
+    " client                    server :443",
+    "   │ ──── SYN ────────────▶ │  let's talk",
+    "   │ ◀─── SYN-ACK ───────── │  yes, and you?",
+    "   │ ──── ACK ────────────▶ │  yes",
+    "   │ ════ data ═══════════▶ │"
+   ],
+   "point": 2,
+   "mark": [
+    "SYN-ACK"
+   ],
+   "text": [
+    "Before any data, TCP opens a connection with a three-way handshake.",
+    "",
+    "- Then TCP numbers every byte, resends what's lost, and delivers in order.",
+    "- Most web traffic, SSH and databases use TCP. DNS queries and video calls mostly use UDP: no connection, no resending."
+   ]
+  },
+  {
+   "scheme": [
+    " 192.168.1.20:51522  ◀──▶  198.51.100.14:443",
+    " └─────┬────┘ └─┬─┘        └─────┬─────┘ └┬┘",
+    "    client   ephemeral       server    service",
+    "              port                      port"
+   ],
+   "point": 2,
+   "mark": [
+    "51522",
+    "443"
+   ],
+   "text": [
+    "A connection is four numbers: both addresses and both ports.",
+    "",
+    "- The server's port names the service (443 is HTTPS).",
+    "- The client's port is picked by the kernel, a free ephemeral one: that's how one machine holds many connections to the same server."
+   ]
+  },
+  {
+   "scheme": [
+    " $ ss -tan",
+    " State      Local Address:Port  Peer Address:Port",
+    " LISTEN     0.0.0.0:22          0.0.0.0:*",
+    " ESTAB      192.168.1.20:51522  198.51.100.14:443",
+    " TIME-WAIT  192.168.1.20:51498  198.51.100.14:443"
+   ],
+   "point": 2,
+   "mark": [
+    "LISTEN",
+    "ESTAB",
+    "TIME-WAIT"
+   ],
+   "text": [
+    "ss lists the sockets: -t TCP, -a all states, -n numbers (its Recv-Q and Send-Q columns are cut here).",
+    "",
+    "- LISTEN: a server waiting. ESTAB: an open connection. TIME-WAIT: just closed, kept a moment.",
+    "- ss -tln shows only the listening ones; add -p to see the program."
+   ]
+  },
+  {
+   "scheme": [
+    " SYN ──▶ ◀── RST          \"Connection refused\"",
+    "                          up, but nothing listens",
+    "",
+    " SYN ──▶ … SYN ──▶ …      \"Connection timed out\"",
+    "                          no answer: firewall/down"
+   ],
+   "point": 0,
+   "mark": [
+    "RST"
+   ],
+   "text": [
+    "The two classic failures tell different stories.",
+    "",
+    "- Refused comes back at once: the machine is there, the port is closed. Check the server started, and on which address.",
+    "- Timed out takes long, up to about two minutes: nothing answers. Look at firewalls and routes."
+   ]
+  }
+ ]
+}
