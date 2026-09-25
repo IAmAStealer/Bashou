@@ -21,6 +21,8 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
         with:
           python-version: ${{ matrix.python }}
+      - name: qrencode, the reference for our QR codes
+        run: sudo apt-get install -y -qq --no-install-recommends qrencode
       - name: Unit and shell tests
         run: |
           python -m unittest -v 2> tests.log && exit 0
