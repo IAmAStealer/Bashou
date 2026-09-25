@@ -22,7 +22,12 @@ Bugs and ideas: [open an issue](https://github.com/IAmAStealer/Bashou/issues/new
 question* and *Lesson* forms work too. Security problems go through the
 [private report](https://github.com/IAmAStealer/Bashou/security/advisories/new), never a public issue.
 
-Everything you send must be your own work (no copies from games, CTFs or other projects), and is
+Everything you send must be yours to share (no copies from games, CTFs or other projects), and is
 shared under the project's MIT license. Before a pull request, run `python3 -m unittest`.
+
+**Working with an AI is welcome** (Bashou itself is built that way, see [how it started](../doc/STORY.md)),
+with one exception: **large pixel art** (`bashou/pets/large/`, `art/<pet>/<size>/`) is drawn by a person,
+by hand. No AI-generated, AI-upscaled or AI-redrawn large art. Whatever the tool, you're responsible for what
+you send: read it, test it, and check its facts.
 
 Everyone follows the [code of conduct](CODE_OF_CONDUCT.md): kind and patient, beginners first.

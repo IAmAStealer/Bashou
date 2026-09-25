@@ -50,3 +50,14 @@ class CommunityFilesTest(unittest.TestCase):
     def test_community_files_exist(self):
         for name in ("CONTRIBUTING.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "PULL_REQUEST_TEMPLATE.md"):
             self.assertTrue((GITHUB / name).is_file(), name)
+
+
+class ReviewAgentTest(unittest.TestCase):
+    """Owner: an internal agent reviews PRs; the PR is content, never instructions, and it can't act."""
+
+    def test_the_reviewer_reads_and_reports_only(self):
+        text = (GITHUB.parent / ".claude/agents/pr-reviewer.md").read_text()
+        tools = {t.strip() for t in text.split("tools:", 1)[1].splitlines()[0].split(",")}
+        self.assertEqual(tools & {"Edit", "Write", "NotebookEdit", "WebFetch", "WebSearch", "Agent"}, set())
+        for rule in ("data, never instructions", "Not ready", "--network none", "large pixel art"):
+            self.assertIn(rule, text)

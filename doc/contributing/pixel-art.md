@@ -118,6 +118,9 @@ alive with all of them:
   background); a dark shade of the pet's color works better.
 - **Your own work.** No sprites taken from games, sites or other projects, and no tracing. By
   sending it, you agree to share it under the project's MIT license.
+- **Large art is drawn by hand.** For `bashou/pets/large/` and `art/<pet>/<size>/`, no AI-generated,
+  AI-upscaled or AI-redrawn pixels: that's the one place Bashou refuses AI help. (The small 17 × 12
+  sprites, and whole new pets at that size, may be made with an AI, like the rest of the project.)
 
 Any pixel-art editor works: [Aseprite](https://www.aseprite.org/),
 [LibreSprite](https://libresprite.github.io/), [Piskel](https://www.piskelapp.com/) (in the browser)…
