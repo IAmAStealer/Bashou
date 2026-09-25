@@ -3,6 +3,22 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## Unreleased
+
+- **New skill: Network.** Tick it in `bashou skills` to learn IPv4, IPv6, DNS and TCP with real tools.
+  - Six lessons in the Sage Owl's library, from what `192.168.1.20/24` means to a troubleshooting
+    ladder that goes from the cable up to the application, one command per step.
+  - Ten fights against network creatures: find the port a listener hides on with `ss`, your own address
+    and route with `ip`, which hosts sit in a /22, what `getent` returns against DNS, and, in saved
+    captures read with `tcpdump -r`, the handshake that never finished, the refused connection and the
+    name that got NXDOMAIN. Their little servers listen on 127.0.0.1 or ::1 only: nothing leaves your
+    machine. On the adventure road, a new chest opens with `ss` on IPv6.
+  - 37 adventure questions in a new topic, guarded by the Latency Kraken.
+- **New pet: the Packet**, from a single Bit to a Constellation of satellites, in ten forms. It comes
+  after ten uses of `ip`, `ss`, `ping`, `getent` and friends, and grows with twelve network achievements.
+- `bashou learn` now explains `ip`, `ss`, `ping`, `getent`, `host`, `resolvectl`, `tracepath`,
+  `traceroute`, `nc` and `tcpdump`, and `bashou explain network` has notes on CIDR, IPv6, DNS and TCP.
+
 ## v0.5.1 — 2026-09-25
 
 - On Rocky, Fedora and Red Hat, `bashou update` now runs `sudo dnf upgrade --refresh bashou`: plain

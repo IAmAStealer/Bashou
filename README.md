@@ -29,10 +29,12 @@ tokens spent to learn what a command does.
   (`SELECT`, `JOIN`, `CREATE TABLE`, `INSERT`, `UPDATE`, `INSERT … ON CONFLICT DO UPDATE`).
   Secrets fights teach `gpg` and `pass`: lock and open a file, spot a forged download by its signature,
   take a password out of a script with `$(pass show …)`. They bring their own practice key and store:
-  yours are never touched.
+  yours are never touched. Network fights read your own addresses and routes with `ip`, find a
+  listener with `ss`, compare `getent` and DNS, and read saved captures with `tcpdump -r`; their
+  servers listen on 127.0.0.1 only, and nothing leaves your machine.
   Beaten fights come back after 1, 7 and 30 days (spaced repetition), so what you learned stays.
-- **`bashou explain python list`** (or `dict`, `loop`, `recursion`; `bashou explain c malloc`…): a
-  short note with an example, for the code fights.
+- **`bashou explain python list`** (or `dict`, `loop`, `recursion`; `bashou explain c malloc`,
+  `bashou explain network cidr`…): a short note with an example, for the code and network fights.
 - **`bashou lesson`**: the Sage Owl's library. Lessons with drawings that grow page by page (the stack
   and the heap, where output goes, permissions…), unlocked as you play, each one preparing your next step.
 - **`bashou security`**: small investigations (a hidden file, a cron backdoor, a SUID binary).

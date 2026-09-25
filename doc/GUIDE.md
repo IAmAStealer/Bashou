@@ -103,7 +103,7 @@ Tab completion works for commands, pet names and `dev` arguments.
 ## Skills
 
 At the first launch, before the starter, Bashou asks what you want to learn: a bit of everything, or
-the skills you tick (Bash, Linux, systemd, Debian, Rocky, Python, C, Rust, Logic, CI/CD). Threats
+the skills you tick (Bash, Linux, systemd, Debian, Rocky, Python, C, Rust, Logic, CI/CD, SQL, Network). Threats
 and the adventure's paths then come from those skills; fights you already won still come back for
 review. A skill whose program isn't installed (no `gcc`, no `rustc`) or that is for another system
 still has its adventure questions. Tick Rust without `rustc`, and your pet tells you how to install it.
