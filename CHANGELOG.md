@@ -3,7 +3,7 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
-## v0.6.0 — 2026-10-02
+## v0.6.0 — 2026-09-25
 
 - **New skill: Network.** Tick it in `bashou skills` to learn IPv4, IPv6, DNS and TCP with real tools.
   - Six lessons in the Sage Owl's library, from what `192.168.1.20/24` means to a troubleshooting
@@ -24,9 +24,6 @@ Every release has a section here, written for players. CI refuses to tag a relea
   send to a server, and `--name` adds a short nickname if you want one.
 - `bashou learn` now explains `ip`, `ss`, `ping`, `getent`, `host`, `resolvectl`, `tracepath`,
   `traceroute`, `nc` and `tcpdump`, and `bashou explain network` has notes on CIDR, IPv6, DNS and TCP.
-
-## v0.5.1 — 2026-09-25
-
 - On Rocky, Fedora and Red Hat, `bashou update` now runs `sudo dnf upgrade --refresh bashou`: plain
   `dnf upgrade` could say "Nothing to do" for two days after a release, because dnf keeps its list of
   packages that long. The Bashou repository file now asks dnf to check it every 6 hours.
