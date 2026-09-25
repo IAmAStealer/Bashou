@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from bashou import share, state
+from bashou import creatures, render, share, state
 
 SITE = Path(__file__).resolve().parent.parent / "doc/site"
 
@@ -60,3 +60,39 @@ class SharePageTest(unittest.TestCase):
             done = subprocess.run(["node", str(Path(__file__).with_name("share_page.js")), f"{tmp}/share.js",
                                    f"{tmp}/share-pets.json", good], capture_output=True, text=True)
         self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
+
+
+class SamePixelArtTest(unittest.TestCase):
+    """The banner must show the pets exactly as Bashou draws them in the terminal (owner, 0.6.1)."""
+
+    def expected(self, sprite_id):
+        pet = creatures.load(Path(creatures.__file__).parent / "pets" / f"{sprite_id}.json")
+        return {f"{r},{c}": pet.palette[k] if isinstance(pet.palette[k], str) else "#%02x%02x%02x" % pet.palette[k]
+                for r, row in enumerate(render.grid(pet, [])) for c, k in enumerate(row) if k != "."}
+
+    def test_the_page_data_is_bashou_s_pets(self):
+        data = share.page_data()
+        for family, info in data["families"].items():
+            if family in creatures.STARTERS:
+                self.assertEqual(info["forms"], list(creatures.STARTERS[family]))
+            else:
+                self.assertEqual(info["forms"], [creatures.form(family, n) for n in range(1, len(creatures.STAGES[family]) + 1)])
+                self.assertEqual(info["en"], list(creatures.STAGES[family]))
+        for sprite_id, sprite in data["sprites"].items():
+            cells = {f"{r},{c}": sprite["palette"][k] for r, row in enumerate(sprite["base"])
+                     for c, k in enumerate(row) if k != "."}
+            self.assertEqual({k: v.lower() for k, v in cells.items()},
+                             {k: v.lower() for k, v in self.expected(sprite_id).items()}, sprite_id)
+
+    @unittest.skipUnless(shutil.which("node"), "node isn't installed")
+    def test_the_page_paints_the_same_pixels(self):
+        import json
+        with tempfile.TemporaryDirectory() as tmp:
+            subprocess.run(["python3", str(SITE.parent.parent / "tools/package.py"), "site", tmp], check=True)
+            done = subprocess.run(["node", str(Path(__file__).with_name("share_pixels.js")), f"{tmp}/share.js",
+                                   f"{tmp}/share-pets.json"], capture_output=True, text=True, check=True)
+        painted = json.loads(done.stdout)
+        self.assertEqual(set(painted), set(share.page_data()["sprites"]))
+        for sprite_id, cells in painted.items():
+            self.assertEqual({k: v.lower() for k, v in cells.items()},
+                             {k: v.lower() for k, v in self.expected(sprite_id).items()}, sprite_id)

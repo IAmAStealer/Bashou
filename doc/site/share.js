@@ -248,5 +248,5 @@ async function main() {
 if (typeof document !== "undefined") {
   main();
 } else if (typeof module === "object") {
-  module.exports = { readCard, check, inflate, base64url };       // for tests (node)
+  module.exports = { readCard, check, inflate, base64url, drawSprite };       // for tests (node)
 }
