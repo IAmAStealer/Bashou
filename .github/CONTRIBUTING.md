@@ -27,7 +27,9 @@ shared under the project's MIT license. Before a pull request, run `python3 -m u
 
 **Working with an AI is welcome** (Bashou itself is built that way, see [how it started](../doc/STORY.md)),
 with one exception: **large pixel art** (`bashou/pets/large/`, `art/<pet>/<size>/`) is drawn by a person,
-by hand. No AI-generated, AI-upscaled or AI-redrawn large art. Whatever the tool, you're responsible for what
+by hand. No AI-generated, AI-upscaled or AI-redrawn large art. Small pets (17 × 12) made with an AI are
+fine, new ones too, and best as a **whole set**: the pet and its achievements, a fight with its hints, a
+lesson that lists the fight, and adventure questions (see [curriculum.md](../doc/contributing/curriculum.md)). Whatever the tool, you're responsible for what
 you send: read it, test it, and check its facts.
 
 Everyone follows the [code of conduct](CODE_OF_CONDUCT.md): kind and patient, beginners first.
