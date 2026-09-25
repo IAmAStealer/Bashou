@@ -92,3 +92,25 @@ class MovingPetTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# Pets whose lone pixels are on purpose: sparkles, spores, bubbles, gill tips, a stray grain.
+LONE_ON_PURPOSE = {"axolotl", "bit", "mountain_ghost", "platypus", "queen_bee", "sand_grain", "sparklings", "spore",
+                   "stardust", "thunder_slime", "xolotl"}
+
+
+class LonePixelTest(unittest.TestCase):
+    def test_no_stray_pixel(self):
+        """The Ember had a lost pixel at its top right (owner's report, 0.6.0): a pixel touching no other."""
+        import json
+        from pathlib import Path
+        for path in sorted((Path(__file__).resolve().parent.parent / "bashou/pets").glob("*.json")):
+            if path.stem in LONE_ON_PURPOSE:
+                continue
+            base = json.loads(path.read_text())["base"]
+            h, w = len(base), len(base[0])
+            for r in range(h):
+                for c in range(w):
+                    if base[r][c] != "." and all(base[r + dr][c + dc] == "." for dr in (-1, 0, 1) for dc in (-1, 0, 1)
+                                                 if (dr or dc) and 0 <= r + dr < h and 0 <= c + dc < w):
+                        self.fail(f"{path.stem}: lone pixel at row {r}, column {c}")

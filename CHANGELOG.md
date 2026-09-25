@@ -3,6 +3,10 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.6.1 — 2026-09-25
+
+- The Ember lost the stray pixel floating at its top right.
+
 ## v0.6.0 — 2026-09-25
 
 - **New skill: Network.** Tick it in `bashou skills` to learn IPv4, IPv6, DNS and TCP with real tools.
