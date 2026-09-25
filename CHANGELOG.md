@@ -3,7 +3,7 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
-## v0.6.2 — 2026-09-25
+## v0.6.2 — 2026-09-26
 
 - `bashou share` asks for a nickname the first time and puts it on every card, so the banner never
   needs your real name (`bashou share --name` changes it).
