@@ -3,7 +3,7 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
-## v0.4.4 — 2026-09-25
+## v0.5.0 — 2026-09-25
 
 - **New: `bashou lesson`, the Sage Owl's library.** Hints tell you what to type; lessons show how things
   work. Each lesson is a few short pages with a drawing that grows from one page to the next, and the owl
