@@ -1,0 +1,97 @@
+{
+ "id": "processes",
+ "order": 60,
+ "skill": "linux",
+ "needs": [
+  "lesson permissions",
+  "tool ps 1 | fights 3"
+ ],
+ "title": "Processes and signals",
+ "summary": "A running program is a process: find its PID, see who started it, and stop it the right way.",
+ "pages": [
+  {
+   "scheme": [
+    " systemd          PID 1",
+    " ├── cron         PID 640",
+    " └── sshd         PID 812",
+    "     └── bash     PID 2301   your shell",
+    "         └── ps   PID 2350   the command you run"
+   ],
+   "point": 4,
+   "mark": [
+    "PID 2350"
+   ],
+   "text": [
+    "A running program is a process. Each one has a number, its PID.",
+    "",
+    "- Every process was started by another one, its parent (PPID).",
+    "- Your commands are children of your shell.",
+    "- PID 1 starts first at boot: on most Linux systems today, it's systemd.",
+    "",
+    "$ ps -ef --forest"
+   ]
+  },
+  {
+   "scheme": [
+    " $ kill 2350      SIGTERM (15): please stop",
+    "     it can save its work, close its files",
+    "",
+    " $ kill -9 2350   SIGKILL (9): stopped at once",
+    "     no cleanup: half-written files, lock files",
+    "",
+    " Ctrl+C           SIGINT (2): interrupt"
+   ],
+   "point": 0,
+   "mark": [
+    "SIGTERM",
+    "SIGKILL"
+   ],
+   "text": [
+    "kill sends a signal: a short message to a process.",
+    "",
+    "- Plain kill asks politely. Try it first, and wait a few seconds.",
+    "- kill -9 can't be refused or cleaned up after: keep it for a process that won't stop."
+   ]
+  },
+  {
+   "scheme": [
+    " $ sleep 300 &",
+    " [1] 2410                job 1, PID 2410",
+    " $ jobs",
+    " [1]+  Running   sleep 300 &",
+    " $ fg %1                 back to the front",
+    " ^Z                      Ctrl+Z: pause it",
+    " $ bg %1                 go on, in the background"
+   ],
+   "point": 1,
+   "mark": [
+    "&"
+   ],
+   "text": [
+    "A command ending with & runs in the background: you get your prompt back at once.",
+    "",
+    "- jobs lists what runs in the background of this shell.",
+    "- These jobs belong to your shell: close the terminal and they usually stop too."
+   ]
+  },
+  {
+   "scheme": [
+    " $ ps aux --sort=-%cpu | head -4",
+    " USER  PID %CPU %MEM COMMAND",
+    " web   912 97.0  2.1 /usr/bin/python3 app.py",
+    " sam  2301  0.3  0.1 -bash"
+   ],
+   "point": 2,
+   "mark": [
+    "97.0"
+   ],
+   "text": [
+    "Something is slow? Find who uses the processor or the memory.",
+    "",
+    "- ps aux lists every process of every user.",
+    "- top (or htop) shows the same list, live. q quits.",
+    "- pgrep -a python finds processes by name."
+   ]
+  }
+ ]
+}

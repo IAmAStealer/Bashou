@@ -44,6 +44,7 @@ def default():
         "looks": {},        # pet or "starter" -> form shown when not the latest (`f` in `bashou swap`)
         "starter_best": 1,  # the starter's highest form reached: it never goes back
         "evolving": [],     # evolutions waiting to be watched: {"who", "from", "to"} (`bashou evolve`)
+        "lessons": {"read": [], "opened": [], "page": {}},   # `bashou lesson`: read to the end, opened, page to resume
     }
 
 

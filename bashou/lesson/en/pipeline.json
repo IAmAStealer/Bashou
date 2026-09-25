@@ -1,0 +1,98 @@
+{
+ "id": "pipeline",
+ "order": 170,
+ "skill": "cicd",
+ "needs": [
+  "won indent_imp | fights 5"
+ ],
+ "title": "A CI pipeline, stage by stage",
+ "summary": "Stages, jobs that wait for each other, and conditions: how a pipeline decides what runs.",
+ "pages": [
+  {
+   "scheme": [
+    "  build        test           deploy",
+    " ┌───────┐    ┌──────────┐    ┌──────────┐",
+    " │compile│───▶│unit      │───▶│to prod   │",
+    " └───────┘    │lint      │    └──────────┘",
+    "              └──────────┘"
+   ],
+   "point": 2,
+   "mark": [
+    "test"
+   ],
+   "text": [
+    "On each push, the CI server runs your pipeline: jobs grouped in stages.",
+    "",
+    "- Stages run one after the other.",
+    "- Jobs in the same stage run side by side: unit and lint together.",
+    "- A job fails? The next stages don't run."
+   ]
+  },
+  {
+   "scheme": [
+    " stages: [build, test, deploy]",
+    "",
+    " unit:",
+    "   stage: test",
+    "   script: make test",
+    "",
+    " deploy:",
+    "   stage: deploy",
+    "   script: ./deploy.sh",
+    "   rules:",
+    "     - if: $CI_COMMIT_BRANCH == \"main\"",
+    "       when: manual"
+   ],
+   "point": 3,
+   "mark": [
+    "stage: test",
+    "when: manual"
+   ],
+   "text": [
+    "On GitLab, .gitlab-ci.yml lists the stages; each job picks one.",
+    "",
+    "- A job's stage must be in that list, spelled the same.",
+    "- rules decide when a job exists. Here: only on main, and someone must click."
+   ]
+  },
+  {
+   "scheme": [
+    " jobs:",
+    "   test:",
+    "     runs-on: ubuntu-latest",
+    "   deploy:",
+    "     runs-on: ubuntu-latest",
+    "     needs: test",
+    "     if: github.ref == 'refs/heads/main'"
+   ],
+   "point": 5,
+   "mark": [
+    "needs: test"
+   ],
+   "text": [
+    "On GitHub Actions, jobs run side by side unless you say otherwise.",
+    "",
+    "- needs: test makes deploy wait for test, and skip if test fails.",
+    "- if: keeps it to the main branch.",
+    "- Without needs, a broken build can still deploy!"
+   ]
+  },
+  {
+   "scheme": [
+    " env:",
+    "   PASSWORD: hunter2             ✗ in the repo",
+    "   PASSWORD: ${{ secrets.DB }}   ✔ kept by the CI"
+   ],
+   "point": 2,
+   "mark": [
+    "secrets.DB"
+   ],
+   "text": [
+    "Everyone who can read the repository reads the pipeline file, and its history forever.",
+    "",
+    "- Keep secrets in the CI settings: secrets on GitHub, CI/CD variables on GitLab.",
+    "- A secret committed by mistake must be changed, not only deleted."
+   ]
+  }
+ ]
+}

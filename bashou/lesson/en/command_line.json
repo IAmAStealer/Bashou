@@ -1,0 +1,97 @@
+{
+ "id": "command_line",
+ "order": 10,
+ "needs": [],
+ "title": "Reading a command line",
+ "summary": "What each word you type means, how the shell finds the program, and how it says it worked.",
+ "pages": [
+  {
+   "scheme": [
+    " you@pc:~$  ls   -l   /etc",
+    "            ▲    ▲    ▲",
+    "            │    │    └─ argument: what to work on",
+    "            │    └────── option: how to do it",
+    "            └─────────── command: which program"
+   ],
+   "point": 4,
+   "mark": [
+    "ls"
+   ],
+   "text": [
+    "Everything left of the $ is the prompt. The shell writes it: who you are, the machine, and where you are (~ is your home folder).",
+    "",
+    "- The first word you type is the command: the program to run.",
+    "- Words that start with - are options: they change how it works.",
+    "- The other words are arguments: the files or things it works on."
+   ]
+  },
+  {
+   "scheme": [
+    " $ mkdir my notes",
+    "         ▔▔ ▔▔▔▔▔",
+    "   two arguments: two folders, my and notes",
+    "",
+    " $ mkdir \"my notes\"",
+    "         ▔▔▔▔▔▔▔▔▔▔",
+    "   one argument: one folder, my notes"
+   ],
+   "point": 6,
+   "mark": [
+    "\"my notes\""
+   ],
+   "text": [
+    "The shell cuts your line into words at each space, before the program even starts.",
+    "",
+    "- Quotes keep words together: \"my notes\" is one argument.",
+    "- That's why names with spaces are painful on the command line: quote them, or avoid spaces."
+   ]
+  },
+  {
+   "scheme": [
+    " $ ls",
+    "    │  the shell looks in each folder of $PATH,",
+    "    │  in order, for a program called ls:",
+    "    ▼",
+    " /usr/local/bin/ls   not there",
+    " /usr/bin/ls         found: it runs this one",
+    " /bin/ls             never looked at"
+   ],
+   "point": 5,
+   "mark": [
+    "/usr/bin/ls"
+   ],
+   "text": [
+    "A command is just a program file somewhere on the disk. $PATH is the list of folders where the shell looks for it.",
+    "",
+    "$ echo $PATH",
+    "$ type -a ls      # every ls the shell can find, in order",
+    "",
+    "\"command not found\" means no folder of $PATH has it: a typo, or it isn't installed."
+   ]
+  },
+  {
+   "scheme": [
+    " $ ls /nothing",
+    " ls: cannot access '/nothing':",
+    "     No such file or directory",
+    " $ echo $?",
+    " 2",
+    "",
+    " 0          it worked",
+    " 1, 2, …    something went wrong"
+   ],
+   "point": 4,
+   "mark": [
+    "2"
+   ],
+   "text": [
+    "Every command ends with a number, its exit status. You don't see it, but $? keeps the last one.",
+    "",
+    "- 0 means success. Anything else is a failure.",
+    "- && uses it: the second command runs only if the first one returned 0.",
+    "",
+    "$ mkdir build && cd build"
+   ]
+  }
+ ]
+}

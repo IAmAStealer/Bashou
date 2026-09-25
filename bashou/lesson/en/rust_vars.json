@@ -1,0 +1,92 @@
+{
+ "id": "rust_vars",
+ "order": 140,
+ "skill": "rust",
+ "needs": [
+  "tool rustc 1 | commands 100"
+ ],
+ "title": "Rust: variables that don't change",
+ "summary": "let, mut, shadowing and integer sizes: what rustc refuses, and why.",
+ "pages": [
+  {
+   "scheme": [
+    " let count = 0;",
+    " count += 1;       error: cannot assign twice",
+    "",
+    " let mut count = 0;",
+    " count += 1;       fine: count is 1"
+   ],
+   "point": 3,
+   "mark": [
+    "mut"
+   ],
+   "text": [
+    "In Rust, a variable can't change unless you say so.",
+    "",
+    "- let: fixed. The compiler refuses any change.",
+    "- let mut: this one may change.",
+    "- Why? Reading the code, you know which values move. Fewer surprises."
+   ]
+  },
+  {
+   "scheme": [
+    " let guess = \"42\";                  text",
+    " let guess: u32 = guess.parse()…;   number",
+    "",
+    "   guess ──╳─▶ \"42\"",
+    "         ────▶ 42"
+   ],
+   "point": 4,
+   "mark": [
+    "u32"
+   ],
+   "text": [
+    "A new let with the same name hides the old variable: that's shadowing.",
+    "",
+    "- Unlike mut, the new variable can have another type.",
+    "- Handy to turn text into a number and keep a good name."
+   ]
+  },
+  {
+   "scheme": [
+    " u8     0 ………………………… 255",
+    " i8  -128 ……… 0 ……… 127",
+    " u32    0 ………………………… about 4 billion",
+    "",
+    " let x: u8 = read_number();   // 250",
+    " x + 10     debug build: panic, overflow",
+    "            release build: wraps to 4"
+   ],
+   "point": 5,
+   "mark": [
+    "overflow"
+   ],
+   "text": [
+    "An integer type says its size: u is unsigned (0 and up), i can be negative, the number is the bits.",
+    "",
+    "- A u8 holds 0 to 255. 250 + 10 doesn't fit.",
+    "- In a debug build, Rust stops (panics) instead of quietly wrapping to 4.",
+    "- When rustc can see both values, it refuses x + 10 before the program even runs.",
+    "- as converts: x as u32 + 10."
+   ]
+  },
+  {
+   "scheme": [
+    " const MAX_POINTS: u32 = 100_000;",
+    "       ─────┬────  ─┬─",
+    "            │       └─ the type: always written",
+    "            └───────── NAME in capitals, by habit"
+   ],
+   "point": 2,
+   "mark": [
+    "u32"
+   ],
+   "text": [
+    "A const is fixed forever, known when the program is built.",
+    "",
+    "- Its type must be written: rustc doesn't guess it.",
+    "- The _ in 100_000 is only there to read it easily."
+   ]
+  }
+ ]
+}

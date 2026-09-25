@@ -1,0 +1,122 @@
+{
+ "id": "pointers",
+ "order": 120,
+ "skill": "c",
+ "needs": [
+  "lesson stack_heap",
+  "won leak_lurker | won stack_specter | tool gcc 10"
+ ],
+ "title": "C pointers, arrays and strings",
+ "summary": "Addresses, arrays that start at 0, the '\\0' at the end of strings, and writing past the end.",
+ "pages": [
+  {
+   "scheme": [
+    "          x               p",
+    "      ┌────────┐      ┌────────┐",
+    "      │   42   │◀─────┼─ 0x10  │",
+    "      └────────┘      └────────┘",
+    " address 0x10",
+    "",
+    " int x = 42;",
+    " int *p = &x;"
+   ],
+   "point": 2,
+   "mark": [
+    "&x",
+    "0x10"
+   ],
+   "text": [
+    "Every variable lives at an address in memory. A pointer is a variable that holds an address.",
+    "",
+    "- &x gives the address of x.",
+    "- *p follows the arrow: it's the value at that address, 42.",
+    "- *p = 7; changes x itself."
+   ]
+  },
+  {
+   "scheme": [
+    " int a[4] = {10, 20, 30, 40};",
+    "",
+    " ┌──────┬──────┬──────┬──────┐",
+    " │  10  │  20  │  30  │  40  │",
+    " └──────┴──────┴──────┴──────┘",
+    "   a[0]   a[1]   a[2]   a[3]"
+   ],
+   "point": 5,
+   "mark": [
+    "a[0]",
+    "a[3]"
+   ],
+   "text": [
+    "An array is boxes side by side in memory.",
+    "",
+    "- The first box is a[0]: the index counts how far from the start.",
+    "- So an array of 4 goes from a[0] to a[3], never a[4]."
+   ]
+  },
+  {
+   "scheme": [
+    " ┌──────┬──────┬──────┬──────┐┌──────┐",
+    " │  10  │  20  │  30  │  40  ││  ??  │",
+    " └──────┴──────┴──────┴──────┘└──────┘",
+    "   a[0]   a[1]   a[2]   a[3]    a[4]",
+    "",
+    " for (i = 0; i <= 4; i++)    reads a[4]",
+    " for (i = 0; i <  4; i++)    stops at a[3]"
+   ],
+   "point": 1,
+   "mark": [
+    "??",
+    "<="
+   ],
+   "text": [
+    "C doesn't check indexes. a[4] reads whatever lies after the array: that's undefined behavior.",
+    "",
+    "- The usual mistake is i <= n in a loop: one step too far.",
+    "- Write i < n, and count: a loop over 4 items runs 4 times."
+   ]
+  },
+  {
+   "scheme": [
+    " char s[] = \"cat\";",
+    "",
+    " ┌─────┬─────┬─────┬─────┐",
+    " │  c  │  a  │  t  │ \\0  │",
+    " └─────┴─────┴─────┴─────┘",
+    "",
+    " strlen(s) is 3      sizeof(s) is 4"
+   ],
+   "point": 3,
+   "mark": [
+    "\\0"
+   ],
+   "text": [
+    "A C string is characters followed by a zero byte, '\\0'. That's how functions know where it ends.",
+    "",
+    "- strlen counts the letters, not the '\\0'.",
+    "- A copy needs one more byte: malloc(strlen(s) + 1)."
+   ]
+  },
+  {
+   "scheme": [
+    " char name[8];",
+    "",
+    " ┌───┬───┬───┬───┬───┬───┬───┬───┐",
+    " │ a │ v │ e │ r │ y │ v │ e │ r │ yverylong…",
+    " └───┴───┴───┴───┴───┴───┴───┴───┘",
+    "",
+    " strcpy(name, argv[1]);"
+   ],
+   "point": 3,
+   "mark": [
+    "yverylong…"
+   ],
+   "text": [
+    "strcpy copies until the '\\0', whatever the size of the target. A long input writes past the end, over whatever lives next to it.",
+    "",
+    "- That's a buffer overflow, a classic security hole.",
+    "- snprintf(name, sizeof name, \"%s\", argv[1]) stops at the size and always adds the '\\0'."
+   ]
+  }
+ ]
+}

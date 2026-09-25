@@ -1,0 +1,104 @@
+{
+ "id": "packages",
+ "order": 70,
+ "skill": "linux",
+ "needs": [
+  "lesson permissions",
+  "tool apt 1 | tool dnf 1 | fights 5"
+ ],
+ "title": "Packages and repositories",
+ "summary": "Where apt and dnf get their programs, why a signature is checked, and what dependencies are.",
+ "pages": [
+  {
+   "scheme": [
+    " repository  (a server, e.g. deb.debian.org)",
+    " ├── the package list, signed",
+    " └── the packages (.deb files)",
+    "       │",
+    "       │  apt update: fetch the list",
+    "       ▼",
+    " your machine keeps a copy of the list",
+    "       │",
+    "       │  apt install jq",
+    "       ▼",
+    " jq and what it needs, installed"
+   ],
+   "point": 4,
+   "mark": [
+    "apt update"
+   ],
+   "text": [
+    "Programs come in packages, stored in repositories.",
+    "",
+    "- apt update only refreshes the list: nothing is installed or upgraded.",
+    "- apt install reads that list, downloads the package, and puts its files in place."
+   ]
+  },
+  {
+   "scheme": [
+    " the package list",
+    "   signed with the repository's private key",
+    "       │",
+    "       ▼  apt checks it with the public key",
+    "       │  you trust, in /etc/apt/keyrings/",
+    "       │  or /usr/share/keyrings/",
+    "       ├── good signature: the list is used",
+    "       └── NO_PUBKEY / Missing key: refused"
+   ],
+   "point": 7,
+   "mark": [
+    "NO_PUBKEY",
+    "Missing key"
+   ],
+   "text": [
+    "Anyone could run a fake mirror. The signature proves the list comes from the real repository and wasn't changed.",
+    "",
+    "- NO_PUBKEY (\"Missing key\" on Debian 13): you don't have the key yet. Get it from the project's own website.",
+    "- Never switch the check off to make the error go away."
+   ]
+  },
+  {
+   "scheme": [
+    " $ sudo apt install jq",
+    " jq",
+    " └── libjq1",
+    "     └── libonig5",
+    "",
+    " three packages for one command"
+   ],
+   "point": 2,
+   "mark": [
+    "libjq1",
+    "libonig5"
+   ],
+   "text": [
+    "Most packages need others to work: their dependencies. apt and dnf install them for you.",
+    "",
+    "- Libraries (lib…) are code shared by many programs.",
+    "- apt autoremove removes the dependencies nothing needs anymore."
+   ]
+  },
+  {
+   "scheme": [
+    "           Debian, Ubuntu      Rocky, RHEL",
+    " refresh   apt update          dnf makecache",
+    " install   apt install jq      dnf install jq",
+    " low level dpkg                rpm",
+    " which pkg dpkg -S /usr/bin/wc rpm -qf /usr/bin/wc",
+    " repos     /etc/apt/sources…   /etc/yum.repos.d/"
+   ],
+   "point": 4,
+   "mark": [
+    "dpkg -S",
+    "rpm -qf"
+   ],
+   "text": [
+    "Two big families, same ideas.",
+    "",
+    "- apt and dnf talk to repositories and handle dependencies.",
+    "- dpkg and rpm work on the packages already on your machine.",
+    "- \"Which package gave me this file?\" is dpkg -S or rpm -qf."
+   ]
+  }
+ ]
+}

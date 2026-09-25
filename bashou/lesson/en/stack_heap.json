@@ -1,0 +1,198 @@
+{
+ "id": "stack_heap",
+ "order": 110,
+ "skill": "c",
+ "needs": [
+  "won semicolon_slug | tool gcc 3"
+ ],
+ "title": "C memory: the stack and the heap",
+ "summary": "Where your variables live, why malloc needs free, and what a leak or a stack overflow is.",
+ "pages": [
+  {
+   "scheme": [
+    " high addresses",
+    " ┌──────────────────┐",
+    " │ stack        ↓   │  local variables,",
+    " │                  │  function calls",
+    " │    free space    │",
+    " │                  │",
+    " │ heap         ↑   │  what malloc gives you",
+    " ├──────────────────┤",
+    " │ globals          │",
+    " │ code             │  your compiled program",
+    " └──────────────────┘",
+    " low addresses"
+   ],
+   "point": 2,
+   "mark": [
+    "stack",
+    "heap"
+   ],
+   "text": [
+    "A running program gets its memory in parts. Two of them matter every day:",
+    "",
+    "- the stack, for the variables of your functions;",
+    "- the heap, for memory you ask for yourself."
+   ]
+  },
+  {
+   "scheme": [
+    " stack",
+    " ┌───────────────────────┐",
+    " │ main    x = ?         │",
+    " ├───────────────────────┤",
+    " │ add     a = 2         │  pushed when",
+    " │         b = 3         │  add(2, 3)",
+    " │         s = 5         │  is called",
+    " └───────────────────────┘",
+    "   ↓ the next call goes here",
+    "",
+    " int add(int a, int b) { int s = a+b; return s; }",
+    " int x = add(2, 3);"
+   ],
+   "point": 4,
+   "mark": [
+    "add"
+   ],
+   "text": [
+    "- Each call gets a box on the stack, a frame, with its arguments and local variables.",
+    "- A call inside a call adds a new box below it: on Linux PCs the stack grows down, toward lower addresses.",
+    "- The newest box is still called \"the top of the stack\": top means the last one added, not the highest."
+   ]
+  },
+  {
+   "scheme": [
+    " stack",
+    " ┌───────────────────────┐",
+    " │ main    x = 5         │",
+    " └───────────────────────┘",
+    "",
+    "   add has returned: its box is gone,",
+    "   a, b and s don't exist anymore"
+   ],
+   "point": 2,
+   "mark": [
+    "x = 5"
+   ],
+   "text": [
+    "When a function returns, its box is thrown away. Nobody has to free it: it's automatic.",
+    "",
+    "- That's why the stack is fast and easy.",
+    "- And why returning the address of a local variable is a bug: it points into a box that no longer exists."
+   ]
+  },
+  {
+   "scheme": [
+    " stack",
+    " ┌───────────────────────┐",
+    " │ main                  │",
+    " │ sum_to(4)             │",
+    " │ sum_to(3)             │",
+    " │ sum_to(2)             │",
+    " │ …  no case that stops │",
+    " │ sum_to(-261000)       │",
+    " └───────────────────────┘",
+    "   stack full: segmentation fault"
+   ],
+   "point": 9,
+   "mark": [
+    "segmentation fault"
+   ],
+   "text": [
+    "A function that calls itself stacks one box per call.",
+    "",
+    "- Without a base case (a case that returns without calling itself again), the boxes pile up.",
+    "- The stack is small (8 MB by default on Linux): it overflows and the program crashes."
+   ]
+  },
+  {
+   "scheme": [
+    " stack                     heap",
+    " ┌──────────────┐",
+    " │ main         │",
+    " ├──────────────┤          ┌─────────────┐",
+    " │ load   p ────┼─────────▶│ 100 bytes   │",
+    " └──────────────┘          └─────────────┘",
+    "",
+    " char *p = malloc(100);    (inside load)"
+   ],
+   "point": 4,
+   "mark": [
+    "malloc",
+    "100 bytes"
+   ],
+   "text": [
+    "malloc asks for memory on the heap and gives you its address.",
+    "",
+    "- p is a pointer: a small variable, on the stack, that holds that address.",
+    "- The heap memory stays after the function returns, until you free it.",
+    "- malloc returns NULL when it can't give memory: always check it before use."
+   ]
+  },
+  {
+   "scheme": [
+    " stack                     heap",
+    " ┌──────────────┐          ┌─────────────┐",
+    " │ load   p ────┼─ ─ ─ ─ ─▶│ given back  │",
+    " └──────────────┘          └─────────────┘",
+    "   free(p);  p still holds the old address",
+    "",
+    " ┌──────────────┐",
+    " │ load   p NULL│",
+    " └──────────────┘",
+    "   p = NULL;  nothing left to follow"
+   ],
+   "point": 2,
+   "mark": [
+    "free",
+    "given back",
+    "NULL"
+   ],
+   "text": [
+    "free gives the memory back to malloc, which will reuse it for something else. But p still holds the old address: a dangling pointer.",
+    "",
+    "- Using p after free is a \"use after free\" bug: it may work, crash, or corrupt data.",
+    "- p = NULL right after free makes a mistake crash at once, where you can find it. And free(NULL) does nothing, so a second free is harmless."
+   ]
+  },
+  {
+   "scheme": [
+    " stack                     heap",
+    " ┌──────────────┐",
+    " │ main         │          ┌─────────────┐",
+    " └──────────────┘          │ 100 bytes   │",
+    "   load returned:          └─────────────┘",
+    "   its box and p are gone    ▲ nobody points here"
+   ],
+   "point": 5,
+   "mark": [
+    "100 bytes"
+   ],
+   "text": [
+    "load returned without free: p is gone, the 100 bytes are not. Nobody can free them anymore. That's a memory leak.",
+    "",
+    "- A program that leaks a little on each request grows until the system kills it.",
+    "- The rule: every malloc has exactly one free.",
+    "",
+    "$ gcc -g -fsanitize=address prog.c -o prog && ./prog"
+   ]
+  },
+  {
+   "scheme": [
+    "             stack               heap",
+    " who frees   automatic           you, with free",
+    " lives       until return        until free",
+    " size        small (MB)          large (GB)",
+    " use it for  small, short-lived  big or long-lived"
+   ],
+   "point": 1,
+   "mark": [
+    "you, with free"
+   ],
+   "text": [
+    "- A local variable goes on the stack: nothing to do.",
+    "- Big data, or data that must outlive the function: malloc, and one free later."
+   ]
+  }
+ ]
+}

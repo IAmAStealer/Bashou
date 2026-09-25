@@ -1,0 +1,36 @@
+{
+ "name": "Pointing owl",
+ "palette": {
+  "a": "#7a5634",
+  "o": "#d8a868",
+  "g": "#a8a098",
+  "f": "#fbf6ee",
+  "r": "#c88a58",
+  "m": "#191919",
+  "b": "#e8c8a8"
+ },
+ "base": [
+  ".......................",
+  "..........aaaaaaaaa....",
+  "........aorrrooorrroa..",
+  ".........arfffrfffra...",
+  ".........armfffmffra...",
+  ".........arfffbfffra...",
+  "..aaaaaaaaorfffffroa...",
+  "aooooggoooogrfffrgooa..",
+  ".aaoaoaooogoorrroogoa..",
+  ".........aogooooogooa..",
+  ".........aaoooooooaa...",
+  "...........bb...bb....."
+ ],
+ "poses": {
+  "inhale": {
+   "8": "--------------------ooa",
+   "9": "--------------------ooa"
+  },
+  "closed": {
+   "4": "-----------rfr-rfr-----"
+  }
+ },
+ "particles": [0, 0]
+}

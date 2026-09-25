@@ -35,6 +35,10 @@ def level():
     if nxt:
         count, what = nxt
         rows.append((_("Next"), f"{progress_bar(s['commands'], count)} {s['commands']:,}/{count:,} → {what}"))
+    from . import lesson
+    new = lesson.new(s, lesson.load())
+    if new:
+        rows.append((_("Lessons"), _("🦉 new: {title} · bashou lesson").format(title=new[0]["title"])))
     width = max(len(label) for label, value in rows)
     for label, value in rows:
         print(f"  {BOLD}{label:<{width}}{RESET} : {value}")
@@ -306,6 +310,8 @@ def main():
     ln.add_argument("command", nargs=argparse.REMAINDER)
     ex = sub.add_parser("explain", help="a short note on a code topic, e.g. bashou explain python list")
     ex.add_argument("topic", nargs="*")
+    ls = sub.add_parser("lesson", help="the Sage Owl's library: lessons with drawings, unlocked as you play")
+    ls.add_argument("which", nargs="?", help="a lesson to open, or list")
     sub.add_parser("evolve", help="watch your pets evolve")
     sw = sub.add_parser("swap", help="change your active pet")
     sw.add_argument("pet", nargs="?")
@@ -355,6 +361,9 @@ def main():
         print(f"  {BOLD}{name}{RESET}: {said}")
         if "`" in said:
             print(f"  {DIM}" + _("Not sure what it does? `bashou learn` takes it apart.") + RESET)
+    elif args.cmd == "lesson":
+        from . import lesson
+        raise SystemExit(lesson.main([args.which] if args.which else []))
     elif args.cmd == "adventure":
         from . import adventure
         raise SystemExit(adventure.main())

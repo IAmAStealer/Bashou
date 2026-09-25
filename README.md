@@ -33,6 +33,8 @@ tokens spent to learn what a command does.
   Beaten fights come back after 1, 7 and 30 days (spaced repetition), so what you learned stays.
 - **`bashou explain python list`** (or `dict`, `loop`, `recursion`; `bashou explain c malloc`…): a
   short note with an example, for the code fights.
+- **`bashou lesson`**: the Sage Owl's library. Lessons with drawings that grow page by page (the stack
+  and the heap, where output goes, permissions…), unlocked as you play, each one preparing your next step.
 - **`bashou security`**: small investigations (a hidden file, a cron backdoor, a SUID binary).
 - **`bashou adventure`**: a walk through 11 topics (coding logic, bash, Linux, systemd, Python, Rust,
   C, Debian, Rocky Linux, CI/CD, SQL) with 291 questions about what goes wrong and what to check first, bosses, and

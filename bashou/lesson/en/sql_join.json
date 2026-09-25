@@ -1,0 +1,74 @@
+{
+ "id": "sql_join",
+ "order": 150,
+ "skill": "sql",
+ "needs": [
+  "won query_quokka | tool sqlite3 5"
+ ],
+ "title": "SQL: tables that point at each other",
+ "summary": "Why an order keeps a customer's number, not their name, and how JOIN puts rows back together.",
+ "pages": [
+  {
+   "scheme": [
+    " customers              orders",
+    " id  name               id  customer_id  total",
+    " 1   Ada                10  1            30",
+    " 2   Bo                 11  2            12",
+    "                        12  1            25"
+   ],
+   "point": 2,
+   "mark": [
+    "customer_id"
+   ],
+   "text": [
+    "A database splits data into tables, and each fact is written once.",
+    "",
+    "- An order doesn't copy the customer's name: it keeps their id.",
+    "- Ada changes her name? One row to update, not every order."
+   ]
+  },
+  {
+   "scheme": [
+    " customers              orders",
+    " id  name               id  customer_id  total",
+    " 1   Ada   ◀────────────10  1            30",
+    " 2   Bo    ◀────────────11  2            12",
+    " 1   Ada   ◀────────────12  1            25"
+   ],
+   "point": 4,
+   "mark": [
+    "Ada"
+   ],
+   "text": [
+    "JOIN … ON puts the matching rows side by side again. Ada shows twice: once for each of her orders.",
+    "",
+    "$ SELECT customers.name, orders.total",
+    "$ FROM orders JOIN customers",
+    "$ ON orders.customer_id = customers.id;"
+   ]
+  },
+  {
+   "scheme": [
+    " name   total",
+    " Ada    30",
+    " Bo     12",
+    " Ada    25",
+    "",
+    " GROUP BY customers.id, SUM(total):",
+    " Ada    55",
+    " Bo     12"
+   ],
+   "point": 6,
+   "mark": [
+    "55"
+   ],
+   "text": [
+    "The joined rows are a table like any other: you can filter them, add them up.",
+    "",
+    "- WHERE customers.name = 'Ada' keeps her orders.",
+    "- SUM(orders.total) adds them up.",
+    "- GROUP BY customers.id gives one line per customer (two Adas stay apart)."
+   ]
+  }
+ ]
+}

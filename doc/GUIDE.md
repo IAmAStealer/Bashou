@@ -36,6 +36,11 @@ A pixel-art pet that lives in the top-right corner of your terminal and grows as
   and it's a checkpoint, the topic levels up (harder questions next time). Lose your last heart and
   you go back to the last checkpoint, where you can pick another path. Finish a chapter and a new quest starts. `s` saves and quits at any time.
   Finishing chapter 1 brings the Snail (a slug at first), and its achievements follow your adventure.
+- **Lessons.** `bashou lesson` opens the Sage Owl's library: lessons you read page by page, each with
+  a small drawing that grows from one page to the next while the owl points its wing at the part that
+  matters (the stack and the heap, stdout and stderr, permissions, pipes…). Lessons unlock as you play,
+  each one preparing your next step; locked ones say what opens them. `bashou lesson list` prints the
+  list, `bashou lesson stack_heap` opens one. ←/→ turn the pages, q goes back.
 - **Typos.** On `command not found` your pet laughs kindly and suggests the command you meant.
 - **Pick your pet** on the board with `bashou swap`.
 - **Pets talk.** Every 10–20 minutes your pet gives a tip for its tool, a hint toward your next
@@ -76,6 +81,7 @@ bashou fight            # enter the arena, once your pet has announced a threat
 bashou talk             # your pet says something useful
 bashou learn            # takes its last suggested command apart; or: bashou learn tar -czf a.tgz d
 bashou explain          # a short note on a code topic: bashou explain python list, bashou explain c malloc
+bashou lesson           # the Sage Owl's library: lessons with drawings, unlocked as you play
 bashou evolve           # watch your pets evolve (s skips)
 bashou swap             # board to pick your pet (or: bashou swap fox); f switches its form
 bashou off / on         # hide / show the pet
@@ -149,9 +155,9 @@ workflow* does the same by hand). Pets only offer these tags, never a plain comm
 
 ## Contributing
 
-Pixel art, security challenges and adventure questions are welcome as pull requests: see
-[pixel art](contributing/pixel-art.md), [security challenges](contributing/security-challenges.md) and
-[adventure questions](contributing/questions.md).
+Pixel art, security challenges, adventure questions and lessons are welcome as pull requests: see
+[pixel art](contributing/pixel-art.md), [security challenges](contributing/security-challenges.md),
+[adventure questions](contributing/questions.md) and [lessons](contributing/lessons.md).
 
 ## Privacy
 
@@ -162,7 +168,8 @@ Only counters are kept, in `~/.local/share/bashou/state.json`.
 
 English is the source language. Translations live in `bashou/locales/<lang>.json`, keyed by the
 English text; an empty value falls back to English, so a language can ship half-done. Adventure
-questions are translated in `bashou/adventure/questions/<lang>/`. Only JSON files, no code: see
+questions are translated in `bashou/adventure/questions/<lang>/`, lessons in `bashou/lesson/<lang>/`.
+Only JSON files, no code: see
 [translations.md](contributing/translations.md).
 
 ```bash

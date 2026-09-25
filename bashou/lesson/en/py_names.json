@@ -1,0 +1,111 @@
+{
+ "id": "py_names",
+ "order": 130,
+ "skill": "python",
+ "needs": [
+  "won colon_cobra | tool python3 5"
+ ],
+ "title": "Python: names and objects",
+ "summary": "A variable is a label on an object: why changing a list in a function changes it outside too.",
+ "pages": [
+  {
+   "scheme": [
+    " hosts = [\"web\", \"db\"]",
+    "",
+    "   hosts ────▶ [\"web\", \"db\"]",
+    "",
+    "   name        object"
+   ],
+   "point": 2,
+   "mark": [
+    "hosts"
+   ],
+   "text": [
+    "In Python, a variable is a name stuck on an object, like a label.",
+    "",
+    "- The list is the object. hosts is only its name.",
+    "- The = sign sticks a name on an object. It doesn't copy anything."
+   ]
+  },
+  {
+   "scheme": [
+    " backup = hosts",
+    " hosts.append(\"cache\")",
+    "",
+    "   hosts  ──┐",
+    "            ├─▶ [\"web\", \"db\", \"cache\"]",
+    "   backup ──┘"
+   ],
+   "point": 4,
+   "mark": [
+    "backup",
+    "\"cache\""
+   ],
+   "text": [
+    "backup = hosts puts a second label on the same list.",
+    "",
+    "- Change the list through one name, and the other name sees it too.",
+    "- print(backup) shows cache: there was never a second list."
+   ]
+  },
+  {
+   "scheme": [
+    " backup = hosts.copy()     (or list(hosts))",
+    "",
+    "   hosts  ────▶ [\"web\", \"db\", \"cache\"]",
+    "   backup ────▶ [\"web\", \"db\"]"
+   ],
+   "point": 3,
+   "mark": [
+    ".copy()"
+   ],
+   "text": [
+    "To get a second list, ask for a copy.",
+    "",
+    "- Now each name has its own list: changing one leaves the other alone.",
+    "- hosts[:] is a copy too; you'll see it in older code.",
+    "- copy() copies the list, not what's inside: lists inside it stay shared."
+   ]
+  },
+  {
+   "scheme": [
+    " def tidy(xs):",
+    "     xs.sort()      # changes hosts too!",
+    "",
+    "   hosts ──┐",
+    "           ├─▶ [\"cache\", \"db\", \"web\"]",
+    "   xs    ──┘"
+   ],
+   "point": 1,
+   "mark": [
+    "xs.sort()"
+   ],
+   "text": [
+    "A function gets the same object, under a new name.",
+    "",
+    "- xs.sort() or xs.remove(…) change the caller's list.",
+    "- Build a new list and return it instead: sorted(xs) returns a new, sorted list."
+   ]
+  },
+  {
+   "scheme": [
+    " name = \"sam\"",
+    " name = name.upper()",
+    "",
+    "   name ──╳─▶ \"sam\"          never changes",
+    "        ────▶ \"SAM\"          a new string"
+   ],
+   "point": 4,
+   "mark": [
+    "\"SAM\""
+   ],
+   "text": [
+    "Some objects can never change: numbers, strings, tuples.",
+    "",
+    "- .upper() doesn't change \"sam\": it makes a new string.",
+    "- So you must keep the result: name = name.upper().",
+    "- Lists and dicts can change in place: that's where shared labels surprise you."
+   ]
+  }
+ ]
+}

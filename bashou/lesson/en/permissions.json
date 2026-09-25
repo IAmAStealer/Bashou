@@ -1,0 +1,116 @@
+{
+ "id": "permissions",
+ "order": 50,
+ "skill": "linux",
+ "needs": [
+  "lesson paths",
+  "commands 150"
+ ],
+ "title": "Permissions: who can do what",
+ "summary": "Read the -rwxr-x--- of ls -l, and change it with chmod without opening everything.",
+ "pages": [
+  {
+   "scheme": [
+    " $ ls -l deploy.sh",
+    " -rwxr-x---  1 sam devs  220 deploy.sh",
+    " │             │   │",
+    " │             │   └─ its group: devs",
+    " │             └───── its owner: sam",
+    " └─ type: - a file, d a folder, l a link"
+   ],
+   "point": 4,
+   "mark": [
+    "sam",
+    "devs"
+   ],
+   "text": [
+    "Every file has an owner (a user) and a group (a team of users).",
+    "",
+    "- The first character is the type of the entry.",
+    "- The next nine say what each kind of person may do with it."
+   ]
+  },
+  {
+   "scheme": [
+    " -rwxr-x---  1 sam devs  220 deploy.sh",
+    "  └┬┘└┬┘└┬┘",
+    "   │  │  └─ others: ---  nothing",
+    "   │  └──── group:  r-x  read, run",
+    "   └─────── owner:  rwx  read, write, run"
+   ],
+   "point": 3,
+   "mark": [
+    "rwx",
+    "r-x",
+    "---"
+   ],
+   "text": [
+    "Three groups of three letters: for the owner, for the group, for everyone else.",
+    "",
+    "- r read, w write, x execute (run). A - means: not allowed.",
+    "- Here sam can change the script, the devs team can only read and run it, the others can do nothing."
+   ]
+  },
+  {
+   "scheme": [
+    "      on a file         on a folder",
+    " r    read what's in it list the names (ls)",
+    " w    change it         add, delete, rename inside",
+    " x    run it            go in (cd)"
+   ],
+   "point": 2,
+   "mark": [
+    "add, delete, rename inside"
+   ],
+   "text": [
+    "The same letters mean something else on a folder.",
+    "",
+    "- Deleting a file needs w on the folder, not on the file!",
+    "- A folder without x can't be entered, even if you can read its names."
+   ]
+  },
+  {
+   "scheme": [
+    " sam, alex (in devs) and kim run ./deploy.sh",
+    "",
+    " is it the owner, sam?     yes: use rwx",
+    "   │ no",
+    " is it in the group devs?  yes: use r-x",
+    "   │ no",
+    " everyone else:                 use ---"
+   ],
+   "point": 4,
+   "mark": [
+    "rwx",
+    "r-x",
+    "---"
+   ],
+   "text": [
+    "Linux checks in this order and stops at the first match.",
+    "",
+    "- alex is in devs, so r-x applies: alex can run the script but not change it.",
+    "- kim is neither: --- , permission denied.",
+    "- root, the administrator, skips these checks (to run a file, it still needs an x somewhere)."
+   ]
+  },
+  {
+   "scheme": [
+    "  r w x     r - x     - - -",
+    "  4+2+1     4+0+1     0+0+0",
+    "    7         5         0",
+    "",
+    " $ chmod 750 deploy.sh"
+   ],
+   "point": 4,
+   "mark": [
+    "750"
+   ],
+   "text": [
+    "chmod changes the permissions. With numbers: r is 4, w is 2, x is 1, and you add them up for each group.",
+    "",
+    "- Or with letters: chmod u+x script.sh adds x for the user (the owner).",
+    "- Never chmod 777 to make an error go away: everyone could change the file."
+   ]
+  }
+ ]
+}

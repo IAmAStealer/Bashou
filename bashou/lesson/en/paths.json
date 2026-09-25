@@ -1,0 +1,130 @@
+{
+ "id": "paths",
+ "order": 20,
+ "needs": [
+  "lesson command_line"
+ ],
+ "title": "The file tree and paths",
+ "summary": "Where files live, and the two ways to say where a file is: from the root, or from where you are.",
+ "pages": [
+  {
+   "scheme": [
+    " /",
+    " ├── etc/",
+    " │   └── hosts",
+    " ├── home/",
+    " │   └── sam/",
+    " │       ├── notes.txt",
+    " │       └── photos/",
+    " └── tmp/"
+   ],
+   "point": 4,
+   "mark": [
+    "sam/"
+   ],
+   "text": [
+    "Every file on Linux is somewhere in one big tree. It starts at the root, written /.",
+    "",
+    "- A folder is also called a directory. Here they end with /.",
+    "- Your home folder is /home/<your name>. ~ is its short name.",
+    "- There are no drive letters like C: — a USB stick shows up as a folder too."
+   ]
+  },
+  {
+   "scheme": [
+    " /",
+    " ├── etc/",
+    " │   └── hosts",
+    " ├── home/",
+    " │   └── sam/",
+    " │       ├── notes.txt",
+    " │       └── photos/",
+    " └── tmp/",
+    "",
+    " /home/sam/notes.txt"
+   ],
+   "point": 9,
+   "mark": [
+    "home/",
+    "sam/",
+    "notes.txt"
+   ],
+   "text": [
+    "An absolute path starts with /. It's the whole way down from the root, one folder after the other.",
+    "",
+    "- It means the same thing wherever you are.",
+    "- Scripts and config files use absolute paths for that reason."
+   ]
+  },
+  {
+   "scheme": [
+    " /",
+    " └── home/",
+    "     └── sam/            you are here",
+    "         ├── notes.txt",
+    "         └── photos/",
+    "             └── cat.png",
+    "",
+    " photos/cat.png"
+   ],
+   "point": 2,
+   "mark": [
+    "photos/",
+    "cat.png"
+   ],
+   "text": [
+    "A path that doesn't start with / is relative: it starts from the folder you are in, the current directory.",
+    "",
+    "$ pwd            # print where you are: /home/sam",
+    "$ ls photos/cat.png",
+    "$ cd photos      # move into it"
+   ]
+  },
+  {
+   "scheme": [
+    " /",
+    " └── home/",
+    "     └── sam/            ..  (one level up)",
+    "         ├── notes.txt",
+    "         └── photos/     .   (you are here)",
+    "             └── cat.png",
+    "",
+    " ../notes.txt"
+   ],
+   "point": 2,
+   "mark": [
+    "..",
+    "notes.txt"
+   ],
+   "text": [
+    "Every folder has two special names:",
+    "",
+    "- . is the folder itself: ./script.sh runs the script that is here.",
+    "- .. is the folder above: from photos, ../notes.txt is sam's notes.",
+    "",
+    "$ cd ..          # go up one level"
+   ]
+  },
+  {
+   "scheme": [
+    " /",
+    " ├── etc/        settings (config files)",
+    " ├── home/       people's files",
+    " ├── tmp/        temporary, may be wiped",
+    " ├── usr/bin/    programs (ls, grep, python3…)",
+    " └── var/log/    logs: what programs report"
+   ],
+   "point": 5,
+   "mark": [
+    "var/log/"
+   ],
+   "text": [
+    "You'll visit the same few places again and again.",
+    "",
+    "- Something misconfigured? Look in /etc.",
+    "- Something broke? The logs in /var/log (or journalctl) often say why.",
+    "- /tmp is often emptied at reboot, not always: never keep anything important there."
+   ]
+  }
+ ]
+}

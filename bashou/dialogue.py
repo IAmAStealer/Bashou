@@ -195,6 +195,8 @@ INVITES = {
                   "I want to see the world. Take me with you: `bashou adventure`",
                   "Grass, hills, dungeons… `bashou adventure` is waiting for us."],
     "security": ["Feel like a detective? `bashou security` has small investigations."],
+    "lesson": ["The Sage Owl has a new lesson for you, with drawings: `bashou lesson`",
+               "A new page opened in the owl's library. It shows how things work inside: `bashou lesson`"],
     "rust": ["You know your way around now. Want to learn Rust? `{cmd}` installs it, and Rust fights will come.",
              "Rust next? The compiler explains every mistake. Install it with `{cmd}`, then `bashou explain rust mut`."],
     "gpg": ["Your files deserve a lock. `{cmd}` installs GnuPG, then `gpg -c notes.txt` locks a file.",
@@ -287,6 +289,12 @@ def invite(state, rng):
     return rng.choice(INVITES[mode])
 
 
+def new_lesson(state, rng):
+    """A lesson you unlocked and haven't opened yet: the Sage Owl's library is waiting."""
+    from . import lesson
+    return rng.choice(INVITES["lesson"]) if lesson.new(state) else None
+
+
 def line(state, pet, rng=random):
     """One thing for `pet` to say, with its voice. A waiting threat comes first."""
     from . import fight
@@ -296,7 +304,8 @@ def line(state, pet, rng=random):
     earned = set(state["achievements"])
     traits = [t for trait, lines in TRAITS.items() if trait in earned for t in lines]
     pools = [(hint(state, pet, rng), 4), (rng.choice(TIPS[pet]), 4),
-             (rng.choice(traits + PERSONAL[pet]), 2), (invite(state, rng), 3), (discover(state, rng), 4)]
+             (rng.choice(traits + PERSONAL[pet]), 2), (invite(state, rng), 3), (discover(state, rng), 4),
+             (new_lesson(state, rng), 3)]
     pools = [(text, w) for text, w in pools if text]
     text = rng.choices([t for t, w in pools], [w for t, w in pools])[0]
     return f"{_(VOICE[pet])} {_(text)}"

@@ -3,6 +3,16 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.4.4 — 2026-09-25
+
+- **New: `bashou lesson`, the Sage Owl's library.** Hints tell you what to type; lessons show how things
+  work. Each lesson is a few short pages with a drawing that grows from one page to the next, and the owl
+  points its wing at what matters: how the shell reads a command line, the file tree, stdout and stderr,
+  pipes step by step, permissions, processes and signals, packages and their signatures, systemd
+  services, the stack and the heap in C, pointers and strings, Python names, Rust variables, SQL joins,
+  public and private keys, CI pipelines. Lessons unlock as you play, each one preparing your next step,
+  and the locked ones tell you what opens them. Your pet mentions it when a new one is waiting.
+
 ## v0.4.3 — 2026-09-24
 
 - The Seedling is now a little seed with one shoot, so you can tell it apart from the Sprout.
