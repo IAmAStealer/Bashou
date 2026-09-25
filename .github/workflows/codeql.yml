@@ -10,11 +10,13 @@ on:
 
 permissions:
   contents: read
-  security-events: write
 
 jobs:
   analyze:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write     # the results in the Security tab
     strategy:
       matrix:
         language: [python, actions]

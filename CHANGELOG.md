@@ -12,6 +12,8 @@ Every release has a section here, written for players. CI refuses to tag a relea
 - The Ember is redrawn cleaner: a symmetric flame on a smooth bed of charcoal.
 - The README shows a sample banner and says it plainly: Bashou collects nothing, you are not the
   product.
+- Each release now carries its `.deb` and `.rpm` with signed checksums and a build provenance
+  attestation, so you can check a download came from this repository (see the guide).
 
 ## v0.6.1 — 2026-09-25
 

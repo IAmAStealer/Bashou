@@ -1,0 +1,6 @@
+# Unix line endings everywhere: bash and python break on CRLF.
+* text=auto eol=lf
+*.png binary
+# GitHub's language bar: docs and art are not code.
+doc/** linguist-documentation
+art/** linguist-documentation

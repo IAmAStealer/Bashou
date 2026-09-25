@@ -147,7 +147,18 @@ Every push runs the tests (Python 3.9 and 3.13) and the security checks:
   `pickle`, `os.system` or `shell=True`. Nothing to `pip install`, so no dependency to trust.
 - **Bandit** (Python security linter), **ShellCheck** (the bash loader), **Gitleaks** (secrets in
   the whole history), **CodeQL** (GitHub code scanning, also weekly).
-- The GitHub Actions are pinned to a commit, and Dependabot proposes their updates.
+- The GitHub Actions are pinned to a commit, and Dependabot proposes their updates. Workflows start
+  read-only; a job gets write access only for what it does (tests check both).
+- **OpenSSF Scorecard** grades these practices every week (the badge in the README).
+
+Each release carries its `.deb` and `.rpm`, a `SHA256SUMS` file signed with the same key as the apt and
+dnf repositories, and a build provenance attestation: proof that GitHub Actions built the file from
+this repository. To check a download:
+
+```bash
+gpg --verify SHA256SUMS.asc SHA256SUMS && sha256sum -c --ignore-missing SHA256SUMS
+gh attestation verify bashou_0.6.2_all.deb --repo IAmAStealer/Bashou
+```
 
 To release, first add a `## v1.2.3 — YYYY-MM-DD` section to `CHANGELOG.md` (written for players:
 it becomes the release notes), then push a commit to `main` whose message has a line

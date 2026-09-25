@@ -110,3 +110,21 @@ class WorkflowsTest(unittest.TestCase):
         self.assertEqual(duplicate_keys(bad), ["6: packages"])
         for path in sorted((GITHUB / "workflows").glob("*.yml")):
             self.assertEqual(duplicate_keys(path.read_text()), [], path.name)
+
+    def test_actions_are_pinned_to_a_commit(self):
+        """A tag can be moved to other code; a commit can't (OpenSSF Scorecard: Pinned-Dependencies)."""
+        import re
+        for path in sorted((GITHUB / "workflows").glob("*.yml")):
+            for n, line in enumerate(path.read_text().splitlines(), 1):
+                found = re.search(r"uses:\s*([^\s#]+)", line)
+                if found and not found.group(1).startswith("./"):
+                    self.assertRegex(found.group(1), r"@[0-9a-f]{40}$", f"{path.name}:{n}")
+                    self.assertIn("# v", line, f"{path.name}:{n}: say which version the commit is")
+
+    def test_workflows_start_read_only(self):
+        """Write permissions are given job by job, never to the whole workflow."""
+        import re
+        for path in sorted((GITHUB / "workflows").glob("*.yml")):
+            top = re.search(r"^permissions:(.*?)^\S", path.read_text(), re.M | re.S)
+            self.assertIsNotNone(top, path.name)
+            self.assertNotIn("write", top.group(1), path.name)
