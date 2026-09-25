@@ -1665,5 +1665,7 @@
  "read 12 lessons to the end": "lire 12 leçons jusqu'au bout",
  "read 20 lessons to the end": "lire 20 leçons jusqu'au bout",
  "master 10 lessons you read": "maîtriser 10 leçons lues",
- "Beacon": "Fanal"
+ "Beacon": "Fanal",
+ "Latency Kraken": "Kraken de la latence",
+ "Network: IPv4, IPv6, DNS, TCP": "Réseau : IPv4, IPv6, DNS, TCP"
 }

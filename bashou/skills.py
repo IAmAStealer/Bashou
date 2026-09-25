@@ -27,6 +27,7 @@ SKILLS = {
     "logic": "Logic: coding basics, for beginners",
     "cicd": "CI/CD: pipelines, secrets, runners",
     "sql": "SQL: databases with SQLite (SELECT, JOIN, UPDATE)",
+    "network": "Network: IPv4, IPv6, DNS, TCP",
 }
 # Fights need a program or a system: without it, the skill still has its adventure questions.
 NEEDS = {"python": "python3", "c": "gcc", "rust": "rustc", "sql": "sqlite3"}

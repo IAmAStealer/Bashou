@@ -1,0 +1,483 @@
+[
+ {
+  "id": "network-1-01",
+  "level": 1,
+  "q": "À quoi sert une adresse IP ?",
+  "choices": [
+   "À dire pour quelle machine est un paquet",
+   "C'est le nom d'un site web",
+   "C'est le mot de passe d'un Wi-Fi",
+   "C'est la marque d'une carte réseau"
+  ],
+  "answer": 0,
+  "explain": "Chaque machine d'un réseau a une adresse, et chaque paquet porte l'adresse où il va, comme une lettre. Les noms comme example.org sont pour les humains : le DNS les transforme d'abord en adresses. Les adresses IPv4 ressemblent à 192.168.1.20, les IPv6 à 2001:db8::20."
+ },
+ {
+  "id": "network-1-02",
+  "level": 1,
+  "q": "Un serveur web et un serveur SSH tournent sur la même machine. Comment un paquet trouve-t-il le bon ?",
+  "choices": [
+   "Par son numéro de port : 443 pour HTTPS, 22 pour SSH",
+   "Par son adresse IP, différente pour chaque programme",
+   "Le premier programme qui répond le prend",
+   "Le noyau te demande lequel"
+  ],
+  "answer": 0,
+  "explain": "L'adresse IP choisit la machine ; le port choisit le programme dessus. Chaque serveur écoute sur son propre port, et chaque paquet dit pour quel port il est. Les services connus ont des ports habituels : 22 SSH, 80 HTTP, 443 HTTPS, 5432 PostgreSQL."
+ },
+ {
+  "id": "network-1-03",
+  "level": 1,
+  "q": "Que veut dire 127.0.0.1 ?",
+  "choices": [
+   "Cette machine elle-même (localhost)",
+   "Le routeur de ton réseau à la maison",
+   "Le premier serveur d'internet",
+   "Une adresse qui ne marche pas"
+  ],
+  "answer": 0,
+  "explain": "127.0.0.1 est l'adresse de bouclage : les paquets envoyés là ne quittent jamais la machine, ils reviennent aussitôt. localhost est son nom. En IPv6, c'est ::1. Un programme qui n'écoute que sur 127.0.0.1 est injoignable depuis toute autre machine."
+ },
+ {
+  "id": "network-1-04",
+  "level": 1,
+  "q": "ss -tln montre une base de données sur 0.0.0.0:5432. Qu'est-ce que ça veut dire ?",
+  "choices": [
+   "Elle accepte les connexions de tous les réseaux",
+   "Elle n'accepte que les connexions de cette machine",
+   "Elle est éteinte",
+   "Elle n'accepte que l'IPv6"
+  ],
+  "answer": 0,
+  "explain": "0.0.0.0 veut dire toutes les adresses IPv4 de la machine : la base répond sur le Wi-Fi, le réseau local, peut-être internet. Sauf si c'est voulu, attache-la à 127.0.0.1, et laisse un pare-feu protéger le reste. Une base ouverte à tous est une fuite classique."
+ },
+ {
+  "id": "network-1-05",
+  "level": 1,
+  "q": "Ton portable a l'adresse 192.168.1.34. Une machine sur internet peut-elle le joindre directement avec ?",
+  "choices": [
+   "Non : 192.168.x.x est privée, valable chez toi seulement",
+   "Oui, toute adresse marche partout",
+   "Seulement avec l'IPv6 activé",
+   "Seulement si elle fait moins de 10 chiffres"
+  ],
+  "answer": 0,
+  "explain": "Certaines plages sont privées, réutilisées par des millions de maisons et de bureaux : 10.0.0.0/8, 172.16.0.0/12 et 192.168.0.0/16. Internet ne les achemine pas. Ton routeur partage une seule adresse publique pour toute la maison, et traduit au passage (NAT)."
+ },
+ {
+  "id": "network-1-06",
+  "level": 1,
+  "q": "Que fait le DNS ?",
+  "choices": [
+   "Il transforme des noms comme example.org en adresses IP",
+   "Il chiffre ton trafic web",
+   "Il donne une adresse IP à ta machine",
+   "Il accélère les téléchargements"
+  ],
+  "answer": 0,
+  "explain": "Les ordinateurs se connectent à des adresses, les humains retiennent des noms. Avant de se connecter à example.org, ta machine demande son adresse à un résolveur DNS, puis se connecte à cette adresse. Quand le DNS est cassé, les noms échouent mais les adresses marchent encore : bon premier test."
+ },
+ {
+  "id": "network-1-07",
+  "level": 1,
+  "q": "En DNS, quelle différence entre un enregistrement A et un enregistrement AAAA ?",
+  "choices": [
+   "A donne une adresse IPv4, AAAA une adresse IPv6",
+   "A pour les sites web, AAAA pour le mail",
+   "AAAA est un A plus récent et plus rapide",
+   "A est public, AAAA est privé"
+  ],
+  "answer": 0,
+  "explain": "Les enregistrements A contiennent des adresses IPv4 (32 bits), les AAAA des IPv6 (128 bits, quatre fois plus longues : quatre A). Un nom peut avoir les deux : dig A example.org et dig AAAA example.org demandent chacun. Ta machine essaie en général l'IPv6 d'abord quand elle a les deux."
+ },
+ {
+  "id": "network-1-08",
+  "level": 1,
+  "q": "ping 192.0.2.10 reçoit des réponses, mais ping server.example dit « Name or service not known ». Qu'est-ce qui est cassé ?",
+  "choices": [
+   "La résolution de noms (DNS), pas le réseau",
+   "Le câble réseau",
+   "La page web du serveur",
+   "ping lui-même"
+  ],
+  "answer": 0,
+  "explain": "Les réponses depuis l'adresse prouvent que le chemin marche. Le nom échoue avant que ping envoie quoi que ce soit : la machine n'a pas su le transformer en adresse. Regarde le DNS : /etc/resolv.conf, resolvectl status, dig server.example, ou une faute dans le nom."
+ },
+ {
+  "id": "network-1-09",
+  "level": 1,
+  "q": "Quelle commande montre les adresses IP de ta machine ?",
+  "choices": [
+   "ip addr (ou ip -br addr, une ligne chacune)",
+   "ifconfig --all-ips",
+   "dig myself",
+   "ping -a"
+  ],
+  "answer": 0,
+  "explain": "ip, du paquet iproute2, est l'outil d'aujourd'hui pour les adresses et les routes. ip -br addr affiche une ligne par interface : son nom, son état (UP ou DOWN) et ses adresses. L'ancien ifconfig existe encore sur certaines machines, mais ip est sur tout Linux moderne."
+ },
+ {
+  "id": "network-1-10",
+  "level": 1,
+  "q": "Que veut dire l'interface « lo » dans ip addr ?",
+  "choices": [
+   "loopback : la machine qui se parle à elle-même",
+   "local : la carte Wi-Fi",
+   "login : la connexion SSH",
+   "low : un lien de secours lent"
+  ],
+  "answer": 0,
+  "explain": "lo porte 127.0.0.1 et ::1. Les programmes d'une même machine s'en servent pour se parler, une appli web avec sa base locale par exemple. Elle est toujours là, même sans carte réseau. Si ip addr ne montre que lo, aucune carte n'a été trouvée (souvent un pilote manquant) : une carte simplement éteinte apparaît quand même, marquée DOWN."
+ },
+ {
+  "id": "network-1-11",
+  "level": 1,
+  "q": "Que vérifie ping ?",
+  "choices": [
+   "Qu'une machine répond, et le temps de l'aller-retour",
+   "Qu'un site web se charge bien",
+   "Qu'un port est ouvert",
+   "Que ton mot de passe est bon"
+  ],
+  "answer": 0,
+  "explain": "ping envoie de petites demandes d'écho ICMP et attend les réponses, en montrant le temps de chaque aller-retour. Pas de réponse ne veut pas toujours dire éteinte : beaucoup de serveurs et de pare-feux bloquent ping. Une réponse dit que la machine est là et que le chemin marche, rien de plus sur ses services."
+ },
+ {
+  "id": "network-1-12",
+  "level": 1,
+  "q": "Quelle commande liste les ports sur lesquels des programmes écoutent, sur ta machine ?",
+  "choices": [
+   "ss -tln (ajoute -p pour voir le programme)",
+   "ip route",
+   "dig +short",
+   "ping localhost"
+  ],
+  "answer": 0,
+  "explain": "ss montre les sockets : -t TCP, -l en écoute, -n des nombres plutôt que des noms, -p le processus (avec sudo pour ceux des autres utilisateurs). C'est le moyen le plus rapide de vérifier qu'un serveur a vraiment démarré, et sur quelle adresse : 127.0.0.1 ou 0.0.0.0."
+ },
+ {
+  "id": "network-2-01",
+  "level": 2,
+  "q": "Que veut dire /24 dans 192.168.1.0/24 ?",
+  "choices": [
+   "Les 24 premiers bits sont le réseau : 256 adresses",
+   "24 machines au maximum",
+   "Le 24e réseau du bâtiment",
+   "Un bail de 24 heures"
+  ],
+  "answer": 0,
+  "explain": "Une adresse IPv4 a 32 bits. /24 fixe les 24 premiers (192.168.1), et les 8 derniers numérotent les machines : 256 adresses, 254 utilisables (.0 nomme le réseau, .255 sert à la diffusion). /16 donne 65 536 adresses ; chaque bit en moins double la taille."
+ },
+ {
+  "id": "network-2-02",
+  "level": 2,
+  "q": "10.4.3.200 est-elle dans 10.4.0.0/22 ?",
+  "choices": [
+   "Oui : /22 couvre de 10.4.0.0 à 10.4.3.255",
+   "Non : seul 10.4.0.x est dedans",
+   "Non : /22 veut dire 22 adresses",
+   "Seulement si elle répond au ping"
+  ],
+  "answer": 0,
+  "explain": "/22 laisse 10 bits aux machines : 1 024 adresses, quatre blocs /24 côte à côte, de 10.4.0.x à 10.4.3.x. À la main, on se trompe vite : python3 -c \"import ipaddress as i; print(i.ip_address('10.4.3.200') in i.ip_network('10.4.0.0/22'))\" répond exactement."
+ },
+ {
+  "id": "network-2-03",
+  "level": 2,
+  "q": "ip route affiche « default via 192.168.1.1 dev wlan0 ». Qu'est-ce que 192.168.1.1 ?",
+  "choices": [
+   "La passerelle : là où vont les paquets sans autre route",
+   "Le serveur DNS",
+   "Ta propre adresse",
+   "L'adresse d'internet"
+  ],
+  "answer": 0,
+  "explain": "Les adresses de ton propre réseau sont jointes directement. Pour tout le reste, la machine confie le paquet à la passerelle, souvent ta box, qui le fait suivre. Pas de route par défaut, pas d'internet, même avec un réseau local qui marche. ip route get 1.1.1.1 montre la route que prendrait un paquet, sans l'envoyer."
+ },
+ {
+  "id": "network-2-04",
+  "level": 2,
+  "q": "Comment écrire 2001:0db8:0000:0000:0000:0000:0000:0001 en court ?",
+  "choices": [
+   "2001:db8::1",
+   "2001:db8:1",
+   "2001::db8::1",
+   "21:db8::1"
+  ],
+  "answer": 0,
+  "explain": "Deux règles : enlever les zéros en tête de chaque groupe (0db8 devient db8), et remplacer une suite de groupes nuls par :: (une seule fois, sinon la longueur serait ambiguë). C'est pour ça que 2001::db8::1 est invalide. 2001:db8::/32 est réservée aux exemples et à la documentation, comme 192.0.2.0/24 en IPv4."
+ },
+ {
+  "id": "network-2-05",
+  "level": 2,
+  "q": "Ton interface a une adresse IPv6 qui commence par fe80::. Qu'est-ce que c'est ?",
+  "choices": [
+   "Une adresse link-local, valable seulement sur ce segment",
+   "Une adresse publique joignable par tous",
+   "Une erreur : la config IPv6 a échoué",
+   "L'adresse de ta box"
+  ],
+  "answer": 0,
+  "explain": "Chaque interface IPv6 se donne une adresse fe80:: dès qu'elle est active, même sans routeur. Elle ne marche que sur ce lien (le même câble ou Wi-Fi), jamais à travers un routeur. Ta vraie adresse, routable, est l'autre, qui commence souvent par 2 (globale) ou fd (privée, comme 10.x en IPv4)."
+ },
+ {
+  "id": "network-2-06",
+  "level": 2,
+  "q": "Pourquoi un réseau IPv6 à la maison est-il en général un /64 ?",
+  "choices": [
+   "Les machines créent elles-mêmes les 64 derniers bits (SLAAC)",
+   "C'est le maximum autorisé par l'IPv6",
+   "64 machines au maximum",
+   "Ça rend le routage plus rapide qu'un /24"
+  ],
+  "answer": 0,
+  "explain": "Avec SLAAC, le routeur annonce les 64 premiers bits (le préfixe), et chaque machine choisit elle-même les 64 derniers : pas besoin de serveur DHCP. Ça ne marche que si le réseau fait exactement /64. C'est immense : 2^64 adresses sur un seul Wi-Fi, impossible de le scanner adresse par adresse."
+ },
+ {
+  "id": "network-2-07",
+  "level": 2,
+  "q": "Qu'est-ce qu'un enregistrement CNAME ?",
+  "choices": [
+   "Un alias : ce nom est un autre nom, cherche celui-là",
+   "L'adresse IP officielle d'un serveur",
+   "Le nom du serveur de mail",
+   "Un enregistrement DNS chiffré"
+  ],
+  "answer": 0,
+  "explain": "www.example.org CNAME example.org veut dire : pour www, demande plutôt example.org. Ça permet à plein de noms de suivre une même cible, un CDN par exemple. MX nomme les serveurs de mail, TXT contient du texte (SPF, vérifications de domaine), PTR va d'une adresse vers un nom (dig -x)."
+ },
+ {
+  "id": "network-2-08",
+  "level": 2,
+  "q": "Tu as changé un enregistrement DNS il y a une heure ; certains arrivent encore sur l'ancienne adresse. Pourquoi ?",
+  "choices": [
+   "Les résolveurs gardent l'ancienne réponse jusqu'au TTL",
+   "Un changement DNS demande de redémarrer le serveur",
+   "Leurs navigateurs sont cassés",
+   "Le changement a été perdu"
+  ],
+  "answer": 0,
+  "explain": "Chaque réponse DNS vient avec un TTL, en secondes : combien de temps les résolveurs peuvent la garder. Avec un TTL de 86400, certains caches gardent l'ancienne adresse un jour. Avant un déménagement prévu, baisse le TTL (à 300) la veille, déménage, puis remonte-le. dig montre le TTL dans la réponse."
+ },
+ {
+  "id": "network-2-09",
+  "level": 2,
+  "q": "/etc/hosts dit 10.0.0.9 db.internal, mais dig db.internal renvoie 10.0.0.5. Laquelle ping db.internal utilisera-t-il ?",
+  "choices": [
+   "10.0.0.9 : nsswitch.conf met files avant dns",
+   "10.0.0.5 : le DNS gagne toujours",
+   "Les deux, au hasard",
+   "Aucune : c'est une erreur"
+  ],
+  "answer": 0,
+  "explain": "Les programmes résolvent les noms par la bibliothèque C, qui suit la ligne hosts: de /etc/nsswitch.conf, en général files avant dns : /etc/hosts gagne. dig ignore tout ça et interroge directement le DNS. getent hosts db.internal montre ce que les programmes obtiendront vraiment."
+ },
+ {
+  "id": "network-2-10",
+  "level": 2,
+  "q": "Quelles sont les trois étapes d'une connexion TCP ?",
+  "choices": [
+   "SYN, SYN-ACK, ACK : la poignée de main",
+   "HELLO, DATA, BYE",
+   "PING, PONG, OK",
+   "Connexion, login, envoi"
+  ],
+  "answer": 0,
+  "explain": "Le client envoie SYN (parlons), le serveur répond SYN-ACK (oui, et parlons), le client envoie ACK. Alors seulement les données passent. Si le SYN ne reçoit aucune réponse, le client réessaie puis finit par un timeout ; c'est à ça que ressemble un pare-feu qui jette les paquets."
+ },
+ {
+  "id": "network-2-11",
+  "level": 2,
+  "q": "curl dit « Connection refused » tout de suite. Qu'est-ce que ça t'apprend ?",
+  "choices": [
+   "La machine a répondu, mais rien n'écoute sur ce port",
+   "La machine est éteinte",
+   "Un pare-feu a jeté les paquets en silence",
+   "Le DNS a échoué"
+  ],
+  "answer": 0,
+  "explain": "Refused veut dire qu'un RST est revenu : la machine est là et joignable, mais rien n'écoute sur ce port (un serveur pas démarré, ou sur un autre port, ou seulement sur 127.0.0.1). Plus rarement, un pare-feu refuse exprès. Un timeout, c'est autre chose : aucune réponse, souvent un pare-feu qui jette ou une machine éteinte."
+ },
+ {
+  "id": "network-2-12",
+  "level": 2,
+  "q": "Quelle est la grande différence entre TCP et UDP ?",
+  "choices": [
+   "TCP livre en ordre et renvoie les pertes ; UDP envoie juste",
+   "UDP est chiffré, TCP non",
+   "TCP pour l'IPv4, UDP pour l'IPv6",
+   "UDP a besoin d'une poignée de main, pas TCP"
+  ],
+  "answer": 0,
+  "explain": "TCP ouvre une connexion, numérote chaque octet, renvoie ce qui se perd et livre dans l'ordre : web, SSH, bases de données. UDP envoie des datagrammes indépendants, sans connexion ni renvoi : rapide et simple pour les requêtes DNS, les appels vidéo et les jeux, où un paquet en retard ne sert plus à rien."
+ },
+ {
+  "id": "network-2-13",
+  "level": 2,
+  "q": "ss -tn montre des centaines de connexions en TIME-WAIT. Qu'est-ce que c'est ?",
+  "choices": [
+   "Des connexions fermées, gardées un moment avant l'oubli",
+   "Des connexions bloquées en attente d'un mot de passe",
+   "Des attaques en cours",
+   "Des serveurs en train de démarrer"
+  ],
+  "answer": 0,
+  "explain": "Le côté qui ferme une connexion TCP la garde en TIME-WAIT environ une minute, pour que des paquets en retard de l'ancienne connexion ne soient pas pris pour une nouvelle. Beaucoup d'entre elles veulent juste dire beaucoup de connexions courtes. ESTABLISHED sont les ouvertes ; LISTEN, des serveurs qui attendent."
+ },
+ {
+  "id": "network-3-01",
+  "level": 3,
+  "q": "dig répond status: NXDOMAIN pour un nom et SERVFAIL pour un autre. Quelle différence ?",
+  "choices": [
+   "NXDOMAIN : nom inexistant. SERVFAIL : recherche ratée",
+   "Les deux veulent dire que le nom n'existe pas",
+   "NXDOMAIN est un timeout, SERVFAIL une faute de frappe",
+   "SERVFAIL veut dire que le site est en panne"
+  ],
+  "answer": 0,
+  "explain": "NXDOMAIN est une vraie réponse des serveurs du domaine : ce nom n'existe pas (souvent une faute de frappe). SERVFAIL veut dire que le résolveur n'a pas pu obtenir de réponse fiable : serveurs du domaine en panne ou mal configurés, ou échec de validation DNSSEC. Compare avec un autre résolveur : dig @1.1.1.1 nom."
+ },
+ {
+  "id": "network-3-02",
+  "level": 3,
+  "q": "Un site a des enregistrements A et AAAA, mais son IPv6 est cassé. Pourquoi la plupart des gens ne voient rien ?",
+  "choices": [
+   "Les clients essaient les deux, et gardent le plus rapide",
+   "Les navigateurs n'utilisent que l'IPv4",
+   "Le DNS cache l'enregistrement cassé",
+   "L'IPv6 est réservé aux serveurs"
+  ],
+  "answer": 0,
+  "explain": "Happy Eyeballs (RFC 8305) : le client commence par l'IPv6 et, s'il ne se connecte pas en quelques centaines de millisecondes, tente l'IPv4 en parallèle et garde le gagnant. Un IPv6 cassé ne coûte alors qu'un petit délai, qui cache le problème. Teste chaque côté exprès : curl -6 et curl -4."
+ },
+ {
+  "id": "network-3-03",
+  "level": 3,
+  "q": "SSH se connecte, mais la session gèle dès qu'une grosse sortie arrive, seulement via le VPN. Cause probable ?",
+  "choices": [
+   "La MTU : les gros paquets se perdent, les petits passent",
+   "La clé SSH est trop longue",
+   "Le DNS est lent",
+   "Le disque est plein"
+  ],
+  "answer": 0,
+  "explain": "Un tunnel ajoute des en-têtes, donc le plus gros paquet qui passe (la MTU) rétrécit. Si les messages ICMP qui signalent « trop gros » sont bloqués, les gros paquets disparaissent alors que les petits (login, invite) passent. tracepath montre la MTU du chemin ; baisser la MTU de l'interface le confirme."
+ },
+ {
+  "id": "network-3-04",
+  "level": 3,
+  "q": "Dans ss -tn, le côté client montre 192.168.1.34:51522. D'où vient 51522 ?",
+  "choices": [
+   "Le noyau a pris un port éphémère libre pour cette connexion",
+   "C'est le port du serveur",
+   "C'est le numéro du processus",
+   "C'est un nombre au hasard, sans sens"
+  ],
+  "answer": 0,
+  "explain": "Chaque connexion est identifiée par quatre nombres : adresse et port source, adresse et port destination. Le client ne choisit pas son port : le noyau en prend un libre dans la plage éphémère (voir /proc/sys/net/ipv4/ip_local_port_range). C'est ainsi qu'une machine tient des milliers de connexions vers le même serveur:443."
+ },
+ {
+  "id": "network-3-05",
+  "level": 3,
+  "q": "Sur un serveur chargé, ss -tln montre Recv-Q qui atteint Send-Q sur le port en écoute. Ça veut dire quoi ?",
+  "choices": [
+   "La file d'accept est pleine : les connexions attendent",
+   "Le serveur n'a rien à envoyer",
+   "La carte réseau est cassée",
+   "Rien : ces colonnes sont toujours égales"
+  ],
+  "answer": 0,
+  "explain": "Pour un socket en écoute, Recv-Q est le nombre de poignées de main terminées que le programme n'a pas encore acceptées, et Send-Q la taille de la file (le backlog). Pleine, l'application est trop lente à accepter : les clients voient des connexions lentes ou ratées. Corrige l'appli, ou augmente son backlog (plafonné par net.core.somaxconn)."
+ },
+ {
+  "id": "network-3-06",
+  "level": 3,
+  "q": "/etc/resolv.conf dit nameserver 127.0.0.53. Qu'est-ce que c'est ?",
+  "choices": [
+   "Le relais local de systemd-resolved, avant les serveurs",
+   "Une config cassée : le DNS ne peut pas être local",
+   "L'adresse de ta box",
+   "Une fausse adresse utilisée hors ligne"
+  ],
+  "answer": 0,
+  "explain": "Beaucoup de systèmes font tourner systemd-resolved : les programmes interrogent le relais sur 127.0.0.53, qui met en cache et transmet aux vrais serveurs DNS, par interface (ceux du VPN pour ses domaines, ceux du Wi-Fi pour le reste). resolvectl status les liste ; resolvectl query nom montre la réponse et l'interface (link) par laquelle elle est venue."
+ },
+ {
+  "id": "network-3-07",
+  "level": 3,
+  "q": "Une capture montre SYN, puis RST du serveur, plusieurs fois. Que conclus-tu ?",
+  "choices": [
+   "Le serveur est joignable mais refuse : rien n'écoute là",
+   "Le réseau est saturé",
+   "La poignée de main a marché",
+   "Le DNS est cassé"
+  ],
+  "answer": 0,
+  "explain": "Un RST en réponse à un SYN, c'est le « Connection refused » vu dans la capture : la machine est là, le port est fermé. Un SYN répété sans aucune réponse ferait plutôt penser à un pare-feu ou à une machine éteinte. tcpdump -nr capture.pcap montre les drapeaux : [S] SYN, [S.] SYN-ACK, [.] ACK, [R.] RST."
+ },
+ {
+  "id": "network-3-08",
+  "level": 3,
+  "q": "Pourquoi dig +short www.example.org affiche-t-il parfois un nom avant l'adresse ?",
+  "choices": [
+   "Un CNAME : dig montre l'alias, puis l'adresse",
+   "C'est le nom du serveur DNS",
+   "C'est un message d'erreur",
+   "C'est le DNS inverse de l'adresse"
+  ],
+  "answer": 0,
+  "explain": "+short n'affiche que la section réponse, un enregistrement par ligne. Quand le nom est un alias, la chaîne vient d'abord (la cible du CNAME), puis les A du nom final. Un script qui prend la première ligne pour une adresse casse sur les CNAME : filtre avec dig +short A nom | grep -v '\\.$'."
+ },
+ {
+  "id": "network-3-09",
+  "level": 3,
+  "q": "ip route get 8.8.8.8 répond « via 10.8.0.1 dev tun0 ». Qu'est-ce que ça t'apprend ?",
+  "choices": [
+   "Le trafic vers cette adresse passe par le tunnel du VPN",
+   "8.8.8.8 est injoignable",
+   "Ton Wi-Fi est coupé",
+   "Le DNS passe par 10.8.0.1"
+  ],
+  "answer": 0,
+  "explain": "ip route get demande au noyau quelle route il choisirait pour une adresse, sans rien envoyer : la passerelle, l'interface, et l'adresse source qu'il utiliserait. C'est la réponse la plus rapide à « est-ce que ça passe par le VPN ? », et ça explique bien des problèmes « ça marche pour certains sites seulement »."
+ },
+ {
+  "id": "network-3-10",
+  "level": 3,
+  "q": "Pourquoi un réseau /31 (deux adresses) a-t-il un sens sur un lien entre deux routeurs ?",
+  "choices": [
+   "Un lien à deux bouts n'a besoin ni de réseau ni de diffusion",
+   "Ça n'en a pas : /31 est invalide",
+   "Les routeurs ont besoin d'exactement 31 adresses",
+   "C'est plus rapide à taper"
+  ],
+  "answer": 0,
+  "explain": "Sur un réseau normal, la première adresse nomme le réseau et la dernière sert à la diffusion, donc un /30 n'a que 2 adresses utilisables sur 4. Sur un lien avec exactement deux bouts, aucune des deux n'est utile (RFC 3021) : un /31 donne les deux adresses aux routeurs et économise la moitié de la place."
+ },
+ {
+  "id": "network-3-11",
+  "level": 3,
+  "q": "Un serveur doit être joignable seulement depuis le réseau du bureau 10.20.0.0/16. Quelle adresse d'écoute et quelle règle ?",
+  "choices": [
+   "Son adresse LAN, et un pare-feu qui n'autorise que 10.20/16",
+   "Écouter sur 0.0.0.0 et espérer que personne ne trouve",
+   "Écouter sur 127.0.0.1",
+   "Utiliser un port au-dessus de 50000"
+  ],
+  "answer": 0,
+  "explain": "Deux couches : attacher le service à l'adresse du LAN (pas 0.0.0.0) pour qu'il n'écoute jamais sur les autres interfaces, et laisser le pare-feu n'accepter que la plage du bureau. Un port caché ne protège rien : les scanners essaient les 65 535 ports en quelques secondes. 127.0.0.1 bloquerait aussi le bureau."
+ },
+ {
+  "id": "network-3-12",
+  "level": 3,
+  "q": "traceroute montre * * * pour quelques sauts au milieu, puis la destination répond. Le chemin est-il cassé ?",
+  "choices": [
+   "Non : ces routeurs ne répondent pas aux sondes",
+   "Oui : les paquets sont perdus à ces sauts",
+   "Oui : le DNS a échoué à ces sauts",
+   "Non : ces sauts sont les disques de la destination"
+  ],
+  "answer": 0,
+  "explain": "traceroute envoie des sondes qui expirent à chaque routeur du chemin, et chaque routeur est censé renvoyer un message « time exceeded ». Beaucoup ne le font pas, ou limitent ce débit, et s'affichent en * * *. Si les sauts suivants et la destination répondent, le trafic passe très bien par eux."
+ }
+]

@@ -25,6 +25,7 @@ TOPICS = {
     "systemd": ("systemd", "dungeon", "Unit Wyrm"),
     "logic": ("Logic", "meadow", "Paradox Sphinx"),
     "sql": ("SQL", "forest", "Deadlock Wyvern"),
+    "network": ("Network", "water", "Latency Kraken"),
 }
 
 CHAPTERS = [
