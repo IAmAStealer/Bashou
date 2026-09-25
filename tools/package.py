@@ -2,6 +2,7 @@
 
     python3 tools/package.py build v0.4.1 dist/          # dist/bashou_0.4.1_all.deb, bashou-0.4.1-1.noarch.rpm
     python3 tools/package.py repo dist/ site/ KEYID      # site/deb, site/rpm, site/bashou.asc, signed with KEYID
+    python3 tools/package.py site site/                  # only the share page, to try it: python3 -m http.server -d site
 
 The code goes to /usr/share/bashou (the same tree as a clone, plus a VERSION file) and /usr/bin/bashou runs
 its commands. Nothing turns the pet on: each user runs `bashou setup` once. `build` needs dpkg-deb for the
@@ -9,6 +10,7 @@ its commands. Nothing turns the pet on: each user runs `bashou setup` once. `bui
 rpmsign and gpg.
 """
 
+import json
 import os
 import shutil
 import subprocess
@@ -193,6 +195,15 @@ def dnf_repo(rpms, site, key):
     gpg("--local-user", key, "--armor", "--detach-sign", "-o", f"{repomd}.asc", str(repomd))
 
 
+def site_pages(site):
+    """The share page (doc/site) and the pets it may draw: `bashou share` links there."""
+    sys.path.insert(0, str(ROOT))
+    from bashou import share
+    for page in sorted((ROOT / "doc/site").iterdir()):
+        shutil.copyfile(page, site / page.name)
+    (site / "share-pets.json").write_text(json.dumps(share.page_data(), separators=(",", ":")))
+
+
 def repo(dist, site, key):
     dist, site = Path(dist), Path(site)
     site.mkdir(parents=True, exist_ok=True)
@@ -202,6 +213,7 @@ def repo(dist, site, key):
     dnf_repo(sorted(dist.glob("*.rpm")), site, key)
     (site / "bashou.repo").write_text(DNF_REPO)
     shutil.copyfile(ROOT / "doc/install.html", site / "index.html")
+    site_pages(site)
     (site / ".nojekyll").touch()
     return 0
 
@@ -209,6 +221,10 @@ def repo(dist, site, key):
 def main(argv):
     if len(argv) == 3 and argv[0] == "build":
         return build(argv[1], argv[2])
+    if len(argv) == 2 and argv[0] == "site":
+        Path(argv[1]).mkdir(parents=True, exist_ok=True)
+        site_pages(Path(argv[1]))
+        return 0
     if len(argv) == 4 and argv[0] == "repo":
         return repo(*argv[1:])
     print(__doc__, file=sys.stderr)

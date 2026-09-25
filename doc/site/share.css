@@ -1,0 +1,13 @@
+:root { --bg: #fdfcf8; --fg: #1d1d1b; --muted: #5b5b55; --link: #1a5fb4; --button: #1d1d1b; --button-fg: #fdfcf8; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #16161a; --fg: #e8e6e0; --muted: #a09e97; --link: #78aeed; --button: #e8e6e0; --button-fg: #16161a; }
+}
+body { background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, sans-serif; margin: 0 auto;
+       max-width: 64rem; padding: 1.5rem 16px; }
+h1 { font-size: 1.4rem; margin: 0 0 1rem; }
+img { display: block; width: 100%; height: auto; border-radius: 10px; image-rendering: pixelated; }
+#actions { display: flex; gap: .8rem; flex-wrap: wrap; margin: 1rem 0; }
+button, #save { background: var(--button); color: var(--button-fg); border: 0; border-radius: 8px; padding: .7rem 1.2rem;
+                font: inherit; font-weight: 600; text-decoration: none; cursor: pointer; }
+.small { color: var(--muted); font-size: .9rem; }
+a { color: var(--link); }

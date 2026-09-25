@@ -11,7 +11,7 @@ import re
 import zlib
 
 from . import achievements, progress, qr, state
-from .creatures import STARTERS, owned
+from .creatures import FORM_NAMES, FORMS, ROSTER, STAGES, STARTERS, owned
 from .i18n import _
 from .repo_setup import SITE
 
@@ -66,6 +66,29 @@ def describe(data):
     if "n" in data:
         rows.insert(0, (_("Name"), data["n"]))
     return rows
+
+
+# Upper bounds the page accepts (share.js reads them from share-pets.json).
+BOUNDS = {"lv": (1, progress.MAX_LEVEL), "ach": (0, 999), "pets": (0, 99), "won": (0, 99999), "read": (0, 999)}
+
+
+def page_data():
+    """share-pets.json, published next to share.html: every family's forms and their sprites, the skills
+    and the bounds. The page only draws what is listed here."""
+    import json as _json
+    from pathlib import Path
+    from . import i18n, skills
+    pets = Path(__file__).parent / "pets"
+    fr = i18n.catalog("fr")
+    families, sprites = {}, {}
+    lines = [(line, list(forms), [FORM_NAMES[f] for f in forms]) for line, forms in STARTERS.items()]
+    lines += [(pet, list(FORMS.get(pet, (pet,) * 3)[:len(STAGES[pet])]), list(STAGES[pet])) for pet, _n in ROSTER]
+    for family, forms, names in lines:
+        families[family] = {"forms": forms, "en": names, "fr": [fr.get(n) or n for n in names]}
+        for sprite in forms:
+            d = _json.loads((pets / f"{sprite}.json").read_text())
+            sprites[sprite] = {"palette": d["palette"], "base": d["base"]}
+    return {"families": families, "sprites": sprites, "skills": {k: v.split(":")[0] for k, v in skills.SKILLS.items()}, "bounds": BOUNDS}
 
 
 def main(args):
