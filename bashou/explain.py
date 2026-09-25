@@ -1,4 +1,4 @@
-"""`bashou explain <language> <topic>`: a short offline note with an example, for the code fights."""
+"""`bashou explain <subject> <topic>`: a short offline note with an example, for the code and network fights."""
 
 from .i18n import _
 
@@ -74,12 +74,31 @@ NOTES = {
                  "(overflow, use after free, leak) and says which line did it.",
                  "gcc -Wall -g -fsanitize=address prog.c -o prog && ./prog"),
     },
+    "network": {
+        "cidr": ("An IPv4 address is 32 bits. The /N after it says how many of those bits name the network; "
+                 "the rest numbers the machines. Each bit less doubles the size: a /24 holds 256 addresses, "
+                 "a /22 four times more. Python's ipaddress module does the math for you.",
+                 "python3 -c \"import ipaddress; n = ipaddress.ip_network('10.4.0.0/22'); print(n[0], n[-1], n.num_addresses)\"\n"
+                 "python3 -c \"import ipaddress; print(ipaddress.ip_address('10.4.2.7') in ipaddress.ip_network('10.4.0.0/22'))\""),
+        "ipv6": ("An IPv6 address is 128 bits in 8 groups. Leading zeros in a group can go, and one run of "
+                 "zero groups becomes ::. ::1 is the loopback, fe80:: addresses work only on their own link, "
+                 "and a global address (often starting with 2) is reachable from other networks.",
+                 "ip -6 addr\npython3 -c \"import ipaddress; print(ipaddress.ip_address('2001:db8::1').exploded)\""),
+        "dns": ("Programs ask the C library for a name: it reads /etc/hosts first, then asks a DNS resolver. "
+                "getent hosts shows what programs really get; dig asks DNS only. NXDOMAIN means the name "
+                "doesn't exist; SERVFAIL means the lookup broke on the way.",
+                "getent hosts example.org\ndig +short example.org\ndig AAAA example.org\nresolvectl status"),
+        "tcp": ("A TCP connection opens with SYN, SYN-ACK, ACK. ss shows the sockets: LISTEN is a server "
+                "waiting, ESTAB an open connection. 'Connection refused' comes back at once (nothing listens); "
+                "'timed out' means no answer at all, often a firewall.",
+                "ss -tlnp\nss -tn state established\nnc -zv localhost 22"),
+    },
 }
 
 
 def main(args):
     if len(args) != 2 or args[0] not in NOTES or args[1] not in NOTES[args[0]]:
-        print(_("Usage: bashou explain <language> <topic>"))
+        print(_("Usage: bashou explain <subject> <topic>"))
         for lang, topics in NOTES.items():
             print(f"  {BOLD}{lang}{RESET}: {' '.join(topics)}")
         return 1

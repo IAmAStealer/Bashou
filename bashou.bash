@@ -94,10 +94,11 @@ _bashou_complete() {
     2:swap:*)         words="starter $_bashou_pets" ;;
     2:config:*)       words="list bubble updates size talk quiet" ;;
     2:update:*)       words="--version" ;;
-    2:explain:*)      words="python rust c" ;;
+    2:explain:*)      words="python rust c network" ;;
     3:explain:rust)   words="mut shadowing const integers" ;;
     3:explain:python) words="list dict loop recursion json url base64 subprocess" ;;
     3:explain:c)      words="malloc array string recursion link warnings gdb asan" ;;
+    3:explain:network) words="cidr ipv6 dns tcp" ;;
     3:config:size)    words="small large default" ;;
     2:security:*)     words=$_bashou_security ;;
     2:lesson:*)       words=$_bashou_lessons ;;

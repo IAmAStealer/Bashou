@@ -22,6 +22,13 @@ class LearnTest(unittest.TestCase):
         self.assertIn("2>&1", pieces)
         self.assertEqual(pieces["log"], "the file")
 
+    def test_network_commands(self):
+        pieces = dict(learn.explain("ip route get 192.0.2.10; ss -tn state established; tcpdump -nn -r cap.pcap"))
+        self.assertIn("nothing is sent", pieces["get"])
+        self.assertIn("open connections", pieces["established"])
+        self.assertIn("capture file", pieces["-r cap.pcap"])
+        self.assertNotIn("man", pieces["-tn"])
+
     def test_unknown_commands_point_to_man(self):
         self.assertIn("man frobnicate", learn.explain("frobnicate --x")[0][1])
 
