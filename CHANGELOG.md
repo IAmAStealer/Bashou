@@ -15,10 +15,11 @@ Every release has a section here, written for players. CI refuses to tag a relea
   progress now are green; once your fights and achievements show you've mastered one, it turns white.
   Your pet mentions it when a new one is waiting.
 - **A new pet: the Spark, born from the library.** Fire, for the Library of Alexandria that burned and for
-  the books still destroyed today: what you learn, nobody can burn. Read a lesson to the end and a little
-  Spark joins you. It grows with each lesson achievement (read 3, master one, read 6, three skills,
-  master 5) through Ember, Candle, Campfire, Bonfire and Blaze, and becomes a Phoenix when you've read
-  every lesson of your skills.
+  the books still destroyed today: what you learn, nobody can burn. Read a lesson to the end and a few
+  Sparklings twinkle next to you. They grow with each lesson achievement (read 3, 6, 12 and 20 lessons,
+  master 1, 5 and 10, three skills) through Spark, Ember, Candle, Lantern, Torch, Campfire, Bonfire and
+  Blaze, and become a Phoenix when you've read every lesson of your skills. Learning only one skill? The
+  counts stop at what your skills offer, so the Phoenix stays within reach.
 - **Fifteen short lessons for the basics**, each building on the one before: files (mkdir, cp, mv, rm),
   reading files (cat, less, head, tail -f), wildcards, shell variables, quotes, grep, users and sudo, disk
   space, archives with tar, your first script, loops, addresses and ports, git snapshots and branches,

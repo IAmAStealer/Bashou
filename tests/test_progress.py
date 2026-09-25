@@ -145,13 +145,13 @@ class ProgressTest(unittest.TestCase):
 
     def test_lessons_bring_the_spark_up_to_the_phoenix(self):
         """Owner: the lesson achievements belong to a fire pet (the Library of Alexandria burned; what you
-        learn, nobody can burn). At least 7 forms, the Phoenix is the endgame."""
-        from bashou import creatures, lesson
+        learn, nobody can burn). Sparklings first, the Phoenix is the endgame, ten forms in all."""
+        from bashou import challenges, creatures, lesson
         every = [le["id"] for le in lesson.english()]
         seen = []
 
         def read(*ids):
-            self.s["lessons"]["read"] += ids
+            self.s["lessons"]["read"] += [i for i in ids if i not in self.s["lessons"]["read"]]
             notes = progress.check(self.s)
             seen.append(creatures.form("spark", progress.stage(self.s, "spark")))
             return notes
@@ -159,18 +159,32 @@ class ProgressTest(unittest.TestCase):
         self.assertNotIn("spark", self.s["pets"])
         notes = read("command_line")
         self.assertIn("spark", self.s["pets"])
-        self.assertTrue(any("Spark" in n for n in notes), notes)
+        self.assertTrue(any("Sparklings" in n for n in notes), notes)
         read("paths", "streams")                                          # 3 read: Page turner
         self.s["challenges"] += ["semicolon_slug", "leak_lurker", "stack_specter"]
         read("stack_heap")                                                # mastered, and a 3rd skill
         read("pipes", "permissions")                                      # 6: Bookworm
-        self.s["challenges"] += ["fencepost_fiend", "overflow_ogre", "list_leech", "join_jackal", "stage_specter",
-                                 "needs_newt", "colon_cobra", "query_quokka", "indent_imp", "mut_marmot",
-                                 "shadow_shade", "byte_basilisk"]
+        self.s["challenges"] += [c.id for c in challenges.ALL if c.id not in self.s["challenges"]]
         read("pointers", "py_names", "sql_join", "pipeline", "rust_vars")  # 5 mastered: Librarian
-        read(*[i for i in every if i not in self.s["lessons"]["read"]])    # every one: Alexandria
-        self.assertEqual(seen, ["spark", "ember", "campfire", "bonfire", "blaze", "phoenix"])   # 2 at once skip the Candle
-        self.assertEqual(len(creatures.FORMS["spark"]), 7)
+        read(*every[:12])                                                 # 12: Scholar, 10 mastered: Torchbearer
+        read(*every[:20])                                                 # 20: Well read
+        read(*every)                                                      # every one: Alexandria
+        self.assertEqual(seen, ["sparklings", "spark", "candle", "lantern", "torch", "campfire",
+                                "bonfire", "phoenix"])                    # 2 at once skip the Ember and the Blaze
+        self.assertEqual(len(creatures.FORMS["spark"]), 10)
+
+    def test_one_skill_can_reach_the_phoenix(self):
+        """Read 20, master 10, three skills: a player who only learns Rust has fewer lessons than that,
+        and the Phoenix must not be out of reach."""
+        from bashou import achievements, creatures, lesson
+        self.s["skills"] = ["rust"]
+        self.s["achievements"] += [a.id for a in achievements.ALL if a.pet != "spark"]
+        self.s.update(commands=500, fights_won=4)
+        self.s["tools"].update(less=3, tail=3, ls=50)
+        self.s["challenges"] += ["mut_marmot", "const_condor", "shadow_shade", "byte_basilisk"]
+        self.s["lessons"]["read"] = [le["id"] for le in lesson.shown(self.s, lesson.english())]
+        progress.check(self.s)
+        self.assertEqual(creatures.form("spark", progress.stage(self.s, "spark")), "phoenix")
 
     def test_new_rules_need_the_right_arguments(self):
         for line in ("git log --oneline", "git checkout main", "tar -xf a.tgz", "tar -cf a.tar d",

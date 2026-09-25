@@ -94,6 +94,24 @@ def lessons_mastered(s):
     return [le for le in lessons_read(s) if lesson.mastered(s, le)]
 
 
+def lessons_offered(s):
+    """The lessons of the skills you learn."""
+    from . import lesson
+    return lesson.shown(s, lesson.english())
+
+
+def skills_offered(s):
+    return {first_skill(le) for le in lessons_offered(s)}
+
+
+def read_at_least(s, n):
+    return len(lessons_read(s)) >= min(n, len(lessons_offered(s)))
+
+
+def mastered_at_least(s, n):
+    return len(lessons_mastered(s)) >= min(n, len(lessons_offered(s)))
+
+
 def all_lessons_read(s):
     from . import lesson
     done = set((s.get("lessons") or {}).get("read", []))
@@ -314,15 +332,19 @@ ALL = [
       cmd=lambda c: c.sub("pass", "show") and "subst" in c.analysis.constructs),
 
     # Spark: the Sage Owl's library. Owner: fire, for the Library of Alexandria that burned, and for the books
-    # still destroyed today; what you learn, nobody can burn. Seven forms, the Phoenix when the family is complete.
-    A("kindling", "spark", "Kindling", "read a lesson to the end: `bashou lesson`", state=lambda s: len(lessons_read(s)) >= 1),
-    A("page_turner", "spark", "Page turner", "read 3 lessons to the end", state=lambda s: len(lessons_read(s)) >= 3),
+    # still destroyed today; what you learn, nobody can burn. Ten forms, the Phoenix when the family is complete.
+    # Counts stop at what your skills offer: a player who learns only Rust can still reach the Phoenix.
+    A("kindling", "spark", "Kindling", "read a lesson to the end: `bashou lesson`", state=lambda s: read_at_least(s, 1)),
+    A("page_turner", "spark", "Page turner", "read 3 lessons to the end", state=lambda s: read_at_least(s, 3)),
     A("mastery", "spark", "Mastery", "master a lesson you read: do the fights and achievements it prepares",
-      state=lambda s: len(lessons_mastered(s)) >= 1),
-    A("bookworm", "spark", "Bookworm", "read 6 lessons to the end", state=lambda s: len(lessons_read(s)) >= 6),
+      state=lambda s: mastered_at_least(s, 1)),
+    A("bookworm", "spark", "Bookworm", "read 6 lessons to the end", state=lambda s: read_at_least(s, 6)),
     A("polymath", "spark", "Polymath", "read lessons of 3 different skills",
-      state=lambda s: len({first_skill(le) for le in lessons_read(s)}) >= 3),
-    A("librarian", "spark", "Librarian", "master 5 lessons you read", state=lambda s: len(lessons_mastered(s)) >= 5),
+      state=lambda s: len({first_skill(le) for le in lessons_read(s)}) >= min(3, len(skills_offered(s)))),
+    A("librarian", "spark", "Librarian", "master 5 lessons you read", state=lambda s: mastered_at_least(s, 5)),
+    A("scholar", "spark", "Scholar", "read 12 lessons to the end", state=lambda s: read_at_least(s, 12)),
+    A("torchbearer", "spark", "Torchbearer", "master 10 lessons you read", state=lambda s: mastered_at_least(s, 10)),
+    A("well_read", "spark", "Well read", "read 20 lessons to the end", state=lambda s: read_at_least(s, 20)),
     A("alexandria", "spark", "Alexandria", "read every lesson of the skills you learn",
       state=lambda s: all_lessons_read(s)),
 

@@ -6,44 +6,42 @@
   "y": "#ffe060",
   "f": "#e84020",
   "m": "#191919",
-  "p": "#ffb0a0",
-  "q": "#3a2a2a"
+  "p": "#ffb0a0"
  },
  "base": [
-  "..y....y....y....",
-  "..f...yfy...f....",
-  "..fy.yfofy.yf....",
-  "...ffoffoffof....",
-  "..ffoowwwwoof....",
-  ".foooqwwwqwoof...",
-  ".fooomwwwmwooof..",
-  ".foooowwwwwooof..",
-  "..foowwppwwoof...",
-  "..fooowwwwooof...",
-  "...ffooooooff....",
-  ".....ffffff......"
+  "..y.....y....y...",
+  ".yf...y.f.y..fy..",
+  ".fo..yfyoyfy..of.",
+  ".fofyfofwfofyfof.",
+  "ffooooowwwoooooff",
+  "fooowwwwwwwwwooof",
+  "foowwwmwwwmwwwoof",
+  "foowwwpwwwpwwwoof",
+  ".foowwwwwwwwwoof.",
+  ".ffoooooooooooff.",
+  "..fffooooooofff..",
+  "....fffffffff...."
  ],
  "poses": {
   "inhale": {
-   "5": "f-------------f--",
-   "8": "-f------------f--"
+   "8": "f---------------f"
   },
   "closed": {
-   "6": "-----o---o-------"
+   "6": "------w---w------"
   },
   "left": {
-   "6": "----mw--mw-------"
+   "6": "-----mw--mw------"
   },
   "right": {
-   "6": "-----om--wm------"
+   "6": "------wm--wm-----"
   },
   "fidget": {
-   "0": "--.----.y---.----",
-   "1": "-y-----------y---"
+   "0": "--.----y.--------",
+   "1": "---------------y-"
   }
  },
  "particles": [
   0,
-  14
+  3
  ]
 }

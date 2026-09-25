@@ -1657,5 +1657,13 @@
  "Ask {tool} itself: `{tool} --help` (-h works for many tools, not all: `ls -h` means human sizes). The Usage line shows how to write it: [ ] is optional, ... means you can give several. Below, one line per option: short form (-x), long form (--xxx), what it does. Too long? `{tool} --help | less`, q quits.": "Demande à {tool} lui-même : `{tool} --help` (-h marche pour beaucoup d'outils, pas tous : `ls -h` veut dire tailles lisibles). La ligne Usage montre comment l'écrire : [ ] est facultatif, ... veut dire que tu peux en mettre plusieurs. Dessous, une ligne par option : forme courte (-x), forme longue (--xxx), ce qu'elle fait. Trop long ? `{tool} --help | less`, q pour quitter.",
  "(or meet the {threat} in a fight)": "(ou affronte le {threat} dans un combat)",
  "No lesson for this one yet: try hint.": "Pas encore de leçon pour celui-ci : essaie hint.",
- "read the Sage Owl's lesson about it": "lire la leçon du Hibou sage là-dessus"
+ "read the Sage Owl's lesson about it": "lire la leçon du Hibou sage là-dessus",
+ "Sparklings": "Étincelles",
+ "Lantern": "Lanterne",
+ "Torch": "Torche",
+ "Torchbearer": "Porte-flambeau",
+ "Well read": "Grand lecteur",
+ "read 12 lessons to the end": "lire 12 leçons jusqu'au bout",
+ "read 20 lessons to the end": "lire 20 leçons jusqu'au bout",
+ "master 10 lessons you read": "maîtriser 10 leçons lues"
 }
