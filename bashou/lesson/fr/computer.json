@@ -1,0 +1,134 @@
+{
+ "title": "Dans l'ordinateur : le processeur et la RAM",
+ "summary": "Ce que font le processeur, la mémoire et le disque, et pourquoi un programme est chargé avant de tourner.",
+ "pages": [
+  {
+   "scheme": [
+    " ┌─────────┐      ┌─────────┐      ┌─────────┐",
+    " │   CPU   │◀────▶│   RAM   │◀────▶│ disque  │",
+    " └─────────┘      └─────────┘      └─────────┘",
+    "  fait le          garde ce qui     garde les",
+    "  travail          tourne là        fichiers"
+   ],
+   "point": 1,
+   "mark": [
+    "CPU",
+    "RAM",
+    "disque"
+   ],
+   "text": [
+    "Trois pièces font presque tout :",
+    "",
+    "- le CPU (processeur) fait le travail : il exécute des instructions ;",
+    "- la RAM (mémoire vive) garde les programmes et les données utilisés en ce moment ;",
+    "- le disque garde tes fichiers, même quand le courant est coupé."
+   ]
+  },
+  {
+   "scheme": [
+    " $ python3 app.py",
+    "",
+    " ┌─────────┐      ┌─────────┐      ┌─────────┐",
+    " │   CPU   │◀────▶│ python3 │◀─────│ python3 │",
+    " │         │      │ app.py  │charge│ app.py  │",
+    " └─────────┘      └─────────┘      └─────────┘",
+    "                      RAM             disque"
+   ],
+   "point": 3,
+   "mark": [
+    "charge"
+   ],
+   "text": [
+    "Le CPU ne peut exécuter que des instructions qui sont en RAM (et le disque est bien trop lent). Alors un programme est d'abord copié du disque vers la RAM, puis il tourne.",
+    "",
+    "- Courant coupé, et la RAM est vide : ce qui n'était pas enregistré sur le disque est perdu.",
+    "- C'est pour ça qu'on enregistre son travail : enregistrer, c'est écrire sur le disque."
+   ]
+  },
+  {
+   "scheme": [
+    "        ┌──────────────────────┐",
+    "        ▼                      │",
+    "  fetch : lire l'instruction   │",
+    "  suivante dans la RAM         │",
+    "        │                      │",
+    "        ▼                      │",
+    "  execute : additionner,       │",
+    "  comparer, copier, sauter… ───┘"
+   ],
+   "point": 6,
+   "mark": [
+    "fetch",
+    "execute"
+   ],
+   "text": [
+    "Un CPU ne fait que de tout petits pas : additionner deux nombres, les comparer, copier une valeur, sauter à une autre instruction.",
+    "",
+    "- Il répète cette boucle des milliards de fois par seconde. Une horloge à 3 GHz bat 3 milliards de fois par seconde.",
+    "- Tout ce que tu vois à l'écran est fait de ces petits pas."
+   ]
+  },
+  {
+   "scheme": [
+    " un CPU à 4 cœurs",
+    " ┌────────┬────────┬────────┬────────┐",
+    " │ cœur 0 │ cœur 1 │ cœur 2 │ cœur 3 │",
+    " │ firefox│ python3│  bash  │  sshd  │",
+    " └────────┴────────┴────────┴────────┘",
+    "   120 autres processus dorment ou attendent"
+   ],
+   "point": 5,
+   "mark": [
+    "120 autres processus"
+   ],
+   "text": [
+    "Un cœur exécute une chose à la fois. Un CPU d'aujourd'hui a plusieurs cœurs, donc quelques choses tournent vraiment en même temps.",
+    "",
+    "- Il y a bien plus de processus que de cœurs : la plupart dorment, en attendant toi ou une minuterie. Le noyau alterne les autres très vite, alors tout semble tourner ensemble.",
+    "- Beaucoup de CPU font tourner 2 fils (threads) par cœur : nproc peut montrer le double du nombre de cœurs.",
+    "",
+    "$ nproc          # combien de threads le CPU fait tourner à la fois"
+   ]
+  },
+  {
+   "scheme": [
+    " rapide, petit                   lent, grand",
+    " registres ▸ cache ▸ RAM ▸ SSD ▸ disque dur",
+    "",
+    " cache        environ 1 ns",
+    " RAM          environ 100 ns",
+    " SSD          environ 100 µs   (1 000 × la RAM)",
+    " disque dur   environ 10 ms    (100 000 × la RAM)"
+   ],
+   "point": 1,
+   "mark": [
+    "RAM"
+   ],
+   "text": [
+    "Plus c'est près du CPU, plus c'est rapide et petit.",
+    "",
+    "- Le CPU garde ce qu'il utilise le plus tout près : dans ses registres, et dans le cache, qui se remplit tout seul.",
+    "- Quand la RAM est pleine, Linux peut en déplacer une partie sur le disque (le swap, s'il existe), et tout ralentit."
+   ]
+  },
+  {
+   "scheme": [
+    " $ free -h",
+    "     total  used  free shared buff/cache available",
+    " Mem: 15Gi 4.1Gi 1.2Gi  300Mi      9.9Gi      11Gi"
+   ],
+   "point": 2,
+   "mark": [
+    "available"
+   ],
+   "text": [
+    "free -h montre la RAM. Lis la dernière colonne, available (disponible).",
+    "",
+    "- Linux remplit la RAM inutilisée avec un cache des fichiers récents : presque tout est rendu dès qu'un programme en a besoin.",
+    "- Un petit free est donc normal. Un petit available veut dire que la RAM manque vraiment.",
+    "",
+    "$ lscpu | head      # ton processeur"
+   ]
+  }
+ ]
+}

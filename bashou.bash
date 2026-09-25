@@ -85,7 +85,7 @@ _bashou_pets="bat frog turtle mushroom slime sofa octopus dragon fox owl mole sn
 _bashou_dev="unlock-all stage stage-all level threat restore"
 _bashou_challenges="line_moth column_crab jumble_sprite last_word_wisp first_line_imp needle_gnat field_wasp dust_bunny verse_viper peak_harpy grep_hydra awk_golem find_wraith uniq_swarm sed_serpent ps_phantom pipe_eel colon_cobra semicolon_slug list_leech dict_djinn loop_lich ouroboros json_jinn base64_banshee percent_poltergeist injection_imp token_trickster leak_lurker fencepost_fiend stack_specter overflow_ogre mut_marmot const_condor shadow_shade byte_basilisk version_vole candidate_crow stowaway_stoat autoremove_adder release_raven hitchhiker_hare census_centipede mirror_mimic repo_revenant enabled_ettin indent_imp stage_specter secret_sprite needs_newt manual_mole query_quokka table_troll insert_imp update_urchin join_jackal upsert_unicorn plaintext_pixie cipher_crow forger_ferret vault_vole cleartext_cricket"
 _bashou_security="1 2 3 4 5 6"
-_bashou_lessons="list command_line paths streams pipes permissions processes packages services stack_heap pointers py_names rust_vars sql_join keys pipeline"
+_bashou_lessons="list command_line computer paths streams pipes permissions processes packages services compilation stack_heap pointers py_names rust_vars sql_join keys pipeline"
 
 _bashou_complete() {
   local cur=${COMP_WORDS[COMP_CWORD]} words

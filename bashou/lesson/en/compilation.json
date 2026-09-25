@@ -1,0 +1,120 @@
+{
+ "id": "compilation",
+ "order": 105,
+ "skill": "c",
+ "needs": [
+  "tool gcc 1 | fights 3"
+ ],
+ "masters": [
+  "won semicolon_slug",
+  "won fencepost_fiend | won leak_lurker | won stack_specter"
+ ],
+ "title": "Compilation: from source code to a program",
+ "summary": "What gcc does with your .c file, how to read its errors, and why ./ runs the result.",
+ "pages": [
+  {
+   "scheme": [
+    " hello.c              gcc             hello",
+    " ┌──────────────┐               ┌──────────────┐",
+    " │ int main()   │──────────────▶│ 01001000 …   │",
+    " │ { … }        │   compile     │ machine code │",
+    " └──────────────┘               └──────────────┘",
+    "  you can read it                the CPU runs it"
+   ],
+   "point": 2,
+   "mark": [
+    "compile"
+   ],
+   "text": [
+    "A CPU only understands machine code: numbers that stand for its tiny instructions.",
+    "",
+    "- You write source code, text a person can read.",
+    "- A compiler, like gcc, translates it once into a program the CPU can run.",
+    "- Python works differently: python3 reads your script and runs it on the spot, each time."
+   ]
+  },
+  {
+   "scheme": [
+    " hello.c",
+    "   │ 1. preprocess: handle #include and #define",
+    "   │ 2. compile: C becomes assembly",
+    "   │ 3. assemble: assembly becomes machine code",
+    "   ▼",
+    " hello.o",
+    "   │ 4. link: connect the libraries (printf…)",
+    "   ▼",
+    " hello"
+   ],
+   "point": 6,
+   "mark": [
+    "link"
+   ],
+   "text": [
+    "gcc hello.c -o hello does four steps in a row.",
+    "",
+    "- Steps 1 to 3 turn your file into an object file (.o): machine code with holes in it.",
+    "- Step 4, the linker, fills the holes: it connects your calls to printf to the C library.",
+    "- gcc deletes hello.o at the end; gcc -c hello.c keeps it and stops before linking."
+   ]
+  },
+  {
+   "scheme": [
+    " hello.c:5:14: error: expected ';' before 'return'",
+    " └──┬──┘ │ │   └────────────────┬────────────────┘",
+    "   file  │ └─ column 14  what went wrong",
+    "         └─ line 5"
+   ],
+   "point": 0,
+   "mark": [
+    "error"
+   ],
+   "text": [
+    "An error stops the build: no program comes out. Read the first one first, the others often follow from it.",
+    "",
+    "- Go to that file, line 5, column 14. For a missing ;, gcc points just after the spot where it belongs.",
+    "- Below the message, gcc prints your line with a ^ under the exact spot.",
+    "- A warning doesn't stop the build, but it's often a real bug: build with -Wall and read them."
+   ]
+  },
+  {
+   "scheme": [
+    " main.o ──┐",
+    "          │",
+    " util.o ──┼──▶ linker ──▶ prog",
+    "          │",
+    " libc   ──┘",
+    "",
+    " undefined reference to `count_words'"
+   ],
+   "point": 6,
+   "mark": [
+    "undefined reference"
+   ],
+   "text": [
+    "A bigger program is several .c files, compiled apart, then linked together.",
+    "",
+    "- \"undefined reference\" comes from the linker: a function is used, but no file gives its code.",
+    "- Usually a .c file you forgot on the command line, or a library to add (-lm for maths)."
+   ]
+  },
+  {
+   "scheme": [
+    " $ gcc -Wall -g hello.c -o hello",
+    "        │     │         └─ name of the program",
+    "        │     └─ -g: debug info (line numbers)",
+    "        └─ -Wall: warn about suspicious code",
+    "",
+    " $ ./hello"
+   ],
+   "point": 5,
+   "mark": [
+    "./hello"
+   ],
+   "text": [
+    "The program is a new file in this folder. ./ says \"the one here\": the shell only looks in $PATH otherwise.",
+    "",
+    "- Changed hello.c? Compile again: the old program doesn't change by itself."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,110 @@
+{
+ "title": "La compilation : du code source au programme",
+ "summary": "Ce que gcc fait de ton fichier .c, comment lire ses erreurs, et pourquoi ./ lance le résultat.",
+ "pages": [
+  {
+   "scheme": [
+    " hello.c              gcc             hello",
+    " ┌──────────────┐               ┌──────────────┐",
+    " │ int main()   │──────────────▶│ 01001000 …   │",
+    " │ { … }        │   compile     │ code machine │",
+    " └──────────────┘               └──────────────┘",
+    "  tu peux le lire                le CPU l'exécute"
+   ],
+   "point": 2,
+   "mark": [
+    "compile"
+   ],
+   "text": [
+    "Un CPU ne comprend que le code machine : des nombres qui désignent ses petites instructions.",
+    "",
+    "- Toi, tu écris du code source, un texte lisible par une personne.",
+    "- Un compilateur, comme gcc, le traduit une fois pour toutes en un programme que le CPU peut exécuter.",
+    "- Python fait autrement : python3 lit ton script et l'exécute sur le moment, à chaque fois."
+   ]
+  },
+  {
+   "scheme": [
+    " hello.c",
+    "   │ 1. préprocesseur : #include et #define",
+    "   │ 2. compilation : le C devient assembleur",
+    "   │ 3. assemblage : l'assembleur devient code",
+    "   ▼    machine",
+    " hello.o",
+    "   │ 4. édition de liens : relier la libc",
+    "   ▼",
+    " hello"
+   ],
+   "point": 6,
+   "mark": [
+    "édition de liens"
+   ],
+   "text": [
+    "gcc hello.c -o hello fait quatre étapes à la suite.",
+    "",
+    "- Les étapes 1 à 3 changent ton fichier en fichier objet (.o) : du code machine avec des trous.",
+    "- L'étape 4, l'éditeur de liens, bouche les trous : il relie tes appels à printf à la bibliothèque C.",
+    "- gcc efface hello.o à la fin ; gcc -c hello.c le garde et s'arrête avant l'édition de liens."
+   ]
+  },
+  {
+   "scheme": [
+    " hello.c:5:14: error: expected ';' before 'return'",
+    " └──┬──┘ │ │   └────────────────┬────────────────┘",
+    " fichier │ └─ colonne 14  ce qui ne va pas",
+    "         └─ ligne 5"
+   ],
+   "point": 0,
+   "mark": [
+    "error"
+   ],
+   "text": [
+    "Une erreur arrête la construction : aucun programme ne sort. Lis la première d'abord, les autres en découlent souvent.",
+    "",
+    "- Va dans ce fichier, ligne 5, colonne 14. Pour un ; oublié, gcc pointe juste après l'endroit où il manque.",
+    "- Sous le message, gcc affiche ta ligne avec un ^ sous l'endroit exact.",
+    "- Un avertissement (warning) n'arrête rien, mais c'est souvent un vrai bug : compile avec -Wall et lis-les."
+   ]
+  },
+  {
+   "scheme": [
+    " main.o ──┐",
+    "          │",
+    " util.o ──┼──▶ éditeur de liens ──▶ prog",
+    "          │",
+    " libc   ──┘",
+    "",
+    " undefined reference to `count_words'"
+   ],
+   "point": 6,
+   "mark": [
+    "undefined reference"
+   ],
+   "text": [
+    "Un plus gros programme, ce sont plusieurs fichiers .c, compilés à part, puis reliés ensemble.",
+    "",
+    "- « undefined reference » vient de l'éditeur de liens : une fonction est utilisée, mais aucun fichier ne donne son code.",
+    "- En général, un fichier .c oublié sur la ligne de commande, ou une bibliothèque à ajouter (-lm pour les maths)."
+   ]
+  },
+  {
+   "scheme": [
+    " $ gcc -Wall -g hello.c -o hello",
+    "        │     │         └─ nom du programme",
+    "        │     └─ -g : infos de débogage (lignes)",
+    "        └─ -Wall : prévenir du code suspect",
+    "",
+    " $ ./hello"
+   ],
+   "point": 5,
+   "mark": [
+    "./hello"
+   ],
+   "text": [
+    "Le programme est un nouveau fichier dans ce dossier. ./ veut dire « celui d'ici » : sinon, le shell ne cherche que dans $PATH.",
+    "",
+    "- Tu as modifié hello.c ? Recompile : l'ancien programme ne change pas tout seul."
+   ]
+  }
+ ]
+}

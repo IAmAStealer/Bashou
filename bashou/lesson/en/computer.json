@@ -1,0 +1,143 @@
+{
+ "id": "computer",
+ "order": 15,
+ "needs": [
+  "commands 30 | fights 1"
+ ],
+ "masters": [
+  "achievement memory | achievement disk",
+  "achievement census"
+ ],
+ "title": "Inside the computer: CPU and RAM",
+ "summary": "What the processor, the memory and the disk each do, and why a program is loaded before it runs.",
+ "pages": [
+  {
+   "scheme": [
+    " ┌─────────┐      ┌─────────┐      ┌─────────┐",
+    " │   CPU   │◀────▶│   RAM   │◀────▶│  disk   │",
+    " └─────────┘      └─────────┘      └─────────┘",
+    "  does the         holds what       keeps files,",
+    "  work             runs now         even off"
+   ],
+   "point": 1,
+   "mark": [
+    "CPU",
+    "RAM",
+    "disk"
+   ],
+   "text": [
+    "Three parts do almost everything:",
+    "",
+    "- the CPU (processor) does the work: it runs instructions;",
+    "- the RAM (memory) holds the programs and data in use right now;",
+    "- the disk keeps your files, even when the power is off."
+   ]
+  },
+  {
+   "scheme": [
+    " $ python3 app.py",
+    "",
+    " ┌─────────┐      ┌─────────┐      ┌─────────┐",
+    " │   CPU   │◀────▶│ python3 │◀─────│ python3 │",
+    " │         │      │ app.py  │ load │ app.py  │",
+    " └─────────┘      └─────────┘      └─────────┘",
+    "                      RAM              disk"
+   ],
+   "point": 3,
+   "mark": [
+    "load"
+   ],
+   "text": [
+    "The CPU can only run instructions that are in RAM (the disk is also far too slow). So a program is first copied from the disk into the RAM, then it runs.",
+    "",
+    "- Power off, and the RAM is empty: whatever wasn't saved to disk is lost.",
+    "- That's why you save your work: saving means writing to the disk."
+   ]
+  },
+  {
+   "scheme": [
+    "        ┌──────────────────────┐",
+    "        ▼                      │",
+    "  fetch: read the next         │",
+    "  instruction from RAM         │",
+    "        │                      │",
+    "        ▼                      │",
+    "  execute it: add, compare,    │",
+    "  copy, jump elsewhere… ───────┘"
+   ],
+   "point": 6,
+   "mark": [
+    "fetch",
+    "execute"
+   ],
+   "text": [
+    "A CPU only does tiny steps: add two numbers, compare them, copy a value, jump to another instruction.",
+    "",
+    "- It repeats that loop billions of times per second. A 3 GHz clock ticks 3 billion times a second.",
+    "- Everything you see on screen is built from those tiny steps."
+   ]
+  },
+  {
+   "scheme": [
+    " CPU with 4 cores",
+    " ┌────────┬────────┬────────┬────────┐",
+    " │ core 0 │ core 1 │ core 2 │ core 3 │",
+    " │ firefox│ python3│  bash  │  sshd  │",
+    " └────────┴────────┴────────┴────────┘",
+    "   120 other processes sleep or wait their turn"
+   ],
+   "point": 5,
+   "mark": [
+    "120 other processes"
+   ],
+   "text": [
+    "A core runs one thing at a time. A CPU today has several cores, so a few things really run at once.",
+    "",
+    "- There are many more processes than cores: most of them sleep, waiting for you or a timer. The kernel switches the others very fast, so they all seem to run together.",
+    "- Many CPUs run 2 threads per core, so nproc can show twice the number of cores.",
+    "",
+    "$ nproc          # how many threads the CPU runs at once"
+   ]
+  },
+  {
+   "scheme": [
+    " fast, small                      slow, big",
+    " registers ▸ cache ▸ RAM ▸ SSD ▸ hard disk",
+    "",
+    " cache        about 1 ns",
+    " RAM          about 100 ns",
+    " SSD          about 100 µs   (1,000 × RAM)",
+    " hard disk    about 10 ms    (100,000 × RAM)"
+   ],
+   "point": 1,
+   "mark": [
+    "RAM"
+   ],
+   "text": [
+    "The closer to the CPU, the faster and the smaller.",
+    "",
+    "- The CPU keeps what it uses most close by: in registers, and in the cache, which fills itself automatically.",
+    "- When the RAM is full, Linux can move some of it to the disk (swap, if set up), and everything slows down."
+   ]
+  },
+  {
+   "scheme": [
+    " $ free -h",
+    "     total  used  free shared buff/cache available",
+    " Mem: 15Gi 4.1Gi 1.2Gi  300Mi      9.9Gi      11Gi"
+   ],
+   "point": 2,
+   "mark": [
+    "available"
+   ],
+   "text": [
+    "free -h shows the RAM. Read the last column, available.",
+    "",
+    "- Linux fills unused RAM with a cache of recent files: most of it is given back as soon as a program needs it.",
+    "- So a small free is normal. A small available means the RAM is really short.",
+    "",
+    "$ lscpu | head      # your CPU"
+   ]
+  }
+ ]
+}

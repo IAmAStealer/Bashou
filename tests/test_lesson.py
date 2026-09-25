@@ -164,9 +164,9 @@ class ReaderTest(unittest.TestCase):
         with state.locked() as s:
             s.update(commands=600, achievements=["exit_code"])            # command_line mastered
         lib = reader.Library(LESSONS)
-        self.assertEqual(lib.lessons[lib.pos]["id"], "paths")
+        self.assertEqual(lib.lessons[lib.pos]["id"], "computer")
         rows = {text for r, c, text in lib.list_screen(80, 40)}
-        self.assertTrue(any(reader.NEXT in t and "The file tree and paths" in t for t in rows))
+        self.assertTrue(any(reader.NEXT in t and "Inside the computer" in t for t in rows))
         self.assertFalse(any(reader.NEXT in t and "Reading a command line" in t for t in rows))
 
     def test_a_locked_lesson_says_how_to_open_it(self):
