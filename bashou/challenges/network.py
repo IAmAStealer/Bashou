@@ -432,11 +432,11 @@ def v6_loopback():
 
 def trial():
     from .trials import trial as make
-    chest = make("trial_ss_ipv6", 1, "A guard (process {pid}) listens on the IPv6 loopback, ::1, next to this chest. "
-                 "On which port? Then: answer <port>",
+    chest = make("trial_ss_ipv6", 1, "A guard listens on the IPv6 loopback, ::1, next to this chest, on a high port (20000 to 39999). "
+                 "Which one? Then: answer <port>",
                  ["ss -tln lists listening TCP sockets; -6 keeps only IPv6, -p shows the process. ::1 is this "
                   "machine, like 127.0.0.1.",
-                  "Try: ss -6tlnp | grep 'pid={pid},'"],
+                  "The guard is process {pid}. Try: ss -6tlnp | grep 'pid={pid},'"],
                  chest_setup, lambda w, m, v: v.strip() == str(m["answer"]), requires=["ss"], teaches=["ss"])
     chest.cleanup, chest.works = stop, v6_loopback
     return chest

@@ -123,6 +123,8 @@ class Game:
             import tempfile
             with tempfile.TemporaryDirectory() as tmp:
                 self._meta = self.trial.setup(Path(tmp), random.Random(self.trial_seed()))
+                if self.trial.cleanup:                  # only the names were needed: stop what it started
+                    self.trial.cleanup(self._meta)
             self._meta_for = self.trial.id
         return self._meta
 

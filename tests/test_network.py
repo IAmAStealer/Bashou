@@ -9,6 +9,17 @@ from pathlib import Path
 
 from bashou.challenges import network
 
+def stopped(pid):
+    for _ in range(50):
+        if not network.alive(pid):
+            return True
+        time.sleep(0.05)
+    try:
+        return not Path(f"/proc/{pid}/cmdline").read_bytes()          # a zombie has none
+    except OSError:
+        return True
+
+
 def loopback_fights():
     return [ch for ch in network.ALL + [network.CHEST] if ch.cleanup and ch.available()]
 
@@ -29,12 +40,18 @@ class LoopbackTest(unittest.TestCase):
                             self.assertIn(addr, (network.LOOPBACK4, network.LOOPBACK6), f"{ch.id} listens beyond loopback")
                 finally:
                     ch.cleanup(meta)
-                for _ in range(50):
-                    if not network.alive(meta["pid"]):
-                        break
-                    time.sleep(0.05)
-                gone = not network.alive(meta["pid"]) or not Path(f"/proc/{meta['pid']}/cmdline").read_bytes()   # a zombie has none
-                self.assertTrue(gone, f"{ch.id} left its listener running")
+                self.assertTrue(stopped(meta["pid"]), f"{ch.id} left its listener running")
+
+    def test_the_chest_box_leaves_no_listener(self):
+        """The adventure ran the chest's setup only to show its names, and never stopped the listener it
+        started: every IPv6 chest seen left a web server on ::1 behind."""
+        from types import SimpleNamespace
+        from bashou import adventure
+        if not network.CHEST.available():
+            self.skipTest("no ss")
+        game = SimpleNamespace(trial=network.CHEST, trial_seed=lambda: "seed")
+        meta = adventure.Game.trial_meta(game)
+        self.assertTrue(stopped(meta["pid"]))
 
 
 class CaptureTest(unittest.TestCase):

@@ -74,7 +74,7 @@ SOLUTIONS = {
     "nxdomain_nixie": ("id=$(tcpdump -nr dns.pcap 2>/dev/null | awk '/NXDomain/ {{print $6}}'); "
                        "tcpdump -nr dns.pcap 2>/dev/null | grep \" $id+ \" | awk '{{print $8}}'", None),
     "established_ettin": ("ss -tnH state established '( dport = :{x} )' | wc -l", r"127\.0\.0\.1:(\d+)"),
-    "trial_ss_ipv6": ("ss -6tlnpH | grep 'pid={x},' | awk '{{sub(/.*:/, \"\", $4); print $4}}'", r"process (\d+)"),
+    "trial_ss_ipv6": ("ss -6tlnH | awk '{{sub(/.*:/, \"\", $4); if ($4 + 0 >= 20000 && $4 + 0 < 40000) print $4}}'", None),
     "trial_gdb_line": ("gcc -g count.c -o count && gdb -q -batch -ex run -ex bt ./count 2>&1"
                        " | grep -o 'count.c:[0-9]*' | head -1 | cut -d: -f2", None),
     # rust fights (rustc): fix the file
@@ -573,7 +573,11 @@ class TrialTest(unittest.TestCase):
                 continue
             with tempfile.TemporaryDirectory() as tmp:
                 meta = ch.setup(Path(tmp), random.Random(0))
-                self.assertFalse(ch.check(Path(tmp), meta, ""), ch.id)
+                try:
+                    self.assertFalse(ch.check(Path(tmp), meta, ""), ch.id)
+                finally:
+                    if ch.cleanup:
+                        ch.cleanup(meta)
 
     def test_hints_show_the_real_names(self):
         ch = challenges.BY_ID["trial_dirs"]
