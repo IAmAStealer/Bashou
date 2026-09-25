@@ -4,9 +4,13 @@
 type; a lesson shows **how things work**, with a small drawing (a scheme) that grows from page to
 page and the owl pointing its wing at the line that matters.
 
-Lessons unlock as you play. Each one prepares the **next** step, not the one you are on: the stack
-and the heap unlock after your first C fight, before the fights about leaks and runaway recursion.
-Locked lessons show in the list with what unlocks them, so players see the road ahead.
+Lessons unlock with what you do (fights, achievements, commands), never by reading another lesson.
+Each one prepares the **next** step, not the one you are on: the stack and the heap unlock after your
+first C fight, before the fights about leaks and runaway recursion. Locked lessons show in the list
+with what unlocks them, so players see the road ahead.
+
+In the list, an open lesson is **green** while it's your next step, and turns back to white once
+you've **mastered** it: its `masters` conditions hold (the fights and achievements it prepares for).
 
 No code needed: a lesson is one JSON file.
 
@@ -18,6 +22,7 @@ No code needed: a lesson is one JSON file.
 ```json
 {"id": "stack_heap", "order": 110, "skill": "c",
  "needs": ["won semicolon_slug | tool gcc 3"],
+ "masters": ["won leak_lurker", "won stack_specter"],
  "title": "C memory: the stack and the heap",
  "summary": "Where your variables live, why malloc needs free, and what a leak is.",
  "pages": [
@@ -34,9 +39,10 @@ No code needed: a lesson is one JSON file.
 
 - `order`: place in the list. `skill`: one of `bashou skills` (the lesson only shows to players who
   learn it); leave it out for lessons everyone gets.
-- `needs`: all of them must hold; `a | b` holds when one side does. Conditions: `lesson ID` (read
-  it to the end), `commands N`, `tool NAME N` (used N times), `won FIGHT_ID`, `fights N` (won),
-  `achievement ID`. The list shows the missing ones in words, with progress ("run 50 commands (32/50)").
+- `needs`: what unlocks it. All of them must hold; `a | b` holds when one side does. Conditions:
+  `commands N`, `tool NAME N` (used N times), `won FIGHT_ID`, `fights N` (won), `achievement ID`.
+  The list shows the missing ones in words, with progress ("run 50 commands (32/50)").
+- `masters`: same conditions, what shows the player knows it now (usually the fights it prepares).
 - `scheme` (optional): lines of text, **50 columns at most**, 14 lines at most. `point`: the line
   (from 0) the owl points at. `mark`: words shown in color, usually what changed since the page
   before.

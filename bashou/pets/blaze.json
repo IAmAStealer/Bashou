@@ -1,0 +1,49 @@
+{
+ "name": "Blaze",
+ "palette": {
+  "o": "#f08030",
+  "w": "#ffd070",
+  "y": "#ffe060",
+  "f": "#e84020",
+  "m": "#191919",
+  "p": "#ffb0a0",
+  "q": "#3a2a2a"
+ },
+ "base": [
+  "..y....y....y....",
+  "..f...yfy...f....",
+  "..fy.yfofy.yf....",
+  "...ffoffoffof....",
+  "..ffoowwwwoof....",
+  ".foooqwwwqwoof...",
+  ".fooomwwwmwooof..",
+  ".foooowwwwwooof..",
+  "..foowwppwwoof...",
+  "..fooowwwwooof...",
+  "...ffooooooff....",
+  ".....ffffff......"
+ ],
+ "poses": {
+  "inhale": {
+   "5": "f-------------f--",
+   "8": "-f------------f--"
+  },
+  "closed": {
+   "6": "-----o---o-------"
+  },
+  "left": {
+   "6": "----mw--mw-------"
+  },
+  "right": {
+   "6": "-----om--wm------"
+  },
+  "fidget": {
+   "0": "--.----.y---.----",
+   "1": "-y-----------y---"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

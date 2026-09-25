@@ -3,8 +3,11 @@
  "order": 50,
  "skill": "linux",
  "needs": [
-  "lesson paths",
   "commands 150"
+ ],
+ "masters": [
+  "achievement octal",
+  "achievement symbolic"
  ],
  "title": "Permissions: who can do what",
  "summary": "Read the -rwxr-x--- of ls -l, and change it with chmod without opening everything.",

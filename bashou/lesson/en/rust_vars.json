@@ -5,6 +5,11 @@
  "needs": [
   "tool rustc 1 | commands 100"
  ],
+ "masters": [
+  "won mut_marmot",
+  "won shadow_shade",
+  "won byte_basilisk"
+ ],
  "title": "Rust: variables that don't change",
  "summary": "let, mut, shadowing and integer sizes: what rustc refuses, and why.",
  "pages": [

@@ -5,6 +5,10 @@
  "needs": [
   "won indent_imp | fights 5"
  ],
+ "masters": [
+  "won stage_specter",
+  "won needs_newt"
+ ],
  "title": "A CI pipeline, stage by stage",
  "summary": "Stages, jobs that wait for each other, and conditions: how a pipeline decides what runs.",
  "pages": [

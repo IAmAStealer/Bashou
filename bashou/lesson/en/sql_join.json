@@ -5,6 +5,9 @@
  "needs": [
   "won query_quokka | tool sqlite3 5"
  ],
+ "masters": [
+  "won join_jackal"
+ ],
  "title": "SQL: tables that point at each other",
  "summary": "Why an order keeps a customer's number, not their name, and how JOIN puts rows back together.",
  "pages": [

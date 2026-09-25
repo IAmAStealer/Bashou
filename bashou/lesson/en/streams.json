@@ -3,8 +3,10 @@
  "order": 30,
  "skill": "bash",
  "needs": [
-  "lesson paths",
   "commands 50"
+ ],
+ "masters": [
+  "achievement merge"
  ],
  "title": "Where output goes",
  "summary": "stdin, stdout and stderr: send output to a file, keep the errors apart, or throw them away.",

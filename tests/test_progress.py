@@ -143,6 +143,35 @@ class ProgressTest(unittest.TestCase):
                 seen.append(creatures.form("duck", progress.stage(self.s, "duck")))
         self.assertEqual(seen, ["duckling", "duck", "white_duck", "mandarin_duck"])
 
+    def test_lessons_bring_the_spark_up_to_the_phoenix(self):
+        """Owner: the lesson achievements belong to a fire pet (the Library of Alexandria burned; what you
+        learn, nobody can burn). At least 7 forms, the Phoenix is the endgame."""
+        from bashou import creatures, lesson
+        every = [le["id"] for le in lesson.english()]
+        seen = []
+
+        def read(*ids):
+            self.s["lessons"]["read"] += ids
+            notes = progress.check(self.s)
+            seen.append(creatures.form("spark", progress.stage(self.s, "spark")))
+            return notes
+
+        self.assertNotIn("spark", self.s["pets"])
+        notes = read("command_line")
+        self.assertIn("spark", self.s["pets"])
+        self.assertTrue(any("Spark" in n for n in notes), notes)
+        read("paths", "streams")                                          # 3 read: Page turner
+        self.s["challenges"] += ["semicolon_slug", "leak_lurker", "stack_specter"]
+        read("stack_heap")                                                # mastered, and a 3rd skill
+        read("pipes", "permissions")                                      # 6: Bookworm
+        self.s["challenges"] += ["fencepost_fiend", "overflow_ogre", "list_leech", "join_jackal", "stage_specter",
+                                 "needs_newt", "colon_cobra", "query_quokka", "indent_imp", "mut_marmot",
+                                 "shadow_shade", "byte_basilisk"]
+        read("pointers", "py_names", "sql_join", "pipeline", "rust_vars")  # 5 mastered: Librarian
+        read(*[i for i in every if i not in self.s["lessons"]["read"]])    # every one: Alexandria
+        self.assertEqual(seen, ["spark", "ember", "campfire", "bonfire", "blaze", "phoenix"])   # 2 at once skip the Candle
+        self.assertEqual(len(creatures.FORMS["spark"]), 7)
+
     def test_new_rules_need_the_right_arguments(self):
         for line in ("git log --oneline", "git checkout main", "tar -xf a.tgz", "tar -cf a.tar d",
                      "curl https://x", "ssh host", "dig example.com", "chmod +x f", "chown root f",

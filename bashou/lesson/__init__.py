@@ -8,6 +8,7 @@ Lessons are JSON files (see doc/contributing/lessons.md): en/<id>.json holds the
 what unlocks it; <lang>/<id>.json only translates title, summary and pages (English fills the gaps).
 """
 
+import functools
 import json
 from pathlib import Path
 
@@ -35,6 +36,12 @@ def load(lang=None):
     return sorted(found, key=lambda le: le["order"])
 
 
+@functools.lru_cache(maxsize=1)
+def english():
+    """The English lessons, read once: the achievements look at them after every command."""
+    return tuple(load("en"))
+
+
 def progress_of(s):
     """s["lessons"], with every field (a save from an older version may lack some)."""
     p = s.setdefault("lessons", {})
@@ -48,11 +55,8 @@ def read(s):
 
 
 def met(s, cond):
-    """Is one condition true? "lesson ID", "commands N", "tool NAME N", "won ID", "fights N",
-    "achievement ID"."""
+    """Is one condition true? "commands N", "tool NAME N", "won ID", "fights N", "achievement ID"."""
     kind, *args = cond.split()
-    if kind == "lesson":
-        return args[0] in read(s)
     if kind == "commands":
         return s["commands"] >= int(args[0])
     if kind == "tool":
@@ -66,16 +70,31 @@ def met(s, cond):
     raise ValueError(cond)
 
 
+def holds(s, conds):
+    """Every condition of the list holds; an entry "a | b" holds when one of its sides does."""
+    return all(any(met(s, c.strip()) for c in cond.split("|")) for cond in conds)
+
+
 def unlocked(s, lesson):
-    """Every entry of "needs" holds; an entry "a | b" holds when one of its sides does."""
-    return all(any(met(s, c.strip()) for c in need.split("|")) for need in lesson.get("needs", []))
+    """Lessons open with what you do (fights, achievements, commands), never by reading another one."""
+    return holds(s, lesson.get("needs", []))
 
 
-def describe(cond, titles, s=None):
+def mastered(s, lesson):
+    """You've shown you know it: the fights and achievements it prepares for are done."""
+    return bool(lesson.get("masters")) and holds(s, lesson["masters"])
+
+
+def status(s, lesson):
+    """"locked", "next" (open, and it's what makes you progress now) or "mastered"."""
+    if not unlocked(s, lesson):
+        return "locked"
+    return "mastered" if mastered(s, lesson) else "next"
+
+
+def describe(cond, s=None):
     """A condition in words for the list: "beat the Semicolon slug", "run 50 commands (32/50)"."""
     kind, *args = cond.split()
-    if kind == "lesson":
-        return _("read “{title}”").format(title=titles.get(args[0], args[0]))
     if kind == "commands":
         text = _("run {n} commands").format(n=args[0])
         return text + (f" ({s['commands']}/{args[0]})" if s else "")
@@ -94,14 +113,18 @@ def describe(cond, titles, s=None):
     return cond
 
 
-def how_to_unlock(s, lesson, titles):
-    """What is still missing, e.g. "read “Pipes” · beat the Semicolon slug in a fight"."""
-    missing = []
-    for need in lesson.get("needs", []):
-        sides = [c.strip() for c in need.split("|")]
+def missing(s, conds):
+    """What still doesn't hold, in words: "run 50 commands (32/50) · beat the Leak Lurker in a fight"."""
+    left = []
+    for cond in conds:
+        sides = [c.strip() for c in cond.split("|")]
         if not any(met(s, c) for c in sides):
-            missing.append(_(" or ").join(describe(c, titles, s) for c in sides))
-    return " · ".join(missing)
+            left.append(_(" or ").join(describe(c, s) for c in sides))
+    return " · ".join(left)
+
+
+def how_to_unlock(s, lesson):
+    return missing(s, lesson.get("needs", []))
 
 
 def shown(s, lessons):
@@ -130,12 +153,14 @@ def main(args):
 
 def print_list(s, lessons):
     """`bashou lesson list` (or outside a terminal): the library as text."""
-    titles = {le["id"]: le["title"] for le in lessons}
+    from .reader import NEXT, RESET
     for le in shown(s, lessons):
-        if le["id"] in read(s):
-            print(f"  ✔ {le['title']}")
-        elif unlocked(s, le):
-            print(f"  📖 {le['title']}  \x1b[2m{le['summary']}\x1b[0m")
+        mark = "✔" if le["id"] in read(s) else "📖"
+        st = status(s, le)
+        if st == "next":
+            print(f"  {mark} {NEXT}{le['title']}{RESET}  \x1b[2m{le['summary']}\x1b[0m")
+        elif st == "mastered":
+            print(f"  {mark} {le['title']}")
         else:
-            print(f"  \x1b[2m🔒 {le['title']} · {how_to_unlock(s, le, titles)}\x1b[0m")
+            print(f"  \x1b[2m🔒 {le['title']} · {how_to_unlock(s, le)}\x1b[0m")
     return 0

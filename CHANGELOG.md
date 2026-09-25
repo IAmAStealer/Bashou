@@ -10,8 +10,15 @@ Every release has a section here, written for players. CI refuses to tag a relea
   points its wing at what matters: how the shell reads a command line, the file tree, stdout and stderr,
   pipes step by step, permissions, processes and signals, packages and their signatures, systemd
   services, the stack and the heap in C, pointers and strings, Python names, Rust variables, SQL joins,
-  public and private keys, CI pipelines. Lessons unlock as you play, each one preparing your next step,
-  and the locked ones tell you what opens them. Your pet mentions it when a new one is waiting.
+  public and private keys, CI pipelines. Lessons unlock with your fights and achievements, each one
+  preparing your next step, and the locked ones tell you what opens them. The lessons that make you
+  progress now are green; once your fights and achievements show you've mastered one, it turns white.
+  Your pet mentions it when a new one is waiting.
+- **A new pet: the Spark, born from the library.** Fire, for the Library of Alexandria that burned and for
+  the books still destroyed today: what you learn, nobody can burn. Read a lesson to the end and a little
+  Spark joins you. It grows with each lesson achievement (read 3, master one, read 6, three skills,
+  master 5) through Ember, Candle, Campfire, Bonfire and Blaze, and becomes a Phoenix when you've read
+  every lesson of your skills.
 
 ## v0.4.3 — 2026-09-24
 

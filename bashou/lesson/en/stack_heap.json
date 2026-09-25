@@ -5,6 +5,10 @@
  "needs": [
   "won semicolon_slug | tool gcc 3"
  ],
+ "masters": [
+  "won leak_lurker",
+  "won stack_specter"
+ ],
  "title": "C memory: the stack and the heap",
  "summary": "Where your variables live, why malloc needs free, and what a leak or a stack overflow is.",
  "pages": [

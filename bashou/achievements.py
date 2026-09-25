@@ -77,6 +77,24 @@ def tool(s, *names):
     return sum(s["tools"].get(n, 0) for n in names)
 
 
+def lessons_read(s):
+    """The lessons (English files) you read to the end."""
+    from . import lesson
+    done = set((s.get("lessons") or {}).get("read", []))
+    return [le for le in lesson.english() if le["id"] in done]
+
+
+def lessons_mastered(s):
+    from . import lesson
+    return [le for le in lessons_read(s) if lesson.mastered(s, le)]
+
+
+def all_lessons_read(s):
+    from . import lesson
+    done = set((s.get("lessons") or {}).get("read", []))
+    return all(le["id"] in done for le in lesson.shown(s, lesson.english()))
+
+
 def streak(days):
     have, day, count = set(days), date.today(), 0
     while day.isoformat() in have:
@@ -289,6 +307,19 @@ ALL = [
     A("generator", "leopard", "Generator", "let `pass generate` make a strong password", cmd=lambda c: c.sub("pass", "generate")),
     A("keeper", "leopard", "Keeper", "hand a password to a command with `$(pass show …)`, never in clear",
       cmd=lambda c: c.sub("pass", "show") and "subst" in c.analysis.constructs),
+
+    # Spark: the Sage Owl's library. Owner: fire, for the Library of Alexandria that burned, and for the books
+    # still destroyed today; what you learn, nobody can burn. Seven forms, the Phoenix when the family is complete.
+    A("kindling", "spark", "Kindling", "read a lesson to the end: `bashou lesson`", state=lambda s: len(lessons_read(s)) >= 1),
+    A("page_turner", "spark", "Page turner", "read 3 lessons to the end", state=lambda s: len(lessons_read(s)) >= 3),
+    A("mastery", "spark", "Mastery", "master a lesson you read: do the fights and achievements it prepares",
+      state=lambda s: len(lessons_mastered(s)) >= 1),
+    A("bookworm", "spark", "Bookworm", "read 6 lessons to the end", state=lambda s: len(lessons_read(s)) >= 6),
+    A("polymath", "spark", "Polymath", "read lessons of 3 different skills",
+      state=lambda s: len({le.get("skill", "") for le in lessons_read(s)}) >= 3),
+    A("librarian", "spark", "Librarian", "master 5 lessons you read", state=lambda s: len(lessons_mastered(s)) >= 5),
+    A("alexandria", "spark", "Alexandria", "read every lesson of the skills you learn",
+      state=lambda s: all_lessons_read(s)),
 
     A("raw", "axolotl", "Raw", "print raw strings with `jq -r`", cmd=lambda c: c.flag("jq", "r", ("--raw-output",))),
     A("selector", "axolotl", "Selector", "filter with `select()`", cmd=lambda c: c.arg("jq", r"select\(")),

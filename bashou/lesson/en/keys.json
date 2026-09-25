@@ -5,6 +5,10 @@
  "needs": [
   "won plaintext_pixie | won cipher_crow | tool gpg 3"
  ],
+ "masters": [
+  "won forger_ferret",
+  "achievement keymaker"
+ ],
  "title": "Public and private keys",
  "summary": "Two halves of one key: lock for someone, and prove who signed a file.",
  "pages": [

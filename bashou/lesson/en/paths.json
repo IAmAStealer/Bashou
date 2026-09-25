@@ -2,7 +2,11 @@
  "id": "paths",
  "order": 20,
  "needs": [
-  "lesson command_line"
+  "commands 20"
+ ],
+ "masters": [
+  "achievement builder",
+  "achievement shortcut"
  ],
  "title": "The file tree and paths",
  "summary": "Where files live, and the two ways to say where a file is: from the root, or from where you are.",

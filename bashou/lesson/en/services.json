@@ -3,8 +3,12 @@
  "order": 80,
  "skill": "systemd",
  "needs": [
-  "lesson paths",
   "tool systemctl 1 | tool journalctl 1 | fights 5"
+ ],
+ "masters": [
+  "achievement status",
+  "achievement logbook",
+  "achievement reload"
  ],
  "title": "A service's life with systemd",
  "summary": "Unit files, start versus enable, and where to read what went wrong.",

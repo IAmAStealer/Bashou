@@ -18,6 +18,7 @@ VOICE = {
     "mole": "*dig dig*", "snake": "Sss…", "ghost": "Boo~", "spider": "*tik-tik*", "ant": "*click*",
     "axolotl": "*wiggle*", "beaver": "*chomp*", "squirrel": "*chitter*", "pigeon": "Coo.", "hedgehog": "*huff*",
     "bee": "Bzz.", "whale": "*whoosh*", "meerkat": "*peek*", "leopard": "*soft paws*", "duck": "Quack.", "cat": "*purr*",
+    "spark": "*crackle*",
 }
 
 TIPS = {
@@ -88,6 +89,9 @@ TIPS = {
     "duck": ["Stuck? Explain your script to me, line by line. It often fixes itself.",
              "bash -x script.sh : every command, printed as it runs.", "echo $? : 0 means the last command worked.",
              "`bashou learn` takes a command apart, piece by piece."],
+    "spark": ["`bashou lesson` : the owl's library. Green means it's your next step.",
+              "A lesson read once is a spark. Practice it, and it becomes a fire.",
+              "Locked lessons say what opens them. Look at the list, then go and do it."],
     "leopard": ["gpg -c notes.txt : locks the file with a passphrase.", "gpg -d notes.txt.gpg : opens it again.",
                 "pass show db/prod : a password for a script, never written in it.",
                 "pass generate site 24 : a strong password you'll never have to type."],
@@ -170,6 +174,9 @@ PERSONAL = {
     "meerkat": ["I keep watch. Disks, memory, all of it."],
     "duck": ["Explain it to me. Out loud. I'll wait."],
     "leopard": ["Nobody sees me in the snow. Nobody sees your passwords either."],
+    "spark": ["The Library of Alexandria burned. What you learn, nobody can burn.",
+              "Books still get destroyed today. Keep what they teach where no fire can reach it: in your head.",
+              "From the ashes, a phoenix. From a mistake, a lesson."],
     "cat": ["I saw what you ran. Your secret is safe with me.", "Curiosity, with permission.",
             "Nice tools. Mind the scope."],
 }

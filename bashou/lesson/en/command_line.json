@@ -2,6 +2,10 @@
  "id": "command_line",
  "order": 10,
  "needs": [],
+ "masters": [
+  "achievement exit_code",
+  "commands 500"
+ ],
  "title": "Reading a command line",
  "summary": "What each word you type means, how the shell finds the program, and how it says it worked.",
  "pages": [

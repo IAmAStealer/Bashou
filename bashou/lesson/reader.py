@@ -14,13 +14,14 @@ import tty
 
 from .. import creatures, render, skills, state
 from ..i18n import _
-from . import HERE, how_to_unlock, progress_of, read, shown, unlocked
+from . import HERE, how_to_unlock, missing, progress_of, read, shown, status, unlocked
 
 ESC = "\x1b"
 DIM, BOLD, RESET, REV = f"{ESC}[2m", f"{ESC}[1m", f"{ESC}[0m", f"{ESC}[7m"
 ACCENT = f"{ESC}[38;2;240;200;110m"
 CMD = f"{ESC}[38;2;130;210;120m"
 TITLE = f"{ESC}[38;2;150;190;230m"
+NEXT = f"{ESC}[38;2;120;220;150m"            # the lessons that make you progress now
 LEADER = f"{ESC}[38;2;122;86;52m"            # the owl's outline brown: the dotted line is its gesture
 KEYS = {"\x1b[A": "up", "\x1b[B": "down", "\x1b[C": "right", "\x1b[D": "left",
         "k": "up", "j": "down", "l": "right", "h": "left", "\r": "enter", "\n": "enter", " ": "right",
@@ -119,15 +120,12 @@ class Library:
         self.all = lessons
         self.s = state.load()
         self.lessons = shown(self.s, lessons)
-        self.titles = {le["id"]: le["title"] for le in lessons}
         self.pos = 0
         self.lesson = None             # the lesson being read, or None on the list
         self.page = 0
         self.message = ""
         self.breath = self.blink = False
-        news = [i for i, le in enumerate(self.lessons) if self.is_new(le)]
-        self.pos = news[0] if news else next((i for i, le in enumerate(self.lessons)
-                                              if unlocked(self.s, le) and le["id"] not in read(self.s)), 0)
+        self.pos = self.next_step()
         if open_id:
             found = next((i for i, le in enumerate(self.lessons) if le["id"] == open_id), None)
             if found is None:
@@ -136,47 +134,60 @@ class Library:
                 self.pos = found
                 self.open()
 
+    def next_step(self, default=0):
+        """Where the cursor goes: a lesson that makes you progress, new or unread ones first."""
+        ranked = [(not self.is_new(le), le["id"] in read(self.s), i) for i, le in enumerate(self.lessons)
+                  if status(self.s, le) == "next"]
+        return min(ranked)[2] if ranked else default
+
     def is_new(self, le):
         return unlocked(self.s, le) and le["id"] not in progress_of(self.s)["opened"]
 
     def list_screen(self, cols, lines):
         done = sum(le["id"] in read(self.s) for le in self.lessons)
         out = [(1, 2, f"{TITLE}{BOLD}🦉 " + _("The Sage Owl's library") + f"{RESET} {DIM}· "
-                + _("{n}/{total} read · ↑↓ Enter: open · q: quit").format(n=done, total=len(self.lessons)) + RESET)]
+                + _("{n}/{total} read · ↑↓ Enter: open · q: quit").format(n=done, total=len(self.lessons)) + RESET),
+               (2, 2, NEXT + "■ " + _("your next step") + f"{RESET}  ■ " + _("mastered") + f"  {DIM}🔒 "
+                + _("locked") + RESET)]
         rows, last = [], None
         for i, le in enumerate(self.lessons):
             if group(le) != last:
                 last = group(le)
                 rows.append((None, f"{BOLD}{last}{RESET}"))
-            if le["id"] in read(self.s):
-                mark, style = "✔", ""
-            elif unlocked(self.s, le):
-                mark, style = "📖", ""
-            else:
-                mark, style = "🔒", DIM
+            st = status(self.s, le)
+            mark = "🔒" if st == "locked" else "✔" if le["id"] in read(self.s) else "📖"
+            style = {"locked": DIM, "next": NEXT, "mastered": ""}[st]
             new = f"  {ACCENT}" + _("new") + RESET if self.is_new(le) else ""
             text = f"{mark} {le['title']}"
-            rows.append((i, (REV if i == self.pos else style) + f" {text} " + RESET + new))
-        room = max(3, lines - 8)
+            rows.append((i, (REV if i == self.pos else "") + style + f" {text} " + RESET + new))
+        room = max(3, lines - 11)
         at = next(k for k, (i, _t) in enumerate(rows) if i == self.pos)
         start = max(0, min(at - room // 2, len(rows) - room))
         for k, (i, text) in enumerate(rows[start:start + room]):
-            out.append((3 + k, 4 if i is not None else 2, text))
+            out.append((4 + k, 4 if i is not None else 2, text))
         le = self.lessons[self.pos]
-        info = le["summary"] if unlocked(self.s, le) else _("To unlock: {how}").format(
-            how=how_to_unlock(self.s, le, self.titles))
-        below = 3 + min(room, len(rows)) + 1
-        for k, part in enumerate(render.wrap(info, min(cols - 4, 76), 3)):
-            out.append((below + k, 2, (ACCENT if not unlocked(self.s, le) else "") + part + RESET))
+        st = status(self.s, le)
+        if st == "locked":
+            info = [(_("To unlock: {how}").format(how=how_to_unlock(self.s, le)), ACCENT)]
+        elif st == "next":
+            info = [(le["summary"], ""), (_("Your next step. To master it: {how}").format(
+                how=missing(self.s, le["masters"])), NEXT)]
+        else:
+            info = [(le["summary"], ""), (_("Mastered: you already do what it teaches. Read it again any time."), DIM)]
+        row = 4 + min(room, len(rows)) + 1
+        for text, color in info:
+            for part in render.wrap(text, min(cols - 4, 76), 3):
+                out.append((row, 2, color + part + RESET))
+                row += 1
         if self.message:
-            for k, part in enumerate(render.wrap(self.message, min(cols - 4, 76), 2)):
-                out.append((lines - 2 + k, 2, DIM + part + RESET))
+            for k, part in enumerate(render.wrap(self.message, min(cols - 4, 76), 3)):
+                out.append((lines - 3 + k, 2, DIM + part + RESET))
         return out
 
     def open(self):
         le = self.lessons[self.pos]
         if not unlocked(self.s, le):
-            self.message = _("Not yet. To unlock it: {how}").format(how=how_to_unlock(self.s, le, self.titles))
+            self.message = _("Not yet. To unlock it: {how}").format(how=how_to_unlock(self.s, le))
             return
         with state.locked() as s:
             p = progress_of(s)
@@ -187,24 +198,27 @@ class Library:
         self.lesson, self.message = le, ""
 
     def leave(self, finished=False):
+        from .. import progress
         le = self.lesson
-        before = {x["id"] for x in self.lessons if unlocked(self.s, x)}
+        notes = []
         with state.locked() as s:
             p = progress_of(s)
             if finished:
                 p["page"].pop(le["id"], None)
                 if le["id"] not in p["read"]:
                     p["read"].append(le["id"])
+                notes = progress.check(s)                  # the Spark's achievements come from reading
             else:
                 p["page"][le["id"]] = self.page
         self.s = state.load()
         self.lessons = shown(self.s, self.all)
         self.lesson = None
         if finished:
-            opened = [x["title"] for x in self.lessons if unlocked(self.s, x) and x["id"] not in before]
-            self.message = _("Lesson done: “{title}”.").format(title=le["title"]) + (
-                " " + _("New: {titles}").format(titles=", ".join(opened)) if opened else "")
-            self.pos = next((i for i, x in enumerate(self.lessons) if x["title"] in opened), self.pos)
+            self.message = _("Lesson done: “{title}”.").format(title=le["title"])
+            if status(self.s, le) == "next":
+                self.message += " " + _("Now practice it: fights and achievements make it mastered.")
+            if notes:
+                self.message += " " + " ".join(notes)
 
     def key(self, k):
         if self.lesson:

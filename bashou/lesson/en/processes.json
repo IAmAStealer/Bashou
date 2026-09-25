@@ -3,8 +3,12 @@
  "order": 60,
  "skill": "linux",
  "needs": [
-  "lesson permissions",
   "tool ps 1 | fights 3"
+ ],
+ "masters": [
+  "achievement census",
+  "achievement signal",
+  "won ps_phantom"
  ],
  "title": "Processes and signals",
  "summary": "A running program is a process: find its PID, see who started it, and stop it the right way.",

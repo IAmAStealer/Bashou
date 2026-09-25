@@ -3,8 +3,11 @@
  "order": 40,
  "skill": "bash",
  "needs": [
-  "lesson streams",
   "won needle_gnat | tool grep 5"
+ ],
+ "masters": [
+  "achievement plumber",
+  "achievement tally"
  ],
  "title": "Pipes: small tools in a chain",
  "summary": "Send one command's output into the next one, and watch the data change at each step.",

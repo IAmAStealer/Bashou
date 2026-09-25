@@ -1,0 +1,53 @@
+{
+ "name": "Bonfire",
+ "palette": {
+  "a": "#8a2a14",
+  "o": "#f08030",
+  "w": "#ffd070",
+  "y": "#ffe060",
+  "f": "#e84020",
+  "m": "#191919",
+  "p": "#ffb0a0",
+  "b": "#7a4a28",
+  "g": "#c08a50"
+ },
+ "base": [
+  "......y...y......",
+  ".....yf..yfy.....",
+  "..y..fofyfof..y..",
+  "..fy.fowowof.yf..",
+  "...ffowwwwwoff...",
+  "...aowwwwwwwoa...",
+  "...aowmwwwmwoa...",
+  "...aowpwwwpwoa...",
+  "..gbaooooooooabg.",
+  ".gbbbbbbbbbbbbbg.",
+  "..gbbbgbbbgbbbg..",
+  ".gbbbbbbbbbbbbbg."
+ ],
+ "poses": {
+  "inhale": {
+   "5": "--a-----------a--",
+   "6": "--a-----------a--",
+   "7": "--a-----------a--"
+  },
+  "closed": {
+   "6": "------o---o------"
+  },
+  "left": {
+   "6": "-----mw--mw------"
+  },
+  "right": {
+   "6": "------wm--wm-----"
+  },
+  "fidget": {
+   "0": "------.y-y.------",
+   "1": "--y-----------y--",
+   "2": "--.-----------.--"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

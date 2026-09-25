@@ -3,8 +3,11 @@
  "order": 70,
  "skill": "linux",
  "needs": [
-  "lesson permissions",
   "tool apt 1 | tool dnf 1 | fights 5"
+ ],
+ "masters": [
+  "won version_vole | won release_raven",
+  "won stowaway_stoat | won census_centipede"
  ],
  "title": "Packages and repositories",
  "summary": "Where apt and dnf get their programs, why a signature is checked, and what dependencies are.",

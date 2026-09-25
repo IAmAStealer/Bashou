@@ -3,8 +3,11 @@
  "order": 120,
  "skill": "c",
  "needs": [
-  "lesson stack_heap",
   "won leak_lurker | won stack_specter | tool gcc 10"
+ ],
+ "masters": [
+  "won fencepost_fiend",
+  "won overflow_ogre"
  ],
  "title": "C pointers, arrays and strings",
  "summary": "Addresses, arrays that start at 0, the '\\0' at the end of strings, and writing past the end.",
