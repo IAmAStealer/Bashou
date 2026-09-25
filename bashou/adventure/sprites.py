@@ -218,11 +218,12 @@ BOSSES = {
         ".pPp..wwww", ".pPp...ppp", ".pPpp..ppP", "..pPPpppPP", "...ppPPPPp", "....pppppp",
         ".....pp.pp", "....p..p..", "...p..p...", "..........",
     ]), {"p": (215, 30, 90), "P": (150, 20, 60), "w": (255, 255, 255), "m": (25, 25, 25)}),
-    "rocky": (half([
-        "........gg", ".......ggg", "......tttt", ".....ttttt", "....tttwwt", "...tttwmwt",
-        "..tttttwwt", "..TtttTTTT", ".TTtttTttt", "TTTtttTttt", "TT.tttTTTT", "...ttttttt",
-        "...ttt.ttt", "...ttt.ttt", "..TTTT.TTT", "..........",
-    ]), {"g": (110, 200, 110), "t": (60, 170, 135), "T": (35, 110, 90), "w": (255, 255, 255), "m": (25, 25, 25)}),
+    "rocky": (half([                           # the Stone Titan: stacked boulders, moss on its head and shoulders
+        "......gggg", ".....gglll", ".....sllll", ".....swwll", ".....swmll", ".....sllSS",
+        "..ggg.sSSS", ".ggsssssss", "gsslssSlls", "ssls.sSlll", "sls..ssSls", "SSs..sslSs",
+        "SSS..SssSs", ".....sss..", "....ssss..", "....SSSS..",
+    ]), {"g": (40, 180, 120), "s": (140, 142, 138), "S": (90, 92, 90), "l": (185, 188, 182),
+         "w": (255, 255, 255), "m": (25, 25, 25)}),
     "cicd": ([
         ".vv.......vv....vv.", "vwmv.....vwmv..vwmv", "vvvv.....vvvv..vvvv", ".vv.......vv....vv.",
         ".vv.......vv...vv..", "..vv......vv...vv..", "...vv.....vv..vv...", "....vv....vv.vv....",
