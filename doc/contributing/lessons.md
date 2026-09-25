@@ -37,12 +37,15 @@ No code needed: a lesson is one JSON file.
  ]}
 ```
 
-- `order`: place in the list. `skill`: one of `bashou skills` (the lesson only shows to players who
-  learn it); leave it out for lessons everyone gets.
+- `order`: place in the list. `skill`: one of `bashou skills`, or a list of them (the lesson only
+  shows to players who learn one); leave it out for lessons everyone gets.
 - `needs`: what unlocks it. All of them must hold; `a | b` holds when one side does. Conditions:
   `commands N`, `tool NAME N` (used N times), `won FIGHT_ID`, `fights N` (won), `achievement ID`.
   The list shows the missing ones in words, with progress ("run 50 commands (32/50)").
 - `masters`: same conditions, what shows the player knows it now (usually the fights it prepares).
+- `fights`: the fights this lesson helps with. **Every fight needs at least one lesson** (a test checks
+  it): meeting one of these fights opens the lesson even when `needs` don't hold yet, and `lesson` in
+  the arena opens it. Place the lesson in its track in [curriculum.md](curriculum.md).
 - `scheme` (optional): lines of text, **50 columns at most**, 14 lines at most. `point`: the line
   (from 0) the owl points at. `mark`: words shown in color, usually what changed since the page
   before.

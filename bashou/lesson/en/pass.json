@@ -1,0 +1,79 @@
+{
+ "id": "pass",
+ "order": 165,
+ "skill": "linux",
+ "tools": [
+  "pass"
+ ],
+ "needs": [
+  "tool gpg 3 | tool pass 1 | won plaintext_pixie | won cipher_crow"
+ ],
+ "masters": [
+  "won vault_vole",
+  "won cleartext_cricket"
+ ],
+ "fights": [
+  "vault_vole",
+  "cleartext_cricket"
+ ],
+ "title": "pass: a password store",
+ "summary": "Keep each password in its own encrypted file, and let your scripts ask for it instead of writing it down.",
+ "pages": [
+  {
+   "scheme": [
+    " ~/.password-store/",
+    " ├── .gpg-id          which gpg key locks them",
+    " ├── email/",
+    " │   └── work.gpg     one password, encrypted",
+    " └── backup/",
+    "     └── server.gpg"
+   ],
+   "point": 5,
+   "mark": [
+    "server.gpg"
+   ],
+   "text": [
+    "pass keeps each password in its own file, encrypted with your gpg key (see the lesson on keys).",
+    "",
+    "- The name is the path: backup/server is backup/server.gpg.",
+    "- Only your private key can open them.",
+    "$ pass init you@example.org      # once, with your key"
+   ]
+  },
+  {
+   "scheme": [
+    " $ pass ls                    the names",
+    " $ pass show backup/server    one password",
+    " 7rX!q2mZ",
+    " $ pass insert email/home     add one",
+    " $ pass generate web/shop 20  make a random one"
+   ],
+   "point": 1,
+   "mark": [
+    "pass show"
+   ],
+   "text": [
+    "- pass show decrypts one password and prints it. gpg may ask for your key's passphrase.",
+    "- pass generate makes a random one, so you never invent a weak one.",
+    "- pass -c name copies it to the clipboard instead of printing it."
+   ]
+  },
+  {
+   "scheme": [
+    " deploy.sh",
+    " DB_PASSWORD=\"hunter2\"               ✗ in the file",
+    " DB_PASSWORD=\"$(pass show db/prod)\"  ✔ at run time"
+   ],
+   "point": 2,
+   "mark": [
+    "$(pass show db/prod)"
+   ],
+   "text": [
+    "A password written in a script is read by anyone who reads the script, and stays in its git history.",
+    "",
+    "- $( ) runs pass when the script runs: the file never holds the password.",
+    "- A password that was ever committed must be changed: deleting the line isn't enough."
+   ]
+  }
+ ]
+}

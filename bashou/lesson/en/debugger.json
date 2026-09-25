@@ -12,6 +12,10 @@
   "won segfault_salamander",
   "won breakpoint_beetle"
  ],
+ "fights": [
+  "segfault_salamander",
+  "breakpoint_beetle"
+ ],
  "title": "Debugging with gdb",
  "summary": "Run a program under a debugger, see where it crashed, and stop it anywhere to look at its variables.",
  "pages": [

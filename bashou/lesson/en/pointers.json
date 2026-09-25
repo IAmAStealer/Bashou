@@ -9,6 +9,10 @@
   "won fencepost_fiend",
   "won overflow_ogre"
  ],
+ "fights": [
+  "fencepost_fiend",
+  "overflow_ogre"
+ ],
  "title": "C pointers, arrays and strings",
  "summary": "Addresses, arrays that start at 0, the '\\0' at the end of strings, and writing past the end.",
  "pages": [

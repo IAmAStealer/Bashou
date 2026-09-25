@@ -68,7 +68,8 @@
     "La plupart des paquets en ont besoin d'autres pour marcher : leurs dépendances. apt et dnf les installent pour toi.",
     "",
     "- Les bibliothèques (lib…) sont du code partagé par beaucoup de programmes.",
-    "- apt autoremove enlève les dépendances dont plus rien n'a besoin."
+    "- apt retient pourquoi chaque paquet est là : manual (tu l'as demandé) ou auto (une dépendance). apt-mark showmanual et showauto les listent.",
+    "- apt autoremove enlève les paquets auto dont plus rien n'a besoin."
    ]
   },
   {

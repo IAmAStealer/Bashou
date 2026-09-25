@@ -26,7 +26,7 @@ ENEMY = 3                 # health pips; hits bring it to 1, `answer` lands the 
 KO = 4                    # exit code of the arena shell when you're knocked out
 FLASH = 0.6               # seconds a hit flashes
 FREE = {"ls", "cd", "pwd", "cat", "head", "tail", "less", "more", "file", "stat", "tree", "echo",
-        "clear", "man", "help", "history", "type", "which", "task", "hint", "answer", "verify", "flee", "bashou",
+        "clear", "man", "help", "history", "type", "which", "task", "hint", "lesson", "answer", "verify", "flee", "bashou",
         "nano", "vi", "vim", "nvim", "emacs", "micro", "ed", "code"}   # editing a file to fix is fine
 
 ENEMIES = Path(__file__).resolve().parent / "enemies"     # <challenge id>.json, the pet format, facing left

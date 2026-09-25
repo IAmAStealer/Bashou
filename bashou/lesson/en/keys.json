@@ -9,6 +9,11 @@
   "won forger_ferret",
   "achievement keymaker"
  ],
+ "fights": [
+  "plaintext_pixie",
+  "cipher_crow",
+  "forger_ferret"
+ ],
  "title": "Public and private keys",
  "summary": "Two halves of one key: lock for someone, and prove who signed a file.",
  "pages": [

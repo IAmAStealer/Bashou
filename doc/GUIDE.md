@@ -40,7 +40,8 @@ A pixel-art pet that lives in the top-right corner of your terminal and grows as
   a small drawing that grows from one page to the next while the owl points its wing at the part that
   matters (the stack and the heap, stdout and stderr, permissions, pipes…). Lessons unlock as you play,
   each one preparing your next step; locked ones say what opens them. `bashou lesson list` prints the
-  list, `bashou lesson stack_heap` opens one. ←/→ turn the pages, q goes back.
+  list, `bashou lesson stack_heap` opens one. ←/→ turn the pages, q goes back. Every fight has a
+  lesson: meeting a fight opens it, and `lesson` in the arena reads it without leaving the fight.
 - **Typos.** On `command not found` your pet laughs kindly and suggests the command you meant.
 - **Pick your pet** on the board with `bashou swap`.
 - **Pets talk.** Every 10–20 minutes your pet gives a tip for its tool, a hint toward your next

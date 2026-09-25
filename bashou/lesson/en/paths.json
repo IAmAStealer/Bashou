@@ -8,6 +8,9 @@
   "achievement builder",
   "achievement shortcut"
  ],
+ "fights": [
+  "dust_bunny"
+ ],
  "title": "The file tree and paths",
  "summary": "Where files live, and the two ways to say where a file is: from the root, or from where you are.",
  "pages": [

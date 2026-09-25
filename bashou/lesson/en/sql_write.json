@@ -1,0 +1,119 @@
+{
+ "id": "sql_write",
+ "order": 147,
+ "skill": "sql",
+ "tools": [
+  "sqlite3"
+ ],
+ "needs": [
+  "won query_quokka | tool sqlite3 3"
+ ],
+ "masters": [
+  "won table_troll",
+  "won insert_imp",
+  "won update_urchin"
+ ],
+ "fights": [
+  "table_troll",
+  "insert_imp",
+  "update_urchin",
+  "upsert_unicorn"
+ ],
+ "title": "SQL: create, insert, update",
+ "summary": "Make a table, add rows, change them safely with WHERE, and the upsert that does both.",
+ "pages": [
+  {
+   "scheme": [
+    " CREATE TABLE movies (",
+    "   title TEXT,         words",
+    "   year  INTEGER       whole numbers",
+    " );",
+    "",
+    " movies",
+    " ┌───────┬──────┐",
+    " │ title │ year │   (no rows yet)",
+    " └───────┴──────┘"
+   ],
+   "point": 2,
+   "mark": [
+    "TEXT",
+    "INTEGER"
+   ],
+   "text": [
+    "CREATE TABLE gives a table its name and its columns, each with a type.",
+    "",
+    "- sqlite3 movies.db creates the file as soon as you write something in it.",
+    "- .schema shows how a table was made: handy to check your columns.",
+    "$ sqlite3 movies.db \"CREATE TABLE movies (title TEXT, year INTEGER);\""
+   ]
+  },
+  {
+   "scheme": [
+    " INSERT INTO movies (title, year)",
+    "             VALUES ('Alien', 1979);",
+    "",
+    " movies",
+    " ┌───────┬──────┐",
+    " │ title │ year │",
+    " ├───────┼──────┤",
+    " │ Alien │ 1979 │   ◀ new row",
+    " └───────┴──────┘"
+   ],
+   "point": 7,
+   "mark": [
+    "Alien"
+   ],
+   "text": [
+    "INSERT INTO adds a row. Name the columns, then give the values in the same order.",
+    "",
+    "- Text goes between single quotes: 'Alien'. Numbers don't.",
+    "- A column you leave out gets NULL, the empty value (or its default, if it has one)."
+   ]
+  },
+  {
+   "scheme": [
+    " UPDATE movies SET year = 1986",
+    " WHERE title = 'Aliens';",
+    "",
+    " title    year",
+    " Alien    1979",
+    " Aliens   1968 → 1986   ◀ only this row",
+    " Heat     1995",
+    "",
+    " without WHERE: every year becomes 1986  ✗"
+   ],
+   "point": 5,
+   "mark": [
+    "WHERE title = 'Aliens'"
+   ],
+   "text": [
+    "UPDATE changes rows; WHERE picks which ones.",
+    "",
+    "- Forget WHERE and every row changes: a classic accident in production.",
+    "- Run a SELECT with the same WHERE first: you see exactly what you're about to change.",
+    "- DELETE FROM works the same way, and needs the same care."
+   ]
+  },
+  {
+   "scheme": [
+    " INSERT INTO stock (item, qty) VALUES ('chair', 3)",
+    " ON CONFLICT(item) DO UPDATE",
+    "   SET qty = qty + excluded.qty;",
+    "",
+    " no chair yet     ─▶  insert: chair 3",
+    " chair has 5      ─▶  update: chair 8"
+   ],
+   "point": 2,
+   "mark": [
+    "excluded.qty"
+   ],
+   "text": [
+    "An upsert inserts a row, or updates it when it's already there.",
+    "",
+    "- ON CONFLICT needs a column that can't repeat, like a PRIMARY KEY: item, here.",
+    "- excluded.qty is the value you tried to insert: 3.",
+    "- INSERT OR REPLACE is different: it deletes the old row first, so its other columns are lost."
+   ]
+  }
+ ]
+}

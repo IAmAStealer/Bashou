@@ -1,0 +1,89 @@
+{
+ "title": "awk et sed : colonnes et modifications",
+ "summary": "awk lit un fichier en colonnes et sait les additionner ; sed affiche ou modifie des lignes. Les deux classiques du travail sur le texte.",
+ "pages": [
+  {
+   "scheme": [
+    " people.txt:  sam 34 rack2",
+    "               │  │    │",
+    "              $1 $2   $3",
+    "",
+    " $ awk '{print $2}' people.txt",
+    " 34"
+   ],
+   "point": 2,
+   "mark": [
+    "$2"
+   ],
+   "text": [
+    "awk coupe chaque ligne en champs, aux espaces, et lance ton petit programme sur chaque ligne.",
+    "",
+    "- $1 est le premier champ, $2 le deuxième, $0 la ligne entière.",
+    "- Contrairement à cut, plusieurs espaces à la suite comptent comme un seul séparateur.",
+    "- Mets le programme entre apostrophes, pour que le shell ne touche pas à $2."
+   ]
+  },
+  {
+   "scheme": [
+    " $ awk -F, '$2 == \"pear\" { s += $3 }",
+    "            END { print s }' sales.csv",
+    "",
+    "  -F,           champs coupés aux virgules",
+    "  $2 == \"pear\"  seulement là où c'est vrai",
+    "  s += $3       ajoute la colonne 3 à s",
+    "  END { … }     une fois, après la dernière ligne"
+   ],
+   "point": 5,
+   "mark": [
+    "s += $3",
+    "END"
+   ],
+   "text": [
+    "Un programme awk, c'est motif { action } : l'action ne tourne que sur les lignes où le motif est vrai.",
+    "",
+    "- Les variables commencent à 0 : pas besoin d'initialiser s.",
+    "- END tourne après la dernière ligne : l'endroit pour afficher un total."
+   ]
+  },
+  {
+   "scheme": [
+    " $ sed -n '8p' poem.txt",
+    "       │   ││",
+    "       │   │└─ p : l'afficher",
+    "       │   └─ 8 : à la ligne 8",
+    "       └─ -n : n'afficher rien d'autre"
+   ],
+   "point": 0,
+   "mark": [
+    "'8p'"
+   ],
+   "text": [
+    "sed lit un fichier ligne par ligne. Normalement il affiche chaque ligne ; -n le rend silencieux, et p affiche celles que tu choisis.",
+    "",
+    "- sed -n '3,5p' affiche les lignes 3 à 5.",
+    "- sed -n '/error/p' affiche les lignes qui correspondent, comme grep."
+   ]
+  },
+  {
+   "scheme": [
+    " $ sed 's/teh/the/g' letter.txt",
+    "        │ │   │   │",
+    "        │ │   │   └─ g : chaque occurrence",
+    "        │ │   └─ le nouveau texte",
+    "        │ └─ l'ancien texte",
+    "        └─ s : substituer"
+   ],
+   "point": 0,
+   "mark": [
+    "s/teh/the/g"
+   ],
+   "text": [
+    "s/ancien/nouveau/ remplace du texte. Sans g, seule la première occurrence de chaque ligne change.",
+    "",
+    "- sed affiche le résultat et laisse le fichier tranquille. -i modifie le fichier sur place.",
+    "$ sed -i 's/teh/the/g; s/Teh/The/g' letter.txt",
+    "- Essaie d'abord sans -i : tu vois le résultat, et rien n'est encore modifié."
+   ]
+  }
+ ]
+}

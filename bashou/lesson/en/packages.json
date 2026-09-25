@@ -1,13 +1,25 @@
 {
  "id": "packages",
  "order": 70,
- "skill": "linux",
+ "skill": [
+  "linux",
+  "debian",
+  "rocky"
+ ],
  "needs": [
   "tool apt 1 | tool dnf 1 | fights 5"
  ],
  "masters": [
   "won version_vole | won release_raven",
   "won stowaway_stoat | won census_centipede"
+ ],
+ "fights": [
+  "version_vole",
+  "release_raven",
+  "stowaway_stoat",
+  "census_centipede",
+  "autoremove_adder",
+  "hitchhiker_hare"
  ],
  "title": "Packages and repositories",
  "summary": "Where apt and dnf get their programs, why a signature is checked, and what dependencies are.",
@@ -78,7 +90,8 @@
     "Most packages need others to work: their dependencies. apt and dnf install them for you.",
     "",
     "- Libraries (lib…) are code shared by many programs.",
-    "- apt autoremove removes the dependencies nothing needs anymore."
+    "- apt remembers why each package is there: manual (you asked for it) or auto (a dependency). apt-mark showmanual and showauto list them.",
+    "- apt autoremove removes the auto ones nothing needs anymore."
    ]
   },
   {

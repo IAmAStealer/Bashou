@@ -9,6 +9,10 @@
   "won linker_lynx",
   "won warning_wraith"
  ],
+ "fights": [
+  "linker_lynx",
+  "warning_wraith"
+ ],
  "title": "Using gcc: warnings, files, libraries",
  "summary": "The options you'll type every day, a program in several files, and the tools that build big projects.",
  "pages": [

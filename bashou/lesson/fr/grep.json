@@ -25,7 +25,8 @@
     " -i    ignore la casse : Error, ERROR, error",
     " -n    montre le numéro de ligne",
     " -v    les lignes qui NE correspondent PAS",
-    " -c    seulement les compter"
+    " -c    seulement les compter",
+    " -F    texte simple : [ ] . * restent tels quels"
    ],
    "point": 2,
    "mark": [
@@ -33,7 +34,8 @@
    ],
    "text": [
     "- Les options se combinent : grep -in error app.log.",
-    "- -v sert à cacher le bruit : grep -v DEBUG app.log."
+    "- -v sert à cacher le bruit : grep -v DEBUG app.log.",
+    "- [ ] et . ont un sens spécial pour grep. -F (ou un \\ devant chacun) les rend simples : grep -cF '[ERROR]' app.log."
    ]
   },
   {

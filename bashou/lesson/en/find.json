@@ -1,0 +1,91 @@
+{
+ "id": "find",
+ "order": 46,
+ "skill": "bash",
+ "tools": [
+  "find"
+ ],
+ "needs": [
+  "tool find 1 | commands 150"
+ ],
+ "masters": [
+  "won find_wraith"
+ ],
+ "fights": [
+  "find_wraith"
+ ],
+ "title": "find: search the whole tree",
+ "summary": "Walk through every folder under a starting point and keep what matches: by name, by type, by size or age.",
+ "pages": [
+  {
+   "scheme": [
+    " $ find maze -name '*.bak'",
+    "",
+    " maze/",
+    " ├── a.txt",
+    " ├── old.bak          ✔",
+    " └── deep/",
+    "     ├── notes.bak    ✔",
+    "     └── more/",
+    "         └── x.bak    ✔"
+   ],
+   "point": 4,
+   "mark": [
+    "old.bak",
+    "notes.bak",
+    "x.bak"
+   ],
+   "text": [
+    "ls shows one folder. find walks into every folder below the start, as deep as it goes.",
+    "",
+    "- First where to start (maze), then the tests that keep what matches.",
+    "- Quote the pattern: '*.bak'. Without quotes, the shell may expand it first, with the names of the folder you are in."
+   ]
+  },
+  {
+   "scheme": [
+    " maze/",
+    " ├── a.txt",
+    " ├── old.bak          file        ✔",
+    " ├── deep.bak/        directory   ✗",
+    " └── deep/",
+    "     ├── notes.bak    file        ✔",
+    "     └── more/",
+    "         └── x.bak    file        ✔",
+    "",
+    " $ find maze -type f -name '*.bak'"
+   ],
+   "point": 3,
+   "mark": [
+    "-type f",
+    "directory"
+   ],
+   "text": [
+    "A directory can have a name that matches too.",
+    "",
+    "- -type f keeps regular files, -type d directories.",
+    "- Tests add up: a path must pass every one of them to be printed."
+   ]
+  },
+  {
+   "scheme": [
+    " $ find maze -type f -name '*.bak' | wc -l",
+    " 3",
+    "",
+    " -iname '*.jpg'   like -name, any case",
+    " -size +100M      bigger than 100 MiB",
+    " -mtime -7        changed in the last 7 days"
+   ],
+   "point": 0,
+   "mark": [
+    "wc -l"
+   ],
+   "text": [
+    "find prints one path per line, so wc -l counts them.",
+    "",
+    "- More tests: case, size, age.",
+    "- find can also act on what it finds (-delete, -exec). Run it once without, to see the list first."
+   ]
+  }
+ ]
+}

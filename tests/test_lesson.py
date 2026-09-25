@@ -23,8 +23,8 @@ class FilesTest(unittest.TestCase):
             self.assertEqual(json.loads(path.read_text())["id"], path.stem)
         for le in LESSONS:
             self.assertTrue(le["title"] and le["summary"] and le["pages"], le["id"])
-            if "skill" in le:
-                self.assertIn(le["skill"], skills.SKILLS, le["id"])
+            for skill in lesson.skills_of(le):
+                self.assertIn(skill, skills.SKILLS, le["id"])
 
     def test_conditions_name_real_things(self):
         fights = {c.id for c in challenges.ALL}
@@ -83,13 +83,55 @@ class FilesTest(unittest.TestCase):
                     self.assertLessEqual(max(row for row, col, text in pieces[:-1]), 22, (le["id"], n))
 
 
+class FightsTest(unittest.TestCase):
+    """Owner: nobody gets stuck on a fight; every fight has at least one lesson, besides its hints."""
+
+    def test_every_fight_has_a_lesson(self):
+        covered = {f for le in LESSONS for f in le.get("fights", [])}
+        self.assertEqual([c.id for c in challenges.ALL if c.id not in covered], [])
+
+    def test_a_lesson_shows_to_the_players_of_its_fights(self):
+        for le in LESSONS:
+            for f in le.get("fights", []):
+                with self.subTest(lesson=le["id"], fight=f):
+                    self.assertIn(f, challenges.BY_ID)
+                    if lesson.skills_of(le):
+                        self.assertIn(challenges.BY_ID[f].skill, lesson.skills_of(le))
+
+    def test_tab_completion_knows_every_lesson(self):
+        import re
+        bash = (Path(__file__).parent.parent / "bashou.bash").read_text()
+        words = re.search(r'^_bashou_lessons="list (.*)"$', bash, re.M).group(1).split()
+        self.assertEqual(words, [le["id"] for le in LESSONS])
+
+    def test_the_teaching_plan_names_every_lesson_and_fight(self):
+        plan = (Path(__file__).parent.parent / "doc/contributing/curriculum.md").read_text()
+        self.assertEqual([le["id"] for le in LESSONS if f"`{le['id']}`" not in plan], [])
+        self.assertEqual([c.threat for c in challenges.ALL if c.threat not in plan], [])
+
+    def test_meeting_a_fight_opens_its_lesson(self):
+        s = state.default()
+        awk = next(le for le in LESSONS if "awk_golem" in le.get("fights", []))
+        self.assertFalse(lesson.unlocked(s, awk))
+        s["threat"] = {"challenge": "awk_golem", "until": 0}     # it waits for you: the lesson opens
+        self.assertTrue(lesson.unlocked(s, awk))
+        s["threat"] = None
+        self.assertFalse(lesson.unlocked(s, awk))
+        s["lessons"]["met"].append("awk_golem")                  # fled or lost: it stays open
+        self.assertTrue(lesson.unlocked(s, awk))
+
+    def test_the_arena_lesson_command_is_free(self):
+        from bashou import duel
+        self.assertIsNone(duel.judge(challenges.BY_ID["awk_golem"], 0, "lesson"))
+
+
 class UnlockTest(unittest.TestCase):
     def test_a_new_player_starts_with_the_first_lesson(self):
         s = state.default()
         self.assertEqual([le["id"] for le in lesson.new(s, LESSONS)], ["command_line"])
         paths = BY_ID["paths"]
         self.assertFalse(lesson.unlocked(s, paths))
-        self.assertEqual(lesson.how_to_unlock(s, paths), "run 20 commands (0/20)")
+        self.assertEqual(lesson.how_to_unlock(s, paths), "run 20 commands (0/20) (or meet the Dust Bunny in a fight)")
         s["commands"] = 20                                       # no need to read command_line first
         self.assertTrue(lesson.unlocked(s, paths))
 
@@ -134,7 +176,7 @@ class UnlockTest(unittest.TestCase):
 
     def test_an_old_save_gets_the_missing_fields(self):
         s = {"lessons": {"read": ["paths"]}}
-        self.assertEqual(lesson.progress_of(s), {"read": ["paths"], "opened": [], "page": {}})
+        self.assertEqual(lesson.progress_of(s), {"read": ["paths"], "opened": [], "page": {}, "met": []})
 
 
 class ReaderTest(unittest.TestCase):

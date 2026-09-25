@@ -9,6 +9,9 @@
   "won semicolon_slug",
   "won fencepost_fiend | won leak_lurker | won stack_specter"
  ],
+ "fights": [
+  "semicolon_slug"
+ ],
  "title": "Compilation: from source code to a program",
  "summary": "What gcc does with your .c file, how to read its errors, and why ./ runs the result.",
  "pages": [

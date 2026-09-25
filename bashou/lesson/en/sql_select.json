@@ -8,6 +8,9 @@
  "masters": [
   "won query_quokka"
  ],
+ "fights": [
+  "query_quokka"
+ ],
  "title": "SQL: your first SELECT",
  "summary": "Rows and columns, and how SELECT, FROM and WHERE pick what you want.",
  "pages": [

@@ -10,6 +10,12 @@
   "won shadow_shade",
   "won byte_basilisk"
  ],
+ "fights": [
+  "mut_marmot",
+  "const_condor",
+  "shadow_shade",
+  "byte_basilisk"
+ ],
  "title": "Rust: variables that don't change",
  "summary": "let, mut, shadowing and integer sizes: what rustc refuses, and why.",
  "pages": [

@@ -1,0 +1,109 @@
+{
+ "id": "awk_sed",
+ "order": 42,
+ "skill": "bash",
+ "tools": [
+  "awk",
+  "sed"
+ ],
+ "needs": [
+  "tool awk 1 | tool sed 1 | fights 4"
+ ],
+ "masters": [
+  "won field_wasp | won awk_golem",
+  "won verse_viper | won sed_serpent"
+ ],
+ "fights": [
+  "field_wasp",
+  "awk_golem",
+  "verse_viper",
+  "sed_serpent"
+ ],
+ "title": "awk and sed: columns and edits",
+ "summary": "awk reads a file as columns and can add them up; sed prints or changes lines. The two classics of text work.",
+ "pages": [
+  {
+   "scheme": [
+    " people.txt:  sam 34 rack2",
+    "               │  │    │",
+    "              $1 $2   $3",
+    "",
+    " $ awk '{print $2}' people.txt",
+    " 34"
+   ],
+   "point": 2,
+   "mark": [
+    "$2"
+   ],
+   "text": [
+    "awk cuts every line into fields, at the spaces, and runs your little program on each line.",
+    "",
+    "- $1 is the first field, $2 the second, $0 the whole line.",
+    "- Unlike cut, several spaces in a row count as one separator.",
+    "- Put the program in single quotes, so the shell leaves $2 alone."
+   ]
+  },
+  {
+   "scheme": [
+    " $ awk -F, '$2 == \"pear\" { s += $3 }",
+    "            END { print s }' sales.csv",
+    "",
+    "  -F,           fields split at commas",
+    "  $2 == \"pear\"  only lines where this is true",
+    "  s += $3       add column 3 to s",
+    "  END { … }     once, after the last line"
+   ],
+   "point": 5,
+   "mark": [
+    "s += $3",
+    "END"
+   ],
+   "text": [
+    "An awk program is pattern { action }: the action runs only on the lines where the pattern is true.",
+    "",
+    "- Variables start at 0: no need to set s first.",
+    "- END runs after the last line: the place to print a total."
+   ]
+  },
+  {
+   "scheme": [
+    " $ sed -n '8p' poem.txt",
+    "       │   ││",
+    "       │   │└─ p: print it",
+    "       │   └─ 8: on line 8",
+    "       └─ -n: print nothing else"
+   ],
+   "point": 0,
+   "mark": [
+    "'8p'"
+   ],
+   "text": [
+    "sed reads a file line by line. Normally it prints every line; -n makes it quiet, and p prints the lines you pick.",
+    "",
+    "- sed -n '3,5p' prints lines 3 to 5.",
+    "- sed -n '/error/p' prints the lines that match, like grep."
+   ]
+  },
+  {
+   "scheme": [
+    " $ sed 's/teh/the/g' letter.txt",
+    "        │ │   │   │",
+    "        │ │   │   └─ g: every match on a line",
+    "        │ │   └─ the new text",
+    "        │ └─ the old text",
+    "        └─ s: substitute"
+   ],
+   "point": 0,
+   "mark": [
+    "s/teh/the/g"
+   ],
+   "text": [
+    "s/old/new/ replaces text. Without g, only the first match of each line changes.",
+    "",
+    "- sed prints the result and leaves the file alone. -i edits the file in place.",
+    "$ sed -i 's/teh/the/g; s/Teh/The/g' letter.txt",
+    "- Try it without -i first: you see the result, and nothing is changed yet."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,101 @@
+{
+ "id": "repos",
+ "order": 75,
+ "skill": [
+  "debian",
+  "rocky"
+ ],
+ "tools": [
+  "apt",
+  "dnf"
+ ],
+ "needs": [
+  "tool apt 3 | tool dnf 3 | fights 6"
+ ],
+ "masters": [
+  "won candidate_crow | won enabled_ettin",
+  "won mirror_mimic | won repo_revenant"
+ ],
+ "fights": [
+  "candidate_crow",
+  "mirror_mimic",
+  "repo_revenant",
+  "enabled_ettin"
+ ],
+ "title": "Repositories: where packages come from",
+ "summary": "The files that list your repositories on Debian and Rocky, and how to ask apt and dnf what they would do.",
+ "pages": [
+  {
+   "scheme": [
+    " /etc/apt/sources.list.d/debian.sources",
+    " Types: deb",
+    " URIs: https://deb.debian.org/debian",
+    " Suites: trixie trixie-updates",
+    " Components: main",
+    " Signed-By: …/debian-archive-keyring.pgp",
+    "",
+    " Types: deb",
+    " URIs: https://security.debian.org/debian-security",
+    " Suites: trixie-security",
+    " Components: main",
+    " Signed-By: …/debian-archive-keyring.pgp"
+   ],
+   "point": 3,
+   "mark": [
+    "trixie-updates",
+    "trixie-security"
+   ],
+   "text": [
+    "apt reads /etc/apt/sources.list and /etc/apt/sources.list.d/. Debian 13's new format: one block per repository.",
+    "",
+    "- URIs: the server. Suites: the release and its updates. Components: parts of the archive.",
+    "- Security updates have their own server and suite. man sources.list explains every field."
+   ]
+  },
+  {
+   "scheme": [
+    " /etc/yum.repos.d/rocky.repo",
+    " [baseos]",
+    " name=Rocky Linux $releasever - BaseOS",
+    " baseurl=https://dl.rockylinux.org/pub/rocky/",
+    "         $releasever/BaseOS/$basearch/os/",
+    " gpgcheck=1",
+    " enabled=1",
+    " gpgkey=file:///…/RPM-GPG-KEY-Rocky-9"
+   ],
+   "point": 4,
+   "mark": [
+    "$releasever",
+    "$basearch"
+   ],
+   "text": [
+    "dnf reads .repo files in /etc/yum.repos.d/, one [section] per repository. The real file uses mirrorlist= (a list of mirrors), with baseurl commented out.",
+    "",
+    "- dnf fills in $releasever and $basearch: 9 and x86_64, for example.",
+    "- Paths are case-sensitive: BaseOS, not baseos.",
+    "- gpgcheck=1 checks every package's signature: keep it on."
+   ]
+  },
+  {
+   "scheme": [
+    " $ apt policy ncdu",
+    " ncdu:",
+    "   Installed: (none)",
+    "   Candidate: 1.22-1    ◀ what apt install gets",
+    "",
+    " $ dnf repolist                   enabled repos",
+    " $ dnf --repo=baseos list tar     only baseos"
+   ],
+   "point": 3,
+   "mark": [
+    "Candidate"
+   ],
+   "text": [
+    "Before you install, ask: nothing changes, and you learn what would happen.",
+    "",
+    "- apt policy shows the installed version, the candidate (what apt install would get) and the repository it comes from.",
+    "- dnf --repo=NAME uses only that repository, for this one command. --disablerepo and --enablerepo work too, without editing any file."
+   ]
+  }
+ ]
+}

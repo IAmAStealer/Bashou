@@ -1,0 +1,78 @@
+{
+ "title": "Les dépôts : d'où viennent les paquets",
+ "summary": "Les fichiers qui listent tes dépôts sur Debian et Rocky, et comment demander à apt et dnf ce qu'ils feraient.",
+ "pages": [
+  {
+   "scheme": [
+    " /etc/apt/sources.list.d/debian.sources",
+    " Types: deb",
+    " URIs: https://deb.debian.org/debian",
+    " Suites: trixie trixie-updates",
+    " Components: main",
+    " Signed-By: …/debian-archive-keyring.pgp",
+    "",
+    " Types: deb",
+    " URIs: https://security.debian.org/debian-security",
+    " Suites: trixie-security",
+    " Components: main",
+    " Signed-By: …/debian-archive-keyring.pgp"
+   ],
+   "point": 3,
+   "mark": [
+    "trixie-updates",
+    "trixie-security"
+   ],
+   "text": [
+    "apt lit /etc/apt/sources.list et /etc/apt/sources.list.d/. Le nouveau format de Debian 13 : un bloc par dépôt.",
+    "",
+    "- URIs : le serveur. Suites : la version et ses mises à jour. Components : les parties de l'archive.",
+    "- La sécurité a son propre serveur et sa suite. man sources.list explique chaque champ."
+   ]
+  },
+  {
+   "scheme": [
+    " /etc/yum.repos.d/rocky.repo",
+    " [baseos]",
+    " name=Rocky Linux $releasever - BaseOS",
+    " baseurl=https://dl.rockylinux.org/pub/rocky/",
+    "         $releasever/BaseOS/$basearch/os/",
+    " gpgcheck=1",
+    " enabled=1",
+    " gpgkey=file:///…/RPM-GPG-KEY-Rocky-9"
+   ],
+   "point": 4,
+   "mark": [
+    "$releasever",
+    "$basearch"
+   ],
+   "text": [
+    "dnf lit les fichiers .repo dans /etc/yum.repos.d/, une [section] par dépôt. Le vrai fichier utilise mirrorlist= (une liste de miroirs), avec baseurl en commentaire.",
+    "",
+    "- dnf remplit $releasever et $basearch : 9 et x86_64, par exemple.",
+    "- Les chemins sont sensibles à la casse : BaseOS, pas baseos.",
+    "- gpgcheck=1 vérifie la signature de chaque paquet : laisse-le activé."
+   ]
+  },
+  {
+   "scheme": [
+    " $ apt policy ncdu",
+    " ncdu:",
+    "   Installed: (none)",
+    "   Candidate: 1.22-1    ◀ ce qu'apt installera",
+    "",
+    " $ dnf repolist                   dépôts activés",
+    " $ dnf --repo=baseos list tar     baseos seulement"
+   ],
+   "point": 3,
+   "mark": [
+    "Candidate"
+   ],
+   "text": [
+    "Avant d'installer, demande : rien ne change, et tu apprends ce qui se passerait.",
+    "",
+    "- apt policy montre la version installée, la candidate (ce qu'apt install prendrait) et le dépôt d'où elle vient.",
+    "- dnf --repo=NOM n'utilise que ce dépôt, pour cette seule commande. --disablerepo et --enablerepo marchent aussi, sans modifier aucun fichier."
+   ]
+  }
+ ]
+}

@@ -8,6 +8,9 @@
  "masters": [
   "won list_leech"
  ],
+ "fights": [
+  "list_leech"
+ ],
  "title": "Python: names and objects",
  "summary": "A variable is a label on an object: why changing a list in a function changes it outside too.",
  "pages": [

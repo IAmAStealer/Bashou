@@ -8,6 +8,10 @@
   "tool less 3",
   "tool tail 3"
  ],
+ "fights": [
+  "first_line_imp",
+  "last_word_wisp"
+ ],
  "title": "Reading files: cat, less, head, tail",
  "summary": "Four ways to look inside a file, from a short note to a log that keeps growing.",
  "pages": [

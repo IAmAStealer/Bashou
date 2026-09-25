@@ -1,0 +1,62 @@
+{
+ "title": "pass : un coffre à mots de passe",
+ "summary": "Garder chaque mot de passe dans son propre fichier chiffré, et laisser tes scripts le demander au lieu de l'écrire.",
+ "pages": [
+  {
+   "scheme": [
+    " ~/.password-store/",
+    " ├── .gpg-id          la clé gpg qui verrouille",
+    " ├── email/",
+    " │   └── work.gpg     un mot de passe, chiffré",
+    " └── backup/",
+    "     └── server.gpg"
+   ],
+   "point": 5,
+   "mark": [
+    "server.gpg"
+   ],
+   "text": [
+    "pass garde chaque mot de passe dans son propre fichier, chiffré avec ta clé gpg (voir la leçon sur les clés).",
+    "",
+    "- Le nom est le chemin : backup/server, c'est backup/server.gpg.",
+    "- Seule ta clé privée peut les ouvrir.",
+    "$ pass init toi@example.org      # une fois, avec ta clé"
+   ]
+  },
+  {
+   "scheme": [
+    " $ pass ls                    les noms",
+    " $ pass show backup/server    un mot de passe",
+    " 7rX!q2mZ",
+    " $ pass insert email/home     en ajouter un",
+    " $ pass generate web/shop 20  un au hasard"
+   ],
+   "point": 1,
+   "mark": [
+    "pass show"
+   ],
+   "text": [
+    "- pass show déchiffre un mot de passe et l'affiche. gpg peut demander la phrase de passe de ta clé.",
+    "- pass generate en crée un au hasard : tu n'en inventes jamais de faible.",
+    "- pass -c nom le copie dans le presse-papiers au lieu de l'afficher."
+   ]
+  },
+  {
+   "scheme": [
+    " deploy.sh",
+    " DB_PASSWORD=\"hunter2\"               ✗ en clair",
+    " DB_PASSWORD=\"$(pass show db/prod)\"  ✔ en direct"
+   ],
+   "point": 2,
+   "mark": [
+    "$(pass show db/prod)"
+   ],
+   "text": [
+    "Un mot de passe écrit dans un script est lu par quiconque lit le script, et reste dans son historique git.",
+    "",
+    "- $( ) lance pass quand le script tourne : le fichier ne contient jamais le mot de passe.",
+    "- Un mot de passe qui a été commité doit être changé : supprimer la ligne ne suffit pas."
+   ]
+  }
+ ]
+}

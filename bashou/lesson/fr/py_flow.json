@@ -1,0 +1,70 @@
+{
+ "title": "Python : boucles, dicts et fonctions",
+ "summary": "Des boucles qui s'arrêtent, des dicts qui comptent, et une fonction qui s'appelle elle-même pour parcourir des dossiers.",
+ "pages": [
+  {
+   "scheme": [
+    " i = 0",
+    " while i < 3:",
+    "     print(i)",
+    "     i += 1       ◀ sans lui, i reste 0 : sans fin",
+    "",
+    " for i in range(3):    pareil, et elle ne peut",
+    "     print(i)          pas oublier d'avancer"
+   ],
+   "point": 3,
+   "mark": [
+    "i += 1"
+   ],
+   "text": [
+    "while répète tant que sa condition est vraie. Quelque chose dans la boucle doit la rendre fausse un jour.",
+    "",
+    "- Une boucle qui ne finit jamais : Ctrl+C l'arrête.",
+    "- for parcourt une liste ou un range() : elle s'arrête toute seule à la fin."
+   ]
+  },
+  {
+   "scheme": [
+    " counts = {\"INFO\": 2, \"ERROR\": 1}",
+    "",
+    " counts[\"ERROR\"]          1",
+    " counts[\"WARN\"]           KeyError: 'WARN'",
+    " counts.get(\"WARN\", 0)    0"
+   ],
+   "point": 3,
+   "mark": [
+    "KeyError",
+    "get"
+   ],
+   "text": [
+    "Un dict associe des clés à des valeurs. Lire une clé absente est une erreur : une KeyError.",
+    "",
+    "- .get(clé, défaut) donne le défaut au lieu de planter.",
+    "- Compter, c'est donc : counts[level] = counts.get(level, 0) + 1"
+   ]
+  },
+  {
+   "scheme": [
+    " def total(folder):",
+    "     size = 0",
+    "     for item in folder:",
+    "         if item est un dossier:",
+    "             size += total(item)  ◀ s'appelle",
+    "         else:",
+    "             size += taille de item",
+    "     return size"
+   ],
+   "point": 4,
+   "mark": [
+    "size += total(item)"
+   ],
+   "text": [
+    "Une fonction peut s'appeler elle-même : c'est la récursion. Elle va bien aux arbres, comme des dossiers dans des dossiers. (C'est une esquisse, pas du vrai Python.)",
+    "",
+    "- Pour chaque dossier dedans, total rappelle total et récupère la taille de ce dossier.",
+    "- Garde ce qu'elle renvoie : size += total(item). Un total(item) seul la calcule, puis la jette.",
+    "- Ça s'arrête parce que l'arbre finit : un dossier sans dossier dedans ne rappelle plus rien."
+   ]
+  }
+ ]
+}

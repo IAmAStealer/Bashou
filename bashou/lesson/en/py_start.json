@@ -8,6 +8,9 @@
  "masters": [
   "won colon_cobra"
  ],
+ "fights": [
+  "colon_cobra"
+ ],
  "title": "Python: your first script",
  "summary": "Run a file with python3, and why indentation and colons matter.",
  "pages": [

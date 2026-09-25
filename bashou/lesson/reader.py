@@ -14,7 +14,7 @@ import tty
 
 from .. import creatures, render, skills, state
 from ..i18n import _
-from . import HERE, how_to_unlock, missing, progress_of, read, shown, status, unlocked
+from . import HERE, how_to_unlock, missing, progress_of, read, shown, skills_of, status, unlocked
 
 ESC = "\x1b"
 DIM, BOLD, RESET, REV = f"{ESC}[2m", f"{ESC}[1m", f"{ESC}[0m", f"{ESC}[7m"
@@ -116,7 +116,7 @@ def page_screen(lesson, n, cols, lines, breath=False, blink=False):
 
 
 def group(lesson):
-    skill = lesson.get("skill")
+    skill = next(iter(skills_of(lesson)), None)
     return _(skills.SKILLS[skill]).split(":")[0] if skill else _("First steps")
 
 

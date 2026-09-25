@@ -9,6 +9,13 @@
   "won stage_specter",
   "won needs_newt"
  ],
+ "fights": [
+  "indent_imp",
+  "stage_specter",
+  "needs_newt",
+  "secret_sprite",
+  "manual_mole"
+ ],
  "title": "A CI pipeline, stage by stage",
  "summary": "Stages, jobs that wait for each other, and conditions: how a pipeline decides what runs.",
  "pages": [

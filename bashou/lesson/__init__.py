@@ -45,7 +45,7 @@ def english():
 def progress_of(s):
     """s["lessons"], with every field (a save from an older version may lack some)."""
     p = s.setdefault("lessons", {})
-    for key, empty in (("read", []), ("opened", []), ("page", {})):
+    for key, empty in (("read", []), ("opened", []), ("page", {}), ("met", [])):
         p.setdefault(key, empty)
     return p
 
@@ -75,9 +75,21 @@ def holds(s, conds):
     return all(any(met(s, c.strip()) for c in cond.split("|")) for cond in conds)
 
 
+def met_fights(s):
+    """Fights you've faced (won, lost or fled) or that wait for you right now."""
+    threat = (s.get("threat") or {}).get("challenge")
+    return set((s.get("lessons") or {}).get("met", [])) | set(s["challenges"]) | ({threat} if threat else set())
+
+
 def unlocked(s, lesson):
-    """Lessons open with what you do (fights, achievements, commands), never by reading another one."""
-    return holds(s, lesson.get("needs", []))
+    """Lessons open with what you do (fights, achievements, commands), never by reading another one.
+    A fight never waits for its lesson: meeting one of the lesson's `fights` opens it too."""
+    return holds(s, lesson.get("needs", [])) or bool(met_fights(s) & set(lesson.get("fights", [])))
+
+
+def for_fight(lessons, fight_id):
+    """The lessons that prepare a fight (its `fights` list), in library order."""
+    return [le for le in lessons if fight_id in le.get("fights", [])]
 
 
 def mastered(s, lesson):
@@ -124,14 +136,25 @@ def missing(s, conds):
 
 
 def how_to_unlock(s, lesson):
-    return missing(s, lesson.get("needs", []))
+    text = missing(s, lesson.get("needs", []))
+    first = next((challenges.BY_ID[f] for f in lesson.get("fights", []) if f in challenges.BY_ID), None)
+    if first:
+        text += " " + _("(or meet the {threat} in a fight)").format(threat=_(first.threat))
+    return text
 
 
 def shown(s, lessons):
     """The lessons of the skills you learn (lessons with no skill are for everyone). A lesson you
     already opened stays, even if you untick its skill later."""
     opened = (s.get("lessons") or {}).get("opened", [])
-    return [le for le in lessons if not le.get("skill") or skills.wanted(s, le["skill"]) or le["id"] in opened]
+    return [le for le in lessons if not skills_of(le) or any(skills.wanted(s, k) for k in skills_of(le))
+            or le["id"] in opened]
+
+
+def skills_of(lesson):
+    """A lesson's skills: "skill" is one skill or a list (packages: Debian and Rocky alike)."""
+    skill = lesson.get("skill")
+    return [skill] if isinstance(skill, str) else list(skill or [])
 
 
 def new(s, lessons=None):

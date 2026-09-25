@@ -9,6 +9,10 @@
   "won leak_lurker",
   "won stack_specter"
  ],
+ "fights": [
+  "leak_lurker",
+  "stack_specter"
+ ],
  "title": "C memory: the stack and the heap",
  "summary": "Where your variables live, why malloc needs free, and what a leak or a stack overflow is.",
  "pages": [

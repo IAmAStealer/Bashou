@@ -1,0 +1,99 @@
+{
+ "title": "SQL : créer, insérer, modifier",
+ "summary": "Créer une table, ajouter des lignes, les modifier prudemment avec WHERE, et l'upsert qui fait les deux.",
+ "pages": [
+  {
+   "scheme": [
+    " CREATE TABLE movies (",
+    "   title TEXT,         des mots",
+    "   year  INTEGER       des nombres entiers",
+    " );",
+    "",
+    " movies",
+    " ┌───────┬──────┐",
+    " │ title │ year │   (pas encore de lignes)",
+    " └───────┴──────┘"
+   ],
+   "point": 2,
+   "mark": [
+    "TEXT",
+    "INTEGER"
+   ],
+   "text": [
+    "CREATE TABLE donne à une table son nom et ses colonnes, chacune avec un type.",
+    "",
+    "- sqlite3 movies.db crée le fichier dès que tu y écris quelque chose.",
+    "- .schema montre comment une table a été créée : pratique pour vérifier tes colonnes.",
+    "$ sqlite3 movies.db \"CREATE TABLE movies (title TEXT, year INTEGER);\""
+   ]
+  },
+  {
+   "scheme": [
+    " INSERT INTO movies (title, year)",
+    "             VALUES ('Alien', 1979);",
+    "",
+    " movies",
+    " ┌───────┬──────┐",
+    " │ title │ year │",
+    " ├───────┼──────┤",
+    " │ Alien │ 1979 │   ◀ nouvelle ligne",
+    " └───────┴──────┘"
+   ],
+   "point": 7,
+   "mark": [
+    "Alien"
+   ],
+   "text": [
+    "INSERT INTO ajoute une ligne. Nomme les colonnes, puis donne les valeurs dans le même ordre.",
+    "",
+    "- Le texte va entre apostrophes : 'Alien'. Les nombres, non.",
+    "- Une colonne que tu omets reçoit NULL, la valeur vide (ou sa valeur par défaut, si elle en a une)."
+   ]
+  },
+  {
+   "scheme": [
+    " UPDATE movies SET year = 1986",
+    " WHERE title = 'Aliens';",
+    "",
+    " title    year",
+    " Alien    1979",
+    " Aliens   1968 → 1986   ◀ seulement celle-ci",
+    " Heat     1995",
+    "",
+    " sans WHERE : toutes les années passent à 1986 ✗"
+   ],
+   "point": 5,
+   "mark": [
+    "WHERE title = 'Aliens'"
+   ],
+   "text": [
+    "UPDATE modifie des lignes ; WHERE choisit lesquelles.",
+    "",
+    "- Oublie WHERE et toutes les lignes changent : un accident classique en production.",
+    "- Lance d'abord un SELECT avec le même WHERE : tu vois exactement ce que tu vas modifier.",
+    "- DELETE FROM marche pareil, et demande le même soin."
+   ]
+  },
+  {
+   "scheme": [
+    " INSERT INTO stock (item, qty) VALUES ('chair', 3)",
+    " ON CONFLICT(item) DO UPDATE",
+    "   SET qty = qty + excluded.qty;",
+    "",
+    " pas de chair     ─▶  insert : chair 3",
+    " chair en a 5     ─▶  update : chair 8"
+   ],
+   "point": 2,
+   "mark": [
+    "excluded.qty"
+   ],
+   "text": [
+    "Un upsert insère une ligne, ou la met à jour si elle existe déjà.",
+    "",
+    "- ON CONFLICT a besoin d'une colonne qui ne peut pas se répéter, comme une PRIMARY KEY : item, ici.",
+    "- excluded.qty est la valeur que tu as essayé d'insérer : 3.",
+    "- INSERT OR REPLACE est différent : il supprime d'abord l'ancienne ligne, donc ses autres colonnes sont perdues."
+   ]
+  }
+ ]
+}

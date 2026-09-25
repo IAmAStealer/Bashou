@@ -1,0 +1,71 @@
+{
+ "title": "Python : lire les données, jamais les exécuter",
+ "summary": "JSON, base64 et les codes %XX sont des formats, pas des secrets : décode-les avec Python. Et une donnée ne doit jamais devenir une commande.",
+ "pages": [
+  {
+   "scheme": [
+    " config.json",
+    " {\"database\": {\"port\": 5432}}",
+    "",
+    " >>> import json",
+    " >>> c = json.load(open('config.json'))",
+    " >>> c['database']['port']",
+    " 5432"
+   ],
+   "point": 5,
+   "mark": [
+    "['database']['port']"
+   ],
+   "text": [
+    "JSON est du texte qui contient des dicts et des listes. json.load transforme un fichier en objets Python : pas de lecture à l'œil.",
+    "",
+    "- Chaque [ ] descend d'un niveau : c['database'] est un dict, ['port'] une valeur dedans.",
+    "- >>> est l'invite de python3. Les mêmes lignes marchent dans un script."
+   ]
+  },
+  {
+   "scheme": [
+    " base64   aGVsbG8=           ─▶  hello",
+    " URL      %2e%2e%2fetc       ─▶  ../etc",
+    " JWT      eyJhbGc….eyJzdWIi… ─▶  {\"sub\": \"sam\"}",
+    "",
+    " base64.b64decode(text)",
+    " urllib.parse.unquote(text)"
+   ],
+   "point": 1,
+   "mark": [
+    "hello",
+    "../etc"
+   ],
+   "text": [
+    "Les encodages transforment des octets en texte simple, sûr pour un mail, une URL ou un jeton. N'importe qui peut les défaire : ils ne cachent rien.",
+    "",
+    "- base64 : des lettres, des chiffres, + et /, souvent = à la fin.",
+    "- %XX est un octet en hexadécimal : %2f, c'est /. Les attaquants s'en servent pour cacher ../ dans une URL.",
+    "- La partie du milieu d'un JWT est en base64url : signé veut dire que personne ne peut le modifier, pas que personne ne peut le lire."
+   ]
+  },
+  {
+   "scheme": [
+    " hosts.txt:  web1; rm -rf ~",
+    "",
+    " os.system(\"ping -c1 \" + host)",
+    "   le shell lance : ping -c1 web1; rm -rf ~  ✗",
+    "",
+    " subprocess.run([\"ping\", \"-c1\", host])",
+    "   ping reçoit 1 argument : web1; rm -rf ~  ✔"
+   ],
+   "point": 3,
+   "mark": [
+    "os.system",
+    "subprocess.run"
+   ],
+   "text": [
+    "os.system donne une chaîne entière à un shell. Si des données extérieures y arrivent, les ; | $( ) qu'elles contiennent deviennent des commandes.",
+    "",
+    "- subprocess.run avec une liste saute le shell : chaque élément est un argument, quoi qu'il contienne.",
+    "- La règle : ne construis jamais une commande en collant des chaînes avec des données d'un fichier ou d'un utilisateur."
+   ]
+  }
+ ]
+}

@@ -9,6 +9,10 @@
   "won needle_gnat",
   "achievement digger"
  ],
+ "fights": [
+  "needle_gnat",
+  "grep_hydra"
+ ],
  "title": "grep: find the lines you need",
  "summary": "Search a file, or a whole folder, for a word, and the few options you'll use every day.",
  "pages": [
@@ -35,7 +39,8 @@
     " -i    ignore case: Error, ERROR, error",
     " -n    show the line number",
     " -v    the lines that DON'T match",
-    " -c    only count them"
+    " -c    only count them",
+    " -F    plain text: [ ] . * stay as written"
    ],
    "point": 2,
    "mark": [
@@ -43,7 +48,8 @@
    ],
    "text": [
     "- Options mix: grep -in error app.log.",
-    "- -v is handy to hide noise: grep -v DEBUG app.log."
+    "- -v is handy to hide noise: grep -v DEBUG app.log.",
+    "- [ ] and . mean something special to grep. -F (or a \\ before each) makes them plain: grep -cF '[ERROR]' app.log."
    ]
   },
   {

@@ -1,0 +1,111 @@
+{
+ "id": "text_tools",
+ "order": 37,
+ "skill": "bash",
+ "tools": [
+  "wc",
+  "sort",
+  "cut",
+  "uniq"
+ ],
+ "needs": [
+  "commands 70 | fights 1"
+ ],
+ "masters": [
+  "won line_moth",
+  "won column_crab",
+  "won peak_harpy"
+ ],
+ "fights": [
+  "line_moth",
+  "column_crab",
+  "jumble_sprite",
+  "peak_harpy",
+  "uniq_swarm"
+ ],
+ "title": "Count, sort, cut: wc, sort, cut, uniq",
+ "summary": "Four small tools that answer questions about a text file: how many lines, in what order, which column, how often.",
+ "pages": [
+  {
+   "scheme": [
+    " $ wc notes.txt",
+    "   42  310 1904 notes.txt",
+    "   │   │   └─ bytes (-c)",
+    "   │   └─ words (-w)",
+    "   └─ lines (-l)"
+   ],
+   "point": 4,
+   "mark": [
+    "lines (-l)"
+   ],
+   "text": [
+    "wc counts. Alone, it gives lines, words and bytes; an option keeps only one of them.",
+    "",
+    "- wc -l is the one you'll use most: how many lines, so how many entries in a list or a log.",
+    "- At the end of a pipe, it counts what comes in:",
+    "$ grep error app.log | wc -l"
+   ]
+  },
+  {
+   "scheme": [
+    " scores.txt   sort        sort -n",
+    " 9            10          2",
+    " 10           2           9",
+    " 2            9           10",
+    "              as text     as numbers"
+   ],
+   "point": 4,
+   "mark": [
+    "sort -n",
+    "as numbers"
+   ],
+   "text": [
+    "sort prints the lines in order. By default it compares text, character by character, like a dictionary: 10 comes before 2, because 1 comes before 2.",
+    "",
+    "- -n compares numbers, -r reverses the order, -u keeps one of each.",
+    "- sort never changes the file: it prints the sorted lines."
+   ]
+  },
+  {
+   "scheme": [
+    " servers.csv             cut -d, -f2",
+    " name,room,port          room",
+    " web,rack2,443    ──▶    rack2",
+    " db,rack7,5432           rack7",
+    "     └─┬─┘",
+    "    field 2"
+   ],
+   "point": 5,
+   "mark": [
+    "cut -d, -f2"
+   ],
+   "text": [
+    "cut keeps some columns of each line.",
+    "",
+    "- -d says what separates the columns (the delimiter): -d, for a comma.",
+    "- -f says which fields to keep: -f2, or -f1,3 for two of them.",
+    "- Columns lined up with several spaces? cut sees empty fields between them: awk handles that better."
+   ]
+  },
+  {
+   "scheme": [
+    " $ sort -n scores.txt | tail -n 1    the biggest",
+    "",
+    " $ sort visitors.txt | uniq -c",
+    "   3 10.0.0.5",
+    "   1 10.0.0.9"
+   ],
+   "point": 2,
+   "mark": [
+    "uniq -c"
+   ],
+   "text": [
+    "These tools are made to be chained with |, one small step each.",
+    "",
+    "- The biggest number: sort -n, then keep the last line.",
+    "- How often: sort puts equal lines side by side, uniq -c counts them.",
+    "- uniq alone only merges neighbours, so sort first. The lesson on pipes builds a whole chain."
+   ]
+  }
+ ]
+}

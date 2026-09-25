@@ -9,6 +9,11 @@
   "achievement plumber",
   "achievement tally"
  ],
+ "fights": [
+  "pipe_eel",
+  "uniq_swarm",
+  "peak_harpy"
+ ],
  "title": "Pipes: small tools in a chain",
  "summary": "Send one command's output into the next one, and watch the data change at each step.",
  "pages": [

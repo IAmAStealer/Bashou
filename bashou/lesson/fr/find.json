@@ -1,0 +1,76 @@
+{
+ "title": "find : chercher dans tout l'arbre",
+ "summary": "Parcourir chaque dossier sous un point de départ et garder ce qui correspond : par nom, par type, par taille ou par âge.",
+ "pages": [
+  {
+   "scheme": [
+    " $ find maze -name '*.bak'",
+    "",
+    " maze/",
+    " ├── a.txt",
+    " ├── old.bak          ✔",
+    " └── deep/",
+    "     ├── notes.bak    ✔",
+    "     └── more/",
+    "         └── x.bak    ✔"
+   ],
+   "point": 4,
+   "mark": [
+    "old.bak",
+    "notes.bak",
+    "x.bak"
+   ],
+   "text": [
+    "ls montre un dossier. find entre dans chaque dossier sous le départ, aussi profond qu'il va.",
+    "",
+    "- D'abord où commencer (maze), puis les tests qui gardent ce qui correspond.",
+    "- Mets le motif entre apostrophes : '*.bak'. Sinon le shell peut le développer d'abord, avec les noms d'ici."
+   ]
+  },
+  {
+   "scheme": [
+    " maze/",
+    " ├── a.txt",
+    " ├── old.bak          fichier     ✔",
+    " ├── deep.bak/        dossier     ✗",
+    " └── deep/",
+    "     ├── notes.bak    fichier     ✔",
+    "     └── more/",
+    "         └── x.bak    fichier     ✔",
+    "",
+    " $ find maze -type f -name '*.bak'"
+   ],
+   "point": 3,
+   "mark": [
+    "-type f",
+    "dossier"
+   ],
+   "text": [
+    "Un dossier aussi peut avoir un nom qui correspond.",
+    "",
+    "- -type f garde les fichiers normaux, -type d les dossiers.",
+    "- Les tests s'additionnent : un chemin doit tous les passer pour être affiché."
+   ]
+  },
+  {
+   "scheme": [
+    " $ find maze -type f -name '*.bak' | wc -l",
+    " 3",
+    "",
+    " -iname '*.jpg'   comme -name, sans la casse",
+    " -size +100M      plus de 100 Mio",
+    " -mtime -7        modifié ces 7 derniers jours"
+   ],
+   "point": 0,
+   "mark": [
+    "wc -l"
+   ],
+   "text": [
+    "find affiche un chemin par ligne, donc wc -l les compte.",
+    "",
+    "- D'autres tests : la casse, la taille, l'âge.",
+    "- find peut aussi agir sur ce qu'il trouve (-delete, -exec). Lance-le d'abord sans, pour voir la liste."
+   ]
+  }
+ ]
+}

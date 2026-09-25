@@ -1,0 +1,87 @@
+{
+ "title": "Compter, trier, découper : wc, sort, cut, uniq",
+ "summary": "Quatre petits outils qui répondent aux questions sur un fichier texte : combien de lignes, dans quel ordre, quelle colonne, combien de fois.",
+ "pages": [
+  {
+   "scheme": [
+    " $ wc notes.txt",
+    "   42  310 1904 notes.txt",
+    "   │   │   └─ octets (-c)",
+    "   │   └─ mots (-w)",
+    "   └─ lignes (-l)"
+   ],
+   "point": 4,
+   "mark": [
+    "lignes (-l)"
+   ],
+   "text": [
+    "wc compte. Tout seul, il donne les lignes, les mots et les octets ; une option n'en garde qu'un.",
+    "",
+    "- wc -l est celle que tu utiliseras le plus : combien de lignes, donc combien d'entrées dans une liste ou un journal.",
+    "- Au bout d'un pipe, il compte ce qui arrive :",
+    "$ grep error app.log | wc -l"
+   ]
+  },
+  {
+   "scheme": [
+    " scores.txt   sort        sort -n",
+    " 9            10          2",
+    " 10           2           9",
+    " 2            9           10",
+    "              en texte    en nombres"
+   ],
+   "point": 4,
+   "mark": [
+    "sort -n",
+    "en nombres"
+   ],
+   "text": [
+    "sort affiche les lignes dans l'ordre. Par défaut, il compare du texte, caractère par caractère, comme un dictionnaire : 10 vient avant 2, parce que 1 vient avant 2.",
+    "",
+    "- -n compare des nombres, -r inverse l'ordre, -u garde un exemplaire de chaque.",
+    "- sort ne modifie jamais le fichier : il affiche les lignes triées."
+   ]
+  },
+  {
+   "scheme": [
+    " servers.csv             cut -d, -f2",
+    " name,room,port          room",
+    " web,rack2,443    ──▶    rack2",
+    " db,rack7,5432           rack7",
+    "     └─┬─┘",
+    "    champ 2"
+   ],
+   "point": 5,
+   "mark": [
+    "cut -d, -f2"
+   ],
+   "text": [
+    "cut garde certaines colonnes de chaque ligne.",
+    "",
+    "- -d dit ce qui sépare les colonnes (le délimiteur) : -d, pour une virgule.",
+    "- -f dit quels champs garder : -f2, ou -f1,3 pour deux d'entre eux.",
+    "- Des colonnes alignées avec plusieurs espaces ? cut voit des champs vides entre elles : awk s'en sort mieux."
+   ]
+  },
+  {
+   "scheme": [
+    " $ sort -n scores.txt | tail -n 1    le plus grand",
+    "",
+    " $ sort visitors.txt | uniq -c",
+    "   3 10.0.0.5",
+    "   1 10.0.0.9"
+   ],
+   "point": 2,
+   "mark": [
+    "uniq -c"
+   ],
+   "text": [
+    "Ces outils sont faits pour s'enchaîner avec |, une petite étape chacun.",
+    "",
+    "- Le plus grand nombre : sort -n, puis garder la dernière ligne.",
+    "- Combien de fois : sort met les lignes égales côte à côte, uniq -c les compte.",
+    "- uniq seul ne fusionne que des voisines, donc trie d'abord. La leçon sur les pipes construit une chaîne entière."
+   ]
+  }
+ ]
+}

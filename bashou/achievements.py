@@ -84,6 +84,11 @@ def lessons_read(s):
     return [le for le in lesson.english() if le["id"] in done]
 
 
+def first_skill(le):
+    from . import lesson
+    return next(iter(lesson.skills_of(le)), "")
+
+
 def lessons_mastered(s):
     from . import lesson
     return [le for le in lessons_read(s) if lesson.mastered(s, le)]
@@ -316,7 +321,7 @@ ALL = [
       state=lambda s: len(lessons_mastered(s)) >= 1),
     A("bookworm", "spark", "Bookworm", "read 6 lessons to the end", state=lambda s: len(lessons_read(s)) >= 6),
     A("polymath", "spark", "Polymath", "read lessons of 3 different skills",
-      state=lambda s: len({le.get("skill", "") for le in lessons_read(s)}) >= 3),
+      state=lambda s: len({first_skill(le) for le in lessons_read(s)}) >= 3),
     A("librarian", "spark", "Librarian", "master 5 lessons you read", state=lambda s: len(lessons_mastered(s)) >= 5),
     A("alexandria", "spark", "Alexandria", "read every lesson of the skills you learn",
       state=lambda s: all_lessons_read(s)),

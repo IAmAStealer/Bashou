@@ -1,0 +1,92 @@
+{
+ "id": "py_data",
+ "order": 135,
+ "skill": "python",
+ "tools": [
+  "python3"
+ ],
+ "needs": [
+  "won colon_cobra | tool python3 5"
+ ],
+ "masters": [
+  "won json_jinn",
+  "won base64_banshee",
+  "won injection_imp"
+ ],
+ "fights": [
+  "json_jinn",
+  "base64_banshee",
+  "percent_poltergeist",
+  "token_trickster",
+  "injection_imp"
+ ],
+ "title": "Python: read data, never run it",
+ "summary": "JSON, base64 and %XX codes are formats, not secrets: decode them with Python. And data must never become a command.",
+ "pages": [
+  {
+   "scheme": [
+    " config.json",
+    " {\"database\": {\"port\": 5432}}",
+    "",
+    " >>> import json",
+    " >>> c = json.load(open('config.json'))",
+    " >>> c['database']['port']",
+    " 5432"
+   ],
+   "point": 5,
+   "mark": [
+    "['database']['port']"
+   ],
+   "text": [
+    "JSON is text that holds dicts and lists. json.load turns a file into Python objects: no reading by eye.",
+    "",
+    "- Each [ ] goes one level down: c['database'] is a dict, ['port'] a value inside it.",
+    "- >>> is the python3 prompt. The same lines work in a script."
+   ]
+  },
+  {
+   "scheme": [
+    " base64   aGVsbG8=           ─▶  hello",
+    " URL      %2e%2e%2fetc       ─▶  ../etc",
+    " JWT      eyJhbGc….eyJzdWIi… ─▶  {\"sub\": \"sam\"}",
+    "",
+    " base64.b64decode(text)",
+    " urllib.parse.unquote(text)"
+   ],
+   "point": 1,
+   "mark": [
+    "hello",
+    "../etc"
+   ],
+   "text": [
+    "Encodings turn bytes into plain text, safe for mail, URLs or tokens. Anyone can undo them: they hide nothing.",
+    "",
+    "- base64: letters, digits, + and /, often = at the end.",
+    "- %XX is one byte in hexadecimal: %2f is /. Attackers use it to hide ../ in a URL.",
+    "- A JWT's middle part is base64url: signed means nobody can change it, not that nobody can read it."
+   ]
+  },
+  {
+   "scheme": [
+    " hosts.txt:  web1; rm -rf ~",
+    "",
+    " os.system(\"ping -c1 \" + host)",
+    "   shell runs:  ping -c1 web1; rm -rf ~   ✗",
+    "",
+    " subprocess.run([\"ping\", \"-c1\", host])",
+    "   ping gets 1 argument: web1; rm -rf ~   ✔"
+   ],
+   "point": 3,
+   "mark": [
+    "os.system",
+    "subprocess.run"
+   ],
+   "text": [
+    "os.system hands one string to a shell. If outside data lands in it, the ; | $( ) in that data become commands.",
+    "",
+    "- subprocess.run with a list skips the shell: each item is one argument, whatever it holds.",
+    "- The rule: never build a command by gluing strings with data from a file or a user."
+   ]
+  }
+ ]
+}

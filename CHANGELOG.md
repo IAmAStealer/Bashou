@@ -30,6 +30,10 @@ Every release has a section here, written for players. CI refuses to tag a relea
   chest, 8 new C questions, and `bashou explain c link`, `warnings` and `gdb`.
 - **Modern tools where it helps**: the compilation lesson now shows clang, sanitizers, clang-tidy and
   cargo/go, the gcc lesson CMake, Meson and Ninja, the gdb lesson lldb, rr and editor debuggers.
+- **Every fight now has a lesson.** Eight new lessons fill the gaps: wc, sort, cut and uniq; awk and sed;
+  find; Python loops, dicts and recursion; reading JSON, base64 and %XX safely in Python; package
+  repositories on Debian and Rocky; SQL CREATE, INSERT, UPDATE and upsert; and pass. As soon as you meet a
+  fight, its lesson opens, and typing `lesson` in the arena reads it without leaving the fight.
 
 ## v0.4.3 — 2026-09-24
 

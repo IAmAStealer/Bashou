@@ -56,6 +56,7 @@ _arena() { python3 "$BASHOU_SRC/launch.py" bashou.fight "$@" "$BASHOU_ARENA"; }
 answer() { _arena answer "$*" && exit 42; }
 verify() { _arena verify && exit 42; }
 hint() { _arena hint; }
+lesson() { _arena lesson; }
 task() { _arena task; }
 flee() { exit 3; }
 _arena_ps0() { [[ -r $BASHOU_ARENA/erase ]] && printf '%s' "$(< "$BASHOU_ARENA/erase")"; }
@@ -229,14 +230,14 @@ def cmd_answer(base, value):
     if not ch.check(Path(base) / "arena", meta, value):
         if ch.fix:
             print(BAD + "✗ " + _("Not yet: Bashou checked your work and it isn't right yet. "
-                                "Look again, try it at the prompt, then verify.") + f"{RESET} {DIM}(hint · task · flee){RESET}")
+                                "Look again, try it at the prompt, then verify.") + f"{RESET} {DIM}(hint · lesson · task · flee){RESET}")
         elif ch.kind == "trial":
-            print(BAD + "✗ " + _("Not yet: the chest is still locked.") + f"{RESET} {DIM}(hint · task · flee){RESET}")
+            print(BAD + "✗ " + _("Not yet: the chest is still locked.") + f"{RESET} {DIM}(hint · lesson · task · flee){RESET}")
         elif ch.kind == "security":
-            print(BAD + "✗ " + _("Not quite. Keep looking.") + f"{RESET} {DIM}(hint · task · flee){RESET}")
+            print(BAD + "✗ " + _("Not quite. Keep looking.") + f"{RESET} {DIM}(hint · lesson · task · flee){RESET}")
         else:
             print(BAD + "✗ " + _("Not quite. The {threat} shrugs it off.").format(threat=_(ch.threat))
-                  + f"{RESET} {DIM}(hint · task · flee){RESET}")
+                  + f"{RESET} {DIM}(hint · lesson · task · flee){RESET}")
         return 1
     if ch.kind == "fight" and not used_tool(base, ch):   # investigations: any way you like
         print(ACCENT + "✓ " + _("Right answer, but only `{tool}` can hurt the {threat}. "
@@ -265,6 +266,22 @@ def cmd_hint(base):
     return 0
 
 
+def lesson_progress(s):
+    from .lesson import progress_of
+    return progress_of(s)
+
+
+def cmd_lesson(base):
+    """`lesson` in the arena: the Sage Owl's lesson for this fight, in the library reader."""
+    from . import lesson
+    ch = challenges.BY_ID[load_meta(base)["challenge"]]
+    found = lesson.for_fight(lesson.load(), ch.id)
+    if not found:
+        print(DIM + _("No lesson for this one yet: try hint.") + RESET)
+        return 0
+    return lesson.main([found[0]["id"]])
+
+
 def cmd_task(base):
     meta = load_meta(base)
     print(challenges.BY_ID[meta["challenge"]].task_text(meta))
@@ -284,6 +301,7 @@ def banner(ch, task, review=None):
             + (strike_done(ch) if ch.fix else "  answer <value>   " + _("strike") + f"   {DIM}("
                + _("needs a successful {tool} command first").format(tool=ch.tool) + f"){RESET}\n")
             + "  hint             " + _("get a hint") + "\n"
+            + "  lesson           " + _("read the Sage Owl's lesson about it") + "\n"
             "  task             " + _("show the task again") + "\n"
             "  flee             " + _("run away (the threat will come back)") + "\n")
 
@@ -354,6 +372,10 @@ def run():
         print(DIM + _("No threat around. Your pet will warn you when one comes.") + RESET)
         return
     review = s.get("reviews", {}).get(ch.id) if (s.get("threat") or {}).get("review") else None
+    with state.locked() as s:                              # meeting a fight opens its lesson
+        met = lesson_progress(s)["met"]
+        if ch.id not in met:
+            met.append(ch.id)
     code, notes = arena(ch, lambda task: banner(ch, task, review), fight=True, help_first=beginner(s))
     won = code == WIN
     with state.locked() as s:
@@ -394,6 +416,8 @@ def main():
         sys.exit(cmd_hint(sys.argv[2]))
     if cmd == "task":
         sys.exit(cmd_task(sys.argv[2]))
+    if cmd == "lesson":
+        sys.exit(cmd_lesson(sys.argv[2]))
     run()
 
 
