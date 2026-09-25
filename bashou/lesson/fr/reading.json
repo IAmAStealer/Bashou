@@ -1,0 +1,61 @@
+{
+ "title": "Lire des fichiers : cat, less, head, tail",
+ "summary": "Quatre façons de regarder dans un fichier, d'une petite note à un journal qui grandit.",
+ "pages": [
+  {
+   "scheme": [
+    " cat notes.txt     tout le fichier, d'un coup",
+    " less big.log      page par page, q pour quitter"
+   ],
+   "point": 1,
+   "mark": [
+    "less"
+   ],
+   "text": [
+    "- cat est pour les petits fichiers : un long défile trop vite.",
+    "- less te laisse te déplacer. /mot cherche, n trouve le suivant, q quitte."
+   ]
+  },
+  {
+   "scheme": [
+    " app.log",
+    " ┌──────────────┐",
+    " │ line 1       │ ◀ head -n 3 montre celles-ci",
+    " │ line 2       │",
+    " │ line 3       │",
+    " │ …            │",
+    " │ line 998     │",
+    " │ line 999     │",
+    " │ line 1000    │ ◀ tail -n 3 montre celles-ci",
+    " └──────────────┘"
+   ],
+   "point": 8,
+   "mark": [
+    "head -n 3",
+    "tail -n 3"
+   ],
+   "text": [
+    "- head montre le début, tail la fin (10 lignes, sauf si tu dis -n).",
+    "- Les lignes les plus récentes d'un journal sont à la fin : c'est tail que tu utiliseras le plus."
+   ]
+  },
+  {
+   "scheme": [
+    " $ tail -f app.log",
+    " 10:02 started",
+    " 10:03 request /home",
+    " 10:03 request /login     ◀ les lignes arrivent",
+    " █                          au fur et à mesure"
+   ],
+   "point": 3,
+   "mark": [
+    "-f"
+   ],
+   "text": [
+    "tail -f suit le fichier : il attend et affiche chaque nouvelle ligne dès qu'elle arrive.",
+    "",
+    "- Parfait pour surveiller un programme pendant que tu le testes. Ctrl+C arrête."
+   ]
+  }
+ ]
+}

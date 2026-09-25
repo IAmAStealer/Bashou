@@ -258,5 +258,109 @@
   ],
   "answer": 0,
   "explain": "make lit un Makefile dans le dossier courant. Chaque règle dit cible: fichiers dont elle dépend, puis les commandes sur des lignes qui commencent par une tabulation (pas des espaces). make ne reconstruit que ce qui a changé depuis la dernière fois. CMake et Ninja sont d'autres outils, avec leurs propres fichiers."
+ },
+ {
+  "id": "c-2-11",
+  "level": 2,
+  "q": "gcc main.c -o app s'arrête sur : undefined reference to `mean'. mean() est écrite dans stats.c. Qu'est-ce qui cloche ?",
+  "choices": [
+   "L'éditeur de liens n'a jamais reçu stats.c",
+   "Il manque un point-virgule dans stats.h",
+   "mean() doit être déclarée static",
+   "gcc a besoin de -Wall pour la trouver"
+  ],
+  "answer": 0,
+  "explain": "undefined reference vient de l'éditeur de liens, la dernière étape de gcc : main.c appelle mean(), mais seul stats.c contient son code, et gcc ne l'a pas reçu. Donne tous les .c : gcc main.c stats.c -o app. Le .h promet seulement que mean() existe quelque part."
+ },
+ {
+  "id": "c-2-12",
+  "level": 2,
+  "q": "gcc -Wall dit : suggest parentheses around assignment used as truth value, sur if (x = 0). Quel est le vrai bug ?",
+  "choices": [
+   "= range 0 dans x ; le test voulait ==",
+   "Le if a besoin de parenthèses pour compiler",
+   "x doit être déclaré avant le if",
+   "-Wall est trop strict : ignore-le"
+  ],
+  "answer": 0,
+  "explain": "= range une valeur, == compare. if (x = 0) met 0 dans x et le test est toujours faux ; if (x = 5) est toujours vrai. gcc compile quand même : sans -Wall, le bug est muet. Compile avec -Wall et traite chaque avertissement comme un bug possible."
+ },
+ {
+  "id": "c-2-13",
+  "level": 2,
+  "q": "Ton programme C dit seulement « Segmentation fault ». Qu'est-ce que gcc -g change ?",
+  "choices": [
+   "Il garde les lignes : un débogueur montre où",
+   "Il corrige le plantage",
+   "gcc s'arrête à la première erreur",
+   "Le programme va plus vite"
+  ],
+  "answer": 0,
+  "explain": "-g ajoute des infos de débogage au programme : noms de fichiers, numéros de ligne, noms de variables. Le programme tourne pareil, mais gdb (ou AddressSanitizer) peut donner la ligne exacte : gcc -g prog.c -o prog && gdb -q ./prog, puis run et bt."
+ },
+ {
+  "id": "c-2-14",
+  "level": 2,
+  "q": "Ton programme a planté dans gdb. Quelle commande montre la chaîne d'appels qui a mené au plantage ?",
+  "choices": [
+   "bt",
+   "next",
+   "list",
+   "info registers"
+  ],
+  "answer": 0,
+  "explain": "bt (backtrace) liste les appels, celui qui a planté en premier : #0 est l'endroit du plantage, #1 qui l'a appelé, et ainsi de suite, chacun avec son fichier et sa ligne. next exécute une ligne, list montre le code, info registers les valeurs brutes du CPU."
+ },
+ {
+  "id": "c-3-01",
+  "level": 3,
+  "q": "Dans gdb, print total répond <optimized out>. Le programme a été compilé avec gcc -O2 -g. Qu'est-ce qui aide ?",
+  "choices": [
+   "Recompiler avec -Og (ou -O0) et -g pour déboguer",
+   "Ajouter des printf dans gdb",
+   "Utiliser print/x au lieu de print",
+   "Lancer gdb en root"
+  ],
+  "answer": 0,
+  "explain": "-O2 permet à gcc de déplacer du code et de garder des valeurs seulement dans les registres : des variables disparaissent et les lignes s'exécutent dans le désordre. Pour déboguer, compile avec -Og (ou -O0) et -g : le programme suit ton code ligne à ligne. Les versions finales gardent -O2."
+ },
+ {
+  "id": "c-3-02",
+  "level": 3,
+  "q": "Une boucle tourne 10 000 fois et échoue sur un seul élément. Que fait break f if id == 42 dans gdb ?",
+  "choices": [
+   "Il s'arrête dans f seulement quand id vaut 42",
+   "Il s'arrête 42 fois dans f",
+   "Il met id à 42 quand f démarre",
+   "Il supprime le point d'arrêt 42"
+  ],
+  "answer": 0,
+  "explain": "Un point d'arrêt conditionnel ne s'arrête que si sa condition est vraie : tu sautes les 9 999 passages sans problème. Ensuite print montre les variables et next avance pas à pas. Sans la condition, tu taperais continue des milliers de fois."
+ },
+ {
+  "id": "c-3-03",
+  "level": 3,
+  "q": "gcc area.c -o area échoue : undefined reference to `sqrt'. area.c inclut <math.h>. Qu'est-ce qui corrige ?",
+  "choices": [
+   "Ajouter -lm à la fin : gcc area.c -o area -lm",
+   "Inclure <math.h> deux fois",
+   "Déclarer sqrt soi-même",
+   "Compiler avec -g"
+  ],
+  "answer": 0,
+  "explain": "<math.h> ne fait que déclarer sqrt ; son code est dans la bibliothèque mathématique, libm, que gcc ne relie pas par défaut sous Linux. -lm la relie ; mets-le après tes fichiers, l'éditeur de liens lit de gauche à droite. L'en-tête et la bibliothèque sont deux choses différentes."
+ },
+ {
+  "id": "c-3-04",
+  "level": 3,
+  "q": "Un projet C moderne a un CMakeLists.txt ou un meson.build au lieu d'un Makefile. Que font CMake et Meson ?",
+  "choices": [
+   "Ils génèrent les fichiers de build pour Ninja ou make",
+   "Ils remplacent le compilateur",
+   "Ce sont des débogueurs",
+   "Ils ne font que formater le code"
+  ],
+  "answer": 0,
+  "explain": "CMake et Meson décrivent le projet une fois (sources, bibliothèques, options) et génèrent ce qui fait la construction, souvent Ninja, très rapide. Le compilateur reste gcc ou clang. Typique : meson setup build && ninja -C build, ou cmake -B build && cmake --build build."
  }
 ]

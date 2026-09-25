@@ -1,0 +1,67 @@
+{
+ "id": "sql_select",
+ "order": 145,
+ "skill": "sql",
+ "needs": [
+  "tool sqlite3 1 | fights 3"
+ ],
+ "masters": [
+  "won query_quokka"
+ ],
+ "title": "SQL: your first SELECT",
+ "summary": "Rows and columns, and how SELECT, FROM and WHERE pick what you want.",
+ "pages": [
+  {
+   "scheme": [
+    " products",
+    " ┌────┬────────┬───────┐",
+    " │ id │ name   │ price │  ◀ columns",
+    " ├────┼────────┼───────┤",
+    " │ 1  │ lamp   │ 25    │  ◀ one row",
+    " │ 2  │ mug    │ 8     │",
+    " │ 3  │ chair  │ 60    │",
+    " └────┴────────┴───────┘"
+   ],
+   "point": 4,
+   "mark": [
+    "lamp"
+   ],
+   "text": [
+    "A table is rows and columns, like a spreadsheet. Each row is one thing, each column one detail about it."
+   ]
+  },
+  {
+   "scheme": [
+    " SELECT name, price   which columns",
+    " FROM products        which table",
+    " WHERE price > 20;    which rows"
+   ],
+   "point": 2,
+   "mark": [
+    "WHERE"
+   ],
+   "text": [
+    "Read it like a sentence. The result is a small new table:",
+    "",
+    "- lamp 25 and chair 60. The mug is left out.",
+    "- Text goes between single quotes: WHERE name = 'mug'."
+   ]
+  },
+  {
+   "scheme": [
+    " $ sqlite3 shop.db",
+    " sqlite> .tables",
+    " sqlite> SELECT COUNT(*) FROM products;",
+    " 3"
+   ],
+   "point": 2,
+   "mark": [
+    "COUNT(*)"
+   ],
+   "text": [
+    "- sqlite3 opens the database file; .tables lists the tables, .quit leaves.",
+    "- Every SQL statement ends with ;, or sqlite3 waits for more."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,65 @@
+{
+ "id": "files",
+ "order": 22,
+ "needs": [
+  "commands 40"
+ ],
+ "masters": [
+  "achievement builder",
+  "achievement copycat"
+ ],
+ "title": "Files: make, copy, move, delete",
+ "summary": "mkdir, touch, cp, mv and rm: the everyday moves, and the one that has no undo.",
+ "pages": [
+  {
+   "scheme": [
+    " $ mkdir notes          notes/",
+    " $ touch notes/todo.txt notes/",
+    "                        └── todo.txt"
+   ],
+   "point": 2,
+   "mark": [
+    "todo.txt"
+   ],
+   "text": [
+    "- mkdir makes a folder. mkdir -p a/b/c makes the whole chain at once.",
+    "- touch makes an empty file (or updates the date of one that exists)."
+   ]
+  },
+  {
+   "scheme": [
+    " $ cp todo.txt copy.txt     todo.txt  copy.txt",
+    "                            (two files now)",
+    "",
+    " $ mv copy.txt done.txt     todo.txt  done.txt",
+    "                            (renamed: still two)"
+   ],
+   "point": 3,
+   "mark": [
+    "mv"
+   ],
+   "text": [
+    "- cp copies: the original stays.",
+    "- mv moves, and renaming is just moving to a new name.",
+    "- Copying a folder needs -r (recursive): cp -r notes backup."
+   ]
+  },
+  {
+   "scheme": [
+    " $ rm done.txt      notes/",
+    "                    ├── todo.txt",
+    "                    └── done.txt   ✗ gone, no undo"
+   ],
+   "point": 2,
+   "mark": [
+    "no undo"
+   ],
+   "text": [
+    "rm deletes for good. There is no recycle bin on the command line.",
+    "",
+    "- rm -r deletes a folder and everything inside: read the line twice first.",
+    "- rm -i asks before each file, a good habit while you learn."
+   ]
+  }
+ ]
+}

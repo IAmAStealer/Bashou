@@ -232,6 +232,9 @@ DISCOVER = {
     "python3": ["`python3 -c \"print(2 ** 10)\"` runs one line of Python, right from bash.",
                 "Python reads JSON too: `python3 -m json.tool data.json` prints it neatly."],
     "gcc": ["`gcc hello.c -o hello && ./hello` builds a C program and runs it."],
+    "gdb": ["A crash? `gcc -g prog.c -o prog && gdb -q ./prog`, then run and bt: gdb shows the line that died.",
+            "gdb pauses a program wherever you want: `break main`, `run`, `next`, `print x`. `bashou lesson` "
+            "has a lesson on it."],
     "rustc": ["`rustc main.rs && ./main` builds a Rust program. rustc's errors say what to change."],
     "gpg": ["`gpg -c notes.txt` locks a file with a passphrase; `gpg -d notes.txt.gpg` opens it again."],
     "pass": ["`pass show web/forum` prints a password from your store, so scripts never have to hold one."],

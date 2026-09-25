@@ -1,0 +1,56 @@
+{
+ "title": "Les jokers : * et ?",
+ "summary": "Comment un petit motif devient une liste de noms de fichiers, avant même que la commande démarre.",
+ "pages": [
+  {
+   "scheme": [
+    " tu tapes :    rm *.tmp",
+    "                  │  le shell le développe",
+    "                  ▼",
+    " rm reçoit :   rm a.tmp b.tmp old.tmp"
+   ],
+   "point": 3,
+   "mark": [
+    "a.tmp b.tmp old.tmp"
+   ],
+   "text": [
+    "* veut dire « n'importe quels caractères, ou aucun ». Le shell remplace le motif par les noms qui correspondent, puis lance la commande.",
+    "",
+    "- rm ne voit jamais le * : il ne reçoit que la liste."
+   ]
+  },
+  {
+   "scheme": [
+    " *.txt      tous les noms qui finissent en .txt",
+    " photo?.jpg photo1.jpg, photoA.jpg (1 caractère)",
+    " [abc]*     les noms qui commencent par a, b ou c"
+   ],
+   "point": 0,
+   "mark": [
+    "*",
+    "?"
+   ],
+   "text": [
+    "- Le ? est exactement un caractère.",
+    "- [ ] est un caractère de la liste.",
+    "- Les noms qui commencent par un point (fichiers cachés) sont laissés de côté par *."
+   ]
+  },
+  {
+   "scheme": [
+    " $ echo *.tmp           a.tmp b.tmp old.tmp",
+    " $ echo '*.tmp'         *.tmp"
+   ],
+   "point": 0,
+   "mark": [
+    "echo"
+   ],
+   "text": [
+    "Pas sûr de ce qu'un motif va attraper ? Fais un echo d'abord : tu vois la liste, rien n'est supprimé.",
+    "",
+    "- Les guillemets empêchent le développement : '*.tmp' reste du texte.",
+    "- Si rien ne correspond, le motif reste tel quel : echo *.xyz affiche *.xyz."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,70 @@
+{
+ "id": "reading",
+ "order": 24,
+ "needs": [
+  "commands 60"
+ ],
+ "masters": [
+  "tool less 3",
+  "tool tail 3"
+ ],
+ "title": "Reading files: cat, less, head, tail",
+ "summary": "Four ways to look inside a file, from a short note to a log that keeps growing.",
+ "pages": [
+  {
+   "scheme": [
+    " cat notes.txt     the whole file, all at once",
+    " less big.log      page by page, q to quit"
+   ],
+   "point": 1,
+   "mark": [
+    "less"
+   ],
+   "text": [
+    "- cat is for short files: a long one scrolls past too fast.",
+    "- less lets you move around. /word searches, n finds the next one, q quits."
+   ]
+  },
+  {
+   "scheme": [
+    " app.log",
+    " ┌──────────────┐",
+    " │ line 1       │ ◀ head -n 3 shows these",
+    " │ line 2       │",
+    " │ line 3       │",
+    " │ …            │",
+    " │ line 998     │",
+    " │ line 999     │",
+    " │ line 1000    │ ◀ tail -n 3 shows these",
+    " └──────────────┘"
+   ],
+   "point": 8,
+   "mark": [
+    "head -n 3",
+    "tail -n 3"
+   ],
+   "text": [
+    "- head shows the start, tail the end (10 lines unless you say -n).",
+    "- The newest lines of a log are at the end: tail is the one you'll use most."
+   ]
+  },
+  {
+   "scheme": [
+    " $ tail -f app.log",
+    " 10:02 started",
+    " 10:03 request /home",
+    " 10:03 request /login     ◀ new lines appear",
+    " █                          as they are written"
+   ],
+   "point": 3,
+   "mark": [
+    "-f"
+   ],
+   "text": [
+    "tail -f follows the file: it waits and prints each new line as it arrives.",
+    "",
+    "- Perfect to watch a program while you test it. Ctrl+C stops watching."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,63 @@
+{
+ "id": "archives",
+ "order": 57,
+ "skill": "linux",
+ "needs": [
+  "tool tar 1 | commands 300"
+ ],
+ "masters": [
+  "achievement packer",
+  "achievement unpacker"
+ ],
+ "title": "Archives: tar and gzip",
+ "summary": "Pack a folder into one file, look inside, and unpack it where you want.",
+ "pages": [
+  {
+   "scheme": [
+    " site/                         site.tar.gz",
+    " ├── index.html  ─ tar -czf ─▶ (one file,",
+    " └── style.css                  compressed)"
+   ],
+   "point": 1,
+   "mark": [
+    "tar -czf"
+   ],
+   "text": [
+    "tar packs many files into one. z compresses it with gzip.",
+    "",
+    "$ tar -czf site.tar.gz site/"
+   ]
+  },
+  {
+   "scheme": [
+    " c   create      x   extract    t   list",
+    " z   gzip        f   the archive file follows"
+   ],
+   "point": 0,
+   "mark": [
+    "c",
+    "x",
+    "t"
+   ],
+   "text": [
+    "- Read the letters as a sentence: -czf = create, gzip, file.",
+    "- f comes last because the file name follows it."
+   ]
+  },
+  {
+   "scheme": [
+    " $ tar -tzf site.tar.gz            look first",
+    " $ tar -xzf site.tar.gz -C /tmp/x  then unpack"
+   ],
+   "point": 0,
+   "mark": [
+    "-tzf",
+    "-C"
+   ],
+   "text": [
+    "- List before you extract: an archive can hold hundreds of files, or paths you didn't expect.",
+    "- -C unpacks into that folder instead of the current one (make it first: mkdir -p /tmp/x)."
+   ]
+  }
+ ]
+}

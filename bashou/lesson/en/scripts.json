@@ -1,0 +1,71 @@
+{
+ "id": "scripts",
+ "order": 62,
+ "skill": "bash",
+ "needs": [
+  "commands 250 | achievement loop"
+ ],
+ "masters": [
+  "achievement dry_run | achievement xray",
+  "achievement exit_code"
+ ],
+ "title": "Your first script",
+ "summary": "Put commands in a file, make it runnable, and give it arguments.",
+ "pages": [
+  {
+   "scheme": [
+    " hello.sh",
+    " ┌──────────────────────────┐",
+    " │ #!/bin/bash              │ ◀ which program",
+    " │ echo \"hello $1\"          │   runs the file",
+    " └──────────────────────────┘"
+   ],
+   "point": 2,
+   "mark": [
+    "#!/bin/bash"
+   ],
+   "text": [
+    "A script is a text file of commands, run from top to bottom.",
+    "",
+    "- The first line, #! (the shebang), says which program reads it."
+   ]
+  },
+  {
+   "scheme": [
+    " $ chmod +x hello.sh",
+    " $ ./hello.sh sam",
+    " hello sam",
+    "        ▲",
+    "        └─ $1 = the first argument"
+   ],
+   "point": 4,
+   "mark": [
+    "$1"
+   ],
+   "text": [
+    "- chmod +x makes it runnable, ./ runs the one in this folder.",
+    "- $1, $2… are the arguments, $# how many there are."
+   ]
+  },
+  {
+   "scheme": [
+    " #!/bin/bash",
+    " set -euo pipefail",
+    "      │││",
+    "      ││└─ a failure inside a pipe counts",
+    "      │└── an unset variable is an error",
+    "      └─── stop at the first failed command"
+   ],
+   "point": 1,
+   "mark": [
+    "set -euo pipefail"
+   ],
+   "text": [
+    "By default a script goes on after an error, and the next lines work on a broken state.",
+    "",
+    "- This line makes it stop early and loudly. Put it at the top of your scripts.",
+    "- bash -n checks the syntax, bash -x shows each line as it runs."
+   ]
+  }
+ ]
+}

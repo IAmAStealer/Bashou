@@ -89,6 +89,18 @@ LESSONS = [
         ("Not installed yet? On Debian and Ubuntu: sudo apt install gnupg pass. On Rocky, Alma and RHEL: sudo dnf "
          "install gnupg2, then pass from EPEL (sudo dnf install epel-release first).", "sudo apt install gnupg pass"),
     ]},
+    {"id": "gdb", "tool": "gdb", "topics": ("c",), "title": "gdb, the debugger", "pages": [
+        ("A debugger runs your program and lets you stop it and look inside. Build with -g first: it keeps the "
+         "line numbers, so gdb can say where you are.", "gcc -g crash.c -o crash"),
+        ("gdb -q ./crash opens it, run starts it. When it crashes, gdb stops right there instead of just printing "
+         "'Segmentation fault'.", "gdb -q ./crash"),
+        ("bt (backtrace) lists the calls that led there, the one that crashed first, each with its file and line. "
+         "That's where to look.", "(gdb) bt"),
+        ("break sets a stop: break main, or break loan.c:12. next runs one line, step goes into a call, print x "
+         "shows a variable, continue goes on to the next stop.", "(gdb) break month_end if month == 5"),
+        ("One line, no typing inside gdb: -batch runs the -ex commands in order, then quits. Not installed yet? "
+         "sudo apt install gdb, or sudo dnf install gdb.", "gdb -q -batch -ex run -ex bt ./crash"),
+    ]},
 ]
 BY_ID = {lesson["id"]: lesson for lesson in LESSONS}
 

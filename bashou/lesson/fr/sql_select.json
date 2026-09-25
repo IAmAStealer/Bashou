@@ -1,0 +1,58 @@
+{
+ "title": "SQL : ton premier SELECT",
+ "summary": "Des lignes et des colonnes, et comment SELECT, FROM et WHERE choisissent ce que tu veux.",
+ "pages": [
+  {
+   "scheme": [
+    " products",
+    " ┌────┬────────┬───────┐",
+    " │ id │ name   │ price │  ◀ colonnes",
+    " ├────┼────────┼───────┤",
+    " │ 1  │ lamp   │ 25    │  ◀ une ligne",
+    " │ 2  │ mug    │ 8     │",
+    " │ 3  │ chair  │ 60    │",
+    " └────┴────────┴───────┘"
+   ],
+   "point": 4,
+   "mark": [
+    "lamp"
+   ],
+   "text": [
+    "Une table, ce sont des lignes et des colonnes, comme un tableur. Chaque ligne est une chose, chaque colonne un détail sur elle."
+   ]
+  },
+  {
+   "scheme": [
+    " SELECT name, price   quelles colonnes",
+    " FROM products        quelle table",
+    " WHERE price > 20;    quelles lignes"
+   ],
+   "point": 2,
+   "mark": [
+    "WHERE"
+   ],
+   "text": [
+    "Lis-le comme une phrase. Le résultat est une petite table neuve :",
+    "",
+    "- lamp 25 et chair 60. Le mug est laissé de côté.",
+    "- Le texte va entre apostrophes : WHERE name = 'mug'."
+   ]
+  },
+  {
+   "scheme": [
+    " $ sqlite3 shop.db",
+    " sqlite> .tables",
+    " sqlite> SELECT COUNT(*) FROM products;",
+    " 3"
+   ],
+   "point": 2,
+   "mark": [
+    "COUNT(*)"
+   ],
+   "text": [
+    "- sqlite3 ouvre le fichier de la base ; .tables liste les tables, .quit quitte.",
+    "- Chaque instruction SQL finit par ;, sinon sqlite3 attend la suite."
+   ]
+  }
+ ]
+}

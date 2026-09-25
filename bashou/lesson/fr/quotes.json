@@ -1,0 +1,54 @@
+{
+ "title": "Les guillemets : ' et \"",
+ "summary": "Les apostrophes gardent le texte tel quel, les guillemets remplacent encore les $ : quand utiliser lesquels.",
+ "pages": [
+  {
+   "scheme": [
+    " $ echo 'hi $USER'      hi $USER",
+    " $ echo \"hi $USER\"      hi sam"
+   ],
+   "point": 1,
+   "mark": [
+    "'hi $USER'",
+    "\"hi $USER\""
+   ],
+   "text": [
+    "- Apostrophes ' ' : tout reste exactement comme écrit.",
+    "- Guillemets \" \" : les $variables et les $( ) sont encore remplacés."
+   ]
+  },
+  {
+   "scheme": [
+    " file=\"my notes.txt\"",
+    "",
+    " rm $file       rm reçoit : my │ notes.txt  2 !",
+    " rm \"$file\"     rm reçoit : my notes.txt     1"
+   ],
+   "point": 3,
+   "mark": [
+    "\"$file\""
+   ],
+   "text": [
+    "Sans guillemets, le shell coupe la valeur à chaque espace.",
+    "",
+    "- Écris toujours \"$file\" entre guillemets : ça reste un seul argument.",
+    "- Dans les scripts, cette seule habitude évite beaucoup de bugs."
+   ]
+  },
+  {
+   "scheme": [
+    " awk '{print $1}' f      $1 va à awk",
+    " grep 'a.*b' f           .* va à grep"
+   ],
+   "point": 0,
+   "mark": [
+    "'{print $1}'"
+   ],
+   "text": [
+    "Utilise des apostrophes quand un programme a ses propres caractères spéciaux.",
+    "",
+    "- Le shell n'y touche pas et le programme les reçoit tels quels."
+   ]
+  }
+ ]
+}

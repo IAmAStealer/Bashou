@@ -1,0 +1,70 @@
+{
+ "id": "git",
+ "order": 68,
+ "needs": [
+  "tool git 3"
+ ],
+ "masters": [
+  "achievement brancher",
+  "achievement stasher"
+ ],
+ "title": "git: snapshots and branches",
+ "summary": "What a commit is, how git add and commit work together, and what a branch really is.",
+ "pages": [
+  {
+   "scheme": [
+    " files you changed",
+    "      │  git add app.py",
+    "      ▼",
+    " staging: what goes in the next snapshot",
+    "      │  git commit -m \"Fix login\"",
+    "      ▼",
+    " history: a snapshot, saved for good"
+   ],
+   "point": 3,
+   "mark": [
+    "staging"
+   ],
+   "text": [
+    "A commit is a snapshot of your project, with a message saying why.",
+    "",
+    "- git add picks what goes in; git commit saves it.",
+    "- git status tells you what is changed, staged, or untracked (new to git)."
+   ]
+  },
+  {
+   "scheme": [
+    " a1 ◀─ b2 ◀─ c3 ◀─ main ◀─ HEAD"
+   ],
+   "point": 0,
+   "mark": [
+    "HEAD"
+   ],
+   "text": [
+    "The history is a chain: each commit points to the one before.",
+    "",
+    "- git log --oneline shows it, newest first.",
+    "- A branch is only a label on a commit. main is a branch like any other.",
+    "- HEAD is where you are: it points to your branch."
+   ]
+  },
+  {
+   "scheme": [
+    " a1 ◀─ b2 ◀─ c3 ◀─ main",
+    "             ▲",
+    "             └─ d4 ◀─ e5 ◀─ login-fix ◀─ HEAD"
+   ],
+   "point": 2,
+   "mark": [
+    "login-fix",
+    "HEAD"
+   ],
+   "text": [
+    "git switch -c login-fix makes a new label and moves you to it.",
+    "",
+    "- New commits go on your branch; main doesn't move.",
+    "- When it works, git switch main, then git merge login-fix brings it in."
+   ]
+  }
+ ]
+}

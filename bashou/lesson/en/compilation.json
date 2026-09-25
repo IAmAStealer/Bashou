@@ -115,6 +115,25 @@
     "",
     "- Changed hello.c? Compile again: the old program doesn't change by itself."
    ]
+  },
+  {
+   "scheme": [
+    " gcc          the classic, on every Linux",
+    " clang        another compiler, same basic use",
+    " -fsanitize   gcc/clang option: memory bugs",
+    " clang-tidy   points out risky code",
+    " cargo, go    build, libraries, tests: one tool"
+   ],
+   "point": 1,
+   "mark": [
+    "clang"
+   ],
+   "text": [
+    "gcc is not the only choice. Newer tools do the same job with more help.",
+    "",
+    "- clang takes the usual options too: clang -Wall hello.c -o hello. Try both on the same error.",
+    "- Newer languages ship everything in one tool: cargo build (Rust), go build (Go)."
+   ]
   }
  ]
 }

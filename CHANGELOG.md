@@ -19,6 +19,17 @@ Every release has a section here, written for players. CI refuses to tag a relea
   Spark joins you. It grows with each lesson achievement (read 3, master one, read 6, three skills,
   master 5) through Ember, Candle, Campfire, Bonfire and Blaze, and becomes a Phoenix when you've read
   every lesson of your skills.
+- **Fifteen short lessons for the basics**, each building on the one before: files (mkdir, cp, mv, rm),
+  reading files (cat, less, head, tail -f), wildcards, shell variables, quotes, grep, users and sudo, disk
+  space, archives with tar, your first script, loops, addresses and ports, git snapshots and branches,
+  your first Python script and your first SQL SELECT. Every lesson is in French too.
+- **gcc and gdb get their own fights and lessons.** Four new C fights: the Linker lynx (a program in two
+  files), the Warning wraith (a bug only `-Wall` shows), the Segfault salamander (find the crashing line
+  with gdb's backtrace) and the Breakpoint beetle (stop a loop at the right month with a conditional
+  breakpoint). Two library lessons, "Using gcc" and "Debugging with gdb", a Sage Owl road lesson and a gdb
+  chest, 8 new C questions, and `bashou explain c link`, `warnings` and `gdb`.
+- **Modern tools where it helps**: the compilation lesson now shows clang, sanitizers, clang-tidy and
+  cargo/go, the gcc lesson CMake, Meson and Ninja, the gdb lesson lldb, rr and editor debuggers.
 
 ## v0.4.3 — 2026-09-24
 

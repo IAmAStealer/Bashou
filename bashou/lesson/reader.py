@@ -57,20 +57,22 @@ NO_BREAK = {" :": "\u00a0:", " ;": "\u00a0;", " ?": "\u00a0?", " !": "\u00a0!", 
 def text_lines(text, width):
     """Wrapped text: "- " starts a bullet, "$ " a command, "" leaves a blank line (air).
     French spaces before : ; ? ! and inside « » never start or end a line."""
+    def keep(text):
+        for space, kept in NO_BREAK.items():
+            text = text.replace(space, kept)
+        return text
+
     out = []
     for line in text:
-        if not line.startswith("$ "):
-            for space, kept in NO_BREAK.items():
-                line = line.replace(space, kept)
         if not line:
             out.append("")
         elif line.startswith("$ "):
             out.append(f"{CMD}{line}{RESET}")
-        elif line.startswith("- "):
-            parts = render.wrap(line[2:], width - 2, 4)
+        elif line.startswith("- "):                      # the bullet first: "- ? is…" stays a bullet
+            parts = render.wrap(keep(line[2:]), width - 2, 4)
             out += ["• " + parts[0]] + ["  " + p for p in parts[1:]]
         else:
-            out += render.wrap(line, width, 6)
+            out += render.wrap(keep(line), width, 6)
     return out
 
 
@@ -84,9 +86,10 @@ def page_screen(lesson, n, cols, lines, breath=False, blink=False):
     for i, line in enumerate(scheme):
         out.append((top + i, LEFT, paint(line, marks)))
     point = page.get("point")
-    col = owl_col(lesson)
+    col = owl_col(lesson) if scheme else cols - OWL.width     # no drawing: the owl stands at the right
+    width = min(cols - LEFT - 1, 72) if scheme else min(col - LEFT - 2, 72)
     bottom = top + len(scheme)
-    if col + OWL.width - 1 <= cols:
+    if col + OWL.width - 1 <= cols and (scheme or width >= 40):
         row = top + point - WING if point is not None and scheme else top
         poses = (["inhale"] if breath else []) + (["closed"] if blink else [])
         cells = [[True] * OWL.width for _ in range(len(OWL.base) // 2)]
@@ -100,7 +103,9 @@ def page_screen(lesson, n, cols, lines, breath=False, blink=False):
         end = LEFT + render.width(scheme[point].rstrip()) + 1
         out.append((top + point, end, f"{ACCENT}◂{RESET}"))
     row = bottom + 1 if scheme else TOP
-    for line in text_lines(page.get("text", []), min(cols - LEFT - 1, 72)):
+    if not scheme and width < 40:                           # too narrow for both: the text gets the room
+        width = min(cols - LEFT - 1, 72)
+    for line in text_lines(page.get("text", []), width):
         if row < lines - 1:
             out.append((row, LEFT, line))
         row += 1

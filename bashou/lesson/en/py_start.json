@@ -1,0 +1,64 @@
+{
+ "id": "py_start",
+ "order": 125,
+ "skill": "python",
+ "needs": [
+  "tool python3 1 | fights 3"
+ ],
+ "masters": [
+  "won colon_cobra"
+ ],
+ "title": "Python: your first script",
+ "summary": "Run a file with python3, and why indentation and colons matter.",
+ "pages": [
+  {
+   "scheme": [
+    " hello.py                   $ python3 hello.py",
+    " name = \"sam\"               hi sam",
+    " print(\"hi\", name)"
+   ],
+   "point": 2,
+   "mark": [
+    "print"
+   ],
+   "text": [
+    "python3 reads the whole file, then runs it from top to bottom. No separate compile step.",
+    "",
+    "- python3 alone opens a prompt to try things; exit() leaves."
+   ]
+  },
+  {
+   "scheme": [
+    " if age >= 18:",
+    "     print(\"adult\")      ◀ 4 spaces: inside the if",
+    " print(\"done\")           ◀ back left: after it"
+   ],
+   "point": 1,
+   "mark": [
+    ":"
+   ],
+   "text": [
+    "- A line ending with : opens a block: if, for, while, def.",
+    "- The block is the lines pushed right, usually by 4 spaces. Python reads the spaces, not braces."
+   ]
+  },
+  {
+   "scheme": [
+    "   File \"/home/sam/hello.py\", line 1",
+    "     if age >= 18",
+    "                 ^",
+    " SyntaxError: expected ':'"
+   ],
+   "point": 3,
+   "mark": [
+    "SyntaxError"
+   ],
+   "text": [
+    "A SyntaxError stops Python before anything runs.",
+    "",
+    "- It gives the file, the line and a ^ under the spot.",
+    "- Look there and just before: a missing : or ) is the usual cause."
+   ]
+  }
+ ]
+}

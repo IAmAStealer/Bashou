@@ -1,0 +1,46 @@
+{
+ "name": "Breakpoint Beetle",
+ "palette": {
+  "a": "#5a0a0a",
+  "o": "#d82020",
+  "w": "#ff7070",
+  "m": "#191919",
+  "k": "#1a1a1a",
+  "g": "#f4f4f4"
+ },
+ "base": [
+  "......k...k......",
+  ".......k.k.......",
+  "......kkkkk......",
+  ".....kgmkmgk.....",
+  "...aaaakkkaaaa...",
+  "..aoowookoowooa..",
+  ".aoowookkkoowooa.",
+  ".aooookookooooa..",
+  ".aokkookkkookkoa.",
+  "..aoooookoooooa..",
+  "...aaaaaaaaaaa...",
+  "..k..k.....k..k.."
+ ],
+ "poses": {
+  "inhale": {
+   "6": "a---------------a"
+  },
+  "closed": {
+   "3": "-------k-k-------"
+  },
+  "left": {
+   "3": "------mkmg-------"
+  },
+  "right": {
+   "3": "-------gmkm------"
+  },
+  "fidget": {
+   "11": "-k.-----------.k-"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

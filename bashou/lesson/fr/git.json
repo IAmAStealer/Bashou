@@ -1,0 +1,61 @@
+{
+ "title": "git : des instantanés et des branches",
+ "summary": "Ce qu'est un commit, comment git add et commit travaillent ensemble, et ce qu'est vraiment une branche.",
+ "pages": [
+  {
+   "scheme": [
+    " fichiers modifiés",
+    "      │  git add app.py",
+    "      ▼",
+    " staging : ce qui ira dans le prochain instantané",
+    "      │  git commit -m \"Fix login\"",
+    "      ▼",
+    " historique : un instantané, gardé pour de bon"
+   ],
+   "point": 3,
+   "mark": [
+    "staging"
+   ],
+   "text": [
+    "Un commit est un instantané de ton projet, avec un message qui dit pourquoi.",
+    "",
+    "- git add choisit ce qui entre ; git commit l'enregistre.",
+    "- git status dit ce qui est modifié, préparé, ou non suivi (nouveau pour git)."
+   ]
+  },
+  {
+   "scheme": [
+    " a1 ◀─ b2 ◀─ c3 ◀─ main ◀─ HEAD"
+   ],
+   "point": 0,
+   "mark": [
+    "HEAD"
+   ],
+   "text": [
+    "L'historique est une chaîne : chaque commit pointe vers celui d'avant.",
+    "",
+    "- git log --oneline la montre, le plus récent d'abord.",
+    "- Une branche n'est qu'une étiquette sur un commit. main est une branche comme une autre.",
+    "- HEAD, c'est là où tu es : il pointe vers ta branche."
+   ]
+  },
+  {
+   "scheme": [
+    " a1 ◀─ b2 ◀─ c3 ◀─ main",
+    "             ▲",
+    "             └─ d4 ◀─ e5 ◀─ login-fix ◀─ HEAD"
+   ],
+   "point": 2,
+   "mark": [
+    "login-fix",
+    "HEAD"
+   ],
+   "text": [
+    "git switch -c login-fix crée une nouvelle étiquette et t'y place.",
+    "",
+    "- Les nouveaux commits vont sur ta branche ; main ne bouge pas.",
+    "- Quand ça marche, git switch main, puis git merge login-fix la ramène."
+   ]
+  }
+ ]
+}

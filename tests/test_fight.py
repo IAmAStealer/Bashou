@@ -52,6 +52,15 @@ SOLUTIONS = {
     "fencepost_fiend": ("sed -i 's/i <= count/i < count/' average.c", None),
     "stack_specter": ("sed -i 's/^    return n + sum_to(n - 1);$/    if (n <= 0)\\n        return 0;\\n&/' sum.c", None),
     "overflow_ogre": ("sed -i '/strcpy/d; s/, name);/, argv[1]);/' greet.c", None),
+    # building and debugging C (gdb ones run where gdb is installed: see the Debian check in the journal)
+    "linker_lynx": ("gcc report.c stats.c -o report", None),
+    "warning_wraith": ("sed -i 's/score = 100/score == 100/' grade.c", None),
+    "segfault_salamander": ("gcc -g crash.c -o crash && gdb -q -batch -ex run -ex bt ./crash 2>&1"
+                            " | grep -o 'crash.c:[0-9]*' | head -1 | cut -d: -f2", None),
+    "breakpoint_beetle": ("gcc -g loan.c -o loan && gdb -q -batch -ex 'break month_end if month == {x}' -ex run"
+                          " -ex 'print balance' ./loan 2>/dev/null | sed -n 's/^[$]1 = //p'", r"for month (\d+)"),
+    "trial_gdb_line": ("gcc -g count.c -o count && gdb -q -batch -ex run -ex bt ./count 2>&1"
+                       " | grep -o 'count.c:[0-9]*' | head -1 | cut -d: -f2", None),
     # rust fights (rustc): fix the file
     "mut_marmot": ("sed -i 's/let errors = 0;/let mut errors = 0;/' counter.rs", None),
     "const_condor": ("sed -i 's/^const MAX_POINTS = /const MAX_POINTS: u32 = /' points.rs", None),
@@ -168,7 +177,7 @@ class ChallengeTest(unittest.TestCase):
 
     def test_code_fights_start_broken(self):
         """The file as handed out must fail its own tests (else there is nothing to fix)."""
-        for ch in challenges.code.ALL + challenges.rust.ALL:
+        for ch in challenges.code.ALL + challenges.debug.ALL + challenges.rust.ALL:
             if ch.verify and ch.available():
                 with self.subTest(ch.id), tempfile.TemporaryDirectory() as tmp:
                     meta = ch.setup(Path(tmp), random.Random(1))
@@ -544,6 +553,8 @@ class RepoFightTest(unittest.TestCase):
 class TrialTest(unittest.TestCase):
     def test_doing_nothing_fails(self):
         for ch in challenges.TRIALS:
+            if not ch.available():               # the gpg chest can't even be set up without gpg
+                continue
             with tempfile.TemporaryDirectory() as tmp:
                 meta = ch.setup(Path(tmp), random.Random(0))
                 self.assertFalse(ch.check(Path(tmp), meta, ""), ch.id)
@@ -579,7 +590,8 @@ class OrderTest(unittest.TestCase):
     def test_beginners_get_level_1_fights_only(self):
         s = state.default()
         ready = {ch.id for ch in challenges.ALL if fight.ready(s, ch)}
-        self.assertEqual(ready, {ch.id for ch in challenges.ALL if ch.level == 1})
+        self.assertEqual(ready, {ch.id for ch in challenges.ALL if ch.level == 1 and not ch.after})
+        self.assertIn("semicolon_slug", challenges.BY_ID["linker_lynx"].after)   # level 1, after the first C fight
         s["tools"]["grep"] = 1                                          # met grep, its fight can come
         self.assertTrue(fight.ready(s, challenges.BY_ID["grep_hydra"]))
 

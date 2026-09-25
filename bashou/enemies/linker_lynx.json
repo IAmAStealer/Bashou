@@ -1,0 +1,47 @@
+{
+ "name": "Linker Lynx",
+ "palette": {
+  "a": "#4a3a2a",
+  "o": "#b08a5a",
+  "w": "#efe0c8",
+  "m": "#191919",
+  "k": "#2a2018",
+  "p": "#d88a8a",
+  "g": "#e8c040"
+ },
+ "base": [
+  ".k.............k.",
+  ".ka...........ak.",
+  ".aoa.........aoa.",
+  "..aoaaaaaaaaaoa..",
+  "..aooooooooooa...",
+  ".aoogmoooogmooa..",
+  ".aoooooopooooooa.",
+  "aowoooawwwaooowoa",
+  ".awwoowwwwwoowwa.",
+  "..awwwwwwwwwwwa..",
+  "...aaaaaaaaaaa...",
+  "................."
+ ],
+ "poses": {
+  "inhale": {
+   "8": "a---------------a"
+  },
+  "closed": {
+   "5": "-----o-----o-----"
+  },
+  "left": {
+   "5": "----mo----mo-----"
+  },
+  "right": {
+   "5": "-----gm----gm----"
+  },
+  "fidget": {
+   "0": "k.-------------.k"
+  }
+ },
+ "particles": [
+  0,
+  5
+ ]
+}

@@ -258,5 +258,109 @@
   ],
   "answer": 0,
   "explain": "make reads a Makefile in the current folder. Each rule says target: files it depends on, then the commands on lines that start with a tab (not spaces). make only rebuilds what changed since last time. CMake and Ninja are other tools, with their own files."
+ },
+ {
+  "id": "c-2-11",
+  "level": 2,
+  "q": "gcc main.c -o app stops with: undefined reference to `mean'. mean() is written in stats.c. What went wrong?",
+  "choices": [
+   "The linker was never given stats.c",
+   "stats.h is missing a semicolon",
+   "mean() must be declared static",
+   "gcc needs -Wall to find it"
+  ],
+  "answer": 0,
+  "explain": "undefined reference comes from the linker, the last step of gcc: main.c calls mean(), but only stats.c holds its code, and gcc wasn't given it. List every .c file: gcc main.c stats.c -o app. The .h file only promises that mean() exists somewhere."
+ },
+ {
+  "id": "c-2-12",
+  "level": 2,
+  "q": "gcc -Wall says: suggest parentheses around assignment used as truth value, on if (x = 0). What is the real bug?",
+  "choices": [
+   "= stores 0 in x; the test wanted ==",
+   "The if needs extra parentheses to compile",
+   "x must be declared before the if",
+   "-Wall is too strict: ignore it"
+  ],
+  "answer": 0,
+  "explain": "= stores a value, == compares. if (x = 0) puts 0 in x and the test is always false; if (x = 5) is always true. gcc builds it anyway, so without -Wall the bug is silent. Build with -Wall and treat each warning as a possible bug."
+ },
+ {
+  "id": "c-2-13",
+  "level": 2,
+  "q": "Your C program says only 'Segmentation fault'. What does building it with gcc -g change?",
+  "choices": [
+   "It keeps line numbers: a debugger shows where it died",
+   "It fixes the crash",
+   "It makes gcc stop at the first error",
+   "It makes the program faster"
+  ],
+  "answer": 0,
+  "explain": "-g adds debug information to the program: file names, line numbers, variable names. The program runs the same, but gdb (or AddressSanitizer) can now tell you the exact line: gcc -g prog.c -o prog && gdb -q ./prog, then run and bt."
+ },
+ {
+  "id": "c-2-14",
+  "level": 2,
+  "q": "Your program crashed inside gdb. Which command shows the chain of calls that led to the crash?",
+  "choices": [
+   "bt",
+   "next",
+   "list",
+   "info registers"
+  ],
+  "answer": 0,
+  "explain": "bt (backtrace) lists the calls, the one that crashed first: #0 is where it died, #1 who called it, and so on, each with its file and line. next runs one line, list shows source code, info registers shows raw CPU values."
+ },
+ {
+  "id": "c-3-01",
+  "level": 3,
+  "q": "In gdb, print total says <optimized out>. The program was built with gcc -O2 -g. What helps?",
+  "choices": [
+   "Rebuild with -Og (or -O0) and -g to debug",
+   "Add more printf calls in gdb",
+   "Use print/x instead of print",
+   "Run gdb as root"
+  ],
+  "answer": 0,
+  "explain": "-O2 lets gcc move code around and keep values only in registers, so some variables vanish and lines run out of order. For debugging, build with -Og (or -O0) and -g: the program follows your code line by line. Release builds keep -O2."
+ },
+ {
+  "id": "c-3-02",
+  "level": 3,
+  "q": "A loop runs 10,000 times and fails on one item. What does break f if id == 42 do in gdb?",
+  "choices": [
+   "It stops in f only when id is 42",
+   "It stops in f 42 times",
+   "It sets id to 42 when f starts",
+   "It deletes breakpoint 42"
+  ],
+  "answer": 0,
+  "explain": "A conditional breakpoint stops only when its condition is true, so you skip the 9,999 good passes. Then print shows the variables and next steps through. Without the condition you'd type continue thousands of times."
+ },
+ {
+  "id": "c-3-03",
+  "level": 3,
+  "q": "gcc area.c -o area fails: undefined reference to `sqrt'. area.c includes <math.h>. What fixes it?",
+  "choices": [
+   "Add -lm at the end: gcc area.c -o area -lm",
+   "Include <math.h> twice",
+   "Declare sqrt yourself",
+   "Build with -g"
+  ],
+  "answer": 0,
+  "explain": "<math.h> only declares sqrt; its code is in the maths library, libm, which gcc doesn't link by default on Linux. -lm links it; put it after your files, since the linker reads left to right. The header and the library are two different things."
+ },
+ {
+  "id": "c-3-04",
+  "level": 3,
+  "q": "A modern C project has CMakeLists.txt or meson.build instead of a hand-written Makefile. What do CMake and Meson do?",
+  "choices": [
+   "They generate the build files for a tool like Ninja or make",
+   "They replace the compiler",
+   "They are debuggers",
+   "They only format the code"
+  ],
+  "answer": 0,
+  "explain": "CMake and Meson describe the project once (sources, libraries, options) and generate what actually runs the build, often Ninja, which is fast. The compiler is still gcc or clang. Typical: meson setup build && ninja -C build, or cmake -B build && cmake --build build."
  }
 ]

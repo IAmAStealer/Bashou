@@ -1,0 +1,65 @@
+{
+ "id": "wildcards",
+ "order": 26,
+ "needs": [
+  "commands 80"
+ ],
+ "masters": [
+  "tool ls 50",
+  "fights 3"
+ ],
+ "title": "Wildcards: * and ?",
+ "summary": "How one short pattern becomes a list of file names, before the command even starts.",
+ "pages": [
+  {
+   "scheme": [
+    " you type:     rm *.tmp",
+    "                  │  the shell expands it",
+    "                  ▼",
+    " rm receives:  rm a.tmp b.tmp old.tmp"
+   ],
+   "point": 3,
+   "mark": [
+    "a.tmp b.tmp old.tmp"
+   ],
+   "text": [
+    "* means \"any characters, or none\". The shell replaces the pattern with the matching names, then runs the command.",
+    "",
+    "- rm never sees the *: it only gets the list."
+   ]
+  },
+  {
+   "scheme": [
+    " *.txt      every name ending in .txt",
+    " photo?.jpg photo1.jpg, photoA.jpg (one char)",
+    " [abc]*     names starting with a, b or c"
+   ],
+   "point": 0,
+   "mark": [
+    "*",
+    "?"
+   ],
+   "text": [
+    "- The ? is exactly one character.",
+    "- [ ] is one character from the list.",
+    "- Names starting with a dot (hidden files) are left out by *."
+   ]
+  },
+  {
+   "scheme": [
+    " $ echo *.tmp           a.tmp b.tmp old.tmp",
+    " $ echo '*.tmp'         *.tmp"
+   ],
+   "point": 0,
+   "mark": [
+    "echo"
+   ],
+   "text": [
+    "Not sure what a pattern will match? echo it first: you see the list, nothing is deleted.",
+    "",
+    "- Quotes stop the expansion: '*.tmp' stays plain text.",
+    "- If nothing matches, the pattern is left as it is: echo *.xyz prints *.xyz."
+   ]
+  }
+ ]
+}

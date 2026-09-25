@@ -59,6 +59,17 @@ NOTES = {
         "recursion": ("A recursive function calls itself on a smaller problem. Without a base case that "
                       "returns directly, it calls itself until the stack overflows.",
                       "long sum_to(long n)\n{\n    if (n <= 0)\n        return 0;\n    return n + sum_to(n - 1);\n}"),
+        "link": ("gcc builds in steps; the last one, the linker, joins every file of the program. \"undefined "
+                 "reference to `f'\" means f is called but no file given to gcc has its code: list every .c file, "
+                 "and add libraries at the end (-lm for sqrt and friends).",
+                 "gcc main.c stats.c -o report\ngcc area.c -o area -lm"),
+        "warnings": ("gcc -Wall turns on the warnings for the usual mistakes, -Wextra a few more. A warning doesn't "
+                     "stop the build, but it's often a real bug: if (x = 5) stores 5 instead of comparing.",
+                     "gcc -Wall -Wextra -g prog.c -o prog"),
+        "gdb": ("gdb runs your program and lets you stop it and look inside. Build with -g for line numbers. "
+                "run starts it; after a crash, bt shows the calls; break f stops at f; next goes one line; "
+                "print x shows a variable; quit leaves.",
+                "gcc -g prog.c -o prog\ngdb -q ./prog\n(gdb) break main\n(gdb) run\n(gdb) next\n(gdb) print x\n(gdb) bt"),
         "asan": ("gcc -fsanitize=address -g builds a program that stops at the first memory error "
                  "(overflow, use after free, leak) and says which line did it.",
                  "gcc -Wall -g -fsanitize=address prog.c -o prog && ./prog"),

@@ -40,7 +40,7 @@ class JudgeTest(unittest.TestCase):
     def test_every_reference_solution_hits(self):
         for ch in challenges.ALL:
             cmd = SOLUTIONS[ch.id][0].replace("{x}", "x").replace("{{", "{").replace("}}", "}")
-            if ch.verify and ch in challenges.code.ALL:                  # fix fights: edit, then run it
+            if ch.verify and ch in challenges.code.ALL + challenges.debug.ALL:   # fix fights: edit, then build it
                 cmd = "gcc prog.c -o prog" if "gcc" in ch.tools else "python3 prog.py"
             if ch in challenges.rust.ALL:
                 cmd = "rustc prog.rs && ./counter"

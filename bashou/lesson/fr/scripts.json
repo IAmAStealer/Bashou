@@ -1,0 +1,61 @@
+{
+ "title": "Ton premier script",
+ "summary": "Mettre des commandes dans un fichier, le rendre exécutable, et lui donner des arguments.",
+ "pages": [
+  {
+   "scheme": [
+    " hello.sh",
+    " ┌──────────────────────────┐",
+    " │ #!/bin/bash              │ ◀ quel programme",
+    " │ echo \"hello $1\"          │   lit le fichier",
+    " └──────────────────────────┘"
+   ],
+   "point": 2,
+   "mark": [
+    "#!/bin/bash"
+   ],
+   "text": [
+    "Un script est un fichier texte de commandes, exécutées de haut en bas.",
+    "",
+    "- La première ligne, #! (le shebang), dit quel programme le lit."
+   ]
+  },
+  {
+   "scheme": [
+    " $ chmod +x hello.sh",
+    " $ ./hello.sh sam",
+    " hello sam",
+    "        ▲",
+    "        └─ $1 = le premier argument"
+   ],
+   "point": 4,
+   "mark": [
+    "$1"
+   ],
+   "text": [
+    "- chmod +x le rend exécutable, ./ lance celui de ce dossier.",
+    "- $1, $2… sont les arguments, $# combien il y en a."
+   ]
+  },
+  {
+   "scheme": [
+    " #!/bin/bash",
+    " set -euo pipefail",
+    "      │││",
+    "      ││└─ un échec dans un pipe compte",
+    "      │└── une variable non définie : erreur",
+    "      └─── s'arrêter à la 1re commande ratée"
+   ],
+   "point": 1,
+   "mark": [
+    "set -euo pipefail"
+   ],
+   "text": [
+    "Par défaut, un script continue après une erreur, et les lignes suivantes travaillent sur un état cassé.",
+    "",
+    "- Cette ligne le fait s'arrêter tôt et bruyamment. Mets-la en haut de tes scripts.",
+    "- bash -n vérifie la syntaxe, bash -x montre chaque ligne pendant qu'elle tourne."
+   ]
+  }
+ ]
+}

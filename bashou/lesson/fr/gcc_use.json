@@ -1,0 +1,96 @@
+{
+ "title": "Utiliser gcc : avertissements, fichiers, bibliothèques",
+ "summary": "Les options que tu taperas tous les jours, un programme en plusieurs fichiers, et les outils qui construisent les gros projets.",
+ "pages": [
+  {
+   "scheme": [
+    " $ gcc -Wall -Wextra grade.c -o grade",
+    " grade.c:7:9: warning: suggest parentheses",
+    "   around assignment used as truth value",
+    "    7 |     if (score = 100)",
+    "      |         ^~~~~"
+   ],
+   "point": 3,
+   "mark": [
+    "warning"
+   ],
+   "text": [
+    "gcc compile sans un mot du code qui a des bugs évidents, sauf si tu demandes.",
+    "",
+    "- -Wall active les avertissements pour les erreurs courantes, -Wextra quelques-uns de plus.",
+    "- Ici = range 100 au lieu de comparer (==) : chaque note est « perfect ».",
+    "- Compile toujours avec les avertissements, et lis-les comme des erreurs."
+   ]
+  },
+  {
+   "scheme": [
+    " report.c ──┐",
+    "            ├─▶ gcc report.c stats.c ─▶ report",
+    " stats.c  ──┘",
+    "",
+    " stats.h : lu par #include, jamais donné"
+   ],
+   "point": 1,
+   "mark": [
+    "report.c stats.c"
+   ],
+   "text": [
+    "Un programme en plusieurs fichiers : donne tous les .c à gcc. Il compile chacun, puis les relie.",
+    "",
+    "- Oublie-en un et l'éditeur de liens dit : undefined reference to `mean'."
+   ]
+  },
+  {
+   "scheme": [
+    " $ gcc area.c -o area -lm",
+    "                      └┬┘",
+    "   relie la bibliothèque maths (libm) : sqrt…"
+   ],
+   "point": 1,
+   "mark": [
+    "-lm"
+   ],
+   "text": [
+    "#include <math.h> promet seulement que sqrt existe. Son code est dans une bibliothèque que tu relies avec -l.",
+    "",
+    "- Mets les options -l après tes fichiers : l'éditeur de liens lit de gauche à droite."
+   ]
+  },
+  {
+   "scheme": [
+    " -g      infos de débogage : lignes pour gdb",
+    " -Og     débogage : le code suit tes lignes",
+    " -O2     version finale : rapide, dur à déboguer",
+    " -fsanitize=address,undefined",
+    "         signale les bugs mémoire sur le moment"
+   ],
+   "point": 3,
+   "mark": [
+    "-fsanitize=address,undefined"
+   ],
+   "text": [
+    "- Pendant que tu travailles : gcc -Wall -Wextra -g -Og -fsanitize=address,undefined.",
+    "- Pour livrer : gcc -Wall -O2."
+   ]
+  },
+  {
+   "scheme": [
+    " Makefile        make           tu l'écris",
+    " CMakeLists.txt  cmake ▸ make   très courant",
+    " meson.build     meson ▸ ninja  récent, simple",
+    " Cargo.toml      cargo          Rust, tout en un"
+   ],
+   "point": 2,
+   "mark": [
+    "meson",
+    "ninja"
+   ],
+   "text": [
+    "Taper gcc à la main va bien pour quelques fichiers. Les gros projets décrivent la construction une fois.",
+    "",
+    "- make ne reconstruit que ce qui a changé. CMake et Meson écrivent les fichiers de build, puis make ou Ninja (plus rapide) fait le travail.",
+    "$ meson setup build && ninja -C build"
+   ]
+  }
+ ]
+}

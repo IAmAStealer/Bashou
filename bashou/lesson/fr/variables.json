@@ -1,0 +1,55 @@
+{
+ "title": "Les variables du shell",
+ "summary": "Garder une valeur, la relire avec $, et la transmettre aux programmes que tu lances.",
+ "pages": [
+  {
+   "scheme": [
+    " $ name=sam           name ─▶ \"sam\"",
+    " $ echo \"hi $name\"    hi sam"
+   ],
+   "point": 0,
+   "mark": [
+    "name=sam",
+    "$name"
+   ],
+   "text": [
+    "- nom=valeur range une valeur. Pas d'espace autour du = : name = sam lance une commande appelée name.",
+    "- $name la relit."
+   ]
+  },
+  {
+   "scheme": [
+    " $ today=$(date +%A)",
+    "         └────┬────┘ lance date, garde sa sortie",
+    " $ echo $today",
+    " Monday"
+   ],
+   "point": 1,
+   "mark": [
+    "$(date +%A)"
+   ],
+   "text": [
+    "$( ) lance une commande et met ce qu'elle affiche à sa place.",
+    "",
+    "- Pratique pour garder une date, un compte, un nom de fichier pour plus tard."
+   ]
+  },
+  {
+   "scheme": [
+    " ton shell     name=sam   export CITY=Oslo",
+    "   │",
+    "   └─▶ python3 app.py     ne voit que CITY"
+   ],
+   "point": 2,
+   "mark": [
+    "export"
+   ],
+   "text": [
+    "Une variable simple reste dans ton shell. export la donne aux programmes que tu lances : une variable d'environnement.",
+    "",
+    "- $HOME, $PATH et $USER sont aussi des variables d'environnement.",
+    "$ env | head"
+   ]
+  }
+ ]
+}

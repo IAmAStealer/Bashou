@@ -1,0 +1,68 @@
+{
+ "id": "loops",
+ "order": 64,
+ "skill": "bash",
+ "needs": [
+  "commands 300 | achievement loop"
+ ],
+ "masters": [
+  "achievement loop",
+  "achievement reader"
+ ],
+ "title": "Loops: for and while read",
+ "summary": "Repeat a command for each file, or for each line of a file.",
+ "pages": [
+  {
+   "scheme": [
+    " for f in *.jpg; do",
+    "   echo \"$f\"            a.jpg",
+    " done                   b.jpg",
+    "                        c.jpg"
+   ],
+   "point": 0,
+   "mark": [
+    "for f in *.jpg"
+   ],
+   "text": [
+    "for takes each item of a list in turn. Here the list comes from *.jpg.",
+    "",
+    "- Inside, $f is the current item: quote it, names can have spaces."
+   ]
+  },
+  {
+   "scheme": [
+    " for i in {1..3}; do echo \"try $i\"; done",
+    " try 1",
+    " try 2",
+    " try 3"
+   ],
+   "point": 0,
+   "mark": [
+    "{1..3}"
+   ],
+   "text": [
+    "- {1..3} counts for you. seq 1 3 does the same.",
+    "- On one line, ; separates the parts."
+   ]
+  },
+  {
+   "scheme": [
+    " while read -r host; do",
+    "   ping -c1 \"$host\"",
+    " done < hosts.txt",
+    "        ▲",
+    "        └─ one line at a time into $host"
+   ],
+   "point": 2,
+   "mark": [
+    "< hosts.txt"
+   ],
+   "text": [
+    "while read handles a file line by line, even long files.",
+    "",
+    "- -r keeps backslashes as they are.",
+    "- Don't use for line in $(cat file): it cuts at every space, not only at line ends."
+   ]
+  }
+ ]
+}

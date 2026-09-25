@@ -1,0 +1,68 @@
+{
+ "id": "grep",
+ "order": 35,
+ "skill": "bash",
+ "needs": [
+  "tool grep 1 | commands 60"
+ ],
+ "masters": [
+  "won needle_gnat",
+  "achievement digger"
+ ],
+ "title": "grep: find the lines you need",
+ "summary": "Search a file, or a whole folder, for a word, and the few options you'll use every day.",
+ "pages": [
+  {
+   "scheme": [
+    " $ grep error app.log",
+    " app.log              output",
+    " ok start",
+    " error disk      ──▶  error disk",
+    " ok save"
+   ],
+   "point": 3,
+   "mark": [
+    "error disk"
+   ],
+   "text": [
+    "grep prints the lines that contain your word. The file doesn't change.",
+    "",
+    "- Put quotes around a pattern with spaces: grep 'disk full' app.log."
+   ]
+  },
+  {
+   "scheme": [
+    " -i    ignore case: Error, ERROR, error",
+    " -n    show the line number",
+    " -v    the lines that DON'T match",
+    " -c    only count them"
+   ],
+   "point": 2,
+   "mark": [
+    "-v"
+   ],
+   "text": [
+    "- Options mix: grep -in error app.log.",
+    "- -v is handy to hide noise: grep -v DEBUG app.log."
+   ]
+  },
+  {
+   "scheme": [
+    " $ grep -rn 'TODO' src/",
+    " src/app.py:120:# TODO check input",
+    " src/db.py:40:# TODO close it",
+    " └───┬────┘ └┬┘",
+    "    file    line"
+   ],
+   "point": 1,
+   "mark": [
+    "-rn"
+   ],
+   "text": [
+    "-r searches every file in a folder and below.",
+    "",
+    "- Each line starts with the file and, with -n, the line number."
+   ]
+  }
+ ]
+}

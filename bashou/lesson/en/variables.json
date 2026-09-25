@@ -1,0 +1,64 @@
+{
+ "id": "variables",
+ "order": 28,
+ "needs": [
+  "commands 100"
+ ],
+ "masters": [
+  "achievement capture",
+  "achievement loop"
+ ],
+ "title": "Shell variables",
+ "summary": "Store a value, use it with $, and pass it on to the programs you start.",
+ "pages": [
+  {
+   "scheme": [
+    " $ name=sam           name ─▶ \"sam\"",
+    " $ echo \"hi $name\"    hi sam"
+   ],
+   "point": 0,
+   "mark": [
+    "name=sam",
+    "$name"
+   ],
+   "text": [
+    "- name=value stores a value. No spaces around the =: name = sam is a command called name.",
+    "- $name reads it back."
+   ]
+  },
+  {
+   "scheme": [
+    " $ today=$(date +%A)",
+    "         └────┬────┘ runs date, keeps its output",
+    " $ echo $today",
+    " Monday"
+   ],
+   "point": 1,
+   "mark": [
+    "$(date +%A)"
+   ],
+   "text": [
+    "$( ) runs a command and puts what it prints in its place.",
+    "",
+    "- Handy to keep a date, a count, a file name for later."
+   ]
+  },
+  {
+   "scheme": [
+    " your shell    name=sam   export CITY=Oslo",
+    "   │",
+    "   └─▶ python3 app.py     sees CITY only"
+   ],
+   "point": 2,
+   "mark": [
+    "export"
+   ],
+   "text": [
+    "A plain variable stays in your shell. export hands it to the programs you start: an environment variable.",
+    "",
+    "- $HOME, $PATH and $USER are environment variables too.",
+    "$ env | head"
+   ]
+  }
+ ]
+}

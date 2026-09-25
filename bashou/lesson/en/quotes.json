@@ -1,0 +1,64 @@
+{
+ "id": "quotes",
+ "order": 32,
+ "skill": "bash",
+ "needs": [
+  "commands 200 | achievement capture"
+ ],
+ "masters": [
+  "achievement capture",
+  "fights 5"
+ ],
+ "title": "Quotes: ' and \"",
+ "summary": "Single quotes keep text as it is, double quotes still expand $: when to use which.",
+ "pages": [
+  {
+   "scheme": [
+    " $ echo 'hi $USER'      hi $USER",
+    " $ echo \"hi $USER\"      hi sam"
+   ],
+   "point": 1,
+   "mark": [
+    "'hi $USER'",
+    "\"hi $USER\""
+   ],
+   "text": [
+    "- Single quotes: everything stays exactly as written.",
+    "- Double quotes: $variables and $( ) are still replaced."
+   ]
+  },
+  {
+   "scheme": [
+    " file=\"my notes.txt\"",
+    "",
+    " rm $file       rm gets: my │ notes.txt  2 files!",
+    " rm \"$file\"     rm gets: my notes.txt     1 file"
+   ],
+   "point": 3,
+   "mark": [
+    "\"$file\""
+   ],
+   "text": [
+    "Without quotes, the shell cuts the value at each space.",
+    "",
+    "- Always write \"$file\" with double quotes: it stays one argument.",
+    "- In scripts this one habit prevents many bugs."
+   ]
+  },
+  {
+   "scheme": [
+    " awk '{print $1}' f      $1 goes to awk",
+    " grep 'a.*b' f           .* goes to grep"
+   ],
+   "point": 0,
+   "mark": [
+    "'{print $1}'"
+   ],
+   "text": [
+    "Use single quotes when a program has its own special characters.",
+    "",
+    "- The shell leaves them alone and the program gets them as they are."
+   ]
+  }
+ ]
+}

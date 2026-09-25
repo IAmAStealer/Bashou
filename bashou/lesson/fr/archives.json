@@ -1,0 +1,53 @@
+{
+ "title": "Les archives : tar et gzip",
+ "summary": "Mettre un dossier dans un seul fichier, regarder dedans, et le déballer où tu veux.",
+ "pages": [
+  {
+   "scheme": [
+    " site/                         site.tar.gz",
+    " ├── index.html  ─ tar -czf ─▶ (un fichier,",
+    " └── style.css                  compressé)"
+   ],
+   "point": 1,
+   "mark": [
+    "tar -czf"
+   ],
+   "text": [
+    "tar met plein de fichiers dans un seul. z le compresse avec gzip.",
+    "",
+    "$ tar -czf site.tar.gz site/"
+   ]
+  },
+  {
+   "scheme": [
+    " c   créer       x   extraire   t   lister",
+    " z   gzip        f   le nom de l'archive suit"
+   ],
+   "point": 0,
+   "mark": [
+    "c",
+    "x",
+    "t"
+   ],
+   "text": [
+    "- Lis les lettres comme une phrase : -czf = créer, gzip, fichier.",
+    "- f vient en dernier parce que le nom du fichier le suit."
+   ]
+  },
+  {
+   "scheme": [
+    " $ tar -tzf site.tar.gz            regarde d'abord",
+    " $ tar -xzf site.tar.gz -C /tmp/x  puis déballe"
+   ],
+   "point": 0,
+   "mark": [
+    "-tzf",
+    "-C"
+   ],
+   "text": [
+    "- Liste avant d'extraire : une archive peut contenir des centaines de fichiers, ou des chemins inattendus.",
+    "- -C déballe dans ce dossier au lieu du dossier courant (crée-le d'abord : mkdir -p /tmp/x)."
+   ]
+  }
+ ]
+}

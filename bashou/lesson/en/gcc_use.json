@@ -1,0 +1,106 @@
+{
+ "id": "gcc_use",
+ "order": 107,
+ "skill": "c",
+ "needs": [
+  "won semicolon_slug | tool gcc 5"
+ ],
+ "masters": [
+  "won linker_lynx",
+  "won warning_wraith"
+ ],
+ "title": "Using gcc: warnings, files, libraries",
+ "summary": "The options you'll type every day, a program in several files, and the tools that build big projects.",
+ "pages": [
+  {
+   "scheme": [
+    " $ gcc -Wall -Wextra grade.c -o grade",
+    " grade.c:7:9: warning: suggest parentheses",
+    "   around assignment used as truth value",
+    "    7 |     if (score = 100)",
+    "      |         ^~~~~"
+   ],
+   "point": 3,
+   "mark": [
+    "warning"
+   ],
+   "text": [
+    "gcc builds code that has obvious bugs without a word, unless you ask.",
+    "",
+    "- -Wall turns on the warnings for the usual mistakes, -Wextra a few more.",
+    "- Here = stores 100 instead of comparing (==): every score is \"perfect\".",
+    "- Build with warnings on, always, and read them like errors."
+   ]
+  },
+  {
+   "scheme": [
+    " report.c ──┐",
+    "            ├─▶ gcc report.c stats.c ─▶ report",
+    " stats.c  ──┘",
+    "",
+    " stats.h: read by #include, never listed"
+   ],
+   "point": 1,
+   "mark": [
+    "report.c stats.c"
+   ],
+   "text": [
+    "A program in several files: give gcc every .c file. It compiles each one, then links them.",
+    "",
+    "- Forget one and the linker says: undefined reference to `mean'."
+   ]
+  },
+  {
+   "scheme": [
+    " $ gcc area.c -o area -lm",
+    "                      └┬┘",
+    "   link the maths library (libm): sqrt, pow…"
+   ],
+   "point": 1,
+   "mark": [
+    "-lm"
+   ],
+   "text": [
+    "#include <math.h> only promises that sqrt exists. Its code is in a library you link with -l.",
+    "",
+    "- Put -l options after your files: the linker reads left to right."
+   ]
+  },
+  {
+   "scheme": [
+    " -g      debug info: line numbers for gdb",
+    " -Og     debug build: code follows your lines",
+    " -O2     release build: faster, harder to debug",
+    " -fsanitize=address,undefined",
+    "         report memory bugs as they happen"
+   ],
+   "point": 3,
+   "mark": [
+    "-fsanitize=address,undefined"
+   ],
+   "text": [
+    "- While you work: gcc -Wall -Wextra -g -Og -fsanitize=address,undefined.",
+    "- When you ship: gcc -Wall -O2."
+   ]
+  },
+  {
+   "scheme": [
+    " Makefile        make           you write it",
+    " CMakeLists.txt  cmake ▸ make   very common",
+    " meson.build     meson ▸ ninja  newer, simpler",
+    " Cargo.toml      cargo          Rust, all in one"
+   ],
+   "point": 2,
+   "mark": [
+    "meson",
+    "ninja"
+   ],
+   "text": [
+    "Typing gcc by hand is fine for a few files. Bigger projects describe the build once.",
+    "",
+    "- make rebuilds only what changed. CMake and Meson write the build files, then make or Ninja (faster) does the work.",
+    "$ meson setup build && ninja -C build"
+   ]
+  }
+ ]
+}

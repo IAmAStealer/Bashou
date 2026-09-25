@@ -1,0 +1,58 @@
+{
+ "title": "Utilisateurs, groupes et sudo",
+ "summary": "Qui tu es sur la machine, ce qu'est root, et ce que fait vraiment sudo.",
+ "pages": [
+  {
+   "scheme": [
+    " $ id",
+    " uid=1000(sam) gid=1000(sam)",
+    " └─────┬─────┘  toi",
+    " groups=1000(sam),1001(devs)",
+    "        └────────┬─────────┘  tes équipes"
+   ],
+   "point": 3,
+   "mark": [
+    "groups"
+   ],
+   "text": [
+    "Chaque utilisateur a un numéro (uid) et appartient à des groupes. (id affiche tout ça sur une seule ligne.)",
+    "",
+    "- Les groupes partagent des droits : chaque membre de devs a les droits du groupe sur les fichiers qui appartiennent à devs."
+   ]
+  },
+  {
+   "scheme": [
+    " root     (uid 0)     peut tout faire",
+    " sam      (uid 1000)  tes fichiers, tes processus",
+    " www-data (uid 33)    fait tourner le serveur web"
+   ],
+   "point": 0,
+   "mark": [
+    "root"
+   ],
+   "text": [
+    "root est l'administrateur : aucune vérification de permission ne l'arrête.",
+    "",
+    "- Les services ont leurs propres utilisateurs : un serveur web cassé ne peut pas toucher tes fichiers."
+   ]
+  },
+  {
+   "scheme": [
+    " $ sudo apt install jq",
+    "   │ demande TON mot de passe",
+    "   ▼",
+    " apt install jq   tourne en root, cette fois"
+   ],
+   "point": 3,
+   "mark": [
+    "sudo"
+   ],
+   "text": [
+    "sudo lance une commande en root, si tu en as le droit (groupe sudo, ou wheel sur Red Hat).",
+    "",
+    "- Utilise-le seulement pour la commande qui en a besoin, jamais par habitude.",
+    "- sudo retient ton mot de passe quelques minutes, puis le redemande."
+   ]
+  }
+ ]
+}

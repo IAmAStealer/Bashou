@@ -77,11 +77,15 @@ def remaining(s):
 
 
 def learned(s, tool):
-    """You've met a tool: used it at least once, or had its lesson in `bashou adventure`."""
+    """You've met a tool: used it at least once, had its lesson in `bashou adventure`, or read a
+    `bashou lesson` that teaches it (its "tools")."""
     lessons = (s.get("adventure") or {}).get("lessons", [])
     if tool == "|":
         return s["constructs"].get("pipe3", 0) > 0 or "pipes" in lessons
-    return s["tools"].get(tool, 0) > 0 or tool in lessons
+    from . import lesson
+    read = set((s.get("lessons") or {}).get("read", []))
+    library = any(tool in le.get("tools", ()) for le in lesson.english() if le["id"] in read)
+    return s["tools"].get(tool, 0) > 0 or tool in lessons or library
 
 
 def ready(s, ch):

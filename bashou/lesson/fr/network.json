@@ -1,0 +1,61 @@
+{
+ "title": "Le réseau : adresses et ports",
+ "summary": "Les adresses IP, les noms, les ports, et ce que veut dire écouter sur 0.0.0.0.",
+ "pages": [
+  {
+   "scheme": [
+    " example.org ──DNS──▶ 203.0.113.10",
+    "     nom                 adresse"
+   ],
+   "point": 0,
+   "mark": [
+    "DNS"
+   ],
+   "text": [
+    "Les machines se parlent avec des nombres, les adresses IP. Le DNS transforme les noms en adresses.",
+    "",
+    "- 203.0.113.10 est une adresse réservée aux exemples ; dig montre la vraie.",
+    "",
+    "$ dig +short example.org",
+    "$ ip addr      # tes propres adresses"
+   ]
+  },
+  {
+   "scheme": [
+    " 203.0.113.10 : 443",
+    " └────┬─────┘   └┬┘",
+    "   la machine   la porte (port)",
+    "",
+    " 22 ssh   80 http   443 https   5432 postgres"
+   ],
+   "point": 2,
+   "mark": [
+    "443"
+   ],
+   "text": [
+    "Une machine fait tourner plein de services. Le port dit lequel tu veux.",
+    "",
+    "- Un service écoute sur son port ; un client s'y connecte."
+   ]
+  },
+  {
+   "scheme": [
+    " $ ss -tln",
+    " Local Address:Port",
+    " 127.0.0.1:5432     cette machine seulement",
+    " 0.0.0.0:22         tous les réseaux : joignable"
+   ],
+   "point": 3,
+   "mark": [
+    "0.0.0.0",
+    "127.0.0.1"
+   ],
+   "text": [
+    "- 127.0.0.1 (localhost), c'est la machine elle-même : aucune autre machine ne peut se connecter.",
+    "- 0.0.0.0 veut dire toutes les adresses de la machine : ouvert au réseau.",
+    "- Une base de données sur 0.0.0.0 par erreur est une faille classique.",
+    "- ss -tln : t = TCP, l = en écoute, n = des nombres plutôt que des noms."
+   ]
+  }
+ ]
+}

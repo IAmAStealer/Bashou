@@ -1,0 +1,71 @@
+{
+ "id": "network",
+ "order": 66,
+ "skill": "linux",
+ "needs": [
+  "commands 400 | tool curl 3 | tool ssh 3"
+ ],
+ "masters": [
+  "achievement headers",
+  "achievement resolver"
+ ],
+ "title": "Networks: addresses and ports",
+ "summary": "IP addresses, names, ports, and what listening on 0.0.0.0 means.",
+ "pages": [
+  {
+   "scheme": [
+    " example.org ──DNS──▶ 203.0.113.10",
+    "     name                address"
+   ],
+   "point": 0,
+   "mark": [
+    "DNS"
+   ],
+   "text": [
+    "Machines talk with numbers, IP addresses. DNS turns names into addresses.",
+    "",
+    "- 203.0.113.10 is an address kept for examples; dig shows the real one.",
+    "",
+    "$ dig +short example.org",
+    "$ ip addr      # your own addresses"
+   ]
+  },
+  {
+   "scheme": [
+    " 203.0.113.10 : 443",
+    " └────┬─────┘   └┬┘",
+    "   the machine   the door (port)",
+    "",
+    " 22 ssh   80 http   443 https   5432 postgres"
+   ],
+   "point": 2,
+   "mark": [
+    "443"
+   ],
+   "text": [
+    "One machine runs many services. The port says which one you want.",
+    "",
+    "- A service listens on its port; a client connects to it."
+   ]
+  },
+  {
+   "scheme": [
+    " $ ss -tln",
+    " Local Address:Port",
+    " 127.0.0.1:5432     only this machine",
+    " 0.0.0.0:22         every network: reachable"
+   ],
+   "point": 3,
+   "mark": [
+    "0.0.0.0",
+    "127.0.0.1"
+   ],
+   "text": [
+    "- 127.0.0.1 (localhost) is the machine itself: no other machine can connect.",
+    "- 0.0.0.0 means every address the machine has: open to the network.",
+    "- A database on 0.0.0.0 by mistake is a classic security hole.",
+    "- ss -tln: t = TCP, l = listening, n = numbers instead of names."
+   ]
+  }
+ ]
+}

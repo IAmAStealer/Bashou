@@ -1,0 +1,57 @@
+{
+ "title": "L'espace disque : df et du",
+ "summary": "À quel point le disque est plein, et quel dossier prend la place.",
+ "pages": [
+  {
+   "scheme": [
+    " $ df -h /",
+    " Filesystem  Size  Used Avail Use% Mounted on",
+    " /dev/sda2    50G   46G  4.0G  92% /"
+   ],
+   "point": 2,
+   "mark": [
+    "92%"
+   ],
+   "text": [
+    "df montre le remplissage de chaque système de fichiers : taille, utilisé, restant. Avec un chemin (/ ici), seulement celui qui le contient. -h écrit G et M au lieu d'octets.",
+    "",
+    "- Au-delà de 90 %, agis avant qu'il soit plein : à 100 %, les programmes échouent bizarrement."
+   ]
+  },
+  {
+   "scheme": [
+    " $ du -sh /var/* | sort -h | tail -3",
+    " 1.2G    /var/cache",
+    " 3.5G    /var/lib",
+    " 28G     /var/log        ◀ ici"
+   ],
+   "point": 3,
+   "mark": [
+    "28G"
+   ],
+   "text": [
+    "du mesure les dossiers. -s donne un total par dossier.",
+    "",
+    "- sort -h trie correctement 1.2G et 28G, tail garde les plus gros.",
+    "- Descends d'un niveau à la fois jusqu'à trouver le coupable."
+   ]
+  },
+  {
+   "scheme": [
+    " /",
+    " ├── var/log/      vieux journaux",
+    " ├── var/cache/    caches des paquets",
+    " └── home/sam/     un gros fichier oublié"
+   ],
+   "point": 1,
+   "mark": [
+    "var/log/"
+   ],
+   "text": [
+    "- Journaux : sudo journalctl --vacuum-size=200M réduit le journal.",
+    "- Caches : sudo apt clean (ou sudo dnf clean all).",
+    "- Ton dossier : du -sh ~/* | sort -h."
+   ]
+  }
+ ]
+}

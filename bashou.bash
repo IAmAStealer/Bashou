@@ -83,9 +83,9 @@ bashou() {
 _bashou_commands="level pets achievements fight talk learn explain lesson evolve swap stats start language skills config setup update version security adventure reset dev on off"
 _bashou_pets="bat frog turtle mushroom slime sofa octopus dragon fox owl mole snake ghost spider ant axolotl gremlin snail beaver squirrel pigeon hedgehog bee whale meerkat leopard duck spark"
 _bashou_dev="unlock-all stage stage-all level threat restore"
-_bashou_challenges="line_moth column_crab jumble_sprite last_word_wisp first_line_imp needle_gnat field_wasp dust_bunny verse_viper peak_harpy grep_hydra awk_golem find_wraith uniq_swarm sed_serpent ps_phantom pipe_eel colon_cobra semicolon_slug list_leech dict_djinn loop_lich ouroboros json_jinn base64_banshee percent_poltergeist injection_imp token_trickster leak_lurker fencepost_fiend stack_specter overflow_ogre mut_marmot const_condor shadow_shade byte_basilisk version_vole candidate_crow stowaway_stoat autoremove_adder release_raven hitchhiker_hare census_centipede mirror_mimic repo_revenant enabled_ettin indent_imp stage_specter secret_sprite needs_newt manual_mole query_quokka table_troll insert_imp update_urchin join_jackal upsert_unicorn plaintext_pixie cipher_crow forger_ferret vault_vole cleartext_cricket"
+_bashou_challenges="line_moth column_crab jumble_sprite last_word_wisp first_line_imp needle_gnat field_wasp dust_bunny verse_viper peak_harpy grep_hydra awk_golem find_wraith uniq_swarm sed_serpent ps_phantom pipe_eel colon_cobra semicolon_slug list_leech dict_djinn loop_lich ouroboros json_jinn base64_banshee percent_poltergeist injection_imp token_trickster leak_lurker fencepost_fiend stack_specter overflow_ogre linker_lynx warning_wraith segfault_salamander breakpoint_beetle mut_marmot const_condor shadow_shade byte_basilisk version_vole candidate_crow stowaway_stoat autoremove_adder release_raven hitchhiker_hare census_centipede mirror_mimic repo_revenant enabled_ettin indent_imp stage_specter secret_sprite needs_newt manual_mole query_quokka table_troll insert_imp update_urchin join_jackal upsert_unicorn plaintext_pixie cipher_crow forger_ferret vault_vole cleartext_cricket"
 _bashou_security="1 2 3 4 5 6"
-_bashou_lessons="list command_line computer paths streams pipes permissions processes packages services compilation stack_heap pointers py_names rust_vars sql_join keys pipeline"
+_bashou_lessons="list command_line computer paths files reading wildcards variables streams quotes grep pipes users permissions disk archives processes scripts loops network git packages services compilation gcc_use stack_heap debugger pointers py_start py_names rust_vars sql_select sql_join keys pipeline"
 
 _bashou_complete() {
   local cur=${COMP_WORDS[COMP_CWORD]} words
@@ -97,7 +97,7 @@ _bashou_complete() {
     2:explain:*)      words="python rust c" ;;
     3:explain:rust)   words="mut shadowing const integers" ;;
     3:explain:python) words="list dict loop recursion json url base64 subprocess" ;;
-    3:explain:c)      words="malloc array string recursion asan" ;;
+    3:explain:c)      words="malloc array string recursion link warnings gdb asan" ;;
     3:config:size)    words="small large default" ;;
     2:security:*)     words=$_bashou_security ;;
     2:lesson:*)       words=$_bashou_lessons ;;

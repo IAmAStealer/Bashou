@@ -1,0 +1,58 @@
+{
+ "title": "Les boucles : for et while read",
+ "summary": "Répéter une commande pour chaque fichier, ou pour chaque ligne d'un fichier.",
+ "pages": [
+  {
+   "scheme": [
+    " for f in *.jpg; do",
+    "   echo \"$f\"            a.jpg",
+    " done                   b.jpg",
+    "                        c.jpg"
+   ],
+   "point": 0,
+   "mark": [
+    "for f in *.jpg"
+   ],
+   "text": [
+    "for prend chaque élément d'une liste à tour de rôle. Ici la liste vient de *.jpg.",
+    "",
+    "- Dedans, $f est l'élément du moment : mets-le entre guillemets, les noms peuvent avoir des espaces."
+   ]
+  },
+  {
+   "scheme": [
+    " for i in {1..3}; do echo \"try $i\"; done",
+    " try 1",
+    " try 2",
+    " try 3"
+   ],
+   "point": 0,
+   "mark": [
+    "{1..3}"
+   ],
+   "text": [
+    "- {1..3} compte pour toi. seq 1 3 fait pareil.",
+    "- Sur une ligne, ; sépare les morceaux."
+   ]
+  },
+  {
+   "scheme": [
+    " while read -r host; do",
+    "   ping -c1 \"$host\"",
+    " done < hosts.txt",
+    "        ▲",
+    "        └─ une ligne à la fois dans $host"
+   ],
+   "point": 2,
+   "mark": [
+    "< hosts.txt"
+   ],
+   "text": [
+    "while read traite un fichier ligne par ligne, même un long fichier.",
+    "",
+    "- -r garde les antislashs tels quels.",
+    "- N'utilise pas for line in $(cat file) : ça coupe à chaque espace, pas seulement en fin de ligne."
+   ]
+  }
+ ]
+}

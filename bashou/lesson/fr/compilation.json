@@ -105,6 +105,25 @@
     "",
     "- Tu as modifié hello.c ? Recompile : l'ancien programme ne change pas tout seul."
    ]
+  },
+  {
+   "scheme": [
+    " gcc          le classique, sur tout Linux",
+    " clang        un autre compilateur, même usage",
+    " -fsanitize   option gcc/clang : bugs mémoire",
+    " clang-tidy   signale le code risqué",
+    " cargo, go    build, bibliothèques, tests : tout"
+   ],
+   "point": 1,
+   "mark": [
+    "clang"
+   ],
+   "text": [
+    "gcc n'est pas le seul choix. Des outils plus récents font le même travail en t'aidant davantage.",
+    "",
+    "- clang prend aussi les options habituelles : clang -Wall hello.c -o hello. Essaie les deux sur la même erreur.",
+    "- Les langages plus récents livrent tout dans un seul outil : cargo build (Rust), go build (Go)."
+   ]
   }
  ]
 }

@@ -1,0 +1,105 @@
+{
+ "id": "debugger",
+ "order": 118,
+ "skill": "c",
+ "tools": [
+  "gdb"
+ ],
+ "needs": [
+  "won stack_specter | won leak_lurker | won linker_lynx | tool gcc 10"
+ ],
+ "masters": [
+  "won segfault_salamander",
+  "won breakpoint_beetle"
+ ],
+ "title": "Debugging with gdb",
+ "summary": "Run a program under a debugger, see where it crashed, and stop it anywhere to look at its variables.",
+ "pages": [
+  {
+   "scheme": [
+    " without a debugger       with gdb",
+    " ./prog                   gdb -q ./prog",
+    " Segmentation fault       (gdb) run",
+    " (that's all)             stops AT the crash,",
+    "                          you can look around"
+   ],
+   "point": 3,
+   "mark": [
+    "gdb"
+   ],
+   "text": [
+    "A debugger runs your program for you, and can stop it to show what's inside: which line, which calls, which values.",
+    "",
+    "- Build with -g first: gdb needs the line numbers.",
+    "$ gcc -g prog.c -o prog && gdb -q ./prog"
+   ]
+  },
+  {
+   "scheme": [
+    " (gdb) bt",
+    " #0  0x…19d in first_char (key=0x…02a \"mode\")",
+    "     at crash.c:28",
+    " #1  0x…1c4 in check (key=0x…02a \"mode\")",
+    "     at crash.c:34",
+    " #2  0x…207 in main () at crash.c:42"
+   ],
+   "point": 2,
+   "mark": [
+    "#0",
+    "crash.c:28"
+   ],
+   "text": [
+    "bt (backtrace) is the chain of calls, the newest first.",
+    "",
+    "- #0 is where it died, #1 called #0, and so on down to main.",
+    "- Look at line 28 first. Then ask why its caller passed that value.",
+    "- The 0x… numbers are memory addresses: skip them for now. Read the function and the file:line."
+   ]
+  },
+  {
+   "scheme": [
+    " (gdb) break month_end   stop when it starts",
+    " (gdb) run",
+    " Breakpoint 1, month_end (month=1, balance=50000)",
+    "     at loan.c:5",
+    " 5     long interest = balance * 10 / 1000;",
+    " (gdb) next              run one line",
+    " 6     long paid = 400 + month * 10;",
+    " (gdb) print interest    show a variable",
+    " $1 = 500",
+    " (gdb) continue          go to the next stop"
+   ],
+   "point": 7,
+   "mark": [
+    "break",
+    "next",
+    "print",
+    "continue"
+   ],
+   "text": [
+    "- A breakpoint pauses the program at a function or a line (break loan.c:12).",
+    "- next runs one line, step goes into a call, finish comes back out.",
+    "- break month_end if month == 5 stops only when the condition is true."
+   ]
+  },
+  {
+   "scheme": [
+    " gdb -tui        gdb with the source on screen",
+    " lldb            clang's debugger, same ideas",
+    " VS Code, CLion  gdb/lldb behind buttons",
+    " rr              record, then replay backwards",
+    " valgrind        memory checks, no rebuild"
+   ],
+   "point": 3,
+   "mark": [
+    "rr"
+   ],
+   "text": [
+    "The same ideas everywhere: breakpoints, steps, variables, backtrace.",
+    "",
+    "- An editor's debugger is gdb or lldb behind buttons: what you learn here carries over.",
+    "- For memory bugs, -fsanitize=address is much faster than valgrind, but needs a rebuild; valgrind works on the program as it is."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,58 @@
+{
+ "title": "grep : trouver les lignes qu'il te faut",
+ "summary": "Chercher un mot dans un fichier, ou tout un dossier, et les quelques options de tous les jours.",
+ "pages": [
+  {
+   "scheme": [
+    " $ grep error app.log",
+    " app.log              sortie",
+    " ok start",
+    " error disk      ──▶  error disk",
+    " ok save"
+   ],
+   "point": 3,
+   "mark": [
+    "error disk"
+   ],
+   "text": [
+    "grep affiche les lignes qui contiennent ton mot. Le fichier ne change pas.",
+    "",
+    "- Mets des guillemets autour d'un motif avec des espaces : grep 'disk full' app.log."
+   ]
+  },
+  {
+   "scheme": [
+    " -i    ignore la casse : Error, ERROR, error",
+    " -n    montre le numéro de ligne",
+    " -v    les lignes qui NE correspondent PAS",
+    " -c    seulement les compter"
+   ],
+   "point": 2,
+   "mark": [
+    "-v"
+   ],
+   "text": [
+    "- Les options se combinent : grep -in error app.log.",
+    "- -v sert à cacher le bruit : grep -v DEBUG app.log."
+   ]
+  },
+  {
+   "scheme": [
+    " $ grep -rn 'TODO' src/",
+    " src/app.py:120:# TODO check input",
+    " src/db.py:40:# TODO close it",
+    " └───┬────┘ └┬┘",
+    "  fichier   ligne"
+   ],
+   "point": 1,
+   "mark": [
+    "-rn"
+   ],
+   "text": [
+    "-r cherche dans tous les fichiers d'un dossier et en dessous.",
+    "",
+    "- Chaque ligne commence par le fichier et, avec -n, le numéro de ligne."
+   ]
+  }
+ ]
+}

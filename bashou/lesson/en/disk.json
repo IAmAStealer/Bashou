@@ -1,0 +1,67 @@
+{
+ "id": "disk",
+ "order": 55,
+ "skill": "linux",
+ "needs": [
+  "commands 200"
+ ],
+ "masters": [
+  "achievement disk",
+  "achievement sizer"
+ ],
+ "title": "Disk space: df and du",
+ "summary": "How full the disk is, and which folder takes the room.",
+ "pages": [
+  {
+   "scheme": [
+    " $ df -h /",
+    " Filesystem  Size  Used Avail Use% Mounted on",
+    " /dev/sda2    50G   46G  4.0G  92% /"
+   ],
+   "point": 2,
+   "mark": [
+    "92%"
+   ],
+   "text": [
+    "df shows how full each filesystem is: size, used, left. With a path (/ here), only the one that holds it. -h writes G and M instead of bytes.",
+    "",
+    "- Above 90%, act before it's full: programs fail in strange ways at 100%."
+   ]
+  },
+  {
+   "scheme": [
+    " $ du -sh /var/* | sort -h | tail -3",
+    " 1.2G    /var/cache",
+    " 3.5G    /var/lib",
+    " 28G     /var/log        ◀ here"
+   ],
+   "point": 3,
+   "mark": [
+    "28G"
+   ],
+   "text": [
+    "du measures folders. -s gives one total per folder.",
+    "",
+    "- sort -h sorts 1.2G and 28G correctly, tail keeps the biggest.",
+    "- Go down one level at a time until you find the culprit."
+   ]
+  },
+  {
+   "scheme": [
+    " /",
+    " ├── var/log/      old logs",
+    " ├── var/cache/    package caches",
+    " └── home/sam/     a big file you forgot"
+   ],
+   "point": 1,
+   "mark": [
+    "var/log/"
+   ],
+   "text": [
+    "- Logs: sudo journalctl --vacuum-size=200M trims the journal.",
+    "- Caches: sudo apt clean (or sudo dnf clean all).",
+    "- Your home: du -sh ~/* | sort -h."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,55 @@
+{
+ "title": "Python : ton premier script",
+ "summary": "Lancer un fichier avec python3, et pourquoi l'indentation et les deux-points comptent.",
+ "pages": [
+  {
+   "scheme": [
+    " hello.py                   $ python3 hello.py",
+    " name = \"sam\"               hi sam",
+    " print(\"hi\", name)"
+   ],
+   "point": 2,
+   "mark": [
+    "print"
+   ],
+   "text": [
+    "python3 lit tout le fichier, puis l'exécute de haut en bas. Pas d'étape de compilation à part.",
+    "",
+    "- python3 tout seul ouvre une invite pour essayer ; exit() en sort."
+   ]
+  },
+  {
+   "scheme": [
+    " if age >= 18:",
+    "     print(\"adult\")      ◀ 4 espaces : dans le if",
+    " print(\"done\")           ◀ revenu à gauche : après"
+   ],
+   "point": 1,
+   "mark": [
+    ":"
+   ],
+   "text": [
+    "- Une ligne qui finit par : ouvre un bloc : if, for, while, def.",
+    "- Le bloc, ce sont les lignes poussées à droite, en général de 4 espaces. Python lit les espaces, pas des accolades."
+   ]
+  },
+  {
+   "scheme": [
+    "   File \"/home/sam/hello.py\", line 1",
+    "     if age >= 18",
+    "                 ^",
+    " SyntaxError: expected ':'"
+   ],
+   "point": 3,
+   "mark": [
+    "SyntaxError"
+   ],
+   "text": [
+    "Une SyntaxError arrête Python avant que quoi que ce soit ne tourne.",
+    "",
+    "- Elle donne le fichier, la ligne et un ^ sous l'endroit.",
+    "- Regarde là et juste avant : un : ou une ) oubliés sont la cause habituelle."
+   ]
+  }
+ ]
+}

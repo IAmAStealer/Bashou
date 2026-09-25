@@ -1,0 +1,69 @@
+{
+ "id": "users",
+ "order": 48,
+ "skill": "linux",
+ "needs": [
+  "commands 150"
+ ],
+ "masters": [
+  "achievement owner | achievement tight",
+  "tool sudo 5"
+ ],
+ "title": "Users, groups and sudo",
+ "summary": "Who you are on the machine, what root is, and what sudo really does.",
+ "pages": [
+  {
+   "scheme": [
+    " $ id",
+    " uid=1000(sam) gid=1000(sam)",
+    " └─────┬─────┘  you",
+    " groups=1000(sam),1001(devs)",
+    "        └────────┬─────────┘  your teams"
+   ],
+   "point": 3,
+   "mark": [
+    "groups"
+   ],
+   "text": [
+    "Every user has a number (uid) and belongs to groups. (id prints all this on one line.)",
+    "",
+    "- Groups share rights: every member of devs gets the group's rights on files that belong to devs.",
+    "- whoami prints only your name."
+   ]
+  },
+  {
+   "scheme": [
+    " root     (uid 0)     can do anything",
+    " sam      (uid 1000)  your files, your processes",
+    " www-data (uid 33)    runs the web server"
+   ],
+   "point": 0,
+   "mark": [
+    "root"
+   ],
+   "text": [
+    "root is the administrator: no permission check stops it.",
+    "",
+    "- Services get their own users, so a broken web server can't touch your files."
+   ]
+  },
+  {
+   "scheme": [
+    " $ sudo apt install jq",
+    "   │ asks YOUR password",
+    "   ▼",
+    " apt install jq   runs as root, for this command"
+   ],
+   "point": 3,
+   "mark": [
+    "sudo"
+   ],
+   "text": [
+    "sudo runs one command as root, if you're allowed to (the sudo group, or wheel on Red Hat).",
+    "",
+    "- Use it only for the command that needs it, never out of habit.",
+    "- sudo remembers your password for a few minutes, then asks again."
+   ]
+  }
+ ]
+}

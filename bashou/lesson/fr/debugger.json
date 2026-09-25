@@ -1,0 +1,92 @@
+{
+ "title": "Déboguer avec gdb",
+ "summary": "Lancer un programme sous un débogueur, voir où il a planté, et l'arrêter n'importe où pour regarder ses variables.",
+ "pages": [
+  {
+   "scheme": [
+    " sans débogueur           avec gdb",
+    " ./prog                   gdb -q ./prog",
+    " Segmentation fault       (gdb) run",
+    " (c'est tout)             s'arrête AU plantage,",
+    "                          tu peux regarder"
+   ],
+   "point": 3,
+   "mark": [
+    "gdb"
+   ],
+   "text": [
+    "Un débogueur lance ton programme pour toi, et peut l'arrêter pour montrer ce qu'il y a dedans : quelle ligne, quels appels, quelles valeurs.",
+    "",
+    "- Compile avec -g d'abord : gdb a besoin des numéros de ligne.",
+    "$ gcc -g prog.c -o prog && gdb -q ./prog"
+   ]
+  },
+  {
+   "scheme": [
+    " (gdb) bt",
+    " #0  0x…19d in first_char (key=0x…02a \"mode\")",
+    "     at crash.c:28",
+    " #1  0x…1c4 in check (key=0x…02a \"mode\")",
+    "     at crash.c:34",
+    " #2  0x…207 in main () at crash.c:42"
+   ],
+   "point": 2,
+   "mark": [
+    "#0",
+    "crash.c:28"
+   ],
+   "text": [
+    "bt (backtrace) est la chaîne des appels, le plus récent d'abord.",
+    "",
+    "- #0 est l'endroit du plantage, #1 a appelé #0, et ainsi de suite jusqu'à main.",
+    "- Regarde la ligne 28 d'abord. Puis demande-toi pourquoi l'appelant a passé cette valeur.",
+    "- Les nombres 0x… sont des adresses mémoire : ignore-les pour l'instant. Lis la fonction et fichier:ligne."
+   ]
+  },
+  {
+   "scheme": [
+    " (gdb) break month_end   s'arrêter à son début",
+    " (gdb) run",
+    " Breakpoint 1, month_end (month=1, balance=50000)",
+    "     at loan.c:5",
+    " 5     long interest = balance * 10 / 1000;",
+    " (gdb) next              exécuter une ligne",
+    " 6     long paid = 400 + month * 10;",
+    " (gdb) print interest    montrer une variable",
+    " $1 = 500",
+    " (gdb) continue          jusqu'au prochain arrêt"
+   ],
+   "point": 7,
+   "mark": [
+    "break",
+    "next",
+    "print",
+    "continue"
+   ],
+   "text": [
+    "- Un point d'arrêt met le programme en pause à une fonction ou une ligne (break loan.c:12).",
+    "- next exécute une ligne, step entre dans un appel, finish en ressort.",
+    "- break month_end if month == 5 ne s'arrête que si la condition est vraie."
+   ]
+  },
+  {
+   "scheme": [
+    " gdb -tui        gdb avec le code à l'écran",
+    " lldb            débogueur de clang, même idée",
+    " VS Code, CLion  gdb/lldb derrière des boutons",
+    " rr              enregistrer, rejouer à l'envers",
+    " valgrind        vérifs mémoire, sans recompiler"
+   ],
+   "point": 3,
+   "mark": [
+    "rr"
+   ],
+   "text": [
+    "Les mêmes idées partout : points d'arrêt, pas à pas, variables, pile d'appels.",
+    "",
+    "- Le débogueur d'un éditeur, c'est gdb ou lldb derrière des boutons : ce que tu apprends ici sert partout.",
+    "- Pour les bugs mémoire, -fsanitize=address est bien plus rapide que valgrind, mais demande de recompiler ; valgrind marche sur le programme tel quel."
+   ]
+  }
+ ]
+}

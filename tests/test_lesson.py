@@ -190,6 +190,20 @@ class ReaderTest(unittest.TestCase):
         lines = reader.text_lines(["mot " * 17 + "fin : la suite"], 72)
         self.assertFalse(any(line.startswith(":") for line in lines))
 
+    def test_a_bullet_starting_with_a_question_mark_stays_a_bullet(self):
+        """The French no-break space turned "- ? is one character" into a line starting with "-"."""
+        self.assertEqual(reader.text_lines(["- ? is exactly one character."], 72), ["• ? is exactly one character."])
+
+    def test_text_never_covers_the_owl_on_a_page_without_a_drawing(self):
+        """disk page 3 had no scheme: its text was drawn over the owl ("trims the#####")."""
+        le = {"id": "t", "title": "T", "pages": [{"text": ["word " * 40]}]}
+        pieces = reader.page_screen(le, 0, 80, 24)
+        owl = [(r, c) for r, c, t in pieces if "▀" in t or "▄" in t]
+        text = [(r, c, t) for r, c, t in pieces if "word" in t]
+        for r, c, t in text:
+            for orow, ocol in owl:
+                self.assertFalse(r == orow and c + len(t) > ocol, (r, t))
+
     def test_list_screen_draws(self):
         lib = reader.Library(LESSONS)
         text = "".join(t for r, c, t in lib.list_screen(80, 24))

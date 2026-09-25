@@ -1,0 +1,56 @@
+{
+ "title": "Les fichiers : créer, copier, déplacer, supprimer",
+ "summary": "mkdir, touch, cp, mv et rm : les gestes de tous les jours, et celui qui n'a pas de retour arrière.",
+ "pages": [
+  {
+   "scheme": [
+    " $ mkdir notes          notes/",
+    " $ touch notes/todo.txt notes/",
+    "                        └── todo.txt"
+   ],
+   "point": 2,
+   "mark": [
+    "todo.txt"
+   ],
+   "text": [
+    "- mkdir crée un dossier. mkdir -p a/b/c crée toute la chaîne d'un coup.",
+    "- touch crée un fichier vide (ou met à jour la date d'un fichier qui existe)."
+   ]
+  },
+  {
+   "scheme": [
+    " $ cp todo.txt copy.txt     todo.txt  copy.txt",
+    "                            (deux fichiers)",
+    "",
+    " $ mv copy.txt done.txt     todo.txt  done.txt",
+    "                            (renommé : toujours 2)"
+   ],
+   "point": 3,
+   "mark": [
+    "mv"
+   ],
+   "text": [
+    "- cp copie : l'original reste.",
+    "- mv déplace, et renommer, c'est juste déplacer vers un nouveau nom.",
+    "- Copier un dossier demande -r (récursif) : cp -r notes backup."
+   ]
+  },
+  {
+   "scheme": [
+    " $ rm done.txt      notes/",
+    "                    ├── todo.txt",
+    "                    └── done.txt   ✗ sans retour"
+   ],
+   "point": 2,
+   "mark": [
+    "sans retour"
+   ],
+   "text": [
+    "rm supprime pour de bon. Il n'y a pas de corbeille en ligne de commande.",
+    "",
+    "- rm -r supprime un dossier et tout ce qu'il contient : relis la ligne deux fois avant.",
+    "- rm -i demande avant chaque fichier, une bonne habitude pendant que tu apprends."
+   ]
+  }
+ ]
+}
