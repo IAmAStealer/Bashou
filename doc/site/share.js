@@ -5,7 +5,7 @@
 
 const MAX_FRAGMENT = 1024;
 const MAX_JSON = 4096;
-const KEYS = ["p", "f", "lv", "ach", "pets", "won", "read", "sk", "n"];
+const KEYS = ["p", "f", "lv", "ach", "pets", "won", "read", "sk", "n", "s", "sf"];
 const NAME = /^[A-Za-z0-9_-]{1,12}$/;          // the same as bashou/share.py
 
 const TEXT = {
@@ -15,8 +15,8 @@ const TEXT = {
         privacy: "This page drew the card on your device from the link itself: the part after the # is never " +
                  "sent to a server. There is no account, no tracking and nothing stored.",
         tagline: "is a terminal pet that teaches Linux, bash and more.",
-        player: "A Bashou player", level: "Level", achievements: "achievements", pets: "pets found",
-        won: "fights won", read: "lessons read", everything: "A bit of everything",
+        level: "Level", achievements: "achievements", pets: "pets found",
+        won: "fights won", read: "lessons read", starter: "Starter", everything: "A bit of everything",
         footer: "a terminal pet that teaches Linux", alt: "Bashou banner" },
   fr: { title: "Carte Bashou", drawing: "Dessin de la carte…", share: "Partager", save: "Enregistrer l'image",
         bad: "Cette carte est illisible. Demande un nouveau lien : bashou share.",
@@ -24,8 +24,8 @@ const TEXT = {
         privacy: "Cette page a dessiné la carte sur ton appareil à partir du lien lui-même : la partie après le # " +
                  "n'est jamais envoyée à un serveur. Pas de compte, pas de pistage, rien n'est stocké.",
         tagline: "est un compagnon de terminal qui apprend Linux, bash et plus encore.",
-        player: "Un joueur de Bashou", level: "Niveau", achievements: "succès", pets: "pets trouvés",
-        won: "combats gagnés", read: "leçons lues", everything: "Un peu de tout",
+        level: "Niveau", achievements: "succès", pets: "pets trouvés",
+        won: "combats gagnés", read: "leçons lues", starter: "Compagnon de départ", everything: "Un peu de tout",
         footer: "un compagnon de terminal qui apprend Linux", alt: "Bannière Bashou" },
 };
 
@@ -80,7 +80,9 @@ function check(card, data) {
   if (!Array.isArray(card.sk) || card.sk.length > Object.keys(data.skills).length) return null;
   for (const skill of card.sk) if (typeof skill !== "string" || !own(data.skills, skill)) return null;
   if (new Set(card.sk).size !== card.sk.length) return null;
-  if (own(card, "n") && (typeof card.n !== "string" || !NAME.test(card.n))) return null;
+  if (typeof card.n !== "string" || !NAME.test(card.n)) return null;      // every card has a nickname
+  if (typeof card.s !== "string" || !data.starters.includes(card.s) || !own(data.families, card.s)) return null;
+  if (!whole(card.sf, 1, data.families[card.s].forms.length)) return null;
   return card;
 }
 
@@ -162,7 +164,7 @@ function banner(card, data, t, lang) {
   const x = 570;
   ctx.fillStyle = "#ffffff";
   ctx.font = `700 64px ${font}`;
-  ctx.fillText(own(card, "n") ? card.n : t.player, x, 125);
+  ctx.fillText(card.n, x, 125);
   ctx.fillStyle = color;
   ctx.font = `600 34px ${font}`;
   ctx.fillText(`${t.level} ${card.lv} · ${family[lang][card.f - 1]}`, x, 178);
@@ -184,12 +186,22 @@ function banner(card, data, t, lang) {
     ctx.fillText(label, bx + 20, 370);
   });
 
+  // the starter's latest form, at the end of the skills row
+  const starter = data.families[card.s];
+  const starterSprite = data.sprites[starter.forms[card.sf - 1]];
+  drawSprite(ctx, starterSprite, 1450 - 68, 397, 4);           // 17 x 12 pixels, 4 times bigger
+  ctx.font = `400 20px ${font}`;
+  ctx.fillStyle = "#b9bccc";
+  const starterText = `${t.starter} · ${starter[lang][card.sf - 1]}`;
+  const starterX = 1450 - 68 - 12 - ctx.measureText(starterText).width;
+  ctx.fillText(starterText, starterX, 430);
+
   ctx.font = `600 22px ${font}`;
   let sx = x;
-  const skills = card.sk.length ? card.sk.map(s => data.skills[s]) : [t.everything];
+  const skills = card.sk.length ? card.sk.map(s => data.skills[s][lang]) : [t.everything];
   for (const label of skills) {
     const w = ctx.measureText(label).width + 28;
-    if (sx + w > 1450) break;
+    if (sx + w > starterX - 16) break;
     box(ctx, sx, 404, w, 38, 19, color);
     ctx.fillStyle = lightness(color) > 140 ? "#15161f" : "#ffffff";
     ctx.fillText(label, sx + 14, 431);
@@ -204,16 +216,31 @@ function banner(card, data, t, lang) {
 
 // --- page --------------------------------------------------------------------------------------------
 
+// The browser's language, the first of its list that we speak (fr or en).
+function browserLang() {
+  for (const tag of navigator.languages || [navigator.language || "en"]) {
+    const code = String(tag).toLowerCase().slice(0, 2);
+    if (code === "fr" || code === "en") return code;
+  }
+  return "en";
+}
+
 async function main() {
   if (window.top !== window.self) return;                       // never inside someone else's frame
-  const lang = (navigator.language || "en").toLowerCase().startsWith("fr") ? "fr" : "en";
-  const t = TEXT[lang];
   const $ = id => document.getElementById(id);
-  document.documentElement.lang = lang;
-  document.title = t.title;
-  for (const id of ["title", "share", "save", "unverified", "privacy", "tagline"]) $(id).textContent = t[id];
-  $("status").textContent = t.drawing;
+  let lang = browserLang(), file = null, url = null;
 
+  function texts() {
+    const t = TEXT[lang];
+    document.documentElement.lang = lang;
+    document.title = t.title;
+    for (const id of ["title", "share", "save", "unverified", "privacy", "tagline"]) $(id).textContent = t[id];
+    for (const code of ["en", "fr"]) $("lang-" + code).setAttribute("aria-pressed", String(code === lang));
+    return t;
+  }
+
+  let t = texts();
+  $("status").textContent = t.drawing;
   let data = null;
   try {
     const answer = await fetch("share-pets.json", { credentials: "omit", referrerPolicy: "no-referrer" });
@@ -226,23 +253,29 @@ async function main() {
     $("status").textContent = t.bad;
     return;
   }
-  const canvas = banner(card, data, t, lang);
-  canvas.toBlob(blob => {
-    const url = URL.createObjectURL(blob);
-    const img = $("card");
-    img.src = url;
-    img.alt = t.alt;
-    img.hidden = false;
-    $("save").href = url;
-    $("actions").hidden = false;
-    $("unverified").hidden = false;
-    $("status").hidden = true;
-    const file = new File([blob], "bashou.png", { type: "image/png" });
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      $("share").hidden = false;
-      $("share").addEventListener("click", () => navigator.share({ files: [file] }).catch(() => {}));
-    }
-  }, "image/png");
+
+  function draw() {
+    t = texts();
+    banner(card, data, t, lang).toBlob(blob => {
+      if (url) URL.revokeObjectURL(url);
+      url = URL.createObjectURL(blob);
+      file = new File([blob], "bashou.png", { type: "image/png" });
+      const img = $("card");
+      img.src = url;
+      img.alt = t.alt;
+      img.hidden = false;
+      $("save").href = url;
+      for (const id of ["actions", "langs", "unverified"]) $(id).hidden = false;
+      $("status").hidden = true;
+      $("share").hidden = !(navigator.canShare && navigator.canShare({ files: [file] }));
+    }, "image/png");
+  }
+
+  $("share").addEventListener("click", () => navigator.share({ files: [file] }).catch(() => {}));
+  for (const code of ["en", "fr"]) {
+    $("lang-" + code).addEventListener("click", () => { lang = code; draw(); });
+  }
+  draw();
 }
 
 if (typeof document !== "undefined") {

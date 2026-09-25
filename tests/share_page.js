@@ -9,7 +9,7 @@ const data = JSON.parse(fs.readFileSync(pets, "utf8"));
 
 const pack = obj => "#v1." + zlib.deflateSync(Buffer.from(typeof obj === "string" ? obj : JSON.stringify(obj)))
   .toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-const base = { p: "packet", f: 3, lv: 5, ach: 20, pets: 4, won: 2, read: 3, sk: ["network"] };
+const base = { p: "packet", f: 3, lv: 5, ach: 20, pets: 4, won: 2, read: 3, sk: ["network"], n: "Nova", s: "star", sf: 3 };
 
 const hostile = {
   "too long": "#v1." + "A".repeat(2000),
@@ -20,7 +20,11 @@ const hostile = {
   "not json": pack("{nope"),
   "an array": pack([1, 2]),
   "unknown key": pack({ ...base, x: 1 }),
-  "__proto__": pack('{"p":"packet","f":3,"lv":5,"ach":20,"pets":4,"won":2,"read":3,"sk":[],"__proto__":{"a":1}}'),
+  "__proto__": pack('{"p":"packet","f":3,"lv":5,"ach":20,"pets":4,"won":2,"read":3,"sk":[],"n":"Nova","s":"star","sf":3,"__proto__":{"a":1}}'),
+  "no nickname": pack({ p: "packet", f: 3, lv: 5, ach: 20, pets: 4, won: 2, read: 3, sk: ["network"], s: "star", sf: 3 }),
+  "no starter": pack({ p: "packet", f: 3, lv: 5, ach: 20, pets: 4, won: 2, read: 3, sk: ["network"], n: "Nova" }),
+  "a pet as starter": pack({ ...base, s: "packet" }),
+  "starter form too far": pack({ ...base, sf: 8 }),
   "unknown pet": pack({ ...base, p: "constructor" }),
   "form too far": pack({ ...base, f: 11 }),
   "level 999": pack({ ...base, lv: 999 }),

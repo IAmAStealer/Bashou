@@ -317,7 +317,7 @@ def main():
     sw.add_argument("pet", nargs="?")
     sub.add_parser("stats", help="your terminal stats: commands, tools, streaks")
     sh = sub.add_parser("share", help="a QR code: your phone turns your progress into an image to share")
-    sh.add_argument("--name", help="a nickname on the image: 1-12 letters, digits, - or _ ('' removes it)")
+    sh.add_argument("--name", help="the nickname on the image: 1-12 letters, digits, - or _ (asked the first time)")
     dv = sub.add_parser("dev", help="testing helpers (back up state first)")
     dv.add_argument("action", choices=["unlock-all", "stage", "stage-all", "level", "threat", "restore"])
     dv.add_argument("pet", nargs="?", help="pet (stage), level 1-9 (level) or challenge id (threat)")

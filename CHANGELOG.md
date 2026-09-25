@@ -3,6 +3,16 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.6.2 — 2026-09-25
+
+- `bashou share` asks for a nickname the first time and puts it on every card, so the banner never
+  needs your real name (`bashou share --name` changes it).
+- The banner also shows your starter at its latest form, and speaks English or French: it follows your
+  browser's language, and two buttons switch it before you share.
+- The Ember is redrawn cleaner: a symmetric flame on a smooth bed of charcoal.
+- The README shows a sample banner and says it plainly: Bashou collects nothing, you are not the
+  product.
+
 ## v0.6.1 — 2026-09-25
 
 - The Ember lost the stray pixel floating at its top right.

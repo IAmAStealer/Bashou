@@ -46,3 +46,48 @@ class ShareTest(unittest.TestCase):
         rows = dict(share.describe(share.payload(player(), "Alexis")))
         self.assertEqual(rows["Name"], "Alexis")
         self.assertEqual(rows["Fights won"], "7")
+
+
+class NicknameTest(unittest.TestCase):
+    """A card always carries a nickname (owner, 0.6.2): asked the first time, then remembered."""
+
+    def setUp(self):
+        import tempfile
+        from pathlib import Path
+        from unittest import mock
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        home = Path(tmp.name)
+        for patch in (mock.patch.object(state, "DATA", home), mock.patch.object(state, "STATE", home / "state.json")):
+            patch.start()
+            self.addCleanup(patch.stop)
+
+    def run_share(self, name=None, typed=None, tty=True):
+        import argparse, io
+        from contextlib import redirect_stdout
+        from unittest import mock
+        answers = iter(typed or [])
+        with mock.patch("sys.stdin.isatty", return_value=tty), \
+                mock.patch("builtins.input", side_effect=lambda _p: next(answers)), redirect_stdout(io.StringIO()) as out:
+            code = share.main(argparse.Namespace(name=name))
+        return code, out.getvalue()
+
+    def test_no_nickname_no_terminal_no_card(self):
+        code, out = self.run_share(tty=False)
+        self.assertEqual(code, 1)
+        self.assertIn("--name", out)
+        self.assertNotIn("share.html", out)
+
+    def test_asked_until_valid_then_remembered(self):
+        code, out = self.run_share(typed=["", "two words", "Nova_7"])
+        self.assertEqual(code, 0)
+        self.assertIn("Nova_7", out)
+        self.assertEqual(state.load()["share_name"], "Nova_7")
+        code, out = self.run_share(tty=False)                       # the next time, no question
+        self.assertEqual(code, 0)
+        self.assertIn(share.encode(share.payload(state.load(), "Nova_7")), out)
+
+    def test_an_empty_or_bad_name_is_refused(self):
+        self.assertEqual(self.run_share(name="")[0], 1)
+        self.assertEqual(self.run_share(name="<b>")[0], 1)
+        self.assertEqual(self.run_share(name="Alexis")[0], 0)

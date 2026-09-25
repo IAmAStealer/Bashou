@@ -62,11 +62,12 @@ Droplet after 10 commands, a Mouseling after 10 programs, a Spore after 5 script
 
 Proud of how far you got? **`bashou share`** shows a QR code in your terminal. Scan it, and your phone
 draws a banner of your pet, its family and your progress, with a button to send it on Signal, WhatsApp
-or anywhere you like. Add a nickname with `bashou share --name Nova`.
+or anywhere you like. The first time, it asks for a nickname to show instead of your real name
+(`bashou share --name Nova` changes it).
 
 ![A Bashou banner: Alexis's Satellite, level 12, the ten forms of the Packet family from Bit to
-Constellation, 58 achievements, 14 pets, 23 fights won, 17 lessons read, and the skills Bash, Linux
-and Network](doc/img/share.png)
+Constellation, 58 achievements, 14 pets, 23 fights won, 17 lessons read, the skills Bash, Linux
+and Network, and the starter, a Moon](doc/img/share.png)
 
 Before the QR code, Bashou lists exactly what the card holds: no commands, files, machine names or
 dates. The progress travels inside the link, after the `#`, a part browsers never send to a server:
