@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security problem
+    url: https://github.com/IAmAStealer/Bashou/security/advisories/new
+    about: Report it privately, not in a public issue.
+  - name: Player's guide
+    url: https://github.com/IAmAStealer/Bashou/blob/main/doc/GUIDE.md
+    about: Every command, fight and setting, explained.
+  - name: Contributing guide
+    url: https://github.com/IAmAStealer/Bashou/blob/main/.github/CONTRIBUTING.md
+    about: Questions, lessons, pixel art and translations, most of them without code.

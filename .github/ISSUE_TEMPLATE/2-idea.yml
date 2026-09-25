@@ -1,0 +1,50 @@
+name: Idea
+description: A feature, a new pet, a new fight, a better way to teach something
+title: "Idea: "
+labels: ["idea"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Bashou teaches the terminal with a pet, fights, adventure questions and lessons. Ideas that help
+        someone learn one more thing, or enjoy learning it, are the best ones.
+  - type: dropdown
+    id: area
+    attributes:
+      label: What it's about
+      options:
+        - A new fight (a threat to beat with a tool)
+        - A new pet, or pixel art
+        - Adventure questions or bosses
+        - A lesson in the Sage Owl's library
+        - A new skill (a topic Bashou doesn't teach yet)
+        - bashou learn / bashou explain
+        - Install, setup, settings
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: What's missing today
+      description: What a player can't learn, or can't do, or finds hard. A real moment helps.
+      placeholder: When I use journalctl, I never know how to keep only today's errors, and nothing in Bashou shows it.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Your idea
+      description: What the player would see and do. Commands, a sketch, a drawing are welcome.
+    validations:
+      required: true
+  - type: textarea
+    id: other
+    attributes:
+      label: Other ways you thought about
+  - type: checkboxes
+    id: help
+    attributes:
+      label: Helping
+      options:
+        - label: I'd like to help build it (questions, lessons and pixel art need no code).

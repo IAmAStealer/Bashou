@@ -1,0 +1,38 @@
+name: Lesson idea or fix
+description: A lesson for `bashou lesson`, or a mistake in one
+title: "Lesson: "
+labels: ["lesson"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Lessons are a few short pages with a drawing that grows from page to page. The guide:
+        [doc/contributing/lessons.md](https://github.com/IAmAStealer/Bashou/blob/main/doc/contributing/lessons.md),
+        and where each lesson fits: [curriculum.md](https://github.com/IAmAStealer/Bashou/blob/main/doc/contributing/curriculum.md).
+  - type: dropdown
+    id: kind
+    attributes:
+      label: This is
+      options:
+        - A mistake in a lesson (wrong fact, typo, drawing out of line)
+        - An idea for a new lesson
+    validations:
+      required: true
+  - type: input
+    id: lesson
+    attributes:
+      label: Which lesson, and which page
+      placeholder: "pipes, page 3 (or: none yet)"
+  - type: textarea
+    id: content
+    attributes:
+      label: What's wrong, or what the lesson should teach
+      description: For a mistake, a link to the man page or official docs that shows it helps a lot.
+    validations:
+      required: true
+  - type: textarea
+    id: drawing
+    attributes:
+      label: A drawing (optional)
+      description: Text drawings of 50 columns at most, like the ones in the lessons.
+      render: text

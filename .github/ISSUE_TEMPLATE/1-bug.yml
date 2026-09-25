@@ -1,0 +1,93 @@
+name: Bug report
+description: Something in Bashou doesn't work as it should
+title: "Bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time! A good report gets fixed fast: tell us what you did, what you saw, and
+        what you expected. Found a security problem? Please use the private report instead (see the link on
+        the previous page).
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where
+      options:
+        - Pet, prompt or speech bubbles
+        - bashou fight (a threat, the arena)
+        - bashou adventure (questions, bosses)
+        - bashou lesson (the Sage Owl's library)
+        - bashou learn / bashou explain
+        - Achievements or pet evolutions
+        - Install, setup or update (apt, dnf, git)
+        - Translation
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, and what Bashou did. Paste the exact message if there is one.
+      placeholder: |
+        I ran `bashou fight`, the Log Hydra asked how many [ERROR] lines…
+        I typed `grep -c '\[ERROR\]' app.log`, got 7, answered 7, and it said "Not quite".
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: How to make it happen again
+      description: The commands, in order, if you can. "It happens every time" or "only once" helps too.
+      placeholder: |
+        1. bashou fight
+        2. …
+  - type: input
+    id: version
+    attributes:
+      label: Bashou version
+      description: "The output of `bashou version`"
+      placeholder: Bashou v0.5.0
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: Installed with
+      options:
+        - apt (Debian, Ubuntu)
+        - dnf (Rocky, Fedora, Red Hat)
+        - git clone
+        - I don't know
+    validations:
+      required: true
+  - type: input
+    id: system
+    attributes:
+      label: System, shell and terminal
+      description: "`grep PRETTY /etc/os-release`, `echo $BASH_VERSION`, and the terminal app (GNOME Terminal, Windows Terminal, WSL, iTerm2, tmux…)"
+      placeholder: Debian 13, bash 5.2.37, Windows Terminal + WSL2
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Output or screenshot
+      description: A screenshot helps for anything drawn (pets, fights, lessons). Text is pasted as is.
+      render: text
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before sending
+      options:
+        - label: I looked at the open issues and this one isn't there yet.
+          required: true
+        - label: My paste holds no password, token or private path I want to keep for myself (Bashou's files record the commands you type).
+          required: true

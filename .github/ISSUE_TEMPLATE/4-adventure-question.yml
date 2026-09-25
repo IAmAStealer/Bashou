@@ -1,0 +1,60 @@
+name: Adventure question
+description: A question for the monsters and bosses of `bashou adventure`
+title: "Question: "
+labels: ["question-bank"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Guide: [doc/contributing/questions.md](https://github.com/IAmAStealer/Bashou/blob/main/doc/contributing/questions.md).
+        Questions teach: clear sentences for beginners, and an explanation that says why.
+  - type: dropdown
+    id: topic
+    attributes:
+      label: Topic
+      options: [bash, linux, systemd, debian, rocky, python, c, rust, sql, cicd, logic, a new one]
+    validations:
+      required: true
+  - type: dropdown
+    id: level
+    attributes:
+      label: Level
+      options:
+        - 1 · basics
+        - 2 · a few months in
+        - 3 · production details
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+    validations:
+      required: true
+  - type: input
+    id: right
+    attributes:
+      label: Right answer
+    validations:
+      required: true
+  - type: textarea
+    id: wrong
+    attributes:
+      label: Three wrong answers
+      description: Plausible ones, the mistakes people really make. No jokes.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Explanation
+      description: Why the right answer is right, in a sentence or two.
+    validations:
+      required: true
+  - type: checkboxes
+    id: own
+    attributes:
+      label: Origin
+      options:
+        - label: Written in my own words, not copied from a quiz or a course.
+          required: true

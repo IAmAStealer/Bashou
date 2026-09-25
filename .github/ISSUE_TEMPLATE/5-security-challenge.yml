@@ -1,0 +1,52 @@
+name: Security challenge idea
+description: A small investigation for `bashou security`
+title: "Security challenge: "
+labels: ["challenge"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Guide: [doc/contributing/security-challenges.md](https://github.com/IAmAStealer/Bashou/blob/main/doc/contributing/security-challenges.md).
+  - type: textarea
+    id: story
+    attributes:
+      label: What the player investigates
+      description: The story, in one or two sentences.
+    validations:
+      required: true
+  - type: textarea
+    id: files
+    attributes:
+      label: Files in the sandbox
+      description: Fake logs, configs…
+    validations:
+      required: true
+  - type: input
+    id: answer
+    attributes:
+      label: What they have to find
+    validations:
+      required: true
+  - type: textarea
+    id: solve
+    attributes:
+      label: Commands that solve it
+      render: bash
+    validations:
+      required: true
+  - type: dropdown
+    id: level
+    attributes:
+      label: Difficulty
+      options: [easy, medium, hard]
+    validations:
+      required: true
+  - type: checkboxes
+    id: own
+    attributes:
+      label: Origin
+      options:
+        - label: It's my own idea, not copied from a CTF or another site.
+          required: true
+        - label: It's harmless, everything stays in the sandbox folder.
+          required: true

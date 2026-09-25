@@ -114,7 +114,9 @@ Your progress stays in `~/.local/share/bashou` (delete it too to forget everythi
 ## More
 
 The [guide](doc/GUIDE.md) explains pets, achievements, fights and translations.
-Want to help? Pixel art, security challenges and adventure questions are welcome: [contributing](.github/CONTRIBUTING.md).
+Something broken, or an idea? [Report a bug](https://github.com/IAmAStealer/Bashou/issues/new?template=1-bug.yml)
+or [suggest an idea](https://github.com/IAmAStealer/Bashou/issues/new?template=2-idea.yml).
+Want to help? Pixel art, lessons, security challenges and adventure questions are welcome: [contributing](.github/CONTRIBUTING.md).
 [How it started](doc/STORY.md): made with AI for responsible use (learning, so you can do it too); the Rust version is written by hand.
 
 MIT license.
