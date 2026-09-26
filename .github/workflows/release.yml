@@ -15,8 +15,12 @@ permissions:
 jobs:
   checks:
     uses: ./.github/workflows/ci.yml
+    # Every permission a job of ci.yml asks for, even jobs skipped here (its release and packages):
+    # GitHub checks them before starting and refuses the whole run otherwise (v0.6.2: startup failure).
     permissions:
-      contents: write  # ci.yml's own release job needs it (skipped here)
+      contents: write
+      id-token: write
+      attestations: write
 
   release:
     needs: checks

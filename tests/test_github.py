@@ -129,6 +129,57 @@ class WorkflowsTest(unittest.TestCase):
             self.assertIsNotNone(top, path.name)
             self.assertNotIn("write", top.group(1), path.name)
 
+    def test_callers_grant_what_called_workflows_ask(self):
+        """release.yml runs ci.yml with contents: write only, while ci.yml's packages job asks for id-token
+        and attestations: GitHub refused to start the v0.6.2 release (startup_failure), even though that
+        job is skipped there. A job that calls a workflow must grant every permission its jobs ask for."""
+        import re
+
+        def jobs(text):
+            """{job: (called workflow or None, {permission: level})}, read by indentation."""
+            found, job, block = {}, None, None
+            for line in text.split("\n"):
+                head = re.match(r"^  ([\w-]+):\s*$", line)
+                if head:
+                    job, block = head.group(1), None
+                    found[job] = [None, {}]
+                    continue
+                if job is None or (line and not line.startswith("    ")):
+                    job = None if line and not line.startswith(" ") else job
+                    continue
+                uses = re.match(r"^    uses: \./\.github/workflows/([\w.-]+)", line)
+                if uses:
+                    found[job][0] = uses.group(1)
+                if re.match(r"^    permissions:", line):
+                    block = True
+                    continue
+                perm = re.match(r"^      ([\w-]+): (read|write)", line)
+                if block and perm:
+                    found[job][1][perm.group(1)] = perm.group(2)
+                elif not line.startswith("      "):
+                    block = None
+            return found
+
+        workflows = {p.name: jobs(p.read_text()) for p in (GITHUB / "workflows").glob("*.yml")}
+        rank = {"read": 1, "write": 2}
+
+        def asked(name, seen=()):
+            need = {}
+            for called, perms in workflows[name].values():
+                wanted = dict(perms)
+                if called and called not in seen:
+                    for k, v in asked(called, seen + (name,)).items():
+                        wanted[k] = max(wanted.get(k, v), v, key=rank.get)
+                for k, v in wanted.items():
+                    need[k] = max(need.get(k, v), v, key=rank.get)
+            return need
+
+        for name, found in workflows.items():
+            for job, (called, perms) in found.items():
+                if called:
+                    for k, v in asked(called).items():
+                        self.assertGreaterEqual(rank.get(perms.get(k), 0), rank[v], f"{name} job {job}: {k}: {v}")
+
     def test_no_option_after_double_dash(self):
         """`gh release upload v0.6.2 -- *.deb --clobber` took --clobber for a file (0.6.2's release failed):
         after `--`, every word is a file."""
