@@ -405,10 +405,11 @@ class SecretsFightTest(unittest.TestCase):
     def test_the_clear_file_must_go_and_the_passphrase_must_open_it(self):
         ch, work, meta = self.setup("plaintext_pixie")
         self.assertFalse(ch.check(work, meta, "done"))
+        clear = (work / "secrets.txt").read_bytes()      # put back as it was (CodeQL flagged writing meta["secret"])
         secrets.lock(work / "secrets.txt", work / "secrets.txt.gpg", "not-the-one")
         (work / "secrets.txt").unlink()
         self.assertFalse(ch.check(work, meta, "done"))                     # another passphrase
-        (work / "secrets.txt").write_text(meta["secret"])
+        (work / "secrets.txt").write_bytes(clear)
         secrets.lock(work / "secrets.txt", work / "secrets.txt.gpg", meta["args"]["pw"])
         self.assertFalse(ch.check(work, meta, "done"))                     # the clear copy is still there
         (work / "secrets.txt").unlink()
