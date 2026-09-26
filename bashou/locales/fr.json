@@ -1863,5 +1863,6 @@
  "choose your starter (once)": "choisis ton starter (une fois)",
  "start over with a new starter": "recommence avec un nouveau starter",
  "get the new version": "installe la nouvelle version",
- "which version of Bashou this is": "quelle version de Bashou c'est"
+ "which version of Bashou this is": "quelle version de Bashou c'est",
+ "This terminal was opened before my last update, so I may draw over your text. Type exec bash (or open a new terminal) to load the new version.": "Ce terminal a été ouvert avant ma dernière mise à jour, alors je peux cacher ton texte. Tape exec bash (ou ouvre un nouveau terminal) pour charger la nouvelle version."
 }

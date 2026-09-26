@@ -174,11 +174,22 @@ class OldLoaderTest(TempState):
         pet = Companion(os.getpid())
         self.assertTrue(pet.room())
 
+    def test_says_to_reload_the_old_loader_once(self):
+        """Owner, 2026-09-26: the fix changed nothing in terminals opened before it, with no sign why."""
+        from bashou.companion import Companion
+        pet = Companion(os.getpid())
+        self.assertIn("exec bash", " ".join(pet.notes))
+        pet.notes = []
+        state.private(state.CACHE)
+        pet.save_resume()                                    # the pet restarts into new code
+        self.assertEqual(Companion(os.getpid()).notes, [])
+
     def test_waits_for_room_with_the_new_loader(self):
         from bashou.companion import Companion
         state.private(state.CACHE)
         (state.CACHE / f"room.{os.getpid()}").write_text("0\n")        # written by `bashou on`
         pet = Companion(os.getpid())
+        self.assertEqual(pet.notes, [])
         self.assertFalse(pet.room())
         (state.CACHE / f"room.{os.getpid()}").unlink()                 # PS0: a command runs
         self.assertFalse(pet.room())
@@ -303,6 +314,8 @@ class ThreatBubbleTest(TempState):
         with state.locked() as s:
             s["starter"] = "pebble"
             s["threat"] = {"challenge": "grep_hydra", "until": time.time() + 600}
+        state.private(state.CACHE)
+        (state.CACHE / f"room.{os.getpid()}").write_text("0\n")        # the loader of this version
         self.pet = companion.Companion(os.getpid())
         self.pet.reload_pet()                              # a terminal that didn't roll it announces it too
         self.pet.update_bubble()

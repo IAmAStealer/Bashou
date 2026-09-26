@@ -58,6 +58,7 @@ class Companion:
         # (the pet updates itself, open shells don't): there the pet draws as it always did. The new
         # loader writes the file before starting the pet.
         self.managed = self.room_file.exists()
+        self.old_loader_told = False
         self.offset = 0            # bytes of the events file already counted
         self.code = code_version()
         self.notes = []            # notifications waiting for the bubble
@@ -83,6 +84,10 @@ class Companion:
         self.talk_at = now_ms() + random.randint(*FIRST_TALK) * 60_000
         self.warn_at = 0
         self.resume()
+        if not self.managed and not self.old_loader_told:
+            self.announce(_("This terminal was opened before my last update, so I may draw over your text. "
+                            "Type exec bash (or open a new terminal) to load the new version."))
+            self.old_loader_told = True
 
     # --- shell ------------------------------------------------------------
 
@@ -356,7 +361,7 @@ class Companion:
         return newest != self.code and time.time() - newest > 2
 
     HANDOVER = ("offset", "bubble", "bubble_at", "notes", "talk_at", "warn_at", "threat", "threat_text", "threat_id",
-                "threat_until", "fights_won")
+                "threat_until", "fights_won", "old_loader_told")
 
     def restart(self):
         """Run the new code in this same process (same PID, so the shell still knows us).
