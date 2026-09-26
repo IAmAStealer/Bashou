@@ -144,6 +144,13 @@ class Scene:
     def fits(self, cols):
         return cols >= self.pet.width + self.enemy.width + 10
 
+    def room(self):
+        """The arena's prompt emptied the top rows for the panel (bashou/room.bash)."""
+        try:
+            return (self.base / "room").read_text().strip() == "1"
+        except OSError:
+            return False
+
     def at_prompt(self):
         try:
             with open(f"/proc/{self.shell}/stat") as f:
@@ -159,7 +166,7 @@ class Scene:
             while True:
                 os.kill(self.shell, 0)                      # OSError when the arena is over
                 time.sleep(0.1)
-                if not self.at_prompt():
+                if not self.at_prompt() or not self.room():
                     last = None                             # PS0 erased us: draw again at the next prompt
                     continue
                 cols = os.get_terminal_size(1).columns

@@ -42,6 +42,7 @@ _arena_log() {
   fi
   _arena_hc=$HISTCMD
   _arena_tip
+  [[ -n $BASHOU_DUEL ]] && _bashou_make_room         # empty top rows for the fight panel
   return "$s"
 }
 _arena_tip() {
@@ -71,8 +72,17 @@ hint() { _arena hint; }
 lesson() { _arena lesson; }
 task() { _arena task; }
 flee() { exit 3; }
-_arena_ps0() { [[ -r $BASHOU_ARENA/erase ]] && printf '%s' "$(< "$BASHOU_ARENA/erase")"; }
-[[ -n $BASHOU_DUEL ]] && PS0='$(_arena_ps0)'
+# The fight panel is drawn at the top, like the pet: the same room is made for it (bashou/room.bash).
+_bashou_height=$BASHOU_ARENA/height _bashou_room=$BASHOU_ARENA/room _bashou_erase=$BASHOU_ARENA/erase
+_arena_ps0() {
+  rm -f "$_bashou_room"                              # the panel waits for the next prompt's room
+  _bashou_close_room && return
+  [[ -r $_bashou_erase ]] && printf '%s' "$(< "$_bashou_erase")"
+}
+if [[ -n $BASHOU_DUEL ]]; then
+  source "$BASHOU_SRC/bashou/room.bash"
+  PS0='$(_arena_ps0)'
+fi
 cd "$BASHOU_ARENA/arena"
 """
 
@@ -360,8 +370,8 @@ def arena(ch, intro, rng=None, fight=False, help_first=False, limit=None):
             "Tip: uniq only merges identical lines that are next to each other. "
             "Sort first: … | sort | uniq -c (or sort -u to keep one of each).") + RESET)
         top = duel.room(base) if fight else 0
-        if top:                                            # the duel takes the top: start below it
-            print("\033[H\033[2J" + "\n" * top, end="", flush=True)
+        if top:                                            # the rows the arena's prompt empties for the duel
+            (base / "height").write_text(f"{top}\n")
         print(intro(ch.task_text(meta)), flush=True)
         env = {**os.environ, "BASHOU_ARENA": str(base),
                "BASHOU_SRC": str(Path(__file__).resolve().parent.parent)}

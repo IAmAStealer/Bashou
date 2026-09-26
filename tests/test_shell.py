@@ -164,11 +164,47 @@ class RoomTest(unittest.TestCase):
 
     def test_keys_waiting_mean_no_question_and_no_pet(self):
         """Asking the terminal would eat keys typed ahead: then the pet skips this prompt."""
-        script = (f"source <(sed -n '/^_bashou_dsr=/,/^_bashou_make_room()/p' {ROOT}/bashou.bash | head -n -1)\n"
+        script = (f"source <(sed -n '/^_bashou_dsr=/,/^_bashou_make_room()/p' {ROOT}/bashou/room.bash | head -n -1)\n"
                   "_bashou_where && echo asked || echo skipped\n")
         import subprocess
         out = subprocess.run(["bash", "-c", script], input="typed ahead\n", capture_output=True, text=True)
         self.assertEqual(out.stdout.strip(), "skipped")
+
+
+class ArenaRoomTest(unittest.TestCase):
+    """Owner, 2026-09-26: the arena's fight panel still hid lines (drawn over the text, then blanked):
+    the arena's prompt now makes the same room as your shell's."""
+
+    def setUp(self):
+        from unittest import mock
+        from bashou import fight
+        self.tmp = tempfile.TemporaryDirectory()
+        self.base = Path(self.tmp.name) / "arena-base"
+        (self.base / "arena").mkdir(parents=True)
+        (self.base / "arena.rc").write_text(fight.RC)
+        (self.base / "meta.json").write_text(json.dumps({"challenge": "grep_hydra"}))
+        (self.base / "height").write_text("9\n")
+        with mock.patch.dict(os.environ, {"BASHOU_ARENA": str(self.base), "BASHOU_SRC": str(ROOT),
+                                          "BASHOU_DUEL": "1"}):
+            self.sh = Shell(self.tmp.name, ["bash", "--rcfile", str(self.base / "arena.rc"), "-i"])
+        self.assertTrue(self.sh.expect(b"arena"))
+
+    def tearDown(self):
+        self.sh.close()
+        self.tmp.cleanup()
+
+    def test_the_top_rows_go_up_untouched_then_the_empty_rows_go_away(self):
+        sh = self.sh
+        sh.row = 29
+        start = len(sh.out)
+        sh.send("echo hi\n", 0)
+        # 9 rows for the panel, 2 free under the prompt: scroll 10, then 9 blank rows
+        self.assertTrue(sh.expect(b"\x1b[30;1H" + b"\r\n" * 10 + b"\x1b[H\x1b[9L\x1b[28;1H", start))
+        self.assertEqual((self.base / "room").read_text().strip(), "1")
+        start = len(sh.out)
+        sh.row = 29
+        sh.send("true\n", 0)
+        self.assertTrue(sh.expect(b"\x1b[H\x1b[9M\x1b[20;1H", start))    # PS0: blank rows deleted
 
 
 class NoCursorReportTest(unittest.TestCase):
