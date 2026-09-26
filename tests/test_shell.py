@@ -21,7 +21,7 @@ TIMEOUT = 10
 class Shell:
     """An interactive bash that sources bashou.bash, with its own data folders."""
 
-    def __init__(self, tmp, cmd=None, state=None):
+    def __init__(self, tmp, cmd=None, state=None, cursor=True):
         self.tmp = Path(tmp)
         self.data, self.cache = self.tmp / "data", self.tmp / "cache"
         self.data.mkdir(exist_ok=True)
@@ -41,6 +41,20 @@ class Shell:
         import fcntl, struct, termios
         fcntl.ioctl(self.fd, termios.TIOCSWINSZ, struct.pack("HHHH", 30, 140, 0, 0))
         self.out = b""
+        self.row = 12                 # where the cursor is, as this terminal answers ESC[6n
+        self.answered = 0             # bytes of output already looked at for ESC[6n
+        self.cursor = cursor          # False: a terminal that never answers them
+
+    def answer_cursor_queries(self):
+        """Like a real terminal: ESC[6n gets the cursor position (self.row; after ESC[9999;9999H, the
+        bottom right corner of the 30x140 screen)."""
+        while self.cursor:
+            at = self.out.find(b"\x1b[6n", self.answered)
+            if at < 0:
+                return
+            corner = self.out[:at].endswith(b"\x1b[9999;9999H")
+            os.write(self.fd, b"\x1b[30;140R" if corner else f"\x1b[{self.row};1R".encode())
+            self.answered = at + 4
 
     def read(self, seconds):
         end = time.time() + seconds
@@ -51,6 +65,7 @@ class Shell:
                     self.out += os.read(self.fd, 65536)
                 except OSError:
                     break
+                self.answer_cursor_queries()
         return self.out
 
     def send(self, text, wait=0.5):
@@ -109,24 +124,95 @@ def alive(pid):
         return False
 
 
+class RoomTest(unittest.TestCase):
+    """Owner, 2026-09-26: scrolling up, lines of `--help` had holes where the pet and its bubble were
+    drawn. The top rows are now emptied before the pet is drawn (their lines go up into the
+    scrollback), and the empty rows are deleted when the next command starts."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.sh = Shell(self.tmp.name)
+        self.assertTrue(self.sh.expect(b"$ "))
+
+    def tearDown(self):
+        self.sh.close()
+        self.tmp.cleanup()
+
+    def room(self):
+        path = self.sh.cache / f"room.{self.sh.pid}"
+        return path.read_text().strip() if path.exists() else None
+
+    def test_the_top_rows_go_up_untouched_then_the_empty_rows_go_away(self):
+        sh = self.sh
+        sh.row = 29                                    # a full screen: the prompt near the bottom
+        start = len(sh.out)
+        sh.send("echo hi\n", 1)
+        # prompt at 29 of 30, 7 rows for the pet, 2 free under the prompt: scroll 8, then 7 blank rows
+        self.assertIn(b"\x1b[30;1H" + b"\r\n" * 8 + b"\x1b[H\x1b[7L\x1b[28;1H", sh.out[start:])
+        self.assertEqual(self.room(), "1")
+        start = len(sh.out)
+        sh.row = 29                                    # where Enter left the cursor
+        sh.send("true\n", 1)
+        self.assertIn(b"\x1b[H\x1b[7M\x1b[22;1H", sh.out[start:])   # PS0: blank rows deleted
+
+    def test_room_is_made_on_a_clear_screen_without_scrolling(self):
+        sh = self.sh
+        sh.row = 1
+        start = len(sh.out)
+        sh.send("clear\n", 1)
+        self.assertIn(b"\x1b[30;1H\x1b[H\x1b[7L\x1b[8;1H", sh.out[start:])
+
+    def test_keys_waiting_mean_no_question_and_no_pet(self):
+        """Asking the terminal would eat keys typed ahead: then the pet skips this prompt."""
+        script = (f"source <(sed -n '/^_bashou_dsr=/,/^_bashou_make_room()/p' {ROOT}/bashou.bash | head -n -1)\n"
+                  "_bashou_where && echo asked || echo skipped\n")
+        import subprocess
+        out = subprocess.run(["bash", "-c", script], input="typed ahead\n", capture_output=True, text=True)
+        self.assertEqual(out.stdout.strip(), "skipped")
+
+
+class NoCursorReportTest(unittest.TestCase):
+    """A terminal that never says where the cursor is: Bashou draws the pet as it always did."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.sh = Shell(self.tmp.name, cursor=False)
+        self.sh.read(1)
+        self.sh.expect(b"38;2;216;200;160", timeout=15)   # after the 2 s wait for an answer
+
+    def tearDown(self):
+        self.sh.close()
+        self.tmp.cleanup()
+
+    def test_prompt_starts_below_the_pet(self):
+        """The first commands' output hid under the pet (the prompt started on the top line)."""
+        self.assertIn(b"\x1b[7B", self.sh.out)             # at startup
+        start = len(self.sh.out)
+        self.sh.send("clear\n", wait=0.2)
+        self.assertTrue(self.sh.expect(b"\x1b[7B", start))  # and after clear
+        self.sh.send("echo typed", 0.2)
+        start = len(self.sh.out)
+        self.sh.send("\x0c", 0)                               # Ctrl+L
+        self.assertTrue(self.sh.expect(b"\x1b[2J\x1b[7B", start))
+        self.assertTrue(self.sh.expect(b"echo typed", start))   # the line being typed stays
+
+    def test_pet_is_erased_before_command_output(self):
+        """The pet must be wiped (PS0) before a command prints, or it scrolls into the history."""
+        erase = next(self.sh.cache.glob("erase.*")).read_bytes()
+        start = len(self.sh.out)
+        self.sh.send('echo "OUT_$((40 + 2))"\n', 0)
+        self.assertTrue(self.sh.expect(b"OUT_42", start))
+        after = self.sh.out[start:]
+        self.assertIn(erase, after)
+        self.assertLess(after.index(erase), after.index(b"OUT_42"))
+
+
 class ShellTest(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.sh = Shell(self.tmp.name)
         self.sh.read(1)
         self.sh.expect(b"38;2;216;200;160")              # the pet is drawn: rc read, pet started
-
-    def test_prompt_starts_below_the_pet(self):
-        """The first commands' output hid under the pet (the prompt started on the top line)."""
-        self.assertIn(b"\x1b[6B", self.sh.out)             # at startup
-        start = len(self.sh.out)
-        self.sh.send("clear\n", wait=0.2)
-        self.assertTrue(self.sh.expect(b"\x1b[6B", start))  # and after clear
-        self.sh.send("echo typed", 0.2)
-        start = len(self.sh.out)
-        self.sh.send("\x0c", 0)                               # Ctrl+L
-        self.assertTrue(self.sh.expect(b"\x1b[2J\x1b[6B", start))
-        self.assertTrue(self.sh.expect(b"echo typed", start))   # the line being typed stays
 
     def tearDown(self):
         pid = ""
@@ -158,16 +244,6 @@ class ShellTest(unittest.TestCase):
         self.assertTrue(self.sh.wait_state(lambda s: s["commands"] == 2))
         self.sh.read(1.5)
         self.assertEqual(self.sh.state()["commands"], 2)       # and not more
-
-    def test_pet_is_erased_before_command_output(self):
-        """The pet must be wiped (PS0) before a command prints, or it scrolls into the history."""
-        erase = next(self.sh.cache.glob("erase.*")).read_bytes()
-        start = len(self.sh.out)
-        self.sh.send('echo "OUT_$((40 + 2))"\n', 0)
-        self.assertTrue(self.sh.expect(b"OUT_42", start))
-        after = self.sh.out[start:]
-        self.assertIn(erase, after)
-        self.assertLess(after.index(erase), after.index(b"OUT_42"))
 
     def test_pet_comes_back_right_after_any_command(self):
         """The pet stayed erased up to 2 s, or longer after commands history skips (duplicates)."""

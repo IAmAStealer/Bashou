@@ -8,6 +8,7 @@ _bashou_data=${BASHOU_DATA:-$HOME/.local/share/bashou}
 _bashou_events=$_bashou_data/events.$$
 _bashou_erase=${BASHOU_CACHE:-$HOME/.cache/bashou}/erase.$$
 _bashou_height=${BASHOU_CACHE:-$HOME/.cache/bashou}/height.$$
+_bashou_room=${BASHOU_CACHE:-$HOME/.cache/bashou}/room.$$
 # The events file holds what you type, for your pet: yours only, whatever the umask (older versions
 # made the folders 755, readable by other accounts where home folders are).
 (umask 077; mkdir -p "$_bashou_data" "${_bashou_erase%/*}"; : >> "$_bashou_events") 2>/dev/null
@@ -21,8 +22,11 @@ _bashou_restarts=0
 # $HISTCMD only moves when a command is added, so empty Enters are not counted.
 _bashou_log() {
   local status=$? last=$_
-  # `clear` put the prompt back on the top line, under the pet.
-  [[ $last == clear || $last == reset ]] && _bashou_below
+  if [[ -n $BASHOU_PID ]]; then
+    _bashou_make_room
+  fi
+  # No cursor reports from this terminal: at least `clear` puts the prompt back under the pet.
+  [[ $_bashou_dsr == off && ( $last == clear || $last == reset ) ]] && _bashou_below
   if [[ -n $BASHOU_PID && -n $_bashou_hc && $HISTCMD != "$_bashou_hc" ]]; then
     printf '%s\t' "$status" >> "$_bashou_events"
     HISTTIMEFORMAT='' history 1 >> "$_bashou_events"
@@ -40,9 +44,66 @@ _bashou_log() {
 # commands' output would hide under the pet. Cursor down doesn't scroll: on a full screen it does
 # nothing. (Asking the terminal where the cursor is could swallow keys typed at that moment.)
 _bashou_below() {
-  local lines=6
+  local lines=7
   [[ -r $_bashou_height ]] && IFS= read -r lines < "$_bashou_height"
   printf '\e[%dB' "$lines"
+}
+
+# The pet and its bubble are drawn over the top rows of the screen. Drawn over text, they hid it, and
+# PS0 then blanked those cells: lines were lost for good (owner: `--help` output with holes when
+# scrolling up). So before each prompt the top rows are made empty: the lines there go up into the
+# scrollback untouched (the screen scrolls), and blank rows are inserted at the top. The rest of the
+# screen doesn't move. When a command starts, PS0 deletes these blank rows again, so the scrollback
+# never collects them. The terminal tells where the cursor is (ESC[6n); that answer comes on the
+# input, so we never ask while keys are waiting there: they would be eaten. Then the pet stays hidden.
+_bashou_dsr=
+_bashou_gap=0
+_bashou_first=1
+_bashou_where() {   # the cursor's row and column, and the screen's last row: "row col bottom"
+  local row col bottom
+  [[ $_bashou_dsr == off ]] && return 1
+  read -t 0 && return 1                              # keys typed ahead: asking would eat them
+  printf '\e[6n\e7\e[9999;9999H\e[6n\e8' > /dev/tty
+  if ! IFS='[;' read -rs -t 2 -dR _ row col || ! IFS='[;' read -rs -t 2 -dR _ bottom _ \
+     || [[ ! $row$col$bottom =~ ^[0-9]+$ ]]; then
+    _bashou_dsr=off                                  # no answer: this terminal doesn't do it
+    return 1
+  fi
+  _bashou_at="$row $col $bottom"
+}
+
+_bashou_hide() {    # no room this time: the pet isn't drawn, and nothing may blank its cells
+  echo 0 > "$_bashou_room"
+  rm -f "$_bashou_erase"
+}
+
+_bashou_make_room() {
+  local lines=7 row col bottom scroll nl=
+  _bashou_gap=0
+  [[ -r $_bashou_height ]] && IFS= read -r lines < "$_bashou_height"
+  if ! _bashou_where; then
+    if [[ $_bashou_dsr == off ]]; then
+      (( _bashou_first )) && _bashou_below           # as before: below the pet at the start,
+      _bashou_first=0
+      echo 1 > "$_bashou_room"                       # and drawn over the text after that
+    else
+      _bashou_hide
+    fi
+    return
+  fi
+  _bashou_first=0
+  read -r row col bottom <<< "$_bashou_at"
+  if (( bottom < lines + 8 )); then                  # too short a screen to give the pet its rows
+    _bashou_hide
+    return
+  fi
+  # Keep 2 free rows under the prompt: Enter on a one-line command must not scroll the screen.
+  scroll=$(( row + lines + 2 - bottom ))
+  (( scroll < 0 )) && scroll=0
+  (( scroll )) && printf -v nl '%*s' "$scroll" '' && nl=${nl// /$'\n'}
+  printf '\e[%d;1H%s\e[H\e[%dL\e[%d;%dH' "$bottom" "$nl" "$lines" $(( row - scroll + lines )) "$col" > /dev/tty
+  _bashou_gap=$lines
+  echo 1 > "$_bashou_room"
 }
 
 # Ctrl+L too: clear the screen like readline does, then start below the pet (readline redraws the line).
@@ -54,8 +115,19 @@ bind -x '"\C-l": _bashou_clear' 2>/dev/null
 
 # Erase the pet before a command runs, so it never scrolls with the output.
 _bashou_ps0() {
-  local seq
-  [[ -n $BASHOU_PID && -r $_bashou_erase ]] || return
+  local seq row col bottom
+  [[ -n $BASHOU_PID ]] || return
+  rm -f "$_bashou_room"                              # the pet waits for the next prompt's room
+  # The command line sits under the empty top rows: delete them (the pet goes with them) and follow
+  # it up. Not if the screen scrolled (a long command reached the last row): the top rows moved.
+  if (( _bashou_gap )) && _bashou_where; then
+    read -r row col bottom <<< "$_bashou_at"
+    if (( row < bottom && row > _bashou_gap )); then
+      printf '\e[H\e[%dM\e[%d;%dH' "$_bashou_gap" $(( row - _bashou_gap )) "$col" > /dev/tty
+      return
+    fi
+  fi
+  [[ -r $_bashou_erase ]] || return
   IFS= read -rd '' seq < "$_bashou_erase"
   printf '%s' "$seq"
 }
@@ -127,6 +199,5 @@ _bashou_ready() {
   [[ $s == *'"language": "'* ]] && [[ $s == *'"starter": "'* || $s == *'"cat"'* ]]
 }
 if _bashou_ready || bashou start; then
-  _bashou_below
-  bashou on
+  bashou on                                          # the first prompt makes room for it
 fi

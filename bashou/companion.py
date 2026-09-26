@@ -35,6 +35,7 @@ def now_ms():
 
 
 BUBBLE_MS = 3 * 60_000     # a bubble never stays longer, however few commands you run
+BUBBLE_ROWS = 7            # a bubble of 4 lines covers the top 7 rows (see frame)
 
 
 def answers(text, command):
@@ -51,6 +52,8 @@ class Companion:
         self.erase_file = state.CACHE / f"erase.{shell}"
         self.resume_file = state.CACHE / f"resume.{shell}"
         self.height_file = state.CACHE / f"height.{shell}"     # lines the pet covers, for the loader
+        self.room_file = state.CACHE / f"room.{shell}"         # 1 once the loader emptied those lines
+        self.height = None
         self.offset = 0            # bytes of the events file already counted
         self.code = code_version()
         self.notes = []            # notifications waiting for the bubble
@@ -275,17 +278,27 @@ class Companion:
         if pet is not self.pet:
             self.pet = pet
             self.cells = render.mask(pet)
+        height = max(len(pet.base) // 2, BUBBLE_ROWS)
+        if height != self.height:
             try:
-                self.height_file.write_text(str(len(pet.base) // 2))
+                self.height_file.write_text(str(height))
+                self.height = height
             except OSError:
                 pass
+
+    def room(self):
+        """The loader emptied the top rows for this prompt (bashou.bash, _bashou_make_room)."""
+        try:
+            return self.room_file.read_text().strip() == "1"
+        except OSError:
+            return False
 
     def draw(self, ms):
         self.update_bubble()
 
         cols = os.get_terminal_size(1).columns
         self.fit(cols)
-        if cols < self.pet.width + 20:
+        if cols < self.pet.width + 20 or not self.room():
             return
         poses, z = self.behavior.frame(ms, self.pet, self.threat, ms - self.last_activity())
         key = (tuple(poses), z, cols, self.bubble and self.bubble[0], self.pet.id, self.pet.width, self.look)
@@ -385,7 +398,7 @@ class Companion:
                     if errors >= 20:
                         raise
         finally:
-            for f in (self.events, self.erase_file):
+            for f in (self.events, self.erase_file, self.room_file, self.height_file):
                 try:
                     f.unlink()
                 except FileNotFoundError:
