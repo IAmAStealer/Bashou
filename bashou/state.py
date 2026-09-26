@@ -22,7 +22,7 @@ def default():
         "constructs": {},   # construct -> uses
         "days": [],         # ISO dates with at least one command
         "today": {"date": "", "count": 0},
-        "language": None,   # "en", "fr"…, asked once at first launch (`bashou language`)
+        "language": None,   # "en", "fr"…, asked once at first launch (`bashou config language`)
         "starter": None,    # "star", "sprout" or "pebble", chosen once (`bashou start`)
         "pets": [],         # collection pets unlocked
         "active": "starter",
@@ -31,7 +31,7 @@ def default():
         "fights_lost": 0,   # knocked out or fled (the Living sofa comforts you)
         "ladder_best": {},  # pet -> highest form reached on a command ladder (the Slime): never goes back
         "challenges": [],   # challenges beaten
-        "skills": "all",    # "all" or the skills you ticked (`bashou skills`, asked before the starter)
+        "skills": "all",    # "all" or the skills you ticked (`bashou config skills`, asked before the starter)
         "reviews": {},      # beaten fight -> {"step": reviews won, "due": ISO date}: it comes back (fight.py)
         "security": [],     # security challenges solved (`bashou security`)
         "adventure": None,  # `bashou adventure` progress (see bashou/adventure)

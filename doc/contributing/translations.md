@@ -36,7 +36,7 @@ the English one shows instead.
   file names, flags.
 - **Keep it about as short as the English**: many lines go in a small speech bubble.
 - `"@language"` is the name of your language, written in that language. It shows up in
-  `bashou language`.
+  `bashou config language`.
 
 ### Questions: `bashou/adventure/questions/<lang>/<topic>.json`
 
@@ -54,7 +54,7 @@ shows in English. See [questions.md](questions.md) for what makes a good questio
    python3 -m bashou.i18n        # also shows how much is translated: "de: 0/758 translated"
    ```
 
-3. Translate, as much as you like. The language shows up in `bashou language` right away.
+3. Translate, as much as you like. The language shows up in `bashou config language` right away.
 
 ## Context matters
 

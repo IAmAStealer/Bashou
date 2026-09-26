@@ -1,7 +1,7 @@
 """Code fights (owner, 2026-09-23): fix a small Python or C file, or answer with a python3 one-liner.
 
 Fix fights: the file starts with a comment saying what goes in, what should come out, how to run it
-and which `bashou explain` note helps. Bashou then runs hidden tests on your version: Python through a
+and where to find help (the fight's lesson). Bashou then runs hidden tests on your version: Python through a
 small harness, C built with AddressSanitizer when the compiler has it (leaks and overflows count).
 The first level only asks to fix what stops the code from compiling.
 """
@@ -123,7 +123,7 @@ def colon_setup(work, rng):
         _("Input: the names in the list below."),
         _("Wanted: one line per name, like: hello ada"),
         _("Run it:") + " python3 greet.py",
-        _("Help:") + " bashou explain python loop",
+        _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ], "\n\ndef greet(names)\n    for name in names:\n        print(\"hello\", name)\n\n\n"
        f"greet({names!r})\n")
     return {"expected": "".join(f"hello {n}\n" for n in names)}
@@ -165,7 +165,7 @@ def list_setup(work, rng):
         _("Input: a list of host names, some repeated."),
         _("Wanted: a new list, each name once, first-seen order. Don't change the list you were given."),
         _("Run it:") + " python3 hosts.py",
-        _("Help:") + " bashou explain python list",
+        _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ], LIST_CODE.format(demo=demo))
     cases = []
     for _i in range(8):
@@ -205,7 +205,7 @@ def dict_setup(work, rng):
         _("Input: log lines like '12:04 ERROR timeout' (the level is the second word)."),
         _("Wanted: a dict like {'INFO': 12, 'ERROR': 3}."),
         _("Run it:") + " python3 tally.py",
-        _("Help:") + " bashou explain python dict",
+        _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ], DICT_CODE)
     cases = []
     for _i in range(6):
@@ -240,7 +240,7 @@ def loop_setup(work, rng):
         _("Input: how many tries, like 4."),
         _("Wanted: [1, 2, 4, 8] for 4 tries, [] for 0."),
         _("Run it:") + " python3 retry.py   (Ctrl+C stops it if it hangs)",
-        _("Help:") + " bashou explain python loop",
+        _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ], LOOP_CODE.format(n=rng.randint(3, 6)))
     return {"cases": [[[n], [2 ** i for i in range(n)]] for n in (0, 1, 4, rng.randint(5, 12))]}
 
@@ -286,7 +286,7 @@ def tree_setup(work, rng):
         _("Input: folders are dicts, files are sizes: {'a.txt': 10, 'src': {'b.c': 5}}."),
         _("Wanted: the sum of every size, at every depth (15 above)."),
         _("Run it:") + " python3 du.py",
-        _("Help:") + " bashou explain python recursion",
+        _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ], TREE_CODE)
     cases = [[[t], size(t)] for t in (tree(rng, 3) for _i in range(6))]
     return {"cases": cases + [[[demo], size(demo)]]}
@@ -355,7 +355,7 @@ def inject_setup(work, rng):
         _("Input: hosts.txt, one host per line."),
         _("Wanted: 'checking <line>' for each line, exactly as written, and nothing else run."),
         _("Run it:") + " python3 check_hosts.py   (then ls: a new file means the attack worked)",
-        _("Help:") + " bashou explain python subprocess",
+        _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ], INJECT_CODE)
     return {}
 
@@ -426,7 +426,7 @@ def leak_setup(work, rng):
         _("Input: lines on stdin (names.txt)."),
         _("Wanted: each line in capitals, and every malloc freed."),
         _("Run it:") + " gcc -g -fsanitize=address shout.c -o shout && ./shout < names.txt",
-        _("Help:") + " bashou explain c malloc",
+        _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ], LEAK_CODE)
     runs = []
     for _i in range(3):
@@ -468,7 +468,7 @@ def fence_setup(work, rng):
         _("Input: whole numbers as arguments."),
         _("Wanted: their average, rounded down: ./average 2 4 9 prints 5."),
         _("Run it:") + " gcc -g -fsanitize=address average.c -o average && ./average " + " ".join(map(str, nums)),
-        _("Help:") + " bashou explain c array",
+        _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ], FENCE_CODE)
     runs = []
     for _i in range(4):
@@ -504,7 +504,7 @@ def stack_setup(work, rng):
         _("Input: a number N >= 0."),
         _("Wanted: 1 + 2 + ... + N: ./sum 4 prints 10, ./sum 0 prints 0."),
         _("Run it:") + " gcc -g sum.c -o sum && ./sum 4",
-        _("Help:") + " bashou explain c recursion",
+        _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ], STACK_CODE)
     return {"runs": [[[str(n)], "", f"{n * (n + 1) // 2}\n"] for n in (0, 1, 4, rng.randint(50, 2000))]}
 
@@ -533,7 +533,7 @@ def overflow_setup(work, rng):
         _("Input: a name as the only argument, of any length."),
         _("Wanted: Hello, <the whole name>! for any name, with no memory error."),
         _("Run it:") + " gcc -g -fsanitize=address greet.c -o greet && ./greet averyveryverylongname",
-        _("Help:") + " bashou explain c string",
+        _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ], OVERFLOW_CODE)
     long = "".join(rng.choice("abcdefghij") for _i in range(rng.randint(300, 2000)))
     return {"runs": [[[n], "", f"Hello, {n}!\n"] for n in (rng.choice(NAMES), "averyveryverylongname", long)]}
@@ -565,7 +565,7 @@ ALL = [
                    "Fix hosts.py (its first lines say what it must do). Run it: python3 hosts.py\n"
                    "When it works, type: verify",
               hints=["Removing items from a list while a for loop walks over it makes the loop skip some. "
-                     "Build a new list instead: bashou explain python list",
+                     "Build a new list instead.",
                      "Try: seen = [] then for host in hosts: if host not in seen: seen.append(host), "
                      "and return seen."],
               setup=list_setup, verify=py_tests("hosts.py", "unique")),
@@ -573,43 +573,39 @@ ALL = [
               task="The Dict Djinn hid a key: tally.py crashes with KeyError: '{level}'.\n"
                    "Fix tally.py (its first lines say what it must do). Run it: python3 tally.py\n"
                    "When it works, type: verify",
-              hints=["counts[level] += 1 reads counts[level] first, and the first time it isn't there. "
-                     "bashou explain python dict",
+              hints=["counts[level] += 1 reads counts[level] first, and the first time it isn't there.",
                      "Try: counts[level] = counts.get(level, 0) + 1"],
               setup=dict_setup, verify=py_tests("tally.py", "count_levels")),
     Challenge(level=2, id="loop_lich", fix=True, pet="snake", threat="Loop Lich", **PY,
               task="The Loop Lich traps retry.py in a loop that never ends.\n"
                    "Fix retry.py (its first lines say what it must do). Run it: python3 retry.py\n"
                    "When it works, type: verify",
-              hints=["A while loop stops when its condition turns false. What in the loop changes i? "
-                     "bashou explain python loop",
+              hints=["A while loop stops when its condition turns false. What in the loop changes i?",
                      "Add i += 1 inside the loop (or write: for i in range(tries):)."],
               setup=loop_setup, verify=py_tests("retry.py", "delays")),
     Challenge(level=2, id="ouroboros", fix=True, pet="snake", threat="Ouroboros", **PY,
               task="The Ouroboros bites its own tail: du.py forgets the files in subfolders.\n"
                    "Fix du.py (its first lines say what it must do). Run it: python3 du.py\n"
                    "When it works, type: verify",
-              hints=["total(item) is called for each subfolder, but where does its result go? "
-                     "bashou explain python recursion",
+              hints=["total(item) is called for each subfolder, but where does its result go?",
                      "Write: size += total(item)"],
               setup=tree_setup, verify=py_tests("du.py", "total")),
     Challenge(level=2, id="json_jinn", pet="snake", threat="JSON Jinn", **PY,
               task="The JSON Jinn guards config.json. Read it with python3, not by eye.\n"
                    "Which port does the database use? Answer with: answer <port>",
-              hints=["python3 -c runs one line of Python. json.load turns the file into dicts: "
-                     "bashou explain python json",
+              hints=["python3 -c runs one line of Python. json.load turns the file into dicts.",
                      "Try: python3 -c \"import json; print(json.load(open('config.json'))['database']['port'])\""],
               setup=json_setup),
     Challenge(level=2, id="base64_banshee", pet="snake", threat="Base64 Banshee", **PY,
               task="The Base64 Banshee wails in secret.txt: it's base64, not a secret code.\n"
                    "Decode it with python3. What is the vault word?",
-              hints=["base64 is an encoding, anyone can undo it: bashou explain python base64",
+              hints=["base64 is an encoding, anyone can undo it.",
                      "Try: python3 -c \"import base64; print(base64.b64decode(open('secret.txt').read()).decode())\""],
               setup=b64_setup),
     Challenge(level=2, id="percent_poltergeist", pet="snake", threat="Percent Poltergeist", **PY,
               task="The Percent Poltergeist hides an attack in access.log behind %XX codes.\n"
                    "Decode the log with python3. Which file under /etc was the attacker after?",
-              hints=["urllib.parse.unquote turns %2e%2e%2f back into ../ : bashou explain python url",
+              hints=["urllib.parse.unquote turns the %XX codes back into characters: %2e%2e%2f becomes ../",
                      "Try: python3 -c \"import urllib.parse; print(urllib.parse.unquote(open('access.log').read()))\""
                      " | grep etc"],
               setup=url_setup, verify=url_verify),
@@ -617,15 +613,13 @@ ALL = [
               task="The Injection Imp slipped a command into hosts.txt, and check_hosts.py runs it.\n"
                    "Fix check_hosts.py (its first lines say what it must do). Run it: python3 check_hosts.py\n"
                    "When it works, type: verify",
-              hints=["os.system hands the whole string to a shell, so ; $( ) | in the data become commands. "
-                     "bashou explain python subprocess",
+              hints=["os.system hands the whole string to a shell, so ; $( ) | in the data become commands.",
                      "Try: subprocess.run(['echo', 'checking', host]) (import subprocess), or just print."],
               setup=inject_setup, verify=inject_verify),
     Challenge(level=3, id="token_trickster", pet="snake", threat="Token Trickster", after=("base64_banshee",), **PY,
               task="The Token Trickster flashes a JWT in token.txt. Signed is not secret: read it.\n"
                    "Which user (sub) is the token for? Decode it with python3.",
-              hints=["A JWT is header.payload.signature, each part base64url without padding. "
-                     "bashou explain python base64",
+              hints=["A JWT is header.payload.signature, each part base64url without padding.",
                      "Try: python3 -c \"import base64; p = open('token.txt').read().split('.')[1]; "
                      "print(base64.urlsafe_b64decode(p + '=='))\""],
               setup=jwt_setup),
@@ -635,7 +629,7 @@ ALL = [
                    "Run it: gcc -g -fsanitize=address shout.c -o shout && ./shout < names.txt\n"
                    "When it works, type: verify",
               hints=["AddressSanitizer names the line where the leaked memory was allocated. "
-                     "Who should free it once it's printed? bashou explain c malloc",
+                     "Who should free it once it's printed?",
                      "Add free(loud); right after fputs(loud, stdout);"],
               setup=leak_setup, verify=c_tests("shout.c")),
     Challenge(level=2, id="fencepost_fiend", fix=True, works=lambda: bool(sanitizer()), pet="beaver", threat="Fencepost Fiend", **C,
@@ -643,16 +637,14 @@ ALL = [
                    "Fix average.c (its first lines say what it must do). "
                    "Run it: gcc -g -fsanitize=address average.c -o average && ./average 2 4 9\n"
                    "When it works, type: verify",
-              hints=["An array of count items goes from 0 to count - 1. Compare the two loops. "
-                     "bashou explain c array",
+              hints=["An array of count items goes from 0 to count - 1. Compare the two loops.",
                      "In the second loop, write i < count instead of i <= count."],
               setup=fence_setup, verify=c_tests("average.c")),
     Challenge(level=2, id="stack_specter", fix=True, pet="beaver", threat="Stack Specter", **C,
               task="The Stack Specter haunts sum.c: sum_to() never stops calling itself.\n"
                    "Fix sum.c (its first lines say what it must do). Run it: gcc -g sum.c -o sum && ./sum 4\n"
                    "When it works, type: verify",
-              hints=["Every recursion needs a case that returns without calling itself. "
-                     "bashou explain c recursion",
+              hints=["Every recursion needs a case that returns without calling itself.",
                      "Add at the start of sum_to: if (n <= 0) return 0;"],
               setup=stack_setup, verify=c_tests("sum.c")),
     Challenge(level=3, id="overflow_ogre", fix=True, pet="beaver", threat="Overflow Ogre", after=("leak_lurker",), **C,
@@ -660,8 +652,7 @@ ALL = [
                    "Fix greet.c (its first lines say what it must do). "
                    "Run it: gcc -g -fsanitize=address greet.c -o greet && ./greet averyveryverylongname\n"
                    "When it works, type: verify",
-              hints=["strcpy never checks the size of the target. Does the name need copying at all? "
-                     "bashou explain c string",
+              hints=["strcpy never checks the size of the target. Does the name need copying at all?",
                      "Simplest: printf(\"Hello, %s!\\n\", argv[1]); or malloc(strlen(argv[1]) + 1) and free it."],
               setup=overflow_setup, verify=c_tests("greet.c")),
 ]

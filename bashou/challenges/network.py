@@ -376,7 +376,8 @@ ALL = [
               task="The Subnet Sprite mixed addresses into hosts.txt.\n"
                    "How many of them are inside {net}? Answer with: answer <number>",
               hints=["{net} is a /22: 1,024 addresses, four /24 blocks in a row. Near misses just outside "
-                     "are the trap. Python's ipaddress module knows the exact limits: bashou explain network cidr",
+                     "are the trap. Python's ipaddress module knows the exact limits, "
+                     "and so does ipcalc {net} if it's installed.",
                      "Try: python3 -c \"import ipaddress as i; n = i.ip_network('{net}'); "
                      "print(sum(i.ip_address(l.strip()) in n for l in open('hosts.txt')))\""],
               setup=sprite_setup, requires=["python3"], **NET),

@@ -18,7 +18,7 @@ body:
         - Adventure questions or bosses
         - A lesson in the Sage Owl's library
         - A new skill (a topic Bashou doesn't teach yet)
-        - bashou learn / bashou explain
+        - bashou learn
         - Install, setup, settings
         - Something else
     validations:

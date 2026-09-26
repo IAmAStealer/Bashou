@@ -1,6 +1,6 @@
 """What you want to learn (owner, 2026-09-23): a bit of everything, or the skills you tick.
 
-Asked once before the starter (`bashou start`), changed any time with `bashou skills`. Fights and the
+Asked once before the starter (`bashou start`), changed any time with `bashou config skills`. Fights and the
 adventure's paths only come from those skills; fights you already won still come back for review.
 """
 
@@ -54,7 +54,7 @@ def note(skill):
 
 def draw_mode(pos, breath):
     out = [f"{ESC}[H{ESC}[2J", f"{BOLD}{_('What do you want to learn?')}{RESET}  "
-           f"{DIM}{_('↑/↓, Enter · `bashou skills` to change it later')}{RESET}\n\n"]
+           f"{DIM}{_('↑/↓, Enter · `bashou config skills` to change it later')}{RESET}\n\n"]
     for i, label in enumerate((_("A bit of everything (all skills)"), _("Pick my skills"))):
         out.append(f"  {REV} {label} {RESET}\n" if i == pos else f"   {label}\n")
     sys.stdout.write("".join(out))
@@ -115,7 +115,7 @@ def show(choice):
 
 
 def main():
-    """`bashou skills`."""
+    """`bashou config skills`."""
     current = state.load().get("skills", "all")
     if not sys.stdin.isatty():
         show(current)

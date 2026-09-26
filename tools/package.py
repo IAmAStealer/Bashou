@@ -5,7 +5,7 @@
     python3 tools/package.py site site/                  # only the share page, to try it: python3 -m http.server -d site
 
 The code goes to /usr/share/bashou (the same tree as a clone, plus a VERSION file) and /usr/bin/bashou runs
-its commands. Nothing turns the pet on: each user runs `bashou setup` once. `build` needs dpkg-deb for the
+its commands. Nothing turns the pet on: each user runs `bashou on` once. `build` needs dpkg-deb for the
 .deb and rpmbuild for the .rpm (either is skipped when missing); `repo` needs apt-ftparchive, createrepo_c,
 rpmsign and gpg.
 """
@@ -25,10 +25,10 @@ URL = "https://github.com/IAmAStealer/Bashou"
 PAGES = "https://iamastealer.github.io/Bashou"
 SUMMARY = "A pet in your terminal that grows as you learn bash"
 DESCRIPTION = ("Bashou lives in the corner of your terminal and evolves as you use bash: fights, a quiz\n"
-               "adventure and hints teach the command line, offline. Each user turns it on with: bashou setup")
+               "adventure and hints teach the command line, offline. Each user turns it on with: bashou on")
 
 WRAPPER = f"""#!/bin/sh
-# Bashou's commands outside the shell function it defines, e.g. `bashou setup` in a new account.
+# Bashou's commands outside the shell function it defines, e.g. `bashou on` in a new account.
 exec python3 /{PREFIX}/launch.py bashou "$@"
 """
 

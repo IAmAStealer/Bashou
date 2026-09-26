@@ -61,7 +61,9 @@
     "",
     "- The first address names the network, the last one is broadcast: a /24 has 254 for machines.",
     "- The private ranges are reused in millions of homes and offices; the internet doesn't route them.",
-    "$ python3 -c \"import ipaddress; print(ipaddress.ip_network('10.4.0.0/22')[-1])\""
+    "$ python3 -c \"import ipaddress; print(ipaddress.ip_network('10.4.0.0/22')[-1])\"",
+    "- ipcalc (its own package) does the same math and shows it all at once: network, broadcast, first and last machine.",
+    "$ ipcalc 10.4.0.0/22"
    ]
   },
   {

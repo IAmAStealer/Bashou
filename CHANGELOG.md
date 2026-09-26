@@ -8,6 +8,15 @@ Every release has a section here, written for players. CI refuses to tag a relea
 - The Bat's night achievement is now called **Night shift** (it was "Night owl", and players looked for
   an Owl to unlock). Every achievement note now says which pet family it grows: "🏆 Night shift (Bat
   family): …".
+- A shorter `bashou --help`, with one command per job:
+  - `bashou explain` is gone: the lessons explain the same things better, with drawings. In a code,
+    Rust or network fight, type `lesson` to open the one that explains it.
+  - `bashou on` also does what `bashou setup` did: after installing the apt or dnf package, `bashou on`
+    adds Bashou to your `~/.bashrc`.
+  - The language and the skills live in `bashou config`: `bashou config language` (or
+    `bashou config language fr`), `bashou config skills`. `bashou config list` shows them too.
+  - The old names (`bashou setup`, `bashou language`, `bashou skills`) still work.
+- The IPv4 addresses lesson mentions `ipcalc`, which does the network math in one command.
 
 ## v0.6.2 — 2026-09-26
 

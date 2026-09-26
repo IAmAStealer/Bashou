@@ -137,7 +137,7 @@ class Companion:
         if mtime == self.state_mtime and not (self.threat and time.time() > self.threat_until):
             return                     # (a threat that timed out doesn't touch the state file)
         self.state_mtime = mtime
-        i18n.use(None)                 # `bashou language` may have changed it
+        i18n.use(None)                 # `bashou config language` may have changed it
         s = state.load()
         sprite, stage, name, self.voice = progress.current(s)
         self.sprite, self.size = sprite, state.setting(s, "size")

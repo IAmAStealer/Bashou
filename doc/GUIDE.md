@@ -67,39 +67,37 @@ A pixel-art pet that lives in the top-right corner of your terminal and grows as
 ## Install
 
 Requires bash 4.4+, Python 3.9+, and a terminal with 24-bit color. See the one-line install in the
-[README](../README.md), or the apt and dnf packages: once the package is installed, `bashou setup` adds
+[README](../README.md), or the apt and dnf packages: once the package is installed, `bashou on` adds
 Bashou to your `~/.bashrc` (a package turns it on for nobody by itself).
 
 ## Commands
 
 ```bash
 bashou start            # choose your starter (first launch does it for you)
-bashou language         # choose the language (asked once at first launch)
 bashou level            # starter level, commands run, next unlock
 bashou pets             # your collection
 bashou achievements     # what you earned, and what to try next
 bashou fight            # enter the arena, once your pet has announced a threat
-bashou talk             # your pet says something useful
+bashou talk             # your pet gives you a tip now, with a command to try
 bashou learn            # takes its last suggested command apart; or: bashou learn tar -czf a.tgz d
-bashou explain          # a short note on a code topic: bashou explain python list, bashou explain c malloc
-bashou lesson           # the Sage Owl's library: lessons with drawings, unlocked as you play
+bashou lesson           # the Sage Owl's library: lessons with drawings, unlocked as you play (in a fight: lesson)
 bashou evolve           # watch your pets evolve (s skips)
 bashou swap             # board to pick your pet (or: bashou swap fox); f switches its form
-bashou off / on         # hide / show the pet
+bashou off / on         # hide / show the pet (the first `on` after installing a package adds Bashou to ~/.bashrc)
 bashou stats            # commands, top tools, constructs, streaks
 bashou share            # a QR code: your phone draws a banner of your progress to share (asks a nickname once; --name changes it)
-bashou skills           # what you learn: a bit of everything, or the skills you tick
 bashou config           # a few questions to set Bashou up (see Configuration)
+bashou config language  # choose the language (asked once at first launch; or: bashou config language fr)
+bashou config skills    # what you learn: a bit of everything, or the skills you tick
 bashou version          # which version this is (and if a newer one is out)
 bashou update           # get the new version from GitHub (--version v0.2.0: a given one, older too)
 bashou update --packages  # a git install moves to the apt or dnf repository (every command shown, asked first)
-bashou setup            # add Bashou to your ~/.bashrc (after installing the apt or dnf package)
-bashou security         # security challenges (bashou security 3 starts the third)
+bashou security         # security investigations you pick (bashou security 3 starts the third); fights come to you
 bashou adventure        # walk into the world with your starter (s: save & quit)
 bashou reset            # start over with a new starter (asks first, keeps a backup)
 ```
 
-Tab completion works for commands, pet names and `dev` arguments.
+Tab completion works for commands, pet names, lessons and settings.
 
 ## Skills
 
@@ -108,7 +106,7 @@ the skills you tick (Bash, Linux, systemd, Debian, Rocky, Python, C, Rust, Logic
 and the adventure's paths then come from those skills; fights you already won still come back for
 review. A skill whose program isn't installed (no `gcc`, no `rustc`) or that is for another system
 still has its adventure questions. Tick Rust without `rustc`, and your pet tells you how to install it.
-`bashou skills` changes your choice.
+`bashou config skills` changes your choice.
 
 ## Configuration
 
@@ -137,7 +135,7 @@ bashou config quiet 120         # and only after 2 minutes without typing
 
 Settings are saved in `~/.local/share/bashou/state.json` (only the ones you changed) and apply to
 every terminal right away. `bashou reset` keeps your language but resets settings. The language is
-chosen with `bashou language`.
+chosen with `bashou config language`.
 
 ## Releases and security checks
 

@@ -43,7 +43,9 @@
     "",
     "- La première adresse nomme le réseau, la dernière sert à la diffusion : un /24 en a 254 pour les machines.",
     "- Les plages privées sont réutilisées dans des millions de maisons et de bureaux ; internet ne les achemine pas.",
-    "$ python3 -c \"import ipaddress; print(ipaddress.ip_network('10.4.0.0/22')[-1])\""
+    "$ python3 -c \"import ipaddress; print(ipaddress.ip_network('10.4.0.0/22')[-1])\"",
+    "- ipcalc (son propre paquet) fait le même calcul et montre tout d'un coup : réseau, broadcast, première et dernière machine.",
+    "$ ipcalc 10.4.0.0/22"
    ]
   },
   {

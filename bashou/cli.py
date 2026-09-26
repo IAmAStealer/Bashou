@@ -163,7 +163,6 @@ def ask_settings(ask=input):
                     break
                 except ValueError:
                     print("  " + _("Not a valid value for {name}: {value}").format(name=key, value=value))
-        from . import skills
         current = s.get("skills", "all")
         change = ask("\n  " + _("Change what you learn? (y/N) ")).strip().lower()
         language = ask("  " + _("Change the language? (y/N) ")).strip().lower()
@@ -176,6 +175,7 @@ def ask_settings(ask=input):
             if new is not None:
                 s["settings"][key] = new
     if change in ("y", "yes", "o", "oui"):
+        from . import skills
         skills.show(skills.ask(current))
     if language in ("y", "yes", "o", "oui"):
         from . import starter
@@ -184,18 +184,50 @@ def ask_settings(ask=input):
     return 0
 
 
+def language(value):
+    """`bashou config language`: the screen; `bashou config language fr`: straight away."""
+    from . import i18n, starter
+    if value is None:
+        return starter.language_main()
+    if value not in i18n.LANGUAGES:
+        print("  " + _("Not a valid value for {name}: {value}").format(name="language", value=value)
+              + f" ({', '.join(i18n.LANGUAGES)})")
+        return 1
+    with state.locked() as s:
+        s["language"] = value
+    i18n.use(value)
+    print("  " + _("Language: {name}").format(name=i18n.LANGUAGES[value]))
+    return 0
+
+
 def config(name, value):
     """`bashou config`: questions (or the list, outside a terminal); `bashou config list`;
-    `bashou config NAME VALUE` sets one ("default" resets it)."""
+    `bashou config NAME VALUE` sets one ("default" resets it). Language and skills, once commands of
+    their own, live here too: `bashou config language [fr]`, `bashou config skills`."""
     import sys
     if not name and sys.stdin.isatty():
         return ask_settings()
     if not name or name == "list":
+        from . import i18n, skills
         s = state.load()
         for key, (default, text) in state.SETTINGS.items():
             print(f"  {BOLD}{key}{RESET} {state.show(state.setting(s, key))}  "
                   f"{DIM}{_(text)} · " + _("default") + f" {state.show(default)}{RESET}")
+        chosen = s.get("skills", "all")
+        print(f"  {BOLD}language{RESET} {s.get('language') or 'en'}  {DIM}"
+              + _("the language Bashou speaks: bashou config language [{codes}]").format(
+                  codes="|".join(i18n.LANGUAGES)) + RESET)
+        print(f"  {BOLD}skills{RESET} {chosen if chosen == 'all' else ','.join(chosen)}  {DIM}"
+              + _("what you want to learn: bashou config skills") + RESET)
         return 0
+    if name == "language":
+        return language(value)
+    if name == "skills":
+        from . import skills
+        if value is not None:
+            print("  " + _("Skills are picked on a screen: bashou config skills"))
+            return 1
+        return skills.main()
     if name not in state.SETTINGS:
         print("  " + _("Unknown setting: {name}").format(name=name))
         return 1
@@ -300,16 +332,15 @@ def dev(args):
 
 def main():
     parser = argparse.ArgumentParser(prog="bashou", description="A pet that grows as you learn bash.")
-    sub = parser.add_subparsers(dest="cmd")
+    # A parser added without help= stays out of the list: old names kept working, and dev.
+    sub = parser.add_subparsers(dest="cmd", metavar="COMMAND")
     sub.add_parser("level", help="commands run and next unlock")
     sub.add_parser("pets", help="your collection")
     sub.add_parser("achievements", help="what you earned and what to try next")
     sub.add_parser("fight", help="enter the arena")
-    sub.add_parser("talk", help="your pet says something useful")
-    ln = sub.add_parser("learn", help="take the last suggested command (or yours) apart, piece by piece")
+    sub.add_parser("talk", help="your pet gives you a tip now, with a command to try")
+    ln = sub.add_parser("learn", help="take a command apart: bashou learn tar -xzf a.tgz (alone: your pet's last tip)")
     ln.add_argument("command", nargs=argparse.REMAINDER)
-    ex = sub.add_parser("explain", help="a short note on a code topic, e.g. bashou explain python list")
-    ex.add_argument("topic", nargs="*")
     ls = sub.add_parser("lesson", help="the Sage Owl's library: lessons with drawings, unlocked as you play")
     ls.add_argument("which", nargs="?", help="a lesson to open, or list")
     sub.add_parser("evolve", help="watch your pets evolve")
@@ -318,27 +349,27 @@ def main():
     sub.add_parser("stats", help="your terminal stats: commands, tools, streaks")
     sh = sub.add_parser("share", help="a QR code: your phone turns your progress into an image to share")
     sh.add_argument("--name", help="the nickname on the image: 1-12 letters, digits, - or _ (asked the first time)")
-    dv = sub.add_parser("dev", help="testing helpers (back up state first)")
+    dv = sub.add_parser("dev")                                          # testing helpers, hidden from players
     dv.add_argument("action", choices=["unlock-all", "stage", "stage-all", "level", "threat", "restore"])
     dv.add_argument("pet", nargs="?", help="pet (stage), level 1-9 (level) or challenge id (threat)")
     dv.add_argument("stage", nargs="?", type=int, choices=[1, 2, 3], default=3)
     sub.add_parser("start", help="choose your starter (once)")
-    sub.add_parser("language", help="choose the language")
-    sub.add_parser("skills", help="what you want to learn: a bit of everything, or the skills you pick")
-    sub.add_parser("setup", help="load Bashou from your ~/.bashrc (after installing the package)")
+    sub.add_parser("language")                                          # now bashou config language
+    sub.add_parser("skills")                                            # now bashou config skills
+    sub.add_parser("setup")                                             # now bashou on
     sub.add_parser("version", help="which version of Bashou this is")
     up = sub.add_parser("update", help="get the new version from GitHub")
     up.add_argument("--version", help="install this release instead, even an older one (e.g. v0.2.0)")
     up.add_argument("--packages", action="store_true", help="move to Bashou's apt or dnf repository (shows every command first)")
     sub.add_parser("adventure", help="walk into the world with your starter")
-    sc = sub.add_parser("security", help="security challenges, easy to hard")
+    sc = sub.add_parser("security", help="investigations you pick, easy to hard (fights come to you)")
     sc.add_argument("which", nargs="?", help="number or id (see the list)")
-    cf = sub.add_parser("config", help="answer a few questions to set Bashou up; or: bashou config list, bashou config bubble 5-10")
+    cf = sub.add_parser("config", help="set Bashou up: settings, language, skills (bashou config list)")
     cf.add_argument("name", nargs="?")
     cf.add_argument("value", nargs="?")
     sub.add_parser("reset", help="start over with a new starter")
-    sub.add_parser("on", help="show the pet (shell function)")
-    sub.add_parser("off", help="hide the pet (shell function)")
+    sub.add_parser("on", help="show the pet (the first time: adds Bashou to ~/.bashrc)")
+    sub.add_parser("off", help="hide the pet in this terminal")
     args = parser.parse_args()
 
     if args.cmd == "pets":
@@ -351,9 +382,6 @@ def main():
     elif args.cmd == "learn":
         from . import learn
         raise SystemExit(learn.main(args.command))
-    elif args.cmd == "explain":
-        from . import explain
-        raise SystemExit(explain.main(args.topic))
     elif args.cmd == "talk":
         from . import dialogue, learn
         s = state.load()
@@ -382,16 +410,16 @@ def main():
         from . import update
         raise SystemExit(update.run(args.version, args.packages))
     elif args.cmd == "skills":
-        from . import skills
-        raise SystemExit(skills.main())
-    elif args.cmd == "setup":
+        raise SystemExit(config("skills", None))
+    elif args.cmd in ("setup", "on"):       # `on` reaches Python only when bashou.bash isn't loaded yet
         from . import setup
         raise SystemExit(setup.run())
+    elif args.cmd == "off":
+        print("  " + _("Bashou isn't running in this terminal."))
     elif args.cmd == "config":
         raise SystemExit(config(args.name, args.value))
     elif args.cmd == "language":
-        from . import starter
-        raise SystemExit(starter.language_main())
+        raise SystemExit(config("language", None))
     elif args.cmd == "fight":
         from . import fight
         fight.run()

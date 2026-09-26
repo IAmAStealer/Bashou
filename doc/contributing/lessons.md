@@ -37,7 +37,7 @@ No code needed: a lesson is one JSON file.
  ]}
 ```
 
-- `order`: place in the list. `skill`: one of `bashou skills`, or a list of them (the lesson only
+- `order`: place in the list. `skill`: one of `bashou config skills`, or a list of them (the lesson only
   shows to players who learn one); leave it out for lessons everyone gets.
 - `needs`: what unlocks it. All of them must hold; `a | b` holds when one side does. Conditions:
   `commands N`, `tool NAME N` (used N times), `won FIGHT_ID`, `fights N` (won), `achievement ID`.

@@ -19,7 +19,7 @@ It writes only to:
   pet) and `~/.cache/bashou`, both private to you (700; the events files 600). Events of closed
   terminals are removed.
 - a private temporary folder for each fight or chest (`mktemp`, 700), removed when you leave it;
-- `~/.bashrc`, one line, only when you run `bashou setup`;
+- `~/.bashrc`, one line, only when you run `bashou on` (or `bashou setup`);
 - its own folder, only for a git install you update with `bashou update` (release tags only).
 
 What you do in a fight runs as you, in its folder. Bashou's own checks stay contained: the SQL fights run

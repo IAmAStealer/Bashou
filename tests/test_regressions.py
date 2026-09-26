@@ -11,6 +11,7 @@ import io
 import json
 import os
 import random
+import re
 import subprocess
 import tempfile
 import time
@@ -18,7 +19,7 @@ import unittest
 from unittest import mock
 from pathlib import Path
 
-from bashou import challenges, cli, creatures, fight, state
+from bashou import challenges, cli, creatures, fight, i18n, state
 
 
 class TempState(unittest.TestCase):
@@ -583,3 +584,46 @@ class PrivacyTest(unittest.TestCase):
                 (Path(tmp) / name).write_text("0\t    1  mysql -psecret\n")
             companion.sweep_events()
             self.assertEqual(sorted(p.name for p in Path(tmp).iterdir()), sorted([f"events.{os.getpid()}", "events.notes"]))
+
+
+class CommandCleanupTest(TempState):
+    """Owner, 2026-09-26: the help listed duplicates. explain is gone (fights open their lesson), language
+    and skills live in config, on does the setup, dev is hidden."""
+
+    def run_cli(self, *argv):
+        import sys
+        old, sys.argv = sys.argv, ["bashou", *argv]
+        out = io.StringIO()
+        try:
+            with contextlib.redirect_stdout(out), contextlib.redirect_stderr(out):
+                try:
+                    code = cli.main()
+                except SystemExit as e:
+                    code = e.code
+        finally:
+            sys.argv = old
+        return code, out.getvalue()
+
+    def test_help_hides_old_and_dev_commands(self):
+        code, text = self.run_cli("--help")
+        listed = set(re.findall(r"^    (\w+)\s", text, re.M))
+        self.assertTrue({"config", "on", "lesson", "learn"} <= listed, listed)
+        self.assertFalse({"dev", "explain", "language", "skills", "setup"} & listed, listed)
+
+    def test_no_fight_points_to_explain(self):
+        for ch in challenges.ALL + challenges.SECURITY + challenges.TRIALS:
+            self.assertNotIn("bashou explain", ch.task + " ".join(ch.hints), ch.id)
+
+    def test_on_without_the_shell_function_sets_up(self):
+        bashrc = Path(self.tmp.name) / ".bashrc"
+        with mock.patch("pathlib.Path.home", return_value=Path(self.tmp.name)):
+            code, text = self.run_cli("on")
+        self.assertEqual(code, 0)
+        self.assertIn("source ", bashrc.read_text())
+
+    def test_config_language(self):
+        self.assertEqual(self.run_cli("config", "language", "fr")[0], 0)
+        self.assertEqual(state.load()["language"], "fr")
+        self.assertEqual(self.run_cli("config", "language", "xx")[0], 1)
+        self.assertEqual(state.load()["language"], "fr")
+        i18n.use("en")

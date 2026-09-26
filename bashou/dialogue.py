@@ -216,7 +216,7 @@ INVITES = {
     "lesson": ["The Sage Owl has a new lesson for you, with drawings: `bashou lesson`",
                "A new page opened in the owl's library. It shows how things work inside: `bashou lesson`"],
     "rust": ["You know your way around now. Want to learn Rust? `{cmd}` installs it, and Rust fights will come.",
-             "Rust next? The compiler explains every mistake. Install it with `{cmd}`, then `bashou explain rust mut`."],
+             "Rust next? The compiler explains every mistake. Install it with `{cmd}`, then `bashou lesson`."],
     "gpg": ["Your files deserve a lock. `{cmd}` installs GnuPG, then `gpg -c notes.txt` locks a file.",
             "Downloads can be faked. GnuPG checks who signed them. Install it: `{cmd}`"],
     "pass": ["Passwords in scripts? Never in clear. `{cmd}` installs pass: scripts read `$(pass show db)`.",

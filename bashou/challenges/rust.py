@@ -1,7 +1,7 @@
 """Rust fights (owner, 2026-09-23): first steps with variables, only where rustc is installed.
 
 One file, built with `rustc` (no cargo project needed). Like the C fights, the file starts with a
-comment saying what it must print, how to run it and which `bashou explain rust …` note helps; Bashou
+comment saying what it must print, how to run it and where to find help (the fight's lesson); Bashou
 then builds your version and compares what it prints.
 """
 
@@ -60,7 +60,7 @@ def counter_setup(work, rng):
         _("Fight: count the \"error\" lines. rustc refuses: a variable that changes must say so."),
         _("Wanted: one line, like: 3 errors"),
         _("Run it:") + " rustc counter.rs && ./counter",
-        _("Help:") + " bashou explain rust mut",
+        _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ], COUNTER_CODE.format(lines=", ".join(f'"{x}"' for x in lines)))
     return {"expected": f"{lines.count('error')} errors\n"}
 
@@ -82,7 +82,7 @@ def points_setup(work, rng):
         _("Fight: a constant must say its type; a let can guess it."),
         _("Wanted: the score out of the maximum, like: 73 / 100"),
         _("Run it:") + " rustc points.rs && ./points",
-        _("Help:") + " bashou explain rust const",
+        _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ], POINTS_CODE.format(top=top, score=score))
     return {"expected": f"{score} / {top}\n"}
 
@@ -102,7 +102,7 @@ def guess_setup(work, rng):
         _("Fight: guess starts as text and should become a number. mut can't change a type."),
         _("Wanted: the number doubled, like: 84 for \"  42  \""),
         _("Run it:") + " rustc guess.rs && ./guess",
-        _("Help:") + " bashou explain rust shadowing",
+        _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ], GUESS_CODE.format(n=n))
     return {"expected": f"{n * 2}\n"}
 
@@ -125,7 +125,7 @@ def temps_setup(work, rng):
         _("Fight: it builds, then panics: 'attempt to add with overflow'. A u8 stops at 255."),
         _("Wanted: the average of the 4 readings, rounded down."),
         _("Run it:") + " rustc temps.rs && ./temps",
-        _("Help:") + " bashou explain rust integers",
+        _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ], TEMPS_CODE.format(readings=", ".join(map(str, readings))))
     return {"expected": f"{sum(readings) // 4}\n"}
 
@@ -137,16 +137,14 @@ ALL = [
               task="The Mut Marmot froze a counter in counter.rs: rustc won't let it change.\n"
                    "Fix counter.rs (its first lines say what it must do). Run it: rustc counter.rs && ./counter\n"
                    "When it works, type: verify",
-              hints=["Read rustc's error: it names the variable and even suggests the fix. "
-                     "bashou explain rust mut",
+              hints=["Read rustc's error: it names the variable and even suggests the fix.",
                      "Write: let mut errors = 0;"],
               setup=counter_setup, verify=rust_output("counter.rs")),
     Challenge(level=1, id="const_condor", fix=True, pet="beaver", threat="Const Condor", **RUST,
               task="The Const Condor stole a type from points.rs: rustc stops at the constant.\n"
                    "Fix points.rs (its first lines say what it must do). Run it: rustc points.rs && ./points\n"
                    "When it works, type: verify",
-              hints=["A const always says its type after its name, like a function argument. "
-                     "bashou explain rust const",
+              hints=["A const always says its type after its name, like a function argument.",
                      "Write: const MAX_POINTS: u32 = …;"],
               setup=points_setup, verify=rust_output("points.rs")),
     Challenge(level=2, id="shadow_shade", fix=True, pet="beaver", threat="Shadow Shade", after=("mut_marmot",), **RUST,
@@ -154,15 +152,14 @@ ALL = [
                    "Fix guess.rs (its first lines say what it must do). Run it: rustc guess.rs && ./guess\n"
                    "When it works, type: verify",
               hints=["mut lets a value change, never its type. A new let with the same name can: "
-                     "that's shadowing. bashou explain rust shadowing",
+                     "that's shadowing.",
                      "Write: let guess = \"  42  \"; then let guess: u32 = guess.trim().parse().unwrap();"],
               setup=guess_setup, verify=rust_output("guess.rs")),
     Challenge(level=2, id="byte_basilisk", fix=True, pet="beaver", threat="Byte Basilisk", after=("mut_marmot",), **RUST,
               task="The Byte Basilisk squeezes four readings into one byte in temps.rs.\n"
                    "Fix temps.rs (its first lines say what it must do). Run it: rustc temps.rs && ./temps\n"
                    "When it works, type: verify",
-              hints=["The readings fit in a u8, their sum doesn't. Give the total a bigger type. "
-                     "bashou explain rust integers",
+              hints=["The readings fit in a u8, their sum doesn't. Give the total a bigger type.",
                      "Write: let mut total: u32 = 0; and total += r as u32;"],
               setup=temps_setup, verify=rust_output("temps.rs")),
 ]

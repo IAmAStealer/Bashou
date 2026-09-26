@@ -1,4 +1,4 @@
-""".deb/.rpm installs: the staged tree, the VERSION file, `bashou update` and `bashou setup` without git."""
+""".deb/.rpm installs: the staged tree, the VERSION file, `bashou update` and `bashou on` (setup) without git."""
 
 import contextlib
 import importlib.util
@@ -110,6 +110,15 @@ class SetupTest(unittest.TestCase):
         self.run_setup()
         self.run_setup()
         self.assertEqual(self.bashrc.read_text(), "alias ll='ls -l'\nsource /usr/share/bashou/bashou.bash\n")
+
+    def test_a_git_clone_loader_counts(self):
+        """`bashou on` outside the shell function sets up: a clone's own line mustn't get a second one."""
+        self.bashrc.write_text("source ~/.bashou/bashou.bash\n")
+        self.run_setup()
+        self.assertEqual(self.bashrc.read_text(), "source ~/.bashou/bashou.bash\n")
+        self.bashrc.write_text("# source ~/.bashou/bashou.bash\n")         # commented out: not loaded
+        self.run_setup()
+        self.assertIn("source /usr/share/bashou/bashou.bash", self.bashrc.read_text())
 
     def test_new_bashrc_and_odd_paths(self):
         self.run_setup("/home/me/my games/bashou.bash")

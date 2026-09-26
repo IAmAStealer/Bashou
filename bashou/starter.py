@@ -81,7 +81,7 @@ LANG_KEYS = {"\x1b[B": 1, "j": 1, "\x1b[A": -1, "k": -1}
 
 def draw_languages(pos, breath):
     """Always in English plus each language's own name, since we don't know yet what you read."""
-    out = [f"{ESC}[H{ESC}[2J", f"{BOLD}Language{RESET}  {DIM}↑/↓, Enter · `bashou language` to change it later{RESET}\n\n"]
+    out = [f"{ESC}[H{ESC}[2J", f"{BOLD}Language{RESET}  {DIM}↑/↓, Enter · `bashou config language` to change it later{RESET}\n\n"]
     for i, (code, name) in enumerate(i18n.LANGUAGES.items()):
         done, total = i18n.progress_of(code) if code != "en" else (1, 1)
         note = "" if done == total else f"  {DIM}({100 * done // total}% translated, the rest in English){RESET}"
@@ -99,7 +99,7 @@ def choose_language():
 
 
 def language_main():
-    """`bashou language`. Exit code 0 when a language is (or already was) set."""
+    """`bashou config language`. Exit code 0 when a language is (or already was) set."""
     if not sys.stdin.isatty():
         return 0 if state.load().get("language") else 1
     lang = choose_language() or state.load().get("language") or "en"     # q: keep it, or English

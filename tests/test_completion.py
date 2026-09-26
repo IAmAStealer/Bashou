@@ -32,23 +32,23 @@ class CompletionTest(unittest.TestCase):
         self.assertEqual(set(words("_bashou_challenges")), {c.id for c in challenges.ALL})
         self.assertEqual(words("_bashou_security"), [str(i) for i in range(1, len(challenges.SECURITY) + 1)])
         parser_src = Path(cli.__file__).read_text()
-        commands = re.findall(r'sub\.add_parser\("([\w-]+)"', parser_src)
-        self.assertEqual(set(words("_bashou_commands")), set(commands))
-        from bashou import explain
-        for lang, topics in explain.NOTES.items():
-            self.assertEqual(complete(f"bashou explain {lang} "), list(topics))
-        self.assertEqual(complete("bashou explain "), list(explain.NOTES))
+        shown = re.findall(r'sub\.add_parser\("([\w-]+)", help=', parser_src)
+        self.assertEqual(set(words("_bashou_commands")), set(shown))       # hidden commands aren't offered
+        from bashou import i18n
+        self.assertEqual(words("_bashou_languages"), list(i18n.LANGUAGES))
         dev = re.search(r'choices=\[("unlock-all".*?)\]', parser_src).group(1)
         self.assertEqual(words("_bashou_dev"), re.findall(r'"([\w-]+)"', dev))
 
     def test_completes(self):
-        self.assertEqual(complete("bashou s"), ["share", "swap", "stats", "start", "skills", "setup", "security"])
+        self.assertEqual(complete("bashou s"), ["share", "swap", "stats", "start", "security"])
         self.assertEqual(complete("bashou swap st"), ["starter"])
         self.assertEqual(complete("bashou swap f"), ["frog", "fox"])
         self.assertEqual(complete("bashou dev st"), ["stage", "stage-all"])
         self.assertEqual(complete("bashou dev threat aw"), ["awk_golem"])
         self.assertEqual(complete("bashou dev stage fox "), ["1", "2", "3"])
         self.assertEqual(complete("bashou level "), [])
+        self.assertEqual(complete("bashou config la"), ["language"])
+        self.assertEqual(complete("bashou config language f"), ["fr"])
 
 
 if __name__ == "__main__":

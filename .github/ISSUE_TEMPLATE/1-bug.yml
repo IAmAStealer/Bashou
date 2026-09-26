@@ -18,7 +18,7 @@ body:
         - bashou fight (a threat, the arena)
         - bashou adventure (questions, bosses)
         - bashou lesson (the Sage Owl's library)
-        - bashou learn / bashou explain
+        - bashou learn
         - Achievements or pet evolutions
         - Install, setup or update (apt, dnf, git)
         - Translation

@@ -5,7 +5,7 @@ Each release is also published as a `.deb` and a `.rpm` in two signed repositori
 
 - `tools/package.py build vX.Y.Z dist/` builds the packages: the code goes to `/usr/share/bashou` (the same
   tree as a clone, plus a `VERSION` file), `/usr/bin/bashou` runs its commands, and the install
-  byte-compiles it. Nothing turns the pet on: each user runs `bashou setup`, which adds one `source` line
+  byte-compiles it. Nothing turns the pet on: each user runs `bashou on`, which adds one `source` line
   to their `~/.bashrc`. `bashou update` tells packaged installs to use apt or dnf.
 - `tools/package.py repo dist/ site/ KEYID` makes the repositories: a flat apt repository (`Suites: ./`,
   signed `InRelease`) and a dnf repository (signed packages, signed `repomd.xml` for `repo_gpgcheck=1`).

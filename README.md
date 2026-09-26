@@ -39,10 +39,9 @@ tokens spent to learn what a command does.
   listener with `ss`, compare `getent` and DNS, and read saved captures with `tcpdump -r`; their
   servers listen on 127.0.0.1 only, and nothing leaves your machine.
   Beaten fights come back after 1, 7 and 30 days (spaced repetition), so what you learned stays.
-- **`bashou explain python list`** (or `dict`, `loop`, `recursion`; `bashou explain c malloc`,
-  `bashou explain network cidr`…): a short note with an example, for the code and network fights.
 - **`bashou lesson`**: the Sage Owl's library. Lessons with drawings that grow page by page (the stack
   and the heap, where output goes, permissions…), unlocked as you play, each one preparing your next step.
+  In a fight, `lesson` opens the one that explains it.
 - **`bashou security`**: small investigations (a hidden file, a cron backdoor, a SUID binary).
 - **`bashou adventure`**: a walk through 12 topics (coding logic, bash, Linux, systemd, Python, Rust,
   C, Debian, Rocky Linux, CI/CD, SQL, networks) with 343 questions about what goes wrong and what to check first, bosses, and
@@ -111,7 +110,7 @@ sudo curl -fsSLo /etc/yum.repos.d/bashou.repo https://iamastealer.github.io/Bash
 sudo dnf install bashou
 ```
 
-Then each user who wants a pet runs `bashou setup` (it adds one line to their `~/.bashrc`). Updates come
+Then each user who wants a pet runs `bashou on` (the first time, it adds one line to their `~/.bashrc`). Updates come
 with `apt upgrade` or `dnf upgrade`.
 
 **Any other Linux**, or to follow the code as it's written, with git:

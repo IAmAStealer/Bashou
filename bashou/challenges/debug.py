@@ -73,7 +73,7 @@ def link_setup(work, rng):
         _("mean() is written in stats.c. The linker needs every file that holds a piece of the program."),
         _("Wanted: ./report 2 4 9 prints mean: 5.00"),
         _("Run it:") + " gcc report.c -o report && ./report 2 4 9",
-        _("Help:") + " bashou explain c link",
+        _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ]) + REPORT_C)
     (work / "stats.c").write_text(STATS_C.lstrip())
     (work / "stats.h").write_text(STATS_H)
@@ -119,7 +119,7 @@ def warning_setup(work, rng):
         _("Build it with warnings on: gcc -Wall grade.c -o grade. Read the warning, fix that line."),
         _("Wanted: 100 is perfect, {mark} or more is pass, less is fail.").format(mark=mark),
         _("Done when gcc -Wall says nothing and ./grade 100 {mark} 7 prints perfect, pass, fail.").format(mark=mark),
-        _("Help:") + " bashou explain c warnings",
+        _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ]) + GRADE_C.replace("{mark}", str(mark)))
     scores = [100, mark, mark - 1, 7, 99, rng.randint(0, 99)]
     return {"runs": [[[str(s) for s in scores], "", "".join(grade_answer(s, mark) + "\n" for s in scores)]],
@@ -195,7 +195,7 @@ def crash_setup(work, rng):
         _("A debugger runs the program and stops right where it crashes."),
         _("Build it with -g (line numbers), run it in gdb, then ask for the backtrace: bt."),
         _("Run it:") + " gcc -g crash.c -o crash && gdb -q ./crash",
-        _("Help:") + " bashou explain c gdb",
+        _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ]) + code
     (work / "crash.c").write_text(text)
     line = next(i for i, l in enumerate(text.split("\n"), 1) if "return value[0];" in l)
@@ -238,7 +238,7 @@ def loan_setup(work, rng):
             month=month),
         _("Stop it there with a breakpoint, then print the variable."),
         _("Run it:") + " gcc -g loan.c -o loan && gdb -q ./loan",
-        _("Help:") + " bashou explain c gdb",
+        _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ]) + code)
     return {"answer": str(balance), "args": {"month": month}}
 
@@ -280,8 +280,7 @@ ALL = [
                    "At which line of crash.c does it crash? Build it with -g, run it in gdb, "
                    "ask for the backtrace. Then: answer <line>",
               hints=["gcc -g adds line numbers to the program. In gdb, run starts it; when it crashes, gdb stops "
-                     "and shows where. bt (backtrace) lists the calls, the one that crashed first: "
-                     "bashou explain c gdb",
+                     "and shows where. bt (backtrace) lists the calls, the one that crashed first.",
                      "The first line of bt says the function and crash.c:LINE. That number is the answer.",
                      "Try: gcc -g crash.c -o crash && gdb -q -batch -ex run -ex bt ./crash"],
               setup=crash_setup),
@@ -289,7 +288,7 @@ ALL = [
               task="The Breakpoint Beetle hides a number in loan.c: it only prints the balance after a year.\n"
                    "What is balance when month_end() starts for month {month}? Then: answer <number>",
               hints=["A breakpoint pauses the program at a function or a line. break month_end stops at every "
-                     "call of month_end(); print balance shows the variable there: bashou explain c gdb",
+                     "call of month_end(); print balance shows the variable there.",
                      "Stop only at the right call with a condition: break month_end if month == {month}. Then "
                      "run, then print balance.",
                      "Try: gcc -g loan.c -o loan && gdb -q -batch -ex 'break month_end if month == {month}' "
