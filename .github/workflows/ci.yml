@@ -44,7 +44,7 @@ jobs:
         run: python -m unittest tests.test_security -v
       - name: Bandit (Python security linter)
         run: |
-          python -m pip install --quiet bandit==1.9.4
+          python -m pip install --quiet --require-hashes -r .github/requirements/bandit.txt
           bandit -r bashou -ll
       - name: ShellCheck (bash loader)
         run: shellcheck -s bash bashou.bash
