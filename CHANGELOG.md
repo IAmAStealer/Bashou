@@ -9,7 +9,8 @@ Every release has a section here, written for players. CI refuses to tag a relea
   top of the screen, and when you scrolled up, a long output like `--help` had holes where they had
   been. Now Bashou moves those top lines up (where scrolling finds them, untouched) before drawing the
   pet, and removes the empty space again when your next command starts. Terminals that can't say
-  where the cursor is keep the old behavior.
+  where the cursor is keep the old behavior, and so do terminals opened
+  before the update.
 - The Bat's night achievement is now called **Night shift** (it was "Night owl", and players looked for
   an Owl to unlock). Every achievement note now says which pet family it grows: "🏆 Night shift (Bat
   family): …".

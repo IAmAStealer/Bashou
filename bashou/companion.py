@@ -54,6 +54,10 @@ class Companion:
         self.height_file = state.CACHE / f"height.{shell}"     # lines the pet covers, for the loader
         self.room_file = state.CACHE / f"room.{shell}"         # 1 once the loader emptied those lines
         self.height = None
+        # A terminal opened before this version runs the old loader, which never writes the room file
+        # (the pet updates itself, open shells don't): there the pet draws as it always did. The new
+        # loader writes the file before starting the pet.
+        self.managed = self.room_file.exists()
         self.offset = 0            # bytes of the events file already counted
         self.code = code_version()
         self.notes = []            # notifications waiting for the bubble
@@ -289,9 +293,11 @@ class Companion:
     def room(self):
         """The loader emptied the top rows for this prompt (bashou.bash, _bashou_make_room)."""
         try:
-            return self.room_file.read_text().strip() == "1"
+            room = self.room_file.read_text().strip() == "1"
         except OSError:
-            return False
+            return not self.managed
+        self.managed = True
+        return room
 
     def draw(self, ms):
         self.update_bubble()

@@ -165,6 +165,27 @@ class SizeTest(TempState):
         self.assertIs(pet.pet, creatures.PETS["fox"])
 
 
+class OldLoaderTest(TempState):
+    """Owner, 2026-09-26: after the update that makes room for the pet, open terminals (still running
+    the old bashou.bash, which never writes room.<pid>) showed no pet at all."""
+
+    def test_draws_without_a_room_file_from_an_old_loader(self):
+        from bashou.companion import Companion
+        pet = Companion(os.getpid())
+        self.assertTrue(pet.room())
+
+    def test_waits_for_room_with_the_new_loader(self):
+        from bashou.companion import Companion
+        state.private(state.CACHE)
+        (state.CACHE / f"room.{os.getpid()}").write_text("0\n")        # written by `bashou on`
+        pet = Companion(os.getpid())
+        self.assertFalse(pet.room())
+        (state.CACHE / f"room.{os.getpid()}").unlink()                 # PS0: a command runs
+        self.assertFalse(pet.room())
+        (state.CACHE / f"room.{os.getpid()}").write_text("1\n")        # the prompt made room
+        self.assertTrue(pet.room())
+
+
 class BubbleTest(TempState):
     def setUp(self):
         super().setUp()

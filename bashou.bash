@@ -142,6 +142,7 @@ bashou() {
       ;;
     on)
       [[ -z $BASHOU_PID ]] || return 0
+      echo 0 > "$_bashou_room" 2>/dev/null           # this loader makes room: the pet waits for it
       # SIGUSR1 ignored until Python installs its handler (the default action would kill it).
       { (trap '' USR1; exec python3 "$BASHOU_DIR/launch.py" bashou.companion "$$") </dev/null 2>/dev/null & } 2>/dev/null
       BASHOU_PID=$!
