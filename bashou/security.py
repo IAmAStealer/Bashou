@@ -1,4 +1,5 @@
-"""`bashou security`: small security investigations, picked by you, easy to hard."""
+"""Security investigations, picked by you, easy to hard, with no clock: one of `bashou arena`'s two
+choices (`bashou arena security`; the old `bashou security` still leads there)."""
 
 from . import challenges, fight, progress, state
 from .i18n import _
@@ -15,7 +16,7 @@ def listing():
         mark = f"{GOOD}✓{RESET}" if ch.id in done else " "
         missing = "" if ch.available() else f"  {DIM}(" + _("needs {tools}").format(tools=", ".join(ch.requires)) + f"){RESET}"
         print(f"  {mark} {i}. {_(ch.threat):<16} {DIM}{_(LEVELS[ch.level])}{RESET}{missing}")
-    print(f"\n  {DIM}" + _("Start one: bashou security <number>") + RESET)
+    print(f"\n  {DIM}" + _("Start one: bashou arena security <number>") + RESET)
     print(f"  {DIM}" + _("Ideas for more? Open an issue on GitHub.") + RESET)
 
 
@@ -36,17 +37,20 @@ def intro(ch, task):
             "  flee             " + _("give up (try again any time)") + "\n")
 
 
-def run(key):
-    if not key:
-        listing()
-        return 0
+def choose(key):
+    """The challenge `key` names (number or id), or None after saying why not."""
     ch = find(key)
     if not ch:
-        print("  " + _("No such challenge: {key}. `bashou security` lists them.").format(key=key))
-        return 1
+        print("  " + _("No such challenge: {key}. `bashou arena security` lists them.").format(key=key))
+        return None
     if not ch.available():
         print("  " + _("This one needs {tools}, which isn't installed.").format(tools=", ".join(ch.requires)))
-        return 1
+        return None
+    return ch
+
+
+def play(ch):
+    """One investigation in the arena. True when solved."""
     code, notes = fight.arena(ch, lambda task: intro(ch, task))
     won = code == fight.WIN
     if won:
@@ -55,10 +59,7 @@ def run(key):
                 s["security"].append(ch.id)
             notes += progress.check(s)
         print(f"\n{GOOD}{BOLD}✨ " + _("Solved: {title}!").format(title=_(ch.threat)) + RESET)
-    else:
-        print(f"\n{DIM}" + _("No worries, try again any time: bashou security {n}").format(
-            n=challenges.SECURITY.index(ch) + 1) + RESET)
     for note in notes:
         print(f"  {note}")
     print()
-    return 0
+    return won

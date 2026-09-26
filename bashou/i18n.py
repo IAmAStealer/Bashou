@@ -131,6 +131,8 @@ def messages():
     for ch in challenges.ALL + challenges.SECURITY + challenges.TRIALS:
         found += [ch.threat, ch.task, *ch.hints] + ([ch.help] if ch.help else [])
     found.append(challenges.HELP_HINT)
+    from . import cli
+    found += [text for section, rows in cli.HELP for text in (section, *(t for _c, t in rows))]
     return list(dict.fromkeys(found))
 
 

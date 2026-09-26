@@ -38,7 +38,7 @@ class Challenge:
     uses: Optional[Callable] = None     # (analysis) -> bool: what must be used; default: one of `tools`
     requires: list = field(default_factory=list)   # executables needed on this system
     level: int = 1            # 1 easy, 2 medium, 3 hard
-    kind: str = "fight"       # "fight": sent as a threat; "security": picked in `bashou security`
+    kind: str = "fight"       # "fight": sent as a threat; "security": picked in `bashou arena security`
     after: tuple = ()         # fights to beat before this one comes (beginners first)
     distro: tuple = ()        # only on these families (os-release ID or ID_LIKE), e.g. ("debian",)
     skill: str = "bash"       # what it teaches (skills.SKILLS): only sent if you learn that
@@ -99,6 +99,6 @@ from . import awk, basics, cicd, code, debug, find, grep, network, packages, pip
 
 ALL = basics.ALL + [grep.CHALLENGE, awk.CHALLENGE, find.CHALLENGE, uniq.CHALLENGE,
                     sed.CHALLENGE, ps.CHALLENGE, pipe.CHALLENGE] + code.ALL + debug.ALL + rust.ALL + packages.ALL + repos.ALL + cicd.ALL + sql.ALL + secrets.ALL + network.ALL   # fights
-SECURITY = security.SECURITY        # `bashou security`, in order
+SECURITY = security.SECURITY        # `bashou arena security`, in order
 TRIALS = trials.TRIALS + [cicd.INDENT_CHEST, sql.CHEST, secrets.CHEST, debug.CHEST, network.CHEST]   # locked chests in `bashou adventure`
 BY_ID = {c.id: c for c in ALL + SECURITY + TRIALS}

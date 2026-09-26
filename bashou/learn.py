@@ -8,6 +8,9 @@ from . import state
 from .i18n import _
 
 BOLD, DIM, CYAN, RESET = "\x1b[1m", "\x1b[2m", "\x1b[36m", "\x1b[0m"
+# One color per role, the same in the command line at the top and in the steps below it.
+COLORS = {"cmd": "\x1b[1;38;2;240;200;100m", "opt": "\x1b[38;2;120;200;230m",
+          "op": "\x1b[1;38;2;220;130;220m", "arg": "\x1b[38;2;150;215;140m"}
 
 # What each command does. Flags: "-x" -> meaning; FLAG_VALUE: flags followed by a value.
 COMMANDS = {
@@ -109,6 +112,10 @@ FLAGS = {
             "--list-keys": "the public keys you have", "--list-secret-keys": "your own private keys"},
     "git": {"-c": "create the branch", "--oneline": "one line per commit", "--graph": "draw the branches"},
     "grep": {"-r": "recursive: every file in every folder", "-n": "show line numbers",
+             "-v": "invert: keep the lines that don't match", "-i": "ignore case: ERROR, error and Error all match",
+             "-l": "only the names of the files that match, not the lines", "-c": "only count the matching lines",
+             "-o": "print only the matching part, not the whole line", "-w": "whole words only",
+             "-F": "fixed text: dots and stars are plain characters, not a pattern",
              "-E": "extended regex: | means or", "-C": "{value} lines of context around each match"},
     "ip": {"-br": "brief: one short line per interface", "-4": "only IPv4", "-6": "only IPv6",
            "-o": "one line per address (handy with grep and awk)", "-s": "with counters: packets, errors, drops"},
@@ -278,8 +285,22 @@ RUNNERS = {"xargs", "strace", "watch", "sudo", "time"}      # their first plain 
 
 def explain(command):
     """[(piece, meaning)] for a command line."""
-    rows, cmd, nth, words, i = [], None, 0, tokens(command), 0
+    return [(piece, meaning) for piece, meaning, role, parts in pieces(command)]
+
+
+class Rows(list):
+    """Rows of (piece, meaning, role, parts). role: cmd, opt, op (syntax) or arg; parts: one
+    (flag, meaning) per letter of grouped flags like -czf, else empty."""
+
+    def append(self, row, role="arg", parts=()):
+        super().append((*row, role, list(parts)))
+
+
+def pieces(command):
+    """explain() with each piece's role, for the display."""
+    rows, cmd, nth, words, i = Rows(), None, 0, tokens(command), 0
     listing = heredoc = None
+    in_exec = False
     while i < len(words):
         w, nxt = words[i], (words[i + 1] if i + 1 < len(words) else "")
         i += 1
@@ -296,7 +317,7 @@ def explain(command):
             heredoc, cmd = None, None
             continue
         if w in REDIRECTS or w == "<<":
-            rows.append((w, _(SYNTAX[w])))
+            rows.append((w, _(SYNTAX[w])), "op")
             if nxt:
                 rows.append((nxt, _("the end word") if w == "<<" else _("the file")))
                 i += 1
@@ -308,7 +329,7 @@ def explain(command):
         listing = None
         if cmd is None:                                    # expecting a command
             if w in SYNTAX:
-                rows.append((w, _(SYNTAX[w])))
+                rows.append((w, _(SYNTAX[w])), "op")
                 if w == "for" and nxt:
                     rows.append((nxt, _("the loop variable")))
                     i += 1
@@ -318,15 +339,20 @@ def explain(command):
             else:
                 about = COMMANDS.get(w)
                 rows.append((w, _(about) if about else
-                             _("a command I have no notes on yet: `man {cmd}` explains it").format(cmd=w)))
+                             _("a command I have no notes on yet: `man {cmd}` explains it").format(cmd=w)), "cmd")
                 cmd, nth = (None if w == "sudo" else w), 0
             continue
+        if in_exec and w in (";", "+"):
+            rows.append((w, _("end of the -exec command (written \\; so bash doesn't take it for its own ;)")
+                         if w == ";" else _(SYNTAX["+"])), "op")
+            cmd, in_exec = "find", False
+            continue
         if w in ("|", ";", "<(", "$(", "do", "then"):
-            rows.append((w, _(SYNTAX.get(w, "then run the next command"))))
+            rows.append((w, _(SYNTAX.get(w, "then run the next command"))), "op")
             cmd = None
             continue
         if w in SYNTAX and w not in ".*~+{}":
-            rows.append((w, _(SYNTAX[w])))
+            rows.append((w, _(SYNTAX[w])), "op")
             continue
         if cmd in RUNNERS and not w.startswith("-") or (cmd == "kubectl" and rows[-1][0] == "--"):
             cmd = None
@@ -334,14 +360,15 @@ def explain(command):
             continue
         if cmd == "find" and rows[-1][0] == "-exec":
             about = COMMANDS.get(w)
-            rows.append((w, _(about) if about else _("the command to run")))
+            rows.append((w, _(about) if about else _("the command to run")), "cmd")
+            cmd, nth, in_exec = w, 0, True                 # grep -l after -exec: -l is grep's
             continue
         if w in SUBCOMMANDS.get(cmd, {}):
-            rows.append((w, _(SUBCOMMANDS[cmd][w])))
+            rows.append((w, _(SUBCOMMANDS[cmd][w])), "opt")
             continue
         if re.match(r"^(--?[A-Za-z0-9]|\+[a-z%])", w) or w in FLAGS.get(cmd, {}):
             row, used = option(cmd, w, nxt)
-            rows.append(row)
+            rows.append(row, "opt", parts(cmd, row[0]))
             i += used
             continue
         rows.append((w, argument(cmd, w, nth)))
@@ -371,6 +398,23 @@ def option(cmd, word, nxt):
             return (word if rest else f"{word} {value}", "; ".join(meanings)), (0 if rest else 1)
         meanings.append(_(flags[flag]).format(value=""))
     return (word, "; ".join(meanings)), 0
+
+
+def parts(cmd, piece):
+    """-czf out.tgz -> [(-c, …), (-z, …), (-f out.tgz, …)]: one line per letter on screen."""
+    word, _sp, value = piece.partition(" ")
+    if word.startswith("--") or len(word) < 3 or word[0] not in "-+" or word in FLAGS.get(cmd, {}):
+        return []
+    flags, takes, out = FLAGS.get(cmd, {}), FLAG_VALUE.get(cmd, set()), []
+    for j, letter in enumerate(word[1:]):
+        flag = word[0] + letter
+        if flag not in flags:
+            return []
+        if letter in takes:
+            rest = word[j + 2:] or value
+            return out + [(f"{flag} {rest}", _(flags[flag]).format(value=rest))]
+        out.append((flag, _(flags[flag]).format(value="")))
+    return out
 
 
 def argument(cmd, word, nth):
@@ -404,13 +448,81 @@ def main(args):
     if not command:
         print("  " + _("No suggestion to explain yet. Try `bashou talk`, or `bashou learn <command>`."))
         return 1
-    print(f"\n  {BOLD}{command.replace(chr(10), ' ⏎ ')}{RESET}\n")
-    rows = explain(command)
-    width = min(max(len(p) for p, _m in rows), 24)
-    for piece, meaning in rows:
-        print(f"  {CYAN}{piece:<{width}}{RESET}  {DIM}{meaning}{RESET}")
-    print()
+    print(render(command))
     return 0
+
+
+def paint(command, rows):
+    """The command as typed (quotes and all), each piece in the color of its role."""
+    import re as _re
+    command = command.replace("\n", " ⏎ ")
+    out, pos = [], 0
+    for piece, _m, role, _p in rows:
+        pattern = r"""["'\\]*""".join(_re.escape(c) if c != " " else r"\s+" for c in piece)
+        found = _re.compile(pattern).search(command, pos) if piece != "…" else None
+        if not found:
+            continue
+        start, end = found.span()
+        while start > pos and command[start - 1] in "\"'\\":         # an opening quote belongs to it
+            start -= 1
+        for quote in "\"'":                                  # its closing quote too
+            if command[start:end].count(quote) % 2 and command[end:end + 1] == quote:
+                end += 1
+        out += [command[pos:start], COLORS[role] + command[start:end] + RESET]
+        pos = end
+    return "".join(out) + command[pos:]
+
+
+def steps(rows):
+    """Cut the rows into steps: each command with its options and arguments, and the operators
+    (| ; > …) between them."""
+    out = []
+    for row in rows:
+        if row[2] in ("cmd", "op") or not out or out[-1][0][2] == "op":
+            out.append([row])
+        else:
+            out[-1].append(row)
+    return out
+
+
+def render(command, width=None):
+    """The command in color, then each command it runs as a numbered step, one line per piece."""
+    import shutil
+    import textwrap
+    width = width or min(shutil.get_terminal_size((88, 24)).columns, 100)
+    rows = pieces(command)
+    lines = ["", "  " + paint(command, rows)]
+
+    def put(indent, label, color, meaning, pad):
+        room = max(24, width - indent - pad - 2)
+        text = textwrap.wrap(meaning, room) or [""]
+        lines.append(" " * indent + color + label + RESET + " " * (pad - len(label) + 2) + text[0])
+        lines.extend(" " * (indent + pad + 2) + more for more in text[1:])
+
+    n, numbered = 0, sum(role == "cmd" for _p, _m, role, _x in rows) > 1
+    for step in steps(rows):
+        head = step[0]
+        if head[2] == "op":
+            put(4, head[0], COLORS["op"], head[1], len(head[0]))
+            pad = min(max((len(r[0]) for r in step[1:]), default=0), 18)
+            for piece, meaning, role, parts in step[1:]:
+                put(7, piece, COLORS[role], meaning, pad)
+            continue
+        if head[2] == "cmd":
+            n += 1
+            lines.append("")
+            label = f"{n}. {head[0]}" if numbered else head[0]
+            put(2, label, COLORS["cmd"], head[1], len(label))
+            body = step[1:]
+        else:
+            body = step
+        shown = [part for piece, meaning, role, parts in body for part in (
+            [(p, m, role) for p, m in parts] or [(piece, meaning, role)])]
+        pad = min(max((len(p) for p, _m, _r in shown), default=0), 18)
+        for piece, meaning, role in shown:
+            put(7, piece, COLORS[role], meaning, pad)
+    lines.append("")
+    return "\n".join(lines)
 
 
 if __name__ == "__main__":

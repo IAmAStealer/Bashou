@@ -605,10 +605,11 @@ class CommandCleanupTest(TempState):
         return code, out.getvalue()
 
     def test_help_hides_old_and_dev_commands(self):
-        code, text = self.run_cli("--help")
-        listed = set(re.findall(r"^    (\w+)\s", text, re.M))
-        self.assertTrue({"config", "on", "lesson", "learn"} <= listed, listed)
-        self.assertFalse({"dev", "explain", "language", "skills", "setup"} & listed, listed)
+        for flag in ("--help", "help"):
+            code, text = self.run_cli(flag)
+            listed = set(re.findall(r"bashou (\w+)", re.sub(r"\x1b\[[0-9;]*m", "", text)))
+            self.assertTrue({"config", "on", "lesson", "learn", "arena"} <= listed, listed)
+            self.assertFalse({"dev", "explain", "language", "skills", "setup", "security"} & listed, listed)
 
     def test_no_fight_points_to_explain(self):
         for ch in challenges.ALL + challenges.SECURITY + challenges.TRIALS:

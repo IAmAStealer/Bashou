@@ -24,7 +24,7 @@ A pixel-art pet that lives in the top-right corner of your terminal and grows as
   `StrictHostKeyChecking=no`, `sudo pip install`, `sshpass -p`. Five of them attract the **Gremlin**,
   which evolves as you pick up safe habits (reading a script before running it, checksums, `chmod u+x`)
   and ends up an Orc.
-- **Security challenges.** `bashou security` lists small investigations, easy to hard: a hidden
+- **Security challenges.** `bashou arena security` lists small investigations, easy to hard: a hidden
   file, an encoded note, brute-force attempts in an `auth.log`, a defaced website, a cron backdoor, a
   SUID program. Each one runs in a sandbox folder with fake, harmless data. Solving them evolves the
   Gremlin into an Orc.
@@ -72,12 +72,15 @@ Bashou to your `~/.bashrc` (a package turns it on for nobody by itself).
 
 ## Commands
 
+`bashou help` lists them by what they're for.
+
 ```bash
+bashou help             # the commands, by what they're for
 bashou start            # choose your starter (first launch does it for you)
 bashou level            # starter level, commands run, next unlock
 bashou pets             # your collection
 bashou achievements     # what you earned, and what to try next
-bashou fight            # enter the arena, once your pet has announced a threat
+bashou fight            # fight the threat your pet announced (no clock)
 bashou talk             # your pet gives you a tip now, with a command to try
 bashou learn            # takes its last suggested command apart; or: bashou learn tar -czf a.tgz d
 bashou lesson           # the Sage Owl's library: lessons with drawings, unlocked as you play (in a fight: lesson)
@@ -92,7 +95,8 @@ bashou config skills    # what you learn: a bit of everything, or the skills you
 bashou version          # which version this is (and if a newer one is out)
 bashou update           # get the new version from GitHub (--version v0.2.0: a given one, older too)
 bashou update --packages  # a git install moves to the apt or dnf repository (every command shown, asked first)
-bashou security         # security investigations you pick (bashou security 3 starts the third); fights come to you
+bashou arena            # fight when you want: a timed fight, or a security investigation (no clock)
+bashou arena security 3 # straight to the third investigation; lose and the arena closes for an hour
 bashou adventure        # walk into the world with your starter (s: save & quit)
 bashou reset            # start over with a new starter (asks first, keeps a backup)
 ```

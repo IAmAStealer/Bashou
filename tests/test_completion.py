@@ -34,13 +34,16 @@ class CompletionTest(unittest.TestCase):
         parser_src = Path(cli.__file__).read_text()
         shown = re.findall(r'sub\.add_parser\("([\w-]+)", help=', parser_src)
         self.assertEqual(set(words("_bashou_commands")), set(shown))       # hidden commands aren't offered
+        listed = " ".join(cmd for _s, rows in cli.HELP for cmd, _t in rows)
+        for name in set(shown) - {"help", "level"}:                        # `bashou help` lists every one
+            self.assertRegex(listed, rf"bashou {name}\b|/ {name}\b", name)
         from bashou import i18n
         self.assertEqual(words("_bashou_languages"), list(i18n.LANGUAGES))
         dev = re.search(r'choices=\[("unlock-all".*?)\]', parser_src).group(1)
         self.assertEqual(words("_bashou_dev"), re.findall(r'"([\w-]+)"', dev))
 
     def test_completes(self):
-        self.assertEqual(complete("bashou s"), ["share", "swap", "stats", "start", "security"])
+        self.assertEqual(complete("bashou s"), ["share", "swap", "stats", "start"])
         self.assertEqual(complete("bashou swap st"), ["starter"])
         self.assertEqual(complete("bashou swap f"), ["frog", "fox"])
         self.assertEqual(complete("bashou dev st"), ["stage", "stage-all"])
@@ -48,6 +51,8 @@ class CompletionTest(unittest.TestCase):
         self.assertEqual(complete("bashou dev stage fox "), ["1", "2", "3"])
         self.assertEqual(complete("bashou level "), [])
         self.assertEqual(complete("bashou config la"), ["language"])
+        self.assertEqual(complete("bashou arena s"), ["security"])
+        self.assertEqual(complete("bashou arena security "), words("_bashou_security"))
         self.assertEqual(complete("bashou config language f"), ["fr"])
 
 

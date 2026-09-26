@@ -42,7 +42,9 @@ tokens spent to learn what a command does.
 - **`bashou lesson`**: the Sage Owl's library. Lessons with drawings that grow page by page (the stack
   and the heap, where output goes, permissions…), unlocked as you play, each one preparing your next step.
   In a fight, `lesson` opens the one that explains it.
-- **`bashou security`**: small investigations (a hidden file, a cron backdoor, a SUID binary).
+- **`bashou arena`**: come and fight when you want. A timed fight (hearts and a clock), or a security
+  investigation with no clock (a hidden file, a cron backdoor, a SUID binary). Lose, and the arena
+  closes for an hour.
 - **`bashou adventure`**: a walk through 12 topics (coding logic, bash, Linux, systemd, Python, Rust,
   C, Debian, Rocky Linux, CI/CD, SQL, networks) with 343 questions about what goes wrong and what to check first, bosses, and
   chests that open with real commands.

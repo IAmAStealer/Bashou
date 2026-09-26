@@ -148,7 +148,7 @@ class InviteTest(unittest.TestCase):
         self.assertTrue(any("bashou adventure" in t for t in said))
         s["adventure"], s["security"] = {"distance": 3}, ["hidden_file"]
         said = {dialogue.line(s, "pebble", random.Random(i)) for i in range(200)}
-        self.assertFalse(any("bashou adventure" in t or "bashou security" in t for t in said))
+        self.assertFalse(any("bashou adventure" in t or "bashou arena" in t for t in said))
 
 
 class GremlinTest(unittest.TestCase):

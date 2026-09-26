@@ -6,7 +6,7 @@ from . import achievements, creatures, progress, state
 from .creatures import STAGES, owned, roster
 from .i18n import _
 
-BOLD, DIM, RESET = "\033[1m", "\033[2m", "\033[0m"
+BOLD, DIM, RESET, CYAN = "\033[1m", "\033[2m", "\033[0m", "\033[38;2;120;200;230m"
 
 
 def progress_bar(done, total, width=20):
@@ -330,46 +330,101 @@ def dev(args):
             print(f"  A {ch.threat} is waiting: bashou fight")
 
 
+# `bashou help`: the commands by what they're for, one per line. Every visible command is here
+# (tests/test_completion.py checks it against the parser and the Tab completion).
+HELP = [
+    ("Your pet", [
+        ("bashou", "your starter's level and what comes next"),
+        ("bashou pets", "your collection"),
+        ("bashou achievements", "what you earned, and what to try next"),
+        ("bashou evolve", "watch your pets evolve"),
+        ("bashou swap [pet]", "change your active pet"),
+        ("bashou stats", "your terminal stats: commands, tools, streaks"),
+        ("bashou share", "a QR code: your phone turns your progress into an image to share"),
+    ]),
+    ("Learn", [
+        ("bashou lesson [name]", "the Sage Owl's library: lessons with drawings, unlocked as you play"),
+        ("bashou learn <command>", "take a command apart, piece by piece (alone: your pet's last tip)"),
+        ("bashou talk", "your pet gives you a tip now, with a command to try"),
+    ]),
+    ("Play", [
+        ("bashou fight", "fight the threat your pet announced"),
+        ("bashou arena", "fight when you want: a timed fight, or a security investigation"),
+        ("bashou adventure", "walk into the world with your starter"),
+    ]),
+    ("Settings", [
+        ("bashou on / off", "show or hide the pet (the first `on` adds Bashou to ~/.bashrc)"),
+        ("bashou config", "settings, language and skills (bashou config list shows them)"),
+        ("bashou start", "choose your starter (once)"),
+        ("bashou reset", "start over with a new starter"),
+        ("bashou update", "get the new version"),
+        ("bashou version", "which version of Bashou this is"),
+    ]),
+]
+
+
+def print_help():
+    width = max(len(cmd) for _s, rows in HELP for cmd, _t in rows)
+    print(f"\n  {BOLD}Bashou{RESET} · " + _("a pet that grows as you learn bash.") + "\n")
+    for section, rows in HELP:
+        print(f"  {BOLD}{_(section)}{RESET}")
+        for cmd, text in rows:
+            print(f"    {CYAN}{cmd:<{width}}{RESET}  {_(text)}")
+        print()
+
+
+class Parser(argparse.ArgumentParser):
+    def print_help(self, file=None):
+        if self.prog == "bashou":
+            print_help()
+        else:
+            super().print_help(file)
+
+
 def main():
-    parser = argparse.ArgumentParser(prog="bashou", description="A pet that grows as you learn bash.")
-    # A parser added without help= stays out of the list: old names kept working, and dev.
-    sub = parser.add_subparsers(dest="cmd", metavar="COMMAND")
-    sub.add_parser("level", help="commands run and next unlock")
+    parser = Parser(prog="bashou", usage="bashou COMMAND  (bashou help lists them)")
+    # Commands without help= are hidden: old names that still work, and dev. HELP lists the others.
+    sub = parser.add_subparsers(dest="cmd", metavar="COMMAND", prog="bashou")
+    sub.add_parser("help", help="this list")
+    sub.add_parser("level", help="your starter's level")
     sub.add_parser("pets", help="your collection")
-    sub.add_parser("achievements", help="what you earned and what to try next")
-    sub.add_parser("fight", help="enter the arena")
-    sub.add_parser("talk", help="your pet gives you a tip now, with a command to try")
-    ln = sub.add_parser("learn", help="take a command apart: bashou learn tar -xzf a.tgz (alone: your pet's last tip)")
+    sub.add_parser("achievements", help="what you earned")
+    sub.add_parser("fight", help="the announced threat")
+    sub.add_parser("talk", help="a tip now")
+    ln = sub.add_parser("learn", help="take a command apart")
     ln.add_argument("command", nargs=argparse.REMAINDER)
-    ls = sub.add_parser("lesson", help="the Sage Owl's library: lessons with drawings, unlocked as you play")
+    ls = sub.add_parser("lesson", help="the Sage Owl's library")
     ls.add_argument("which", nargs="?", help="a lesson to open, or list")
     sub.add_parser("evolve", help="watch your pets evolve")
     sw = sub.add_parser("swap", help="change your active pet")
     sw.add_argument("pet", nargs="?")
-    sub.add_parser("stats", help="your terminal stats: commands, tools, streaks")
-    sh = sub.add_parser("share", help="a QR code: your phone turns your progress into an image to share")
+    sub.add_parser("stats", help="your terminal stats")
+    sh = sub.add_parser("share", help="a QR code of your progress")
     sh.add_argument("--name", help="the nickname on the image: 1-12 letters, digits, - or _ (asked the first time)")
     dv = sub.add_parser("dev")                                          # testing helpers, hidden from players
     dv.add_argument("action", choices=["unlock-all", "stage", "stage-all", "level", "threat", "restore"])
     dv.add_argument("pet", nargs="?", help="pet (stage), level 1-9 (level) or challenge id (threat)")
     dv.add_argument("stage", nargs="?", type=int, choices=[1, 2, 3], default=3)
-    sub.add_parser("start", help="choose your starter (once)")
+    sub.add_parser("start", help="choose your starter")
     sub.add_parser("language")                                          # now bashou config language
     sub.add_parser("skills")                                            # now bashou config skills
     sub.add_parser("setup")                                             # now bashou on
-    sub.add_parser("version", help="which version of Bashou this is")
-    up = sub.add_parser("update", help="get the new version from GitHub")
+    sub.add_parser("version", help="which version")
+    up = sub.add_parser("update", help="get the new version")
     up.add_argument("--version", help="install this release instead, even an older one (e.g. v0.2.0)")
     up.add_argument("--packages", action="store_true", help="move to Bashou's apt or dnf repository (shows every command first)")
-    sub.add_parser("adventure", help="walk into the world with your starter")
-    sc = sub.add_parser("security", help="investigations you pick, easy to hard (fights come to you)")
-    sc.add_argument("which", nargs="?", help="number or id (see the list)")
-    cf = sub.add_parser("config", help="set Bashou up: settings, language, skills (bashou config list)")
+    sub.add_parser("adventure", help="walk into the world")
+    ar = sub.add_parser("arena", help="fight when you want")
+    ar.add_argument("mode", nargs="?", help="fight or security")
+    ar.add_argument("which", nargs="?", help="security: number or id (see the list)")
+    sc = sub.add_parser("security")                                     # now bashou arena security
+    sc.add_argument("which", nargs="?")
+    cf = sub.add_parser("config", help="settings, language, skills")
     cf.add_argument("name", nargs="?")
     cf.add_argument("value", nargs="?")
-    sub.add_parser("reset", help="start over with a new starter")
-    sub.add_parser("on", help="show the pet (the first time: adds Bashou to ~/.bashrc)")
-    sub.add_parser("off", help="hide the pet in this terminal")
+    sub.add_parser("reset", help="start over")
+    sub.add_parser("on", help="show the pet")
+    sub.add_parser("off", help="hide the pet")
     args = parser.parse_args()
 
     if args.cmd == "pets":
@@ -397,9 +452,11 @@ def main():
     elif args.cmd == "adventure":
         from . import adventure
         raise SystemExit(adventure.main())
-    elif args.cmd == "security":
-        from . import security
-        raise SystemExit(security.run(args.which))
+    elif args.cmd in ("arena", "security"):
+        from . import arena
+        raise SystemExit(arena.main(*(("security", args.which) if args.cmd == "security" else (args.mode, args.which))))
+    elif args.cmd == "help":
+        print_help()
     elif args.cmd == "version":
         from . import update
         print("  Bashou " + (update.version() or _("(unknown version: not a git clone)")))

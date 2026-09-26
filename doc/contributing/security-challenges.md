@@ -1,6 +1,6 @@
 # Security challenges for Bashou
 
-`bashou security` has small investigations: something happened on a (fake) machine, and the
+`bashou arena security` has small investigations: something happened on a (fake) machine, and the
 player uses the shell to find out what. New challenges are welcome, as an idea (issue) or as code
 (pull request).
 
@@ -62,4 +62,4 @@ Then:
 2. Add its reference solution to `SOLUTIONS` in `tests/test_fight.py`: a command that prints the
    answer.
 3. Run `python3 -m bashou.i18n` (puts its texts in the translation catalogs) and `python3 -m unittest`.
-4. Try it for real: `bashou security <number>`.
+4. Try it for real: `bashou arena security <number>`.

@@ -17,6 +17,18 @@ Every release has a section here, written for players. CI refuses to tag a relea
     `bashou config language fr`), `bashou config skills`. `bashou config list` shows them too.
   - The old names (`bashou setup`, `bashou language`, `bashou skills`) still work.
 - The IPv4 addresses lesson mentions `ipcalc`, which does the network math in one command.
+- **`bashou arena`**: come and fight when you want, without waiting for a threat. Pick a timed
+  fight (hearts and a clock shown in the prompt: 5, 8 or 12 minutes by level) or a security
+  investigation (no clock). Lose, run out of time or flee, and the arena closes for an hour;
+  threats your pet announces can still be fought with `bashou fight`. The security investigations
+  moved here: `bashou arena security 3` (the old `bashou security` leads there too).
+- `bashou help` (and `bashou --help`) lists the commands by what they're for: your pet, learn, play,
+  settings. In French too.
+- `bashou learn` is easier on the eye: the command in color (commands, options, arguments and
+  operators each in their own color), then each command as a numbered step with one line per option
+  (`-czf` becomes `-c`, `-z`, `-f`), in normal text instead of grey.
+- `bashou learn` now knows grep's `-v`, `-i`, `-l`, `-c`, `-o`, `-w` and `-F`, and after
+  `find … -exec grep -l …` the `-l` is grep's, not find's.
 
 ## v0.6.2 — 2026-09-26
 

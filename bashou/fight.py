@@ -22,6 +22,7 @@ from .i18n import _, cap
 BOLD, DIM, RESET = "\033[1m", "\033[2m", "\033[0m"
 ACCENT, GOOD, BAD = "\033[38;2;150;190;230m", "\033[38;2;130;210;120m", "\033[38;2;240;110;110m"
 WIN, FLEE, KO = 42, 3, 4   # exit codes of the arena shell (Ctrl-D is a flee, KO: no hearts left)
+TIMEOUT = -1               # `bashou arena`'s clock ran out (not an exit code: Bashou stops the shell)
 THREAT_MINUTES = 30
 
 RC = r"""
@@ -52,6 +53,17 @@ _arena_tip() {
   fi
 }
 PROMPT_COMMAND=_arena_log
+if [[ -n $BASHOU_DEADLINE ]]; then                 # `bashou arena`: the time left, in the prompt (no fork)
+  _arena_clock() {
+    local now left
+    printf -v now '%(%s)T' -1
+    left=$(( BASHOU_DEADLINE - now ))
+    (( left < 0 )) && left=0
+    printf -v _arena_left '⏱ %d:%02d' $(( left / 60 )) $(( left % 60 ))
+  }
+  PROMPT_COMMAND='_arena_log; _arena_clock'
+  PS1='\[\e[38;2;240;200;100m\]${_arena_left}\[\e[0m\] '$PS1
+fi
 _arena() { python3 "$BASHOU_SRC/launch.py" bashou.fight "$@" "$BASHOU_ARENA"; }
 answer() { _arena answer "$*" && exit 42; }
 verify() { _arena verify && exit 42; }
@@ -318,9 +330,24 @@ def beginner(s):
     return s["fights_won"] < BEGINNER_WINS
 
 
-def arena(ch, intro, rng=None, fight=False, help_first=False):
+def stop_shell(shell):
+    """Time's up: hang up the arena shell (an interactive bash ignores TERM) and whatever it runs."""
+    import signal
+    try:
+        shell.send_signal(signal.SIGHUP)
+        shell.wait(timeout=3)
+    except subprocess.TimeoutExpired:
+        shell.kill()
+        shell.wait()
+    if sys.stdin.isatty():
+        subprocess.run(["stty", "sane"], check=False)        # readline had the terminal
+    return TIMEOUT
+
+
+def arena(ch, intro, rng=None, fight=False, help_first=False, limit=None):
     """Run the sandbox bash for `ch`. `intro(task_text)` is printed first. Returns (exit code, notes).
-    With `fight`, the duel is drawn at the top and wrong commands cost hearts (duel.py)."""
+    With `fight`, the duel is drawn at the top and wrong commands cost hearts (duel.py). With `limit`
+    (seconds), Bashou stops the shell when the time is up and the code is TIMEOUT."""
     base = Path(tempfile.mkdtemp(prefix="bashou-arena-"))
     work = base / "arena"
     work.mkdir()
@@ -342,10 +369,15 @@ def arena(ch, intro, rng=None, fight=False, help_first=False):
         env.pop("BASHOU_DUEL", None)
         if top:
             env["BASHOU_DUEL"] = "1"
+        env.pop("BASHOU_DEADLINE", None)
+        if limit:
+            env["BASHOU_DEADLINE"] = str(int(time.time() + limit))
         shell = subprocess.Popen(["bash", "--rcfile", str(base / "arena.rc"), "-i"], env=env)
         scene = duel.start(base, shell.pid) if top else None
         try:
-            code = shell.wait()
+            code = shell.wait(timeout=limit)
+        except subprocess.TimeoutExpired:
+            code = stop_shell(shell)
         finally:
             duel.stop(scene)
         try:
@@ -365,21 +397,26 @@ def arena(ch, intro, rng=None, fight=False, help_first=False):
     return code, notes
 
 
-def run():
+def run(ch=None, limit=None):
+    """`bashou fight`: the threat your pet announced. `bashou arena` passes its own fight and a time
+    limit in seconds. Returns the arena's code, or None when there was nothing to fight."""
     s = state.load()
-    ch = pick(s)
+    ch = ch or pick(s)
     if not ch:
         print(DIM + _("No threat around. Your pet will warn you when one comes.") + RESET)
-        return
+        return None
     review = s.get("reviews", {}).get(ch.id) if (s.get("threat") or {}).get("review") else None
     with state.locked() as s:                              # meeting a fight opens its lesson
         met = lesson_progress(s)["met"]
         if ch.id not in met:
             met.append(ch.id)
-    code, notes = arena(ch, lambda task: banner(ch, task, review), fight=True, help_first=beginner(s))
+    clock = ("\n" + ACCENT + "⏱ " + _("You have {n} minutes. The time left shows in the prompt.").format(
+        n=limit // 60) + RESET) if limit else ""
+    code, notes = arena(ch, lambda task: banner(ch, task, review) + clock, fight=True,
+                        help_first=beginner(s), limit=limit)
     won = code == WIN
     with state.locked() as s:
-        told = after_fight(s, ch, won) if won or code == KO else None
+        told = after_fight(s, ch, won) if won or code in (KO, TIMEOUT) else None
         if not won:
             s["fights_lost"] = s.get("fights_lost", 0) + 1
             notes += progress.check(s)
@@ -393,6 +430,9 @@ def run():
             notes += progress.check(s)
     if won:
         print(f"\n{GOOD}{BOLD}✨ " + _("You beat the {threat}!").format(threat=_(ch.threat)) + RESET)
+    elif code == TIMEOUT:
+        print(f"\n{BAD}{BOLD}⏱ " + _("Time's up! The {threat} wins this time.").format(threat=_(ch.threat))
+              + RESET)
     elif code == KO:
         print(f"\n{BAD}{BOLD}💫 " + _("Knocked out! The {threat} wins this time.").format(threat=_(ch.threat))
               + f"{RESET}\n{DIM}" + _("Only `{tool}` hurts it; looking around (ls, cat…) is free. "
@@ -404,6 +444,7 @@ def run():
     for note in notes:
         print(f"  {note}")
     print()
+    return code
 
 
 def main():

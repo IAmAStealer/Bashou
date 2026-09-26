@@ -33,7 +33,8 @@ def default():
         "challenges": [],   # challenges beaten
         "skills": "all",    # "all" or the skills you ticked (`bashou config skills`, asked before the starter)
         "reviews": {},      # beaten fight -> {"step": reviews won, "due": ISO date}: it comes back (fight.py)
-        "security": [],     # security challenges solved (`bashou security`)
+        "security": [],     # security challenges solved (`bashou arena security`)
+        "arena_closed_until": 0,   # `bashou arena` after a defeat: closed until this time (epoch seconds)
         "adventure": None,  # `bashou adventure` progress (see bashou/adventure)
         "threat": None,     # {"challenge", "until"} while a threat waits for you
         "threat_day": {"date": "", "count": 0},

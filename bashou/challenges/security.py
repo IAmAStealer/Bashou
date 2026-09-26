@@ -1,4 +1,4 @@
-"""Security challenges (`bashou security`): small investigations, easy to hard.
+"""Security challenges (`bashou arena security`): small investigations, easy to hard.
 
 Everything happens inside the arena folder: fake logs, fake cron files, harmless scripts.
 Ideas for more are welcome on GitHub (write your own, don't copy CTF tasks).
