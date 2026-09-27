@@ -145,11 +145,13 @@ class Scene:
         return cols >= self.pet.width + self.enemy.width + 10
 
     def room(self):
-        """The arena's prompt emptied the top rows for the panel (bashou/room.bash)."""
+        """When the arena's prompt last emptied the top rows for the panel (bashou/room.bash), or None
+        when there is no room now. Each prompt makes new room, so a new time means draw again."""
         try:
-            return (self.base / "room").read_text().strip() == "1"
+            path = self.base / "room"
+            return path.stat().st_mtime_ns if path.read_text().strip() == "1" else None
         except OSError:
-            return False
+            return None
 
     def at_prompt(self):
         try:
@@ -161,14 +163,17 @@ class Scene:
 
     def run(self):
         erase_file = self.base / "erase"
-        last = None
+        last = made = None
         try:
             while True:
                 os.kill(self.shell, 0)                      # OSError when the arena is over
                 time.sleep(0.1)
-                if not self.at_prompt() or not self.room():
+                room = self.room() if self.at_prompt() else None
+                if room is None:
                     last = None                             # PS0 erased us: draw again at the next prompt
                     continue
+                if room != made:                            # new room (an empty Enter too): the old
+                    last, made = None, room                 # panel went with the old one
                 cols = os.get_terminal_size(1).columns
                 if not self.fits(cols):
                     continue

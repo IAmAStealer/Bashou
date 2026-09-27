@@ -102,6 +102,20 @@ class ScoreTest(TempState):
         self.assertTrue(scene.fits(80))
         self.assertTrue(erase)
 
+    def test_each_prompt_room_is_new(self):
+        """An empty Enter runs no PS0: the prompt deletes the old room (the panel with it) and makes a
+        new one. The panel must see it's new and draw again, even when its picture didn't change."""
+        scene = duel.Scene(self.base, 0)
+        room = self.base / "room"
+        self.assertIsNone(scene.room())
+        room.write_text("1\n")
+        first = scene.room()
+        self.assertIsNotNone(first)
+        os.utime(room, ns=(first + 10**9, first + 10**9))
+        self.assertNotEqual(scene.room(), first)
+        room.write_text("0\n")
+        self.assertIsNone(scene.room())
+
 
 class ArenaShellTest(TempState):
     """The real arena bash: wrong commands end it with a knockout."""

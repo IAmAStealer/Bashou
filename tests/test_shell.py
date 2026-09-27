@@ -155,6 +155,20 @@ class RoomTest(unittest.TestCase):
         sh.send("true\n", 1)
         self.assertIn(b"\x1b[H\x1b[7M\x1b[22;1H", sh.out[start:])   # PS0: blank rows deleted
 
+    def test_an_empty_enter_deletes_the_last_room_before_making_a_new_one(self):
+        """Owner, 2026-09-27: after empty Enters the pet was there three times, one under the other.
+        Bash runs no PS0 for an empty line, so the old blank rows (and the pet in them) stayed and
+        the next ones were inserted above them."""
+        sh = self.sh
+        sh.row = 29
+        sh.send("echo hi\n", 1)
+        start = len(sh.out)
+        sh.row = 29                                    # the prompt was at 28: Enter moved it to 29
+        sh.send("\n", 1)
+        self.assertIn(b"\x1b[H\x1b[7M\x1b[22;1H", sh.out[start:])   # the old room goes first
+        self.assertIn(b"\x1b[H\x1b[7L", sh.out[start:])
+        self.assertLess(sh.out.index(b"\x1b[7M", start), sh.out.index(b"\x1b[7L", start))
+
     def test_room_is_made_on_a_clear_screen_without_scrolling(self):
         sh = self.sh
         sh.row = 1

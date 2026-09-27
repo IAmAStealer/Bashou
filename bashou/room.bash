@@ -44,6 +44,9 @@ _bashou_hide() {    # no room this time: the pet isn't drawn, and nothing may bl
 
 _bashou_make_room() {
   local lines=7 row col bottom scroll nl=
+  # An empty Enter runs no PS0 (bash shows it only before a command): the last room is still there,
+  # the pet in it. Delete it first, or the new blank rows push it down and it's drawn again above.
+  (( _bashou_gap )) && [[ -e $_bashou_room ]] && _bashou_close_room
   _bashou_gap=0
   [[ -r $_bashou_height ]] && IFS= read -r lines < "$_bashou_height"
   if ! _bashou_where; then
