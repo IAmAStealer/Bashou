@@ -3,7 +3,7 @@
 import argparse
 
 from . import achievements, creatures, progress, state
-from .creatures import STAGES, owned, roster
+from .creatures import owned, roster
 from .i18n import _
 
 BOLD, DIM, RESET, CYAN = "\033[1m", "\033[2m", "\033[0m", "\033[38;2;120;200;230m"
@@ -61,7 +61,7 @@ def pets():
     for pet, rule in roster(s):
         if pet in s["pets"]:
             active = " ← " + _("active") if pet == s["active"] else ""
-            name = _(STAGES[pet][progress.stage(s, pet) - 1])
+            name = progress.sprite_of(s, pet, progress.reached(s, pet))[1]
             print(f"  {stars(s, pet)} {name}{DIM}{active}{RESET}")
         else:
             print(f"  {DIM}☆☆☆ ???  ({hint(s, pet)}){RESET}")
@@ -83,7 +83,7 @@ def achievements_list():
     for pet, rule in roster(s):
         fam = achievements.family(pet)
         got = sum(a.id in earned for a in fam)
-        title = _(STAGES[pet][progress.stage(s, pet) - 1]) if pet in s["pets"] else "???"
+        title = progress.sprite_of(s, pet, progress.reached(s, pet))[1] if pet in s["pets"] else "???"
         print(f"  {BOLD}{title}{RESET} {DIM}{got}/{len(fam)}{RESET}")
         for a in fam:
             if a.id in earned:
@@ -302,7 +302,7 @@ def dev(args):
             s["achievements"] = [a for a in s["achievements"] if a not in fam] + keep
             if args.pet not in s["pets"]:
                 s["pets"].append(args.pet)
-            print(f"  {STAGES[args.pet][args.stage - 1]} (stage {args.stage}).")
+            print(f"  {creatures.names(args.pet)[args.stage - 1]} (stage {args.stage}).")
             if args.stage > 1:                                   # as if you'd just earned it: bashou evolve
                 s["evolving"] = [e for e in s.get("evolving", []) if e["who"] != args.pet]
                 s.get("looks", {}).pop(args.pet, None)
@@ -315,15 +315,15 @@ def dev(args):
             print(f"  Every pet at stage {args.stage}.")
         elif args.action == "level":
             n = max(1, min(progress.MAX_LEVEL, int(args.pet or 1)))
-            form_before = progress.starter_form(s)
+            form_before = progress.reached(s, "starter")
             s["achievements"] = [a.id for a in achievements.ALL][:(n - 1) * progress.ACHIEVEMENTS_PER_LEVEL]
             s["starter_best"] = 1
-            s["starter_best"] = progress.starter_form(s)
+            s["starter_best"] = progress.reached(s, "starter")
             s.get("looks", {}).pop("starter", None)
             s["evolving"] = [e for e in s.get("evolving", []) if e["who"] != "starter"]
             print(f"  Starter at level {n}: {progress.current(s, 'starter')[2]}.")
-            if progress.starter_form(s) > form_before:
-                print("  " + progress.evolve(s, "starter", form_before, progress.starter_form(s)))
+            if s["starter_best"] > form_before:
+                print("  " + progress.evolve(s, "starter", form_before, s["starter_best"]))
         elif args.action == "threat":
             ch = challenges.BY_ID.get(args.pet) or challenges.ALL[0]
             s["threat"] = {"challenge": ch.id, "until": time.time() + 600}

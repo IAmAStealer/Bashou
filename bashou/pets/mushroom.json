@@ -1,6 +1,7 @@
 {
  "name": "Mushroom",
  "next": "blob",
+ "next_at": {"achievements": "all"},
  "palette": {
   "a": "#aa2832",
   "r": "#e14646",

@@ -1,6 +1,7 @@
 {
  "name": "Soldier ant",
  "next": "queen_ant",
+ "next_at": {"achievements": "all"},
  "palette": {
   "a": "#5a1e1a",
   "o": "#a83a30",

@@ -1,6 +1,7 @@
 {
  "name": "Blaze",
  "next": "phoenix",
+ "next_at": {"achievements": "all"},
  "palette": {
   "o": "#f08030",
   "w": "#ffd070",

@@ -1,6 +1,7 @@
 {
  "name": "Spiderling",
  "next": "spider",
+ "next_at": {"achievements": 2},
  "symmetric": true,
  "palette": {
   "a": "#8c73b9",

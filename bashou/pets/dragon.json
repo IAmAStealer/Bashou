@@ -1,6 +1,7 @@
 {
- "name": "Dragon",
+ "name": "Dragonet",
  "next": "great_dragon",
+ "next_at": {"achievements": "all"},
  "palette": {
   "a": "#2d7346",
   "o": "#5ab464",

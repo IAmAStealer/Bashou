@@ -1,6 +1,7 @@
 {
  "name": "Tadpole",
  "next": "frog",
+ "next_at": {"achievements": 2},
  "palette": {
   "a": "#284830",
   "o": "#4e7048",

@@ -1,6 +1,7 @@
 {
  "name": "Thunder slime",
  "next": "king_slime",
+ "next_at": {"commands": 10000},
  "lone_pixels": true,
  "palette": {
   "m": "#191919",

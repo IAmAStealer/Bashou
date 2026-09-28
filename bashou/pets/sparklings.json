@@ -1,6 +1,7 @@
 {
  "name": "Sparklings",
  "next": "spark",
+ "next_at": {"achievements": 2},
  "lone_pixels": true,
  "palette": {
   "o": "#f08030",

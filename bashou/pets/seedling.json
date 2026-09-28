@@ -1,6 +1,7 @@
 {
  "name": "Seedling",
  "next": "sprout",
+ "next_at": {"level": 3},
  "palette": {
   "a": "#6e4526",
   "o": "#b07a45",

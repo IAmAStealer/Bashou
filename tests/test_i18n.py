@@ -54,8 +54,7 @@ class CatalogTest(unittest.TestCase):
     def test_pet_names_fit_the_board(self):
         """The swap board shows 16 characters of a name ("Poussière d'étoile" lost its end)."""
         from bashou import board, creatures
-        names = set(creatures.NAMES.values()) | set(creatures.FORM_NAMES.values())
-        names |= {n for stages in creatures.STAGES.values() for n in stages}
+        names = set(creatures.NAMES.values()) | {pet.name for pet in creatures.PETS.values()}
         for lang in i18n.LANGUAGES:
             cat = i18n.catalog(lang)
             for name in names:

@@ -1,6 +1,7 @@
 {
  "name": "Fern",
  "next": "bush",
+ "next_at": {"level": 15},
  "symmetric": true,
  "palette": {
   "g": "#2f6e2a",

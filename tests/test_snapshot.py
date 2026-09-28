@@ -30,7 +30,7 @@ def walks():
         s = state.default()
         s["starter"], s["pets"] = "star", [pet]
         steps = [seen(s, pet)]
-        if pet in getattr(progress, "COMMAND_LADDER", {}) or pet == "slime":
+        if pet == "slime":
             for n in (10, 100, 200, 500, 1500, 3500, 5000, 7500, 10000):
                 s["commands"] = n
                 progress.check(s)

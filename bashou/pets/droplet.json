@@ -1,6 +1,7 @@
 {
  "name": "Droplet",
  "next": "slime",
+ "next_at": {"commands": 100},
  "symmetric": true,
  "palette": {
   "a": "#329682",

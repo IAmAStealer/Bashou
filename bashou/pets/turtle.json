@@ -1,6 +1,7 @@
 {
  "name": "Turtle",
  "next": "sea_turtle",
+ "next_at": {"achievements": "all"},
  "palette": {
   "S": "#78552d",
   "h": "#af8246",

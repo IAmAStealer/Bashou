@@ -1,6 +1,7 @@
 {
  "name": "Mole",
  "next": "mole_king",
+ "next_at": {"achievements": "all"},
  "palette": {
   "a": "#503c37",
   "o": "#7d645a",

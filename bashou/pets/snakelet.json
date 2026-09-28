@@ -1,6 +1,7 @@
 {
  "name": "Snakelet",
  "next": "snake",
+ "next_at": {"achievements": 2},
  "symmetric": true,
  "palette": {
   "a": "#326e32",

@@ -1,6 +1,7 @@
 {
  "name": "Fennec",
  "next": "fox",
+ "next_at": {"achievements": 2},
  "palette": {
   "a": "#a8703a",
   "o": "#e8c48a",

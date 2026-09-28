@@ -1,6 +1,7 @@
 {
- "name": "Knight snail",
+ "name": "Snail",
  "next": "gary",
+ "next_at": {"achievements": "all"},
  "palette": {
   "a": "#784628",
   "S": "#c88c50",

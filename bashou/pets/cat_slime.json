@@ -1,6 +1,7 @@
 {
  "name": "Cat slime",
  "next": "thunder_slime",
+ "next_at": {"commands": 7500},
  "palette": {
   "a": "#8a5a2a",
   "o": "#f0b060",

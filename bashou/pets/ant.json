@@ -1,6 +1,7 @@
 {
- "name": "Ant",
+ "name": "Worker ant",
  "next": "soldier_ant",
+ "next_at": {"achievements": 2},
  "palette": {
   "a": "#6e2823",
   "o": "#be4b3c",

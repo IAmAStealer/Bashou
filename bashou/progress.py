@@ -5,14 +5,11 @@ from .achievements import Ctx
 from .analyze import analyze
 from .behavior import ACTIONS
 from . import creatures
-from .creatures import FORM_NAMES, STAGES, STARTER_LEVELS, STARTERS
+from .creatures import STARTERS
 from .i18n import _
 
-# Total commands run -> pet unlocked.
-# The Slime grows with your command count: one form per count, as many as creatures.FORMS gives it
-# (round animals and elements join as they get drawn, the King slime stays last; see doc/PLAN.md).
-COMMAND_LADDER = {"slime": (10, 100, 200, 500, 1500, 3500, 5000, 7500, 10000)}
-MILESTONES = [(COMMAND_LADDER["slime"][0], "slime")]
+# Total commands run -> pet unlocked. The Slime then grows with your command count (its forms' "next_at").
+MILESTONES = [(10, "slime")]
 
 # Pet -> (tools that count, successful uses needed).
 TOOL_PETS = {
@@ -73,10 +70,10 @@ STATE_PETS = {
 }
 
 
-def stars(state, pet):
-    """★ of a pet: how far along its forms it is (a pet with one form has one star)."""
-    forms = len(creatures.FORMS.get(pet, ("",) * 3))
-    return "★" * tier(state, pet, stage(state, pet)) + "☆" * (min(3, forms) - tier(state, pet, stage(state, pet)))
+def stars(state, who):
+    """One star per form, filled up to the form reached: ★★☆ for a Bat, ★★★★★★★☆☆☆ for a Packet at 7/10."""
+    top = reached(state, who)
+    return "★" * top + "☆" * (len(chain(state, who)) - top)
 
 
 def how_to_unlock(state, pet):
@@ -86,8 +83,9 @@ def how_to_unlock(state, pet):
     if pet in CONSTRUCT_PETS:
         construct, needed = CONSTRUCT_PETS[pet]
         return f"{state['constructs'].get(construct, 0)}/{needed} × " + _(CONSTRUCT_NAMES[construct])
-    if pet in COMMAND_LADDER:
-        return _("{count} commands").format(count=f"{state['commands']:,}/{COMMAND_LADDER[pet][0]:,}")
+    for count, milestone in MILESTONES:
+        if pet == milestone:
+            return _("{count} commands").format(count=f"{state['commands']:,}/{count:,}")
     if pet in TOOL_PETS:
         tools, needed = TOOL_PETS[pet]
         return f"{tool_uses(state, tools)}/{needed} × {tool_label(pet)}"
@@ -99,26 +97,11 @@ def unlock(state, pet, reason):
         return []
     state["pets"].append(pet)
     return ["🎉 " + _("New pet: {name}! ({reason}) · bashou swap").format(
-        name=_(STAGES[pet][stage(state, pet) - 1]), reason=reason)]
+        name=sprite_of(state, pet, reached(state, pet))[1], reason=reason)]
 
 
 def tool_uses(state, tools):
     return sum(state["tools"].get(t, 0) for t in tools)
-
-
-def stage(state, pet):
-    """1, 2 or 3 depending on the achievements earned in the pet's family; the Slime by your command
-    count. A form once reached stays (`ladder_best`). A family with more forms (the Duck) takes a new
-    one with each achievement, and its last when the family is complete."""
-    if pet in COMMAND_LADDER:
-        by_count = sum(1 for n in COMMAND_LADDER[pet] if state["commands"] >= n)
-        return max(1, by_count, state.get("ladder_best", {}).get(pet, 1))
-    earned = sum(a.id in state["achievements"] for a in achievements.family(pet))
-    total = len(achievements.family(pet))
-    forms = len(creatures.FORMS.get(pet, ("",) * 3))
-    if forms > 3:
-        return forms if total and earned == total else min(forms - 1, max(1, earned))
-    return min(forms, 3 if total and earned == total else 2 if earned >= 2 else 1)
 
 
 ACHIEVEMENTS_PER_LEVEL = 5
@@ -129,25 +112,34 @@ def starter_level(state):
     return 1 + min(MAX_LEVEL - 1, len(state["achievements"]) // ACHIEVEMENTS_PER_LEVEL)
 
 
-def ladder(state):
-    """The starter's forms, in order, and the level each one comes at."""
-    line = state["starter"] or "star"
-    return STARTERS[line], STARTER_LEVELS[line]
+def chain(state, who):
+    """The sprites of a pet's forms, or of the starter's, in order (creatures.chain follows the links)."""
+    return STARTERS[state["starter"] or "star"] if who_of(state, who) == "starter" else creatures.forms(who)
 
 
-def starter_form(state):
-    """The starter's form (1 = the first): the last one its level reached. Never goes back: a form once
-    reached stays (`starter_best`), even when the ladder changes."""
-    forms, levels = ladder(state)
-    by_level = sum(1 for lvl in levels if lvl <= starter_level(state))
-    return min(len(forms), max(by_level, state.get("starter_best", 1)))
+def met(state, who, need):
+    """Is a form's "next_at" met? {"achievements": 2} also counts as met once the whole family is done."""
+    kind, n = next(iter(need.items()))
+    if kind == "commands":
+        return state["commands"] >= n
+    if kind == "level":
+        return starter_level(state) >= n
+    family = achievements.family(who)
+    earned = sum(a.id in state["achievements"] for a in family)
+    done = bool(family) and earned == len(family)
+    return done if n == "all" else earned >= n or done
+
+
+def counted(state, who):
+    """A pet that grows with your command count: its form is compared with the one saved (`ladder_best`),
+    since the count goes up before check() runs."""
+    return any("commands" in creatures.PETS[s].next_at for s in chain(state, who))
 
 
 def tier(state, who, form):
     """What a form can do (1-3, see behavior.ACTIONS, and the ★ shown): the form itself, or on a long
     ladder (the starter, the Slime) which third of it the form is in."""
-    who = who_of(state, who)
-    n = len(ladder(state)[0]) if who == "starter" else len(creatures.FORMS.get(who, ()))
+    n = len(chain(state, who))
     return min(3, 1 + 3 * (form - 1) // n) if n > 3 else form
 
 
@@ -158,8 +150,15 @@ def who_of(state, who=None):
 
 
 def reached(state, who):
-    """The latest form (a pet: 1-3; the starter: its place on the ladder)."""
-    return starter_form(state) if who_of(state, who) == "starter" else stage(state, who)
+    """The latest form (1 = the first): walk the chain while each form's "next_at" is met. A form once
+    reached stays (`starter_best`, `ladder_best`), even when a ladder changes."""
+    who = who_of(state, who)
+    forms = chain(state, who)
+    form = 1
+    while form < len(forms) and met(state, who, creatures.PETS[forms[form - 1]].next_at):
+        form += 1
+    best = state.get("starter_best", 1) if who == "starter" else state.get("ladder_best", {}).get(who, 1)
+    return min(len(forms), max(form, best))
 
 
 def look(state, who=None):
@@ -171,10 +170,8 @@ def look(state, who=None):
 
 def sprite_of(state, who, form):
     """(sprite id, name) of a pet or the starter at a form."""
-    if who_of(state, who) == "starter":
-        sprite = STARTERS[state["starter"] or "star"][form - 1]
-        return sprite, _(FORM_NAMES[sprite])
-    return creatures.form(who, form), _(STAGES[who][form - 1])
+    sprite = chain(state, who)[form - 1]
+    return sprite, _(creatures.PETS[sprite].name)
 
 
 def current(state, who=None):
@@ -242,8 +239,8 @@ def record(state, status, line, today, hour):
 def check(state, earned=()):
     """Unlock pets and achievements that are now due. Returns the notifications."""
     notes = []
-    before = {pet: stage(state, pet) for pet in STAGES}
-    level_before, form_before = starter_level(state), starter_form(state)
+    before = {pet: reached(state, pet) for pet in creatures.NAMES}
+    level_before, form_before = starter_level(state), reached(state, "starter")
     earned = list(earned) + [a for a in achievements.ALL if a.state and a.state(state)]
     for a in earned:
         if a.id not in state["achievements"]:
@@ -264,18 +261,18 @@ def check(state, earned=()):
         if tool_uses(state, tools) >= needed:
             notes += unlock(state, pet, f"{needed} × {tool_label(pet)}")
     if state["starter"] and starter_level(state) > level_before:
-        line = STARTERS[state["starter"]]
-        state["starter_best"] = starter_form(state)
-        if starter_form(state) > form_before:
-            notes.append(evolve(state, "starter", form_before, starter_form(state)))
+        now = state["starter_best"] = reached(state, "starter")
+        if now > form_before:
+            notes.append(evolve(state, "starter", form_before, now))
         else:
-            name = _(FORM_NAMES[line[starter_form(state) - 1]])
+            name = sprite_of(state, "starter", now)[1]
             notes.append("⬆ " + _("{name} reached level {level}!").format(name=name, level=starter_level(state)))
-    for pet in COMMAND_LADDER:                              # its count went up before check(): compare
-        before[pet] = state.setdefault("ladder_best", {}).get(pet, 1)   # with the form it had
-        state["ladder_best"][pet] = stage(state, pet)
-    for pet in STAGES:
-        now = stage(state, pet)
+    for pet in creatures.NAMES:
+        if counted(state, pet):                             # its count went up before check(): compare
+            before[pet] = state.setdefault("ladder_best", {}).get(pet, 1)   # with the form it had
+            state["ladder_best"][pet] = reached(state, pet)
+    for pet in creatures.NAMES:
+        now = reached(state, pet)
         if now > before[pet] and pet in state["pets"]:
             notes.append(evolve(state, pet, before[pet], now))
     return notes
@@ -283,8 +280,11 @@ def check(state, earned=()):
 
 def next_milestone(state):
     """(commands, what comes): the Slime, then its next form (a surprise)."""
-    for pet, counts in COMMAND_LADDER.items():
-        for i, count in enumerate(counts):
-            if state["commands"] < count:
-                return count, _(STAGES[pet][0]) if i == 0 else "?"
+    for count, pet in MILESTONES:
+        if state["commands"] < count:
+            return count, sprite_of(state, pet, 1)[1]
+        for sprite in chain(state, pet):
+            need = creatures.PETS[sprite].next_at.get("commands")
+            if need and state["commands"] < need:
+                return need, "?"
     return None

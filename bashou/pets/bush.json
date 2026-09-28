@@ -1,6 +1,7 @@
 {
  "name": "Bush",
  "next": "tree",
+ "next_at": {"level": 20},
  "palette": {
   "g": "#2f6e2a",
   "L": "#50a04b",

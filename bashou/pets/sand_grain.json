@@ -1,6 +1,7 @@
 {
  "name": "Sand grain",
  "next": "gravel",
+ "next_at": {"level": 3},
  "lone_pixels": true,
  "symmetric": true,
  "palette": {

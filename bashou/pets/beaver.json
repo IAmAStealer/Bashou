@@ -1,6 +1,7 @@
 {
  "name": "Beaver",
  "next": "platypus",
+ "next_at": {"achievements": "all"},
  "palette": {
   "a": "#462d1e",
   "o": "#96643c",

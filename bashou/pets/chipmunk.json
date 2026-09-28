@@ -1,6 +1,7 @@
 {
  "name": "Chipmunk",
  "next": "flying_squirrel",
+ "next_at": {"achievements": "all"},
  "palette": {
   "a": "#6e3719",
   "o": "#c88040",

@@ -190,11 +190,11 @@ def duel_shot():
 def pets_shot():
     """The three starters you choose from, then the first pets you'll meet; the rest stays a surprise."""
     from bashou import progress
-    shown = [(creatures.get(forms[0]), creatures.FORM_NAMES[forms[0]], "starter")
+    shown = [(creatures.get(forms[0]), creatures.PETS[forms[0]].name, "starter")
              for forms in creatures.STARTERS.values()]
     for pet, how in (("slime", f"{progress.MILESTONES[0][0]} commands"), ("bat", "10 × python3…"),
                      ("mushroom", "5 scripts run")):
-        shown.append((creatures.get(creatures.form(pet, 1)), creatures.STAGES[pet][0], how))
+        shown.append((creatures.get(creatures.form(pet, 1)), creatures.names(pet)[0], how))
     s = Screen(len(shown) * 19 + 1, 9)
     for i, (pet, name, how) in enumerate(shown):
         c = i * 19 + 2

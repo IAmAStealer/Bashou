@@ -1,6 +1,7 @@
 {
  "name": "Beanbag",
  "next": "sofa",
+ "next_at": {"achievements": 2},
  "symmetric": true,
  "palette": {
   "a": "#8c323c",

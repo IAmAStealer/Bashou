@@ -90,7 +90,7 @@ cd "$BASHOU_ARENA/arena"
 # --- threats ---------------------------------------------------------------
 
 def level(s):
-    return (len(s["pets"]) + sum(progress.stage(s, p) - 1 for p in s["pets"])
+    return (len(s["pets"]) + sum(progress.reached(s, p) - 1 for p in s["pets"])
             + min(progress.starter_level(s), 9) - 1)            # the starter's first 9 levels
 
 

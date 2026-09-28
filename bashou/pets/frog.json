@@ -1,6 +1,7 @@
 {
- "name": "Frog",
+ "name": "Tree frog",
  "next": "toad",
+ "next_at": {"achievements": "all"},
  "palette": {
   "a": "#3c823c",
   "o": "#6ebe50",

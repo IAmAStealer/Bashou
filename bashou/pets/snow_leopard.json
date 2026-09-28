@@ -1,6 +1,7 @@
 {
  "name": "Snow leopard",
  "next": "mountain_ghost",
+ "next_at": {"achievements": "all"},
  "palette": {
   "a": "#5b6070",
   "o": "#d7dbe3",

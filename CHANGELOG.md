@@ -8,6 +8,11 @@ Every release has a section here, written for players. CI refuses to tag a relea
 - The Pebble's last evolution, at level 20, really changes your pet now: the Jade golem was only a
   green Crystal golem, so it said it was evolving and looked the same. It's now a carved jade pendant
   with a grinning face, hanging from its cord.
+- Stars now count forms: one star per form, filled up to the one your pet has reached (★★☆ for a Bat,
+  ★★★★★★★☆☆☆ for a Packet at its 7th form). The pet screen and the board used to disagree, and pets with
+  many forms stopped saying what comes next after their third.
+- The Hacker cat stays once a secret brings it. It used to leave at every load, then say "New pet:
+  Hacker cat!" again after each command. Its picture also shows on the pet screen now.
 
 ## v0.6.3 — 2026-09-28
 

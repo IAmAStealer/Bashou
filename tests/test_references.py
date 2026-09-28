@@ -112,16 +112,16 @@ class TablesTest(unittest.TestCase):
 
     def test_pets(self):
         roster = set(creatures.NAMES)
-        self.assertEqual(set(creatures.STAGES), roster)
         self.assertEqual(set(creatures.FORMS), roster)
-        for pet, forms in creatures.FORMS.items():
-            self.assertEqual(len(creatures.STAGES[pet]), len(forms), pet)
-            self.assertEqual(len(forms), len(progress.COMMAND_LADDER.get(pet, forms)), pet)
-            self.assertEqual(list(progress.COMMAND_LADDER.get(pet, ())), sorted(progress.COMMAND_LADDER.get(pet, ())))
+        for chain in list(creatures.FORMS.values()) + list(creatures.STARTERS.values()):
+            needs = [creatures.PETS[s].next_at for s in chain[:-1]]
+            self.assertLessEqual(len({k for need in needs for k in need}), 1, chain)   # one way to grow per pet
+            numbers = [n for need in needs for n in need.values() if n != "all"]
+            self.assertEqual(numbers, sorted(set(numbers)), chain)               # each form asks for more
+            self.assertEqual([n for need in needs for n in need.values()].count("all") <= 1, True, chain)
         self.assertIn_all([s for forms in creatures.FORMS.values() for s in forms], creatures.PETS, "FORMS sprites")
         starter_forms = [s for forms in creatures.STARTERS.values() for s in forms]
         self.assertIn_all(starter_forms, creatures.PETS, "starter sprites")
-        self.assertEqual(set(creatures.FORM_NAMES), set(starter_forms))
         self.assertEqual(set(creatures.STARTER_BLURBS), set(creatures.STARTERS))
         self.assertIn_all(creatures.LARGE, creatures.PETS, "large sprites without a small one")
         self.assertIn_all(creatures.NEEDS, roster, "NEEDS")
@@ -172,10 +172,9 @@ class TablesTest(unittest.TestCase):
             self.assertTrue(set(forms) & set(sprites.BACK), forms)
         self.assertEqual(sprites.back_of("moon"), "comet")           # no back view yet: the last one before it
         self.assertEqual(sprites.back_of("sand_grain"), "pebble")    # none before it: the first one after
-        self.assertEqual({len(f) for f in creatures.STARTERS.values()} - {0},
-                         {len(creatures.STARTER_LEVELS[k]) for k in creatures.STARTERS})
-        for line, levels in creatures.STARTER_LEVELS.items():
-            self.assertEqual((levels[0], list(levels), len(levels)), (1, sorted(set(levels)), len(creatures.STARTERS[line])))
+        for forms in creatures.STARTERS.values():                    # starters grow by level, up to the last one
+            levels = [creatures.PETS[s].next_at.get("level") for s in forms[:-1]]
+            self.assertTrue(all(levels) and levels[-1] <= progress.MAX_LEVEL, forms)
         biomes = {home for _n, home, _b in world.TOPICS.values()} | {c["home"] for c in world.CHAPTERS}
         self.assertIn_all(biomes, scene.BIOMES, "biomes")
         for lesson in lessons.LESSONS:

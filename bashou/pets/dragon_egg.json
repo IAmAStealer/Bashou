@@ -1,6 +1,7 @@
 {
  "name": "Dragon egg",
  "next": "dragon",
+ "next_at": {"achievements": 2},
  "symmetric": true,
  "palette": {
   "a": "#2d7346",

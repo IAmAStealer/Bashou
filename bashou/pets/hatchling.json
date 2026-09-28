@@ -1,6 +1,7 @@
 {
  "name": "Hatchling",
  "next": "turtle",
+ "next_at": {"achievements": 2},
  "palette": {
   "S": "#78552d",
   "h": "#af8246",

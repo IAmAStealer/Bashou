@@ -1,6 +1,7 @@
 {
  "name": "Pup",
  "next": "meerkat",
+ "next_at": {"achievements": 2},
  "symmetric": true,
  "palette": {
   "a": "#6e5032",

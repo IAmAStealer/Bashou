@@ -1,6 +1,7 @@
 {
- "name": "Living sofa",
+ "name": "Armchair",
  "next": "throne",
+ "next_at": {"achievements": "all"},
  "palette": {
   "a": "#8c323c",
   "o": "#cd555f",

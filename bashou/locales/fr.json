@@ -70,6 +70,7 @@
  "unlock: {how}": "à débloquer : {how}",
  "{n} pets · arrows/hjkl · Enter: pick · f: form · q: quit": "{n} compagnons · flèches/hjkl · Entrée : choisir · f : forme · q : quitter",
  "next: {name}, learns to {actions}": "ensuite : {name}, apprend à {actions}",
+ "next: {name}": "ensuite : {name}",
  "Not unlocked yet: {how}": "Pas encore débloqué : {how}",
  "When it works, type: verify": "Quand ça marche, tape : verify",
  "Fight: this script doesn't even start. Python says why, with the line number.": "Combat : ce script ne démarre même pas. Python dit pourquoi, avec le numéro de ligne.",

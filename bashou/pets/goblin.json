@@ -1,6 +1,7 @@
 {
  "name": "Goblin",
  "next": "orc",
+ "next_at": {"achievements": "all"},
  "symmetric": true,
  "palette": {
   "E": "#5a8a3a",

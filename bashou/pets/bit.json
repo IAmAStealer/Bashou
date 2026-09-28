@@ -1,6 +1,7 @@
 {
  "name": "Bit",
  "next": "byte",
+ "next_at": {"achievements": 2},
  "lone_pixels": true,
  "palette": {
   "n": "#1c2a4a",

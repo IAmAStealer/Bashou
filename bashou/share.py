@@ -12,7 +12,8 @@ import sys
 import zlib
 
 from . import achievements, progress, qr, state
-from .creatures import FORM_NAMES, FORMS, ROSTER, STAGES, STARTERS, owned
+from .creatures import PETS, ROSTER, STARTERS, owned
+from . import creatures
 from .i18n import _
 from .repo_setup import SITE
 
@@ -32,7 +33,7 @@ def payload(s, name=""):
             "ach": len(achievements.earned(s)), "pets": len(owned(s)), "won": s["fights_won"],
             "read": len((s.get("lessons") or {}).get("read", [])),
             "sk": [] if s["skills"] == "all" else sorted(s["skills"]),
-            "s": starter, "sf": progress.starter_form(s)}
+            "s": starter, "sf": progress.reached(s, "starter")}
     if name and NAME.fullmatch(name):
         data["n"] = name
     return data
@@ -86,8 +87,8 @@ def page_data():
     pets = Path(__file__).parent / "pets"
     fr = i18n.catalog("fr")
     families, sprites = {}, {}
-    lines = [(line, list(forms), [FORM_NAMES[f] for f in forms]) for line, forms in STARTERS.items()]
-    lines += [(pet, list(FORMS.get(pet, (pet,) * 3)[:len(STAGES[pet])]), list(STAGES[pet])) for pet, _n in ROSTER]
+    lines = [(line, list(chain), [PETS[f].name for f in chain]) for line, chain in STARTERS.items()]
+    lines += [(pet, list(creatures.forms(pet)), creatures.names(pet)) for pet, _n in ROSTER]
     for family, forms, names in lines:
         families[family] = {"forms": forms, "en": names, "fr": [fr.get(n) or n for n in names]}
         for sprite in forms:

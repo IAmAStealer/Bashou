@@ -1,6 +1,7 @@
 {
  "name": "Bee",
  "next": "queen_bee",
+ "next_at": {"achievements": "all"},
  "palette": {
   "a": "#32281e",
   "o": "#fac83c",

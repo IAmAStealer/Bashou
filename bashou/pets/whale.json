@@ -1,6 +1,7 @@
 {
  "name": "Whale",
  "next": "leviathan",
+ "next_at": {"achievements": "all"},
  "palette": {
   "a": "#234678",
   "o": "#508cd2",

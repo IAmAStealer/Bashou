@@ -1,6 +1,7 @@
 {
  "name": "Hedgehog",
  "next": "porcupine",
+ "next_at": {"achievements": "all"},
  "palette": {
   "s": "#5f4b41",
   "S": "#967d69",

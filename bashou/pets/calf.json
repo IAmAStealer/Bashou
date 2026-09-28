@@ -1,6 +1,7 @@
 {
  "name": "Calf",
  "next": "whale",
+ "next_at": {"achievements": 2},
  "palette": {
   "a": "#234678",
   "o": "#508cd2",

@@ -1,6 +1,7 @@
 {
  "name": "Uplink",
  "next": "satellite",
+ "next_at": {"achievements": 9},
  "symmetric": true,
  "palette": {
   "n": "#1c2a4a",

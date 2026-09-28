@@ -1,6 +1,7 @@
 {
  "name": "Brood",
  "next": "bee",
+ "next_at": {"achievements": 2},
  "symmetric": true,
  "palette": {
   "H": "#b07818",

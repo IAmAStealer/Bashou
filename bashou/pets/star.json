@@ -1,6 +1,7 @@
 {
  "name": "Star",
  "next": "red_giant",
+ "next_at": {"level": 20},
  "symmetric": true,
  "palette": {
   "w": "#fffbe8",

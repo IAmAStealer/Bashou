@@ -8,7 +8,7 @@ import tty
 
 from . import creatures, render, state
 from . import i18n
-from .creatures import FORM_NAMES, STARTER_BLURBS, STARTERS
+from .creatures import PETS, STARTER_BLURBS, STARTERS
 from .i18n import _
 
 ESC = "\x1b"
@@ -27,7 +27,7 @@ def draw(pos, breath):
         pet = creatures.get(forms[0])
         cells = [[True] * pet.width for _ in range(len(pet.base) // 2)]
         sprite = render.lines(pet, ["inhale"] if breath and i == pos else [], cells)
-        name = _(FORM_NAMES[forms[0]])
+        name = _(PETS[forms[0]].name)
         title = f"{REV} {name} {RESET}" if i == pos else f" {name} "
         cols.append(sprite + ["", title])
     out = [f"{ESC}[H{ESC}[2J"] + [f"{ESC}[{i + 1};1H{l}" for i, l in enumerate(lines)]
@@ -117,7 +117,7 @@ def main():
         language_main()
     if s["starter"]:
         print("  " + _("Your starter is {name}'s line. `bashou reset` to start over.").format(
-            name=_(FORM_NAMES[STARTERS[s["starter"]][0]])))
+            name=_(PETS[STARTERS[s["starter"]][0]].name)))
         return 0
     if not sys.stdin.isatty():
         return 1
@@ -130,5 +130,5 @@ def main():
     with state.locked() as s:
         s["starter"], s["active"] = line, "starter"
     print("  " + _("{name} is your starter! It levels up every 5 achievements.").format(
-        name=f"{BOLD}{_(FORM_NAMES[STARTERS[line][0]])}{RESET}"))
+        name=f"{BOLD}{_(PETS[STARTERS[line][0]].name)}{RESET}"))
     return 0

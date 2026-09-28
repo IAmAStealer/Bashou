@@ -1,6 +1,7 @@
 {
  "name": "Pigeon",
  "next": "messenger",
+ "next_at": {"achievements": "all"},
  "palette": {
   "a": "#464b5f",
   "o": "#9196aa",

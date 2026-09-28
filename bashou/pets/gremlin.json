@@ -1,6 +1,7 @@
 {
  "name": "Gremlin",
  "next": "goblin",
+ "next_at": {"achievements": 2},
  "symmetric": true,
  "palette": {
   "E": "#468c46",

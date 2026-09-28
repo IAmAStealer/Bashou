@@ -1,6 +1,7 @@
 {
  "name": "Leaf slime",
  "next": "fire_slime",
+ "next_at": {"commands": 500},
  "palette": {
   "a": "#2f6e2a",
   "o": "#7ccc5a",

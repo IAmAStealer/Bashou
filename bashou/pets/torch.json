@@ -1,6 +1,7 @@
 {
  "name": "Torch",
  "next": "campfire",
+ "next_at": {"achievements": 7},
  "symmetric": true,
  "palette": {
   "o": "#f08030",

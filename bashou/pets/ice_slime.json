@@ -1,6 +1,7 @@
 {
  "name": "Ice slime",
  "next": "cat_slime",
+ "next_at": {"commands": 5000},
  "symmetric": true,
  "palette": {
   "a": "#1c2a5a",

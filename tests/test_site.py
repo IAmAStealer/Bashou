@@ -76,8 +76,8 @@ class SamePixelArtTest(unittest.TestCase):
             if family in creatures.STARTERS:
                 self.assertEqual(info["forms"], list(creatures.STARTERS[family]))
             else:
-                self.assertEqual(info["forms"], [creatures.form(family, n) for n in range(1, len(creatures.STAGES[family]) + 1)])
-                self.assertEqual(info["en"], list(creatures.STAGES[family]))
+                self.assertEqual(info["forms"], list(creatures.forms(family)))
+                self.assertEqual(info["en"], creatures.names(family))
         for sprite_id, sprite in data["sprites"].items():
             cells = {f"{r},{c}": sprite["palette"][k] for r, row in enumerate(sprite["base"])
                      for c, k in enumerate(row) if k != "."}

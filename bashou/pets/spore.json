@@ -1,6 +1,7 @@
 {
  "name": "Spore",
  "next": "mushroom",
+ "next_at": {"achievements": 2},
  "lone_pixels": true,
  "palette": {
   "a": "#b89a70",

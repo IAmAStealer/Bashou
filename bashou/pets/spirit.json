@@ -1,6 +1,7 @@
 {
  "name": "Spirit",
  "next": "wisp",
+ "next_at": {"achievements": 2},
  "symmetric": true,
  "palette": {
   "a": "#2e3650",

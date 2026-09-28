@@ -105,10 +105,10 @@ def messages():
     found += dialogue.TYPO_FIX + dialogue.TYPO_NONE + list(dialogue.VOICE.values())
     from . import safety
     found += safety.messages()
-    found += list(creatures.NAMES.values()) + list(creatures.FORM_NAMES.values())
+    found += list(creatures.NAMES.values())
     found += list(creatures.STARTER_BLURBS.values())
-    for names in creatures.STAGES.values():
-        found += names
+    for chain in list(creatures.FORMS.values()) + list(creatures.STARTERS.values()):
+        found += [creatures.PETS[s].name for s in chain]
     found += list(behavior.ACTIONS.values())
     from . import progress
     from .adventure import lessons

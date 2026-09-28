@@ -1,6 +1,7 @@
 {
  "name": "Octopus",
  "next": "kraken",
+ "next_at": {"achievements": "all"},
  "palette": {
   "a": "#6e4196",
   "o": "#b47ddc",

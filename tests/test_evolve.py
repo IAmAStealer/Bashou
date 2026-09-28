@@ -54,11 +54,12 @@ class EveryPetEvolvesTest(unittest.TestCase):
             with self.subTest(pet=pet):
                 s = state.default()
                 s["starter"], s["pets"] = "star", [pet]
-                if pet in progress.COMMAND_LADDER:                       # the Slime: your command count
+                counts = [creatures.PETS[f].next_at.get("commands") for f in creatures.forms(pet)[:-1]]
+                if any(counts):                                         # the Slime: your command count
                     def step(n):
                         s["commands"] = n
                         return progress.check(s)
-                    steps = [lambda n=n: step(n) for n in progress.COMMAND_LADDER[pet]]
+                    steps = [lambda n=n: step(n) for n in counts]
                 else:                                                   # the others: their achievements
                     steps = [lambda a=a: progress.check(s, [a]) for a in achievements.family(pet)]
                 reached = self.walk(pet, creatures.forms(pet), s, steps)
@@ -145,6 +146,33 @@ class FormSwitchTest(TempState):
         self.assertIn("Only one form", board.message)
 
 
+class StarsTest(TempState):
+    """One star per form (owner). The pet screen drew ★ × form + ☆ × (3 - form): a Packet at form 7 had 7
+    stars there and 2 on its tile, and no "next:" after form 3."""
+
+    @mock.patch("bashou.which.installed", return_value=True)
+    def test_the_tile_and_the_pet_screen_agree_on_every_pet(self, _):
+        from bashou.board import Board
+        for pet in creatures.NAMES:
+            forms = creatures.forms(pet)
+            with self.subTest(pet=pet), state.locked() as s:
+                s["starter"], s["pets"], s["active"] = "star", [pet], pet
+                family = achievements.family(pet)
+                s["achievements"] = [a.id for a in family[:len(family) - 1]]     # all but one: not the last form
+                s["commands"] = 5000
+            board = Board()
+            board.pos = board.ids.index(pet)
+            s = state.load()
+            top = progress.reached(s, pet)
+            stars = "★" * top + "☆" * (len(forms) - top)
+            self.assertIn(stars, "".join(board.tile(board.pos)))
+            screen = "\n".join(board.preview())
+            self.assertIn(stars, screen)
+            self.assertNotIn("art coming soon", screen)                       # every pet is drawn
+            if top < len(forms):
+                self.assertIn(creatures.PETS[forms[top]].name, screen)       # next: the form after
+
+
 class NoSpoilerTest(unittest.TestCase):
     """Forms are to discover (owner): only the ones reached are named, then "?" and its level."""
 
@@ -166,7 +194,7 @@ class NoSpoilerTest(unittest.TestCase):
         text = out.getvalue() + " ".join(creatures.STARTER_BLURBS.values())
         for forms in creatures.STARTERS.values():
             for later in forms[1:]:
-                self.assertIsNone(re.search(rf"\b{creatures.FORM_NAMES[later]}\b", text, re.I), later)
+                self.assertIsNone(re.search(rf"\b{creatures.PETS[later].name}\b", text, re.I), later)
 
 
 if __name__ == "__main__":

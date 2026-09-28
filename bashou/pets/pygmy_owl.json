@@ -1,6 +1,7 @@
 {
  "name": "Pygmy owl",
  "next": "barn_owl",
+ "next_at": {"achievements": 2},
  "palette": {
   "a": "#5a3d24",
   "o": "#8a6040",

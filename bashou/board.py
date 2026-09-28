@@ -8,7 +8,7 @@ import tty
 
 from . import achievements, creatures, progress, render, state
 from .behavior import ACTIONS
-from .creatures import FORM_NAMES, STAGES, STARTERS, roster
+from .creatures import STARTERS, roster
 from .i18n import _
 
 ESC = "\x1b"
@@ -33,11 +33,11 @@ def silhouette(pet):
 
 def ladder_line(s):
     """The forms reached so far, then a mystery: what comes next is for you to discover."""
-    forms, levels = progress.ladder(s)
-    top = progress.starter_form(s)
-    shown = [_(FORM_NAMES[f]) for f in forms[:top]]
+    forms = progress.chain(s, "starter")
+    top = progress.reached(s, "starter")
+    shown = [_(creatures.PETS[f].name) for f in forms[:top]]
     if top < len(forms):
-        shown.append("? " + _("(level {level})").format(level=levels[top]))
+        shown.append("? " + _("(level {level})").format(level=creatures.PETS[forms[top - 1]].next_at["level"]))
     return " → ".join(shown)
 
 
@@ -64,7 +64,6 @@ class Board:
             name = progress.current(self.s, "starter")[2]
             top = _("Lv {level}").format(level=lvl) + ("  ●" if self.s["active"] == "starter" else "")
         elif unlocked:
-            st = progress.stage(self.s, pet)
             name = progress.current(self.s, pet)[2]
             top = progress.stars(self.s, pet) + ("  ●" if pet == self.s["active"] else "")
         else:
@@ -94,7 +93,7 @@ class Board:
         if pet_id == "starter":
             return self.starter_preview()
         unlocked = pet_id in self.s["pets"]
-        drawn = pet_id in creatures.PETS
+        drawn = creatures.form(pet_id, 1) in creatures.PETS     # the pet id isn't always a sprite (cat: hacker_cat)
         out = []
         if drawn:
             stage = progress.look(self.s, pet_id) if unlocked else 1
@@ -107,11 +106,14 @@ class Board:
             out += ["", "", f"{DIM}   " + _("(art coming soon)") + RESET, "", "", ""]
         out.append("")
         if unlocked:
-            st = progress.stage(self.s, pet_id)
-            out.append(f"{BOLD}{progress.current(self.s, pet_id)[2]}{RESET}  {'★' * st}{'☆' * (3 - st)}")
-            if st < 3:
-                out.append(DIM + _("next: {name}, learns to {actions}").format(
-                    name=_(STAGES[pet_id][st]), actions=_(ACTIONS[st + 1])) + RESET)
+            top, forms = progress.reached(self.s, pet_id), progress.chain(self.s, pet_id)
+            out.append(f"{BOLD}{progress.current(self.s, pet_id)[2]}{RESET}  {progress.stars(self.s, pet_id)}")
+            if top < len(forms):
+                tier = progress.tier(self.s, pet_id, top + 1)
+                name = _(creatures.PETS[forms[top]].name)
+                out.append(DIM + (_("next: {name}, learns to {actions}").format(name=name, actions=_(ACTIONS[tier]))
+                                  if tier > progress.tier(self.s, pet_id, top) else
+                                  _("next: {name}").format(name=name)) + RESET)
         else:
             out.append(f"{BOLD}???{RESET}")
             out.append(ACCENT + _("unlock: {how}").format(how=hint(self.s, pet_id)) + RESET)

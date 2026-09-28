@@ -1,6 +1,7 @@
 {
  "name": "Comet",
  "next": "moon",
+ "next_at": {"level": 8},
  "palette": {
   "w": "#ffffff",
   "y": "#e8f6ff",

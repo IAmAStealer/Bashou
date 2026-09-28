@@ -1,6 +1,7 @@
 {
  "name": "Larva",
  "next": "axolotl",
+ "next_at": {"achievements": 2},
  "palette": {
   "a": "#dc6e96",
   "o": "#ffafc8",

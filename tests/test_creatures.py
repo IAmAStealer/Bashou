@@ -1,7 +1,7 @@
 import unittest
 
 from bashou import creatures, duel, render
-from bashou.creatures import ROSTER, STAGES
+from bashou.creatures import ROSTER
 
 
 class CreaturesTest(unittest.TestCase):
@@ -58,7 +58,7 @@ class CreaturesTest(unittest.TestCase):
         self.assertIs(creatures.get("fox", "large"), creatures.PETS["fox"])
 
     def test_roster_has_stage_names(self):
-        self.assertEqual({p for p, _ in ROSTER}, set(STAGES))
+        self.assertEqual({p for p, _ in ROSTER}, set(creatures.FORMS))
 
     def test_every_sprite_is_a_form_of_one_pet(self):
         """Each sprite links to the form it evolves into ("next"): following the links from each first form

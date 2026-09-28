@@ -1,6 +1,7 @@
 {
  "name": "Gravel",
  "next": "pebble",
+ "next_at": {"level": 5},
  "palette": {
   "a": "#555a64",
   "o": "#8c919b",

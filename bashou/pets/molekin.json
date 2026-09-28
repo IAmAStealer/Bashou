@@ -1,6 +1,7 @@
 {
  "name": "Molekin",
  "next": "mole",
+ "next_at": {"achievements": 2},
  "symmetric": true,
  "palette": {
   "a": "#503c37",

@@ -1,6 +1,7 @@
 {
  "name": "White duck",
  "next": "mandarin_duck",
+ "next_at": {"achievements": "all"},
  "palette": {
   "k": "#4a4d57",
   "w": "#f8f8f4",

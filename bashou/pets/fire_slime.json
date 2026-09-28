@@ -1,6 +1,7 @@
 {
  "name": "Fire slime",
  "next": "rock_slime",
+ "next_at": {"commands": 1500},
  "palette": {
   "a": "#8a2a14",
   "o": "#f08030",

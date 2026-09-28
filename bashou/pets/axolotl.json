@@ -1,6 +1,7 @@
 {
  "name": "Axolotl",
  "next": "xolotl",
+ "next_at": {"achievements": "all"},
  "lone_pixels": true,
  "palette": {
   "a": "#dc6e96",

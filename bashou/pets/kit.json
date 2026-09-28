@@ -1,6 +1,7 @@
 {
  "name": "Kit",
  "next": "beaver",
+ "next_at": {"achievements": 2},
  "palette": {
   "a": "#462d1e",
   "o": "#96643c",

@@ -1,6 +1,7 @@
 {
  "name": "Bat",
  "next": "vampire",
+ "next_at": {"achievements": "all"},
  "symmetric": true,
  "palette": {
   "a": "#5a4b78",

@@ -1,6 +1,7 @@
 {
  "name": "Packet",
  "next": "datagram",
+ "next_at": {"achievements": 4},
  "symmetric": true,
  "palette": {
   "n": "#1c2a4a",

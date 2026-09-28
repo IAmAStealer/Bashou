@@ -26,6 +26,7 @@ class Pet:
     symmetric: bool = False     # its outline is a mirror image, and must stay one (`check`)
     lone_pixels: bool = False   # pixels touching no other are on purpose: sparkles, spores, bubbles
     next: str = ""              # the sprite of the form it evolves into; none for a last form
+    next_at: dict = field(default_factory=dict)   # what it takes: {"achievements": 2 or "all"}, {"commands": 100}, {"level": 3}
 
     @property
     def can_evolve(self):
@@ -51,7 +52,16 @@ def load(path):
                poses={name: _overlay(rows) for name, rows in d.get("poses", {}).items()},
                stages={int(n): _overlay(rows) for n, rows in d.get("stages", {}).items()},
                z_at=tuple(d.get("particles", (0, 13))), idle=d.get("idle", "breathe"),
-               symmetric=d.get("symmetric", False), lone_pixels=d.get("lone_pixels", False), next=d.get("next", ""))
+               symmetric=d.get("symmetric", False), lone_pixels=d.get("lone_pixels", False), next=d.get("next", ""),
+               next_at=d.get("next_at", {}))
+
+
+NEEDS_KINDS = ("achievements", "commands", "level")          # what a form's "next_at" can ask for
+
+
+def valid_need(need):
+    (kind, n), = need.items()
+    return (isinstance(n, int) and n > 0) or (kind == "achievements" and n == "all")
 
 
 def mirror_breaks(base):
@@ -98,6 +108,12 @@ def problems(path):
             found.append(f"{path.name}: missing pose {pose}")
     if d.get("next") and not (path.parent / f"{d['next']}.json").exists():
         found.append(f"{path.name}: \"next\" is {d['next']!r}, and there's no {d['next']}.json to evolve into")
+    need = d.get("next_at", {})
+    if bool(d.get("next")) != bool(need):
+        found.append(f"{path.name}: \"next\" and \"next_at\" go together: where it evolves, and what it takes")
+    elif need and not (len(need) == 1 and next(iter(need)) in NEEDS_KINDS and valid_need(need)):
+        found.append(f"{path.name}: \"next_at\" is one of {{\"achievements\": 2 or \"all\"}}, "
+                     f"{{\"commands\": 100}}, {{\"level\": 3}}")
     if d.get("symmetric"):
         for i in mirror_breaks(base):
             found.append(f"{path.name}: row {i} is no longer a mirror image (\"symmetric\": true)")
@@ -142,39 +158,6 @@ def owned(state):
     shown = dict(roster(state))
     return [pet for pet in state["pets"] if pet in shown]
 
-# Names of the three stages: unlocked, evolved (2 achievements), legendary (whole family).
-STAGES = {
-    "bat": ("Mouseling", "Bat", "Vampire"),
-    "gremlin": ("Gremlin", "Goblin", "Orc"),
-    "snail": ("Slug", "Snail", "Gary"),
-    "frog": ("Tadpole", "Tree frog", "Toad"),
-    "turtle": ("Hatchling", "Turtle", "Sea turtle"),
-    "mushroom": ("Spore", "Mushroom", "Blob"),
-    "slime": ("Droplet", "Slime", "Leaf slime", "Fire slime", "Rock slime", "Ice slime", "Cat slime", "Thunder slime", "King slime"),
-    "sofa": ("Beanbag", "Armchair", "Throne"),
-    "octopus": ("Octopito", "Octopus", "Kraken"),
-    "dragon": ("Dragon egg", "Dragonet", "Dragon"),
-    "fox": ("Fennec", "Fox", "Kitsune"),
-    "owl": ("Pygmy owl", "Barn owl", "Horned owl"),
-    "mole": ("Molekin", "Mole", "Mole king"),
-    "snake": ("Snakelet", "Snake", "Basilisk"),
-    "ghost": ("Spirit", "Wisp", "Ghost"),
-    "spider": ("Spiderling", "Spider", "Tarantula"),
-    "ant": ("Worker ant", "Soldier ant", "Queen ant"),
-    "axolotl": ("Larva", "Axolotl", "Xolotl"),
-    "beaver": ("Kit", "Beaver", "Platypus"),
-    "squirrel": ("Red squirrel", "Chipmunk", "Flying squirrel"),
-    "pigeon": ("Squab", "Pigeon", "Messenger"),
-    "hedgehog": ("Hoglet", "Hedgehog", "Porcupine"),
-    "bee": ("Brood", "Bee", "Queen bee"),
-    "cat": ("Hacker cat",),                      # secret, one form only
-    "whale": ("Calf", "Whale", "Leviathan"),
-    "meerkat": ("Pup", "Meerkat", "Sentinel"),
-    "leopard": ("Snow cub", "Snow leopard", "Mountain ghost"),
-    "duck": ("Duckling", "Duck", "White duck", "Mandarin duck"),
-    "spark": ("Sparklings", "Spark", "Ember", "Candle", "Lantern", "Torch", "Campfire", "Beacon", "Blaze", "Phoenix"),
-    "packet": ("Bit", "Byte", "Packet", "Datagram", "Socket", "Relay", "Router", "Uplink", "Satellite", "Constellation"),
-}
 
 
 
@@ -201,19 +184,17 @@ def can_evolve(pet_id):
 
 def form(pet_id, stage):
     """The sprite id of a pet at a stage."""
-    return FORMS.get(pet_id, (pet_id,) * 3)[stage - 1]
+    return forms(pet_id)[stage - 1]
 
 
-# Starters: chosen once, they level up with every 5 achievements and take a new shape at the levels
-# of STARTER_LEVELS (one per form). Forms are added as their art is drawn (see doc/PLAN.md).
+def names(pet_id):
+    """The names of a pet's forms, in order (each form's file holds its own)."""
+    return [PETS[s].name for s in forms(pet_id)]
+
+
+# Starters: chosen once, they level up with every 5 achievements and take a new shape at the level each
+# form's "next_at" says. Forms are added as their art is drawn (see doc/PLAN.md).
 STARTER_FIRST = {"star": "stardust", "sprout": "seedling", "pebble": "sand_grain"}     # then the "next" links
-STARTER_LEVELS = {line: (1, 3, 5, 8, 11, 15, 20) for line in STARTER_FIRST}
-FORM_NAMES = {"stardust": "Stardust", "meteor": "Meteor", "comet": "Comet", "moon": "Moon", "planet": "Planet",
-              "star": "Star", "red_giant": "Red giant",
-              "seedling": "Seedling", "sprout": "Sprout", "grass": "Grass", "flower": "Flower", "fern": "Fern",
-              "bush": "Bush", "tree": "Tree spirit",
-              "sand_grain": "Sand grain", "gravel": "Gravel", "pebble": "Pebble", "stone": "Stone",
-              "golem": "Rock golem", "crystal": "Crystal golem", "jade_golem": "Jade golem"}
 STARTER_BLURBS = {
     "star": "Bright and curious. A speck of dust with big dreams.",
     "sprout": "Calm and patient. Grows scripts from tiny seeds.",

@@ -1,6 +1,7 @@
 {
  "name": "Duck",
  "next": "white_duck",
+ "next_at": {"achievements": 3},
  "palette": {
   "k": "#3b3b44",
   "g": "#2f8a55",

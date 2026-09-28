@@ -1,6 +1,7 @@
 {
  "name": "Rock slime",
  "next": "ice_slime",
+ "next_at": {"commands": 3500},
  "palette": {
   "a": "#3c3a38",
   "o": "#8e8a82",

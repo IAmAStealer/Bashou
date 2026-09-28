@@ -1,6 +1,7 @@
 {
  "name": "Router",
  "next": "uplink",
+ "next_at": {"achievements": 8},
  "symmetric": true,
  "palette": {
   "n": "#1c2a4a",

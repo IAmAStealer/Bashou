@@ -1,6 +1,7 @@
 {
  "name": "Candle",
  "next": "lantern",
+ "next_at": {"achievements": 5},
  "palette": {
   "a": "#8a2a14",
   "w": "#ffd070",

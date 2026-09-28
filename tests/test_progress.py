@@ -26,7 +26,7 @@ class ProgressTest(unittest.TestCase):
         self.assertEqual(notes, [])
         notes = self.run_cmd("ls", times=50)                                       # 100 commands
         self.assertIn("Droplet is evolving", " ".join(notes))
-        self.assertEqual(progress.stage(self.s, "slime"), 2)
+        self.assertEqual(progress.reached(self.s, "slime"), 2)
         self.assertEqual(progress.next_milestone(self.s), (200, "?"))             # no spoiler
 
     def test_themed_unlocks(self):
@@ -47,7 +47,7 @@ class ProgressTest(unittest.TestCase):
         del old["ladder_best"]                                             # a King slime by its family
         s = state.migrate(old)
         self.assertEqual(progress.current(s, "slime")[0], "king_slime")
-        self.assertEqual(progress.tier(s, "slime", progress.stage(s, "slime")), 3)
+        self.assertEqual(progress.tier(s, "slime", progress.reached(s, "slime")), 3)
 
     def test_new_slime_forms_keep_old_ones(self):
         """0.4.3 added the Ice slime (3,500) and the Thunder slime (7,500): a King slime stays a King."""
@@ -80,11 +80,11 @@ class ProgressTest(unittest.TestCase):
     def test_achievement_and_evolution(self):
         self.run_cmd("find . -mtime -1", times=10)
         self.assertIn("time_traveller", self.s["achievements"])
-        self.assertEqual(progress.stage(self.s, "fox"), 1)
+        self.assertEqual(progress.reached(self.s, "fox"), 1)
         notes = self.run_cmd("find . -name '*.log' -exec rm {} +")
         self.assertIn("🏆 Executor (Fox family): act on results with `find -exec`", notes)
         self.assertIn("✨ Fennec is evolving! Watch it: `bashou evolve`", notes)
-        self.assertEqual(progress.stage(self.s, "fox"), 2)
+        self.assertEqual(progress.reached(self.s, "fox"), 2)
         self.assertEqual(progress.current(self.s, "fox")[1:3], (2, "Fennec"))   # new actions, old look until watched
         self.assertEqual(self.s["evolving"], [{"who": "fox", "from": 1, "to": 2}])
         progress.watched(self.s, "fox")
@@ -140,7 +140,7 @@ class ProgressTest(unittest.TestCase):
             seen = []
             for line in ("bashou learn", "bash -x a.sh", "bash -n a.sh", "ls; echo $?"):
                 self.run_cmd(line)
-                seen.append(creatures.form("duck", progress.stage(self.s, "duck")))
+                seen.append(creatures.form("duck", progress.reached(self.s, "duck")))
         self.assertEqual(seen, ["duckling", "duck", "white_duck", "mandarin_duck"])
 
     def test_lessons_bring_the_spark_up_to_the_phoenix(self):
@@ -153,7 +153,7 @@ class ProgressTest(unittest.TestCase):
         def read(*ids):
             self.s["lessons"]["read"] += [i for i in ids if i not in self.s["lessons"]["read"]]
             notes = progress.check(self.s)
-            seen.append(creatures.form("spark", progress.stage(self.s, "spark")))
+            seen.append(creatures.form("spark", progress.reached(self.s, "spark")))
             return notes
 
         self.assertNotIn("spark", self.s["pets"])
@@ -182,11 +182,11 @@ class ProgressTest(unittest.TestCase):
         for line in lines:
             progress.record(self.s, 0, line, "2026-09-25", 14)
             if "packet" in self.s["pets"]:
-                seen.append(creatures.form("packet", progress.stage(self.s, "packet")))
+                seen.append(creatures.form("packet", progress.reached(self.s, "packet")))
         self.assertEqual(seen[-1], "satellite")
         self.s["challenges"].append("loopback_lurker")
         progress.check(self.s)
-        self.assertEqual(creatures.form("packet", progress.stage(self.s, "packet")), "constellation")
+        self.assertEqual(creatures.form("packet", progress.reached(self.s, "packet")), "constellation")
 
     def test_one_skill_can_reach_the_phoenix(self):
         """Read 20, master 10, three skills: a player who only learns Rust has fewer lessons than that,
@@ -199,7 +199,7 @@ class ProgressTest(unittest.TestCase):
         self.s["challenges"] += ["mut_marmot", "const_condor", "shadow_shade", "byte_basilisk"]
         self.s["lessons"]["read"] = [le["id"] for le in lesson.shown(self.s, lesson.english())]
         progress.check(self.s)
-        self.assertEqual(creatures.form("spark", progress.stage(self.s, "spark")), "phoenix")
+        self.assertEqual(creatures.form("spark", progress.reached(self.s, "spark")), "phoenix")
 
     def test_new_rules_need_the_right_arguments(self):
         for line in ("git log --oneline", "git checkout main", "tar -xf a.tgz", "tar -cf a.tar d",
@@ -235,12 +235,12 @@ class ProgressTest(unittest.TestCase):
             self.assertNotIn("resolver", ids)
             self.assertIn("headers", ids)
             self.s["achievements"] += list(ids)                          # legendary without the dig ones
-            self.assertEqual(progress.stage(self.s, "pigeon"), 3)
+            self.assertEqual(progress.reached(self.s, "pigeon"), 3)
 
     def test_legendary_stage(self):
         for line in ("uniq -c f", "sort -rn f", "sort -u f"):
             self.run_cmd(line)
-        self.assertEqual(progress.stage(self.s, "sofa"), 3)
+        self.assertEqual(progress.reached(self.s, "sofa"), 3)
 
 
 if __name__ == "__main__":
@@ -251,12 +251,12 @@ class StarterTest(unittest.TestCase):
     def test_levels_and_forms(self):
         s = state.default()
         s["starter"] = "pebble"
-        self.assertEqual((progress.starter_level(s), progress.starter_form(s)), (1, 1))
+        self.assertEqual((progress.starter_level(s), progress.reached(s, "starter")), (1, 1))
         self.assertEqual(progress.current(s)[:3], ("sand_grain", 1, "Sand grain"))
         s["achievements"] = [f"a{i}" for i in range(15)]
-        self.assertEqual((progress.starter_level(s), progress.starter_form(s)), (4, 2))   # Gravel at level 3
+        self.assertEqual((progress.starter_level(s), progress.reached(s, "starter")), (4, 2))   # Gravel at level 3
         s["achievements"] = [f"a{i}" for i in range(50)]
-        self.assertEqual((progress.starter_level(s), progress.starter_form(s)), (11, 5))
+        self.assertEqual((progress.starter_level(s), progress.reached(s, "starter")), (11, 5))
         self.assertEqual(progress.current(s)[2], "Rock golem")
         s["achievements"] = [f"a{i}" for i in range(94)]
         self.assertEqual(progress.starter_level(s), progress.MAX_LEVEL - 1)
@@ -311,7 +311,7 @@ class StarterTest(unittest.TestCase):
                         s = state.load()
                 self.assertEqual(progress.current(s)[0], sprite)
         s["achievements"] = [f"a{i}" for i in range(70)]                   # level 15: the Star comes
-        self.assertEqual(progress.starter_form(s), 6)
+        self.assertEqual(progress.reached(s, "starter"), 6)
 
     def test_pre_release_save_loads(self):
         """A save from before v0.1.0 (installs that updated with git pull) keeps its progress."""
@@ -337,7 +337,7 @@ class StarterTest(unittest.TestCase):
         del old["starter_best"]
         s = state.migrate(old)
         self.assertEqual(s["evolving"], [{"who": "starter", "from": 1, "to": 5}])      # Stardust → Planet still
-        self.assertEqual(progress.starter_form(s), 5)
+        self.assertEqual(progress.reached(s, "starter"), 5)
 
 
 class AchievementNoteTest(unittest.TestCase):

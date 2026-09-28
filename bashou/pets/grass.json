@@ -1,6 +1,7 @@
 {
  "name": "Grass",
  "next": "flower",
+ "next_at": {"level": 8},
  "palette": {
   "g": "#50a04b",
   "L": "#96d26e"

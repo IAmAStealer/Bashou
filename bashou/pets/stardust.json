@@ -1,6 +1,7 @@
 {
  "name": "Stardust",
  "next": "meteor",
+ "next_at": {"level": 3},
  "lone_pixels": true,
  "palette": {
   "o": "#d8c8a0",
