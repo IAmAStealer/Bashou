@@ -109,3 +109,20 @@ class UpdateOfferTest(unittest.TestCase):
             self.assertEqual(offer.call_count, 1)                            # "no" is remembered
             update.run(packages=True)
             self.assertEqual(offer.call_count, 2)                            # --packages asks again
+
+    def test_a_clone_updates_with_git_once_the_package_is_installed(self):
+        """User report: the move was offered again and again (the package was there), so the copy that
+        ~/.bashrc loaded never updated. Updated with git, its loader hands over to the package."""
+        from bashou import update
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(state, "DATA", Path(tmp)), \
+                mock.patch.object(state, "STATE", Path(tmp) / "state.json"), \
+                mock.patch("sys.stdin.isatty", return_value=True), mock.patch.object(update, "packaged", return_value=None), \
+                mock.patch.object(repo_setup, "system", return_value="redhat"), \
+                mock.patch.object(repo_setup, "PACKAGE_LOADER", Path(__file__)), \
+                mock.patch.object(repo_setup, "offer") as offer, \
+                mock.patch.object(update, "available", return_value=None) as available, \
+                contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(update.run(), 0)
+            offer.assert_not_called()
+            available.assert_called_once()
+

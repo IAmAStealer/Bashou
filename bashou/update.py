@@ -133,7 +133,10 @@ def run(version=None, packages=False):
         return repo_setup.offer(ROOT / "bashou.bash")
     if version:
         return switch("v" + version.lstrip("v"))
-    if sys.stdin.isatty() and repo_setup.system() and not state.load().get("packages_declined"):
+    # Package already installed: offering it again would end here, and this copy would never update.
+    # Updated, its loader hands over to the package (bashou.bash).
+    if sys.stdin.isatty() and repo_setup.system() and not state.load().get("packages_declined") \
+            and not repo_setup.PACKAGE_LOADER.exists():
         moved = repo_setup.offer(ROOT / "bashou.bash")
         if moved == 0:
             return 0

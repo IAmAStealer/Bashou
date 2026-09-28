@@ -21,7 +21,7 @@ TIMEOUT = 10
 class Shell:
     """An interactive bash that sources bashou.bash, with its own data folders."""
 
-    def __init__(self, tmp, cmd=None, state=None, cursor=True):
+    def __init__(self, tmp, cmd=None, state=None, cursor=True, env=None, bashrc=None):
         self.tmp = Path(tmp)
         self.data, self.cache = self.tmp / "data", self.tmp / "cache"
         self.data.mkdir(exist_ok=True)
@@ -31,9 +31,10 @@ class Shell:
             (self.data / "state.json").write_text(json.dumps(base))
         rc = self.tmp / "rc"
         rc.write_text(f"PS1='$ '\nHISTFILE={self.tmp}/hist\nHISTCONTROL=ignoreboth\n"
-                      f"source {ROOT}/bashou.bash\n")
+                      + (bashrc or f"source {ROOT}/bashou.bash\n"))
         env = {**os.environ, "BASHOU_DATA": str(self.data), "BASHOU_CACHE": str(self.cache),
-               "PYTHONPATH": str(ROOT), "TERM": "xterm-256color"}
+               "PYTHONPATH": str(ROOT), "TERM": "xterm-256color",
+               "BASHOU_PACKAGE_LOADER": str(self.tmp / "no-package"), **(env or {})}   # a real one isn't used
         argv = cmd or ["bash", "--rcfile", str(rc), "-i"]
         self.pid, self.fd = pty.fork()
         if self.pid == 0:
@@ -122,6 +123,52 @@ def alive(pid):
         return True
     except ProcessLookupError:
         return False
+
+
+class PackageHandoverTest(unittest.TestCase):
+    """User report (0.6.2 rpm installed, no `bashou share`): ~/.bashrc still loaded an old git copy, which
+    dnf never updates. A git copy's loader now hands over to the package, and the package's profile.d
+    script moves shells whose ~/.bashrc loads an older copy, at the first prompt."""
+
+    def test_a_clone_loader_sources_the_package(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            package = Path(tmp) / "package.bash"
+            package.write_text("PACKAGE_LOADED=yes\n")
+            sh = Shell(tmp, env={"BASHOU_PACKAGE_LOADER": str(package)})
+            try:
+                self.assertTrue(sh.expect(b"$ "))
+                self.assertEqual(sh.value("PACKAGE_LOADED"), "yes")
+                self.assertEqual(sh.value("BASHOU_DIR"), "")            # the clone's loader stopped there
+            finally:
+                sh.close()
+
+    def test_the_package_moves_a_shell_that_loads_an_old_copy(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            old = Path(tmp) / "old"
+            old.mkdir()
+            (old / "bashou.bash").write_text(f"BASHOU_DIR={old}\nbashou() {{ [[ $1 == off ]] && OLD_OFF=yes; }}\n")
+            rc = f"source {ROOT}/bashou/handover.bash\nsource {old}/bashou.bash\n"   # profile.d, then ~/.bashrc
+            sh = Shell(tmp, bashrc=rc, env={"BASHOU_PACKAGE_DIR": str(ROOT)})
+            try:
+                self.assertTrue(sh.expect(b"$ "))
+                self.assertEqual(sh.value("BASHOU_DIR"), str(ROOT))
+                self.assertEqual(sh.value("OLD_OFF"), "yes")                # the old pet was stopped
+                self.assertNotIn("_bashou_handover", sh.value("PROMPT_COMMAND"))
+                self.assertTrue(sh.value("BASHOU_PID"))                     # the package's pet runs
+            finally:
+                sh.close()
+
+    def test_the_package_leaves_its_own_loader_and_kept_clones_alone(self):
+        for env in ({"BASHOU_PACKAGE_DIR": str(ROOT)}, {"BASHOU_PACKAGE_DIR": "/elsewhere", "BASHOU_KEEP_CLONE": "1"}):
+            with tempfile.TemporaryDirectory() as tmp:
+                rc = f"source {ROOT}/bashou/handover.bash\nsource {ROOT}/bashou.bash\nLOADS=1\n"
+                sh = Shell(tmp, bashrc=rc, env=env)
+                try:
+                    self.assertTrue(sh.expect(b"$ "))
+                    self.assertEqual(sh.value("BASHOU_DIR"), str(ROOT), env)
+                    self.assertNotIn("_bashou_handover", sh.value("PROMPT_COMMAND"))
+                finally:
+                    sh.close()
 
 
 class RoomTest(unittest.TestCase):

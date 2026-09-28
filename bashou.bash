@@ -3,6 +3,16 @@
 
 [[ $- == *i* && -t 1 ]] || return 0
 
+# A git copy hands over to the apt or dnf package once it's installed. Otherwise a ~/.bashrc line that
+# `bashou update` couldn't rewrite keeps loading this copy, which dnf never updates (user report, 0.6.2).
+_bashou_pkg=${BASHOU_PACKAGE_LOADER:-/usr/share/bashou/bashou.bash}
+if [[ -z $BASHOU_KEEP_CLONE && -r $_bashou_pkg && $(readlink -f "$_bashou_pkg") != "$(readlink -f "${BASH_SOURCE[0]}")" ]]; then
+  unset _bashou_pkg
+  source "${BASHOU_PACKAGE_LOADER:-/usr/share/bashou/bashou.bash}"
+  return
+fi
+unset _bashou_pkg
+
 BASHOU_DIR=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
 _bashou_data=${BASHOU_DATA:-$HOME/.local/share/bashou}
 _bashou_events=$_bashou_data/events.$$

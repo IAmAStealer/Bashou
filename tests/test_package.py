@@ -36,6 +36,16 @@ class StageTest(unittest.TestCase):
             self.assertFalse((self.share / private).exists(), private)
         self.assertEqual((self.share / "VERSION").read_text(), "v1.2.3\n")
 
+    def test_profile_hands_old_copies_over(self):
+        profile = (self.tree / "etc/profile.d/bashou.sh").read_text()
+        self.assertIn(f"/{package.PREFIX}/bashou/handover.bash", profile)
+        self.assertTrue((self.share / "bashou/handover.bash").is_file())
+        for shell in ("sh", "dash"):                                     # login shells that aren't bash skip it
+            if shutil.which(shell):
+                out = subprocess.run([shell, "-c", profile], capture_output=True, text=True)
+                self.assertEqual((out.returncode, out.stderr), (0, ""), shell)
+        self.assertIn("/etc/profile.d/bashou.sh", package.SPEC)
+
     def test_permissions(self):
         self.assertEqual((self.tree / "usr/bin/bashou").stat().st_mode & 0o777, 0o755)
         self.assertEqual((self.share / "bashou/cli.py").stat().st_mode & 0o777, 0o644)

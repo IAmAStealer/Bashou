@@ -5,6 +5,12 @@ Every release has a section here, written for players. CI refuses to tag a relea
 
 ## v0.6.3 — 2026-09-26
 
+- If you installed the apt or dnf package but your `~/.bashrc` still loaded an old git copy of Bashou,
+  your terminal kept running that old copy, which the package manager never updates (so `bashou share`
+  was missing, for example). Now the package moves those terminals to itself when they open. It works
+  in every terminal on Fedora and Rocky, and in login shells on Debian and Ubuntu. `bashou update` in
+  a git copy also updates it again, instead of offering the package you already have. If a terminal
+  still shows an old version, run `bashou update --version v0.6.3` once, then open a new terminal.
 - The pet and its speech bubble no longer hide or eat lines of text. Before, they were drawn over the
   top of the screen, and when you scrolled up, a long output like `--help` had holes where they had
   been. Now Bashou moves those top lines up (where scrolling finds them, untouched) before drawing the

@@ -5,7 +5,8 @@
     python3 tools/package.py site site/                  # only the share page, to try it: python3 -m http.server -d site
 
 The code goes to /usr/share/bashou (the same tree as a clone, plus a VERSION file) and /usr/bin/bashou runs
-its commands. Nothing turns the pet on: each user runs `bashou on` once. `build` needs dpkg-deb for the
+its commands, /etc/profile.d/bashou.sh moves shells still loading a git copy to the package. Nothing
+turns the pet on: each user runs `bashou on` once. `build` needs dpkg-deb for the
 .deb and rpmbuild for the .rpm (either is skipped when missing); `repo` needs apt-ftparchive, createrepo_c,
 rpmsign and gpg.
 """
@@ -30,6 +31,13 @@ DESCRIPTION = ("Bashou lives in the corner of your terminal and evolves as you u
 WRAPPER = f"""#!/bin/sh
 # Bashou's commands outside the shell function it defines, e.g. `bashou on` in a new account.
 exec python3 /{PREFIX}/launch.py bashou "$@"
+"""
+
+# Read by login shells, and on Fedora and Rocky by every interactive bash, before ~/.bashrc: see handover.bash.
+PROFILE = f"""# Bashou: a ~/.bashrc that loads an old git copy of Bashou gets this package's instead.
+if [ -n "${{BASH_VERSION:-}}" ] && [ -r /{PREFIX}/bashou/handover.bash ]; then
+  case $- in *i*) . /{PREFIX}/bashou/handover.bash ;; esac
+fi
 """
 
 # Users can't write to /usr/share: compile once at install so every command starts fast.
@@ -77,6 +85,7 @@ if [ "$1" -eq 0 ]; then {clean}; fi
 %files
 /{prefix}
 /usr/bin/bashou
+/etc/profile.d/bashou.sh
 """
 
 
@@ -108,6 +117,8 @@ def stage(dest, version):
     (share / "VERSION").write_text(f"v{version}\n")
     (dest / "usr/bin").mkdir(parents=True)
     (dest / "usr/bin/bashou").write_text(WRAPPER)
+    (dest / "etc/profile.d").mkdir(parents=True)
+    (dest / "etc/profile.d/bashou.sh").write_text(PROFILE)
     for path in [dest, *dest.rglob("*")]:
         path.chmod(0o755 if path.is_dir() or path.parent.name == "bin" else 0o644)
     return dest
