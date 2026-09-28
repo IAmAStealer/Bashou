@@ -19,7 +19,7 @@ import unittest
 from unittest import mock
 from pathlib import Path
 
-from bashou import challenges, cli, creatures, fight, i18n, state
+from bashou import achievements, challenges, cli, creatures, fight, i18n, state
 
 
 class TempState(unittest.TestCase):
@@ -186,6 +186,32 @@ class SecretCatTest(TempState):
             s.update(pets=["cat", "fox"], active="cat", starter=None)
         s = state.load()
         self.assertEqual((s["pets"], s["active"], s["starter"]), (["fox"], "starter", "star"))
+
+
+class SharedAchievementIdTest(TempState):
+    """Found while giving achievements their level: "scholar" and "mapper" were each two achievements, so
+    earning one counted as both, and `jq 'map(.id)'` (the Axolotl's Mapper) brought the secret cat."""
+
+    def test_every_achievement_id_is_unique(self):
+        ids = [a.id for a in achievements.ALL]
+        self.assertEqual(sorted({i for i in ids if ids.count(i) > 1}), [])
+
+    def test_jq_map_brings_no_secret(self):
+        from bashou import progress
+        with mock.patch("bashou.which.installed", return_value=True), state.locked() as s:
+            s["starter"] = "star"
+            progress.record(s, 0, "jq 'map(.id)' f.json", "2026-09-28", 14)
+        s = state.load()
+        self.assertIn("mapper", s["achievements"])
+        self.assertNotIn("cat", s["pets"])
+
+    def test_old_saves(self):
+        with state.locked() as s:                                   # jq's Mapper counted as the secret
+            s.update(starter="star", achievements=["mapper", "scholar"], pets=["cat"])
+        s = state.load()
+        self.assertIn("cat", s["pets"])                             # a cat already found stays
+        self.assertIn("net_mapper", s["achievements"])
+        self.assertNotIn("scholar", s["achievements"])              # no topic at level 3: not the Snail's
 
 
 class OldLoaderTest(TempState):

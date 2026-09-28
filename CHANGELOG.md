@@ -13,6 +13,10 @@ Every release has a section here, written for players. CI refuses to tag a relea
   many forms stopped saying what comes next after their third.
 - The Hacker cat stays once a secret brings it. It used to leave at every load, then say "New pet:
   Hacker cat!" again after each command. Its picture also shows on the pet screen now.
+- Two pairs of achievements shared a name inside the game, so earning one counted as both: the Snail's
+  and the Spark's **Scholar**, and the Axolotl's and a secret **Mapper**. Using `jq 'map(...)'` could
+  bring the secret Hacker cat without finding any secret. Each now counts on its own. A Hacker cat you
+  already have stays.
 
 ## v0.6.3 — 2026-09-28
 

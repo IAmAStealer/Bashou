@@ -147,11 +147,25 @@ def recover(text):
     return default()
 
 
+def fix_shared_ids(state):
+    """Until 0.6.4 two achievements shared the id "scholar" (Snail, Spark) and two "mapper" (Axolotl, and
+    the Hacker cat's secret): earning one counted as both, and `jq 'map(.)'` brought the secret cat.
+    The newer ones got their own ids (lesson_scholar, net_mapper). The Snail's Scholar is a rule on the
+    save: it stays only if it holds (the Spark's comes back by itself). A cat already found stays."""
+    from .achievements import BY_ID
+    earned = state.get("achievements", [])
+    if "scholar" in earned and not BY_ID["scholar"].state(state):
+        earned.remove("scholar")
+    if "mapper" in earned and "cat" in state.get("pets", []) and "net_mapper" not in earned:
+        earned.append("net_mapper")
+
+
 def migrate(state):
     """Old saves: the cat in the collection became the starter, and the cat starter became the star.
     Since then the Hacker cat is a secret pet: a save that found a secret keeps it (it was removed at every
     load, and "New pet: Hacker cat!" came back after each command)."""
     from .achievements import secrets
+    fix_shared_ids(state)
     if state["starter"] is None and "cat" in state["pets"]:
         state["starter"] = "star"
     if state["starter"] == "cat":
