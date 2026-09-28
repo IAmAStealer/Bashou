@@ -3,6 +3,7 @@
 import contextlib
 import importlib.util
 import io
+import re
 import shutil
 import subprocess
 import tempfile
@@ -43,6 +44,28 @@ class StageTest(unittest.TestCase):
         wrapper = (self.tree / "usr/bin/bashou").read_text().replace("/" + package.PREFIX, str(self.share))
         out = subprocess.run(["sh", "-c", wrapper, "bashou", "version"], capture_output=True, text=True)
         self.assertIn("v1.2.3", out.stdout)
+
+    def test_every_game_file_is_shipped(self):
+        """A user on 0.6.2 reported no `bashou share`: every tracked file of the game must be in the package."""
+        tracked = subprocess.run(["git", "ls-files", "bashou", "art", "bashou.bash", "launch.py"], cwd=ROOT,
+                                 capture_output=True, text=True).stdout.split()
+        if not tracked:
+            self.skipTest("not a git clone")
+        missing = [f for f in tracked if not (self.share / f).is_file()]
+        self.assertEqual(missing, [])
+
+    def test_wrapper_runs_every_command(self):
+        """Each command the shell completes is known to the packaged CLI (--help exits 0)."""
+        wrapper = (self.tree / "usr/bin/bashou").read_text().replace("/" + package.PREFIX, str(self.share))
+        loader = (self.share / "bashou.bash").read_text()
+        commands = [c for c in re.search(r'_bashou_commands="([^"]*)"', loader)[1].split() if c not in ("on", "off")]
+        self.assertIn("share", commands)
+        for cmd in commands:
+            with self.subTest(cmd=cmd):
+                out = subprocess.run(["sh", "-c", wrapper, "bashou", cmd, "--help"],
+                                     capture_output=True, text=True, env={"PATH": "/usr/bin:/bin",
+                                                                         "HOME": self.tmp.name})
+                self.assertEqual(out.returncode, 0, out.stderr)
 
     @unittest.skipUnless(shutil.which("dpkg-deb"), "needs dpkg-deb")
     def test_deb(self):
