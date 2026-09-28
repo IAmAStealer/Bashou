@@ -1,5 +1,6 @@
 {
  "name": "Xolotl",
+ "lone_pixels": true,
  "palette": {
   "a": "#dc6e96",
   "o": "#ffafc8",

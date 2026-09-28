@@ -1,5 +1,7 @@
 {
  "name": "Star",
+ "next": "red_giant",
+ "symmetric": true,
  "palette": {
   "w": "#fffbe8",
   "y": "#ffe9a0",

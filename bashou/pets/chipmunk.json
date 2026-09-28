@@ -1,5 +1,6 @@
 {
  "name": "Chipmunk",
+ "next": "flying_squirrel",
  "palette": {
   "a": "#6e3719",
   "o": "#c88040",

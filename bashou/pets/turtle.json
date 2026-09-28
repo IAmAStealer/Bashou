@@ -1,5 +1,6 @@
 {
  "name": "Turtle",
+ "next": "sea_turtle",
  "palette": {
   "S": "#78552d",
   "h": "#af8246",

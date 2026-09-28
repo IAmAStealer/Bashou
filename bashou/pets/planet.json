@@ -1,5 +1,7 @@
 {
  "name": "Planet",
+ "next": "star",
+ "symmetric": true,
  "palette": {
   "O": "#3f7fcf",
   "o": "#2a5aa0",

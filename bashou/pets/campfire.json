@@ -1,5 +1,6 @@
 {
  "name": "Campfire",
+ "next": "beacon",
  "palette": {
   "a": "#8a2a14",
   "o": "#f08030",

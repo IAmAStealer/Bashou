@@ -1,5 +1,7 @@
 {
  "name": "Gremlin",
+ "next": "goblin",
+ "symmetric": true,
  "palette": {
   "E": "#468c46",
   "g": "#6ebe5a",

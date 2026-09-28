@@ -43,6 +43,12 @@ number of rows (the pets are 17 × 12).
 - **`stages`** (optional) work the same way, for pixels added when the pet evolves: `"2"` and `"3"`
   (a scarf, a crown…).
 - **`particles`**: the terminal line and column of a 3-cell empty spot where `z`, `♪` and `✦` show up.
+- **`next`**: the sprite of the form it evolves into (`"next": "fox"` in `fennec.json`). A pet's forms
+  are the chain of these links, from its first form (`FIRST_FORM` in `bashou/creatures.py`) to its last,
+  which has no `next`. A new form is one new file and one link: the tests then walk every pet through it.
+- **`symmetric`** (optional): `true` when the outline is a mirror image. `check` keeps it one.
+- **`lone_pixels`** (optional): `true` when pixels touching no other are on purpose (sparkles, spores,
+  bubbles). Without it, `check` reports each one as a stray pixel.
 - **`idle`** (optional): `"swim"` instead of breathing; the pet then needs `swim_up` and `swim_down`
   poses instead of `inhale` (see `tadpole.json`).
 

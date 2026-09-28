@@ -1,5 +1,6 @@
 {
  "name": "Spark",
+ "next": "ember",
  "palette": {
   "a": "#8a2a14",
   "o": "#f08030",

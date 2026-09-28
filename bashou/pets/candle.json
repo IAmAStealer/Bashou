@@ -1,5 +1,6 @@
 {
  "name": "Candle",
+ "next": "lantern",
  "palette": {
   "a": "#8a2a14",
   "w": "#ffd070",

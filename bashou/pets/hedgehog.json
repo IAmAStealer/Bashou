@@ -1,5 +1,6 @@
 {
  "name": "Hedgehog",
+ "next": "porcupine",
  "palette": {
   "s": "#5f4b41",
   "S": "#967d69",

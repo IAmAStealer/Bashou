@@ -1,5 +1,6 @@
 {
  "name": "Comet",
+ "next": "moon",
  "palette": {
   "w": "#ffffff",
   "y": "#e8f6ff",

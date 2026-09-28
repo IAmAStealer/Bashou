@@ -1,5 +1,7 @@
 {
  "name": "Axolotl",
+ "next": "xolotl",
+ "lone_pixels": true,
  "palette": {
   "a": "#dc6e96",
   "o": "#ffafc8",

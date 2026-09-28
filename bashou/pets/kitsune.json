@@ -1,5 +1,6 @@
 {
  "name": "Kitsune",
+ "symmetric": true,
  "palette": {
   "a": "#b0806a",
   "o": "#fff4ea",

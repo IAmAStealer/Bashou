@@ -1,5 +1,6 @@
 {
  "name": "Basilisk",
+ "symmetric": true,
  "palette": {
   "a": "#1e3a1e",
   "o": "#3f7a3a",

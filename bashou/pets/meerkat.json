@@ -1,5 +1,6 @@
 {
  "name": "Meerkat",
+ "next": "sentinel",
  "palette": {
   "a": "#6e5032",
   "o": "#c8a06e",

@@ -1,5 +1,6 @@
 {
  "name": "Octopus",
+ "next": "kraken",
  "palette": {
   "a": "#6e4196",
   "o": "#b47ddc",

@@ -1,5 +1,7 @@
 {
  "name": "Brood",
+ "next": "bee",
+ "symmetric": true,
  "palette": {
   "H": "#b07818",
   "y": "#f5d070",

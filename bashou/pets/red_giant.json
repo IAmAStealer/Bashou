@@ -1,5 +1,6 @@
 {
  "name": "Red giant",
+ "symmetric": true,
  "palette": {
   "g": "#4a1408",
   "h": "#8a2410",

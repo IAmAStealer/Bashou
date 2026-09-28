@@ -1,5 +1,7 @@
 {
  "name": "Stone",
+ "next": "golem",
+ "symmetric": true,
  "palette": {
   "a": "#555a64",
   "o": "#8c919b",

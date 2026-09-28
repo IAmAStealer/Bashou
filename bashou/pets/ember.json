@@ -1,5 +1,7 @@
 {
  "name": "Ember",
+ "next": "candle",
+ "symmetric": true,
  "palette": {
   "a": "#8a2a14",
   "o": "#f08030",

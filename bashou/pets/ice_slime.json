@@ -1,5 +1,7 @@
 {
  "name": "Ice slime",
+ "next": "cat_slime",
+ "symmetric": true,
  "palette": {
   "a": "#1c2a5a",
   "d": "#2f7fd0",

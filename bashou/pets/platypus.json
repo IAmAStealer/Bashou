@@ -1,5 +1,6 @@
 {
  "name": "Platypus",
+ "lone_pixels": true,
  "palette": {
   "a": "#4a3020",
   "o": "#8a5a34",

@@ -1,5 +1,7 @@
 {
  "name": "Beanbag",
+ "next": "sofa",
+ "symmetric": true,
  "palette": {
   "a": "#8c323c",
   "o": "#cd555f",

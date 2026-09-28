@@ -1,5 +1,6 @@
 {
  "name": "Porcupine",
+ "symmetric": true,
  "palette": {
   "s": "#4a3830",
   "q": "#a89880",

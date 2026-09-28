@@ -1,5 +1,6 @@
 {
  "name": "Orc",
+ "symmetric": true,
  "palette": {
   "o": "#5a7a4a",
   "O": "#3e5a34",

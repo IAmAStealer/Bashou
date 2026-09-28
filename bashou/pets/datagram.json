@@ -1,5 +1,7 @@
 {
  "name": "Datagram",
+ "next": "socket",
+ "symmetric": true,
  "palette": {
   "n": "#1c2a4a",
   "c": "#5cc8e8",

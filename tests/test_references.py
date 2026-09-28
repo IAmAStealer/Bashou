@@ -244,7 +244,7 @@ class DrawEverythingTest(TempState):
         from bashou import evolve
         s = state.load()
         lines = [("starter", line, forms) for line, forms in creatures.STARTERS.items()]
-        for who, line, forms in lines + [(pet, "star", forms) for pet, forms in creatures.FORMS.items()]:
+        for who, line, forms in lines + [(pet, "star", creatures.forms(pet)) for pet in creatures.NAMES]:
             s["starter"] = line
             for a in range(1, len(forms)):                                 # every step, and skipped forms too
                 for b in range(a + 1, len(forms) + 1):

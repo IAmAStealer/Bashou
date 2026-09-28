@@ -1,5 +1,8 @@
 {
  "name": "Sand grain",
+ "next": "gravel",
+ "lone_pixels": true,
+ "symmetric": true,
  "palette": {
   "l": "#f0dfa8",
   "w": "#cfe6f7"

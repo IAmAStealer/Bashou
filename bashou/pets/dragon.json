@@ -1,5 +1,6 @@
 {
  "name": "Dragon",
+ "next": "great_dragon",
  "palette": {
   "a": "#2d7346",
   "o": "#5ab464",

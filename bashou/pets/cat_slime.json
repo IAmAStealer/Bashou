@@ -1,5 +1,6 @@
 {
  "name": "Cat slime",
+ "next": "thunder_slime",
  "palette": {
   "a": "#8a5a2a",
   "o": "#f0b060",

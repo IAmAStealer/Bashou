@@ -1,5 +1,6 @@
 {
  "name": "Queen bee",
+ "lone_pixels": true,
  "palette": {
   "a": "#32281e",
   "o": "#fac83c",

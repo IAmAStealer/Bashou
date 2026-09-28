@@ -1,5 +1,6 @@
 {
  "name": "Squirrel",
+ "next": "chipmunk",
  "palette": {
   "a": "#6e3719",
   "o": "#cd6e32",

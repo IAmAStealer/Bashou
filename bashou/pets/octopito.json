@@ -1,5 +1,7 @@
 {
  "name": "Octopito",
+ "next": "octopus",
+ "symmetric": true,
  "palette": {
   "a": "#6e4196",
   "o": "#b47ddc",

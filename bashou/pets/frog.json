@@ -1,5 +1,6 @@
 {
  "name": "Frog",
+ "next": "toad",
  "palette": {
   "a": "#3c823c",
   "o": "#6ebe50",

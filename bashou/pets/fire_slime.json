@@ -1,5 +1,6 @@
 {
  "name": "Fire slime",
+ "next": "rock_slime",
  "palette": {
   "a": "#8a2a14",
   "o": "#f08030",

@@ -1,5 +1,6 @@
 {
  "name": "Snake",
+ "next": "basilisk",
  "palette": {
   "a": "#326e32",
   "o": "#78be50",

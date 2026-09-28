@@ -23,6 +23,13 @@ class Pet:
     z_at: tuple = (0, 13)       # terminal row / column of the 3-cell particle spot (z, ♪, ✦)
     unlock: str = ""            # human hint shown on the board
     idle: str = "breathe"       # what it does when nothing happens: "breathe" (inhale) or "swim" (swim_up/down)
+    symmetric: bool = False     # its outline is a mirror image, and must stay one (`check`)
+    lone_pixels: bool = False   # pixels touching no other are on purpose: sparkles, spores, bubbles
+    next: str = ""              # the sprite of the form it evolves into; none for a last form
+
+    @property
+    def can_evolve(self):
+        return bool(self.next)
 
     @property
     def width(self):
@@ -43,7 +50,22 @@ def load(path):
                palette={k: tuple(int(v[i:i + 2], 16) for i in (1, 3, 5)) for k, v in d["palette"].items()},
                poses={name: _overlay(rows) for name, rows in d.get("poses", {}).items()},
                stages={int(n): _overlay(rows) for n, rows in d.get("stages", {}).items()},
-               z_at=tuple(d.get("particles", (0, 13))), idle=d.get("idle", "breathe"))
+               z_at=tuple(d.get("particles", (0, 13))), idle=d.get("idle", "breathe"),
+               symmetric=d.get("symmetric", False), lone_pixels=d.get("lone_pixels", False), next=d.get("next", ""))
+
+
+def mirror_breaks(base):
+    """Rows whose outline isn't a mirror image (colors aside: highlights may sit on one side)."""
+    shapes = ["".join("." if k == "." else "x" for k in row) for row in base]
+    return [i for i, shape in enumerate(shapes) if shape != shape[::-1]]
+
+
+def lone(base):
+    """(row, column) of each pixel touching no other: a stray one, unless the sprite says it's on purpose."""
+    h, w = len(base), len(base[0])
+    return [(r, c) for r in range(h) for c in range(w)
+            if base[r][c] != "." and all(base[r + dr][c + dc] == "." for dr in (-1, 0, 1) for dc in (-1, 0, 1)
+                                         if (dr or dc) and 0 <= r + dr < h and 0 <= c + dc < w)]
 
 
 def problems(path):
@@ -74,6 +96,14 @@ def problems(path):
     for pose in POSES if idle == "breathe" else ("swim_up", "swim_down") + POSES[1:]:
         if pose not in d.get("poses", {}):
             found.append(f"{path.name}: missing pose {pose}")
+    if d.get("next") and not (path.parent / f"{d['next']}.json").exists():
+        found.append(f"{path.name}: \"next\" is {d['next']!r}, and there's no {d['next']}.json to evolve into")
+    if d.get("symmetric"):
+        for i in mirror_breaks(base):
+            found.append(f"{path.name}: row {i} is no longer a mirror image (\"symmetric\": true)")
+    if not d.get("lone_pixels"):
+        for r, c in lone(base):
+            found.append(f"{path.name}: lone pixel at row {r}, column {c} (on purpose? add \"lone_pixels\": true)")
     zr, zc = d.get("particles", (0, 13))
     if zc + 3 > len(base[0]) or any(base[2 * zr + i][zc + j] != "." for i in (0, 1) for j in range(3)):
         found.append(f"{path.name}: particles spot (row {zr}, column {zc}) must be 3 empty cells")
@@ -148,39 +178,25 @@ STAGES = {
 
 
 
-# Pets whose first stage is another animal: the sprite of each stage.
-FORMS = {
-    "bat": ("mouseling", "bat", "vampire"),
-    "frog": ("tadpole", "frog", "toad"),
-    "fox": ("fennec", "fox", "kitsune"),
-    "owl": ("pygmy_owl", "barn_owl", "owl"),
-    "turtle": ("hatchling", "turtle", "sea_turtle"),
-    "mushroom": ("spore", "mushroom", "blob"),
-    "octopus": ("octopito", "octopus", "kraken"),
-    "sofa": ("beanbag", "sofa", "throne"),
-    "dragon": ("dragon_egg", "dragon", "great_dragon"),
-    "snake": ("snakelet", "snake", "basilisk"),
-    "ghost": ("spirit", "wisp", "ghost"),
-    "spider": ("spiderling", "spider", "tarantula"),
-    "ant": ("ant", "soldier_ant", "queen_ant"),
-    "axolotl": ("larva", "axolotl", "xolotl"),
-    "gremlin": ("gremlin", "goblin", "orc"),
-    "snail": ("slug", "snail", "gary"),
-    "squirrel": ("squirrel", "chipmunk", "flying_squirrel"),
-    "beaver": ("kit", "beaver", "platypus"),
-    "pigeon": ("squab", "pigeon", "messenger"),
-    "hedgehog": ("hoglet", "hedgehog", "porcupine"),
-    "bee": ("brood", "bee", "queen_bee"),
-    "cat": ("hacker_cat",),
-    "slime": ("droplet", "slime", "leaf_slime", "fire_slime", "rock_slime", "ice_slime", "cat_slime", "thunder_slime", "king_slime"),
-    "mole": ("molekin", "mole", "mole_king"),
-    "whale": ("calf", "whale", "leviathan"),
-    "meerkat": ("pup", "meerkat", "sentinel"),
-    "leopard": ("snow_cub", "snow_leopard", "mountain_ghost"),
-    "duck": ("duckling", "duck", "white_duck", "mandarin_duck"),
-    "spark": ("sparklings", "spark", "ember", "candle", "lantern", "torch", "campfire", "beacon", "blaze", "phoenix"),
-    "packet": ("bit", "byte", "packet", "datagram", "socket", "relay", "router", "uplink", "satellite", "constellation"),
+# Each pet's first form. The sprite files link each form to the next (`"next"`): the last form has none.
+FIRST_FORM = {
+    "bat": "mouseling", "frog": "tadpole", "fox": "fennec", "owl": "pygmy_owl", "turtle": "hatchling",
+    "mushroom": "spore", "octopus": "octopito", "sofa": "beanbag", "dragon": "dragon_egg", "snake": "snakelet",
+    "ghost": "spirit", "spider": "spiderling", "ant": "ant", "axolotl": "larva", "gremlin": "gremlin",
+    "snail": "slug", "squirrel": "squirrel", "beaver": "kit", "pigeon": "squab", "hedgehog": "hoglet",
+    "bee": "brood", "cat": "hacker_cat", "slime": "droplet", "mole": "molekin", "whale": "calf",
+    "meerkat": "pup", "leopard": "snow_cub", "duck": "duckling", "spark": "sparklings", "packet": "bit"
 }
+
+
+def forms(pet_id):
+    """The sprite ids of a pet's forms, in order (one for a pet that never evolves)."""
+    return FORMS.get(pet_id, (pet_id,))
+
+
+def can_evolve(pet_id):
+    """A pet (by its id) that has more than one form."""
+    return PETS[forms(pet_id)[0]].can_evolve
 
 
 def form(pet_id, stage):
@@ -190,12 +206,8 @@ def form(pet_id, stage):
 
 # Starters: chosen once, they level up with every 5 achievements and take a new shape at the levels
 # of STARTER_LEVELS (one per form). Forms are added as their art is drawn (see doc/PLAN.md).
-STARTERS = {
-    "star": ("stardust", "meteor", "comet", "moon", "planet", "star", "red_giant"),
-    "sprout": ("seedling", "sprout", "grass", "flower", "fern", "bush", "tree"),
-    "pebble": ("sand_grain", "gravel", "pebble", "stone", "golem", "crystal", "jade_golem"),
-}
-STARTER_LEVELS = {line: (1, 3, 5, 8, 11, 15, 20) for line in STARTERS}
+STARTER_FIRST = {"star": "stardust", "sprout": "seedling", "pebble": "sand_grain"}     # then the "next" links
+STARTER_LEVELS = {line: (1, 3, 5, 8, 11, 15, 20) for line in STARTER_FIRST}
 FORM_NAMES = {"stardust": "Stardust", "meteor": "Meteor", "comet": "Comet", "moon": "Moon", "planet": "Planet",
               "star": "Star", "red_giant": "Red giant",
               "seedling": "Seedling", "sprout": "Sprout", "grass": "Grass", "flower": "Flower", "fern": "Fern",
@@ -210,6 +222,20 @@ STARTER_BLURBS = {
 
 PETS = {path.stem: load(path) for path in sorted(ART.glob("*.json"))}
 LARGE = {path.stem: load(path) for path in sorted((ART / "large").glob("*.json"))}   # `bashou config size large`
+
+
+def chain(first):
+    """The forms from `first`, following each sprite's "next" link to the last form."""
+    out = [first]
+    while PETS[out[-1]].next:
+        if PETS[out[-1]].next in out:
+            raise ValueError(f"{out[-1]}.json: \"next\" loops back to {PETS[out[-1]].next}")
+        out.append(PETS[out[-1]].next)
+    return tuple(out)
+
+
+FORMS = {pet: chain(first) for pet, first in FIRST_FORM.items()}          # pet -> the sprite of each stage
+STARTERS = {line: chain(first) for line, first in STARTER_FIRST.items()}
 
 
 def get(pet_id, size="small"):

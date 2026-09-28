@@ -1,6 +1,6 @@
 import unittest
 
-from bashou import creatures, render
+from bashou import creatures, duel, render
 from bashou.creatures import ROSTER, STAGES
 
 
@@ -58,24 +58,28 @@ class CreaturesTest(unittest.TestCase):
         self.assertIs(creatures.get("fox", "large"), creatures.PETS["fox"])
 
     def test_roster_has_stage_names(self):
-        from bashou.creatures import SECRET
-        self.assertEqual(len([p for p, _ in ROSTER if p not in SECRET]), 29)
         self.assertEqual({p for p, _ in ROSTER}, set(STAGES))
 
-
-# Symmetric designs (their outline, not their highlights). A one-pixel slip broke the Droplet, the
-# Orc's tusk and the Snakelet (owner's bug report): they must stay mirror images.
-SYMMETRIC = ["barn_owl", "basilisk", "bat", "beanbag", "brood", "dragon_egg", "droplet", "goblin", "gremlin", "ice_slime",
-             "king_slime", "kitsune", "kraken", "molekin", "octopito", "orc", "planet", "porcupine", "pup",
-             "snakelet", "spider", "spiderling", "spirit", "star", "throne", "vampire"]
+    def test_every_sprite_is_a_form_of_one_pet(self):
+        """Each sprite links to the form it evolves into ("next"): following the links from each first form
+        reaches every sprite exactly once, and a last form has no link."""
+        chains = list(creatures.FORMS.values()) + list(creatures.STARTERS.values())
+        sprites = [s for chain in chains for s in chain]
+        self.assertEqual(sorted(sprites), sorted(creatures.PETS))
+        for chain in chains:
+            self.assertFalse(creatures.PETS[chain[-1]].can_evolve, chain)
+            self.assertTrue(all(creatures.PETS[s].can_evolve for s in chain[:-1]), chain)
+        for pet, forms in creatures.FORMS.items():
+            self.assertEqual(creatures.can_evolve(pet), len(forms) > 1, pet)
 
 
 class SymmetryTest(unittest.TestCase):
     def test_symmetric_sprites_stay_symmetric(self):
-        for pet_id in SYMMETRIC:
-            for i, row in enumerate(creatures.PETS[pet_id].base):
-                shape = "".join("." if k == "." else "x" for k in row)
-                self.assertEqual(shape, shape[::-1], f"{pet_id} row {i}: {row}")
+        """A one-pixel slip broke the Droplet, the Orc's tusk and the Snakelet (owner's bug report): a sprite
+        whose file says "symmetric" must stay a mirror image."""
+        for pet in [*creatures.PETS.values(), *creatures.LARGE.values()]:
+            if pet.symmetric:
+                self.assertEqual(creatures.mirror_breaks(pet.base), [], pet.id)
 
 
 class MovingPetTest(unittest.TestCase):
@@ -90,27 +94,14 @@ class MovingPetTest(unittest.TestCase):
                 self.assertEqual(len(grains), 1, f"{poses}: {grains}")
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
-# Pets whose lone pixels are on purpose: sparkles, spores, bubbles, gill tips, a stray grain.
-LONE_ON_PURPOSE = {"axolotl", "bit", "mountain_ghost", "platypus", "queen_bee", "sand_grain", "sparklings", "spore",
-                   "stardust", "thunder_slime", "xolotl"}
-
-
 class LonePixelTest(unittest.TestCase):
     def test_no_stray_pixel(self):
-        """The Ember had a lost pixel at its top right (owner's report, 0.6.0): a pixel touching no other."""
-        import json
-        from pathlib import Path
-        for path in sorted((Path(__file__).resolve().parent.parent / "bashou/pets").glob("*.json")):
-            if path.stem in LONE_ON_PURPOSE:
-                continue
-            base = json.loads(path.read_text())["base"]
-            h, w = len(base), len(base[0])
-            for r in range(h):
-                for c in range(w):
-                    if base[r][c] != "." and all(base[r + dr][c + dc] == "." for dr in (-1, 0, 1) for dc in (-1, 0, 1)
-                                                 if (dr or dc) and 0 <= r + dr < h and 0 <= c + dc < w):
-                        self.fail(f"{path.stem}: lone pixel at row {r}, column {c}")
+        """The Ember had a lost pixel at its top right (owner's report, 0.6.0): a pixel touching no other,
+        unless the sprite's file says its lone pixels are on purpose (sparkles, spores, bubbles)."""
+        for pet in [*creatures.PETS.values(), *creatures.LARGE.values(), *map(creatures.load, sorted(duel.ENEMIES.glob("*.json")))]:
+            if not pet.lone_pixels:
+                self.assertEqual(creatures.lone(pet.base), [], pet.id)
+
+
+if __name__ == "__main__":
+    unittest.main()

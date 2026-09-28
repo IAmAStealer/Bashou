@@ -50,29 +50,23 @@ class EveryPetEvolvesTest(unittest.TestCase):
 
     @mock.patch("bashou.which.installed", return_value=True)
     def test_every_pet(self, _):
-        for pet in progress.STAGES:
-            if pet in progress.COMMAND_LADDER:
-                continue
+        for pet in creatures.NAMES:
             with self.subTest(pet=pet):
                 s = state.default()
                 s["starter"], s["pets"] = "star", [pet]
-                forms = creatures.FORMS.get(pet, (pet,) * 3)
-                family = achievements.family(pet)
-                reached = self.walk(pet, forms, s, [lambda a=a: progress.check(s, [a]) for a in family])
-                if family:
-                    self.assertEqual(reached[-1], len(forms), pet)       # the whole family: the last form
-
-    def test_every_command_ladder(self):
-        for pet, counts in progress.COMMAND_LADDER.items():
-            with self.subTest(pet=pet):
-                s = state.default()
-                s["starter"], s["pets"] = "star", [pet]
-
-                def step(n):
-                    s["commands"] = n
-                    return progress.check(s)
-                reached = self.walk(pet, creatures.FORMS[pet], s, [lambda n=n: step(n) for n in counts])
-                self.assertEqual(reached[-1], len(creatures.FORMS[pet]))
+                if pet in progress.COMMAND_LADDER:                       # the Slime: your command count
+                    def step(n):
+                        s["commands"] = n
+                        return progress.check(s)
+                    steps = [lambda n=n: step(n) for n in progress.COMMAND_LADDER[pet]]
+                else:                                                   # the others: their achievements
+                    steps = [lambda a=a: progress.check(s, [a]) for a in achievements.family(pet)]
+                reached = self.walk(pet, creatures.forms(pet), s, steps)
+                if creatures.can_evolve(pet):
+                    self.assertTrue(steps, f"{pet} has forms but nothing makes it evolve")
+                    self.assertEqual(reached[-1], len(creatures.forms(pet)), pet)   # all earned: the last form
+                else:
+                    self.assertEqual(set(reached), {1}, pet)
 
     def test_every_starter_line(self):
         needed = progress.ACHIEVEMENTS_PER_LEVEL * (progress.MAX_LEVEL - 1)

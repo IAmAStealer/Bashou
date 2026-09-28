@@ -1,5 +1,7 @@
 {
  "name": "Pup",
+ "next": "meerkat",
+ "symmetric": true,
  "palette": {
   "a": "#6e5032",
   "o": "#c8a06e",

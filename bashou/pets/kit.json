@@ -1,5 +1,6 @@
 {
  "name": "Kit",
+ "next": "beaver",
  "palette": {
   "a": "#462d1e",
   "o": "#96643c",

@@ -1,5 +1,6 @@
 {
  "name": "Soldier ant",
+ "next": "queen_ant",
  "palette": {
   "a": "#5a1e1a",
   "o": "#a83a30",

@@ -1,5 +1,6 @@
 {
  "name": "Blaze",
+ "next": "phoenix",
  "palette": {
   "o": "#f08030",
   "w": "#ffd070",

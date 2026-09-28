@@ -1,5 +1,7 @@
 {
  "name": "Packet",
+ "next": "datagram",
+ "symmetric": true,
  "palette": {
   "n": "#1c2a4a",
   "m": "#191919",

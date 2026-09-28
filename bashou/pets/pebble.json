@@ -1,5 +1,6 @@
 {
  "name": "Pebble",
+ "next": "stone",
  "palette": {
   "a": "#555a64",
   "o": "#8c919b",

@@ -1,5 +1,7 @@
 {
  "name": "Sparklings",
+ "next": "spark",
+ "lone_pixels": true,
  "palette": {
   "o": "#f08030",
   "w": "#ffd070",

@@ -1,5 +1,6 @@
 {
  "name": "Throne",
+ "symmetric": true,
  "palette": {
   "a": "#6e4a10",
   "g": "#e8b830",

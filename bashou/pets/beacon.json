@@ -1,5 +1,7 @@
 {
  "name": "Beacon",
+ "next": "blaze",
+ "symmetric": true,
  "palette": {
   "o": "#f08030",
   "w": "#ffd070",

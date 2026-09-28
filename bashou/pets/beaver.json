@@ -1,5 +1,6 @@
 {
  "name": "Beaver",
+ "next": "platypus",
  "palette": {
   "a": "#462d1e",
   "o": "#96643c",

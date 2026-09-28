@@ -1,5 +1,6 @@
 {
  "name": "Meteor",
+ "next": "comet",
  "palette": {
   "h": "#3a2c22",
   "e": "#6b5240",

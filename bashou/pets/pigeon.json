@@ -1,5 +1,6 @@
 {
  "name": "Pigeon",
+ "next": "messenger",
  "palette": {
   "a": "#464b5f",
   "o": "#9196aa",

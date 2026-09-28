@@ -1,5 +1,6 @@
 {
  "name": "Duckling",
+ "next": "duck",
  "palette": {
   "k": "#8a6a20",
   "y": "#ffe066",

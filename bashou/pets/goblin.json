@@ -1,5 +1,7 @@
 {
  "name": "Goblin",
+ "next": "orc",
+ "symmetric": true,
  "palette": {
   "E": "#5a8a3a",
   "g": "#7aa84a",

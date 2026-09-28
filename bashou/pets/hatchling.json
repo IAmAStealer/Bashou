@@ -1,5 +1,6 @@
 {
  "name": "Hatchling",
+ "next": "turtle",
  "palette": {
   "S": "#78552d",
   "h": "#af8246",

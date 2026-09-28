@@ -1,5 +1,7 @@
 {
  "name": "Thunder slime",
+ "next": "king_slime",
+ "lone_pixels": true,
  "palette": {
   "m": "#191919",
   "a": "#2e3440",

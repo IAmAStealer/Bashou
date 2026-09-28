@@ -1,5 +1,6 @@
 {
  "name": "Wisp",
+ "next": "ghost",
  "palette": {
   "a": "#1e4a8a",
   "b": "#3aa0f0",

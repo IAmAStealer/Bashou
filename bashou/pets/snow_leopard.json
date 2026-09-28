@@ -1,5 +1,6 @@
 {
  "name": "Snow leopard",
+ "next": "mountain_ghost",
  "palette": {
   "a": "#5b6070",
   "o": "#d7dbe3",

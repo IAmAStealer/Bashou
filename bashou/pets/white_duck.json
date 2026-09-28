@@ -1,5 +1,6 @@
 {
  "name": "White duck",
+ "next": "mandarin_duck",
  "palette": {
   "k": "#4a4d57",
   "w": "#f8f8f4",

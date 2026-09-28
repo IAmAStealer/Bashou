@@ -1,5 +1,7 @@
 {
  "name": "Torch",
+ "next": "campfire",
+ "symmetric": true,
  "palette": {
   "o": "#f08030",
   "w": "#ffd070",

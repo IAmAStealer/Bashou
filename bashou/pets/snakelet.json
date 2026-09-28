@@ -1,5 +1,7 @@
 {
  "name": "Snakelet",
+ "next": "snake",
+ "symmetric": true,
  "palette": {
   "a": "#326e32",
   "o": "#78be50",

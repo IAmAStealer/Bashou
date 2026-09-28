@@ -1,5 +1,6 @@
 {
  "name": "Hacker cat",
+ "symmetric": true,
  "palette": {
   "a": "#14121a",
   "k": "#2a2730",

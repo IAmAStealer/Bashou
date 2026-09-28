@@ -1,5 +1,6 @@
 {
  "name": "Grass",
+ "next": "flower",
  "palette": {
   "g": "#50a04b",
   "L": "#96d26e"

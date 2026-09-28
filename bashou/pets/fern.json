@@ -1,5 +1,7 @@
 {
  "name": "Fern",
+ "next": "bush",
+ "symmetric": true,
  "palette": {
   "g": "#2f6e2a",
   "L": "#50a04b",

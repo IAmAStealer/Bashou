@@ -1,5 +1,7 @@
 {
  "name": "Bat",
+ "next": "vampire",
+ "symmetric": true,
  "palette": {
   "a": "#5a4b78",
   "o": "#8c78b4",

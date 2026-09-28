@@ -1,5 +1,6 @@
 {
  "name": "Vampire",
+ "symmetric": true,
  "palette": {
   "a": "#3a2c48",
   "o": "#54426a",

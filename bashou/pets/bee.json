@@ -1,5 +1,6 @@
 {
  "name": "Bee",
+ "next": "queen_bee",
  "palette": {
   "a": "#32281e",
   "o": "#fac83c",

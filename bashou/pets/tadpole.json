@@ -1,5 +1,6 @@
 {
  "name": "Tadpole",
+ "next": "frog",
  "palette": {
   "a": "#284830",
   "o": "#4e7048",

@@ -1,5 +1,6 @@
 {
  "name": "Kraken",
+ "symmetric": true,
  "palette": {
   "a": "#3a1f4a",
   "o": "#7a3a8a",

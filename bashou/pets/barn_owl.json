@@ -1,5 +1,7 @@
 {
  "name": "Barn owl",
+ "next": "owl",
+ "symmetric": true,
  "palette": {
   "a": "#7a5634",
   "o": "#d8a868",

@@ -1,5 +1,7 @@
 {
  "name": "Spider",
+ "next": "tarantula",
+ "symmetric": true,
  "palette": {
   "a": "#8c73b9",
   "o": "#5f4882",

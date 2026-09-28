@@ -1,5 +1,7 @@
 {
  "name": "Spore",
+ "next": "mushroom",
+ "lone_pixels": true,
  "palette": {
   "a": "#b89a70",
   "c": "#f5e8cd",

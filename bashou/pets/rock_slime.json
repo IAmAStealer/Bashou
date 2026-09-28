@@ -1,5 +1,6 @@
 {
  "name": "Rock slime",
+ "next": "ice_slime",
  "palette": {
   "a": "#3c3a38",
   "o": "#8e8a82",

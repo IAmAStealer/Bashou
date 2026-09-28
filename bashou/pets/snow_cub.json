@@ -1,5 +1,6 @@
 {
  "name": "Snow cub",
+ "next": "snow_leopard",
  "palette": {
   "a": "#5b6070",
   "o": "#d7dbe3",

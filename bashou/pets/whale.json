@@ -1,5 +1,6 @@
 {
  "name": "Whale",
+ "next": "leviathan",
  "palette": {
   "a": "#234678",
   "o": "#508cd2",

@@ -1,5 +1,7 @@
 {
  "name": "Molekin",
+ "next": "mole",
+ "symmetric": true,
  "palette": {
   "a": "#503c37",
   "o": "#7d645a",

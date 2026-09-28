@@ -1,5 +1,6 @@
 {
  "name": "Mountain ghost",
+ "lone_pixels": true,
  "palette": {
   "a": "#4f5d7e",
   "o": "#dde7f6",

@@ -1,5 +1,6 @@
 {
  "name": "Slime",
+ "next": "leaf_slime",
  "palette": {
   "a": "#329682",
   "o": "#6ed7b9",

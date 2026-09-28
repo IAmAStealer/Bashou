@@ -1,5 +1,6 @@
 {
  "name": "NXDomain Nixie",
+ "lone_pixels": true,
  "palette": {
   "a": "#1a3a6a",
   "o": "#5aa0e0",

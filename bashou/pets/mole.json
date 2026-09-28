@@ -1,5 +1,6 @@
 {
  "name": "Mole",
+ "next": "mole_king",
  "palette": {
   "a": "#503c37",
   "o": "#7d645a",

@@ -1,5 +1,6 @@
 {
  "name": "Flower",
+ "next": "fern",
  "palette": {
   "a": "#8c5f37",
   "o": "#cd9b64",

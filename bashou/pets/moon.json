@@ -1,5 +1,7 @@
 {
  "name": "Moon",
+ "next": "planet",
+ "symmetric": true,
  "palette": {
   "h": "#4a4a52",
   "e": "#7e7e88",

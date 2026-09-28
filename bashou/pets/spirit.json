@@ -1,5 +1,7 @@
 {
  "name": "Spirit",
+ "next": "wisp",
+ "symmetric": true,
  "palette": {
   "a": "#2e3650",
   "b": "#56628a",
