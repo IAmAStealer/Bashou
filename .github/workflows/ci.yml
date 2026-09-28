@@ -87,11 +87,35 @@ jobs:
           su - tester -c "cd ~/bashou && python3 tools/package.py build v0.0.0 dist"   # git refuses root in the runner's checkout
           dnf install -y -q /home/tester/bashou/dist/*.rpm
           su - tester -c "bashou on && bashou version"
+          su - tester -c "cd ~/bashou && BASHOU_INSTALLED=1 python3 -m unittest -v tests.test_installed"
           dnf remove -y -q bashou
+          test ! -e /etc/profile.d/bashou.sh
+
+  # Debian 12: the .deb installed with apt, every command run from it, and a login shell whose ~/.bashrc
+  # loads an old git copy moved to the package (Debian reads profile.d in login shells only).
+  debian:
+    runs-on: ubuntu-latest
+    container:
+      image: debian:12
+      options: --init
+    steps:
+      - name: Tools
+        run: apt-get update -qq && apt-get install -y -qq --no-install-recommends python3 git procps ca-certificates
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - name: The .deb installs and runs
+        run: |
+          useradd -m -s /bin/bash tester
+          cp -r . /home/tester/bashou && chown -R tester:tester /home/tester/bashou
+          su - tester -c "cd ~/bashou && python3 tools/package.py build v0.0.0 dist"
+          apt-get install -y -qq /home/tester/bashou/dist/*.deb
+          su - tester -c "bashou on && bashou version"
+          su - tester -c "cd ~/bashou && BASHOU_INSTALLED=1 python3 -m unittest -v tests.test_installed"
+          apt-get remove -y -qq bashou
+          test ! -e /etc/profile.d/bashou.sh
 
   # A commit on main with a line "release: v1.2.3" becomes that release once every check passed.
   release:
-    needs: [tests, security, rocky]
+    needs: [tests, security, rocky, debian]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
