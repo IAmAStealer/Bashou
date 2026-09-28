@@ -8,6 +8,7 @@
 _bashou_pkg=${BASHOU_PACKAGE_LOADER:-/usr/share/bashou/bashou.bash}
 if [[ -z $BASHOU_KEEP_CLONE && -r $_bashou_pkg && $(readlink -f "$_bashou_pkg") != "$(readlink -f "${BASH_SOURCE[0]}")" ]]; then
   unset _bashou_pkg
+  # shellcheck source=bashou.bash
   source "${BASHOU_PACKAGE_LOADER:-/usr/share/bashou/bashou.bash}"
   return
 fi
