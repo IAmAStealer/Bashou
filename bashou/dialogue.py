@@ -80,8 +80,8 @@ def hint(state, pet, rng):
     todo = todo or [a for a in achievements.usable() if a.id not in earned and not a.state]
     if not todo:
         return None
-    easiest = min(map(achievements.difficulty, todo))
-    a = rng.choice([a for a in todo if achievements.difficulty(a) == easiest])
+    easiest = min(a.level for a in todo)
+    a = rng.choice([a for a in todo if a.level == easiest])
     example = EXAMPLES.get(a.id)
     if example:
         return _("Try `{example}` (achv: {name})").format(example=example.replace(chr(10), " ⏎ "), name=_(a.name))

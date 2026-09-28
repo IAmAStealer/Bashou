@@ -68,6 +68,7 @@ class Achievement:
     state: Optional[Callable] = None
     needs: tuple = ()           # commands it needs (any one); hidden when none is installed
     hidden: bool = False        # a secret: never listed or hinted before you earn it
+    level: int = 2              # how hard it is to learn: 1 easy, 2 medium, 3 hard (hints suggest the easiest first)
 
     def available(self):
         return not self.needs or any(map(which.installed, self.needs))
@@ -155,7 +156,7 @@ ALL = [
 
     # Frog: volume
     A("sprinter", "frog", "Sprinter", "run 100 commands in one day", state=lambda s: s["today"]["count"] >= 100),
-    A("historian", "frog", "Historian", "look back with `history`", cmd=lambda c: bool(c.args("history"))),
+    A("historian", "frog", "Historian", "look back with `history`", cmd=lambda c: bool(c.args("history")), level=1),
     A("thousand", "frog", "Thousand", "run 1,000 commands", state=lambda s: s["commands"] >= 1000),
 
     # Turtle: regularity
@@ -164,45 +165,45 @@ ALL = [
     A("year", "turtle", "Year", "365 active days", state=lambda s: len(s["days"]) >= 365),
 
     # Mushroom: loops
-    A("loop", "mushroom", "Loop", "write a `for` loop", cmd=lambda c: bool(re.search(r"(^|[;&|(\s])for\s", c.line))),
+    A("loop", "mushroom", "Loop", "write a `for` loop", cmd=lambda c: bool(re.search(r"(^|[;&|(\s])for\s", c.line)), level=1),
     A("reader", "mushroom", "Reader", "read lines with `while read`", cmd=lambda c: bool(re.search(r"while\s+(IFS=\S*\s+)?read\b", c.line))),
-    A("ranges", "mushroom", "Ranges", "count with `seq` or `{1..10}`", cmd=lambda c: bool(c.args("seq")) or bool(re.search(r"\{\d+\.\.\d+", c.line))),
+    A("ranges", "mushroom", "Ranges", "count with `seq` or `{1..10}`", cmd=lambda c: bool(c.args("seq")) or bool(re.search(r"\{\d+\.\.\d+", c.line)), level=1),
 
     # Slime: substitutions
-    A("capture", "mushroom", "Capture", "capture output with `$( )`", cmd=lambda c: "subst" in c.analysis.constructs),
-    A("nested", "mushroom", "Nested", "nest `$( $( ) )`", cmd=lambda c: nested_subst(c.line)),
-    A("substitute", "mushroom", "Substitute", "use a process substitution `<( )`", cmd=lambda c: "procsub" in c.analysis.constructs),
+    A("capture", "mushroom", "Capture", "capture output with `$( )`", cmd=lambda c: "subst" in c.analysis.constructs, level=1),
+    A("nested", "mushroom", "Nested", "nest `$( $( ) )`", cmd=lambda c: nested_subst(c.line), level=3),
+    A("substitute", "mushroom", "Substitute", "use a process substitution `<( )`", cmd=lambda c: "procsub" in c.analysis.constructs, level=3),
     A("here", "mushroom", "Here", "feed a heredoc `<<EOF`", cmd=lambda c: "heredoc" in c.analysis.constructs),
 
     # Living sofa: sort and uniq
-    A("tally", "sofa", "Tally", "count duplicates with `uniq -c`", cmd=lambda c: c.flag("uniq", "c", ("--count",))),
+    A("tally", "sofa", "Tally", "count duplicates with `uniq -c`", cmd=lambda c: c.flag("uniq", "c", ("--count",)), level=1),
     A("ranking", "sofa", "Ranking", "sort numbers in reverse with `sort -rn`", cmd=lambda c: c.flag("sort", "n") and c.flag("sort", "r")),
-    A("unique", "sofa", "Unique", "deduplicate with `sort -u`", cmd=lambda c: c.flag("sort", "u", ("--unique",))),
+    A("unique", "sofa", "Unique", "deduplicate with `sort -u`", cmd=lambda c: c.flag("sort", "u", ("--unique",)), level=1),
 
     # Octopus: pipes
-    A("plumber", "octopus", "Plumber", "chain 3 commands with pipes", cmd=lambda c: c.analysis.pipes >= 3),
+    A("plumber", "octopus", "Plumber", "chain 3 commands with pipes", cmd=lambda c: c.analysis.pipes >= 3, level=1),
     A("pipeline", "octopus", "Pipeline", "chain 5 commands with pipes", cmd=lambda c: c.analysis.pipes >= 5),
     A("tee_time", "octopus", "Tee time", "split a stream with `tee`", cmd=lambda c: "tee" in c.analysis.constructs),
     A("merge", "octopus", "Merge", "send stderr into the pipe with `2>&1`", cmd=lambda c: "stderr" in c.analysis.constructs),
 
     # Gremlin: shows up after risky commands, and evolves as you learn safe habits
     A("inspector", "gremlin", "Inspector", "read a script before running it: `less install.sh`",
-      cmd=lambda c: c.arg(("less", "more", "cat", "head", "bat", "view", "vim", "nano"), r"\.sh$")),
+      cmd=lambda c: c.arg(("less", "more", "cat", "head", "bat", "view", "vim", "nano"), r"\.sh$"), level=1),
     A("checksum", "gremlin", "Checksum", "check a download with `sha256sum`",
-      cmd=lambda c: bool(c.args("sha256sum", "sha512sum", "shasum", "b2sum")) or c.arg("gpg", r"^--verify$")),
+      cmd=lambda c: bool(c.args("sha256sum", "sha512sum", "shasum", "b2sum")) or c.arg("gpg", r"^--verify$"), level=1),
     A("save_first", "gremlin", "Save first", "download to a file with `curl -o` or `wget`, not into a shell",
       cmd=lambda c: (c.flag("curl", "oO", ("--output", "--remote-name")) or bool(c.args("wget")))
       and not safety.risk(c.line)),
     A("tight", "gremlin", "Tight", "set careful permissions: `chmod u+x` or `chmod 600`",
-      cmd=lambda c: c.arg("chmod", r"^(0?[67][0-5][0-5]|u\+r?w?x|go?-r?w?x?|o-r?w?x?)$")),
+      cmd=lambda c: c.arg("chmod", r"^(0?[67][0-5][0-5]|u\+r?w?x|go?-r?w?x?|o-r?w?x?)$"), level=1),
     A("first_flag", "gremlin", "First flag", "solve a security challenge: `bashou arena security`",
       state=lambda s: len(s.get("security", [])) >= 1),
     A("investigator", "gremlin", "Investigator", "solve 6 security challenges",
       state=lambda s: len(s.get("security", [])) >= 6),
 
     # Snail: bashou adventure (and the file basics its chests teach)
-    A("builder", "snail", "Builder", "create nested folders with `mkdir -p`", cmd=lambda c: c.flag("mkdir", "p", ("--parents",))),
-    A("copycat", "snail", "Copycat", "copy a folder with `cp -r`", cmd=lambda c: c.flag("cp", "rRa", ("--recursive", "--archive"))),
+    A("builder", "snail", "Builder", "create nested folders with `mkdir -p`", cmd=lambda c: c.flag("mkdir", "p", ("--parents",)), level=1),
+    A("copycat", "snail", "Copycat", "copy a folder with `cp -r`", cmd=lambda c: c.flag("cp", "rRa", ("--recursive", "--archive")), level=1),
     A("shortcut", "snail", "Shortcut", "make a symbolic link with `ln -s`", cmd=lambda c: c.flag("ln", "s", ("--symbolic",))),
     A("first_steps", "snail", "First steps", "walk 100 m in `bashou adventure`",
       state=lambda s: adv(s).get("walked", 0) >= 100),
@@ -223,52 +224,52 @@ ALL = [
     # Fox: find
     A("time_traveller", "fox", "Time traveller", "find by date: `-mtime`, `-mmin` or `-newer`", cmd=lambda c: c.arg("find", r"^-(mtime|mmin|newer|atime|ctime)$")),
     A("executor", "fox", "Executor", "act on results with `find -exec`", cmd=lambda c: c.arg("find", r"^-(exec|execdir|ok)$")),
-    A("pruner", "fox", "Pruner", "skip a directory with `-prune`", cmd=lambda c: c.arg("find", r"^-prune$")),
+    A("pruner", "fox", "Pruner", "skip a directory with `-prune`", cmd=lambda c: c.arg("find", r"^-prune$"), level=3),
     A("tracker", "fox", "Tracker", "use find 100 times", state=lambda s: tool(s, "find") >= 100),
 
     # Owl: awk
     A("field_reader", "owl", "Field reader", "set a separator with `awk -F`", cmd=lambda c: c.arg(("awk", "gawk", "mawk"), r"^-F")),
-    A("accountant", "owl", "Accountant", "sum a column and print it in `END`", cmd=lambda c: c.arg(("awk", "gawk", "mawk"), r"\+=.*END|END.*\+=|\+=[\s\S]*END")),
-    A("scribe", "owl", "Scribe", "format output with `printf` in awk", cmd=lambda c: c.arg(("awk", "gawk", "mawk"), r"printf")),
+    A("accountant", "owl", "Accountant", "sum a column and print it in `END`", cmd=lambda c: c.arg(("awk", "gawk", "mawk"), r"\+=.*END|END.*\+=|\+=[\s\S]*END"), level=3),
+    A("scribe", "owl", "Scribe", "format output with `printf` in awk", cmd=lambda c: c.arg(("awk", "gawk", "mawk"), r"printf"), level=3),
     A("sage", "owl", "Sage", "use awk 100 times", state=lambda s: tool(s, "awk", "gawk", "mawk") >= 100),
 
     # Mole: grep
-    A("digger", "mole", "Digger", "search a tree with `grep -r`", cmd=lambda c: c.flag(("grep",), "rR", ("--recursive",))),
+    A("digger", "mole", "Digger", "search a tree with `grep -r`", cmd=lambda c: c.flag(("grep",), "rR", ("--recursive",)), level=1),
     A("regex", "mole", "Regex", "use extended regexes: `grep -E`", cmd=lambda c: c.flag(("grep",), "EP", ("--extended-regexp", "--perl-regexp")) or bool(c.args("egrep"))),
     A("context", "mole", "Context", "show lines around matches with `-A`, `-B` or `-C`", cmd=lambda c: c.flag(("grep",), "ABC", ("--context", "--after-context", "--before-context"))),
     A("miner", "mole", "Miner", "use grep 250 times", state=lambda s: tool(s, "grep", "egrep", "fgrep", "rg") >= 250),
 
     # Snake: sed
     A("in_place", "snake", "In place", "edit a file with `sed -i`", cmd=lambda c: c.flag("sed", "i", ("--in-place",))),
-    A("global", "snake", "Global", "replace every match: `s/…/…/g`", cmd=lambda c: c.arg("sed", r"s(.).*\1.*\1[a-zA-Z]*g")),
+    A("global", "snake", "Global", "replace every match: `s/…/…/g`", cmd=lambda c: c.arg("sed", r"s(.).*\1.*\1[a-zA-Z]*g"), level=1),
     A("printer", "snake", "Printer", "print chosen lines with `sed -n …p`", cmd=lambda c: c.flag("sed", "n") and c.arg("sed", r"p$")),
 
     # Ghost: processes
-    A("census", "ghost", "Census", "list every process: `ps aux` or `ps -ef`", cmd=lambda c: c.arg("ps", r"^(aux|-ef|-e|ax|-A)$")),
+    A("census", "ghost", "Census", "list every process: `ps aux` or `ps -ef`", cmd=lambda c: c.arg("ps", r"^(aux|-ef|-e|ax|-A)$"), level=1),
     A("seeker", "ghost", "Seeker", "find a process by name with `pgrep`", cmd=lambda c: bool(c.args("pgrep"))),
     A("signal", "ghost", "Signal", "send a named signal: `kill -TERM`, `-HUP`…", cmd=lambda c: c.arg(("kill", "pkill", "killall"), r"^-(s$|[A-Z]{3,}|SIG)")),
 
     # Spider: strace
-    A("filter", "spider", "Filter", "trace only some calls with `strace -e`", cmd=lambda c: c.flag("strace", "e")),
-    A("follow", "spider", "Follow", "follow child processes with `strace -f`", cmd=lambda c: c.flag("strace", "f")),
-    A("summary", "spider", "Summary", "count syscalls with `strace -c`", cmd=lambda c: c.flag("strace", "c")),
+    A("filter", "spider", "Filter", "trace only some calls with `strace -e`", cmd=lambda c: c.flag("strace", "e"), level=3),
+    A("follow", "spider", "Follow", "follow child processes with `strace -f`", cmd=lambda c: c.flag("strace", "f"), level=3),
+    A("summary", "spider", "Summary", "count syscalls with `strace -c`", cmd=lambda c: c.flag("strace", "c"), level=3),
 
     # Ant: xargs
     A("placeholder", "ant", "Placeholder", "place arguments with `xargs -I{}`", cmd=lambda c: c.arg("xargs", r"^-I")),
-    A("parallel", "ant", "Parallel", "run jobs in parallel with `xargs -P`", cmd=lambda c: c.arg("xargs", r"^-P")),
-    A("null", "ant", "Null", "handle odd file names: `-print0 | xargs -0`", cmd=lambda c: c.flag("xargs", "0", ("--null",))),
+    A("parallel", "ant", "Parallel", "run jobs in parallel with `xargs -P`", cmd=lambda c: c.arg("xargs", r"^-P"), level=3),
+    A("null", "ant", "Null", "handle odd file names: `-print0 | xargs -0`", cmd=lambda c: c.flag("xargs", "0", ("--null",)), level=3),
 
     # Axolotl: jq
     # Beaver: git
     A("brancher", "beaver", "Brancher", "start a branch with `git switch -c`",
       cmd=lambda c: c.sub("git", "switch", "-c", "-C", "--create") or c.sub("git", "checkout", "-b", "-B")),
-    A("stasher", "beaver", "Stasher", "put work aside with `git stash`", cmd=lambda c: c.sub("git", "stash")),
+    A("stasher", "beaver", "Stasher", "put work aside with `git stash`", cmd=lambda c: c.sub("git", "stash"), level=1),
     A("grapher", "beaver", "Grapher", "draw the history with `git log --graph`", cmd=lambda c: c.sub("git", "log", "--graph")),
-    A("bisector", "beaver", "Bisector", "hunt the commit that broke it with `git bisect`", cmd=lambda c: c.sub("git", "bisect")),
+    A("bisector", "beaver", "Bisector", "hunt the commit that broke it with `git bisect`", cmd=lambda c: c.sub("git", "bisect"), level=3),
 
     # Squirrel: archives
     A("packer", "squirrel", "Packer", "pack a folder with `tar -czf`", cmd=lambda c: c.tar("c", "z") or c.tar("c", "J")),
-    A("peeker", "squirrel", "Peeker", "look inside an archive with `tar -tf`", cmd=lambda c: c.tar("t")),
+    A("peeker", "squirrel", "Peeker", "look inside an archive with `tar -tf`", cmd=lambda c: c.tar("t"), level=1),
     A("unpacker", "squirrel", "Unpacker", "extract into a folder with `tar -xf … -C dir`",
       cmd=lambda c: c.tar("x") and c.arg("tar", r"^(-C|--directory)")),
     A("squeezer", "squirrel", "Squeezer", "compress harder with `xz` or `zstd`",
@@ -276,17 +277,17 @@ ALL = [
 
     # Pigeon: network
     A("headers", "pigeon", "Headers", "see only the headers with `curl -I`", cmd=lambda c: c.flag("curl", "I", ("--head",)),
-      needs=("curl",)),
+      needs=("curl",), level=1),
     A("poster", "pigeon", "Poster", "send data with `curl -d`",
       cmd=lambda c: c.flag("curl", "d", ("--data", "--data-raw", "--json")), needs=("curl",)),
     A("tunneler", "pigeon", "Tunneler", "forward a port with `ssh -L`, or jump with `ssh -J`",
-      cmd=lambda c: c.flag("ssh", "LRJ"), needs=("ssh",)),
+      cmd=lambda c: c.flag("ssh", "LRJ"), needs=("ssh",), level=3),
     A("mirror", "pigeon", "Mirror", "sync folders with `rsync -a`", cmd=lambda c: c.flag("rsync", "a", ("--archive",)),
       needs=("rsync",)),
     A("resolver", "pigeon", "Resolver", "ask DNS with `dig +short`", cmd=lambda c: c.arg("dig", r"^(\+short|@.)"),
       needs=("dig",)),
     A("tracer", "pigeon", "Tracer", "follow a name from the root with `dig +trace`", cmd=lambda c: c.arg("dig", r"^\+trace$"),
-      needs=("dig",)),
+      needs=("dig",), level=3),
 
     # Packet: the network, from an address to a packet on the wire
     A("interfaces", "packet", "Interfaces", "list your addresses with `ip -br addr`",
@@ -314,52 +315,52 @@ ALL = [
     A("net_fighter", "packet", "On the wire", "win a network fight: `bashou fight`", state=lambda s: won_network(s)),
 
     # Hedgehog: permissions
-    A("octal", "hedgehog", "Octal", "set a mode in numbers: `chmod 644`", cmd=lambda c: c.arg("chmod", r"^0?[0-7]{3}$")),
+    A("octal", "hedgehog", "Octal", "set a mode in numbers: `chmod 644`", cmd=lambda c: c.arg("chmod", r"^0?[0-7]{3}$"), level=1),
     A("symbolic", "hedgehog", "Symbolic", "add or remove a right: `chmod g+w`", cmd=lambda c: c.arg("chmod", r"^[ugoa]+[-+=][rwxXst]+$")),
     A("owner", "hedgehog", "Owner", "change the owner with `chown user:group`", cmd=lambda c: c.arg("chown", r"^[\w.$-]+:[\w.$-]*$")),
     A("mode_reader", "hedgehog", "Mode reader", "read a file's mode with `stat -c %a`", cmd=lambda c: c.arg("stat", r"%a")),
 
     # Bee: systemd
-    A("status", "bee", "Status", "check a service with `systemctl status`", cmd=lambda c: c.sub("systemctl", "status")),
+    A("status", "bee", "Status", "check a service with `systemctl status`", cmd=lambda c: c.sub("systemctl", "status"), level=1),
     A("logbook", "bee", "Logbook", "read a service's logs with `journalctl -u`",
       cmd=lambda c: c.flag("journalctl", "u", ("--unit",)), needs=("journalctl",)),
     A("enabler", "bee", "Enabler", "start a service now and at boot: `systemctl enable --now`",
       cmd=lambda c: c.sub("systemctl", "enable", "--now")),
-    A("reload", "bee", "Reload", "after editing a unit file: `systemctl daemon-reload`", cmd=lambda c: c.sub("systemctl", "daemon-reload")),
+    A("reload", "bee", "Reload", "after editing a unit file: `systemctl daemon-reload`", cmd=lambda c: c.sub("systemctl", "daemon-reload"), level=3),
 
     # Whale: kubectl
-    A("pods", "whale", "Pods", "list every pod with `kubectl get pods -A`", cmd=lambda c: c.sub("kubectl", "get", "-A", "--all-namespaces")),
+    A("pods", "whale", "Pods", "list every pod with `kubectl get pods -A`", cmd=lambda c: c.sub("kubectl", "get", "-A", "--all-namespaces"), level=1),
     A("describer", "whale", "Describer", "see why a pod is stuck with `kubectl describe`", cmd=lambda c: c.sub("kubectl", "describe")),
     A("tailer", "whale", "Tailer", "follow a pod's logs with `kubectl logs -f`",
       cmd=lambda c: c.sub("kubectl", "logs") and c.flag("kubectl", "f", ("--follow",))),
     A("diver", "whale", "Diver", "open a shell in a pod with `kubectl exec -it`",
-      cmd=lambda c: c.sub("kubectl", "exec") and c.flag("kubectl", "i") and c.flag("kubectl", "t")),
+      cmd=lambda c: c.sub("kubectl", "exec") and c.flag("kubectl", "i") and c.flag("kubectl", "t"), level=3),
 
     # Meerkat: watching the system
-    A("disk", "meerkat", "Disk", "see free space with `df -h`", cmd=lambda c: c.flag("df", "h", ("--human-readable",))),
+    A("disk", "meerkat", "Disk", "see free space with `df -h`", cmd=lambda c: c.flag("df", "h", ("--human-readable",)), level=1),
     A("sizer", "meerkat", "Sizer", "size a folder with `du -sh`", cmd=lambda c: c.flag("du", "s") and c.flag("du", "h")),
     A("memory", "meerkat", "Memory", "check the memory with `free -h`", cmd=lambda c: c.flag("free", "h"), needs=("free",)),
     A("watcher", "meerkat", "Watcher", "rerun a command every few seconds with `watch -n`",
       cmd=lambda c: c.flag("watch", "n", ("--interval",)), needs=("watch",)),
 
     # Duck: debugging, like the rubber duck you explain your code to (owner: "ducks are awesome")
-    A("quack", "duck", "Quack", "explain a command to your duck: `bashou learn <command>`", cmd=lambda c: c.sub("bashou", "learn")),
+    A("quack", "duck", "Quack", "explain a command to your duck: `bashou learn <command>`", cmd=lambda c: c.sub("bashou", "learn"), level=1),
     A("xray", "duck", "X-ray", "watch a script run line by line with `bash -x`", cmd=lambda c: c.flag("bash", "x")),
     A("dry_run", "duck", "Dry run", "check a script's syntax without running it: `bash -n`", cmd=lambda c: c.flag("bash", "n")),
     A("exit_code", "duck", "Exit code", "check how the last command ended: `echo $?`",
-      cmd=lambda c: "$?" in c.line and bool(c.args("echo", "printf"))),
+      cmd=lambda c: "$?" in c.line and bool(c.args("echo", "printf")), level=1),
     A("linter", "duck", "Linter", "find bugs before they bite with `shellcheck`", cmd=lambda c: bool(c.args("shellcheck")),
       needs=("shellcheck",)),
 
     # Snow leopard: secrets (gpg, pass). Never hidden when gpg or pass is missing: the pets invite you to install them.
     A("sealed", "leopard", "Sealed", "encrypt a file with `gpg -c` (a passphrase) or `gpg -e` (a key)",
-      cmd=lambda c: c.flag(("gpg", "gpg2"), "ce", ("--symmetric", "--encrypt"))),
+      cmd=lambda c: c.flag(("gpg", "gpg2"), "ce", ("--symmetric", "--encrypt")), level=1),
     A("keymaker", "leopard", "Keymaker", "make your own key pair with `gpg --full-generate-key`",
-      cmd=lambda c: c.arg(("gpg", "gpg2"), r"^--(full-gen|gen|quick-gen|full-generate|generate|quick-generate)-key$")),
+      cmd=lambda c: c.arg(("gpg", "gpg2"), r"^--(full-gen|gen|quick-gen|full-generate|generate|quick-generate)-key$"), level=3),
     A("vault", "leopard", "Vault", "start a password store with `pass init`", cmd=lambda c: c.sub("pass", "init")),
     A("generator", "leopard", "Generator", "let `pass generate` make a strong password", cmd=lambda c: c.sub("pass", "generate")),
     A("keeper", "leopard", "Keeper", "hand a password to a command with `$(pass show …)`, never in clear",
-      cmd=lambda c: c.sub("pass", "show") and "subst" in c.analysis.constructs),
+      cmd=lambda c: c.sub("pass", "show") and "subst" in c.analysis.constructs, level=3),
 
     # Spark: the Sage Owl's library. Owner: fire, for the Library of Alexandria that burned, and for the books
     # still destroyed today; what you learn, nobody can burn. Ten forms, the Phoenix when the family is complete.
@@ -380,7 +381,7 @@ ALL = [
 
     A("raw", "axolotl", "Raw", "print raw strings with `jq -r`", cmd=lambda c: c.flag("jq", "r", ("--raw-output",))),
     A("selector", "axolotl", "Selector", "filter with `select()`", cmd=lambda c: c.arg("jq", r"select\(")),
-    A("mapper", "axolotl", "Mapper", "transform arrays with `map()`", cmd=lambda c: c.arg("jq", r"map\(")),
+    A("mapper", "axolotl", "Mapper", "transform arrays with `map()`", cmd=lambda c: c.arg("jq", r"map\("), level=3),
 ]
 
 # Secret achievements: security tools. Nothing announces them; they just pop up, and the first one
@@ -400,7 +401,7 @@ SECRET = [
     A("reverser", "cat", "Reverser", "take a binary apart", hidden=True,
       cmd=_uses("ghidra", "ghidraRun", "radare2", "r2", "rizin", "jadx", "retdec-decompiler", "ida", "cutter",
                 "apktool", "dnSpy")),
-    A("net_mapper", "cat", "Mapper", "scan a network with `nmap`", hidden=True, cmd=_uses("nmap", "masscan", "zmap", "rustscan")),
+    A("net_mapper", "cat", "Mapper", "scan a network with `nmap`", hidden=True, cmd=_uses("nmap", "masscan", "zmap", "rustscan"), level=3),
     A("web_scanner", "cat", "Web scanner", "scan a site with `nikto`", hidden=True,
       cmd=_uses("nikto", "wpscan", "nuclei", "whatweb", "zaproxy")),
     A("wardriver", "cat", "Wardriver", "listen to Wi-Fi with the aircrack suite", hidden=True,
@@ -423,17 +424,6 @@ for _a in ALL:                                   # a family's commands: in its f
 BY_ID = {a.id: a for a in ALL}
 
 
-# How hard an achievement is to learn: hints suggest the easiest ones left first.
-EASY = {"builder", "copycat", "historian", "loop", "ranges", "capture", "tally", "unique", "plumber", "inspector", "checksum",
-        "tight", "digger", "census", "global", "stasher", "peeker", "headers", "octal", "status",
-        "pods", "disk", "sealed", "quack", "exit_code"}
-HARD = {"nested", "substitute", "pruner", "scribe", "accountant", "parallel", "null", "mapper", "follow",
-        "summary", "filter", "bisector", "tunneler", "reload", "diver", "tracer", "keymaker", "keeper"}
-
-
-def difficulty(a):
-    """1 easy, 2 medium, 3 hard."""
-    return 1 if a.id in EASY else 3 if a.id in HARD else 2
 
 
 def adv(state):
