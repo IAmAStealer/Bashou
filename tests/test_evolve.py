@@ -20,8 +20,8 @@ def shape(sprite, stage):
 
 
 # Forms that only change color, until they're redrawn. User report: "it says it's evolving, yet nothing
-# evolves" (the Crystal golem's last evolution, at level 20).
-RECOLORS = {("crystal", "jade_golem")}
+# evolves" (the Jade golem was a green Crystal golem, redrawn as a jade pendant).
+RECOLORS = set()
 
 
 class EveryPetEvolvesTest(unittest.TestCase):

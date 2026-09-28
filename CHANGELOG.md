@@ -3,6 +3,12 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.6.4 — 2026-09-28
+
+- The Pebble's last evolution, at level 20, really changes your pet now: the Jade golem was only a
+  green Crystal golem, so it said it was evolving and looked the same. It's now a carved jade pendant
+  with a grinning face, hanging from its cord.
+
 ## v0.6.3 — 2026-09-28
 
 - If you installed the apt or dnf package but your `~/.bashrc` still loaded an old git copy of Bashou,

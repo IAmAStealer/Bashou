@@ -1,45 +1,53 @@
 {
  "name": "Jade golem",
+ "symmetric": true,
  "palette": {
-  "a": "#1e4a36",
-  "o": "#2f7a56",
-  "m": "#0a1f16",
-  "p": "#a8e8c0",
-  "n": "#123326",
-  "c": "#6ee8a8",
-  "C": "#d0ffe0"
+  "a": "#4a3222",
+  "o": "#3f9a6a",
+  "d": "#27694a",
+  "l": "#7fd0a0",
+  "C": "#e4fff0",
+  "m": "#2b1c14",
+  "w": "#eef2e0",
+  "r": "#c9a26a",
+  "R": "#8f6c3e",
+  "b": "#34c47a"
  },
  "base": [
-  "C......c......C..",
-  "cC...aCcCa...Cc..",
-  "cc..aoooooa..cc..",
-  ".a.aoooooooa.a...",
-  "ac.aomooomoa.ca..",
-  "aCaaoooooooaaCa..",
-  "aooaoponopoaooa..",
-  "aooaoooooooaooa..",
-  ".a.aoooooooa.a...",
-  "...aoocccooa.....",
-  "...aoaaaaaoa.....",
-  "..aaa.....aaa...."
+  ".rrr.........rrr.",
+  "....rrrRRRrrr....",
+  "...aaaabCbaaaa...",
+  "...alddoooddoa...",
+  "...aldmCodmCoa...",
+  "...aldmmodmmoa...",
+  "...aoddoCoddoa...",
+  "...aoodddddooa...",
+  "...aodmmmmmdoa...",
+  "...aodwmwmwdoa...",
+  "...aoodddddooa...",
+  "...aaaaaaaaaaa..."
  ],
  "poses": {
-  "inhale": {},
+  "inhale": {
+   "2": "-------CbC-------"
+  },
   "closed": {
-   "4": "-----o---o-------"
+   "4": "------oo--oo-----",
+   "5": "------dd--dd-----"
   },
   "left": {
-   "4": "----mo--mo-------"
+   "4": "------Cm--Cm-----"
   },
   "right": {
-   "4": "-----om--om------"
+   "4": "-------m---m-----",
+   "5": "-------C---C-----"
   },
   "fidget": {
-   "9": "------CcC--------"
+   "9": "------mwmwm------"
   }
  },
  "particles": [
-  0,
-  10
+  5,
+  14
  ]
 }
