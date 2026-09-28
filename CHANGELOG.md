@@ -17,6 +17,9 @@ Every release has a section here, written for players. CI refuses to tag a relea
   and the Spark's **Scholar**, and the Axolotl's and a secret **Mapper**. Using `jq 'map(...)'` could
   bring the secret Hacker cat without finding any secret. Each now counts on its own. A Hacker cat you
   already have stays.
+- For contributors: a new pet, or a new form, is now only JSON files. Each pet has a family file (name,
+  place on the board, how it's unlocked, what it says), and each form names the form it evolves into and
+  what it takes. The tests check every pet from these files (see `doc/contributing/pixel-art.md`).
 
 ## v0.6.3 — 2026-09-28
 
