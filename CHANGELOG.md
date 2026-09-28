@@ -3,7 +3,7 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
-## v0.6.3 — 2026-09-26
+## v0.6.3 — 2026-09-28
 
 - If you installed the apt or dnf package but your `~/.bashrc` still loaded an old git copy of Bashou,
   your terminal kept running that old copy, which the package manager never updates (so `bashou share`
@@ -15,8 +15,10 @@ Every release has a section here, written for players. CI refuses to tag a relea
   top of the screen, and when you scrolled up, a long output like `--help` had holes where they had
   been. Now Bashou moves those top lines up (where scrolling finds them, untouched) before drawing the
   pet, and removes the empty space again when your next command starts. Terminals that can't say
-  where the cursor is keep the old behavior, and so do terminals opened
-  before the update.
+  where the cursor is keep the old behavior. The fight panel in the arena makes room the same way, and
+  pressing Enter on an empty line no longer stacks copies of the pet one under the other.
+- In a terminal opened before this update, the pet can't make room yet: it tells you once to open a
+  new terminal (or type `exec bash`) instead of drawing over your text.
 - The Bat's night achievement is now called **Night shift** (it was "Night owl", and players looked for
   an Owl to unlock). Every achievement note now says which pet family it grows: "🏆 Night shift (Bat
   family): …".
