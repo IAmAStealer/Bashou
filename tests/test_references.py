@@ -135,6 +135,8 @@ class TablesTest(unittest.TestCase):
         self.assertIn_all([c for c, _n in progress.CONSTRUCT_PETS.values()], progress.CONSTRUCT_NAMES, "constructs")
         for pet, names in progress.TOOL_LABELS.items():
             self.assertIn_all(names, progress.TOOL_PETS[pet][0], pet)
+        by_fight = {ch.pet for ch in challenges.ALL}                         # every pet comes some way
+        self.assertEqual([p for p in roster if p not in by_fight and not progress.how_to_unlock(state.default(), p)], [])
         self.assertIn_all([a.family for a in achievements.ALL if getattr(a, "family", None)],
                           roster | set(creatures.STARTERS), "achievement families")
 
@@ -142,6 +144,8 @@ class TablesTest(unittest.TestCase):
         voices = set(creatures.NAMES) | set(creatures.STARTERS)
         for table in (dialogue.VOICE, dialogue.TIPS, dialogue.PERSONAL, dialogue.TRAITS):
             self.assertIn_all(table, voices | set(achievements.BY_ID), sorted(table)[:3])
+        for table in (dialogue.VOICE, dialogue.TIPS, dialogue.PERSONAL):       # a new pet comes with its lines
+            self.assertIn_all(voices, table, sorted(table)[:3])
         self.assertIn_all(dialogue.INVITES, {"adventure", "security", "lesson", "rust", "gpg", "pass", "sqlite3"}, "INVITES")    # modes, and tools to install
         self.assertIn_all(dialogue.EXAMPLES, achievements.BY_ID, "EXAMPLES")
         tools = {t for ch in challenges.ALL for t in ch.tools} | {"|"}
@@ -231,19 +235,20 @@ class DrawEverythingTest(TempState):
                 self.assertTrue(set("".join(rows)) - {"."} <= set(palette), (kind, topic))
 
     def test_every_sprite_in_every_look(self):
+        most = max(len(forms) for forms in list(creatures.FORMS.values()) + list(creatures.STARTERS.values()))
         for pet in list(creatures.PETS.values()) + list(creatures.LARGE.values()):
-            for look in (1, 2, 3):
+            for look in range(1, most + 1):                               # a 10-form pet draws look 10
                 self.assertEqual(len(render.lines(pet, [], render.mask(pet), look)), len(pet.base) // 2)
 
     def test_every_evolution_scene(self):
         from bashou import evolve
         s = state.load()
-        s["starter"] = "star"
-        for who in ["starter"] + list(creatures.NAMES):
-            if len(creatures.FORMS.get(who, ())) < 3:                  # a secret pet has one form only
-                continue
-            for a, b in ((1, 2), (2, 3)):
-                self.assertTrue(evolve.scenes(s, {"who": who, "from": a, "to": b}), who)
+        lines = [("starter", line, forms) for line, forms in creatures.STARTERS.items()]
+        for who, line, forms in lines + [(pet, "star", forms) for pet, forms in creatures.FORMS.items()]:
+            s["starter"] = line
+            for a in range(1, len(forms)):                                 # every step, and skipped forms too
+                for b in range(a + 1, len(forms) + 1):
+                    self.assertTrue(evolve.scenes(s, {"who": who, "from": a, "to": b}), (who, line, a, b))
 
 
 class ScreenshotTest(unittest.TestCase):

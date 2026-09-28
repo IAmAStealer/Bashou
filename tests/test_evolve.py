@@ -1,8 +1,9 @@
 import contextlib
 import io
 import unittest
+from unittest import mock
 
-from bashou import achievements, evolve, progress, state
+from bashou import achievements, creatures, evolve, progress, render, state
 from tests.test_regressions import TempState
 
 
@@ -11,6 +12,82 @@ def evolving_stardust():
     s["starter"], s["achievements"] = "star", [f"a{i}" for i in range(9)]
     progress.check(s, achievements.ALL[:1])                              # the 10th: level 3, the Meteor
     return s
+
+
+def shape(sprite, stage):
+    """The pixels a form draws, colors aside: an evolution must change more than the colors."""
+    return render.grid(creatures.get(sprite), [], stage)
+
+
+# Forms that only change color, until they're redrawn. User report: "it says it's evolving, yet nothing
+# evolves" (the Crystal golem's last evolution, at level 20).
+RECOLORS = {("crystal", "jade_golem")}
+
+
+class EveryPetEvolvesTest(unittest.TestCase):
+    """Every pet and starter line, from the lists: a new pet is checked without touching this test."""
+
+    def queued(self, s, who):
+        return [e for e in s["evolving"] if e["who"] == who]
+
+    def walk(self, who, forms, s, steps):
+        """Run each step (it earns something), watch every evolution it queues. Returns the forms reached."""
+        reached = [progress.reached(s, who)]
+        for step in steps:
+            notes = step()
+            evolving = [n for n in notes if "is evolving" in n]
+            for e in self.queued(s, who):
+                self.assertGreater(e["to"], e["from"], (who, e))
+                pair = (forms[e["from"] - 1], forms[e["to"] - 1])
+                if pair not in RECOLORS:
+                    self.assertTrue(shape(pair[0], e["from"]) != shape(pair[1], e["to"]), f"{who}: {pair} only changes color")
+                self.assertTrue(evolving, (who, e))                     # a queued evolution is announced
+                progress.watched(s, who)
+                self.assertEqual(progress.current(s, who)[0], pair[1])  # and shown once watched
+            reached.append(progress.reached(s, who))
+        self.assertEqual(reached, sorted(reached), who)                 # never goes back
+        return reached
+
+    @mock.patch("bashou.which.installed", return_value=True)
+    def test_every_pet(self, _):
+        for pet in progress.STAGES:
+            if pet in progress.COMMAND_LADDER:
+                continue
+            with self.subTest(pet=pet):
+                s = state.default()
+                s["starter"], s["pets"] = "star", [pet]
+                forms = creatures.FORMS.get(pet, (pet,) * 3)
+                family = achievements.family(pet)
+                reached = self.walk(pet, forms, s, [lambda a=a: progress.check(s, [a]) for a in family])
+                if family:
+                    self.assertEqual(reached[-1], len(forms), pet)       # the whole family: the last form
+
+    def test_every_command_ladder(self):
+        for pet, counts in progress.COMMAND_LADDER.items():
+            with self.subTest(pet=pet):
+                s = state.default()
+                s["starter"], s["pets"] = "star", [pet]
+
+                def step(n):
+                    s["commands"] = n
+                    return progress.check(s)
+                reached = self.walk(pet, creatures.FORMS[pet], s, [lambda n=n: step(n) for n in counts])
+                self.assertEqual(reached[-1], len(creatures.FORMS[pet]))
+
+    def test_every_starter_line(self):
+        needed = progress.ACHIEVEMENTS_PER_LEVEL * (progress.MAX_LEVEL - 1)
+        ids = [achievements.A(f"test{i}", "cat", "", "") for i in range(needed)]
+        for line, forms in creatures.STARTERS.items():
+            with self.subTest(line=line):
+                s = state.default()
+                s["starter"] = line
+                reached = self.walk("starter", forms, s, [lambda a=a: progress.check(s, [a]) for a in ids])
+                self.assertEqual(reached[-1], len(forms))
+
+    def test_recolors_are_still_recolors(self):
+        """Once one is redrawn, take it out of RECOLORS so the check covers it again."""
+        for old, new in RECOLORS:
+            self.assertEqual(shape(old, 1), shape(new, 1), (old, new))
 
 
 class AnimationTest(unittest.TestCase):
