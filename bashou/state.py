@@ -148,14 +148,17 @@ def recover(text):
 
 
 def migrate(state):
-    """Old saves: the cat in the collection became the starter, and the cat starter became the star."""
+    """Old saves: the cat in the collection became the starter, and the cat starter became the star.
+    Since then the Hacker cat is a secret pet: a save that found a secret keeps it (it was removed at every
+    load, and "New pet: Hacker cat!" came back after each command)."""
+    from .achievements import secrets
     if state["starter"] is None and "cat" in state["pets"]:
         state["starter"] = "star"
     if state["starter"] == "cat":
         state["starter"] = "star"
-    if "cat" in state["pets"]:
+    if "cat" in state["pets"] and not secrets(state):
         state["pets"].remove("cat")
-    if state["active"] == "cat":
+    if state["active"] == "cat" and "cat" not in state["pets"]:
         state["active"] = "starter"
     if "starter_best" not in state:
         migrate_ladder(state)

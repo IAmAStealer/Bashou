@@ -165,6 +165,29 @@ class SizeTest(TempState):
         self.assertIs(pet.pet, creatures.PETS["fox"])
 
 
+class SecretCatTest(TempState):
+    """Found while testing every pet: loading a save removed the Hacker cat (an old-save migration from when
+    the cat was a starter), so every command said "New pet: Hacker cat!" again."""
+
+    def test_the_secret_cat_stays(self):
+        from bashou import progress
+        notes = []
+        for i in range(3):
+            with state.locked() as s:
+                s["starter"] = "star"
+                if i == 0:
+                    s["achievements"].append("auditor")                     # a secret: the cat comes
+                notes += [n for n in progress.check(s) if "Hacker cat" in n]
+        self.assertEqual(len(notes), 1)
+        self.assertIn("cat", state.load()["pets"])
+
+    def test_an_old_collection_cat_still_goes(self):
+        with state.locked() as s:
+            s.update(pets=["cat", "fox"], active="cat", starter=None)
+        s = state.load()
+        self.assertEqual((s["pets"], s["active"], s["starter"]), (["fox"], "starter", "star"))
+
+
 class OldLoaderTest(TempState):
     """Owner, 2026-09-26: after the update that makes room for the pet, open terminals (still running
     the old bashou.bash, which never writes room.<pid>) showed no pet at all."""
