@@ -1,0 +1,20 @@
+{
+ "name": "Spark",
+ "first": "sparklings",
+ "order": 28,
+ "unlock": {
+  "achievement": "kindling",
+  "how": "read a lesson to the end: bashou lesson"
+ },
+ "voice": "*crackle*",
+ "tips": [
+  "`bashou lesson` : the owl's library. Green means it's your next step.",
+  "A lesson read once is a spark. Practice it, and it becomes a fire.",
+  "Locked lessons say what opens them. Look at the list, then go and do it."
+ ],
+ "personal": [
+  "The Library of Alexandria burned. What you learn, nobody can burn.",
+  "Books still get destroyed today. Keep what they teach where no fire can reach it: in your head.",
+  "From the ashes, a phoenix. From a mistake, a lesson."
+ ]
+}

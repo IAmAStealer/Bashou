@@ -1,0 +1,17 @@
+{
+ "starter": true,
+ "order": 2,
+ "first": "seedling",
+ "blurb": "Calm and patient. Grows scripts from tiny seeds.",
+ "voice": "*rustle*",
+ "tips": [
+  "Start scripts with `#!/usr/bin/env bash`.",
+  "`set -euo pipefail` stops a script on errors.",
+  "`chmod +x script.sh` makes it runnable.",
+  "Functions: greet() { echo \"hi $1\"; }",
+  "`bash -x script.sh` shows each line as it runs."
+ ],
+ "personal": [
+  "Water me with commands."
+ ]
+}

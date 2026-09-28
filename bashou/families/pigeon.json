@@ -1,0 +1,33 @@
+{
+ "name": "Pigeon",
+ "first": "squab",
+ "order": 21,
+ "unlock": {
+  "tools": [
+   "curl",
+   "dig",
+   "host",
+   "nslookup",
+   "rsync",
+   "scp",
+   "ssh",
+   "wget"
+  ],
+  "uses": 10,
+  "label": [
+   "curl",
+   "ssh",
+   "dig"
+  ]
+ },
+ "voice": "Coo.",
+ "tips": [
+  "curl -I url : just the headers.",
+  "curl -sS url : quiet, but still shows errors.",
+  "rsync -av src/ dst/ : copies only what changed.",
+  "ssh -L 8080:localhost:80 host : a tunnel."
+ ],
+ "personal": [
+  "I always find my way home. Even through a tunnel."
+ ]
+}

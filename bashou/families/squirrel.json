@@ -1,0 +1,31 @@
+{
+ "name": "Squirrel",
+ "first": "squirrel",
+ "order": 20,
+ "unlock": {
+  "tools": [
+   "gunzip",
+   "gzip",
+   "tar",
+   "unzip",
+   "xz",
+   "zip",
+   "zstd"
+  ],
+  "uses": 10,
+  "label": [
+   "tar",
+   "gzip"
+  ]
+ },
+ "voice": "*chitter*",
+ "tips": [
+  "tar -czf backup.tgz dir/ packs a folder.",
+  "tar -tf a.tgz lists it without unpacking.",
+  "tar -xf a.tgz -C /tmp unpacks somewhere else.",
+  "`gzip -k file` keeps the original."
+ ],
+ "personal": [
+  "I pack everything for winter."
+ ]
+}

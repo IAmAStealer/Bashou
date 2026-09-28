@@ -1,0 +1,20 @@
+{
+ "name": "Gremlin",
+ "first": "gremlin",
+ "order": 17,
+ "unlock": {
+  "construct": "risky",
+  "count": 5
+ },
+ "voice": "Hehehe.",
+ "tips": [
+  "Before running a script from the web: download, read, then run.",
+  "`sha256sum file` shows a checksum: compare it with the one on the website.",
+  "`chmod u+x script.sh` is enough to run it. No need for 777.",
+  "`ls -l` shows who can read, write and run each file.",
+  "Want to play detective? `bashou arena security` has small investigations."
+ ],
+ "personal": [
+  "Run it! What could go wrong? …Just kidding. Read it first."
+ ]
+}

@@ -1,0 +1,23 @@
+{
+ "name": "Hacker cat",
+ "first": "hacker_cat",
+ "order": 30,
+ "secret": true,
+ "unlock": {
+  "secret_found": true,
+  "how": "???"
+ },
+ "voice": "*purr*",
+ "tips": [
+  "Only test what you're allowed to test. Written permission, always.",
+  "Read the man page before the exploit.",
+  "Keep your notes: half of security is notes.",
+  "`nmap -sV host` tells you what's listening, and what version.",
+  "A lab at home beats someone else's server."
+ ],
+ "personal": [
+  "I saw what you ran. Your secret is safe with me.",
+  "Curiosity, with permission.",
+  "Nice tools. Mind the scope."
+ ]
+}

@@ -8,66 +8,49 @@ from . import creatures
 from .creatures import STARTERS
 from .i18n import _
 
-# Total commands run -> pet unlocked. The Slime then grows with your command count (its forms' "next_at").
-MILESTONES = [(10, "slime")]
-
-# Pet -> (tools that count, successful uses needed).
-TOOL_PETS = {
-    "fox": ({"find"}, 10),
-    "owl": ({"awk", "gawk", "mawk"}, 10),
-    "mole": ({"grep", "egrep", "fgrep", "rg"}, 10),
-    "snake": ({"sed"}, 10),
-    "ghost": ({"ps", "pgrep", "pkill", "kill", "killall"}, 10),
-    "spider": ({"strace"}, 3),
-    "ant": ({"xargs"}, 10),
-    "axolotl": ({"jq"}, 10),
-    "beaver": ({"git"}, 10),
-    "squirrel": ({"tar", "gzip", "gunzip", "zip", "unzip", "xz", "zstd"}, 10),
-    "pigeon": ({"curl", "wget", "ssh", "scp", "rsync", "dig", "host", "nslookup"}, 10),
-    "hedgehog": ({"chmod", "chown", "chgrp", "umask"}, 10),
-    "packet": ({"ip", "ss", "ping", "getent", "resolvectl", "tracepath", "traceroute", "mtr", "nc", "ncat",
-                "tcpdump"}, 10),
-    "bee": ({"systemctl", "journalctl"}, 10),
-    "whale": ({"kubectl"}, 10),
-    "meerkat": ({"top", "htop", "btop", "free", "df", "du", "watch", "vmstat"}, 10),
-    "leopard": ({"gpg", "gpg2", "gpgv", "pass"}, 5),                    # keeps secrets
-    "bat": ({"python", "python3", "cargo", "rustc", "gcc", "g++", "clang", "make", "cmake", "node", "npm",
-             "go", "javac", "java", "ruby", "perl", "php"}, 10),              # a night coder
-}
-# How the unlock hint names a tool pet's tools (default: the first in alphabetical order).
-# Only the installed ones are named: no `dig` in the hint when dig is missing.
-TOOL_LABELS = {"bat": ("python3", "cargo", "gcc", "make", "node"), "ghost": ("ps", "kill"), "squirrel": ("tar", "gzip"), "pigeon": ("curl", "ssh", "dig"),
-               "hedgehog": ("chmod", "chown"), "bee": ("systemctl",), "meerkat": ("df", "du", "top"),
-               "leopard": ("gpg", "pass"), "packet": ("ip", "ss", "ping")}
-
-
-def tool_label(pet):
-    from .which import installed
-    names = TOOL_LABELS.get(pet) or (min(TOOL_PETS[pet][0]),)
-    return "/".join([n for n in names if installed(n)] or names[:1])
-
-
-# pet: (construct, lines needed); "pipe3" = a line chaining 3+ commands with |
-CONSTRUCT_PETS = {"octopus": ("pipe3", 10), "gremlin": ("risky", 5), "mushroom": ("script", 5)}
 CONSTRUCT_NAMES = {"pipe3": "3-command pipes", "risky": "risky commands", "script": "scripts of your own run"}
 
 
-def adventure(state):
-    return state.get("adventure") or {}
+def tool_label(pet):
+    """How the unlock hint names a tool pet's tools ("label" in its file, or the first in alphabetical
+    order). Only the installed ones are named: no `dig` in the hint when dig is missing."""
+    from .which import installed
+    rule = creatures.FAMILIES[pet].unlock
+    names = rule.get("label") or [min(rule["tools"])]
+    return "/".join([n for n in names if installed(n)] or names[:1])
 
 
-# pet: (rule on the state, how to get it)
-STATE_PETS = {
-    "snail": (lambda s: adventure(s).get("chapters_done", 0) >= 1, "finish chapter 1 of bashou adventure"),
-    "turtle": (lambda s: adventure(s).get("walked", 0) >= 500, "walk 500 m in bashou adventure"),
-    "frog": (lambda s: adventure(s).get("correct", 0) >= 20, "answer 20 questions right in bashou adventure"),
-    "sofa": (lambda s: s.get("fights_lost", 0) >= 1, "lose (or flee) a fight: take a seat"),
-    "dragon": (lambda s: s["fights_won"] >= 1, "win a fight: bashou fight"),
-    "cat": (lambda s: bool(achievements.secrets(s)), "???"),          # a secret finds you
-    "spark": (lambda s: "kindling" in s["achievements"], "read a lesson to the end: bashou lesson"),
-    "duck": (lambda s: bool({a.id for a in achievements.family("duck")} & set(s["achievements"])),
-             "debug like a rubber duck: bashou learn <command>, bash -x or echo $?"),
-}
+def counter(state, path):
+    """A number in the save, by its path: "fights_won", "adventure.walked"."""
+    value = state
+    for key in path.split("."):
+        value = (value or {}).get(key, 0) if isinstance(value, dict) else 0
+    return value or 0
+
+
+def unlock_rule(state, pet):
+    """(met, reason, hint) of a pet's "unlock" rule: whether it comes now, what the 🎉 line says, and what
+    the board shows while it's locked (with where you stand)."""
+    rule = creatures.FAMILIES[pet].unlock
+    if "tools" in rule:
+        now, n = tool_uses(state, rule["tools"]), rule["uses"]
+        return now >= n, f"{n} × {tool_label(pet)}", f"{now}/{n} × {tool_label(pet)}"
+    if "construct" in rule:
+        now, n, what = state["constructs"].get(rule["construct"], 0), rule["count"], _(CONSTRUCT_NAMES[rule["construct"]])
+        return now >= n, f"{n} × " + what, f"{now}/{n} × " + what
+    if "commands" in rule:
+        n = rule["commands"]
+        return (state["commands"] >= n, _("{count} commands").format(count=f"{n:,}"),
+                _("{count} commands").format(count=f"{state['commands']:,}/{n:,}"))
+    if "counter" in rule:
+        met = counter(state, rule["counter"]) >= rule["count"]
+    elif "achievement" in rule:
+        met = rule["achievement"] in state["achievements"]
+    elif "family_achievement" in rule:
+        met = bool({a.id for a in achievements.family(pet)} & set(state["achievements"]))
+    else:                                                  # "secret_found": a secret finds you
+        met = bool(achievements.secrets(state))
+    return met, _(rule["how"]), _(rule["how"])
 
 
 def stars(state, who):
@@ -78,18 +61,7 @@ def stars(state, who):
 
 def how_to_unlock(state, pet):
     """The hint of a locked pet, with where you stand."""
-    if pet in STATE_PETS:
-        return _(STATE_PETS[pet][1])
-    if pet in CONSTRUCT_PETS:
-        construct, needed = CONSTRUCT_PETS[pet]
-        return f"{state['constructs'].get(construct, 0)}/{needed} × " + _(CONSTRUCT_NAMES[construct])
-    for count, milestone in MILESTONES:
-        if pet == milestone:
-            return _("{count} commands").format(count=f"{state['commands']:,}/{count:,}")
-    if pet in TOOL_PETS:
-        tools, needed = TOOL_PETS[pet]
-        return f"{tool_uses(state, tools)}/{needed} × {tool_label(pet)}"
-    return ""
+    return unlock_rule(state, pet)[2]
 
 
 def unlock(state, pet, reason):
@@ -248,18 +220,10 @@ def check(state, earned=()):
             notes.append(f"🏆 {_(a.name)}: {_(a.how)}" if a.hidden else     # a secret doesn't name its pet
                          "🏆 " + _("{name} ({pet} family): {how}").format(
                              name=_(a.name), pet=_(creatures.NAMES[a.pet]), how=_(a.how)))
-    for count, pet in MILESTONES:
-        if state["commands"] >= count:
-            notes += unlock(state, pet, _("{count} commands").format(count=f"{count:,}"))
-    for pet, (construct, needed) in CONSTRUCT_PETS.items():
-        if state["constructs"].get(construct, 0) >= needed:
-            notes += unlock(state, pet, f"{needed} × " + _(CONSTRUCT_NAMES[construct]))
-    for pet, (rule, how) in STATE_PETS.items():
-        if rule(state):
-            notes += unlock(state, pet, _(how))
-    for pet, (tools, needed) in TOOL_PETS.items():
-        if tool_uses(state, tools) >= needed:
-            notes += unlock(state, pet, f"{needed} × {tool_label(pet)}")
+    for pet in creatures.NAMES:
+        met, reason, _hint = unlock_rule(state, pet)
+        if met:
+            notes += unlock(state, pet, reason)
     if state["starter"] and starter_level(state) > level_before:
         now = state["starter_best"] = reached(state, "starter")
         if now > form_before:
@@ -279,8 +243,11 @@ def check(state, earned=()):
 
 
 def next_milestone(state):
-    """(commands, what comes): the Slime, then its next form (a surprise)."""
-    for count, pet in MILESTONES:
+    """(commands, what comes): the pet your command count brings (the Slime), then its next form (a surprise)."""
+    for pet in creatures.NAMES:
+        count = creatures.FAMILIES[pet].unlock.get("commands")
+        if not count:
+            continue
         if state["commands"] < count:
             return count, sprite_of(state, pet, 1)[1]
         for sprite in chain(state, pet):

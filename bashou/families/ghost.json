@@ -1,0 +1,29 @@
+{
+ "name": "Ghost",
+ "first": "spirit",
+ "order": 13,
+ "unlock": {
+  "tools": [
+   "kill",
+   "killall",
+   "pgrep",
+   "pkill",
+   "ps"
+  ],
+  "uses": 10,
+  "label": [
+   "ps",
+   "kill"
+  ]
+ },
+ "voice": "Boo~",
+ "tips": [
+  "ps aux --sort=-%mem | head : memory hogs.",
+  "pgrep -a python lists python processes.",
+  "kill -TERM first; -KILL only as a last resort.",
+  "Ctrl+Z then `bg`: resume a job in background."
+ ],
+ "personal": [
+  "I see every process…"
+ ]
+}

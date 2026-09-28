@@ -12,7 +12,7 @@ import sys
 import zlib
 
 from . import achievements, progress, qr, state
-from .creatures import PETS, ROSTER, STARTERS, owned
+from .creatures import NAMES, PETS, STARTERS, owned
 from . import creatures
 from .i18n import _
 from .repo_setup import SITE
@@ -88,7 +88,7 @@ def page_data():
     fr = i18n.catalog("fr")
     families, sprites = {}, {}
     lines = [(line, list(chain), [PETS[f].name for f in chain]) for line, chain in STARTERS.items()]
-    lines += [(pet, list(creatures.forms(pet)), creatures.names(pet)) for pet, _n in ROSTER]
+    lines += [(pet, list(creatures.forms(pet)), creatures.names(pet)) for pet in NAMES]
     for family, forms, names in lines:
         families[family] = {"forms": forms, "en": names, "fr": [fr.get(n) or n for n in names]}
         for sprite in forms:

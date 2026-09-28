@@ -192,7 +192,7 @@ def pets_shot():
     from bashou import progress
     shown = [(creatures.get(forms[0]), creatures.PETS[forms[0]].name, "starter")
              for forms in creatures.STARTERS.values()]
-    for pet, how in (("slime", f"{progress.MILESTONES[0][0]} commands"), ("bat", "10 × python3…"),
+    for pet, how in (("slime", f"{creatures.FAMILIES['slime'].unlock['commands']} commands"), ("bat", "10 × python3…"),
                      ("mushroom", "5 scripts run")):
         shown.append((creatures.get(creatures.form(pet, 1)), creatures.names(pet)[0], how))
     s = Screen(len(shown) * 19 + 1, 9)

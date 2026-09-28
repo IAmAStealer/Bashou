@@ -1,0 +1,39 @@
+{
+ "name": "Packet",
+ "first": "bit",
+ "order": 29,
+ "unlock": {
+  "tools": [
+   "getent",
+   "ip",
+   "mtr",
+   "nc",
+   "ncat",
+   "ping",
+   "resolvectl",
+   "ss",
+   "tcpdump",
+   "tracepath",
+   "traceroute"
+  ],
+  "uses": 10,
+  "label": [
+   "ip",
+   "ss",
+   "ping"
+  ]
+ },
+ "voice": "*ping*",
+ "tips": [
+  "ip -br addr : your addresses, one line per interface.",
+  "ip route get 1.1.1.1 : which way a packet would go, and nothing is sent.",
+  "ss -tlnp : who is listening, on which port, and which program.",
+  "getent hosts name : what programs really get. dig only asks DNS.",
+  "Refused? The machine answered: nothing listens there. Timed out? Nothing answered at all."
+ ],
+ "personal": [
+  "I'm only a few bytes, but I cross oceans.",
+  "Every hop, someone reads my address and points the way.",
+  "Lost packets get sent again. So can you."
+ ]
+}

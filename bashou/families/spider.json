@@ -1,0 +1,24 @@
+{
+ "name": "Spider",
+ "first": "spiderling",
+ "order": 14,
+ "unlock": {
+  "tools": [
+   "strace"
+  ],
+  "uses": 3
+ },
+ "achievement_needs": [
+  "strace"
+ ],
+ "voice": "*tik-tik*",
+ "tips": [
+  "strace -e trace=openat ls : files it opens.",
+  "strace -c cmd : a syscall summary.",
+  "strace -p PID attaches to a running process.",
+  "strace -f follows child processes."
+ ],
+ "personal": [
+  "I hear every syscall on my web."
+ ]
+}

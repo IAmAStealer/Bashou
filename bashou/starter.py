@@ -8,7 +8,7 @@ import tty
 
 from . import creatures, render, state
 from . import i18n
-from .creatures import PETS, STARTER_BLURBS, STARTERS
+from .creatures import FAMILIES, PETS, STARTERS
 from .i18n import _
 
 ESC = "\x1b"
@@ -34,7 +34,7 @@ def draw(pos, breath):
     for i, col in enumerate(cols):
         for j, l in enumerate(col):
             out.append(f"{ESC}[{len(lines) + j + 1};{2 + i * SLOT}H{l}")
-    blurb = _(STARTER_BLURBS[list(STARTERS)[pos]])
+    blurb = _(FAMILIES[list(STARTERS)[pos]].blurb)
     out.append(f"{ESC}[{len(lines) + len(cols[0]) + 2};1H{blurb}")
     sys.stdout.write("".join(out))
     sys.stdout.flush()

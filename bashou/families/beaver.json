@@ -1,0 +1,24 @@
+{
+ "name": "Beaver",
+ "first": "kit",
+ "order": 19,
+ "unlock": {
+  "tools": [
+   "git"
+  ],
+  "uses": 10
+ },
+ "achievement_needs": [
+  "git"
+ ],
+ "voice": "*chomp*",
+ "tips": [
+  "`git add -p` picks changes piece by piece.",
+  "`git commit --amend` fixes the last commit.",
+  "`git diff --staged` shows what you're about to commit.",
+  "`git restore file` drops your changes."
+ ],
+ "personal": [
+  "Commit often. A dam is built stick by stick."
+ ]
+}

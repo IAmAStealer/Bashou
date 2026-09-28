@@ -1,0 +1,23 @@
+{
+ "name": "Owl",
+ "first": "pygmy_owl",
+ "order": 10,
+ "unlock": {
+  "tools": [
+   "awk",
+   "gawk",
+   "mawk"
+  ],
+  "uses": 10
+ },
+ "voice": "Hoo.",
+ "tips": [
+  "awk '{print $1}' prints the first column.",
+  "awk -F: '{print $1}' /etc/passwd lists users.",
+  "awk 'NR==5' prints line 5.",
+  "awk 'length > 80' finds long lines."
+ ],
+ "personal": [
+  "Every line has fields, if you look closely."
+ ]
+}

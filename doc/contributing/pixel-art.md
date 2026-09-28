@@ -47,7 +47,7 @@ number of rows (the pets are 17 × 12).
 - **`next`** and **`next_at`**: the form it evolves into, and what it takes: `{"achievements": 2}` (that
   many of the pet's family, or all of them if the family is smaller), `{"achievements": "all"}`,
   `{"commands": 100}` (the Slime) or `{"level": 3}` (the starters). A pet's forms are the chain of these
-  links, from its first form (`FIRST_FORM` in `bashou/creatures.py`) to its last, which has neither.
+  links, from its first form (`"first"` in the pet's family file, below) to its last, which has neither.
   A new form is one new file and one link: the board shows one more star, and the tests walk every pet
   through it.
 - **`symmetric`** (optional): `true` when the outline is a mirror image. `check` keeps it one.
@@ -83,6 +83,24 @@ pet (17 × 12, the same poses), facing **left**, toward the pet. The file is nam
 Big threats show only their top part, as if the rest were below the frame (the Log Hydra is three
 heads on long necks). Check with `python3 -m bashou.creatures check`, see one with
 `python3 -m bashou.creatures show ../enemies/grep_hydra`.
+
+### A pet's family: `bashou/families/<pet>.json`
+
+Everything about a pet that isn't a picture lives in one file, named after the pet (`bat.json`), and one
+per starter (`star.json`):
+
+- **`name`**, and **`order`**: its place on the board (starters: in the starter choice).
+- **`first`**: the sprite of its first form; each form's `next` leads to the others.
+- **`unlock`**: how it comes. One of `{"tools": ["find"], "uses": 10}` (successful uses of those
+  commands; `"label"` picks which ones the hint names), `{"construct": "pipe3", "count": 10}`,
+  `{"commands": 10}`, or a rule with a `"how"` sentence for the board: `{"counter": "fights_won",
+  "count": 1}`, `{"achievement": "kindling"}`, `{"family_achievement": true}`, `{"secret_found": true}`.
+- **`voice`**, **`tips`** (3 or more) and **`personal`**: what it says. A starter also has a **`blurb`**.
+- Optional: **`secret`** (not on the board until found), **`needs`** (hidden where that command isn't
+  installed), **`achievement_needs`** (its achievements only count where those commands exist).
+
+`python3 -m bashou.creatures check` checks the family files too, and the tests walk every pet listed
+there: a new pet is a family file and its sprites, with no code to change.
 
 ## 2. Bigger art: PNG files in `art/`
 

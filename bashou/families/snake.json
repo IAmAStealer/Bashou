@@ -1,0 +1,21 @@
+{
+ "name": "Snake",
+ "first": "snakelet",
+ "order": 12,
+ "unlock": {
+  "tools": [
+   "sed"
+  ],
+  "uses": 10
+ },
+ "voice": "Sss…",
+ "tips": [
+  "sed -n '10,20p' prints lines 10 to 20.",
+  "sed -i.bak 's/a/b/g' f keeps a backup.",
+  "sed '/^$/d' removes empty lines.",
+  "sed 's/[[:space:]]*$//' trims trailing spaces."
+ ],
+ "personal": [
+  "I rewrite what I touch."
+ ]
+}

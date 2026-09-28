@@ -1,0 +1,33 @@
+{
+ "name": "Meerkat",
+ "first": "pup",
+ "order": 25,
+ "unlock": {
+  "tools": [
+   "btop",
+   "df",
+   "du",
+   "free",
+   "htop",
+   "top",
+   "vmstat",
+   "watch"
+  ],
+  "uses": 10,
+  "label": [
+   "df",
+   "du",
+   "top"
+  ]
+ },
+ "voice": "*peek*",
+ "tips": [
+  "df -h : how full are the disks?",
+  "du -sh * | sort -h : biggest last.",
+  "free -h : memory at a glance.",
+  "watch -n 2 cmd : rerun it every 2 s."
+ ],
+ "personal": [
+  "I keep watch. Disks, memory, all of it."
+ ]
+}

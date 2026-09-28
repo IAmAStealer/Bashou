@@ -191,7 +191,7 @@ class NoSpoilerTest(unittest.TestCase):
             starter.draw(0, False)
         import re
         from bashou import creatures
-        text = out.getvalue() + " ".join(creatures.STARTER_BLURBS.values())
+        text = out.getvalue() + " ".join(f.blurb for f in creatures.FAMILIES.values())
         for forms in creatures.STARTERS.values():
             for later in forms[1:]:
                 self.assertIsNone(re.search(rf"\b{creatures.PETS[later].name}\b", text, re.I), later)

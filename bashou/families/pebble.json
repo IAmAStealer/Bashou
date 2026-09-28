@@ -1,0 +1,17 @@
+{
+ "starter": true,
+ "order": 3,
+ "first": "sand_grain",
+ "blurb": "Solid and loyal. Knows the filesystem rock by rock.",
+ "voice": "*clack*",
+ "tips": [
+  "`ls -lah` shows hidden files with human sizes.",
+  "`du -sh *` : how big is each folder?",
+  "`df -h` : how full are your disks?",
+  "`ln -s target link` makes a shortcut.",
+  "`chmod 644 file` : rw for you, read for others."
+ ],
+ "personal": [
+  "I'm a rock. You can count on me."
+ ]
+}

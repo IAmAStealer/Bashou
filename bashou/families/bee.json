@@ -1,0 +1,29 @@
+{
+ "name": "Bee",
+ "first": "brood",
+ "order": 23,
+ "needs": "systemctl",
+ "unlock": {
+  "tools": [
+   "journalctl",
+   "systemctl"
+  ],
+  "uses": 10,
+  "label": [
+   "systemctl"
+  ]
+ },
+ "achievement_needs": [
+  "systemctl"
+ ],
+ "voice": "Bzz.",
+ "tips": [
+  "systemctl status nginx : is it running?",
+  "journalctl -u nginx -f : its logs, live.",
+  "systemctl list-units --failed : what broke.",
+  "Edited a unit file? `systemctl daemon-reload`."
+ ],
+ "personal": [
+  "Every service in the hive has its job."
+ ]
+}

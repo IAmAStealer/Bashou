@@ -1,0 +1,19 @@
+{
+ "name": "Octopus",
+ "first": "octopito",
+ "order": 7,
+ "unlock": {
+  "construct": "pipe3",
+  "count": 10
+ },
+ "voice": "Glub!",
+ "tips": [
+  "cmd 2>&1 | less pages the errors too.",
+  "cmd | tee out.txt shows AND saves.",
+  "`set -o pipefail`: a pipe fails if any part fails.",
+  "cmd |& grep x also pipes stderr."
+ ],
+ "personal": [
+  "Eight arms, eight pipes."
+ ]
+}

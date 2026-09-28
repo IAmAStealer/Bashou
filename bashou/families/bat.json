@@ -1,0 +1,44 @@
+{
+ "name": "Bat",
+ "first": "mouseling",
+ "order": 1,
+ "unlock": {
+  "tools": [
+   "cargo",
+   "clang",
+   "cmake",
+   "g++",
+   "gcc",
+   "go",
+   "java",
+   "javac",
+   "make",
+   "node",
+   "npm",
+   "perl",
+   "php",
+   "python",
+   "python3",
+   "ruby",
+   "rustc"
+  ],
+  "uses": 10,
+  "label": [
+   "python3",
+   "cargo",
+   "gcc",
+   "make",
+   "node"
+  ]
+ },
+ "voice": "*flap*",
+ "tips": [
+  "`ctrl+L` clears the screen, like `clear`.",
+  "`tail -f log` watches a file live.",
+  "`nohup cmd &` keeps it running after you leave.",
+  "`man -k word` searches every manual."
+ ],
+ "personal": [
+  "I like the terminal after dark."
+ ]
+}

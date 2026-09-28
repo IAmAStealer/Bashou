@@ -1,0 +1,31 @@
+{
+ "name": "Hedgehog",
+ "first": "hoglet",
+ "order": 22,
+ "unlock": {
+  "tools": [
+   "chgrp",
+   "chmod",
+   "chown",
+   "umask"
+  ],
+  "uses": 10,
+  "label": [
+   "chmod",
+   "chown"
+  ]
+ },
+ "achievement_needs": [
+  "chmod"
+ ],
+ "voice": "*huff*",
+ "tips": [
+  "chmod 644 : rw for you, read for others.",
+  "chmod 755 : scripts and folders everyone can enter.",
+  "`ls -l` : the 10 letters are the rights.",
+  "`umask` : the rights new files get."
+ ],
+ "personal": [
+  "Not everyone gets to touch my files."
+ ]
+}

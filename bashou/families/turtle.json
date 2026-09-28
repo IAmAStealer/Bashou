@@ -1,0 +1,20 @@
+{
+ "name": "Turtle",
+ "first": "hatchling",
+ "order": 3,
+ "unlock": {
+  "counter": "adventure.walked",
+  "count": 500,
+  "how": "walk 500 m in bashou adventure"
+ },
+ "voice": "…",
+ "tips": [
+  "`watch -n 5 df -h` reruns a command every 5 s.",
+  "`time make` tells how long it took.",
+  "`sleep 600 && echo done` waits 10 minutes.",
+  "`crontab -e` runs things on a schedule."
+ ],
+ "personal": [
+  "Slow and steady. No rush."
+ ]
+}

@@ -99,14 +99,15 @@ def messages():
         found += _calls(path)
     for a in achievements.ALL:
         found += [a.name, a.how]
-    for table in (dialogue.TIPS, dialogue.PERSONAL, dialogue.TRAITS, dialogue.INVITES, dialogue.DISCOVER):
+    for table in (dialogue.TRAITS, dialogue.INVITES, dialogue.DISCOVER):
         for lines in table.values():
             found += lines
-    found += dialogue.TYPO_FIX + dialogue.TYPO_NONE + list(dialogue.VOICE.values())
+    found += dialogue.TYPO_FIX + dialogue.TYPO_NONE
+    for family in creatures.FAMILIES.values():
+        found += [family.voice] + family.tips + family.personal + [t for t in (family.name, family.blurb,
+                                                                              family.unlock.get("how")) if t]
     from . import safety
     found += safety.messages()
-    found += list(creatures.NAMES.values())
-    found += list(creatures.STARTER_BLURBS.values())
     for chain in list(creatures.FORMS.values()) + list(creatures.STARTERS.values()):
         found += [creatures.PETS[s].name for s in chain]
     found += list(behavior.ACTIONS.values())
@@ -118,7 +119,7 @@ def messages():
         found += [ch["title"], ch["intro"]]
     for lesson in lessons.LESSONS:
         found += [lesson["title"]] + [text for text, example in lesson["pages"]]
-    found += list(progress.CONSTRUCT_NAMES.values()) + [how for rule, how in progress.STATE_PETS.values()]
+    found += list(progress.CONSTRUCT_NAMES.values())
     from . import state
     found += [text for default, text in state.SETTINGS.values()]
     from . import skills

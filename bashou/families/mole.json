@@ -1,0 +1,24 @@
+{
+ "name": "Mole",
+ "first": "molekin",
+ "order": 11,
+ "unlock": {
+  "tools": [
+   "egrep",
+   "fgrep",
+   "grep",
+   "rg"
+  ],
+  "uses": 10
+ },
+ "voice": "*dig dig*",
+ "tips": [
+  "grep -rn TODO . shows file and line number.",
+  "grep -v '^#' drops comment lines.",
+  "grep -l pattern *.txt lists matching files.",
+  "grep -i ignores case."
+ ],
+ "personal": [
+  "I dig through text all day."
+ ]
+}

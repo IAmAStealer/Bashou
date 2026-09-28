@@ -1,0 +1,20 @@
+{
+ "name": "Frog",
+ "first": "tadpole",
+ "order": 2,
+ "unlock": {
+  "counter": "adventure.correct",
+  "count": 20,
+  "how": "answer 20 questions right in bashou adventure"
+ },
+ "voice": "Ribbit.",
+ "tips": [
+  "`!$` is the last argument of the previous command.",
+  "`fc` opens the last command in your editor.",
+  "`history | grep ssh` finds that command from last week.",
+  "Press Ctrl+R again for older matches."
+ ],
+ "personal": [
+  "Hop hop. What's next?"
+ ]
+}

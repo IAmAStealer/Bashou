@@ -122,19 +122,16 @@ class TablesTest(unittest.TestCase):
         self.assertIn_all([s for forms in creatures.FORMS.values() for s in forms], creatures.PETS, "FORMS sprites")
         starter_forms = [s for forms in creatures.STARTERS.values() for s in forms]
         self.assertIn_all(starter_forms, creatures.PETS, "starter sprites")
-        self.assertEqual(set(creatures.STARTER_BLURBS), set(creatures.STARTERS))
         self.assertIn_all(creatures.LARGE, creatures.PETS, "large sprites without a small one")
-        self.assertIn_all(creatures.NEEDS, roster, "NEEDS")
         self.assertIn_all(state.CHOICES, state.SETTINGS, "setting choices")
 
     def test_unlocks(self):
         roster = set(creatures.NAMES)
-        for table in (progress.TOOL_PETS, progress.TOOL_LABELS, progress.CONSTRUCT_PETS, progress.STATE_PETS,
-                      achievements.FAMILY_NEEDS):
-            self.assertIn_all(table, roster, table)
-        self.assertIn_all([c for c, _n in progress.CONSTRUCT_PETS.values()], progress.CONSTRUCT_NAMES, "constructs")
-        for pet, names in progress.TOOL_LABELS.items():
-            self.assertIn_all(names, progress.TOOL_PETS[pet][0], pet)
+        for pet in roster:
+            rule = creatures.FAMILIES[pet].unlock
+            self.assertIn_all([rule["construct"]] if "construct" in rule else [], progress.CONSTRUCT_NAMES, pet)
+            self.assertIn_all(rule.get("label", []), rule.get("tools", []), pet)     # the hint names its tools
+            self.assertEqual(len(progress.unlock_rule(state.default(), pet)), 3, pet)
         by_fight = {ch.pet for ch in challenges.ALL}                         # every pet comes some way
         self.assertEqual([p for p in roster if p not in by_fight and not progress.how_to_unlock(state.default(), p)], [])
         self.assertIn_all([a.family for a in achievements.ALL if getattr(a, "family", None)],
@@ -142,10 +139,7 @@ class TablesTest(unittest.TestCase):
 
     def test_pet_lines(self):
         voices = set(creatures.NAMES) | set(creatures.STARTERS)
-        for table in (dialogue.VOICE, dialogue.TIPS, dialogue.PERSONAL, dialogue.TRAITS):
-            self.assertIn_all(table, voices | set(achievements.BY_ID), sorted(table)[:3])
-        for table in (dialogue.VOICE, dialogue.TIPS, dialogue.PERSONAL):       # a new pet comes with its lines
-            self.assertIn_all(voices, table, sorted(table)[:3])
+        self.assertIn_all(dialogue.TRAITS, voices | set(achievements.BY_ID), "TRAITS")
         self.assertIn_all(dialogue.INVITES, {"adventure", "security", "lesson", "rust", "gpg", "pass", "sqlite3"}, "INVITES")    # modes, and tools to install
         self.assertIn_all(dialogue.EXAMPLES, achievements.BY_ID, "EXAMPLES")
         tools = {t for ch in challenges.ALL for t in ch.tools} | {"|"}
@@ -287,7 +281,7 @@ class ReadmeCountsTest(unittest.TestCase):
             r"\*\*(\d+) achievements\*\*": len([a for a in achievements.ALL if not a.hidden]),
             r"walk through (\d+) topics": len(world.TOPICS),
             r"with (\d+) questions": sum(len(json.loads(Path(f).read_text())) for f in glob.glob(str(root / "*.json"))),
-            r"(\d+) more pets hide": len([p for p, _ in creatures.ROSTER if p not in creatures.SECRET]),
+            r"(\d+) more pets hide": len([p for p in creatures.NAMES if not creatures.FAMILIES[p].secret]),
         }
         for pattern, real in counts.items():
             self.assertEqual(int(re.search(pattern, text).group(1)), real, pattern)

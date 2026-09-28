@@ -294,7 +294,7 @@ def dev(args):
     backup()
     with state.locked() as s:
         if args.action == "unlock-all":
-            s["pets"] = [pet for pet, _ in roster(s)] + sorted(creatures.SECRET)
+            s["pets"] = [pet for pet, _ in roster(s)] + sorted(p for p in creatures.NAMES if creatures.FAMILIES[p].secret)
             print(f"  All {len(s['pets'])} pets unlocked.")
         elif args.action == "stage":
             fam = [a.id for a in achievements.family(args.pet)]

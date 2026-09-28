@@ -1,0 +1,20 @@
+{
+ "name": "Living sofa",
+ "first": "beanbag",
+ "order": 6,
+ "unlock": {
+  "counter": "fights_lost",
+  "count": 1,
+  "how": "lose (or flee) a fight: take a seat"
+ },
+ "voice": "*creak*",
+ "tips": [
+  "sort | uniq -c | sort -rn makes a top list.",
+  "`sort -u` sorts and dedupes in one go.",
+  "sort -t, -k3 -n sorts a CSV by its 3rd column.",
+  "`uniq -d` shows only the duplicates."
+ ],
+ "personal": [
+  "Sit down. Relax. Run a command."
+ ]
+}

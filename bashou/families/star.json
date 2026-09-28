@@ -1,0 +1,17 @@
+{
+ "starter": true,
+ "order": 1,
+ "first": "stardust",
+ "blurb": "Bright and curious. A speck of dust with big dreams.",
+ "voice": "*twinkle*",
+ "tips": [
+  "Ctrl+R searches your history as you type.",
+  "`cd -` jumps back to the previous folder.",
+  "`sudo !!` reruns the last command with sudo.",
+  "Ctrl+A / Ctrl+E: start / end of the line.",
+  "Ctrl+W deletes the word before the cursor."
+ ],
+ "personal": [
+  "I'm made of stardust. And a bit of bash."
+ ]
+}

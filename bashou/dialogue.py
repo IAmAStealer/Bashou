@@ -8,103 +8,9 @@ import difflib
 import random
 import shutil
 
-from . import achievements, safety
+from . import achievements, creatures, safety
 from .analyze import analyze
 from .i18n import _
-
-VOICE = {
-    "star": "*twinkle*", "sprout": "*rustle*", "pebble": "*clack*", "bat": "*flap*", "gremlin": "Hehehe.", "snail": "*slow bow*", "frog": "Ribbit.", "turtle": "…", "mushroom": "*puff*", "slime": "Blub.",
-    "sofa": "*creak*", "octopus": "Glub!", "dragon": "Rawr!", "fox": "*sniff*", "owl": "Hoo.",
-    "mole": "*dig dig*", "snake": "Sss…", "ghost": "Boo~", "spider": "*tik-tik*", "ant": "*click*",
-    "axolotl": "*wiggle*", "beaver": "*chomp*", "squirrel": "*chitter*", "pigeon": "Coo.", "hedgehog": "*huff*",
-    "bee": "Bzz.", "whale": "*whoosh*", "meerkat": "*peek*", "leopard": "*soft paws*", "duck": "Quack.", "cat": "*purr*",
-    "spark": "*crackle*", "packet": "*ping*",
-}
-
-TIPS = {
-    "star": ["Ctrl+R searches your history as you type.", "`cd -` jumps back to the previous folder.",
-            "`sudo !!` reruns the last command with sudo.", "Ctrl+A / Ctrl+E: start / end of the line.",
-            "Ctrl+W deletes the word before the cursor."],
-    "sprout": ["Start scripts with `#!/usr/bin/env bash`.", "`set -euo pipefail` stops a script on errors.",
-               "`chmod +x script.sh` makes it runnable.", "Functions: greet() { echo \"hi $1\"; }",
-               "`bash -x script.sh` shows each line as it runs."],
-    "pebble": ["`ls -lah` shows hidden files with human sizes.", "`du -sh *` : how big is each folder?",
-               "`df -h` : how full are your disks?", "`ln -s target link` makes a shortcut.",
-               "`chmod 644 file` : rw for you, read for others."],
-    "snail": ["`mkdir -p a/b/c` builds a whole path at once.", "`cp -r src dst` copies a folder and its content.",
-              "`ln -s target name` makes a shortcut.", "`mv old new` renames; `mv file dir/` moves.",
-              "Onward! `bashou adventure` has more roads to walk."],
-    "gremlin": ["Before running a script from the web: download, read, then run.",
-                "`sha256sum file` shows a checksum: compare it with the one on the website.",
-                "`chmod u+x script.sh` is enough to run it. No need for 777.",
-                "`ls -l` shows who can read, write and run each file.",
-                "Want to play detective? `bashou arena security` has small investigations."],
-    "bat": ["`ctrl+L` clears the screen, like `clear`.", "`tail -f log` watches a file live.",
-            "`nohup cmd &` keeps it running after you leave.", "`man -k word` searches every manual."],
-    "frog": ["`!$` is the last argument of the previous command.", "`fc` opens the last command in your editor.",
-             "`history | grep ssh` finds that command from last week.", "Press Ctrl+R again for older matches."],
-    "turtle": ["`watch -n 5 df -h` reruns a command every 5 s.", "`time make` tells how long it took.",
-               "`sleep 600 && echo done` waits 10 minutes.", "`crontab -e` runs things on a schedule."],
-    "mushroom": ['for f in *.log; do gzip "$f"; done', 'while read -r l; do echo "$l"; done < file',
-                 "for i in {1..5}; do echo $i; done", "until ping -c1 host; do sleep 1; done",
-                 "`seq 0 5 20` counts by fives: 0 5 10 15 20."],
-    "slime": ["today=$(date +%F) stores a command's output.", "diff <(ls a) <(ls b) compares two outputs.",
-              "cat <<EOF > file writes several lines at once.", "echo $(( 6 * 7 )) does math in bash."],
-    "sofa": ["sort | uniq -c | sort -rn makes a top list.", "`sort -u` sorts and dedupes in one go.",
-             "sort -t, -k3 -n sorts a CSV by its 3rd column.", "`uniq -d` shows only the duplicates."],
-    "octopus": ["cmd 2>&1 | less pages the errors too.", "cmd | tee out.txt shows AND saves.",
-                "`set -o pipefail`: a pipe fails if any part fails.", "cmd |& grep x also pipes stderr."],
-    "dragon": ["When a threat shows up, `bashou fight` opens the arena.", "Stuck in the arena? Type `hint`.",
-               "A threat you ignore comes back later."],
-    "fox": ["find . -name '*.log' -mtime +7 : week-old logs.", "find . -type f -size +100M : big files.",
-            "find . -name '*.tmp' -delete cleans up.", "find . -newer ref.txt : changed since ref.txt."],
-    "owl": ["awk '{print $1}' prints the first column.", "awk -F: '{print $1}' /etc/passwd lists users.",
-            "awk 'NR==5' prints line 5.", "awk 'length > 80' finds long lines."],
-    "mole": ["grep -rn TODO . shows file and line number.", "grep -v '^#' drops comment lines.",
-             "grep -l pattern *.txt lists matching files.", "grep -i ignores case."],
-    "snake": ["sed -n '10,20p' prints lines 10 to 20.", "sed -i.bak 's/a/b/g' f keeps a backup.",
-              "sed '/^$/d' removes empty lines.", "sed 's/[[:space:]]*$//' trims trailing spaces."],
-    "ghost": ["ps aux --sort=-%mem | head : memory hogs.", "pgrep -a python lists python processes.",
-              "kill -TERM first; -KILL only as a last resort.", "Ctrl+Z then `bg`: resume a job in background."],
-    "spider": ["strace -e trace=openat ls : files it opens.", "strace -c cmd : a syscall summary.",
-               "strace -p PID attaches to a running process.", "strace -f follows child processes."],
-    "ant": ["find . -name '*.bak' | xargs rm", "find . -print0 | xargs -0 : safe with spaces.",
-            "xargs -P4 runs 4 jobs in parallel.", "ls *.txt | xargs -I{} cp {} {}.bak"],
-    "axolotl": ["`jq .` pretty-prints JSON.", "jq -r '.[].name' : raw names, no quotes.",
-                "jq 'map(select(.age > 30))' filters a list.", "curl -s url | jq '.items[0]'"],
-    "beaver": ["`git add -p` picks changes piece by piece.", "`git commit --amend` fixes the last commit.",
-               "`git diff --staged` shows what you're about to commit.", "`git restore file` drops your changes."],
-    "squirrel": ["tar -czf backup.tgz dir/ packs a folder.", "tar -tf a.tgz lists it without unpacking.",
-                 "tar -xf a.tgz -C /tmp unpacks somewhere else.", "`gzip -k file` keeps the original."],
-    "pigeon": ["curl -I url : just the headers.", "curl -sS url : quiet, but still shows errors.",
-               "rsync -av src/ dst/ : copies only what changed.", "ssh -L 8080:localhost:80 host : a tunnel."],
-    "hedgehog": ["chmod 644 : rw for you, read for others.", "chmod 755 : scripts and folders everyone can enter.",
-                 "`ls -l` : the 10 letters are the rights.", "`umask` : the rights new files get."],
-    "bee": ["systemctl status nginx : is it running?", "journalctl -u nginx -f : its logs, live.",
-            "systemctl list-units --failed : what broke.", "Edited a unit file? `systemctl daemon-reload`."],
-    "whale": ["kubectl get pods -A : every pod everywhere.", "kubectl describe pod x : the Events explain why.",
-              "kubectl logs -f pod : logs, live.", "kubectl config get-contexts : which cluster am I on?"],
-    "meerkat": ["df -h : how full are the disks?", "du -sh * | sort -h : biggest last.",
-                "free -h : memory at a glance.", "watch -n 2 cmd : rerun it every 2 s."],
-    "duck": ["Stuck? Explain your script to me, line by line. It often fixes itself.",
-             "bash -x script.sh : every command, printed as it runs.", "echo $? : 0 means the last command worked.",
-             "`bashou learn` takes a command apart, piece by piece."],
-    "spark": ["`bashou lesson` : the owl's library. Green means it's your next step.",
-              "A lesson read once is a spark. Practice it, and it becomes a fire.",
-              "Locked lessons say what opens them. Look at the list, then go and do it."],
-    "packet": ["ip -br addr : your addresses, one line per interface.",
-               "ip route get 1.1.1.1 : which way a packet would go, and nothing is sent.",
-               "ss -tlnp : who is listening, on which port, and which program.",
-               "getent hosts name : what programs really get. dig only asks DNS.",
-               "Refused? The machine answered: nothing listens there. Timed out? Nothing answered at all."],
-    "leopard": ["gpg -c notes.txt : locks the file with a passphrase.", "gpg -d notes.txt.gpg : opens it again.",
-                "pass show db/prod : a password for a script, never written in it.",
-                "pass generate site 24 : a strong password you'll never have to type."],
-    "cat": ["Only test what you're allowed to test. Written permission, always.",
-            "Read the man page before the exploit.", "Keep your notes: half of security is notes.",
-            "`nmap -sV host` tells you what's listening, and what version.",
-            "A lab at home beats someone else's server."],
-}
 
 # Achievement -> an example that earns it.
 EXAMPLES = {
@@ -165,32 +71,6 @@ TRAITS = {
     "tally": ["I like things counted and sorted."],
 }
 
-PERSONAL = {
-    "star": ["I'm made of stardust. And a bit of bash."], "sprout": ["Water me with commands."],
-    "pebble": ["I'm a rock. You can count on me."], "bat": ["I like the terminal after dark."],
-    "gremlin": ["Run it! What could go wrong? …Just kidding. Read it first."],
-    "snail": ["Slowly but surely, hero.", "Every checkpoint is a small victory."], "frog": ["Hop hop. What's next?"],
-    "turtle": ["Slow and steady. No rush."], "mushroom": ["Loops make me grow."],
-    "slime": ["I can take the shape of any output."], "sofa": ["Sit down. Relax. Run a command."],
-    "octopus": ["Eight arms, eight pipes."], "dragon": ["I guard your shell."],
-    "fox": ["I can find anything. Anything."], "owl": ["Every line has fields, if you look closely."],
-    "mole": ["I dig through text all day."], "snake": ["I rewrite what I touch."],
-    "ghost": ["I see every process…"], "spider": ["I hear every syscall on my web."],
-    "ant": ["Many small jobs make one big job."], "axolotl": ["JSON is my favourite pond."],
-    "beaver": ["Commit often. A dam is built stick by stick."], "squirrel": ["I pack everything for winter."],
-    "pigeon": ["I always find my way home. Even through a tunnel."], "hedgehog": ["Not everyone gets to touch my files."],
-    "bee": ["Every service in the hive has its job."], "whale": ["So many containers on my back."],
-    "meerkat": ["I keep watch. Disks, memory, all of it."],
-    "duck": ["Explain it to me. Out loud. I'll wait."],
-    "leopard": ["Nobody sees me in the snow. Nobody sees your passwords either."],
-    "spark": ["The Library of Alexandria burned. What you learn, nobody can burn.",
-              "Books still get destroyed today. Keep what they teach where no fire can reach it: in your head.",
-              "From the ashes, a phoenix. From a mistake, a lesson."],
-    "packet": ["I'm only a few bytes, but I cross oceans.", "Every hop, someone reads my address and points the way.",
-               "Lost packets get sent again. So can you."],
-    "cat": ["I saw what you ran. Your secret is safe with me.", "Curiosity, with permission.",
-            "Nice tools. Mind the scope."],
-}
 
 
 def hint(state, pet, rng):
@@ -321,15 +201,15 @@ def line(state, pet, rng=random):
     from . import fight
     threat = fight.announcement(state)
     if threat:
-        return f"{_(VOICE[pet])} {threat}"
+        return f"{_(creatures.FAMILIES[pet].voice)} {threat}"
     earned = set(state["achievements"])
     traits = [t for trait, lines in TRAITS.items() if trait in earned for t in lines]
-    pools = [(hint(state, pet, rng), 4), (rng.choice(TIPS[pet]), 4),
-             (rng.choice(traits + PERSONAL[pet]), 2), (invite(state, rng), 3), (discover(state, rng), 4),
+    pools = [(hint(state, pet, rng), 4), (rng.choice(creatures.FAMILIES[pet].tips), 4),
+             (rng.choice(traits + creatures.FAMILIES[pet].personal), 2), (invite(state, rng), 3), (discover(state, rng), 4),
              (new_lesson(state, rng), 3)]
     pools = [(text, w) for text, w in pools if text]
     text = rng.choices([t for t, w in pools], [w for t, w in pools])[0]
-    return f"{_(VOICE[pet])} {_(text)}"
+    return f"{_(creatures.FAMILIES[pet].voice)} {_(text)}"
 
 
 COMMON = ("ls cd cat grep find awk sed sort uniq head tail less more echo printf pwd mkdir rmdir rm cp mv "
@@ -349,7 +229,7 @@ def risky(pet, command, rng=random):
     parts = safety.warning(command, rng)
     if not parts:
         return None
-    return f"{_(VOICE[pet])} ⚠ " + " ".join(_(p) for p in parts)
+    return f"{_(creatures.FAMILIES[pet].voice)} ⚠ " + " ".join(_(p) for p in parts)
 
 
 def typo(state, pet, command, rng=random):
@@ -364,4 +244,4 @@ def typo(state, pet, command, rng=random):
     close = [c for c in candidates if len(c) == len(word) and sorted(c) == sorted(word)][:1]
     close = close or difflib.get_close_matches(word, candidates, n=1, cutoff=0.6)
     template = rng.choice(TYPO_FIX if close else TYPO_NONE)
-    return f"{_(VOICE[pet])} " + _(template).format(typo=word[:20], fix=close[0] if close else "")
+    return f"{_(creatures.FAMILIES[pet].voice)} " + _(template).format(typo=word[:20], fix=close[0] if close else "")

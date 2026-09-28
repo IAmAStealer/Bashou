@@ -1,0 +1,19 @@
+{
+ "name": "Duck",
+ "first": "duckling",
+ "order": 27,
+ "unlock": {
+  "family_achievement": true,
+  "how": "debug like a rubber duck: bashou learn <command>, bash -x or echo $?"
+ },
+ "voice": "Quack.",
+ "tips": [
+  "Stuck? Explain your script to me, line by line. It often fixes itself.",
+  "bash -x script.sh : every command, printed as it runs.",
+  "echo $? : 0 means the last command worked.",
+  "`bashou learn` takes a command apart, piece by piece."
+ ],
+ "personal": [
+  "Explain it to me. Out loud. I'll wait."
+ ]
+}

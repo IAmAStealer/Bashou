@@ -174,7 +174,7 @@ class Companion:
             self.bubble = None
         self.notes = [n for n in self.notes if text not in n]
         if s["fights_won"] <= self.fights_won:
-            self.say_now(f"{_(dialogue.VOICE[self.voice])} {fight.gone(self.threat_id)}")
+            self.say_now(f"{_(creatures.FAMILIES[self.voice].voice)} {fight.gone(self.threat_id)}")
         self.threat_text = self.threat_id = None
 
     def announce(self, text):

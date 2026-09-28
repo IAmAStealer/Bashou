@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from datetime import date, timedelta
 from typing import Callable, Optional
 
-from . import safety
+from . import creatures, safety
 from . import which
 
 
@@ -383,9 +383,8 @@ ALL = [
     A("mapper", "axolotl", "Mapper", "transform arrays with `map()`", cmd=lambda c: c.arg("jq", r"map\(")),
 ]
 
-# Families about a command this system may not have: hints skip them when it's missing.
 # Secret achievements: security tools. Nothing announces them; they just pop up, and the first one
-# brings a pet that isn't on the board (see creatures.SECRET).
+# brings a pet that isn't on the board ("secret" in its family file).
 def _uses(*names):
     tools = set(names)
     return lambda c: bool(c.analysis.tools & tools)
@@ -418,10 +417,8 @@ SECRET = [
 ]
 ALL += SECRET
 
-FAMILY_NEEDS = {"spider": ("strace",), "axolotl": ("jq",), "whale": ("kubectl",), "bee": ("systemctl",),
-                "beaver": ("git",), "hedgehog": ("chmod",)}
-for _a in ALL:
-    _a.needs = _a.needs or FAMILY_NEEDS.get(_a.pet, ())
+for _a in ALL:                                   # a family's commands: in its file ("achievement_needs")
+    _a.needs = _a.needs or creatures.FAMILIES[_a.pet].achievement_needs
 
 BY_ID = {a.id: a for a in ALL}
 

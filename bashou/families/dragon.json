@@ -1,0 +1,19 @@
+{
+ "name": "Dragon",
+ "first": "dragon_egg",
+ "order": 8,
+ "unlock": {
+  "counter": "fights_won",
+  "count": 1,
+  "how": "win a fight: bashou fight"
+ },
+ "voice": "Rawr!",
+ "tips": [
+  "When a threat shows up, `bashou fight` opens the arena.",
+  "Stuck in the arena? Type `hint`.",
+  "A threat you ignore comes back later."
+ ],
+ "personal": [
+  "I guard your shell."
+ ]
+}

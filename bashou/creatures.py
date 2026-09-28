@@ -126,50 +126,72 @@ def problems(path):
     return found
 
 
-# Every pet in board order.
-ROSTER = [
-    ("bat", "Bat"), ("frog", "Frog"), ("turtle", "Turtle"), ("mushroom", "Mushroom"),
-    ("slime", "Slime"), ("sofa", "Living sofa"), ("octopus", "Octopus"), ("dragon", "Dragon"),
-    ("fox", "Fox"), ("owl", "Owl"), ("mole", "Mole"), ("snake", "Snake"),
-    ("ghost", "Ghost"), ("spider", "Spider"), ("ant", "Ant"), ("axolotl", "Axolotl"),
-    ("gremlin", "Gremlin"), ("snail", "Snail"),
-    ("beaver", "Beaver"), ("squirrel", "Squirrel"), ("pigeon", "Pigeon"), ("hedgehog", "Hedgehog"),
-    ("bee", "Bee"), ("whale", "Whale"), ("meerkat", "Meerkat"), ("leopard", "Snow leopard"), ("duck", "Duck"),
-    ("spark", "Spark"), ("packet", "Packet"),
-    ("cat", "Hacker cat"),
-]
-NAMES = dict(ROSTER)
-NEEDS = {"whale": "kubectl", "bee": "systemctl"}                   # pet -> the command it's about; hidden when it isn't installed
+# Families: one file per pet and per starter line, bashou/families/<id>.json. It holds the pet's name, its
+# first form (the forms' "next" links do the rest), its place on the board, how it's unlocked and what it
+# says. doc/contributing/pixel-art.md lists the fields.
+FAMILY_DIR = ART.parent / "families"
+UNLOCKS = ("tools", "construct", "commands", "counter", "achievement", "family_achievement", "secret_found")
 
 
-SECRET = {"cat"}            # not on the board until you find it (secret achievements bring it)
+@dataclass
+class Family:
+    id: str
+    first: str                      # its first form (a sprite id)
+    name: str = ""                  # a pet's name; a starter goes by its form's name
+    order: int = 0                  # place on the board (starters: in the starter choice)
+    starter: bool = False
+    secret: bool = False            # not on the board until you find it (secret achievements bring it)
+    needs: str = ""                 # the command it's about: hidden where that isn't installed
+    unlock: dict = field(default_factory=dict)   # how a pet comes: progress.unlock_rule reads it
+    achievement_needs: tuple = ()   # its achievements only count where these commands are installed
+    voice: str = ""                 # a sound before each line it says
+    tips: list = field(default_factory=list)
+    personal: list = field(default_factory=list)
+    blurb: str = ""                 # a starter's line when you choose one
+
+
+def load_family(path):
+    d = json.loads(path.read_text())
+    d["achievement_needs"] = tuple(d.get("achievement_needs", ()))
+    return Family(id=path.stem, **d)
+
+
+def family_problems(path):
+    """What's wrong in a family file, in words a contributor can act on."""
+    try:
+        f = load_family(path)
+    except (json.JSONDecodeError, TypeError) as e:
+        return [f"{path.name}: {e}"]
+    found = []
+    if not (ART / f"{f.first}.json").exists():
+        found.append(f"{path.name}: \"first\" is {f.first!r}, and there's no bashou/pets/{f.first}.json")
+    if not f.voice or not f.tips or not f.personal:
+        found.append(f"{path.name}: every pet needs a \"voice\", \"tips\" and \"personal\" lines")
+    if f.starter:
+        if not f.blurb or f.order < 1:
+            found.append(f"{path.name}: a starter needs a \"blurb\" and an \"order\"")
+    elif not f.name or f.order < 1 or not any(k in f.unlock for k in UNLOCKS):
+        found.append(f"{path.name}: a pet needs a \"name\", an \"order\" and an \"unlock\" rule ({', '.join(UNLOCKS)})")
+    return found
+
+
+FAMILIES = {path.stem: load_family(path) for path in sorted(FAMILY_DIR.glob("*.json"))}
+NAMES = {f.id: f.name for f in sorted(FAMILIES.values(), key=lambda f: f.order) if not f.starter}  # pets, board order
 
 
 def roster(state=None):
     """The pets of this system, in board order; a secret pet only once you have it."""
     from .which import installed
     owned_pets = (state or {}).get("pets", ())
-    return [(pet, name) for pet, name in ROSTER
-            if (pet not in NEEDS or installed(NEEDS[pet])) and (pet not in SECRET or pet in owned_pets)]
+    return [(pet, name) for pet, name in NAMES.items()
+            if (not FAMILIES[pet].needs or installed(FAMILIES[pet].needs))
+            and (not FAMILIES[pet].secret or pet in owned_pets)]
 
 
 def owned(state):
     """Unlocked pets of this system (a Whale unlocked before kubectl was removed stays saved, not counted)."""
     shown = dict(roster(state))
     return [pet for pet in state["pets"] if pet in shown]
-
-
-
-
-# Each pet's first form. The sprite files link each form to the next (`"next"`): the last form has none.
-FIRST_FORM = {
-    "bat": "mouseling", "frog": "tadpole", "fox": "fennec", "owl": "pygmy_owl", "turtle": "hatchling",
-    "mushroom": "spore", "octopus": "octopito", "sofa": "beanbag", "dragon": "dragon_egg", "snake": "snakelet",
-    "ghost": "spirit", "spider": "spiderling", "ant": "ant", "axolotl": "larva", "gremlin": "gremlin",
-    "snail": "slug", "squirrel": "squirrel", "beaver": "kit", "pigeon": "squab", "hedgehog": "hoglet",
-    "bee": "brood", "cat": "hacker_cat", "slime": "droplet", "mole": "molekin", "whale": "calf",
-    "meerkat": "pup", "leopard": "snow_cub", "duck": "duckling", "spark": "sparklings", "packet": "bit"
-}
 
 
 def forms(pet_id):
@@ -194,12 +216,6 @@ def names(pet_id):
 
 # Starters: chosen once, they level up with every 5 achievements and take a new shape at the level each
 # form's "next_at" says. Forms are added as their art is drawn (see doc/PLAN.md).
-STARTER_FIRST = {"star": "stardust", "sprout": "seedling", "pebble": "sand_grain"}     # then the "next" links
-STARTER_BLURBS = {
-    "star": "Bright and curious. A speck of dust with big dreams.",
-    "sprout": "Calm and patient. Grows scripts from tiny seeds.",
-    "pebble": "Solid and loyal. Knows the filesystem rock by rock.",
-}
 
 PETS = {path.stem: load(path) for path in sorted(ART.glob("*.json"))}
 LARGE = {path.stem: load(path) for path in sorted((ART / "large").glob("*.json"))}   # `bashou config size large`
@@ -215,8 +231,8 @@ def chain(first):
     return tuple(out)
 
 
-FORMS = {pet: chain(first) for pet, first in FIRST_FORM.items()}          # pet -> the sprite of each stage
-STARTERS = {line: chain(first) for line, first in STARTER_FIRST.items()}
+FORMS = {pet: chain(FAMILIES[pet].first) for pet in NAMES}                # pet -> the sprite of each stage
+STARTERS = {f.id: chain(f.first) for f in sorted(FAMILIES.values(), key=lambda f: f.order) if f.starter}
 
 
 def get(pet_id, size="small"):
@@ -245,7 +261,8 @@ def main():
         enemies = sorted((ART.parent / "enemies").glob("*.json"))
         found = [p for path in sorted(ART.glob("*.json")) + sorted((ART / "large").glob("*.json")) + enemies
                  for p in problems(path)]
-        print("\n".join(found) or f"{len(PETS)} pets OK, {len(LARGE)} large")
+        found += [p for path in sorted(FAMILY_DIR.glob("*.json")) for p in family_problems(path)]
+        print("\n".join(found) or f"{len(PETS)} pets OK, {len(LARGE)} large, {len(FAMILIES)} families")
         return 1 if found else 0
     print(main.__doc__)
     return 2

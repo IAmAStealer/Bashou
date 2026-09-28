@@ -1,0 +1,21 @@
+{
+ "name": "Fox",
+ "first": "fennec",
+ "order": 9,
+ "unlock": {
+  "tools": [
+   "find"
+  ],
+  "uses": 10
+ },
+ "voice": "*sniff*",
+ "tips": [
+  "find . -name '*.log' -mtime +7 : week-old logs.",
+  "find . -type f -size +100M : big files.",
+  "find . -name '*.tmp' -delete cleans up.",
+  "find . -newer ref.txt : changed since ref.txt."
+ ],
+ "personal": [
+  "I can find anything. Anything."
+ ]
+}

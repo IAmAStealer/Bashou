@@ -1,0 +1,20 @@
+{
+ "name": "Mushroom",
+ "first": "spore",
+ "order": 4,
+ "unlock": {
+  "construct": "script",
+  "count": 5
+ },
+ "voice": "*puff*",
+ "tips": [
+  "for f in *.log; do gzip \"$f\"; done",
+  "while read -r l; do echo \"$l\"; done < file",
+  "for i in {1..5}; do echo $i; done",
+  "until ping -c1 host; do sleep 1; done",
+  "`seq 0 5 20` counts by fives: 0 5 10 15 20."
+ ],
+ "personal": [
+  "Loops make me grow."
+ ]
+}

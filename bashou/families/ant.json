@@ -1,0 +1,21 @@
+{
+ "name": "Ant",
+ "first": "ant",
+ "order": 15,
+ "unlock": {
+  "tools": [
+   "xargs"
+  ],
+  "uses": 10
+ },
+ "voice": "*click*",
+ "tips": [
+  "find . -name '*.bak' | xargs rm",
+  "find . -print0 | xargs -0 : safe with spaces.",
+  "xargs -P4 runs 4 jobs in parallel.",
+  "ls *.txt | xargs -I{} cp {} {}.bak"
+ ],
+ "personal": [
+  "Many small jobs make one big job."
+ ]
+}

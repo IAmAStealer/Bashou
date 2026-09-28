@@ -1,0 +1,25 @@
+{
+ "name": "Whale",
+ "first": "calf",
+ "order": 24,
+ "needs": "kubectl",
+ "unlock": {
+  "tools": [
+   "kubectl"
+  ],
+  "uses": 10
+ },
+ "achievement_needs": [
+  "kubectl"
+ ],
+ "voice": "*whoosh*",
+ "tips": [
+  "kubectl get pods -A : every pod everywhere.",
+  "kubectl describe pod x : the Events explain why.",
+  "kubectl logs -f pod : logs, live.",
+  "kubectl config get-contexts : which cluster am I on?"
+ ],
+ "personal": [
+  "So many containers on my back."
+ ]
+}

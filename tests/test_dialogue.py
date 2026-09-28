@@ -1,22 +1,19 @@
 import random
 import unittest
 
-from bashou import achievements, dialogue, progress, render, safety, state
-from bashou.creatures import ROSTER
+from bashou import achievements, creatures, dialogue, progress, render, safety, state
 
 
 class DialogueTest(unittest.TestCase):
     def test_every_pet_has_a_voice_and_tips(self):
-        from bashou.creatures import STARTERS
-        for pet in [p for p, _ in ROSTER] + list(STARTERS):
-            self.assertIn(pet, dialogue.VOICE)
-            self.assertGreaterEqual(len(dialogue.TIPS[pet]), 3)
-            self.assertIn(pet, dialogue.PERSONAL)
+        for family in creatures.FAMILIES.values():
+            self.assertTrue(family.voice and family.personal, family.id)
+            self.assertGreaterEqual(len(family.tips), 3, family.id)
 
     def test_lines_fit_a_bubble(self):
         s = state.default()
         rng = random.Random(0)
-        for pet, _ in ROSTER:
+        for pet in creatures.NAMES:
             for _ in range(50):
                 text = dialogue.line(s, pet, rng)
                 self.assertLessEqual(render.width(text), 130, text)     # bubbles wrap on up to 4 lines
@@ -94,7 +91,7 @@ class RemoteScriptTest(unittest.TestCase):
     def test_warning_is_never_cut_in_a_small_terminal(self):
         """Bubbles were one line, cut with … to fit: a safety warning lost its advice."""
         for text in safety.messages():
-            full = f"{dialogue.VOICE['star']} ⚠ {text} {safety.SUDO}"
+            full = f"{creatures.FAMILIES['star'].voice} ⚠ {text} {safety.SUDO}"
             lines, w = render.bubble(full, 80 - 17 - 2)
             inner = " ".join(l[2:-3].strip() for l in lines[1:-1])
             self.assertEqual(inner, full)

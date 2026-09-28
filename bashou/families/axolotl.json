@@ -1,0 +1,24 @@
+{
+ "name": "Axolotl",
+ "first": "larva",
+ "order": 16,
+ "unlock": {
+  "tools": [
+   "jq"
+  ],
+  "uses": 10
+ },
+ "achievement_needs": [
+  "jq"
+ ],
+ "voice": "*wiggle*",
+ "tips": [
+  "`jq .` pretty-prints JSON.",
+  "jq -r '.[].name' : raw names, no quotes.",
+  "jq 'map(select(.age > 30))' filters a list.",
+  "curl -s url | jq '.items[0]'"
+ ],
+ "personal": [
+  "JSON is my favourite pond."
+ ]
+}

@@ -1,0 +1,22 @@
+{
+ "name": "Snail",
+ "first": "slug",
+ "order": 18,
+ "unlock": {
+  "counter": "adventure.chapters_done",
+  "count": 1,
+  "how": "finish chapter 1 of bashou adventure"
+ },
+ "voice": "*slow bow*",
+ "tips": [
+  "`mkdir -p a/b/c` builds a whole path at once.",
+  "`cp -r src dst` copies a folder and its content.",
+  "`ln -s target name` makes a shortcut.",
+  "`mv old new` renames; `mv file dir/` moves.",
+  "Onward! `bashou adventure` has more roads to walk."
+ ],
+ "personal": [
+  "Slowly but surely, hero.",
+  "Every checkpoint is a small victory."
+ ]
+}
