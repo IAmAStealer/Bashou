@@ -79,27 +79,47 @@ def py_output(name):
     return verify
 
 
+PROBES = 10    # runs of a sanitized program before trusting it (one hang in 3 would pass 5 runs 17% of the time)
+
+
 @functools.lru_cache(maxsize=None)
-def sanitizer():
-    """The -fsanitize flags this gcc can build and run, or [] (no AddressSanitizer here)."""
+def sanitized():
+    """(the -fsanitize flags this gcc can build and run, how to start the program), or ([], []).
+
+    AddressSanitizer in gcc 12 (Debian 12) hangs at start about 1 time in 3 on kernels that randomize
+    addresses more (WSL, recent kernels): a correct fix was then refused. Without address randomization
+    (`setarch -R`) it can't hang. Where that isn't allowed (containers), and the program still hangs,
+    C is built without sanitizers, and the fights that need them aren't offered."""
     with tempfile.TemporaryDirectory() as tmp:
         (Path(tmp) / "t.c").write_text("int main(void) { return 0; }\n")
         flags = ["-fsanitize=address,undefined"]
         r = run(["gcc", *flags, "t.c", "-o", "t"], tmp)
-        ok = r and r.returncode == 0 and run(["./t"], tmp)
-        return flags if ok and ok.returncode == 0 else []
+        if not r or r.returncode != 0:
+            return [], []
+        launchers = [["setarch", os.uname().machine, "-R"]] if shutil.which("setarch") else []
+        for launcher in launchers + [[]]:
+            runs = [run([*launcher, "./t"], tmp, timeout=3) for _ in range(PROBES)]
+            if all(r and r.returncode == 0 for r in runs):
+                return flags, launcher
+        return [], []
+
+
+def sanitizer():
+    """The -fsanitize flags this gcc can build and run, or [] (no AddressSanitizer here)."""
+    return sanitized()[0]
 
 
 def c_tests(name):
     """verify(): build your file, run it on meta["runs"] ([args, stdin, expected stdout])."""
     def verify(work, meta, value):
         with tempfile.TemporaryDirectory() as tmp:
-            built = run(["gcc", "-g", *sanitizer(), str(work / name), "-o", "prog"], tmp)
+            flags, launcher = sanitized()
+            built = run(["gcc", "-g", *flags, str(work / name), "-o", "prog"], tmp)
             if not built or built.returncode != 0:
                 return False
             env = {**os.environ, "ASAN_OPTIONS": "detect_leaks=1", "UBSAN_OPTIONS": "halt_on_error=1"}
             for args, stdin, expected in meta["runs"]:
-                r = run(["./prog", *args], tmp, stdin, env=env)
+                r = run([*launcher, "./prog", *args], tmp, stdin, env=env)
                 if not r or r.returncode != 0 or r.stdout != expected:
                     return False
         return True

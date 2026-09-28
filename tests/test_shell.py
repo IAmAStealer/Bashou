@@ -16,6 +16,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 TIMEOUT = 10
+ARENA_PROMPT = b"arena # " if os.geteuid() == 0 else b"arena $"     # bash's \$: # for root (a container)
 
 
 class Shell:
@@ -508,7 +509,7 @@ class AdventureShellTest(unittest.TestCase):
             try:
                 self.assertTrue(sh.expect(b"shell trick"))
                 sh.send("\r", 0)
-                self.assertTrue(sh.expect(b"arena $"))              # a real shell in the sandbox
+                self.assertTrue(sh.expect(ARENA_PROMPT))              # a real shell in the sandbox
                 sh.send("flee\n", 0)
                 self.assertTrue(sh.expect(b"stays shut"))           # back in the game
                 sh.send("\r", 0.3)
@@ -525,7 +526,7 @@ class SecurityShellTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             sh = Shell(tmp, ["python3", "-m", "bashou", "security", "2"])
             try:
-                self.assertTrue(sh.expect(b"arena $"))           # the sandbox prompt
+                self.assertTrue(sh.expect(ARENA_PROMPT))           # the sandbox prompt
                 self.assertIn(b"Encoded note", sh.out)
                 sh.send('answer "$(base64 -d note.txt | cut -d\' \' -f2)"\n', 0)
                 self.assertTrue(sh.expect(b"Solved"))
@@ -550,10 +551,10 @@ class ArenaShellTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             sh = Shell(tmp, ["python3", "-m", "bashou", "fight"], state=threat)
             try:
-                self.assertTrue(sh.expect(b"arena $"))
+                self.assertTrue(sh.expect(ARENA_PROMPT))
                 start = len(sh.out)
                 sh.send("true\n", 0)
-                self.assertTrue(sh.expect(b"arena $", start))
+                self.assertTrue(sh.expect(ARENA_PROMPT, start))
                 sh.send("\x04", 0)
                 self.assertTrue(sh.expect(b"You fled"))
                 self.assertEqual(sh.state()["fights_won"], 0)

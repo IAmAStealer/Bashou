@@ -3,6 +3,14 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.6.5 — 2026-09-29
+
+- C fights no longer refuse a correct fix at random. On some systems (gcc 12, as on Debian 12, with a
+  recent kernel, WSL included), a program built with AddressSanitizer could freeze when it started,
+  about one time in three, and the check gave up. Bashou now runs your program with address
+  randomization turned off, which prevents that. Where that isn't allowed, it builds without the
+  sanitizer, and the two memory fights that need it wait for a system that can run them.
+
 ## v0.6.4 — 2026-09-28
 
 - The Pebble's last evolution, at level 20, really changes your pet now: the Jade golem was only a

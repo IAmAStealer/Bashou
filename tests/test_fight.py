@@ -159,6 +159,42 @@ SOLUTIONS = {
 }
 
 
+class SanitizerHangTest(unittest.TestCase):
+    """AddressSanitizer in gcc 12 hung at start 9 times in 30 on a recent kernel (Docker, WSL): C fights
+    refused correct fixes at random. Programs now start without address randomization where allowed,
+    else C is built without sanitizers."""
+
+    def probe(self, setarch_works, plain_hangs):
+        from subprocess import CompletedProcess
+        from bashou.challenges import code
+
+        def run(cmd, cwd, stdin="", timeout=10, env=None):
+            if cmd[0] == "gcc":
+                return CompletedProcess(cmd, 0)
+            if cmd[0] == "setarch":
+                return CompletedProcess(cmd, 0 if setarch_works else 1)
+            return None if plain_hangs else CompletedProcess(cmd, 0)      # None: timed out
+        code.sanitized.cache_clear()
+        try:
+            with mock.patch.object(code, "run", side_effect=run), \
+                    mock.patch("shutil.which", return_value="/usr/bin/setarch"):
+                return code.sanitized()
+        finally:
+            code.sanitized.cache_clear()
+
+    def test_setarch_first(self):
+        flags, launcher = self.probe(setarch_works=True, plain_hangs=True)
+        self.assertTrue(flags)
+        self.assertEqual(launcher[0::2], ["setarch", "-R"])
+
+    def test_no_sanitizer_when_it_hangs_and_setarch_is_refused(self):
+        self.assertEqual(self.probe(setarch_works=False, plain_hangs=True), ([], []))
+
+    def test_plain_when_nothing_hangs(self):
+        flags, launcher = self.probe(setarch_works=False, plain_hangs=False)
+        self.assertEqual((bool(flags), launcher), (True, []))
+
+
 class ChallengeTest(unittest.TestCase):
     def test_every_challenge_has_a_solution(self):
         self.assertEqual(set(SOLUTIONS), set(challenges.BY_ID))
