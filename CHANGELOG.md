@@ -10,6 +10,9 @@ Every release has a section here, written for players. CI refuses to tag a relea
   about one time in three, and the check gave up. Bashou now runs your program with address
   randomization turned off, which prevents that. Where that isn't allowed, it builds without the
   sanitizer, and the two memory fights that need it wait for a system that can run them.
+- A save damaged inside (one wrong byte on disk, or a hand edit) no longer makes your pet crash over
+  and over. The damaged entry is dropped and everything else in your save is kept. If the starter
+  itself can't be read, Bashou asks you to choose it again.
 
 ## v0.6.4 — 2026-09-28
 

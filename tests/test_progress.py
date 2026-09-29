@@ -349,3 +349,55 @@ class AchievementNoteTest(unittest.TestCase):
         for a in achievements.ALL:                   # no achievement name sounds like another family's pet
             if a.pet != "owl":
                 self.assertNotIn("owl", a.name.lower(), a.id)
+
+
+class DamagedSaveTest(unittest.TestCase):
+    """Found by fuzzing the save reader: a damaged byte inside a field (a renamed key, a number turned into
+    text, a list into a number) passed state.read, then crashed progress.check at every frame of the pet.
+    The damaged entry is dropped now, the rest of the save is kept."""
+
+    def good(self):
+        s = state.default()
+        s.update(language="en", starter="star", commands=40, pets=["fox"], tools={"find": 12, "grep": 3},
+                 evolving=[{"who": "fox", "from": 1, "to": 2}], achievements=["tracker"])
+        return s
+
+    def load(self, **damage):
+        s = {**self.good(), **damage}
+        loaded = state.read(json.dumps(s))
+        progress.check(loaded)                         # raised before
+        return loaded
+
+    def test_damaged_entries_are_dropped_and_the_rest_kept(self):
+        s = self.load(evolving=[{"whg": "starter", "from": 1, "to": 2}, {"who": "fox", "from": 1, "to": 2}],
+                      tools={"find": 12, "grep": "3"}, pets=["fox", {"x": 1}], days=[1, "2026-09-29"])
+        self.assertEqual([e["who"] for e in s["evolving"]], ["fox"])
+        self.assertEqual(s["tools"], {"find": 12})
+        self.assertTrue(all(isinstance(p, str) for p in s["pets"]) and "fox" in s["pets"])
+        self.assertEqual(s["days"], ["2026-09-29"])
+        self.assertEqual(s["commands"], 40)
+        self.assertIn("tracker", s["achievements"])
+
+    def test_damaged_records_go_back_to_their_defaults(self):
+        s = self.load(today={"date": 3}, threat={"challenge": "grep_hydra"}, skills=[1], reviews={"a": 5},
+                      lessons={"read": "x", "page": []})
+        self.assertEqual(s["today"], state.default()["today"])
+        self.assertIsNone(s["threat"])
+        self.assertEqual(s["skills"], "all")
+        self.assertEqual(s["reviews"], {})
+        self.assertEqual(s["lessons"]["read"], [])
+
+    def test_an_unreadable_starter_is_asked_again(self):
+        for starter in ("sprnut", {"a": 1}, 3):
+            with self.subTest(starter=starter):
+                self.assertIsNone(self.load(starter=starter)["starter"])
+
+    def test_an_unknown_active_pet_falls_back_to_the_starter(self):
+        self.assertEqual(self.load(active="fxo")["active"], "starter")
+
+    def test_the_adventure_part_the_pet_reads(self):
+        self.assertIsNone(self.load(adventure=7)["adventure"])
+        adv = self.load(adventure={"walked": "far", "bosses": [{"topic": "grep"}, {"topc": "x"}], "levels": 2})["adventure"]
+        self.assertNotIn("walked", adv)
+        self.assertEqual(adv["bosses"], [{"topic": "grep"}])
+        self.assertEqual(adv["levels"], {})

@@ -115,10 +115,79 @@ def read(text):
         kind = (int, float) if isinstance(value, (int, float)) else type(value)
         if not isinstance(state[key], kind):
             state[key] = value
+    clean(state)
     for key in ("starter_best", "ladder_best", "reviews"):
         if key not in data:
             del state[key]                                 # an old save: migrate() sets it
     return migrate(state)
+
+
+NUMBER = (int, float)
+
+
+def _entries(value, check):
+    """The entries of a list (or the items of a dict) that pass `check`: a damaged one is dropped."""
+    if isinstance(value, dict):
+        return {k: v for k, v in value.items() if check(v)}
+    return [v for v in value if check(v)]
+
+
+def _record(value, fields):
+    """A dict holding each field with its type."""
+    return isinstance(value, dict) and all(isinstance(value.get(k), kind) for k, kind in fields.items())
+
+
+def clean(state):
+    """Inside the fields too: a damaged byte in a save (or a hand edit) made an entry the wrong type or
+    renamed one of its keys, and the pet crashed on it at every frame. Drop what's damaged, keep the rest.
+    (Found by fuzzing the save reader.)"""
+    from .creatures import FAMILIES, STARTERS
+    if state["starter"] is not None and not (isinstance(state["starter"], str) and state["starter"] in {*STARTERS, "cat"}):
+        state["starter"] = None                            # unreadable: `bashou start` asks again (cat: migrate())
+    for key in ("tools", "constructs", "ladder_best", "looks"):
+        state[key] = _entries(state[key], lambda v: isinstance(v, NUMBER))
+    for key in ("days", "pets", "achievements", "challenges", "security"):
+        state[key] = _entries(state[key], lambda v: isinstance(v, str))
+    state["pets"] = [p for p in state["pets"] if p in FAMILIES]
+    if state["active"] != "starter" and state["active"] not in state["pets"]:
+        state["active"] = "starter"
+    for key in ("today", "threat_day"):
+        if not _record(state[key], {"date": str, "count": NUMBER}):
+            state[key] = default()[key]
+    state["evolving"] = _entries(state["evolving"], lambda e: _record(e, {"who": str, "from": int, "to": int}))
+    state["reviews"] = _entries(state["reviews"], lambda r: _record(r, {"step": int, "due": str}))
+    if state["skills"] != "all" and not (isinstance(state["skills"], list)
+                                         and all(isinstance(s, str) for s in state["skills"])):
+        state["skills"] = "all"
+    if state["threat"] is not None and not _record(state["threat"], {"challenge": str, "until": NUMBER}):
+        state["threat"] = None
+    lessons = {**default()["lessons"], **state["lessons"]}
+    for key in ("read", "opened", "met"):
+        lessons[key] = _entries(lessons[key], lambda v: isinstance(v, str)) if isinstance(lessons[key], list) else []
+    if not isinstance(lessons["page"], dict):
+        lessons["page"] = {}
+    state["lessons"] = lessons
+    clean_adventure(state)
+
+
+def clean_adventure(state):
+    """What the pet reads of the adventure (its achievements, at every frame). The rest is only read by
+    `bashou adventure`."""
+    adv = state["adventure"]
+    if adv is None:
+        return
+    if not isinstance(adv, dict):
+        state["adventure"] = None
+        return
+    for key in ("walked", "chapters_done"):
+        if key in adv and not isinstance(adv[key], NUMBER):
+            del adv[key]
+    for key, check in (("bosses", lambda b: isinstance(b, dict) and isinstance(b.get("topic"), str)),
+                       ("trials", lambda t: True)):
+        if key in adv:
+            adv[key] = _entries(adv[key], check) if isinstance(adv[key], list) else []
+    if "levels" in adv:
+        adv["levels"] = _entries(adv["levels"], lambda v: isinstance(v, NUMBER)) if isinstance(adv["levels"], dict) else {}
 
 
 def prev():
