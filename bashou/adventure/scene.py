@@ -64,11 +64,11 @@ def blit(canvas, rows, palette, cx, bottom, scale):
 
 ROAD = (92, 80, 62)
 ROAD_LIT = (170, 146, 100)
-HORIZON = 0.26          # share of the height above the plain at a fork: the paths get room to recede
+HORIZON = 0.26          # share of the height above the plain: the road gets room to recede
 
 
 def fork_road(canvas, biome, n, picked=None, hero_h=12):
-    """The road splitting into `n` paths (a Y, or three), narrowing toward the horizon; the split is
+    """The road splitting into `n` paths (a Y, or three; one between forks), narrowing toward the horizon; the split is
     just above the pet's head. `picked` path is lit. Returns where each path's name goes: (x, y)
     pixels at its far end, left to right (the middle one a line higher, so names never overlap)."""
     top, bottom, ground, _grass = BIOMES[biome]
@@ -85,10 +85,14 @@ def fork_road(canvas, biome, n, picked=None, hero_h=12):
             for x in range(round(cx - half), round(cx + half) + 1):
                 canvas.set(x, y, color)
 
-    ends = {2: (0.28, 0.72), 3: (0.16, 0.5, 0.84)}.get(n, (0.5,))
+    near = max(w * 0.14, hero_h * 0.75)                           # at least the pet's width, even in portrait
+    if n == 1:                                                    # one road, straight to the horizon
+        band(horizon, h - 1, w / 2, w / 2, 1, near, ROAD)
+        return []
+    ends = {2: (0.28, 0.72), 3: (0.16, 0.5, 0.84)}[n]
     signs = []
     for i, end in enumerate(ends):
         band(horizon, split, w * end, w / 2, 1, w * 0.04, ROAD_LIT if i == picked else ROAD)
         signs.append((w * end, horizon - (4 if n == 3 and end == 0.5 else 2)))
-    band(split, h - 1, w / 2, w / 2, w * 0.04, w * 0.14, ROAD_LIT if picked is not None else ROAD)
+    band(split, h - 1, w / 2, w / 2, w * 0.04, near, ROAD_LIT if picked is not None else ROAD)
     return signs

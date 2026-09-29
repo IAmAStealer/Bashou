@@ -75,13 +75,14 @@ class Game:
         self.trial = None               # the chest's shell trial
         self.pending_trial = None       # set when you open it: main() runs the sandbox shell
         self.page = 0                   # lesson page
+        self.hud_rows = 1               # status lines at the bottom: 2 when one is too narrow (portrait)
         if self.adv["phase"] in ("monster", "boss", "chest", "lesson"):
             self.start_event(self.adv["phase"], time.time())   # an event you quit in: start it again
         self.resize(cols, rows)
 
     def resize(self, cols, rows):
         self.cols, self.rows = cols, rows
-        self.canvas = canvas.Canvas(cols, (rows - 1) * 2)
+        self.canvas = canvas.Canvas(cols, (rows - self.hud_rows) * 2)
         self.scale = 2 if self.canvas.h >= 40 else 1
 
     # --- rules ---------------------------------------------------------------------------------
@@ -270,6 +271,9 @@ class Game:
     # --- drawing ---------------------------------------------------------------------------------
 
     def draw(self, t, now):
+        if len(self.hud_lines()) != self.hud_rows:          # the status line wraps or unwraps: new layout
+            self.hud_rows = len(self.hud_lines())
+            self.resize(self.cols, self.rows)
         adv, c = self.adv, self.canvas
         signs = self.draw_fork(t)
         lines = self.panel(now)
@@ -293,13 +297,13 @@ class Game:
         """Paint the scene. At the start and at a fork the road splits into the paths you can take
         (a Y, or three); returns their names and where they go on screen (line, column, text, picked)."""
         adv = self.adv
-        fork = None
+        options, picked = [None], None                    # between forks: one road ahead
         if adv["phase"] in ("intro", "fork") and not self.result:
             options = world.fork_options(adv, self.topics)
             picked = self.choice if adv["phase"] == "fork" else None
-            fork = (len(options), picked, 12 * self.scale)
+        fork = (len(options), picked, 12 * self.scale)
         spots = scene.draw(self.canvas, world.biome(adv), adv["distance"], t, 17 * self.scale, fork)
-        if not fork or fork[1] is None:
+        if picked is None:
             return []
         signs = []
         for i, (topic, (x, y)) in enumerate(zip(options, spots)):
@@ -364,7 +368,7 @@ class Game:
             scale = max(1.0, min(room * share / len(rows), self.canvas.w * 0.5 / len(rows[0])))
             scene.blit(self.canvas, rows, palette, self.canvas.w / 2, room - 1 - bob, scale)
             return
-        horizon = int(self.canvas.h * 0.38)
+        horizon = int(self.canvas.h * scene.HORIZON)          # it comes down the road
         y = horizon + scene.CAMERA / rel
         near = (y - horizon) / (self.canvas.h - horizon)
         scale = near * (3.0 if kind == "boss" else 2.0) * self.scale
@@ -420,7 +424,7 @@ class Game:
         width = min(self.cols - 4, 76)
         wrapped = [(part, color) for text, color in lines
                    for part in (render.wrap(text, width - 4, 8) if text else [""])]
-        top = max(1, self.rows - 2 - len(wrapped))          # just above the status line
+        top = max(1, self.rows - 1 - self.hud_rows - len(wrapped))     # just above the status line
         return (top, (self.cols - width) // 2 + 1, width, wrapped)
 
     def panel_text(self, lines, rect):
@@ -444,6 +448,13 @@ class Game:
                 self.canvas.shown.pop((line, col), None)
 
     def hud(self):
+        lines = self.hud_lines()
+        return "".join(f"{ESC}[{self.rows - len(lines) + 1 + i};1H{ESC}[0m{ESC}[2K{text[:self.cols - 1]}"
+                       for i, text in enumerate(lines))
+
+    def hud_lines(self):
+        """The status line: the keys and where you are. On a narrow (portrait) terminal they don't fit
+        side by side, so each gets its own line instead of being cut off."""
         adv = self.adv
         hearts = "♥" * adv["hearts"] + "♡" * (world.HEARTS - adv["hearts"])
         where = biome_name(world.biome(adv))
@@ -454,8 +465,10 @@ class Game:
         if self.result:
             keys = _("s: save & quit")
         info = f"{_('Chapter {n}').format(n=adv['chapter'])} · {where}{path} · {hearts} · {int(adv['walked'])} m"
-        text = f" {keys}   {info}" if adv["phase"] in ("intro", "fork") and not self.result else f" {info}   {keys}"
-        return f"{ESC}[{self.rows};1H{ESC}[0m{ESC}[2K{text[:self.cols - 1]}"
+        parts = [keys, info] if adv["phase"] in ("intro", "fork") and not self.result else [info, keys]
+        if render.width(f" {parts[0]}   {parts[1]}") < self.cols:
+            return [f" {parts[0]}   {parts[1]}"]
+        return [f" {part}" for part in parts]
 
 
 def main():

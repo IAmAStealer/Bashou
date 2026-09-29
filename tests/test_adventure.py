@@ -87,6 +87,25 @@ class GameTest(unittest.TestCase):
         self.assertEqual(g.caption(), "")
         self.assertIn("←/→", g.hud())
 
+    def test_portrait_keeps_the_status_and_the_road(self):
+        """User report: in a portrait terminal the status line was cut (no chapter, hearts, meters) and
+        the walk showed only empty sky. The status wraps to two lines, and a road runs to the horizon."""
+        g = self.game = adventure.Game(50, 60, rng=random.Random(0))
+        self.go("\r", "\r")                                    # set off, take the first path
+        self.assertEqual(g.adv["phase"], "walk")
+        g.draw(0.0, 0)
+        lines = g.hud_lines()
+        self.assertEqual(len(lines), 2)
+        self.assertTrue(all(len(line) < g.cols for line in lines))
+        self.assertIn("♥", "".join(lines))
+        self.assertIn("s: save & quit", "".join(lines))
+        self.assertEqual(g.canvas.h, (g.rows - 2) * 2)         # the canvas leaves both lines free
+        road = lambda y: sum(g.canvas.px[y][x] == scene.ROAD for x in range(g.canvas.w))
+        self.assertGreaterEqual(road(g.canvas.h - 1), 17 * g.scale)          # as wide as the pet near it
+        self.assertGreater(road(int(g.canvas.h * scene.HORIZON) + 2), 0)     # and runs up to the horizon
+        wide = adventure.Game(120, 35, rng=random.Random(0))
+        self.assertEqual(len(wide.hud_lines()), 1)
+
     def test_the_road_splits_with_the_paths_written_on_it(self):
         """Owner: the fork was only a line on top; draw a Y narrowing away, the names on the paths."""
         g = self.game
