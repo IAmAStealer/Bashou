@@ -13,8 +13,8 @@ from pathlib import Path
 from .. import challenges, fight, progress, render, skills, state, terminal
 from ..i18n import _, cap
 from . import canvas, lessons, quiz, scene, sprites, world
+from ..render import ESC
 
-ESC = "\x1b"
 FPS = 15
 SPEED = 5.0                    # world units per second: the pet walks on its own between events
 BOSS_SECONDS = 20

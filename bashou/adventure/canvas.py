@@ -1,6 +1,6 @@
 """A pixel buffer drawn with half blocks (two pixels per terminal cell), redrawing only what changed."""
 
-ESC = "\x1b"
+from ..render import ESC
 
 
 class Canvas:

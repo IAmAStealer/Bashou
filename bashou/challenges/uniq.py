@@ -22,3 +22,4 @@ CHALLENGE = Challenge(
            "Try: sort visitors.txt | uniq -c | sort -rn | head -1"],
     setup=setup,
 )
+ALL = [CHALLENGE]

@@ -18,9 +18,8 @@ from pathlib import Path
 from . import challenges, duel, progress, skills, state
 from .analyze import analyze, parse_log
 from .i18n import _, cap
+from .render import BOLD, DIM, RESET, ACCENT, GOOD, BAD
 
-BOLD, DIM, RESET = "\033[1m", "\033[2m", "\033[0m"
-ACCENT, GOOD, BAD = "\033[38;2;150;190;230m", "\033[38;2;130;210;120m", "\033[38;2;240;110;110m"
 WIN, FLEE, KO = 42, 3, 4   # exit codes of the arena shell (Ctrl-D is a flee, KO: no hearts left)
 TIMEOUT = -1               # `bashou arena`'s clock ran out (not an exit code: Bashou stops the shell)
 THREAT_MINUTES = 30

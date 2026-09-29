@@ -23,3 +23,4 @@ CHALLENGE = Challenge(
            "Try: awk -F, '$2 == \"ITEM\" { s += $3 } END { print s }' sales.csv"],
     setup=setup,
 )
+ALL = [CHALLENGE]

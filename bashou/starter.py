@@ -6,9 +6,8 @@ from . import creatures, render, state, terminal
 from . import i18n
 from .creatures import FAMILIES, PETS, STARTERS
 from .i18n import _
+from .render import ESC, BOLD, DIM, RESET, REV
 
-ESC = "\x1b"
-BOLD, DIM, RESET, REV = f"{ESC}[1m", f"{ESC}[2m", f"{ESC}[0m", f"{ESC}[7m"
 KEYS = {"\x1b[C": 1, "l": 1, "\x1b[D": -1, "h": -1}
 SLOT = 26
 

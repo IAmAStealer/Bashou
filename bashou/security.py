@@ -3,8 +3,8 @@ choices (`bashou arena security`; the old `bashou security` still leads there)."
 
 from . import challenges, fight, progress, state
 from .i18n import _
+from .render import BOLD, DIM, RESET, GOOD
 
-BOLD, DIM, RESET, GOOD = "\033[1m", "\033[2m", "\033[0m", "\033[38;2;130;210;130m"
 LEVELS = {1: "easy", 2: "medium", 3: "hard"}
 
 

@@ -30,7 +30,7 @@ class RepoSetupTest(unittest.TestCase):
             ran.append(cmd)
             return CompletedProcess(cmd, 1 if fails and fails in cmd else 0)
         out = io.StringIO()
-        with mock.patch.object(challenges, "family", return_value=frozenset(family)), \
+        with mock.patch("bashou.which.os_family", return_value=frozenset(family)), \
                 mock.patch("builtins.input", return_value=answer), mock.patch("shutil.which", return_value="/usr/bin/curl"), \
                 contextlib.redirect_stdout(out):
             code = repo_setup.offer(self.old, self.bashrc, run=run)
@@ -83,7 +83,7 @@ class RepoSetupTest(unittest.TestCase):
 
     def test_package_installs_only_show_the_command_without_a_terminal(self):
         run = mock.Mock()
-        with mock.patch.object(challenges, "family", return_value=frozenset({"debian"})), \
+        with mock.patch("bashou.which.os_family", return_value=frozenset({"debian"})), \
                 contextlib.redirect_stdout(io.StringIO()) as out:
             self.assertEqual(repo_setup.upgrade(run=run), 0)
         run.assert_not_called()
@@ -117,7 +117,7 @@ class UpdateOfferTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp, mock.patch.object(state, "DATA", Path(tmp)), \
                 mock.patch.object(state, "STATE", Path(tmp) / "state.json"), \
                 mock.patch("sys.stdin.isatty", return_value=True), mock.patch.object(update, "packaged", return_value=None), \
-                mock.patch.object(repo_setup, "system", return_value="redhat"), \
+                mock.patch.object(repo_setup, "system", return_value="rocky"), \
                 mock.patch.object(repo_setup, "PACKAGE_LOADER", Path(__file__)), \
                 mock.patch.object(repo_setup, "offer") as offer, \
                 mock.patch.object(update, "available", return_value=None) as available, \

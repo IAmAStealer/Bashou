@@ -394,3 +394,4 @@ from .trials import trial  # noqa: E402
 INDENT_CHEST = trial("trial_ci_indent", 2, "A pipeline file hides in this chest: " + WORKFLOW + ". One line is out "
                      "of line. Put it back, so the job test has its two steps. Then: verify",
                      [YAML_OUTLINE, YAML_NEIGHBOURS], indent_setup, indent_verify, requires=["sed"], teaches=["yaml"])
+CHESTS = [INDENT_CHEST]                  # locked chests in `bashou adventure`

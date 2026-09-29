@@ -460,3 +460,4 @@ def trial():
 
 
 CHEST = trial()
+CHESTS = [CHEST]                  # locked chests in `bashou adventure`

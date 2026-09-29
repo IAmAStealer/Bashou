@@ -19,8 +19,8 @@ from . import challenges, creatures, progress, render, state
 from .adventure import sprites
 from .analyze import analyze, parse_log
 from .i18n import _, cap
+from .render import ESC
 
-ESC = "\x1b"
 HEARTS = 3
 ENEMY = 3                 # health pips; hits bring it to 1, `answer` lands the last blow
 KO = 4                    # exit code of the arena shell when you're knocked out

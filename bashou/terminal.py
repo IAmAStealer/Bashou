@@ -7,8 +7,8 @@ import sys
 import termios
 import tty
 from contextlib import contextmanager
+from .render import ESC
 
-ESC = "\x1b"
 # What a key means on every screen; a screen adds its own (`f` on the board).
 NAMES = {"\x1b[A": "up", "\x1b[B": "down", "\x1b[C": "right", "\x1b[D": "left",
          "k": "up", "j": "down", "l": "right", "h": "left", "\r": "enter", "\n": "enter",

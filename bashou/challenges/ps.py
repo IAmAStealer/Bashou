@@ -42,3 +42,4 @@ CHALLENGE = Challenge(
            "Try: pgrep -f phantom   or   ps aux | grep phantom"],
     setup=setup, cleanup=cleanup, requires=["ps"],
 )
+ALL = [CHALLENGE]

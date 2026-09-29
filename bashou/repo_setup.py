@@ -14,7 +14,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-from . import setup, state
+from . import setup, state, which
 from .i18n import _
 
 SITE = "https://iamastealer.github.io/Bashou"
@@ -35,13 +35,8 @@ gpgkey={SITE}/bashou.asc
 
 
 def system():
-    """"debian", "redhat", or None where Bashou has no repository."""
-    from .challenges import family
-    if "debian" in family():
-        return "debian"
-    if family() & {"rhel", "fedora", "centos"}:
-        return "redhat"
-    return None
+    """"debian", "rocky" (the Red Hat family), or None where Bashou has no repository."""
+    return which.system()
 
 
 def download(url, dest):
@@ -161,7 +156,7 @@ def offer(old_loader, bashrc=None, run=subprocess.run, asked=True):
 
 def upgrade(run=subprocess.run):
     """A package install: show the command that upgrades it, and run it if you say so."""
-    manager = "dnf" if system() == "redhat" else "apt"
+    manager = "dnf" if system() == "rocky" else "apt"
     # --refresh: dnf re-reads a repository only every 48 hours, and Bashou knows about a release from GitHub
     # right away: without it, dnf said "Nothing to do" for two days after 0.5.0.
     text = ("sudo dnf upgrade --refresh bashou" if manager == "dnf"

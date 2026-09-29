@@ -8,9 +8,8 @@ import time
 from . import creatures, progress, render, state, terminal
 from .behavior import ACTIONS
 from .i18n import _
+from .render import ESC, BOLD, DIM, RESET
 
-ESC = "\x1b"
-BOLD, DIM, RESET = f"{ESC}[1m", f"{ESC}[2m", f"{ESC}[0m"
 SPARKLE = f"{ESC}[38;2;255;220;120m"
 WHITE = (235, 235, 245)
 

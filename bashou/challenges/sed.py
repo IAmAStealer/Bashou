@@ -28,3 +28,4 @@ CHALLENGE = Challenge(
            "Try: sed -i 's/teh/the/g; s/Teh/The/g' letter.txt"],
     setup=setup, verify=verify,
 )
+ALL = [CHALLENGE]

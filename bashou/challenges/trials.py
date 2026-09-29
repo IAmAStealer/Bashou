@@ -270,5 +270,5 @@ VISITORS = trial("trial_sort_visitors", 2, "visitors.txt has one name per visit.
                  teaches=["sort"])
 
 
-TRIALS = [DIRS, NOTE, MOVE, COPY, RENAME, CLEAN, SPELL, LINK, JOURNAL, GEMS, LOOT, LETTER, SCROLLS,
+CHESTS = [DIRS, NOTE, MOVE, COPY, RENAME, CLEAN, SPELL, LINK, JOURNAL, GEMS, LOOT, LETTER, SCROLLS,
           NAMES_COL, PRICES, CITIES, SCORES, VISITORS]

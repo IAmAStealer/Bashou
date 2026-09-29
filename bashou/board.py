@@ -7,13 +7,11 @@ from . import achievements, creatures, progress, render, state, terminal
 from .behavior import ACTIONS
 from .creatures import STARTERS, roster
 from .i18n import _
+from .render import ESC, BOLD, DIM, RESET, REV, ACCENT
 
-ESC = "\x1b"
 COLS = 4
 TILE_W, TILE_H = 18, 2          # 16-character names (Golem de cristal) fit; 4 × 18 fits 80 columns
 PREVIEW_SHORT = 9                  # sprite, blank line, name and next stage
-DIM, BOLD, RESET, REV = f"{ESC}[2m", f"{ESC}[1m", f"{ESC}[0m", f"{ESC}[7m"
-ACCENT = f"{ESC}[38;2;150;190;230m"
 KEYS = {"f": "form"}             # besides terminal.NAMES
 
 

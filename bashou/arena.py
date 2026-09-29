@@ -15,9 +15,8 @@ import time
 
 from . import fight, security, state
 from .i18n import _
+from .render import BOLD, DIM, RESET, BAD
 
-BOLD, DIM, RESET = "\033[1m", "\033[2m", "\033[0m"
-BAD = "\033[38;2;240;110;110m"
 CLOSED_FOR = 3600                   # seconds
 LIMITS = {1: 5, 2: 8, 3: 12}        # minutes, by fight level
 

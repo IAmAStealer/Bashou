@@ -24,3 +24,4 @@ CHALLENGE = Challenge(
            "Try: grep -c '\\[ERROR\\]' app.log  (or grep -cF '[ERROR]' app.log)"],
     setup=setup,
 )
+ALL = [CHALLENGE]

@@ -10,7 +10,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from bashou import challenges, fight, state
+from bashou import challenges, fight, state, which
 from bashou.challenges import cicd, repos, secrets, sql
 
 # Reference solutions, run with bash in the arena folder. {x} is filled from the task text.
@@ -276,17 +276,17 @@ esac
 
 class PackageFightTest(unittest.TestCase):
     def test_they_follow_the_distro(self):
-        with mock.patch.object(challenges, "family", return_value=frozenset({"ubuntu", "debian"})):
+        with mock.patch("bashou.which.os_family", return_value=frozenset({"ubuntu", "debian"})):
             self.assertFalse(challenges.BY_ID["release_raven"].available())
-        with mock.patch.object(challenges, "family", return_value=frozenset({"rocky", "rhel", "centos", "fedora"})):
+        with mock.patch("bashou.which.os_family", return_value=frozenset({"rocky", "rhel", "centos", "fedora"})):
             self.assertFalse(challenges.BY_ID["version_vole"].available())
 
     def test_os_release_family(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "os-release"
             path.write_text('NAME="Rocky Linux"\nID="rocky"\nID_LIKE="rhel centos fedora"\n')
-            self.assertEqual(challenges.family.__wrapped__(str(path)), {"rocky", "rhel", "centos", "fedora"})
-            self.assertEqual(challenges.family.__wrapped__(str(path) + "-missing"), frozenset())
+            self.assertEqual(which.os_family.__wrapped__(str(path)), {"rocky", "rhel", "centos", "fedora"})
+            self.assertEqual(which.os_family.__wrapped__(str(path) + "-missing"), frozenset())
 
     def test_red_hat_fights_with_a_fake_rpm(self):
         with tempfile.TemporaryDirectory() as bin_dir, tempfile.TemporaryDirectory() as tmp:
@@ -295,7 +295,7 @@ class PackageFightTest(unittest.TestCase):
             fake.chmod(0o755)
             path = f"{bin_dir}:{os.environ['PATH']}"
             with mock.patch.dict(os.environ, {"PATH": path}), \
-                    mock.patch.object(challenges, "family", return_value=frozenset({"rocky", "rhel"})):
+                    mock.patch("bashou.which.os_family", return_value=frozenset({"rocky", "rhel"})):
                 for cid in ("release_raven", "hitchhiker_hare", "census_centipede"):
                     ch = challenges.BY_ID[cid]
                     self.assertTrue(ch.available(), cid)
@@ -598,7 +598,7 @@ class RepoFightTest(unittest.TestCase):
         importlib.reload(repos)
 
     def test_red_hat_file_fight(self):
-        with mock.patch.object(challenges, "family", return_value=frozenset({"rocky", "rhel"})):
+        with mock.patch("bashou.which.os_family", return_value=frozenset({"rocky", "rhel"})):
             self.assertTrue(challenges.BY_ID["repo_revenant"].available())
             self.assertFalse(challenges.BY_ID["mirror_mimic"].available())
 

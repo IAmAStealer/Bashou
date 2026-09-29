@@ -3,6 +3,9 @@
 import unicodedata
 
 ESC = "\x1b"
+BOLD, DIM, RESET, REV = f"{ESC}[1m", f"{ESC}[2m", f"{ESC}[0m", f"{ESC}[7m"
+ACCENT = f"{ESC}[38;2;150;190;230m"         # Bashou's light blue: titles, the pet's bubble, what is picked
+GOOD, BAD = f"{ESC}[38;2;130;210;120m", f"{ESC}[38;2;240;110;110m"
 SKIP = ESC + "[C"   # move right without touching the cell: transparent
 
 

@@ -21,7 +21,7 @@ def stopped(pid):
 
 
 def loopback_fights():
-    return [ch for ch in network.ALL + [network.CHEST] if ch.cleanup and ch.available()]
+    return [ch for ch in network.ALL + network.CHESTS if ch.cleanup and ch.available()]
 
 
 class LoopbackTest(unittest.TestCase):

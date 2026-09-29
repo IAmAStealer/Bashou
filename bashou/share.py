@@ -16,8 +16,8 @@ from .creatures import NAMES, PETS, STARTERS, owned
 from . import creatures
 from .i18n import _
 from .repo_setup import SITE
+from .render import BOLD, DIM, RESET
 
-BOLD, DIM, RESET = "\x1b[1m", "\x1b[2m", "\x1b[0m"
 PAGE = f"{SITE}/share.html"
 NAME = re.compile(r"[A-Za-z0-9_-]{1,12}")      # the page accepts exactly the same (share.js)
 KEYS = ("p", "f", "lv", "ach", "pets", "won", "read", "sk", "n", "s", "sf")

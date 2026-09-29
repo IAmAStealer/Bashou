@@ -253,3 +253,4 @@ CHEST = trial("trial_gpg_note", 1, "A locked note lies in this chest: note.txt.g
                "gpg -d note.txt.gpg, then type {pw}. " + PINENTRY],
               lambda work, rng: message_setup(work, rng, "note.txt"), lambda w, m, v: v.strip() == m["answer"],
               requires=["gpg", "gpgconf"], teaches=["gpg"])
+CHESTS = [CHEST]                  # locked chests in `bashou adventure`

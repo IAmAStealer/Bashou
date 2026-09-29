@@ -38,7 +38,7 @@ class SkillsTest(unittest.TestCase):
     def test_rust_learners_are_invited_right_away(self):
         s = state.default()
         s.update(adventure={"chapter": 1}, security=[1])
-        with mock.patch("shutil.which", return_value=None):
+        with mock.patch("bashou.which.installed", return_value=False):
             self.assertIsNone(dialogue.invite(s, random.Random(1)))           # all skills: 15 achievements first
             s["skills"] = ["rust"]
             self.assertIn("Rust", dialogue.invite(s, random.Random(1)))

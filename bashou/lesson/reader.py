@@ -12,9 +12,8 @@ import sys
 from .. import creatures, render, skills, state, terminal
 from ..i18n import _
 from . import HERE, how_to_unlock, missing, progress_of, read, shown, skills_of, status, unlocked
+from ..render import ESC, BOLD, DIM, RESET, REV
 
-ESC = "\x1b"
-DIM, BOLD, RESET, REV = f"{ESC}[2m", f"{ESC}[1m", f"{ESC}[0m", f"{ESC}[7m"
 ACCENT = f"{ESC}[38;2;240;200;110m"
 CMD = f"{ESC}[38;2;130;210;120m"
 TITLE = f"{ESC}[38;2;150;190;230m"

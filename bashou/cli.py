@@ -5,8 +5,9 @@ import argparse
 from . import achievements, creatures, progress, state
 from .creatures import owned, roster
 from .i18n import _
+from .render import BOLD, DIM, RESET
 
-BOLD, DIM, RESET, CYAN = "\033[1m", "\033[2m", "\033[0m", "\033[38;2;120;200;230m"
+CYAN = "\033[38;2;120;200;230m"
 
 
 def progress_bar(done, total, width=20):

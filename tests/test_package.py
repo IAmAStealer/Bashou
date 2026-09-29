@@ -115,7 +115,7 @@ class PackagedInstallTest(unittest.TestCase):
         (dnf keeps a repository's list 48 hours). The command must refresh it, like apt update does."""
         from bashou import repo_setup
         ran = []
-        with mock.patch.object(repo_setup, "system", return_value="redhat"), \
+        with mock.patch.object(repo_setup, "system", return_value="rocky"), \
                 contextlib.redirect_stdout(io.StringIO()) as out:
             repo_setup.upgrade(run=lambda *a, **k: ran.append(a))
         self.assertIn("sudo dnf upgrade --refresh bashou", out.getvalue())

@@ -33,3 +33,4 @@ CHALLENGE = Challenge(
            "Try: find maze -type f -name '*.bak' | wc -l"],
     setup=setup,
 )
+ALL = [CHALLENGE]

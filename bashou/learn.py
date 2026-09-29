@@ -6,8 +6,9 @@ import sys
 
 from . import state
 from .i18n import _
+from .render import RESET
 
-BOLD, DIM, CYAN, RESET = "\x1b[1m", "\x1b[2m", "\x1b[36m", "\x1b[0m"
+CYAN = "\x1b[36m"
 # One color per role, the same in the command line at the top and in the steps below it.
 COLORS = {"cmd": "\x1b[1;38;2;240;200;100m", "opt": "\x1b[38;2;120;200;230m",
           "op": "\x1b[1;38;2;220;130;220m", "arg": "\x1b[38;2;150;215;140m"}

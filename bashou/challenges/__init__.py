@@ -4,10 +4,7 @@ Each challenge fills the arena folder with random data in `setup` and returns th
 task text plus what `verify` needs (stored as JSON in the arena's meta file).
 """
 
-import functools
-import shutil
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import Callable, Optional
 
 
@@ -40,8 +37,7 @@ class Challenge:
     level: int = 1            # 1 easy, 2 medium, 3 hard
     kind: str = "fight"       # "fight": sent as a threat; "security": picked in `bashou arena security`
     after: tuple = ()         # fights to beat before this one comes (beginners first)
-    distro: tuple = ()        # only on these families (os-release ID or ID_LIKE), e.g. ("debian",)
-    skill: str = "bash"       # what it teaches (skills.SKILLS): only sent if you learn that
+    skill: str = "bash"       # what it teaches (skills.SKILLS): only sent if you learn that; debian/rocky: only there
     help: str = ""            # what to look for in `tool --help`: beginners get that hint first
     fix: bool = False         # you fix a file (or run commands), then `verify`: Bashou checks the result
     works: Optional[Callable] = None    # () -> bool: something else this system must have (AddressSanitizer…)
@@ -74,31 +70,17 @@ class Challenge:
         return value.strip() == str(meta["answer"])
 
     def available(self):
-        if self.distro and not set(self.distro) & family():
+        from ..which import SYSTEMS, installed, system
+        if self.skill in SYSTEMS and self.skill != system():
             return False
-        from ..which import installed
         return all(installed(t) for t in (self.requires or [self.tool])) and (self.works is None or self.works())
-
-
-@functools.lru_cache(maxsize=None)
-def family(path="/etc/os-release"):
-    """{ID} plus ID_LIKE from os-release: {"ubuntu", "debian"}, {"rocky", "rhel", "centos", "fedora"}…"""
-    try:
-        text = Path(path).read_text()
-    except OSError:
-        return frozenset()
-    found = set()
-    for line in text.splitlines():
-        key, _, value = line.partition("=")
-        if key in ("ID", "ID_LIKE"):
-            found |= set(value.strip().strip('"').split())
-    return frozenset(found)
 
 
 from . import awk, basics, cicd, code, debug, find, grep, network, packages, pipe, ps, repos, rust, secrets, sed, security, sql, trials, uniq  # noqa: E402
 
-ALL = basics.ALL + [grep.CHALLENGE, awk.CHALLENGE, find.CHALLENGE, uniq.CHALLENGE,
-                    sed.CHALLENGE, ps.CHALLENGE, pipe.CHALLENGE] + code.ALL + debug.ALL + rust.ALL + packages.ALL + repos.ALL + cicd.ALL + sql.ALL + secrets.ALL + network.ALL   # fights
+MODULES = (basics, grep, awk, find, uniq, sed, ps, pipe, code, debug, rust, packages, repos, cicd, sql, secrets,
+           network, trials)
+ALL = [c for m in MODULES for c in getattr(m, "ALL", ())]            # fights
 SECURITY = security.SECURITY        # `bashou arena security`, in order
-TRIALS = trials.TRIALS + [cicd.INDENT_CHEST, sql.CHEST, secrets.CHEST, debug.CHEST, network.CHEST]   # locked chests in `bashou adventure`
+TRIALS = [c for m in MODULES for c in getattr(m, "CHESTS", ())]      # locked chests in `bashou adventure`
 BY_ID = {c.id: c for c in ALL + SECURITY + TRIALS}

@@ -28,3 +28,4 @@ CHALLENGE = Challenge(
     uses=lambda analysis: analysis.pipes >= 3,
     requires=["grep", "cut", "sort", "wc"],
 )
+ALL = [CHALLENGE]

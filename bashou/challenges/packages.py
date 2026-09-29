@@ -1,6 +1,6 @@
 """Package fights (owner, 2026-09-23): ask the real package database of this machine.
 
-They only come on the matching family, read from /etc/os-release (see Challenge.distro): Debian and
+They only come on the matching family, read from /etc/os-release (their skill, debian or rocky: which.system): Debian and
 its children (Ubuntu…) for dpkg/apt, Red Hat and its rebuilds (Rocky, Alma, Fedora…) for rpm/dnf.
 Answers are computed at setup from the same database the player queries.
 """
@@ -14,8 +14,6 @@ COMMON = ("bash", "coreutils", "grep", "sed", "tar", "gzip", "findutils", "util-
           "curl", "git", "python3", "openssh-client", "less", "diffutils", "passwd", "hostname")
 EXTRAS = ("htop", "jq", "tree", "nmap", "ncdu", "tmux", "ripgrep", "lynis", "fail2ban", "rsync", "mtr", "iotop",
           "strace", "tcpdump", "whois", "zstd", "btop", "ranger", "cowsay", "figlet")
-DEBIAN = ("debian",)
-REDHAT = ("rhel", "fedora", "centos")
 
 
 def sh(*cmd):
@@ -148,7 +146,7 @@ APT = ("apt", "dpkg", "dpkg-query", "apt-cache")
 RPM = ("rpm", "dnf", "yum")
 
 ALL = [
-    Challenge(level=1, id="version_vole", pet="ant", tools=APT, distro=DEBIAN, skill="debian", requires=["dpkg-query"],
+    Challenge(level=1, id="version_vole", pet="ant", tools=APT, skill="debian", requires=["dpkg-query"],
               threat="Version Vole",
               task="The Version Vole nibbles at labels. Which version of {pkg} is installed on this machine?\n"
                    "Ask the package database, then: answer <version>",
@@ -156,7 +154,7 @@ ALL = [
                      "see only that one. dpkg -l does it too.",
                      "Try: apt list --installed {pkg}   (or: dpkg-query -W {pkg})"],
               setup=installed_setup, verify=version_verify),
-    Challenge(level=1, id="candidate_crow", pet="ant", tools=APT, distro=DEBIAN, skill="debian", requires=["apt-cache"],
+    Challenge(level=1, id="candidate_crow", pet="ant", tools=APT, skill="debian", requires=["apt-cache"],
               threat="Candidate Crow",
               task="The Candidate Crow wants what isn't here yet. Which version of {pkg} would apt install?\n"
                    "Don't install it: just ask apt, then: answer <version>",
@@ -164,35 +162,35 @@ ALL = [
                      "apt policy name shows Installed and Candidate.",
                      "Try: apt policy {pkg}   (the Candidate: line)"],
               setup=candidate_setup, verify=version_verify),
-    Challenge(level=2, id="stowaway_stoat", pet="ant", tools=APT, distro=DEBIAN, skill="debian", requires=["dpkg"],
+    Challenge(level=2, id="stowaway_stoat", pet="ant", tools=APT, skill="debian", requires=["dpkg"],
               threat="Stowaway Stoat",
               task="The Stowaway Stoat asks: which package put {path} on this machine?\n"
                    "A file nobody owns in /usr/bin would be suspicious. Answer with the package name.",
               hints=["dpkg knows which package installed each file: dpkg -S path searches it.",
                      "Try: dpkg -S {path}"],
               setup=owner_setup),
-    Challenge(level=2, id="autoremove_adder", pet="ant", tools=APT + ("apt-mark",), distro=DEBIAN, skill="debian",
+    Challenge(level=2, id="autoremove_adder", pet="ant", tools=APT + ("apt-mark",), skill="debian",
               requires=["apt-mark"], threat="Autoremove Adder",
               task="The Autoremove Adder eats packages nobody asked for. Is {pkg} marked manual or auto?\n"
                    "(auto = pulled in as a dependency: apt autoremove may take it.) answer manual, or answer auto",
               hints=["apt-mark keeps the list: showmanual for what you asked for, showauto for dependencies.",
                      "Try: apt-mark showmanual | grep -x {pkg}   (nothing printed: it's auto)"],
               setup=mark_setup, verify=mark_verify),
-    Challenge(level=1, id="release_raven", pet="ant", tools=RPM, distro=REDHAT, skill="rocky", requires=["rpm"],
+    Challenge(level=1, id="release_raven", pet="ant", tools=RPM, skill="rocky", requires=["rpm"],
               threat="Release Raven",
               task="The Release Raven collects version tags. Which version of {pkg} is installed here?\n"
                    "Answer version-release, like 5.1.8-9.el9: answer <version>",
               hints=["rpm -q name prints name-version-release.arch; dnf list --installed name shows it too.",
                      "Try: rpm -q {pkg}"],
               setup=rpm_installed_setup, verify=rpm_version_verify),
-    Challenge(level=2, id="hitchhiker_hare", pet="ant", tools=RPM, distro=REDHAT, skill="rocky", requires=["rpm"],
+    Challenge(level=2, id="hitchhiker_hare", pet="ant", tools=RPM, skill="rocky", requires=["rpm"],
               threat="Hitchhiker Hare",
               task="The Hitchhiker Hare asks: which package put {path} on this machine?\n"
                    "A file nobody owns in /usr/bin would be suspicious. Answer with the package name.",
               hints=["rpm knows which package installed each file: rpm -qf path.",
                      "Try: rpm -qf --qf '%{NAME}\\n' {path}"],
               setup=rpm_owner_setup, verify=rpm_owner_verify),
-    Challenge(level=2, id="census_centipede", pet="ant", tools=RPM, distro=REDHAT, skill="rocky", requires=["rpm", "wc"],
+    Challenge(level=2, id="census_centipede", pet="ant", tools=RPM, skill="rocky", requires=["rpm", "wc"],
               threat="Census Centipede",
               task="The Census Centipede counts legs, you count packages.\n"
                    "How many packages are installed on this machine?",

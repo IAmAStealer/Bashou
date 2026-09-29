@@ -182,23 +182,23 @@ class RustInviteTest(unittest.TestCase):
         from unittest import mock
         s = state.default()
         s.update(adventure={"chapter": 1}, security={"done": []})
-        with mock.patch("shutil.which", lambda tool: None if tool == "rustc" else f"/usr/bin/{tool}"):
+        with mock.patch("bashou.which.installed", lambda tool: tool != "rustc"):
             self.assertIsNone(dialogue.invite(s, random.Random(0)))                  # a beginner: not yet
             s["achievements"] = [f"a{i}" for i in range(dialogue.RUST_AT)]
             said = dialogue.invite(s, random.Random(0))
             self.assertIn("Rust", said)
             self.assertIn(dialogue.rust_install(), said)
-        with mock.patch("shutil.which", return_value="/usr/bin/rustc"):
+        with mock.patch("bashou.which.installed", return_value=True):
             self.assertIsNone(dialogue.invite(s, random.Random(0)))                  # already there
 
     def test_install_command_follows_the_distro(self):
         from unittest import mock
         from bashou import challenges
-        with mock.patch.object(challenges, "family", return_value=frozenset({"ubuntu", "debian"})):
+        with mock.patch("bashou.which.os_family", return_value=frozenset({"ubuntu", "debian"})):
             self.assertIn("apt install rustc cargo", dialogue.rust_install())
-        with mock.patch.object(challenges, "family", return_value=frozenset({"rocky", "rhel"})):
+        with mock.patch("bashou.which.os_family", return_value=frozenset({"rocky", "rhel"})):
             self.assertIn("dnf install rust", dialogue.rust_install())
-        with mock.patch.object(challenges, "family", return_value=frozenset({"arch"})):
+        with mock.patch("bashou.which.os_family", return_value=frozenset({"arch"})):
             self.assertIn("less rustup.sh", dialogue.rust_install())                  # read it first
 
 
@@ -209,21 +209,21 @@ class SecretsInviteTest(unittest.TestCase):
         s = state.default()
         s.update(adventure={"chapter": 1}, security={"done": []}, skills=["linux"],
                  achievements=[f"a{i}" for i in range(dialogue.SECRETS_AT)])
-        with mock.patch("shutil.which", return_value=None):
+        with mock.patch("bashou.which.installed", return_value=False):
             self.assertIn("GnuPG", dialogue.invite(s, random.Random(0)))             # gpg first: pass needs it
-        with mock.patch("shutil.which", lambda tool: None if tool == "pass" else f"/usr/bin/{tool}"):
+        with mock.patch("bashou.which.installed", lambda tool: tool != "pass"):
             self.assertIn("pass", dialogue.invite(s, random.Random(0)))
         s["skills"] = ["bash"]
-        with mock.patch("shutil.which", return_value=None):
+        with mock.patch("bashou.which.installed", return_value=False):
             self.assertIsNone(dialogue.invite(s, random.Random(0)))                  # not what they learn
 
     def test_pass_comes_from_epel_on_red_hat(self):
         from unittest import mock
         from bashou import challenges
-        with mock.patch.object(challenges, "family", return_value=frozenset({"rocky", "rhel", "centos", "fedora"})):
+        with mock.patch("bashou.which.os_family", return_value=frozenset({"rocky", "rhel", "centos", "fedora"})):
             self.assertIn("epel-release", dialogue.install("pass"))
             self.assertEqual(dialogue.install("gpg"), "sudo dnf install gnupg2")
-        with mock.patch.object(challenges, "family", return_value=frozenset({"fedora"})):
+        with mock.patch("bashou.which.os_family", return_value=frozenset({"fedora"})):
             self.assertEqual(dialogue.install("pass"), "sudo dnf install pass")
-        with mock.patch.object(challenges, "family", return_value=frozenset({"debian"})):
+        with mock.patch("bashou.which.os_family", return_value=frozenset({"debian"})):
             self.assertEqual(dialogue.install("sqlite3"), "sudo apt install sqlite3")

@@ -6,9 +6,8 @@ Personality = the pet's own voice + traits from the achievements you earned
 
 import difflib
 import random
-import shutil
 
-from . import achievements, creatures, safety
+from . import achievements, creatures, safety, which
 from .analyze import analyze
 from .i18n import _
 
@@ -146,13 +145,12 @@ def discover(state, rng):
 
 def install(tool):
     """How to install a tool here, with this system's package manager."""
-    from .challenges import family
     debian, redhat = PACKAGES[tool]
-    if "debian" in family():
+    if which.system() == "debian":
         return f"sudo apt install {debian}"
-    if tool == "pass" and "rhel" in family():
+    if tool == "pass" and "rhel" in which.os_family():
         return "sudo dnf install epel-release && sudo dnf install pass"     # pass lives in EPEL on RHEL, Rocky, Alma
-    if family() & {"rhel", "fedora", "centos"}:
+    if which.system() == "rocky":
         return f"sudo dnf install {redhat}"
     if tool == "rustc":
         return "curl -sSf https://sh.rustup.rs -o rustup.sh && less rustup.sh && sh rustup.sh"
@@ -173,12 +171,12 @@ def invite(state, rng):
             if not tried]
     rust_ok = state.get("skills", "all") == "all" and len(state["achievements"]) >= RUST_AT or \
         state.get("skills", "all") != "all" and "rust" in state["skills"]
-    if rust_ok and not shutil.which("rustc"):
+    if rust_ok and not which.installed("rustc"):
         todo.append("rust")
     if len(state["achievements"]) >= SECRETS_AT:          # at ease with the shell first
         if wanted(state, "linux"):
-            todo += [tool for tool in ("gpg", "pass") if not shutil.which(tool)][:1]     # gpg first: pass needs it
-        if wanted(state, "sql") and not shutil.which("sqlite3"):
+            todo += [tool for tool in ("gpg", "pass") if not which.installed(tool)][:1]     # gpg first: pass needs it
+        if wanted(state, "sql") and not which.installed("sqlite3"):
             todo.append("sqlite3")
     if not todo:
         return None
@@ -235,7 +233,7 @@ def risky(pet, command, rng=random):
 def typo(state, pet, command, rng=random):
     """A kind laugh at a "command not found", with the closest real command if there is one."""
     names = [name for name, args in analyze(command).commands]
-    unknown = [n for n in names if not shutil.which(n) and n not in COMMON]
+    unknown = [n for n in names if not which.installed(n) and n not in COMMON]
     if not unknown:
         return None
     word = unknown[0]

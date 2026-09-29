@@ -4,15 +4,13 @@ Asked once before the starter (`bashou start`), changed any time with `bashou co
 adventure's paths only come from those skills; fights you already won still come back for review.
 """
 
-import shutil
 import sys
 
 from . import state
-from .challenges import family
+from .which import SYSTEMS, installed, system
 from .i18n import _
+from .render import ESC, BOLD, DIM, RESET, REV
 
-ESC = "\x1b"
-BOLD, DIM, RESET, REV = f"{ESC}[1m", f"{ESC}[2m", f"{ESC}[0m", f"{ESC}[7m"
 
 # skill -> what it covers, in the order of the list (the adventure's topics, world.TOPICS)
 SKILLS = {
@@ -31,7 +29,6 @@ SKILLS = {
 }
 # Fights need a program or a system: without it, the skill still has its adventure questions.
 NEEDS = {"python": "python3", "c": "gcc", "rust": "rustc", "sql": "sqlite3"}
-SYSTEMS = {"debian": {"debian"}, "rocky": {"rhel", "fedora", "centos"}}
 
 
 def picked(s):
@@ -45,9 +42,9 @@ def wanted(s, skill):
 
 def note(skill):
     """Why this skill has no fights here, or ""."""
-    if skill in NEEDS and not shutil.which(NEEDS[skill]):
+    if skill in NEEDS and not installed(NEEDS[skill]):
         return _("no {program} here: questions only").format(program=NEEDS[skill])
-    if skill in SYSTEMS and not SYSTEMS[skill] & family():
+    if skill in SYSTEMS and skill != system():
         return _("another system: questions only")
     return ""
 

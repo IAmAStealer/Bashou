@@ -276,3 +276,4 @@ CHEST = trial("trial_sql_loot", 1, "This chest holds loot.db, a list of treasure
               ["sqlite3 loot.db .schema shows the table and its columns. SELECT … FROM loot WHERE rarity = 'rare'; "
                "shows the rare ones.", "SELECT COUNT(*) FROM loot WHERE rarity = 'rare';"],
               chest_setup, lambda w, m, v: v.strip() == m["answer"], requires=["sqlite3"], teaches=["sqlite3"])
+CHESTS = [CHEST]                  # locked chests in `bashou adventure`
