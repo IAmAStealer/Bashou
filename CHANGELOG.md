@@ -3,6 +3,14 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.6.6 — 2026-09-29
+
+- In a very small window, the commands that draw a screen (`bashou evolve`, `swap`, `lesson`,
+  `adventure`, `start` and `share`) tell you the window is too small and the size they need, instead of
+  drawing a broken screen that can look stuck. `bashou share` needs room for the whole QR code, or
+  your phone can't scan it.
+- In a narrow window, the progress bar of `bashou` is shorter, so it stays on one line.
+
 ## v0.6.5 — 2026-09-29
 
 - C fights no longer refuse a correct fix at random. On some systems (gcc 12, as on Debian 12, with a

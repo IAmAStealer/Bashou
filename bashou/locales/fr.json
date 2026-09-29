@@ -1865,5 +1865,6 @@
  "choose your starter (once)": "choisis ton starter (une fois)",
  "start over with a new starter": "recommence avec un nouveau starter",
  "get the new version": "installe la nouvelle version",
- "which version of Bashou this is": "quelle version de Bashou c'est"
+ "which version of Bashou this is": "quelle version de Bashou c'est",
+ "Your terminal is too small: {cols}×{rows}. `bashou {name}` needs at least {need_cols}×{need_rows}, or its screen would come out broken. Make the window bigger (or the font smaller), then try again.": "Ton terminal est trop petit : {cols}×{rows}. `bashou {name}` a besoin d'au moins {need_cols}×{need_rows}, sinon son écran s'afficherait cassé. Agrandis la fenêtre (ou réduis la police), puis réessaie."
 }

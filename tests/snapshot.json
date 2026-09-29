@@ -7658,6 +7658,7 @@
   "Your progress stays in the link, after the #: browsers never send that part to the server.",
   "Your starter is {name}'s line. `bashou reset` to start over.",
   "Your starter, pets, achievements and counters start over.",
+  "Your terminal is too small: {cols}×{rows}. `bashou {name}` needs at least {need_cols}×{need_rows}, or its screen would come out broken. Make the window bigger (or the font smaller), then try again.",
   "`!$` is the last argument of the previous command.",
   "`bash -x script.sh` shows each line as it runs.",
   "`bashou learn awk`: awk cuts each line into fields, $1 is the first word, $2 the second. Print the column, then read the line you need.",

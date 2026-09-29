@@ -1,6 +1,8 @@
 """`bashou` command line."""
 
 import argparse
+import os
+import sys
 
 from . import achievements, creatures, progress, state
 from .creatures import owned, roster
@@ -35,7 +37,9 @@ def level():
     nxt = progress.next_milestone(s)
     if nxt:
         count, what = nxt
-        rows.append((_("Next"), f"{progress_bar(s['commands'], count)} {s['commands']:,}/{count:,} → {what}"))
+        bar = progress_bar(s["commands"], count, 20 if os.get_terminal_size(1).columns >= 60 else 10) \
+            if sys.stdout.isatty() else progress_bar(s["commands"], count)             # narrow: a short bar
+        rows.append((_("Next"), f"{bar} {s['commands']:,}/{count:,} → {what}"))
     from . import lesson
     new = lesson.new(s, lesson.load())
     if new:
@@ -205,7 +209,6 @@ def config(name, value):
     """`bashou config`: questions (or the list, outside a terminal); `bashou config list`;
     `bashou config NAME VALUE` sets one ("default" resets it). Language and skills, once commands of
     their own, live here too: `bashou config language [fr]`, `bashou config skills`."""
-    import sys
     if not name and sys.stdin.isatty():
         return ask_settings()
     if not name or name == "list":
@@ -260,7 +263,6 @@ def backup():
 
 def reset():
     """Start over: new starter, empty collection. Asks first, keeps a backup."""
-    import sys
     from . import starter
     print(f"  {BOLD}{_('Reset Bashou?')}{RESET} " + _("Your starter, pets, achievements and counters start over."))
     try:
@@ -377,10 +379,12 @@ class Command:
     """A `bashou` command: what runs, its arguments, and its line in `bashou help` (`row`: how it's
     written, what it's for, under which title). No row: it still works and completes (`help`, `off`),
     unless `hidden`: old names that still work, and dev. tests/test_completion.py checks bashou.bash
-    offers exactly the commands that aren't hidden."""
+    offers exactly the commands that aren't hidden. `size`: the smallest terminal (columns, rows) its
+    screen fits in; in a smaller one it says so and stops (tests/test_screens.py checks each size)."""
 
-    def __init__(self, name, handler, row=None, args=(), hidden=False):
+    def __init__(self, name, handler, row=None, args=(), hidden=False, size=None):
         self.name, self.handler, self.row, self.args, self.hidden = name, handler, row, args, hidden
+        self.size = size
 
 
 PET, LEARN, PLAY, SETTINGS = "Your pet", "Learn", "Play", "Settings"      # `bashou help`, in this order
@@ -388,15 +392,17 @@ COMMANDS = [
     Command("level", lambda a: level(), ("bashou", "your starter's level and what comes next", PET)),
     Command("pets", lambda a: pets(), ("bashou pets", "your collection", PET)),
     Command("achievements", lambda a: achievements_list(), ("bashou achievements", "what you earned, and what to try next", PET)),
-    Command("evolve", run("evolve"), ("bashou evolve", "watch your pets evolve", PET)),
-    Command("swap", lambda a: swap(a.pet), ("bashou swap [pet]", "change your active pet", PET), [("pet", dict(nargs="?"))]),
+    Command("evolve", run("evolve"), ("bashou evolve", "watch your pets evolve", PET), size=(40, 14)),
+    Command("swap", lambda a: swap(a.pet), ("bashou swap [pet]", "change your active pet", PET), [("pet", dict(nargs="?"))],
+            size=(40, 16)),
     Command("stats", lambda a: stats(), ("bashou stats", "your terminal stats: commands, tools, streaks", PET)),
     Command("share", run("share", "main", lambda a: a),
             ("bashou share", "a QR code: your phone turns your progress into an image to share", PET),
-            [("--name", dict(help="the nickname on the image: 1-12 letters, digits, - or _ (asked the first time)"))]),
+            [("--name", dict(help="the nickname on the image: 1-12 letters, digits, - or _ (asked the first time)"))],
+            size=(60, 30)),                                                     # the whole QR code, to scan it
     Command("lesson", run("lesson.reader", "main", lambda a: [a.which] if a.which else []),
             ("bashou lesson [name]", "the Sage Owl's library: lessons with drawings, unlocked as you play", LEARN),
-            [("which", dict(nargs="?", help="a lesson to open, or list"))]),
+            [("which", dict(nargs="?", help="a lesson to open, or list"))], size=(60, 16)),
     Command("learn", run("learn", "main", "command"),
             ("bashou learn <command>", "take a command apart, piece by piece (alone: your pet's last tip)", LEARN),
             [("command", dict(nargs=argparse.REMAINDER))]),
@@ -406,12 +412,13 @@ COMMANDS = [
     Command("arena", run("arena", "main", "mode", "which"),
             ("bashou arena", "fight when you want: a timed fight, or a security investigation", PLAY),
             [("mode", dict(nargs="?", help="fight or security")), ("which", dict(nargs="?", help="security: number or id (see the list)"))]),
-    Command("adventure", run("adventure.game"), ("bashou adventure", "walk into the world with your starter", PLAY)),
+    Command("adventure", run("adventure.game"), ("bashou adventure", "walk into the world with your starter", PLAY),
+            size=(50, 20)),
     Command("on", run("setup", "run"), ("bashou on / off", "show or hide the pet (the first `on` adds Bashou to ~/.bashrc)", SETTINGS)),
     Command("off", lambda a: print("  " + _("Bashou isn't running in this terminal."))),   # bashou.bash answers first
     Command("config", lambda a: config(a.name, a.value), ("bashou config", "settings, language and skills (bashou config list shows them)", SETTINGS),
             [("name", dict(nargs="?")), ("value", dict(nargs="?"))]),
-    Command("start", run("starter"), ("bashou start", "choose your starter (once)", SETTINGS)),
+    Command("start", run("starter"), ("bashou start", "choose your starter (once)", SETTINGS), size=(60, 16)),
     Command("reset", lambda a: reset(), ("bashou reset", "start over with a new starter", SETTINGS)),
     Command("update", run("update", "run", "version", "packages"), ("bashou update", "get the new version", SETTINGS),
             [("--version", dict(help="install this release instead, even an older one (e.g. v0.2.0)")),
@@ -443,6 +450,23 @@ def print_help():
         print()
 
 
+def too_small(command):
+    """In a terminal smaller than the command's screen, say so instead of drawing a broken one."""
+    if not command.size or not (sys.stdin.isatty() and sys.stdout.isatty()):
+        return False
+    try:
+        cols, rows = os.get_terminal_size()
+    except OSError:
+        return False
+    need_cols, need_rows = command.size
+    if cols >= need_cols and rows >= need_rows:
+        return False
+    print("  " + _("Your terminal is too small: {cols}×{rows}. `bashou {name}` needs at least {need_cols}×{need_rows}, "
+                   "or its screen would come out broken. Make the window bigger (or the font smaller), then "
+                   "try again.").format(cols=cols, rows=rows, name=command.name, need_cols=need_cols, need_rows=need_rows))
+    return True
+
+
 class Parser(argparse.ArgumentParser):
     def print_help(self, file=None):
         if self.prog == "bashou":
@@ -460,7 +484,9 @@ def main():
         for name, kwargs in command.args:
             cmd.add_argument(name, **kwargs)
     args = parser.parse_args()
-    handler = next((c.handler for c in COMMANDS if c.name == args.cmd), lambda a: level())
-    code = handler(args)
+    command = next((c for c in COMMANDS if c.name == args.cmd), None)
+    if command and too_small(command):
+        raise SystemExit(1)
+    code = command.handler(args) if command else level()
     if isinstance(code, int):
         raise SystemExit(code)

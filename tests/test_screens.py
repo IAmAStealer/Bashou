@@ -18,7 +18,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from bashou import challenges, companion, creatures, duel, evolve, fight, progress, starter, state
+from bashou import challenges, cli, companion, creatures, duel, evolve, fight, progress, starter, state
 from bashou.adventure import game
 from bashou.lesson import load as load_lessons, reader
 
@@ -28,6 +28,27 @@ screenshot = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(screenshot)
 
 SIZES = {"full": (160, 48), "portrait": (60, 96), "small": (80, 24)}
+TINY = (40, 12)                                                  # a very small window
+RUNS = {"level": [], "pets": ["pets"], "achievements": ["achievements"], "evolve": ["evolve"], "swap": ["swap"],
+        "stats": ["stats"], "share": ["share", "--name", "Tester"], "lesson": ["lesson"],
+        "learn": ["learn", "grep", "-rn", "TODO", "."], "talk": ["talk"], "fight": ["fight"], "arena": ["arena"],
+        "adventure": ["adventure"], "on": ["on"], "off": ["off"], "config": ["config", "list"], "start": ["start"],
+        "reset": ["reset"], "version": ["version"], "help": ["help"]}
+NOT_RUN = {"update"}                                             # git or apt/dnf: not in a test
+DRAWN = "▀▄█░▌▐"                                                 # sprites, bars, QR codes
+
+
+def last_drawn(line):
+    """Up to the last drawn character: a sentence may wrap like in any terminal, a drawing may not."""
+    return max((i + 1 for i, ch in enumerate(line) if ch in DRAWN), default=0)
+
+
+SMALLEST = {c.name: c.size for c in cli.COMMANDS if c.size}      # below it, the command says so and stops
+
+
+def sizes(command):
+    """The three sizes, and the smallest one the command accepts."""
+    return [*SIZES, f"smallest {command}"]
 SEQ = re.compile(r"\x1b\[(\??)([0-9;]*)([A-Za-z])|\x1b([78])")
 
 
@@ -124,22 +145,22 @@ class ScreensTest(unittest.TestCase):
 
     @contextlib.contextmanager
     def at(self, size):
-        cols, rows = SIZES[size]
+        cols, rows = SIZES.get(size) or SMALLEST[size.split()[1]]
         with self.subTest(size=size), mock.patch("os.get_terminal_size", return_value=os.terminal_size((cols, rows))):
             yield cols, rows
 
     def test_board(self):
         from bashou import board
-        for size in SIZES:
+        for size in sizes("swap"):
             with self.at(size) as (cols, rows):
                 b = board.Board()
                 t = Term(cols, rows)
                 t.write(printed(b.draw))
-                self.check("board", size, t, "Fox")
+                self.check("board", size, t, "Fox" if size in SIZES else "Bashou")   # smallest: Fox is a row below
 
     def test_library_and_a_lesson(self):
         lessons = load_lessons("en")
-        for size in SIZES:
+        for size in sizes("lesson"):
             with self.at(size) as (cols, rows):
                 lib = reader.Library(lessons)
                 t = Term(cols, rows)
@@ -154,7 +175,7 @@ class ScreensTest(unittest.TestCase):
         screens = {"starter": lambda: starter.draw(0, False), "language": lambda: starter.draw_languages(0, False),
                    "skills-mode": lambda: starter.draw_mode(1, False),
                    "skills": lambda: starter.checklist_drawer({"bash"})(0, False)}
-        for size in SIZES:
+        for size in sizes("start"):
             with self.at(size) as (cols, rows):
                 for name, draw in screens.items():
                     t = Term(cols, rows)
@@ -162,7 +183,7 @@ class ScreensTest(unittest.TestCase):
                     self.check(name, size, t)
 
     def test_adventure(self):
-        for size in SIZES:
+        for size in sizes("adventure"):
             with self.at(size) as (cols, rows):
                 with state.locked() as s:           # a new walk at each size, not the last size's saved one
                     s["adventure"] = {}
@@ -186,7 +207,7 @@ class ScreensTest(unittest.TestCase):
     def test_evolution(self):
         s = state.load()
         e = {"who": "fox", "from": "fennec", "to": "fox"}
-        for size in SIZES:
+        for size in sizes("evolve"):
             with self.at(size) as (cols, rows):
                 screen = evolve.Screen()
                 t = Term(cols, rows)
@@ -237,6 +258,61 @@ class ScreensTest(unittest.TestCase):
                     t.write(printed(function))
                     self.check(name, size, t)
 
+    def test_every_command_in_a_tiny_window(self):
+        """Owner: each command, in a very small window, either says the window is too small or prints
+        nothing wider than it (a wider line wraps, and a drawing or a QR code comes out broken)."""
+        visible = {c.name for c in cli.COMMANDS if not c.hidden}
+        self.assertEqual(visible - NOT_RUN, set(RUNS), "a new command: add how to run it to RUNS")
+        cols, rows = TINY
+        for name, argv in RUNS.items():
+            with self.subTest(command=name):
+                out, keys = io.StringIO(), io.StringIO("")            # a terminal where Enter is never pressed
+                out.isatty = keys.isatty = lambda: True
+                with mock.patch("os.get_terminal_size", return_value=os.terminal_size(TINY)), \
+                        mock.patch.dict(os.environ, {"HOME": self.tmp.name, "COLUMNS": str(cols), "LINES": str(rows)}), \
+                        mock.patch("sys.argv", ["bashou", *argv]), mock.patch("sys.stdin", keys), \
+                        contextlib.redirect_stdout(out), contextlib.redirect_stderr(out):
+                    try:
+                        cli.main()
+                    except SystemExit:
+                        pass
+                text = out.getvalue()
+                if "Your terminal is too small" in text:
+                    continue
+                lines = screenshot.render.strip(text).split("\n")
+                t = Term(cols, max(rows, len(lines) + 1), flow=True)  # the whole output, to look at
+                t.write(text)
+                self.check(name, "tiny", t)
+                cut = [line for line in lines if screenshot.render.width(line.rstrip()[:last_drawn(line)]) > cols]
+                self.assertEqual(cut[:3], [], f"bashou {name}: a drawing wider than {cols} columns")
+
+
+class TooSmallTest(unittest.TestCase):
+    """Owner: in a very small window, a command whose screen can't fit says so and stops, instead of
+    drawing a broken screen (an evolution looked stuck)."""
+
+    def run_at(self, name, cols, rows, tty=True):
+        out = io.StringIO()
+        out.isatty = lambda: tty
+        with mock.patch("os.get_terminal_size", return_value=os.terminal_size((cols, rows))), \
+                mock.patch("sys.stdin.isatty", return_value=tty), contextlib.redirect_stdout(out), \
+                mock.patch.dict(os.environ, {"BASHOU_LANG": "en"}):
+            stops = cli.too_small(next(c for c in cli.COMMANDS if c.name == name))
+        return stops, out.getvalue()
+
+    def test_a_small_window_stops_the_command(self):
+        for name, (cols, rows) in SMALLEST.items():
+            for small in ((cols - 1, rows), (cols, rows - 1)):
+                stops, text = self.run_at(name, *small)
+                self.assertTrue(stops, f"{name} at {small}")
+                self.assertIn(f"{small[0]}×{small[1]}", text)
+                self.assertIn(f"`bashou {name}` needs at least {cols}×{rows}", text)
+            self.assertEqual(self.run_at(name, cols, rows), (False, ""), name)
+
+    def test_only_screens_and_only_in_a_terminal(self):
+        self.assertEqual(self.run_at("pets", 10, 5), (False, ""))                  # plain text: it wraps
+        self.assertEqual(self.run_at("adventure", 10, 5, tty=False), (False, ""))  # piped: no screen drawn
+        self.assertEqual(set(SMALLEST), {"evolve", "swap", "lesson", "adventure", "start", "share"})
 
 if __name__ == "__main__":
     unittest.main()
