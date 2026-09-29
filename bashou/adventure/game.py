@@ -80,7 +80,9 @@ class Game:
     def resize(self, cols, rows):
         self.cols, self.rows = cols, rows
         self.canvas = canvas.Canvas(cols, (rows - self.hud_rows) * 2)
-        self.scale = 2 if self.canvas.h >= 40 else 1
+        # The pet at double size only when a question box still fits between it and what you meet
+        # (owner: the box used to hide the pet; on 80×24 it's drawn at half size instead).
+        self.scale = 2 if self.canvas.h >= 64 else 1
 
     # --- rules ---------------------------------------------------------------------------------
 
@@ -423,7 +425,10 @@ class Game:
         width = min(self.cols - 4, 76)
         wrapped = [(part, color) for text, color in lines
                    for part in (render.wrap(text, width - 4, 8) if text else [""])]
-        top = max(1, self.rows - 1 - self.hud_rows - len(wrapped))     # just above the status line
+        pet_top = (self.canvas.h - 12 * self.scale - 1) // 2 + 1      # the pet's first line, at the bottom
+        top = pet_top - len(wrapped) - 2                              # the box just above your pet
+        if top < 1:                                                   # no room: over it, as a last resort
+            top = max(1, self.rows - 1 - self.hud_rows - len(wrapped))
         return (top, (self.cols - width) // 2 + 1, width, wrapped)
 
     def panel_text(self, lines, rect):

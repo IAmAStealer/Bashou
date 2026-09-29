@@ -178,6 +178,9 @@ class ScreensTest(unittest.TestCase):
                 t = Term(cols, rows)
                 t.write(g.draw(1.0, 100.0) + g.hud())
                 self.check("adventure-monster", size, t, "A.", "♥")
+                top, _left, _width, wrapped = g.panel_rect         # owner: the question box hid the pet
+                pet_top = (g.canvas.h - 12 * g.scale - 1) // 2 + 1
+                self.assertLess(top + len(wrapped) + 1, pet_top, f"{size}: the box covers the pet")
 
     def test_evolution(self):
         s = state.load()

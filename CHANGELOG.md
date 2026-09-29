@@ -19,6 +19,9 @@ Every release has a section here, written for players. CI refuses to tag a relea
   earn it, instead of a random easy one each time.
 - The pet board, the library and the first-launch screens fit a narrow (portrait) terminal: the
   board shows fewer pets per row, and the keys (q: quit…) go on their own line instead of being cut off.
+- In the adventure, your pet stays in view when a monster, a boss or a chest asks you something: the
+  question box sits between you and what you meet, instead of hiding your pet. On an 80×24 terminal
+  your pet is drawn smaller so everything fits.
 - The adventure looks right in a tall, narrow (portrait) terminal. The status line at the bottom was
   cut off, hiding your chapter, hearts and meters: when it doesn't fit, it now takes two lines. And
   between forks your pet walked under an empty sky: a road now runs ahead of it to the horizon, and
