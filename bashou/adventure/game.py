@@ -294,11 +294,13 @@ class Game:
         """Paint the scene. At the start and at a fork the road splits into the paths you can take
         (a Y, or three); returns their names and where they go on screen (line, column, text, picked)."""
         adv = self.adv
-        options, picked = [None], None                    # between forks: one road ahead
-        if adv["phase"] in ("intro", "fork") and not self.result:
+        fork, picked = None, None
+        if adv["phase"] == "walk":
+            fork = (1, None, 12 * self.scale)                 # between forks: one road ahead
+        elif adv["phase"] in ("intro", "fork") and not self.result:
             options = world.fork_options(adv, self.topics)
             picked = self.choice if adv["phase"] == "fork" else None
-        fork = (len(options), picked, 12 * self.scale)
+            fork = (len(options), picked, 12 * self.scale)
         spots = scene.draw(self.canvas, world.biome(adv), adv["distance"], t, 17 * self.scale, fork)
         if picked is None:
             return []
