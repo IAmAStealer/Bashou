@@ -73,15 +73,25 @@ TRAITS = {
 
 
 
-def hint(state, pet, rng):
-    """Next achievement of this pet's family, or any one left (the easiest first), with an example."""
+def next_step(state, pet):
+    """The achievement a pet points you at: in its family, the first one left whose chain has come to
+    it (the one before it is earned), the least deep first. It stays the same until you earn it, then
+    the chain moves on. Once the family is done, the same among every pet's."""
     earned = set(state["achievements"])
-    todo = [a for a in achievements.family(pet) if a.id not in earned and not a.state and not a.hidden]
-    todo = todo or [a for a in achievements.usable() if a.id not in earned and not a.state]
-    if not todo:
+
+    def ready(a):
+        prev = achievements.PREV.get(a.id)
+        return a.id not in earned and not a.state and not a.hidden and (prev is None or prev.id in earned
+                                                                          or not prev.available())
+    todo = [a for a in achievements.family(pet) if ready(a)] or [a for a in achievements.usable() if ready(a)]
+    return min(todo, key=lambda a: a.depth, default=None)
+
+
+def hint(state, pet, rng=None):
+    """What to try next, with an example (see next_step)."""
+    a = next_step(state, pet)
+    if a is None:
         return None
-    easiest = min(a.level for a in todo)
-    a = rng.choice([a for a in todo if a.level == easiest])
     example = EXAMPLES.get(a.id)
     if example:
         return _("Try `{example}` (achv: {name})").format(example=example.replace(chr(10), " ⏎ "), name=_(a.name))

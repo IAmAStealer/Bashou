@@ -278,6 +278,17 @@ def reset():
     return starter.main() if sys.stdin.isatty() else 0
 
 
+def at_form(s, pet, form):
+    """Earn the pet's achievements, in order, until it reaches `form` (or runs out). Returns the form."""
+    family = [a.id for a in achievements.family(pet)]
+    s["achievements"] = [a for a in s["achievements"] if a not in family]
+    for a in family:
+        if progress.reached(s, pet) >= form:
+            break
+        s["achievements"].append(a)
+    return progress.reached(s, pet)
+
+
 def dev(args):
     """Testing helpers. Every change first backs up state.json next to it."""
     import shutil
@@ -298,21 +309,17 @@ def dev(args):
             s["pets"] = [pet for pet, _ in roster(s)] + sorted(p for p in creatures.NAMES if creatures.FAMILIES[p].secret)
             print(f"  All {len(s['pets'])} pets unlocked.")
         elif args.action == "stage":
-            fam = [a.id for a in achievements.family(args.pet)]
-            keep = fam[:{1: 0, 2: 2, 3: len(fam)}[args.stage]]
-            s["achievements"] = [a for a in s["achievements"] if a not in fam] + keep
+            form = at_form(s, args.pet, args.stage)
             if args.pet not in s["pets"]:
                 s["pets"].append(args.pet)
-            print(f"  {creatures.names(args.pet)[args.stage - 1]} (stage {args.stage}).")
-            if args.stage > 1:                                   # as if you'd just earned it: bashou evolve
+            print(f"  {creatures.names(args.pet)[form - 1]} (stage {form}).")
+            if form > 1:                                         # as if you'd just earned it: bashou evolve
                 s["evolving"] = [e for e in s.get("evolving", []) if e["who"] != args.pet]
                 s.get("looks", {}).pop(args.pet, None)
-                print("  " + progress.evolve(s, args.pet, args.stage - 1, args.stage))
+                print("  " + progress.evolve(s, args.pet, form - 1, form))
         elif args.action == "stage-all":
             for pet, rule in roster(s):
-                fam = [a.id for a in achievements.family(pet)]
-                keep = fam[:{1: 0, 2: 2, 3: len(fam)}[args.stage]]
-                s["achievements"] = [a for a in s["achievements"] if a not in fam] + keep
+                at_form(s, pet, args.stage)
             print(f"  Every pet at stage {args.stage}.")
         elif args.action == "level":
             n = max(1, min(progress.MAX_LEVEL, int(args.pet or 1)))
@@ -420,7 +427,7 @@ COMMANDS = [
     Command("dev", run_dev, args=[                                              # testing helpers
         ("action", dict(choices=["unlock-all", "stage", "stage-all", "level", "threat", "restore"])),
         ("pet", dict(nargs="?", help="pet (stage), level 1-9 (level) or challenge id (threat)")),
-        ("stage", dict(nargs="?", type=int, choices=[1, 2, 3], default=3))], hidden=True),
+        ("stage", dict(nargs="?", type=int, default=3))], hidden=True),
 ]
 
 

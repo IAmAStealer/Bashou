@@ -1,5 +1,6 @@
 import random
 import unittest
+from unittest import mock
 
 from bashou import achievements, creatures, dialogue, progress, render, safety, state
 
@@ -121,21 +122,36 @@ class HintTest(unittest.TestCase):
     def test_beginners_get_easy_hints(self):
         """The Pebble suggested `awk '{printf "%-10s %s\\n", $1, $2}'` to someone with 12 commands."""
         s = state.default()
-        rng = random.Random(0)
-        easy = {a.name for a in achievements.ALL if a.level == 1}
-        for _ in range(100):
-            text = dialogue.hint(s, "pebble", rng)
-            self.assertTrue(any(f"(achv: {name})" in text for name in easy), text)
+        for pet in list(creatures.NAMES) + ["pebble"]:
+            a = dialogue.next_step(s, pet)
+            self.assertEqual(a.depth, 1, (pet, a.id))                   # where a chain starts
+
+    def test_the_hint_follows_its_chain(self):
+        """Owner: the pet points at the next achievement of its chain until you earn it, then moves on."""
+        s = state.default()
+        with mock.patch("bashou.which.installed", return_value=True):
+            self.assertEqual(dialogue.next_step(s, "mole").id, "digger")
+            self.assertEqual(dialogue.next_step(s, "mole").id, "digger")          # the same until earned
+            s["achievements"].append("digger")
+            self.assertEqual(dialogue.next_step(s, "mole").id, "regex")
+            s["achievements"] += ["regex", "context"]
+            other = dialogue.next_step(s, "mole")                                # family done: another one
+            self.assertNotEqual(other.pet, "mole")
+            self.assertEqual(other.depth, 1)
 
     def test_harder_hints_come_later(self):
         s = state.default()
-        s["achievements"] = [a.id for a in achievements.ALL if a.level < 3]
-        text = dialogue.hint(s, "pebble", random.Random(0))
-        self.assertTrue(any(f"(achv: {a.name})" in text for a in achievements.ALL if a.level == 3), text)
+        with mock.patch("bashou.which.installed", return_value=True):
+            s["achievements"] = [a.id for a in achievements.ALL if a.depth < 3]
+            a = dialogue.next_step(s, "pebble")
+        self.assertGreaterEqual(a.depth, 3, a.id)
+        self.assertIn(f"(achv: {a.name})", dialogue.hint(s, "pebble"))
 
-    def test_every_achievement_has_a_level(self):
+    def test_chains_hold_together(self):
+        self.assertEqual(achievements.chain_problems(), [])
         for a in achievements.ALL:
-            self.assertIn(a.level, (1, 2, 3), a.id)
+            prev = achievements.PREV.get(a.id)
+            self.assertEqual(a.depth, prev.depth + 1 if prev else 1, a.id)
 
 
 class InviteTest(unittest.TestCase):
