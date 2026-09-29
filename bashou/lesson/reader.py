@@ -7,12 +7,9 @@ usually what changed since the previous page.
 
 import os
 import random
-import select
 import sys
-import termios
-import tty
 
-from .. import creatures, render, skills, state
+from .. import creatures, render, skills, state, terminal
 from ..i18n import _
 from . import HERE, how_to_unlock, missing, progress_of, read, shown, skills_of, status, unlocked
 
@@ -23,9 +20,7 @@ CMD = f"{ESC}[38;2;130;210;120m"
 TITLE = f"{ESC}[38;2;150;190;230m"
 NEXT = f"{ESC}[38;2;120;220;150m"            # the lessons that make you progress now
 LEADER = f"{ESC}[38;2;122;86;52m"            # the owl's outline brown: the dotted line is its gesture
-KEYS = {"\x1b[A": "up", "\x1b[B": "down", "\x1b[C": "right", "\x1b[D": "left",
-        "k": "up", "j": "down", "l": "right", "h": "left", "\r": "enter", "\n": "enter", " ": "right",
-        "q": "quit", "\x1b": "quit", "\x04": "quit", "\x03": "quit"}
+KEYS = {" ": "right"}            # besides terminal.NAMES
 OWL = creatures.load(HERE / "owl.json")
 WING = 3                      # terminal line of the owl's wing tip (its first column)
 TOP = 3                       # first line of a scheme, under the title and a blank line
@@ -264,25 +259,17 @@ class Library:
         sys.stdout.flush()
 
     def run(self):
-        fd = sys.stdin.fileno()
-        old = termios.tcgetattr(fd)
-        sys.stdout.write(f"{ESC}[?1049h{ESC}[?25l{ESC}[?7l")         # no autowrap: a long line never spills
-        try:
-            tty.setcbreak(fd)
+        with terminal.Screen() as screen:
             running = True
             while running:
                 self.draw()
                 self.blink = False
-                if not select.select([fd], [], [], 1.5)[0]:
+                keys = screen.keys(1.5)
+                if not keys:
                     self.breath = not self.breath
                     self.blink = random.random() < 0.15
-                    continue
-                data = os.read(fd, 8).decode(errors="ignore")
-                running = self.key(KEYS.get(data, ""))
-        finally:
-            termios.tcsetattr(fd, termios.TCSADRAIN, old)
-            sys.stdout.write(f"{ESC}[?7h{ESC}[?25h{ESC}[?1049l")
-            sys.stdout.flush()
+                for k in keys:
+                    running = running and self.key(terminal.name(k, KEYS))
         done = sum(le["id"] in read(self.s) for le in self.lessons)
         print("  🦉 " + _("{n}/{total} lessons read. `bashou lesson` opens the library again.").format(
             n=done, total=len(self.lessons)))

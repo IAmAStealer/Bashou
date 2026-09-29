@@ -1,12 +1,8 @@
 """First launch: pick a language, then your starter (once: only `bashou reset` lets you pick again)."""
 
-import os
-import select
 import sys
-import termios
-import tty
 
-from . import creatures, render, state
+from . import creatures, render, state, terminal
 from . import i18n
 from .creatures import FAMILIES, PETS, STARTERS
 from .i18n import _
@@ -43,31 +39,22 @@ def draw(pos, breath):
 def pick(draw, count, keys=KEYS, start=0, toggle=None):
     """Full-screen picker: draw(pos, breath) until Enter (returns pos) or q (returns None).
     With `toggle`, Space calls toggle(pos) (a checklist)."""
-    fd = sys.stdin.fileno()
-    old = termios.tcgetattr(fd)
-    pos, breath, chosen = start, False, None
-    sys.stdout.write(f"{ESC}[?1049h{ESC}[?25l")
-    try:
-        tty.setcbreak(fd)
+    pos, breath = start, False
+    with terminal.Screen(wrap=True) as screen:
         while True:
             draw(pos, breath)
-            if not select.select([fd], [], [], 1.5)[0]:
+            pressed = screen.keys(1.5)
+            if not pressed:
                 breath = not breath
-                continue
-            key = os.read(fd, 8).decode(errors="ignore")
-            if key in ("\r", "\n"):
-                chosen = pos
-                break
-            if key in ("q", "\x1b", "\x04", "\x03"):   # also Ctrl+D, Ctrl+C
-                break
-            if key == " " and toggle:
-                toggle(pos)
-            pos = (pos + keys.get(key, 0)) % count
-    finally:
-        termios.tcsetattr(fd, termios.TCSADRAIN, old)
-        sys.stdout.write(f"{ESC}[?25h{ESC}[?1049l")
-        sys.stdout.flush()
-    return chosen
+            for key in pressed:
+                what = terminal.name(key)
+                if what == "enter":
+                    return pos
+                if what == "quit":
+                    return None
+                if key == " " and toggle:
+                    toggle(pos)
+                pos = (pos + keys.get(key, 0)) % count
 
 
 def choose():

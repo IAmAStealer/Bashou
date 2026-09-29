@@ -6,14 +6,11 @@ The rules live in world.py; this file draws and reads keys.
 
 import os
 import random
-import select
 import sys
-import termios
 import time
-import tty
 from pathlib import Path
 
-from .. import challenges, fight, progress, render, skills, state
+from .. import challenges, fight, progress, render, skills, state, terminal
 from ..i18n import _, cap
 from . import canvas, lessons, quiz, scene, sprites, world
 
@@ -475,42 +472,34 @@ def main():
     if not sys.stdin.isatty():
         print(_("The adventure needs a terminal."))
         return 1
-    fd = sys.stdin.fileno()
-    old = termios.tcgetattr(fd)
     size = os.get_terminal_size()
     if size.columns < 50 or size.lines < 20:
         print(_("Make the terminal a bit bigger for the adventure (50×20 at least)."))
         return 1
     game = Game(size.columns, size.lines)
     out = sys.stdout
-    out.write(f"{ESC}[?1049h{ESC}[?25l{ESC}[2J")
     start = last = time.time()
     try:
-        tty.setcbreak(fd)
-        while not game.quit:
-            now = time.time()
-            size = os.get_terminal_size()
-            if (size.columns, size.lines) != (game.cols, game.rows):
-                game.resize(size.columns, size.lines)
-                out.write(f"{ESC}[2J")
-            game.update(now - last, now)
-            last = now
-            if game.pending_trial:
-                run_trial(game, fd, old, out)
-                continue
-            out.write(game.draw(now - start, now) + game.hud())
-            out.flush()
-            if select.select([fd], [], [], 1 / FPS)[0]:
-                data = os.read(fd, 32).decode(errors="ignore")
-                for k in split_keys(data):
+        with terminal.Screen(wrap=True) as screen:
+            while not game.quit:
+                now = time.time()
+                size = os.get_terminal_size()
+                if (size.columns, size.lines) != (game.cols, game.rows):
+                    game.resize(size.columns, size.lines)
+                    out.write(f"{ESC}[2J")
+                game.update(now - last, now)
+                last = now
+                if game.pending_trial:
+                    run_trial(game, screen)
+                    continue
+                out.write(game.draw(now - start, now) + game.hud())
+                out.flush()
+                for k in screen.keys(1 / FPS):
                     game.key(k, time.time())
     except KeyboardInterrupt:
         pass
     finally:
         notes = save(game.adv)
-        termios.tcsetattr(fd, termios.TCSADRAIN, old)
-        out.write(f"{ESC}[0m{ESC}[?25h{ESC}[?1049l")
-        out.flush()
     print("  " + _("Adventure saved: chapter {n}, {m} m walked. Come back with: bashou adventure").format(
         n=game.adv["chapter"], m=int(game.adv["walked"])))
     for note in notes:
@@ -518,18 +507,13 @@ def main():
     return 0
 
 
-def run_trial(game, fd, old, out):
+def run_trial(game, screen):
     """Leave the game screen for a real sandbox shell, then come back where we were."""
     trial, game.pending_trial = game.pending_trial, None
-    termios.tcsetattr(fd, termios.TCSADRAIN, old)
-    out.write(f"{ESC}[0m{ESC}[?25h{ESC}[?1049l")
-    out.flush()
-    code, notes = fight.arena(trial, lambda task: trial_intro(trial, task), random.Random(game.trial_seed()))
-    won = code == fight.WIN
-    tty.setcbreak(fd)
-    out.write(f"{ESC}[?1049h{ESC}[?25l{ESC}[2J")
+    with screen.paused():
+        code, notes = fight.arena(trial, lambda task: trial_intro(trial, task), random.Random(game.trial_seed()))
     game.canvas.shown = {}                     # the whole screen is drawn again
-    game.trial_done(won, notes)
+    game.trial_done(code == fight.WIN, notes)
 
 
 def trial_intro(trial, task):
@@ -540,16 +524,3 @@ def trial_intro(trial, task):
             + "  hint             " + _("get a hint") + "\n"
             "  task             " + _("show the task again") + "\n"
             "  flee             " + _("leave the chest and go back to the adventure") + "\n")
-
-
-def split_keys(data):
-    """Split a read into keys: arrow escapes stay whole."""
-    keys, i = [], 0
-    while i < len(data):
-        if data[i] == ESC and data[i + 1:i + 2] == "[" and i + 2 < len(data):
-            keys.append(data[i:i + 3])
-            i += 3
-        else:
-            keys.append(data[i])
-            i += 1
-    return keys

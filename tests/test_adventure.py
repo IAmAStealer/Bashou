@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from bashou import adventure, state
+from bashou import adventure, state, terminal
 from bashou.adventure import canvas, quiz, scene, sprites, topic_name, world
 
 
@@ -287,7 +287,7 @@ class GameTest(unittest.TestCase):
         self.assertEqual(adventure.load()["chapter"], 1)
 
     def test_keys(self):
-        self.assertEqual(adventure.split_keys("\x1b[Aw \x1b[B"), ["\x1b[A", "w", " ", "\x1b[B"])
+        self.assertEqual(terminal.split_keys("\x1b[Aw \x1b[B"), ["\x1b[A", "w", " ", "\x1b[B"])
         for k in ("s", "q", "\x1b", "\x03", "\x04"):
             game = adventure.Game(80, 24)
             game.key(k, 0)

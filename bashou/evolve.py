@@ -2,13 +2,10 @@
 pet keeps its old look until you watch them. `s` skips an animation.
 """
 
-import select
 import sys
-import termios
 import time
-import tty
 
-from . import creatures, progress, render, state
+from . import creatures, progress, render, state, terminal
 from .behavior import ACTIONS
 from .i18n import _
 
@@ -69,8 +66,9 @@ class Screen:
     """Draws frames in place, below the prompt, and reads keys without waiting for Enter."""
     HEIGHT = 11                                              # title, blank, 6 sprite lines, blank, 2 text lines
 
-    def __init__(self):
+    def __init__(self, keys=None):
         self.drawn = False
+        self.keys = keys               # a terminal.Screen, None when the input isn't a terminal
 
     def show(self, title, lines, text):
         rows = [title, ""] + lines + [""] + (text.split("\n") + ["", ""])[:2]
@@ -79,10 +77,9 @@ class Screen:
         sys.stdout.flush()
         self.drawn = True
 
-    @staticmethod
-    def wait(seconds):
-        ready, _, _ = select.select([sys.stdin], [], [], seconds)
-        return sys.stdin.read(1) if ready else None
+    def wait(self, seconds):
+        pressed = self.keys.keys(seconds)
+        return pressed[0] if pressed else None
 
 
 def main():
@@ -96,15 +93,11 @@ def main():
             print("  ✨ " + _("{old} evolved into {new}!").format(
                 old=progress.sprite_of(s, e["who"], e["from"])[1], new=progress.sprite_of(s, e["who"], e["to"])[1]))
     else:
-        fd = sys.stdin.fileno()
-        old = termios.tcgetattr(fd)
-        sys.stdout.write(f"{ESC}[?25l")
         print("  " + DIM + _("s: skip") + RESET)
-        try:
-            tty.setcbreak(fd)
+        with terminal.Screen(alt=False, wrap=True) as keys:
             for i, e in enumerate(queue):
                 print()
-                screen = Screen()
+                screen = Screen(keys)
                 going = play(s, e, screen.show, screen.wait)
                 with state.locked() as saved:
                     progress.watched(saved, e["who"])
@@ -112,9 +105,6 @@ def main():
                     break
                 if i < len(queue) - 1:
                     time.sleep(1)
-        finally:
-            termios.tcsetattr(fd, termios.TCSADRAIN, old)
-            sys.stdout.write(f"{ESC}[?25h")
         print("  " + DIM + _("Miss the old look? `bashou swap`, then f switches between the forms you reached.") + RESET)
         return 0
     with state.locked() as saved:

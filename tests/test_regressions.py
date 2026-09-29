@@ -134,9 +134,10 @@ class CliBugs(TempState):
                     board.draw()
                 rows = [int(r) for r, c in re.findall(r"\x1b\[(\d+);(\d+)H", out.getvalue())]
                 self.assertLessEqual(max(rows), lines)
-        run = inspect.getsource(board_mod.Board.run)
-        self.assertIn("?7l", run)                          # no autowrap while the board is open…
-        self.assertIn("?7h", run)                          # …and it comes back on the way out
+        self.assertIn("terminal.Screen()", inspect.getsource(board_mod.Board.run))
+        from bashou import terminal
+        self.assertFalse(terminal.Screen().wrap)               # no autowrap while the board is open…
+        self.assertIn("?7h", inspect.getsource(terminal.Screen.__exit__))   # …and it comes back on the way out
 
 
 class ScrollTrailTest(unittest.TestCase):

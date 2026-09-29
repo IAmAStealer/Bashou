@@ -1,12 +1,9 @@
 """`bashou swap`: a 4Ã—4 board to pick your active pet, with a live preview."""
 
 import os
-import select
 import sys
-import termios
-import tty
 
-from . import achievements, creatures, progress, render, state
+from . import achievements, creatures, progress, render, state, terminal
 from .behavior import ACTIONS
 from .creatures import STARTERS, roster
 from .i18n import _
@@ -17,9 +14,7 @@ TILE_W, TILE_H = 18, 2          # 16-character names (Golem de cristal) fit; 4 Ã
 PREVIEW_SHORT = 9                  # sprite, blank line, name and next stage
 DIM, BOLD, RESET, REV = f"{ESC}[2m", f"{ESC}[1m", f"{ESC}[0m", f"{ESC}[7m"
 ACCENT = f"{ESC}[38;2;150;190;230m"
-KEYS = {"\x1b[A": "up", "\x1b[B": "down", "\x1b[C": "right", "\x1b[D": "left",
-        "k": "up", "j": "down", "l": "right", "h": "left", "\r": "enter", "\n": "enter",
-        "f": "form", "q": "quit", "\x1b": "quit", "\x04": "quit", "\x03": "quit"}
+KEYS = {"f": "form"}             # besides terminal.NAMES
 
 
 def hint(s, pet):
@@ -224,24 +219,15 @@ class Board:
         return True
 
     def run(self):
-        fd = sys.stdin.fileno()
-        old = termios.tcgetattr(fd)
-        sys.stdout.write(f"{ESC}[?1049h{ESC}[?25l{ESC}[?7l")         # no autowrap: a long line never spills
-        try:
-            tty.setcbreak(fd)
+        with terminal.Screen() as screen:
             running = True
             while running:
                 self.draw()
-                ready = select.select([fd], [], [], 1.5)[0]
-                if not ready:
+                keys = screen.keys(1.5)
+                if not keys:
                     self.breath = not self.breath
-                    continue
-                data = os.read(fd, 8).decode(errors="ignore")
-                running = self.key(KEYS.get(data, ""))
-        finally:
-            termios.tcsetattr(fd, termios.TCSADRAIN, old)
-            sys.stdout.write(f"{ESC}[?7h{ESC}[?25h{ESC}[?1049l")
-            sys.stdout.flush()
+                for k in keys:
+                    running = running and self.key(terminal.name(k, KEYS))
         print("  " + _("{name} is your pet.").format(name=progress.current(self.s)[2]))
 
 
