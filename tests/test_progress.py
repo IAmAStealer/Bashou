@@ -387,6 +387,19 @@ class DamagedSaveTest(unittest.TestCase):
         self.assertEqual(s["reviews"], {})
         self.assertEqual(s["lessons"]["read"], [])
 
+    def test_damaged_settings_are_dropped(self):
+        """A setting `bashou config` would refuse ("bubble": "x") crashed the pet when it drew a bubble."""
+        s = self.load(settings={"bubble": "x", "talk": "off", "size": "huge", "nope": 1, "quiet": [5, 3],
+                                "updates": "off", "bubble ": [2, 4]})
+        self.assertEqual(s["settings"], {"talk": "off", "updates": "off"})
+        self.assertEqual(state.setting(s, "bubble"), (5, 10))
+
+    def test_every_default_fits_its_own_check(self):
+        for name, (value, check) in state.FIELDS.items():
+            with self.subTest(name=name):
+                self.assertEqual(check(value), value)
+        self.assertEqual(set(state.default()), set(state.FIELDS))
+
     def test_an_unreadable_starter_is_asked_again(self):
         for starter in ("sprnut", {"a": 1}, 3):
             with self.subTest(starter=starter):

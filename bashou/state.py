@@ -1,5 +1,6 @@
 """Persistent state shared by every terminal, guarded by a file lock."""
 
+import copy
 import fcntl
 import json
 import os
@@ -12,42 +13,6 @@ DATA = Path(os.environ.get("BASHOU_DATA", Path.home() / ".local/share/bashou"))
 CACHE = Path(os.environ.get("BASHOU_CACHE", Path.home() / ".cache/bashou"))
 STATE = DATA / "state.json"
 SAVE_VERSION = 3        # bump with a step in migrate() whenever the save's shape changes
-
-
-def default():
-    return {
-        "version": SAVE_VERSION,
-        "commands": 0,
-        "tools": {},        # tool -> successful uses
-        "constructs": {},   # construct -> uses
-        "days": [],         # ISO dates with at least one command
-        "today": {"date": "", "count": 0},
-        "language": None,   # "en", "fr"…, asked once at first launch (`bashou config language`)
-        "starter": None,    # "star", "sprout" or "pebble", chosen once (`bashou start`)
-        "pets": [],         # collection pets unlocked
-        "active": "starter",
-        "achievements": [],
-        "fights_won": 0,
-        "fights_lost": 0,   # knocked out or fled (the Living sofa comforts you)
-        "ladder_best": {},  # pet -> highest form reached on a command ladder (the Slime): never goes back
-        "challenges": [],   # challenges beaten
-        "skills": "all",    # "all" or the skills you ticked (`bashou config skills`, asked before the starter)
-        "reviews": {},      # beaten fight -> {"step": reviews won, "due": ISO date}: it comes back (fight.py)
-        "security": [],     # security challenges solved (`bashou arena security`)
-        "arena_closed_until": 0,   # `bashou arena` after a defeat: closed until this time (epoch seconds)
-        "adventure": None,  # `bashou adventure` progress (see bashou/adventure)
-        "threat": None,     # {"challenge", "until"} while a threat waits for you
-        "threat_day": {"date": "", "count": 0},
-        "last_threat": 0,
-        "update_checked": 0,   # last time a terminal looked for a new version
-        "update_available": "",  # newest release tag not installed yet, at that check
-        "settings": {},     # `bashou config`, only what differs from SETTINGS
-        "looks": {},        # pet or "starter" -> form shown when not the latest (`f` in `bashou swap`)
-        "starter_best": 1,  # the starter's highest form reached: it never goes back
-        "evolving": [],     # evolutions waiting to be watched: {"who", "from", "to"} (`bashou evolve`)
-        "lessons": {"read": [], "opened": [], "page": {}, "met": []},
-        "share_name": "",   # the nickname on `bashou share` cards (letters, digits, - and _)   # `bashou lesson`: read, opened, page to resume, fights met
-    }
 
 
 # name: (default (low, high), help)
@@ -104,90 +69,160 @@ def load():
         return recover(text)
 
 
+# --- what a save holds ---------------------------------------------------------------------------
+# Each field: its default, and a check that returns the value cleaned or raises ValueError (the field
+# then gets its default). Inside a list or a dict, a damaged entry is dropped and the rest kept: one
+# wrong byte on disk (or a hand edit) used to make the pet crash at every frame. (Found by fuzzing.)
+
+NUMBER = (int, float)
+
+
+def kind(*types):
+    def check(value):
+        if not isinstance(value, types):
+            raise ValueError(value)
+        return value
+    return check
+
+
+def optional(check):
+    return lambda value: None if value is None else check(value)
+
+
+def fits(check, value):
+    try:
+        check(value)
+        return True
+    except (ValueError, TypeError, KeyError, AttributeError):
+        return False
+
+
+def list_of(check):
+    return lambda value: [v for v in kind(list)(value) if fits(check, v)]
+
+
+def dict_of(check):
+    return lambda value: {k: v for k, v in kind(dict)(value).items() if fits(check, v)}
+
+
+def record(**fields):
+    """A dict holding each field with its type (more keys are kept)."""
+    def check(value):
+        if not (isinstance(value, dict) and all(isinstance(value.get(k), t) for k, t in fields.items())):
+            raise ValueError(value)
+        return value
+    return check
+
+
+def skills_choice(value):
+    ok = value == "all" or isinstance(value, list) and all(isinstance(s, str) for s in value)
+    return value if ok else "all"
+
+
+def lessons_progress(value):
+    value = {**LESSONS, **kind(dict)(value)}
+    return {**value, **{k: list_of(kind(str))(value[k]) if isinstance(value[k], list) else [] for k in ("read", "opened", "met")},
+            "page": value["page"] if isinstance(value["page"], dict) else {}}
+
+
+def adventure_progress(adv):
+    """What the pet reads of the adventure (its achievements, at every frame). The rest is only read by
+    `bashou adventure`."""
+    adv = kind(dict)(adv)
+    for key in ("walked", "chapters_done"):
+        if key in adv and not isinstance(adv[key], NUMBER):
+            del adv[key]
+    if "bosses" in adv:
+        adv["bosses"] = list_of(record(topic=str))(adv["bosses"]) if isinstance(adv["bosses"], list) else []
+    if "trials" in adv and not isinstance(adv["trials"], list):
+        adv["trials"] = []
+    if "levels" in adv:
+        adv["levels"] = dict_of(kind(*NUMBER))(adv["levels"]) if isinstance(adv["levels"], dict) else {}
+    return adv
+
+
+def settings_of(value):
+    """Only settings that exist, with a value `bashou config` would accept."""
+    def good(name, v):
+        if name not in SETTINGS:
+            return False
+        if name in CHOICES:
+            return v in CHOICES[name]
+        if name in OFFABLE and v == "off":
+            return True
+        return (isinstance(v, list) and len(v) == 2 and all(isinstance(n, int) for n in v)
+                and 1 <= v[0] <= v[1])
+    return {k: v for k, v in kind(dict)(value).items() if good(k, v)}
+
+
+LESSONS = {"read": [], "opened": [], "page": {}, "met": []}
+COUNT = {"date": "", "count": 0}
+FIELDS = {
+    "version": (SAVE_VERSION, kind(int)),
+    "commands": (0, kind(*NUMBER)),
+    "tools": ({}, dict_of(kind(*NUMBER))),            # tool -> successful uses
+    "constructs": ({}, dict_of(kind(*NUMBER))),       # construct -> uses
+    "days": ([], list_of(kind(str))),                 # ISO dates with at least one command
+    "today": (COUNT, record(date=str, count=NUMBER)),
+    "language": (None, optional(kind(str))),          # "en", "fr"…, asked once at first launch (`bashou config language`)
+    "starter": (None, optional(kind(str))),           # "star", "sprout" or "pebble", chosen once (`bashou start`)
+    "pets": ([], list_of(kind(str))),                 # collection pets unlocked
+    "active": ("starter", kind(str)),
+    "achievements": ([], list_of(kind(str))),
+    "fights_won": (0, kind(*NUMBER)),
+    "fights_lost": (0, kind(*NUMBER)),                # knocked out or fled (the Living sofa comforts you)
+    "ladder_best": ({}, dict_of(kind(*NUMBER))),      # pet -> highest form reached on a command ladder: never goes back
+    "challenges": ([], list_of(kind(str))),           # challenges beaten
+    "skills": ("all", skills_choice),                 # "all" or the skills you ticked (`bashou config skills`)
+    "reviews": ({}, dict_of(record(step=int, due=str))),   # beaten fight -> {"step", "due"}: it comes back (fight.py)
+    "security": ([], list_of(kind(str))),             # security challenges solved (`bashou arena security`)
+    "arena_closed_until": (0, kind(*NUMBER)),         # `bashou arena` after a defeat: closed until then (epoch seconds)
+    "adventure": (None, optional(adventure_progress)),     # `bashou adventure` progress (see bashou/adventure)
+    "threat": (None, optional(record(challenge=str, until=NUMBER))),   # while a threat waits for you
+    "threat_day": (COUNT, record(date=str, count=NUMBER)),
+    "last_threat": (0, kind(*NUMBER)),
+    "update_checked": (0, kind(*NUMBER)),             # last time a terminal looked for a new version
+    "update_available": ("", kind(str)),              # newest release tag not installed yet, at that check
+    "settings": ({}, settings_of),                    # `bashou config`, only what differs from SETTINGS
+    "looks": ({}, dict_of(kind(*NUMBER))),            # pet or "starter" -> form shown when not the latest (`f` in `bashou swap`)
+    "starter_best": (1, kind(*NUMBER)),               # the starter's highest form reached: it never goes back
+    "evolving": ([], list_of(record(who=str, **{"from": int, "to": int}))),   # waiting for `bashou evolve`
+    "lessons": (LESSONS, lessons_progress),           # `bashou lesson`: read, opened, page to resume, fights met
+    "share_name": ("", kind(str)),                    # the nickname on `bashou share` cards
+}
+
+
+def default():
+    return {name: copy.deepcopy(value) for name, (value, _check) in FIELDS.items()}
+
+
+def clean(state):
+    """Every field as FIELDS describes it; a field that doesn't fit gets its default."""
+    for name, (value, check) in FIELDS.items():
+        try:
+            state[name] = check(state[name])
+        except (ValueError, TypeError, KeyError, AttributeError):
+            state[name] = copy.deepcopy(value)
+    clean_game(state)
+
+
+def clean_game(state):
+    """What only the game knows: a starter and pets that exist."""
+    from .creatures import FAMILIES, STARTERS
+    if state["starter"] not in {*STARTERS, "cat", None}:
+        state["starter"] = None                            # unreadable: `bashou start` asks again (cat: migrate())
+    state["pets"] = [p for p in state["pets"] if p in FAMILIES]
+    if state["active"] != "starter" and state["active"] not in state["pets"]:
+        state["active"] = "starter"
+
+
 def read(text):
     data = json.loads(text)
     if not isinstance(data, dict):
         raise ValueError("not a save")
     state = {**default(), **data}
-    for key, value in default().items():                  # a field of the wrong type: its default
-        if value is None or key == "skills":
-            continue
-        kind = (int, float) if isinstance(value, (int, float)) else type(value)
-        if not isinstance(state[key], kind):
-            state[key] = value
     clean(state)
-    for key in ("starter_best", "ladder_best", "reviews"):
-        if key not in data:
-            del state[key]                                 # an old save: migrate() sets it
-    return migrate(state)
-
-
-NUMBER = (int, float)
-
-
-def _entries(value, check):
-    """The entries of a list (or the items of a dict) that pass `check`: a damaged one is dropped."""
-    if isinstance(value, dict):
-        return {k: v for k, v in value.items() if check(v)}
-    return [v for v in value if check(v)]
-
-
-def _record(value, fields):
-    """A dict holding each field with its type."""
-    return isinstance(value, dict) and all(isinstance(value.get(k), kind) for k, kind in fields.items())
-
-
-def clean(state):
-    """Inside the fields too: a damaged byte in a save (or a hand edit) made an entry the wrong type or
-    renamed one of its keys, and the pet crashed on it at every frame. Drop what's damaged, keep the rest.
-    (Found by fuzzing the save reader.)"""
-    from .creatures import FAMILIES, STARTERS
-    if state["starter"] is not None and not (isinstance(state["starter"], str) and state["starter"] in {*STARTERS, "cat"}):
-        state["starter"] = None                            # unreadable: `bashou start` asks again (cat: migrate())
-    for key in ("tools", "constructs", "ladder_best", "looks"):
-        state[key] = _entries(state[key], lambda v: isinstance(v, NUMBER))
-    for key in ("days", "pets", "achievements", "challenges", "security"):
-        state[key] = _entries(state[key], lambda v: isinstance(v, str))
-    state["pets"] = [p for p in state["pets"] if p in FAMILIES]
-    if state["active"] != "starter" and state["active"] not in state["pets"]:
-        state["active"] = "starter"
-    for key in ("today", "threat_day"):
-        if not _record(state[key], {"date": str, "count": NUMBER}):
-            state[key] = default()[key]
-    state["evolving"] = _entries(state["evolving"], lambda e: _record(e, {"who": str, "from": int, "to": int}))
-    state["reviews"] = _entries(state["reviews"], lambda r: _record(r, {"step": int, "due": str}))
-    if state["skills"] != "all" and not (isinstance(state["skills"], list)
-                                         and all(isinstance(s, str) for s in state["skills"])):
-        state["skills"] = "all"
-    if state["threat"] is not None and not _record(state["threat"], {"challenge": str, "until": NUMBER}):
-        state["threat"] = None
-    lessons = {**default()["lessons"], **state["lessons"]}
-    for key in ("read", "opened", "met"):
-        lessons[key] = _entries(lessons[key], lambda v: isinstance(v, str)) if isinstance(lessons[key], list) else []
-    if not isinstance(lessons["page"], dict):
-        lessons["page"] = {}
-    state["lessons"] = lessons
-    clean_adventure(state)
-
-
-def clean_adventure(state):
-    """What the pet reads of the adventure (its achievements, at every frame). The rest is only read by
-    `bashou adventure`."""
-    adv = state["adventure"]
-    if adv is None:
-        return
-    if not isinstance(adv, dict):
-        state["adventure"] = None
-        return
-    for key in ("walked", "chapters_done"):
-        if key in adv and not isinstance(adv[key], NUMBER):
-            del adv[key]
-    for key, check in (("bosses", lambda b: isinstance(b, dict) and isinstance(b.get("topic"), str)),
-                       ("trials", lambda t: True)):
-        if key in adv:
-            adv[key] = _entries(adv[key], check) if isinstance(adv[key], list) else []
-    if "levels" in adv:
-        adv["levels"] = _entries(adv["levels"], lambda v: isinstance(v, NUMBER)) if isinstance(adv["levels"], dict) else {}
+    return migrate(state, data)
 
 
 def prev():
@@ -229,12 +264,14 @@ def fix_shared_ids(state):
         earned.append("net_mapper")
 
 
-def migrate(state):
-    """Old saves: the cat in the collection became the starter, and the cat starter became the star.
-    Since then the Hacker cat is a secret pet: a save that found a secret keeps it (it was removed at every
-    load, and "New pet: Hacker cat!" came back after each command)."""
+def migrate(state, saved=None):
+    """Bring an older save up to date. `saved` is the file as it was read (the state itself if not
+    given): a field it lacks tells which versions it went through (the first saves had no version)."""
+    saved = state if saved is None else saved
     from .achievements import secrets
     fix_shared_ids(state)
+    # The cat in the collection became the starter, and the cat starter became the star. Since then
+    # the Hacker cat is a secret pet: a save that found a secret keeps it.
     if state["starter"] is None and "cat" in state["pets"]:
         state["starter"] = "star"
     if state["starter"] == "cat":
@@ -243,14 +280,9 @@ def migrate(state):
         state["pets"].remove("cat")
     if state["active"] == "cat" and "cat" not in state["pets"]:
         state["active"] = "starter"
-    if "starter_best" not in state:
-        migrate_ladder(state)
-    if "ladder_best" not in state:
-        migrate_slime(state)
-    elif state.get("version", 1) < 3:
-        migrate_slime_ladder(state)
-    if "reviews" not in state:
-        migrate_reviews(state)
+    for needed, step in MIGRATIONS:
+        if needed(saved):
+            step(state)
     state["version"] = SAVE_VERSION
     return state
 
@@ -302,6 +334,15 @@ def migrate_ladder(state):
     for e in state.get("evolving", []):
         if e["who"] == "starter":
             e["from"], e["to"] = new(e["from"]), new(e["to"])
+
+
+# (does the save need it, the step), oldest first
+MIGRATIONS = [
+    (lambda saved: "starter_best" not in saved, migrate_ladder),
+    (lambda saved: "ladder_best" not in saved, migrate_slime),
+    (lambda saved: "ladder_best" in saved and saved.get("version", 1) < 3, migrate_slime_ladder),
+    (lambda saved: "reviews" not in saved, migrate_reviews),
+]
 
 
 def private(folder):
