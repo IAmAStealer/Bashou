@@ -22,6 +22,8 @@ Every release has a section here, written for players. CI refuses to tag a relea
 - In the adventure, your pet stays in view when a monster, a boss or a chest asks you something: the
   question box sits between you and what you meet, instead of hiding your pet. On an 80×24 terminal
   your pet is drawn smaller so everything fits.
+- In the adventure, the paths at a fork keep the same thickness all along, instead of jumping
+  between one and two pixels from line to line.
 - The adventure looks right in a tall, narrow (portrait) terminal. The status line at the bottom was
   cut off, hiding your chapter, hearts and meters: when it doesn't fit, it now takes two lines. And
   between forks your pet walked under an empty sky: a road now runs ahead of it to the horizon, and

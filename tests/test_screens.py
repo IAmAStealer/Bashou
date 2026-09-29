@@ -164,18 +164,19 @@ class ScreensTest(unittest.TestCase):
     def test_adventure(self):
         for size in SIZES:
             with self.at(size) as (cols, rows):
+                with state.locked() as s:           # a new walk at each size, not the last size's saved one
+                    s["adventure"] = {}
                 g = game.Game(cols, rows, rng=random.Random(0))
+                t = Term(cols, rows)                  # one terminal: each frame only redraws what changed
                 for phase, keys in (("intro", ()), ("fork", ("\r",)), ("walk", ("\r",))):
                     for k in keys:
                         g.key(k, 100.0)
-                    t = Term(cols, rows)
                     t.write(g.draw(1.0, 100.0) + g.hud())
                     self.check(f"adventure-{phase}", size, t, "♥")
                 for _ in range(200):                                      # walk up to the first monster
                     g.update(0.5, 100.0)
                     if g.adv["phase"] != "walk":
                         break
-                t = Term(cols, rows)
                 t.write(g.draw(1.0, 100.0) + g.hud())
                 self.check("adventure-monster", size, t, "A.", "♥")
                 top, _left, _width, wrapped = g.panel_rect         # owner: the question box hid the pet

@@ -34,6 +34,21 @@ class SceneTest(unittest.TestCase):
         scene.draw(b, "meadow", 10.0, 1.0)
         self.assertNotEqual(a.px, b.px)
 
+    def test_side_paths_keep_the_same_thickness(self):
+        """Owner: a side path was 2 pixels thick on some rows and 1 on others. Going down, a path only
+        widens: no row may be thinner than the one above it."""
+        for w, h in ((160, 88), (60, 188), (80, 44)):
+            for n, picked in ((2, 0), (2, 1), (3, 0), (3, 1), (3, 2)):
+                c = canvas.Canvas(w, h)
+                scene.draw(c, "meadow", fork=(n, picked, 24))
+                horizon, split = int(h * scene.HORIZON), h - 24 - 4
+                rows = [[x for x, color in enumerate(c.px[y]) if color == scene.ROAD_LIT]
+                        for y in range(horizon, horizon + (split - horizon) * 2 // 3)]
+                where = f"{w}x{h}, path {picked + 1} of {n}"
+                self.assertEqual([len(r) for r in rows], sorted(len(r) for r in rows), where)
+                for edge in ([r[0] for r in rows], [r[-1] for r in rows]):     # and no pixel sticks out
+                    self.assertIn(edge, (sorted(edge), sorted(edge, reverse=True)), where)
+
     def test_every_hero_has_a_back_view(self):
         for form in {f for line in creatures.STARTERS.values() for f in line}:      # every starter form
             frames, palette = sprites.hero(form)

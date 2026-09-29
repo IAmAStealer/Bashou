@@ -79,10 +79,18 @@ def fork_road(canvas, biome, n, picked=None, hero_h=12):
     split = max(horizon + 4, h - hero_h - 4)
 
     def band(y0, y1, x0, x1, half0, half1, color):
+        """A path drawn row by row. A slanted one is widened by how much it slants, so it keeps the same
+        thickness all along (owner: side paths were 2 pixels thick on some rows, 1 on others)."""
+        stretch = math.hypot(1, (x1 - x0) / max(1, y1 - y0))
         for y in range(int(y0), int(y1) + 1):
             k = (y - y0) / max(1, y1 - y0)
-            cx, half = x0 + (x1 - x0) * k, half0 + (half1 - half0) * k
-            for x in range(round(cx - half), round(cx + half) + 1):
+            cx, half = x0 + (x1 - x0) * k, (half0 + (half1 - half0) * k) * stretch
+            left, right, wide = math.floor(cx - half + 0.5), math.floor(cx + half + 0.5), math.floor(2 * half + 0.5)
+            if x1 > x0:                                   # slanted: the outer edge, then the width, so no row
+                right = left + wide                       # is thinner than the one above it
+            elif x1 < x0:
+                left = right - wide
+            for x in range(left, right + 1):
                 canvas.set(x, y, color)
 
     near = max(w * 0.14, hero_h * 0.75)                           # at least the pet's width, even in portrait
