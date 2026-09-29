@@ -318,13 +318,14 @@ def dev(args):
             n = max(1, min(progress.MAX_LEVEL, int(args.pet or 1)))
             form_before = progress.reached(s, "starter")
             s["achievements"] = [a.id for a in achievements.ALL][:(n - 1) * progress.ACHIEVEMENTS_PER_LEVEL]
-            s["starter_best"] = 1
-            s["starter_best"] = progress.reached(s, "starter")
+            s["starter_best"] = None
+            now = progress.reached(s, "starter")
+            progress.keep_best(s, "starter", now)
             s.get("looks", {}).pop("starter", None)
             s["evolving"] = [e for e in s.get("evolving", []) if e["who"] != "starter"]
             print(f"  Starter at level {n}: {progress.current(s, 'starter')[2]}.")
-            if s["starter_best"] > form_before:
-                print("  " + progress.evolve(s, "starter", form_before, s["starter_best"]))
+            if now > form_before:
+                print("  " + progress.evolve(s, "starter", form_before, now))
         elif args.action == "threat":
             ch = challenges.BY_ID.get(args.pet) or challenges.ALL[0]
             s["threat"] = {"challenge": ch.id, "until": time.time() + 600}

@@ -121,23 +121,53 @@ def who_of(state, who=None):
     return "starter" if who == "starter" or who in STARTERS else who
 
 
+def form_of(state, who, sprite):
+    """The place (1 = the first) of a saved form (a sprite id) in the chain, or None when the game no
+    longer has it there. The save holds ids: a form added to a chain shifts no saved number."""
+    forms = chain(state, who)
+    return forms.index(sprite) + 1 if isinstance(sprite, str) and sprite in forms else None
+
+
+def best(state, who):
+    """The highest form reached so far, kept in the save (`starter_best`, `ladder_best`)."""
+    who = who_of(state, who)
+    saved = state.get("starter_best") if who == "starter" else state.get("ladder_best", {}).get(who)
+    return form_of(state, who, saved) or 1
+
+
+def keep_best(state, who, form):
+    sprite = chain(state, who)[form - 1]
+    if who_of(state, who) == "starter":
+        state["starter_best"] = sprite
+    else:
+        state.setdefault("ladder_best", {})[who] = sprite
+
+
 def reached(state, who):
     """The latest form (1 = the first): walk the chain while each form's "next_at" is met. A form once
-    reached stays (`starter_best`, `ladder_best`), even when a ladder changes."""
+    reached stays (`best`), even when a ladder changes."""
     who = who_of(state, who)
     forms = chain(state, who)
     form = 1
     while form < len(forms) and met(state, who, creatures.PETS[forms[form - 1]].next_at):
         form += 1
-    best = state.get("starter_best", 1) if who == "starter" else state.get("ladder_best", {}).get(who, 1)
-    return min(len(forms), max(form, best))
+    return min(len(forms), max(form, best(state, who)))
 
 
 def look(state, who=None):
     """The form shown: the latest, unless you picked an earlier one or haven't watched it evolve."""
     who = who_of(state, who)
     top = reached(state, who)
-    return max(1, min(state.get("looks", {}).get(who, top), top))
+    return min(form_of(state, who, state.get("looks", {}).get(who)) or top, top)
+
+
+def set_look(state, who, form):
+    """Show this form (`f` in `bashou swap`); the latest one is the default and isn't saved."""
+    who = who_of(state, who)
+    if form == reached(state, who):
+        state.get("looks", {}).pop(who, None)
+    else:
+        state.setdefault("looks", {})[who] = chain(state, who)[form - 1]
 
 
 def sprite_of(state, who, form):
@@ -157,15 +187,22 @@ def current(state, who=None):
 
 def evolve(state, who, old, new):
     """Queue an evolution for `bashou evolve`; until then the pet keeps its old look."""
-    state.setdefault("looks", {}).setdefault(who, old)
+    forms = chain(state, who)
+    state.setdefault("looks", {}).setdefault(who, forms[old - 1])
     queue = state.setdefault("evolving", [])
     for e in queue:
         if e["who"] == who:
-            e["to"] = new
+            e["to"] = forms[new - 1]
             break
     else:
-        queue.append({"who": who, "from": old, "to": new})
+        queue.append({"who": who, "from": forms[old - 1], "to": forms[new - 1]})
     return "✨ " + _("{old} is evolving! Watch it: `bashou evolve`").format(old=sprite_of(state, who, old)[1])
+
+
+def evolution(state, e):
+    """A waiting evolution with form numbers: {"who", "from", "to"}."""
+    to = form_of(state, e["who"], e["to"]) or reached(state, e["who"])
+    return {"who": e["who"], "from": min(to, form_of(state, e["who"], e["from"]) or 1), "to": to}
 
 
 def watched(state, who):
@@ -225,7 +262,8 @@ def check(state, earned=()):
         if met:
             notes += unlock(state, pet, reason)
     if state["starter"] and starter_level(state) > level_before:
-        now = state["starter_best"] = reached(state, "starter")
+        now = reached(state, "starter")
+        keep_best(state, "starter", now)
         if now > form_before:
             notes.append(evolve(state, "starter", form_before, now))
         else:
@@ -233,8 +271,8 @@ def check(state, earned=()):
             notes.append("⬆ " + _("{name} reached level {level}!").format(name=name, level=starter_level(state)))
     for pet in creatures.NAMES:
         if counted(state, pet):                             # its count went up before check(): compare
-            before[pet] = state.setdefault("ladder_best", {}).get(pet, 1)   # with the form it had
-            state["ladder_best"][pet] = reached(state, pet)
+            before[pet] = best(state, pet)                  # with the form it had
+            keep_best(state, pet, reached(state, pet))
     for pet in creatures.NAMES:
         now = reached(state, pet)
         if now > before[pet] and pet in state["pets"]:

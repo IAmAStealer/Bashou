@@ -13,6 +13,7 @@ Every release has a section here, written for players. CI refuses to tag a relea
 - A save damaged inside (one wrong byte on disk, or a hand edit) no longer makes your pet crash over
   and over. The damaged entry is dropped and everything else in your save is kept. If the starter
   itself can't be read, Bashou asks you to choose it again.
+  A setting damaged the same way (a bubble range that isn't one) is set back to its default too.
 - The adventure looks right in a tall, narrow (portrait) terminal. The status line at the bottom was
   cut off, hiding your chapter, hearts and meters: when it doesn't fit, it now takes two lines. And
   between forks your pet walked under an empty sky: a road now runs ahead of it to the horizon, and

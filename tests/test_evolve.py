@@ -36,7 +36,7 @@ class EveryPetEvolvesTest(unittest.TestCase):
         for step in steps:
             notes = step()
             evolving = [n for n in notes if "is evolving" in n]
-            for e in self.queued(s, who):
+            for e in [progress.evolution(s, e) for e in self.queued(s, who)]:
                 self.assertGreater(e["to"], e["from"], (who, e))
                 pair = (forms[e["from"] - 1], forms[e["to"] - 1])
                 if pair not in RECOLORS:

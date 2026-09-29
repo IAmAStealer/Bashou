@@ -21,6 +21,7 @@ def glow(pet):
 
 def scenes(s, e):
     """(title, sprite lines, text, seconds) for one evolution, from the old form to the new one."""
+    e = progress.evolution(s, e)
     who = e["who"]
     (old_id, old_name), (new_id, new_name) = (progress.sprite_of(s, who, e[k]) for k in ("from", "to"))
     old, new = creatures.get(old_id), creatures.get(new_id)
@@ -88,7 +89,7 @@ def main():
         print("  " + _("No evolution waiting. Keep learning, it will come!"))
         return 0
     if not sys.stdin.isatty():
-        for e in queue:
+        for e in map(lambda e: progress.evolution(s, e), queue):
             print("  ✨ " + _("{old} evolved into {new}!").format(
                 old=progress.sprite_of(s, e["who"], e["from"])[1], new=progress.sprite_of(s, e["who"], e["to"])[1]))
     else:

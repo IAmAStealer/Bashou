@@ -174,12 +174,8 @@ class Board:
             self.message = DIM + _("Only one form so far: it evolves with achievements.") + RESET
             return
         form = progress.look(self.s, pet) % top + 1
-        who = progress.who_of(self.s, pet)
         with state.locked() as s:
-            if form == top:
-                s.setdefault("looks", {}).pop(who, None)
-            else:
-                s.setdefault("looks", {})[who] = form
+            progress.set_look(s, pet, form)
         self.s = state.load()
         self.message = _("{name}: form {n}/{total}").format(name=progress.current(self.s, pet)[2], n=form, total=top)
 

@@ -12,7 +12,7 @@ from pathlib import Path
 DATA = Path(os.environ.get("BASHOU_DATA", Path.home() / ".local/share/bashou"))
 CACHE = Path(os.environ.get("BASHOU_CACHE", Path.home() / ".cache/bashou"))
 STATE = DATA / "state.json"
-SAVE_VERSION = 3        # bump with a step in migrate() whenever the save's shape changes
+SAVE_VERSION = 4        # bump with a step in migrate() whenever the save's shape changes
 
 
 # name: (default (low, high), help)
@@ -171,7 +171,7 @@ FIELDS = {
     "achievements": ([], list_of(kind(str))),
     "fights_won": (0, kind(*NUMBER)),
     "fights_lost": (0, kind(*NUMBER)),                # knocked out or fled (the Living sofa comforts you)
-    "ladder_best": ({}, dict_of(kind(*NUMBER))),      # pet -> highest form reached on a command ladder: never goes back
+    "ladder_best": ({}, dict_of(kind(str, int))),     # pet -> highest form (sprite id) reached on a command ladder
     "challenges": ([], list_of(kind(str))),           # challenges beaten
     "skills": ("all", skills_choice),                 # "all" or the skills you ticked (`bashou config skills`)
     "reviews": ({}, dict_of(record(step=int, due=str))),   # beaten fight -> {"step", "due"}: it comes back (fight.py)
@@ -184,9 +184,9 @@ FIELDS = {
     "update_checked": (0, kind(*NUMBER)),             # last time a terminal looked for a new version
     "update_available": ("", kind(str)),              # newest release tag not installed yet, at that check
     "settings": ({}, settings_of),                    # `bashou config`, only what differs from SETTINGS
-    "looks": ({}, dict_of(kind(*NUMBER))),            # pet or "starter" -> form shown when not the latest (`f` in `bashou swap`)
-    "starter_best": (1, kind(*NUMBER)),               # the starter's highest form reached: it never goes back
-    "evolving": ([], list_of(record(who=str, **{"from": int, "to": int}))),   # waiting for `bashou evolve`
+    "looks": ({}, dict_of(kind(str, int))),           # pet or "starter" -> form (sprite id) shown when not the latest
+    "starter_best": (None, optional(kind(str, int))), # the starter's highest form (sprite id) reached: never goes back
+    "evolving": ([], list_of(record(who=str, **{"from": (str, int), "to": (str, int)}))),   # for `bashou evolve`
     "lessons": (LESSONS, lessons_progress),           # `bashou lesson`: read, opened, page to resume, fights met
     "share_name": ("", kind(str)),                    # the nickname on `bashou share` cards
 }
@@ -336,13 +336,34 @@ def migrate_ladder(state):
             e["from"], e["to"] = new(e["from"]), new(e["to"])
 
 
+def migrate_form_ids(state):
+    """Version 4: a form is saved as its sprite id ("planet"), not as its place in the chain, so a form
+    added to a chain no longer shifts what was saved. A pet the game doesn't have is dropped."""
+    from . import creatures, progress
+
+    def sprite(who, n):
+        if who != "starter" and who not in creatures.FAMILIES:
+            return None
+        forms = progress.chain(state, who)
+        return forms[max(1, min(n, len(forms))) - 1] if type(n) is int else n if n in forms else None
+
+    state["starter_best"] = sprite("starter", state["starter_best"] or 1)
+    state["ladder_best"] = {pet: sprite(pet, n) for pet, n in state["ladder_best"].items() if sprite(pet, n)}
+    state["looks"] = {who: sprite(who, n) for who, n in state["looks"].items() if sprite(who, n)}
+    state["evolving"] = [{**e, "from": sprite(e["who"], e["from"]), "to": sprite(e["who"], e["to"])}
+                         for e in state["evolving"] if sprite(e["who"], e["from"]) and sprite(e["who"], e["to"])]
+
+
 # (does the save need it, the step), oldest first
 MIGRATIONS = [
     (lambda saved: "starter_best" not in saved, migrate_ladder),
     (lambda saved: "ladder_best" not in saved, migrate_slime),
     (lambda saved: "ladder_best" in saved and saved.get("version", 1) < 3, migrate_slime_ladder),
     (lambda saved: "reviews" not in saved, migrate_reviews),
+    (lambda saved: True, migrate_form_ids),        # version 4; also a number written by hand since
 ]
+# Numbers in looks, starter_best, ladder_best and evolving (int in FIELDS) are forms saved before
+# version 4, turned into sprite ids by migrate_form_ids.
 
 
 def private(folder):

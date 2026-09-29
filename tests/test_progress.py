@@ -86,7 +86,7 @@ class ProgressTest(unittest.TestCase):
         self.assertIn("✨ Fennec is evolving! Watch it: `bashou evolve`", notes)
         self.assertEqual(progress.reached(self.s, "fox"), 2)
         self.assertEqual(progress.current(self.s, "fox")[1:3], (2, "Fennec"))   # new actions, old look until watched
-        self.assertEqual(self.s["evolving"], [{"who": "fox", "from": 1, "to": 2}])
+        self.assertEqual(self.s["evolving"], [{"who": "fox", "from": "fennec", "to": "fox"}])   # sprite ids
         progress.watched(self.s, "fox")
         self.assertEqual(progress.current(self.s, "fox")[2], "Fox")
         self.assertEqual(self.s["evolving"], [])
@@ -276,15 +276,16 @@ class StarterTest(unittest.TestCase):
         self.assertEqual(progress.current(s)[:3], ("stardust", 1, "Stardust"))     # a Comet: still tier 1
         s["achievements"] = [f"a{i}" for i in range(19)]                   # to Comet (level 5) before watching
         progress.check(s, [a for a in __import__("bashou").achievements.ALL[:1]])
-        self.assertEqual(s["evolving"], [{"who": "starter", "from": 1, "to": 3}])   # one animation, Stardust → Comet
+        self.assertEqual(s["evolving"], [{"who": "starter", "from": "stardust", "to": creatures.STARTERS["star"][2]}])   # one animation, Stardust → Comet
 
     def test_pick_an_earlier_look(self):
         s = state.default()
         s["starter"], s["achievements"] = "star", [f"a{i}" for i in range(95)]
         self.assertEqual(progress.current(s)[:3], ("red_giant", 3, "Red giant"))
-        s["looks"]["starter"] = 1
+        progress.set_look(s, "starter", 1)
+        self.assertEqual(s["looks"]["starter"], "stardust")                      # saved by id
         self.assertEqual(progress.current(s)[:3], ("stardust", 3, "Stardust"))   # stardust that can dance
-        s["looks"]["starter"] = 9
+        s["looks"]["starter"] = creatures.STARTERS["star"][-1]
         self.assertEqual(progress.look(s), 7)                                   # never beyond what's reached
 
     def test_old_saves_keep_the_cat_as_starter(self):
@@ -336,8 +337,31 @@ class StarterTest(unittest.TestCase):
                "evolving": [{"who": "starter", "from": 1, "to": 2}], "looks": {"starter": 1}}
         del old["starter_best"]
         s = state.migrate(old)
-        self.assertEqual(s["evolving"], [{"who": "starter", "from": 1, "to": 5}])      # Stardust → Planet still
+        self.assertEqual(s["evolving"], [{"who": "starter", "from": "stardust", "to": "planet"}])   # Stardust → Planet still
         self.assertEqual(progress.reached(s, "starter"), 5)
+
+
+class FormIdTest(unittest.TestCase):
+    """Version 4: forms are saved by sprite id, so a form added to a chain shifts nothing saved."""
+
+    def test_numbers_become_ids(self):
+        slime = creatures.forms("slime")
+        old = {**state.default(), "version": 3, "starter": "star", "starter_best": 2, "pets": ["slime"],
+               "ladder_best": {"slime": 3, "ghostling": 2}, "looks": {"starter": 1},
+               "evolving": [{"who": "starter", "from": 1, "to": 2}, {"who": "nobody", "from": 1, "to": 2}]}
+        s = state.read(json.dumps(old))
+        self.assertEqual(s["version"], state.SAVE_VERSION)
+        star = creatures.STARTERS["star"]
+        self.assertEqual((s["starter_best"], s["looks"]), (star[1], {"starter": star[0]}))
+        self.assertEqual(s["ladder_best"], {"slime": slime[2]})                    # an unknown pet is dropped
+        self.assertEqual(s["evolving"], [{"who": "starter", "from": star[0], "to": star[1]}])
+        self.assertEqual(state.read(json.dumps(s)), s)                             # ids stay as they are
+
+    def test_a_form_the_game_no_longer_has(self):
+        s = {**state.default(), "starter": "star", "achievements": [f"a{i}" for i in range(95)],
+             "starter_best": "gone", "looks": {"starter": "gone"}}
+        self.assertEqual(progress.look(s), progress.reached(s, "starter"))        # the latest form, not a crash
+        self.assertEqual(progress.best(s, "starter"), 1)
 
 
 class AchievementNoteTest(unittest.TestCase):
