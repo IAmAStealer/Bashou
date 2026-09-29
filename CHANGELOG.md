@@ -17,6 +17,8 @@ Every release has a section here, written for players. CI refuses to tag a relea
 - Your pet's tips follow a path now. Each family's achievements lead one to the next (`grep -r`, then
   `grep -E`, then `grep -C`), and your pet suggests the next one on the path, the same one until you
   earn it, instead of a random easy one each time.
+- The pet board, the library and the first-launch screens fit a narrow (portrait) terminal: the
+  board shows fewer pets per row, and the keys (q: quit…) go on their own line instead of being cut off.
 - The adventure looks right in a tall, narrow (portrait) terminal. The status line at the bottom was
   cut off, hiding your chapter, hearts and meters: when it doesn't fit, it now takes two lines. And
   between forks your pet walked under an empty sky: a road now runs ahead of it to the horizon, and

@@ -14,9 +14,10 @@ SLOT = 26
 
 
 def draw(pos, breath):
-    lines = [f"{BOLD}{_('Choose your starter')}{RESET}  "
-             f"{DIM}{_('(for good: only `bashou reset` lets you choose again)')}{RESET}",
-             "", f"{DIM}{_('←/→ to look, Enter to choose, q to decide later')}{RESET}", ""]
+    width = render.columns()
+    slot = max(18, min(SLOT, (width - 2) // len(STARTERS)))     # a portrait terminal: closer together
+    lines = render.heading(_("Choose your starter"), _("(for good: only `bashou reset` lets you choose again)"), width)
+    lines += ["", f"{DIM}{_('←/→ to look, Enter to choose, q to decide later')}{RESET}", ""]
     cols = []
     for i, line in enumerate(STARTERS):
         forms = STARTERS[line]
@@ -29,9 +30,9 @@ def draw(pos, breath):
     out = [f"{ESC}[H{ESC}[2J"] + [f"{ESC}[{i + 1};1H{l}" for i, l in enumerate(lines)]
     for i, col in enumerate(cols):
         for j, l in enumerate(col):
-            out.append(f"{ESC}[{len(lines) + j + 1};{2 + i * SLOT}H{l}")
-    blurb = _(FAMILIES[list(STARTERS)[pos]].blurb)
-    out.append(f"{ESC}[{len(lines) + len(cols[0]) + 2};1H{blurb}")
+            out.append(f"{ESC}[{len(lines) + j + 1};{2 + i * slot}H{l}")
+    blurb = render.wrap(_(FAMILIES[list(STARTERS)[pos]].blurb), width - 1, 4)
+    out += [f"{ESC}[{len(lines) + len(cols[0]) + 2 + k};1H{line}" for k, line in enumerate(blurb)]
     sys.stdout.write("".join(out))
     sys.stdout.flush()
 
@@ -68,12 +69,13 @@ LANG_KEYS = {"\x1b[B": 1, "j": 1, "\x1b[A": -1, "k": -1}
 
 def draw_languages(pos, breath):
     """Always in English plus each language's own name, since we don't know yet what you read."""
-    out = [f"{ESC}[H{ESC}[2J", f"{BOLD}Language{RESET}  {DIM}↑/↓, Enter · `bashou config language` to change it later{RESET}\n\n"]
+    out = [f"{ESC}[H{ESC}[2J"] + [line + "\n" for line in render.heading(
+        "Language", "↑/↓, Enter · `bashou config language` to change it later", render.columns())] + ["\n"]
     for i, (code, name) in enumerate(i18n.LANGUAGES.items()):
         done, total = i18n.progress_of(code) if code != "en" else (1, 1)
-        note = "" if done == total else f"  {DIM}({100 * done // total}% translated, the rest in English){RESET}"
+        note = "" if done == total else f"({100 * done // total}% translated, the rest in English)"
         label = f"{REV} {name} {RESET}" if i == pos else f" {name} "
-        out.append(f"  {label}{note}\n")
+        out += [line + "\n" for line in render.beside(f"  {label}", note, render.columns())]
     sys.stdout.write("".join(out))
     sys.stdout.flush()
 
@@ -123,8 +125,8 @@ def main():
 # --- what you want to learn (bashou/skills.py) --------------------------------------------------
 
 def draw_mode(pos, breath):
-    out = [f"{ESC}[H{ESC}[2J", f"{BOLD}{_('What do you want to learn?')}{RESET}  "
-           f"{DIM}{_('↑/↓, Enter · `bashou config skills` to change it later')}{RESET}\n\n"]
+    out = [f"{ESC}[H{ESC}[2J"] + [line + "\n" for line in render.heading(
+        _("What do you want to learn?"), _("↑/↓, Enter · `bashou config skills` to change it later"), render.columns())] + ["\n"]
     for i, label in enumerate((_("A bit of everything (all skills)"), _("Pick my skills"))):
         out.append(f"  {REV} {label} {RESET}\n" if i == pos else f"   {label}\n")
     sys.stdout.write("".join(out))
@@ -133,14 +135,15 @@ def draw_mode(pos, breath):
 
 def checklist_drawer(ticked):
     def draw(pos, breath):
-        out = [f"{ESC}[H{ESC}[2J", f"{BOLD}{_('Pick your skills')}{RESET}  "
-               f"{DIM}{_('↑/↓ to move, Space to tick, Enter when done')}{RESET}\n\n"]
+        width = render.columns()
+        out = [f"{ESC}[H{ESC}[2J"] + [line + "\n" for line in render.heading(
+            _("Pick your skills"), _("↑/↓ to move, Space to tick, Enter when done"), width)] + ["\n"]
         for i, skill in enumerate(skills.SKILLS):
             box = "[x]" if skill in ticked else "[ ]"
             text = f"{box} {_(skills.SKILLS[skill].text)}"
             line = f"  {REV} {text} {RESET}" if i == pos else f"   {text} "
             why = skills.note(skill)
-            out.append(line + (f"  {DIM}({why}){RESET}" if why else "") + "\n")
+            out += [part + "\n" for part in render.beside(line, f"({why})" if why else "", width, 7)]
         if not ticked:
             out.append(f"\n  {DIM}{_('Tick at least one.')}{RESET}\n")
         sys.stdout.write("".join(out))

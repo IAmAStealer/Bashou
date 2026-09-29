@@ -1,5 +1,7 @@
 """Draw sprites with half blocks (two pixels per character cell) over the terminal text."""
 
+import os
+import re
 import unicodedata
 
 ESC = "\x1b"
@@ -101,6 +103,44 @@ def wrap(text, w, max_lines):
             last = last[:-1]
         lines[-1] = last + "…"
     return lines
+
+
+def columns():
+    """The terminal's width (80 when it isn't a terminal)."""
+    try:
+        return os.get_terminal_size().columns
+    except OSError:
+        return 80
+
+
+def heading(title, keys, cols):
+    """A screen's first lines: the title in bold and its keys dimmed after it, or below it when the
+    terminal is too narrow for both (a portrait one): the keys (q: quit…) must never be cut off."""
+    if width(title) + 2 + width(keys) < cols:
+        return [f"{BOLD}{title}{RESET}  {DIM}{keys}{RESET}"]
+    return [f"{BOLD}{title}{RESET}"] + [f"{DIM}{line}{RESET}" for line in wrap(keys, cols - 1, 3)]
+
+
+def beside(text, note, cols, indent=5):
+    """`text` with a dimmed note after it, or on the next line (indented) when both don't fit."""
+    if not note:
+        return [text]
+    if width(strip(text)) + 2 + width(note) < cols:
+        return [f"{text}  {DIM}{note}{RESET}"]
+    return [text] + [" " * indent + f"{DIM}{line}{RESET}" for line in wrap(note, cols - indent - 1, 2)]
+
+
+def fit(line, cols):
+    """A line of text as lines of at most `cols` columns: wrapped in the style it starts with."""
+    if width(strip(line)) <= cols:
+        return [line]
+    style = re.match(r"(\x1b\[[0-9;]*m)*", line).group(0)
+    return [style + part + RESET for part in wrap(strip(line), cols, 4)]
+
+
+def strip(text):
+    """The text without its escape sequences (what the terminal shows)."""
+    return re.sub(r"\x1b\[[0-9;?]*[A-Za-z]", "", text)
 
 
 def bubble(text, max_width, max_lines=4):

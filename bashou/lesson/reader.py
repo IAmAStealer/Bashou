@@ -144,10 +144,12 @@ class Library:
 
     def list_screen(self, cols, lines):
         done = sum(le["id"] in read(self.s) for le in self.lessons)
-        out = [(1, 2, f"{TITLE}{BOLD}🦉 " + _("The Sage Owl's library") + f"{RESET} {DIM}· "
-                + _("{n}/{total} read · ↑↓ Enter: open · q: quit").format(n=done, total=len(self.lessons)) + RESET),
-               (2, 2, NEXT + "■ " + _("your next step") + f"{RESET}  ■ " + _("mastered") + f"  {DIM}🔒 "
-                + _("locked") + RESET)]
+        head = render.heading("🦉 " + _("The Sage Owl's library"),
+                              _("{n}/{total} read · ↑↓ Enter: open · q: quit").format(n=done, total=len(self.lessons)), cols - 1)
+        out = [(1 + k, 2, TITLE + line) for k, line in enumerate(head)]
+        top = len(head) - 1                                 # the keys took a line of their own (portrait)
+        out.append((2 + top, 2, NEXT + "■ " + _("your next step") + f"{RESET}  ■ " + _("mastered") + f"  {DIM}🔒 "
+                    + _("locked") + RESET))
         rows, last = [], None
         for i, le in enumerate(self.lessons):
             if group(le) != last:
@@ -159,11 +161,11 @@ class Library:
             new = f"  {ACCENT}" + _("new") + RESET if self.is_new(le) else ""
             text = f"{mark} {le['title']}"
             rows.append((i, (REV if i == self.pos else "") + style + f" {text} " + RESET + new))
-        room = max(3, lines - 11)
+        room = max(3, lines - 11 - top)
         at = next(k for k, (i, _t) in enumerate(rows) if i == self.pos)
         start = max(0, min(at - room // 2, len(rows) - room))
         for k, (i, text) in enumerate(rows[start:start + room]):
-            out.append((4 + k, 4 if i is not None else 2, text))
+            out.append((4 + top + k, 4 if i is not None else 2, text))
         le = self.lessons[self.pos]
         st = status(self.s, le)
         if st == "locked":
@@ -173,7 +175,7 @@ class Library:
                 how=missing(self.s, le["masters"])), NEXT)]
         else:
             info = [(le["summary"], ""), (_("Mastered: you already do what it teaches. Read it again any time."), DIM)]
-        row = 4 + min(room, len(rows)) + 1
+        row = 4 + top + min(room, len(rows)) + 1
         for text, color in info:
             for part in render.wrap(text, min(cols - 4, 76), 3):
                 out.append((row, 2, color + part + RESET))

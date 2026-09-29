@@ -43,9 +43,10 @@ class Board:
         self.breath = False
         self.message = ""
         self.top = 0                      # first pet row shown when the grid scrolls
+        self.cols = COLS                  # tiles per row: fewer on a narrow (portrait) terminal
 
     def rows(self):
-        return -(-(len(self.ids) - 1) // COLS)          # the last row may be partly empty
+        return -(-(len(self.ids) - 1) // self.cols)     # the last row may be partly empty
 
     def tile(self, i):
         if i >= len(self.ids):
@@ -121,13 +122,14 @@ class Board:
     def layout(self, cols, lines):
         """(grid lines, preview lines, preview on the side?) fitting a cols × lines terminal.
         When it's too short, the preview keeps its sprite and name, and the grid scrolls."""
-        head = [f"{BOLD}Bashou{RESET} {DIM}· " + _("{n} pets · arrows/hjkl · Enter: pick · f: form · q: quit").format(
-            n=f"{len(creatures.owned(self.s))}/{len(self.ids) - 1}") + RESET, ""] + self.tile(0)
-        preview = self.preview()
-        side = cols >= COLS * TILE_W + 40
+        self.cols = max(1, min(COLS, (cols - 1) // TILE_W))
+        head = render.heading("Bashou", _("{n} pets · arrows/hjkl · Enter: pick · f: form · q: quit").format(
+            n=f"{len(creatures.owned(self.s))}/{len(self.ids) - 1}"), cols) + [""] + self.tile(0)
+        side = cols >= self.cols * TILE_W + 40
+        width = max(20, (cols - self.cols * TILE_W - 6) if side else cols - 3)
+        preview = [part for line in self.preview() for part in render.fit(line, width)]
         dim = self.message.startswith(DIM)
         text = self.message.replace(DIM, "").replace(RESET, "")
-        width = max(20, (cols - COLS * TILE_W - 6) if side else cols - 2)
         message = [(DIM if dim else "") + part + (RESET if dim else "")
                    for part in render.wrap(text, width, 3)] if text else [""]
         fixed = len(head) + len(message)                              # the message wraps on a few lines
@@ -139,12 +141,12 @@ class Board:
             room = lines - fixed - 1 - len(preview)
         shown = max(1, min(self.rows(), room // TILE_H))
         if self.pos:                                                  # keep the selected row in view
-            row = (self.pos - 1) // COLS
+            row = (self.pos - 1) // self.cols
             self.top = min(max(self.top, row - shown + 1), row)
         self.top = max(0, min(self.top, self.rows() - shown))
         grid = list(head)
         for row in range(self.top, self.top + shown):
-            tiles = [self.tile(1 + row * COLS + c) for c in range(COLS)]
+            tiles = [self.tile(1 + row * self.cols + c) for c in range(self.cols)]
             for line in range(TILE_H):
                 grid.append("".join(t[line] if t[line] else " " * TILE_W for t in tiles))
         more = shown < self.rows()
@@ -161,7 +163,7 @@ class Board:
         for i, line in enumerate(preview):
             row = i + 3 if side else len(grid) + i + 2
             if row <= size.lines:                          # below the last line the terminal would scroll
-                out.append(f"{ESC}[{row};{COLS * TILE_W + 4 if side else 2}H{line}")
+                out.append(f"{ESC}[{row};{self.cols * TILE_W + 4 if side else 2}H{line}")
         sys.stdout.write("".join(out))
         sys.stdout.flush()
 
@@ -181,7 +183,7 @@ class Board:
 
     def key(self, k):
         n, size = self.pos, len(self.ids)
-        last_row = 1 + (self.rows() - 1) * COLS
+        last_row, COLS = 1 + (self.rows() - 1) * self.cols, self.cols
         if k == "up":
             self.pos = 0 if 1 <= n <= COLS else (n - COLS if n else last_row)
         elif k == "down":
