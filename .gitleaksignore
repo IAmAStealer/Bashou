@@ -1,0 +1,2 @@
+# Not a secret: the achievement's example reads the password from `pass` (curl -u "admin:$(pass show ...)").
+43154e687a1e2378eb91d253e1f92d32f0888fe0:bashou/achievements.py:curl-auth-user:358
