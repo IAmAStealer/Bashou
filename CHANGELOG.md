@@ -28,9 +28,10 @@ Every release has a section here, written for players. CI refuses to tag a relea
   cut off, hiding your chapter, hearts and meters: when it doesn't fit, it now takes two lines. And
   between forks your pet walked under an empty sky: a road now runs ahead of it to the horizon, and
   what waits for you comes down that road.
-- For contributors: the code is being refactored toward a data-driven program. The save is described
-  in one table, commands in one list, achievements as chains, and skills and settings as records, so
-  each fact lives in one place instead of several that had to agree.
+- For contributors: the code was reworked toward a data-driven program. The save, the commands, the
+  achievement chains, the skills and the settings are each described in one place, instead of several
+  copies that had to agree. That removes a whole kind of bug, where one copy was updated and another
+  was not.
 
 ## v0.6.4 — 2026-09-28
 
