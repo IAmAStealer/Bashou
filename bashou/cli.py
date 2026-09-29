@@ -176,8 +176,8 @@ def ask_settings(ask=input):
             if new is not None:
                 s["settings"][key] = new
     if change in ("y", "yes", "o", "oui"):
-        from . import skills
-        skills.show(skills.ask(current))
+        from . import starter
+        starter.show_skills(starter.ask_skills(current))
     if language in ("y", "yes", "o", "oui"):
         from . import starter
         starter.language_main()
@@ -224,11 +224,11 @@ def config(name, value):
     if name == "language":
         return language(value)
     if name == "skills":
-        from . import skills
+        from . import starter
         if value is not None:
             print("  " + _("Skills are picked on a screen: bashou config skills"))
             return 1
-        return skills.main()
+        return starter.skills_main()
     if name not in state.SETTINGS:
         print("  " + _("Unknown setting: {name}").format(name=name))
         return 1
@@ -449,11 +449,11 @@ def main():
         if "`" in said:
             print(f"  {DIM}" + _("Not sure what it does? `bashou learn` takes it apart.") + RESET)
     elif args.cmd == "lesson":
-        from . import lesson
-        raise SystemExit(lesson.main([args.which] if args.which else []))
+        from .lesson import reader
+        raise SystemExit(reader.main([args.which] if args.which else []))
     elif args.cmd == "adventure":
-        from . import adventure
-        raise SystemExit(adventure.main())
+        from .adventure import game
+        raise SystemExit(game.main())
     elif args.cmd in ("arena", "security"):
         from . import arena
         raise SystemExit(arena.main(*(("security", args.which) if args.cmd == "security" else (args.mode, args.which))))

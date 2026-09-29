@@ -1,6 +1,9 @@
 """Turn analyzed commands into counters, unlocked pets and notifications."""
 
+import re
+
 from . import achievements, safety
+from . import which
 from .achievements import Ctx
 from .analyze import analyze
 from .behavior import ACTIONS
@@ -14,10 +17,9 @@ CONSTRUCT_NAMES = {"pipe3": "3-command pipes", "risky": "risky commands", "scrip
 def tool_label(pet):
     """How the unlock hint names a tool pet's tools ("label" in its file, or the first in alphabetical
     order). Only the installed ones are named: no `dig` in the hint when dig is missing."""
-    from .which import installed
     rule = creatures.FAMILIES[pet].unlock
     names = rule.get("label") or [min(rule["tools"])]
-    return "/".join([n for n in names if installed(n)] or names[:1])
+    return "/".join([n for n in names if which.installed(n)] or names[:1])
 
 
 def counter(state, path):
@@ -213,7 +215,6 @@ def watched(state, who):
 
 def runs_a_script(analysis, line):
     """`./backup.sh`, `bash deploy.sh`, `sh x.sh`: running a script of your own."""
-    import re
     if any(t.endswith(".sh") for t in analysis.tools):
         return True
     return bool(analysis.tools & {"bash", "sh", "zsh"}) and bool(re.search(r"\b(ba|z)?sh\s+\S+\.sh\b", line))

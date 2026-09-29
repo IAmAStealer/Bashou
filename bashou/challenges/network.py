@@ -18,6 +18,7 @@ import time
 from pathlib import Path
 
 from . import Challenge
+from .trials import trial as make
 
 NET = dict(pet="packet", skill="network")
 TCPDUMP = dict(tools=("tcpdump", "tshark"), requires=["tcpdump"])
@@ -448,7 +449,6 @@ def v6_loopback():
 
 
 def trial():
-    from .trials import trial as make
     chest = make("trial_ss_ipv6", 1, "A guard listens on the IPv6 loopback, ::1, next to this chest, on a high port (20000 to 39999). "
                  "Which one? Then: answer <port>",
                  ["ss -tln lists listening TCP sockets; -6 keeps only IPv6, -p shows the process. ::1 is this "

@@ -27,10 +27,10 @@ Setup, once:
 
 ```bash
 echo '{"@language": "Deutsch"}' > bashou/locales/de.json   # the language's name, in that language
-python3 -m bashou.i18n                                      # fills in every message to translate, empty
+python3 -m bashou.translations                                      # fills in every message to translate, empty
 ```
 
-Rerun `python3 -m bashou.i18n` any time: it adds new messages, drops old ones, keeps translations,
+Rerun `python3 -m bashou.translations` any time: it adds new messages, drops old ones, keeps translations,
 and prints how many are done. An empty value shows the English, so partial work can ship.
 
 ## Rules the tests enforce
@@ -83,7 +83,7 @@ Run `python3 -m unittest tests.test_i18n tests.test_adventure` after each batch.
 ## Before the pull request
 
 ```bash
-python3 -m bashou.i18n            # 100% translated? (partial is fine too)
+python3 -m bashou.translations            # 100% translated? (partial is fine too)
 python3 -m unittest               # everything passes
 ```
 

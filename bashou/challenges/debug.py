@@ -8,6 +8,7 @@ import os
 import tempfile
 
 from . import Challenge
+from .trials import trial as make
 from .code import COMPILERS, NAMES, c_tests, header, run
 from ..i18n import _
 
@@ -308,7 +309,6 @@ def chest_setup(work, rng):
 
 
 def trial():
-    from .trials import trial as make
     return make("trial_gdb_line", 2, "count.c crashes. Build it with gcc -g, run it in gdb and ask bt: at which line "
                 "of count.c does it stop? Then: answer <line>",
                 ["gcc -g count.c -o count builds it with line numbers. In gdb: run, then bt.",

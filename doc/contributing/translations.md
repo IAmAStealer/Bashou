@@ -51,7 +51,7 @@ shows in English. See [questions.md](questions.md) for what makes a good questio
 2. Fill it with every message to translate (empty values):
 
    ```bash
-   python3 -m bashou.i18n        # also shows how much is translated: "de: 0/758 translated"
+   python3 -m bashou.translations        # also shows how much is translated: "de: 0/758 translated"
    ```
 
 3. Translate, as much as you like. The language shows up in `bashou config language` right away.

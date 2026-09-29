@@ -12,7 +12,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from bashou import achievements, creatures, i18n, progress, share, state
+from bashou import achievements, creatures, i18n, progress, share, state, translations
 
 FILE = Path(__file__).resolve().parent / "snapshot.json"
 
@@ -56,7 +56,7 @@ def capture():
         return {"walks": walks(),
                 "unlock_hints": {pet: progress.how_to_unlock(state.default(), pet) for pet in creatures.NAMES},
                 "share_page": share.page_data(),
-                "translated": sorted(set(i18n.messages()))}
+                "translated": sorted(set(translations.messages()))}
 
 
 class SnapshotTest(unittest.TestCase):

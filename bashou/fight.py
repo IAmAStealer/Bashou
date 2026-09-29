@@ -15,8 +15,9 @@ import tempfile
 import time
 from pathlib import Path
 
-from . import challenges, duel, progress, skills, state
+from . import challenges, duel, lesson, progress, skills, state
 from .analyze import analyze, parse_log
+from .lesson import reader
 from .i18n import _, cap
 from .render import BOLD, DIM, RESET, ACCENT, GOOD, BAD
 
@@ -104,7 +105,6 @@ def learned(s, tool):
     lessons = (s.get("adventure") or {}).get("lessons", [])
     if tool == "|":
         return s["constructs"].get("pipe3", 0) > 0 or "pipes" in lessons
-    from . import lesson
     read = set((s.get("lessons") or {}).get("read", []))
     library = any(tool in le.get("tools", ()) for le in lesson.english() if le["id"] in read)
     return s["tools"].get(tool, 0) > 0 or tool in lessons or library
@@ -288,19 +288,17 @@ def cmd_hint(base):
 
 
 def lesson_progress(s):
-    from .lesson import progress_of
-    return progress_of(s)
+    return lesson.progress_of(s)
 
 
 def cmd_lesson(base):
     """`lesson` in the arena: the Sage Owl's lesson for this fight, in the library reader."""
-    from . import lesson
     ch = challenges.BY_ID[load_meta(base)["challenge"]]
     found = lesson.for_fight(lesson.load(), ch.id)
     if not found:
         print(DIM + _("No lesson for this one yet: try hint.") + RESET)
         return 0
-    return lesson.main([found[0]["id"]])
+    return reader.main([found[0]["id"]])
 
 
 def cmd_task(base):

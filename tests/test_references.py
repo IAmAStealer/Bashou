@@ -181,7 +181,7 @@ class DrawEverythingTest(TempState):
     """Play the adventure through every topic with every starter form, drawing every frame."""
 
     def play(self, form, topic, rng):
-        from bashou import adventure
+        from bashou.adventure import game as adventure
         with state.locked() as s:
             s["starter"] = next(k for k, forms in creatures.STARTERS.items() if form in forms)
             s["adventure"] = None                                   # a new game each time

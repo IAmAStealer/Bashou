@@ -2,7 +2,7 @@ import json
 import re
 import unittest
 
-from bashou import i18n
+from bashou import i18n, translations
 
 
 class CatalogTest(unittest.TestCase):
@@ -10,8 +10,8 @@ class CatalogTest(unittest.TestCase):
         i18n.use(None)
 
     def test_every_message_is_in_every_catalog(self):
-        """Run `python3 -m bashou.i18n` after adding or changing a message."""
-        keys = set(i18n.messages())
+        """Run `python3 -m bashou.translations` after adding or changing a message."""
+        keys = set(translations.messages())
         for lang in i18n.LANGUAGES:
             if lang != "en":
                 self.assertEqual(set(i18n.catalog(lang)) - {i18n.NAME}, keys, f"{lang}: run python3 -m bashou.i18n")
@@ -39,7 +39,7 @@ class CatalogTest(unittest.TestCase):
     def test_adventure_names_are_translatable(self):
         """Boss names, chapter titles and places went through _() but weren't in the catalogs."""
         from bashou.adventure import world
-        keys = set(i18n.messages())
+        keys = set(translations.messages())
         self.assertIn("Kernel Warden", keys)
         self.assertIn("The Sleepy Meadow", keys)
         ch = world.chapter(9)

@@ -9,9 +9,9 @@ import os
 import random
 import sys
 
-from .. import creatures, render, skills, state, terminal
+from .. import achievements, challenges, creatures, progress, render, skills, state, terminal
 from ..i18n import _
-from . import HERE, how_to_unlock, missing, progress_of, read, shown, skills_of, status, unlocked
+from . import HERE, load, met, progress_of, read, shown, skills_of, status, unlocked
 from ..render import ESC, BOLD, DIM, RESET, REV
 
 ACCENT = f"{ESC}[38;2;240;200;110m"
@@ -197,7 +197,6 @@ class Library:
         self.lesson, self.message = le, ""
 
     def leave(self, finished=False):
-        from .. import progress
         le = self.lesson
         notes = []
         with state.locked() as s:
@@ -277,3 +276,68 @@ class Library:
 
 def run(lessons, open_id=None):
     return Library(lessons, open_id).run()
+
+
+# --- what's still missing, in words ---------------------------------------------------------
+
+def describe(cond, s=None):
+    """A condition in words for the list: "beat the Semicolon slug", "run 50 commands (32/50)"."""
+    kind, *args = cond.split()
+    if kind == "commands":
+        text = _("run {n} commands").format(n=args[0])
+        return text + (f" ({s['commands']}/{args[0]})" if s else "")
+    if kind == "tool":
+        text = (_("use {tool} once") if args[1] == "1" else _("use {tool} {n} times")).format(tool=args[0], n=args[1])
+        return text + (f" ({s['tools'].get(args[0], 0)}/{args[1]})" if s else "")
+    if kind == "won":
+        ch = challenges.BY_ID.get(args[0])
+        return _("beat the {threat} in a fight").format(threat=_(ch.threat) if ch else args[0])
+    if kind == "fights":
+        text = _("win {n} fights").format(n=args[0])
+        return text + (f" ({s['fights_won']}/{args[0]})" if s else "")
+    if kind == "achievement":
+        a = next((a for a in achievements.ALL if a.id == args[0]), None)
+        return _("earn the achievement “{name}”").format(name=_(a.name) if a else args[0])
+    return cond
+
+
+def missing(s, conds):
+    """What still doesn't hold, in words: "run 50 commands (32/50) · beat the Leak Lurker in a fight"."""
+    left = []
+    for cond in conds:
+        sides = [c.strip() for c in cond.split("|")]
+        if not any(met(s, c) for c in sides):
+            left.append(_(" or ").join(describe(c, s) for c in sides))
+    return " · ".join(left)
+
+
+def how_to_unlock(s, lesson):
+    text = missing(s, lesson.get("needs", []))
+    first = next((challenges.BY_ID[f] for f in lesson.get("fights", []) if f in challenges.BY_ID), None)
+    if first:
+        text += " " + _("(or meet the {threat} in a fight)").format(threat=_(first.threat))
+    return text
+
+
+# --- `bashou lesson` ------------------------------------------------------------------------
+
+def main(args):
+    lessons = load()
+    s = state.load()
+    if args and args[0] == "list" or not sys.stdin.isatty():
+        return print_list(s, lessons)
+    return run(lessons, args[0] if args else None)
+
+
+def print_list(s, lessons):
+    """`bashou lesson list` (or outside a terminal): the library as text."""
+    for le in shown(s, lessons):
+        mark = "✔" if le["id"] in read(s) else "📖"
+        st = status(s, le)
+        if st == "next":
+            print(f"  {mark} {NEXT}{le['title']}{RESET}  \x1b[2m{le['summary']}\x1b[0m")
+        elif st == "mastered":
+            print(f"  {mark} {le['title']}")
+        else:
+            print(f"  \x1b[2m🔒 {le['title']} · {how_to_unlock(s, le)}\x1b[0m")
+    return 0

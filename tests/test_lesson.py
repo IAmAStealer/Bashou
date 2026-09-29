@@ -131,7 +131,7 @@ class UnlockTest(unittest.TestCase):
         self.assertEqual([le["id"] for le in lesson.new(s, LESSONS)], ["command_line"])
         paths = BY_ID["paths"]
         self.assertFalse(lesson.unlocked(s, paths))
-        self.assertEqual(lesson.how_to_unlock(s, paths), "run 20 commands (0/20) (or meet the Dust Bunny in a fight)")
+        self.assertEqual(reader.how_to_unlock(s, paths), "run 20 commands (0/20) (or meet the Dust Bunny in a fight)")
         s["commands"] = 20                                       # no need to read command_line first
         self.assertTrue(lesson.unlocked(s, paths))
 
@@ -141,7 +141,7 @@ class UnlockTest(unittest.TestCase):
         self.assertEqual(lesson.status(s, heap), "locked")
         s["challenges"].append("semicolon_slug")
         self.assertEqual(lesson.status(s, heap), "next")
-        self.assertEqual(lesson.missing(s, heap["masters"]),
+        self.assertEqual(reader.missing(s, heap["masters"]),
                          "beat the Leak Lurker in a fight · beat the Stack Specter in a fight")
         s["challenges"] += ["leak_lurker", "stack_specter"]
         self.assertEqual(lesson.status(s, heap), "mastered")
@@ -150,7 +150,7 @@ class UnlockTest(unittest.TestCase):
         s = state.default()
         heap = BY_ID["stack_heap"]
         self.assertFalse(lesson.unlocked(s, heap))
-        self.assertIn("(0/3)", lesson.how_to_unlock(s, heap))
+        self.assertIn("(0/3)", reader.how_to_unlock(s, heap))
         s["tools"]["gcc"] = 3
         self.assertTrue(lesson.unlocked(s, heap))
         s = state.default()

@@ -3,8 +3,10 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from bashou import adventure, state, terminal
-from bashou.adventure import canvas, quiz, scene, sprites, topic_name, world
+from bashou import state, terminal
+from bashou.adventure import canvas, quiz, scene, sprites, world
+from bashou.adventure import game as adventure
+from bashou.adventure.game import topic_name
 
 
 class CanvasTest(unittest.TestCase):

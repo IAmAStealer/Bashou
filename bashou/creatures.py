@@ -9,6 +9,9 @@ import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from . import render
+from . import which
+
 ART = Path(__file__).resolve().parent / "pets"
 
 
@@ -181,10 +184,9 @@ NAMES = {f.id: f.name for f in sorted(FAMILIES.values(), key=lambda f: f.order) 
 
 def roster(state=None):
     """The pets of this system, in board order; a secret pet only once you have it."""
-    from .which import installed
     owned_pets = (state or {}).get("pets", ())
     return [(pet, name) for pet, name in NAMES.items()
-            if (not FAMILIES[pet].needs or installed(FAMILIES[pet].needs))
+            if (not FAMILIES[pet].needs or which.installed(FAMILIES[pet].needs))
             and (not FAMILIES[pet].secret or pet in owned_pets)]
 
 
@@ -244,7 +246,6 @@ def get(pet_id, size="small"):
 
 def main():
     """python3 -m bashou.creatures check | show <pet or fight id> [...]"""
-    from . import render
     args = sys.argv[1:]
     if args[:1] == ["show"] and len(args) > 1:
         for pet_id in args[1:]:

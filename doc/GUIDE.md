@@ -200,7 +200,7 @@ Only JSON files, no code: see
 [translations.md](contributing/translations.md).
 
 ```bash
-python3 -m bashou.i18n         # add new messages (empty) to every catalog, show progress
+python3 -m bashou.translations         # add new messages (empty) to every catalog, show progress
 ```
 
 To add a language, create `bashou/locales/<lang>.json` with `{"@language": "Deutsch"}` and run the

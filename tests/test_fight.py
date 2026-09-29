@@ -798,7 +798,7 @@ class StrikeWordTest(unittest.TestCase):
     """Owner: `answer` for file checks and `answer X` for questions were hard to tell apart."""
 
     def test_each_screen_shows_only_the_command_that_applies(self):
-        from bashou import adventure
+        from bashou.adventure import game as adventure
         for ch in challenges.ALL + challenges.TRIALS:
             with self.subTest(ch.id):
                 screen = (adventure.trial_intro(ch, "task") if ch.kind == "trial" else fight.banner(ch, "task"))

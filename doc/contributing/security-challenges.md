@@ -61,5 +61,5 @@ Then:
 1. Add it to `SECURITY` at the end of the file, and its number to `_bashou_security` in `bashou.bash`.
 2. Add its reference solution to `SOLUTIONS` in `tests/test_fight.py`: a command that prints the
    answer.
-3. Run `python3 -m bashou.i18n` (puts its texts in the translation catalogs) and `python3 -m unittest`.
+3. Run `python3 -m bashou.translations` (puts its texts in the translation catalogs) and `python3 -m unittest`.
 4. Try it for real: `bashou arena security <number>`.

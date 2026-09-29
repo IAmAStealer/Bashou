@@ -7,7 +7,8 @@ Personality = the pet's own voice + traits from the achievements you earned
 import difflib
 import random
 
-from . import achievements, creatures, safety, which
+from . import achievements, creatures, fight, lesson, safety, which
+from .adventure import lessons
 from .analyze import analyze
 from .i18n import _
 
@@ -133,11 +134,9 @@ DISCOVER = {
 
 
 def discover(state, rng):
-    from . import fight
     tools = [t for t in fight.to_discover(state) if t in DISCOVER]
     if not tools:
         return None
-    from .adventure import lessons
     tool = rng.choice(tools)
     taught = any(le["tool"] == tool for le in lessons.LESSONS)
     return _(rng.choice(DISCOVER[tool])) + (" " + _("(bashou adventure teaches it too)") if taught else "")
@@ -190,13 +189,11 @@ def invite(state, rng):
 
 def new_lesson(state, rng):
     """A lesson you unlocked and haven't opened yet: the Sage Owl's library is waiting."""
-    from . import lesson
     return rng.choice(INVITES["lesson"]) if lesson.new(state) else None
 
 
 def line(state, pet, rng=random):
     """One thing for `pet` to say, with its voice. A waiting threat comes first."""
-    from . import fight
     threat = fight.announcement(state)
     if threat:
         return f"{_(creatures.FAMILIES[pet].voice)} {threat}"

@@ -47,7 +47,7 @@ class LoopbackTest(unittest.TestCase):
         """The adventure ran the chest's setup only to show its names, and never stopped the listener it
         started: every IPv6 chest seen left a web server on ::1 behind."""
         from types import SimpleNamespace
-        from bashou import adventure
+        from bashou.adventure import game as adventure
         if not network.CHEST.available():
             self.skipTest("no ss")
         game = SimpleNamespace(trial=network.CHEST, trial_seed=lambda: "seed")

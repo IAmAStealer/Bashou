@@ -1,6 +1,7 @@
 """Persistent state shared by every terminal, guarded by a file lock."""
 
 import copy
+import datetime
 import fcntl
 import json
 import os
@@ -8,6 +9,8 @@ import sys
 import time
 from contextlib import contextmanager
 from pathlib import Path
+
+from . import achievements, creatures, i18n
 
 DATA = Path(os.environ.get("BASHOU_DATA", Path.home() / ".local/share/bashou"))
 CACHE = Path(os.environ.get("BASHOU_CACHE", Path.home() / ".cache/bashou"))
@@ -208,10 +211,9 @@ def clean(state):
 
 def clean_game(state):
     """What only the game knows: a starter and pets that exist."""
-    from .creatures import FAMILIES, STARTERS
-    if state["starter"] not in {*STARTERS, "cat", None}:
+    if state["starter"] not in {*creatures.STARTERS, "cat", None}:
         state["starter"] = None                            # unreadable: `bashou start` asks again (cat: migrate())
-    state["pets"] = [p for p in state["pets"] if p in FAMILIES]
+    state["pets"] = [p for p in state["pets"] if p in creatures.FAMILIES]
     if state["active"] != "starter" and state["active"] not in state["pets"]:
         state["active"] = "starter"
 
@@ -256,9 +258,8 @@ def fix_shared_ids(state):
     the Hacker cat's secret): earning one counted as both, and `jq 'map(.)'` brought the secret cat.
     The newer ones got their own ids (lesson_scholar, net_mapper). The Snail's Scholar is a rule on the
     save: it stays only if it holds (the Spark's comes back by itself). A cat already found stays."""
-    from .achievements import BY_ID
     earned = state.get("achievements", [])
-    if "scholar" in earned and not BY_ID["scholar"].state(state):
+    if "scholar" in earned and not achievements.BY_ID["scholar"].state(state):
         earned.remove("scholar")
     if "mapper" in earned and "cat" in state.get("pets", []) and "net_mapper" not in earned:
         earned.append("net_mapper")
@@ -268,7 +269,6 @@ def migrate(state, saved=None):
     """Bring an older save up to date. `saved` is the file as it was read (the state itself if not
     given): a field it lacks tells which versions it went through (the first saves had no version)."""
     saved = state if saved is None else saved
-    from .achievements import secrets
     fix_shared_ids(state)
     # The cat in the collection became the starter, and the cat starter became the star. Since then
     # the Hacker cat is a secret pet: a save that found a secret keeps it.
@@ -276,7 +276,7 @@ def migrate(state, saved=None):
         state["starter"] = "star"
     if state["starter"] == "cat":
         state["starter"] = "star"
-    if "cat" in state["pets"] and not secrets(state):
+    if "cat" in state["pets"] and not achievements.secrets(state):
         state["pets"].remove("cat")
     if state["active"] == "cat" and "cat" not in state["pets"]:
         state["active"] = "starter"
@@ -289,7 +289,6 @@ def migrate(state, saved=None):
 
 def migrate_reviews(state):
     """Fights beaten before reviews existed come back too: one a day from tomorrow, not all at once."""
-    import datetime
     today = datetime.date.today()
     state["reviews"] = {cid: {"step": 0, "due": (today + datetime.timedelta(days=i + 1)).isoformat()}
                         for i, cid in enumerate(state["challenges"])}
@@ -303,10 +302,9 @@ def migrate_slime_ladder(state):
 
 def migrate_slime(state):
     """The Slime evolved with its achievement family before it had a command ladder: keep its form."""
-    from .creatures import FORMS
     fam = ("capture", "nested", "substitute", "here")      # the family it had until 0.2.3
     earned = sum(a in state.get("achievements", []) for a in fam)
-    state["ladder_best"] = {"slime": len(FORMS["slime"]) if earned == len(fam) else 2 if earned >= 2 else 1}
+    state["ladder_best"] = {"slime": len(creatures.FORMS["slime"]) if earned == len(fam) else 2 if earned >= 2 else 1}
 
 
 # Before starters had long ladders (0.2.3 and older): 3 forms, at levels 4 and 7 (level max 9).
@@ -317,15 +315,14 @@ OLD_LADDERS = {"star": ("stardust", "planet", "star"), "sprout": ("seedling", "s
 def migrate_ladder(state):
     """Form numbers of an old save are places on the old 3-form ladder: turn them into places on the
     new one, and keep the form reached (a Planet stays a Planet until it becomes a Star)."""
-    from .creatures import STARTERS
     line = state.get("starter")
     state["starter_best"] = 1
-    if line not in OLD_LADDERS or line not in STARTERS:
+    if line not in OLD_LADDERS or line not in creatures.STARTERS:
         return
 
     def new(old_form):
         sprite = OLD_LADDERS[line][max(1, min(3, old_form)) - 1]
-        return STARTERS[line].index(sprite) + 1 if sprite in STARTERS[line] else 1
+        return creatures.STARTERS[line].index(sprite) + 1 if sprite in creatures.STARTERS[line] else 1
 
     level = 1 + min(8, len(state.get("achievements", [])) // 5)
     state["starter_best"] = new((level - 1) // 3 + 1)
@@ -339,12 +336,10 @@ def migrate_ladder(state):
 def migrate_form_ids(state):
     """Version 4: a form is saved as its sprite id ("planet"), not as its place in the chain, so a form
     added to a chain no longer shifts what was saved. A pet the game doesn't have is dropped."""
-    from . import creatures, progress
-
     def sprite(who, n):
         if who != "starter" and who not in creatures.FAMILIES:
             return None
-        forms = progress.chain(state, who)
+        forms = creatures.STARTERS[state["starter"] or "star"] if who == "starter" else creatures.forms(who)
         return forms[max(1, min(n, len(forms))) - 1] if type(n) is int else n if n in forms else None
 
     state["starter_best"] = sprite("starter", state["starter_best"] or 1)
@@ -414,3 +409,6 @@ def locked():
         state = load()
         yield state
         save(state)
+
+
+i18n.saved = lambda: load().get("language")        # the language you chose (see i18n.saved)

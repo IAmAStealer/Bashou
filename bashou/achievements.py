@@ -9,8 +9,7 @@ from dataclasses import dataclass
 from datetime import date, timedelta
 from typing import Callable, Optional
 
-from . import creatures, safety
-from . import which
+from . import challenges, creatures, lesson, safety, which
 
 
 @dataclass
@@ -75,7 +74,6 @@ class Achievement:
 
 
 def won_network(s):
-    from . import challenges
     return any(ch.id in s["challenges"] for ch in challenges.network.ALL)
 
 
@@ -85,24 +83,20 @@ def tool(s, *names):
 
 def lessons_read(s):
     """The lessons (English files) you read to the end."""
-    from . import lesson
     done = set((s.get("lessons") or {}).get("read", []))
     return [le for le in lesson.english() if le["id"] in done]
 
 
 def first_skill(le):
-    from . import lesson
     return next(iter(lesson.skills_of(le)), "")
 
 
 def lessons_mastered(s):
-    from . import lesson
     return [le for le in lessons_read(s) if lesson.mastered(s, le)]
 
 
 def lessons_offered(s):
     """The lessons of the skills you learn."""
-    from . import lesson
     return lesson.shown(s, lesson.english())
 
 
@@ -119,7 +113,6 @@ def mastered_at_least(s, n):
 
 
 def all_lessons_read(s):
-    from . import lesson
     done = set((s.get("lessons") or {}).get("read", []))
     return all(le["id"] in done for le in lesson.shown(s, lesson.english()))
 

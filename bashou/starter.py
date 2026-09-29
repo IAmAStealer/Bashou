@@ -1,8 +1,9 @@
-"""First launch: pick a language, then your starter (once: only `bashou reset` lets you pick again)."""
+"""First launch: pick a language, what you want to learn, then your starter (once: only `bashou reset` lets
+you pick again). The same pickers serve `bashou config language` and `bashou config skills`."""
 
 import sys
 
-from . import creatures, render, state, terminal
+from . import creatures, render, skills, state, terminal
 from . import i18n
 from .creatures import FAMILIES, PETS, STARTERS
 from .i18n import _
@@ -107,8 +108,7 @@ def main():
         return 0
     if not sys.stdin.isatty():
         return 1
-    from . import skills
-    skills.show(skills.ask(s.get("skills", "all")))
+    show_skills(ask_skills(s.get("skills", "all")))
     line = choose()
     if not line:
         print(f"  {DIM}" + _("No starter yet. Run `bashou start` when you're ready.") + RESET)
@@ -117,4 +117,77 @@ def main():
         s["starter"], s["active"] = line, "starter"
     print("  " + _("{name} is your starter! It levels up every 5 achievements.").format(
         name=f"{BOLD}{_(PETS[STARTERS[line][0]].name)}{RESET}"))
+    return 0
+
+
+# --- what you want to learn (bashou/skills.py) --------------------------------------------------
+
+def draw_mode(pos, breath):
+    out = [f"{ESC}[H{ESC}[2J", f"{BOLD}{_('What do you want to learn?')}{RESET}  "
+           f"{DIM}{_('↑/↓, Enter · `bashou config skills` to change it later')}{RESET}\n\n"]
+    for i, label in enumerate((_("A bit of everything (all skills)"), _("Pick my skills"))):
+        out.append(f"  {REV} {label} {RESET}\n" if i == pos else f"   {label}\n")
+    sys.stdout.write("".join(out))
+    sys.stdout.flush()
+
+
+def checklist_drawer(ticked):
+    def draw(pos, breath):
+        out = [f"{ESC}[H{ESC}[2J", f"{BOLD}{_('Pick your skills')}{RESET}  "
+               f"{DIM}{_('↑/↓ to move, Space to tick, Enter when done')}{RESET}\n\n"]
+        for i, skill in enumerate(skills.SKILLS):
+            box = "[x]" if skill in ticked else "[ ]"
+            text = f"{box} {_(skills.SKILLS[skill])}"
+            line = f"  {REV} {text} {RESET}" if i == pos else f"   {text} "
+            why = skills.note(skill)
+            out.append(line + (f"  {DIM}({why}){RESET}" if why else "") + "\n")
+        if not ticked:
+            out.append(f"\n  {DIM}{_('Tick at least one.')}{RESET}\n")
+        sys.stdout.write("".join(out))
+        sys.stdout.flush()
+    return draw
+
+
+def choose_skills(current="all"):
+    """"all", a list of skills, or None (q)."""
+    mode = pick(draw_mode, 2, LANG_KEYS, 0 if current == "all" else 1)
+    if mode is None:
+        return None
+    if mode == 0:
+        return "all"
+    ticked = set(skills.SKILLS if current == "all" else current)
+    keys = list(skills.SKILLS)
+    while True:
+        pos = pick(checklist_drawer(ticked), len(keys), LANG_KEYS,
+                   toggle=lambda p: ticked.symmetric_difference_update({keys[p]}))
+        if pos is None:
+            return None
+        if ticked:
+            return "all" if len(ticked) == len(keys) else [k for k in keys if k in ticked]
+
+
+def ask_skills(current="all"):
+    """Ask and save. q keeps what was there."""
+    choice = choose_skills(current)
+    if choice is None:
+        return current
+    with state.locked() as s:
+        s["skills"] = choice
+    return choice
+
+
+def show_skills(choice):
+    if choice == "all":
+        print("  " + _("You learn a bit of everything."))
+    else:
+        print("  " + _("You learn: {skills}").format(skills=", ".join(_(skills.SKILLS[k]).split(":")[0].strip() for k in choice)))
+
+
+def skills_main():
+    """`bashou config skills`."""
+    current = state.load().get("skills", "all")
+    if not sys.stdin.isatty():
+        show_skills(current)
+        return 0
+    show_skills(ask_skills(current))
     return 0

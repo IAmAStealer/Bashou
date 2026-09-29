@@ -8,6 +8,7 @@ boss question, or all your hearts): back to the checkpoint, and you may pick ano
 import random
 
 from . import lessons
+from ..i18n import _
 
 SEGMENT = 12.0          # world units between two events: a short stroll, not a trek
 HEARTS = 3
@@ -45,7 +46,6 @@ NEW_ROAD = "A new road, a new quest. Your pet is ready."
 
 def title(ch):
     """A chapter's title in your language: generated ones carry their number, "Lake of Lost Packets (5)"."""
-    from ..i18n import _
     return f"{_(ch['title'])} ({ch['number']})" if "number" in ch else _(ch["title"])
 
 

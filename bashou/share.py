@@ -11,7 +11,9 @@ import re
 import sys
 import zlib
 
-from . import achievements, progress, qr, state
+from pathlib import Path
+
+from . import achievements, i18n, progress, qr, skills, state
 from .creatures import NAMES, PETS, STARTERS, owned
 from . import creatures
 from .i18n import _
@@ -81,9 +83,6 @@ BOUNDS = {"lv": (1, progress.MAX_LEVEL), "ach": (0, 999), "pets": (0, 99), "won"
 def page_data():
     """share-pets.json, published next to share.html: every family's forms and their sprites, the skills
     and the bounds. The page only draws what is listed here."""
-    import json as _json
-    from pathlib import Path
-    from . import i18n, skills
     pets = Path(__file__).parent / "pets"
     fr = i18n.catalog("fr")
     families, sprites = {}, {}
@@ -92,7 +91,7 @@ def page_data():
     for family, forms, names in lines:
         families[family] = {"forms": forms, "en": names, "fr": [fr.get(n) or n for n in names]}
         for sprite in forms:
-            d = _json.loads((pets / f"{sprite}.json").read_text())
+            d = json.loads((pets / f"{sprite}.json").read_text())
             sprites[sprite] = {"palette": d["palette"], "base": d["base"]}
     labels = {k: {"en": v.split(":")[0], "fr": (fr.get(v) or v).split(":")[0].strip()} for k, v in skills.SKILLS.items()}
     return {"families": families, "sprites": sprites, "skills": labels, "starters": list(STARTERS), "bounds": BOUNDS}

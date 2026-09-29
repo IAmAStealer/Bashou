@@ -7,6 +7,9 @@ task text plus what `verify` needs (stored as JSON in the arena's meta file).
 from dataclasses import dataclass, field
 from typing import Callable, Optional
 
+from ..i18n import _
+from .. import which
+
 
 def fill(text, meta):
     """Put meta["args"] into {placeholders}, leaving other braces alone (awk '{print $1}')."""
@@ -47,12 +50,10 @@ class Challenge:
         return self.tools[0] if self.tools else ""
 
     def task_text(self, meta):
-        from ..i18n import _
         return fill(_(self.task), meta)
 
     def hint_list(self, meta):
         """The hints of this fight; beginners (meta["help_first"]) first learn to read --help."""
-        from ..i18n import _
         hints = [fill(_(h), meta) for h in self.hints]
         if meta.get("help_first") and self.help:
             hints.insert(0, _(HELP_HINT).format(tool=self.tool) + " " + fill(_(self.help), meta))
@@ -70,10 +71,9 @@ class Challenge:
         return value.strip() == str(meta["answer"])
 
     def available(self):
-        from ..which import SYSTEMS, installed, system
-        if self.skill in SYSTEMS and self.skill != system():
+        if self.skill in which.SYSTEMS and self.skill != which.system():
             return False
-        return all(installed(t) for t in (self.requires or [self.tool])) and (self.works is None or self.works())
+        return all(which.installed(t) for t in (self.requires or [self.tool])) and (self.works is None or self.works())
 
 
 from . import awk, basics, cicd, code, debug, find, grep, network, packages, pipe, ps, repos, rust, secrets, sed, security, sql, trials, uniq  # noqa: E402

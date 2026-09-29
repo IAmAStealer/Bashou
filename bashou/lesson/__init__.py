@@ -12,8 +12,7 @@ import functools
 import json
 from pathlib import Path
 
-from .. import achievements, challenges, i18n, skills, state
-from ..i18n import _
+from .. import i18n, skills
 
 HERE = Path(__file__).resolve().parent
 SCHEME_WIDTH = 50               # the owl stands to the right of the scheme: 50 + owl fits 80 columns
@@ -104,45 +103,6 @@ def status(s, lesson):
     return "mastered" if mastered(s, lesson) else "next"
 
 
-def describe(cond, s=None):
-    """A condition in words for the list: "beat the Semicolon slug", "run 50 commands (32/50)"."""
-    kind, *args = cond.split()
-    if kind == "commands":
-        text = _("run {n} commands").format(n=args[0])
-        return text + (f" ({s['commands']}/{args[0]})" if s else "")
-    if kind == "tool":
-        text = (_("use {tool} once") if args[1] == "1" else _("use {tool} {n} times")).format(tool=args[0], n=args[1])
-        return text + (f" ({s['tools'].get(args[0], 0)}/{args[1]})" if s else "")
-    if kind == "won":
-        ch = challenges.BY_ID.get(args[0])
-        return _("beat the {threat} in a fight").format(threat=_(ch.threat) if ch else args[0])
-    if kind == "fights":
-        text = _("win {n} fights").format(n=args[0])
-        return text + (f" ({s['fights_won']}/{args[0]})" if s else "")
-    if kind == "achievement":
-        a = next((a for a in achievements.ALL if a.id == args[0]), None)
-        return _("earn the achievement “{name}”").format(name=_(a.name) if a else args[0])
-    return cond
-
-
-def missing(s, conds):
-    """What still doesn't hold, in words: "run 50 commands (32/50) · beat the Leak Lurker in a fight"."""
-    left = []
-    for cond in conds:
-        sides = [c.strip() for c in cond.split("|")]
-        if not any(met(s, c) for c in sides):
-            left.append(_(" or ").join(describe(c, s) for c in sides))
-    return " · ".join(left)
-
-
-def how_to_unlock(s, lesson):
-    text = missing(s, lesson.get("needs", []))
-    first = next((challenges.BY_ID[f] for f in lesson.get("fights", []) if f in challenges.BY_ID), None)
-    if first:
-        text += " " + _("(or meet the {threat} in a fight)").format(threat=_(first.threat))
-    return text
-
-
 def shown(s, lessons):
     """The lessons of the skills you learn (lessons with no skill are for everyone). A lesson you
     already opened stays, even if you untick its skill later."""
@@ -162,28 +122,3 @@ def new(s, lessons=None):
     lessons = shown(s, lessons if lessons is not None else load("en"))
     opened = (s.get("lessons") or {}).get("opened", [])
     return [le for le in lessons if le["id"] not in opened and unlocked(s, le)]
-
-
-def main(args):
-    import sys
-    lessons = load()
-    s = state.load()
-    if args and args[0] == "list" or not sys.stdin.isatty():
-        return print_list(s, lessons)
-    from . import reader
-    return reader.run(lessons, args[0] if args else None)
-
-
-def print_list(s, lessons):
-    """`bashou lesson list` (or outside a terminal): the library as text."""
-    from .reader import NEXT, RESET
-    for le in shown(s, lessons):
-        mark = "✔" if le["id"] in read(s) else "📖"
-        st = status(s, le)
-        if st == "next":
-            print(f"  {mark} {NEXT}{le['title']}{RESET}  \x1b[2m{le['summary']}\x1b[0m")
-        elif st == "mastered":
-            print(f"  {mark} {le['title']}")
-        else:
-            print(f"  \x1b[2m🔒 {le['title']} · {how_to_unlock(s, le)}\x1b[0m")
-    return 0
