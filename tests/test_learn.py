@@ -5,13 +5,13 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from bashou import dialogue, learn, state
+from bashou import achievements, dialogue, learn, state
 
 
 class LearnTest(unittest.TestCase):
     def test_every_hint_example_is_explained(self):
         """`bashou learn` must know every command and option the pets suggest."""
-        for achievement, example in dialogue.EXAMPLES.items():
+        for achievement, example in ((a.id, a.example) for a in achievements.ALL if a.example):
             for piece, meaning in learn.explain(example):
                 self.assertNotIn("no notes", meaning, f"{example}: {piece}")
                 self.assertNotIn("an option of", meaning, f"{example}: {piece}")

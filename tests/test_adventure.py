@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from bashou import state, terminal
+from bashou import creatures, state, terminal
 from bashou.adventure import canvas, quiz, scene, sprites, world
 from bashou.adventure import game as adventure
 from bashou.adventure.game import topic_name
@@ -35,7 +35,7 @@ class SceneTest(unittest.TestCase):
         self.assertNotEqual(a.px, b.px)
 
     def test_every_hero_has_a_back_view(self):
-        for form in ["stardust", "planet", "star", "seedling", "sprout", "tree", "pebble", "golem", "crystal"]:
+        for form in {f for line in creatures.STARTERS.values() for f in line}:      # every starter form
             frames, palette = sprites.hero(form)
             for frame in frames:
                 self.assertEqual(len(frame), 12, form)

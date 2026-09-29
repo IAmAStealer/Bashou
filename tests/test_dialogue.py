@@ -40,16 +40,16 @@ class DialogueTest(unittest.TestCase):
         # Night owl is about the time, not a command. Secrets have no example: the pet never suggests
         # running a security tool, and they are a surprise.
         missing = [a.id for a in achievements.ALL
-                   if a.cmd and not a.hidden and a.id not in dialogue.EXAMPLES and a.id != "night_owl"]
+                   if a.cmd and not a.hidden and not a.example and a.id != "night_owl"]
         self.assertEqual(missing, [])
 
     def test_examples_earn_their_achievement(self):
         from bashou import progress
         for a in achievements.ALL:
-            if a.cmd and a.id in dialogue.EXAMPLES:
+            if a.cmd and a.example:
                 s = state.default()
-                progress.record(s, 0, dialogue.EXAMPLES[a.id], "2026-09-21", 3 if a.id == "night_owl" else 14)
-                self.assertIn(a.id, s["achievements"], dialogue.EXAMPLES[a.id])
+                progress.record(s, 0, a.example, "2026-09-21", 3 if a.id == "night_owl" else 14)
+                self.assertIn(a.id, s["achievements"], a.example)
 
     def test_typo_suggests_the_closest_command(self):
         s = state.default()
@@ -70,7 +70,6 @@ class DialogueTest(unittest.TestCase):
         self.assertIsNone(dialogue.typo(state.default(), "star", "ls /nope", random.Random(0)))
 
     def test_examples_match_real_achievements(self):
-        self.assertLessEqual(set(dialogue.EXAMPLES), set(achievements.BY_ID))
         self.assertLessEqual(set(dialogue.TRAITS), set(achievements.BY_ID))
 
 

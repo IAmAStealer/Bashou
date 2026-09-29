@@ -12,52 +12,6 @@ from .adventure import lessons
 from .analyze import analyze
 from .i18n import _
 
-# Achievement -> an example that earns it.
-EXAMPLES = {
-    "historian": "history | tail", "loop": "for f in *; do echo $f; done",
-    "reader": "while read -r l; do echo $l; done < file", "ranges": "for i in {1..3}; do echo $i; done",
-    "capture": "echo \"today: $(date +%A)\"", "nested": "echo $(basename $(pwd))",
-    "substitute": "diff <(ls /bin) <(ls /usr/bin)", "here": "cat <<EOF > note.txt\nhello\nEOF",
-    "tally": "sort file | uniq -c", "ranking": "du -s * | sort -rn", "unique": "sort -u file",
-    "plumber": "ps aux | grep bash | wc -l", "pipeline": "cat f | tr A-Z a-z | sort | uniq -c | sort -rn",
-    "tee_time": "ls | tee list.txt", "merge": "make 2>&1 | less",
-    "time_traveller": "find . -mtime -1", "executor": "find . -name '*.tmp' -exec rm {} +",
-    "pruner": "find . -name .git -prune -o -type f -print",
-    "field_reader": "awk -F: '{print $1}' /etc/passwd", "accountant": "awk '{s+=$1} END {print s}' f",
-    "scribe": "awk '{printf \"%-10s %s\\n\", $1, $2}' f",
-    "digger": "grep -rn TODO .", "regex": "grep -E 'cat|dog' f", "context": "grep -C2 error log",
-    "builder": "mkdir -p camp/tent/bed", "copycat": "cp -r notes notes.bak", "shortcut": "ln -s ~/projects p",
-    "inspector": "less install.sh", "checksum": "sha256sum install.sh",
-    "save_first": "curl -fsSLo install.sh https://example.com/install.sh", "tight": "chmod u+x install.sh",
-    "in_place": "sed -i 's/old/new/' f", "global": "sed 's/a/b/g' f", "printer": "sed -n '1,5p' f",
-    "census": "ps aux", "seeker": "pgrep -a bash", "signal": "kill -TERM <pid>",
-    "filter": "strace -e trace=openat ls", "follow": "strace -f bash -c ls", "summary": "strace -c ls",
-    "placeholder": "ls | xargs -I{} echo {}", "parallel": "ls | xargs -P4 -n1 echo",
-    "null": "find . -print0 | xargs -0 ls", "raw": "jq -r '.name' f.json",
-    "selector": "jq '.[] | select(.ok)' f.json", "mapper": "jq 'map(.id)' f.json",
-    "warrior": "bashou fight",
-    "brancher": "git switch -c try-it", "stasher": "git stash", "grapher": "git log --oneline --graph",
-    "bisector": "git bisect start", "packer": "tar -czf notes.tgz notes", "peeker": "tar -tf notes.tgz",
-    "unpacker": "tar -xf notes.tgz -C /tmp", "squeezer": "xz -k big.log",
-    "headers": "curl -I https://example.com", "poster": "curl -d 'a=1' https://httpbin.org/post",
-    "tunneler": "ssh -L 8080:localhost:80 server", "mirror": "rsync -av notes/ backup/",
-    "resolver": "dig +short example.com", "tracer": "dig +trace example.com",
-    "interfaces": "ip -br addr", "six_sense": "ip -6 addr", "pathfinder": "ip route get 1.1.1.1",
-    "listener": "ss -tlnp", "established": "ss -tn state established", "nsswitch": "getent hosts example.org",
-    "reverse": "dig -x 1.1.1.1", "stub": "resolvectl status", "hops": "tracepath -n 1.1.1.1",
-    "knocker": "nc -zv localhost 22", "capture_reader": "tcpdump -nn -r capture.pcap",
-    "octal": "chmod 644 notes.txt", "symbolic": "chmod g+w notes.txt", "owner": "sudo chown $USER:$USER f",
-    "mode_reader": "stat -c %a notes.txt", "status": "systemctl status cron", "logbook": "journalctl -u cron",
-    "enabler": "sudo systemctl enable --now cron", "reload": "sudo systemctl daemon-reload",
-    "pods": "kubectl get pods -A", "describer": "kubectl describe pod <name>", "tailer": "kubectl logs -f <pod>",
-    "diver": "kubectl exec -it <pod> -- sh", "disk": "df -h", "sizer": "du -sh *", "memory": "free -h",
-    "watcher": "watch -n 2 df -h",
-    "quack": "bashou learn", "xray": "bash -x deploy.sh", "dry_run": "bash -n deploy.sh", "exit_code": "ls /nope; echo $?",
-    "linter": "shellcheck deploy.sh",
-    "sealed": "gpg -c notes.txt", "keymaker": "gpg --full-generate-key", "vault": "pass init <your key id>",
-    "generator": "pass generate web/forum 24", "keeper": "curl -u \"admin:$(pass show web/admin)\" https://example.org",
-}
-
 # Trait (an achievement you earned) -> lines any pet may say.
 TRAITS = {
     "warrior": ["Any threats around? I'm ready.", "I sharpened my claws. `bashou fight`?"],
@@ -92,7 +46,7 @@ def hint(state, pet, rng=None):
     a = next_step(state, pet)
     if a is None:
         return None
-    example = EXAMPLES.get(a.id)
+    example = a.example
     if example:
         return _("Try `{example}` (achv: {name})").format(example=example.replace(chr(10), " ⏎ "), name=_(a.name))
     return _("Next: {how} (achv: {name})").format(how=_(a.how), name=_(a.name))

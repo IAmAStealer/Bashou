@@ -140,7 +140,6 @@ class TablesTest(unittest.TestCase):
         voices = set(creatures.NAMES) | set(creatures.STARTERS)
         self.assertIn_all(dialogue.TRAITS, voices | set(achievements.BY_ID), "TRAITS")
         self.assertIn_all(dialogue.INVITES, {"adventure", "security", "lesson", "rust", "gpg", "pass", "sqlite3"}, "INVITES")    # modes, and tools to install
-        self.assertIn_all(dialogue.EXAMPLES, achievements.BY_ID, "EXAMPLES")
         tools = {t for ch in challenges.ALL for t in ch.tools} | {"|"}
         self.assertIn_all(dialogue.DISCOVER, tools, "DISCOVER")
 
