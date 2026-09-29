@@ -332,46 +332,107 @@ def dev(args):
             print(f"  A {ch.threat} is waiting: bashou fight")
 
 
-# `bashou help`: the commands by what they're for, one per line. Every visible command is here
-# (tests/test_completion.py checks it against the parser and the Tab completion).
-HELP = [
-    ("Your pet", [
-        ("bashou", "your starter's level and what comes next"),
-        ("bashou pets", "your collection"),
-        ("bashou achievements", "what you earned, and what to try next"),
-        ("bashou evolve", "watch your pets evolve"),
-        ("bashou swap [pet]", "change your active pet"),
-        ("bashou stats", "your terminal stats: commands, tools, streaks"),
-        ("bashou share", "a QR code: your phone turns your progress into an image to share"),
-    ]),
-    ("Learn", [
-        ("bashou lesson [name]", "the Sage Owl's library: lessons with drawings, unlocked as you play"),
-        ("bashou learn <command>", "take a command apart, piece by piece (alone: your pet's last tip)"),
-        ("bashou talk", "your pet gives you a tip now, with a command to try"),
-    ]),
-    ("Play", [
-        ("bashou fight", "fight the threat your pet announced"),
-        ("bashou arena", "fight when you want: a timed fight, or a security investigation"),
-        ("bashou adventure", "walk into the world with your starter"),
-    ]),
-    ("Settings", [
-        ("bashou on / off", "show or hide the pet (the first `on` adds Bashou to ~/.bashrc)"),
-        ("bashou config", "settings, language and skills (bashou config list shows them)"),
-        ("bashou start", "choose your starter (once)"),
-        ("bashou reset", "start over with a new starter"),
-        ("bashou update", "get the new version"),
-        ("bashou version", "which version of Bashou this is"),
-    ]),
+def talk(_args):
+    from . import dialogue, learn
+    s = state.load()
+    name, voice = progress.current(s)[2:]
+    said = dialogue.line(s, voice)
+    learn.remember(said)
+    print(f"  {BOLD}{name}{RESET}: {said}")
+    if "`" in said:
+        print(f"  {DIM}" + _("Not sure what it does? `bashou learn` takes it apart.") + RESET)
+
+
+def version(_args):
+    from . import update
+    print("  Bashou " + (update.version() or _("(unknown version: not a git clone)")))
+    newer = state.load()["update_available"]
+    if newer:
+        print("  🆕 " + _("Bashou {version} is out: bashou update").format(version=newer))
+
+
+def run_dev(args):
+    if args.action == "stage-all" and args.pet:
+        args.stage = int(args.pet)
+    dev(args)
+
+
+def run(module, function="main", *arguments):
+    """A command living in its own module, imported only when it runs (`bashou` starts fast)."""
+    def go(args):
+        import importlib
+        return getattr(importlib.import_module(f".{module}", __package__), function)(
+            *(getattr(args, a) if isinstance(a, str) else a(args) for a in arguments))
+    return go
+
+
+class Command:
+    """A `bashou` command: what runs, its arguments, and its line in `bashou help` (`row`: how it's
+    written, what it's for, under which title). No row: it still works and completes (`help`, `off`),
+    unless `hidden`: old names that still work, and dev. tests/test_completion.py checks bashou.bash
+    offers exactly the commands that aren't hidden."""
+
+    def __init__(self, name, handler, row=None, args=(), hidden=False):
+        self.name, self.handler, self.row, self.args, self.hidden = name, handler, row, args, hidden
+
+
+PET, LEARN, PLAY, SETTINGS = "Your pet", "Learn", "Play", "Settings"      # `bashou help`, in this order
+COMMANDS = [
+    Command("level", lambda a: level(), ("bashou", "your starter's level and what comes next", PET)),
+    Command("pets", lambda a: pets(), ("bashou pets", "your collection", PET)),
+    Command("achievements", lambda a: achievements_list(), ("bashou achievements", "what you earned, and what to try next", PET)),
+    Command("evolve", run("evolve"), ("bashou evolve", "watch your pets evolve", PET)),
+    Command("swap", lambda a: swap(a.pet), ("bashou swap [pet]", "change your active pet", PET), [("pet", dict(nargs="?"))]),
+    Command("stats", lambda a: stats(), ("bashou stats", "your terminal stats: commands, tools, streaks", PET)),
+    Command("share", run("share", "main", lambda a: a),
+            ("bashou share", "a QR code: your phone turns your progress into an image to share", PET),
+            [("--name", dict(help="the nickname on the image: 1-12 letters, digits, - or _ (asked the first time)"))]),
+    Command("lesson", run("lesson.reader", "main", lambda a: [a.which] if a.which else []),
+            ("bashou lesson [name]", "the Sage Owl's library: lessons with drawings, unlocked as you play", LEARN),
+            [("which", dict(nargs="?", help="a lesson to open, or list"))]),
+    Command("learn", run("learn", "main", "command"),
+            ("bashou learn <command>", "take a command apart, piece by piece (alone: your pet's last tip)", LEARN),
+            [("command", dict(nargs=argparse.REMAINDER))]),
+    Command("talk", talk, ("bashou talk", "your pet gives you a tip now, with a command to try", LEARN)),
+    Command("fight", lambda a: run("fight", "run")(a) and None,        # its result isn't an exit code
+            ("bashou fight", "fight the threat your pet announced", PLAY)),
+    Command("arena", run("arena", "main", "mode", "which"),
+            ("bashou arena", "fight when you want: a timed fight, or a security investigation", PLAY),
+            [("mode", dict(nargs="?", help="fight or security")), ("which", dict(nargs="?", help="security: number or id (see the list)"))]),
+    Command("adventure", run("adventure.game"), ("bashou adventure", "walk into the world with your starter", PLAY)),
+    Command("on", run("setup", "run"), ("bashou on / off", "show or hide the pet (the first `on` adds Bashou to ~/.bashrc)", SETTINGS)),
+    Command("off", lambda a: print("  " + _("Bashou isn't running in this terminal."))),   # bashou.bash answers first
+    Command("config", lambda a: config(a.name, a.value), ("bashou config", "settings, language and skills (bashou config list shows them)", SETTINGS),
+            [("name", dict(nargs="?")), ("value", dict(nargs="?"))]),
+    Command("start", run("starter"), ("bashou start", "choose your starter (once)", SETTINGS)),
+    Command("reset", lambda a: reset(), ("bashou reset", "start over with a new starter", SETTINGS)),
+    Command("update", run("update", "run", "version", "packages"), ("bashou update", "get the new version", SETTINGS),
+            [("--version", dict(help="install this release instead, even an older one (e.g. v0.2.0)")),
+             ("--packages", dict(action="store_true", help="move to Bashou's apt or dnf repository (shows every command first)"))]),
+    Command("version", version, ("bashou version", "which version of Bashou this is", SETTINGS)),
+    Command("help", lambda a: print_help()),
+    # old names, still working
+    Command("language", lambda a: config("language", None), hidden=True),       # now bashou config language
+    Command("skills", lambda a: config("skills", None), hidden=True),           # now bashou config skills
+    Command("setup", run("setup", "run"), hidden=True),                         # now bashou on
+    Command("security", run("arena", "main", lambda a: "security", "which"), args=[("which", dict(nargs="?"))],
+            hidden=True),                                                       # now bashou arena security
+    Command("dev", run_dev, args=[                                              # testing helpers
+        ("action", dict(choices=["unlock-all", "stage", "stage-all", "level", "threat", "restore"])),
+        ("pet", dict(nargs="?", help="pet (stage), level 1-9 (level) or challenge id (threat)")),
+        ("stage", dict(nargs="?", type=int, choices=[1, 2, 3], default=3))], hidden=True),
 ]
 
 
 def print_help():
-    width = max(len(cmd) for _s, rows in HELP for cmd, _t in rows)
+    rows = [c.row for c in COMMANDS if c.row]
+    width = max(len(usage) for usage, _t, _s in rows)
     print(f"\n  {BOLD}Bashou{RESET} · " + _("a pet that grows as you learn bash.") + "\n")
-    for section, rows in HELP:
+    for section in (PET, LEARN, PLAY, SETTINGS):
         print(f"  {BOLD}{_(section)}{RESET}")
-        for cmd, text in rows:
-            print(f"    {CYAN}{cmd:<{width}}{RESET}  {_(text)}")
+        for usage, text, where in rows:
+            if where == section:
+                print(f"    {CYAN}{usage:<{width}}{RESET}  {_(text)}")
         print()
 
 
@@ -385,118 +446,14 @@ class Parser(argparse.ArgumentParser):
 
 def main():
     parser = Parser(prog="bashou", usage="bashou COMMAND  (bashou help lists them)")
-    # Commands without help= are hidden: old names that still work, and dev. HELP lists the others.
     sub = parser.add_subparsers(dest="cmd", metavar="COMMAND", prog="bashou")
-    sub.add_parser("help", help="this list")
-    sub.add_parser("level", help="your starter's level")
-    sub.add_parser("pets", help="your collection")
-    sub.add_parser("achievements", help="what you earned")
-    sub.add_parser("fight", help="the announced threat")
-    sub.add_parser("talk", help="a tip now")
-    ln = sub.add_parser("learn", help="take a command apart")
-    ln.add_argument("command", nargs=argparse.REMAINDER)
-    ls = sub.add_parser("lesson", help="the Sage Owl's library")
-    ls.add_argument("which", nargs="?", help="a lesson to open, or list")
-    sub.add_parser("evolve", help="watch your pets evolve")
-    sw = sub.add_parser("swap", help="change your active pet")
-    sw.add_argument("pet", nargs="?")
-    sub.add_parser("stats", help="your terminal stats")
-    sh = sub.add_parser("share", help="a QR code of your progress")
-    sh.add_argument("--name", help="the nickname on the image: 1-12 letters, digits, - or _ (asked the first time)")
-    dv = sub.add_parser("dev")                                          # testing helpers, hidden from players
-    dv.add_argument("action", choices=["unlock-all", "stage", "stage-all", "level", "threat", "restore"])
-    dv.add_argument("pet", nargs="?", help="pet (stage), level 1-9 (level) or challenge id (threat)")
-    dv.add_argument("stage", nargs="?", type=int, choices=[1, 2, 3], default=3)
-    sub.add_parser("start", help="choose your starter")
-    sub.add_parser("language")                                          # now bashou config language
-    sub.add_parser("skills")                                            # now bashou config skills
-    sub.add_parser("setup")                                             # now bashou on
-    sub.add_parser("version", help="which version")
-    up = sub.add_parser("update", help="get the new version")
-    up.add_argument("--version", help="install this release instead, even an older one (e.g. v0.2.0)")
-    up.add_argument("--packages", action="store_true", help="move to Bashou's apt or dnf repository (shows every command first)")
-    sub.add_parser("adventure", help="walk into the world")
-    ar = sub.add_parser("arena", help="fight when you want")
-    ar.add_argument("mode", nargs="?", help="fight or security")
-    ar.add_argument("which", nargs="?", help="security: number or id (see the list)")
-    sc = sub.add_parser("security")                                     # now bashou arena security
-    sc.add_argument("which", nargs="?")
-    cf = sub.add_parser("config", help="settings, language, skills")
-    cf.add_argument("name", nargs="?")
-    cf.add_argument("value", nargs="?")
-    sub.add_parser("reset", help="start over")
-    sub.add_parser("on", help="show the pet")
-    sub.add_parser("off", help="hide the pet")
+    for command in COMMANDS:
+        options = {} if command.hidden else {"help": command.row[1] if command.row else command.name}
+        cmd = sub.add_parser(command.name, **options)
+        for name, kwargs in command.args:
+            cmd.add_argument(name, **kwargs)
     args = parser.parse_args()
-
-    if args.cmd == "pets":
-        pets()
-    elif args.cmd == "achievements":
-        achievements_list()
-    elif args.cmd == "evolve":
-        from . import evolve
-        return evolve.main()
-    elif args.cmd == "learn":
-        from . import learn
-        raise SystemExit(learn.main(args.command))
-    elif args.cmd == "talk":
-        from . import dialogue, learn
-        s = state.load()
-        name, voice = progress.current(s)[2:]
-        said = dialogue.line(s, voice)
-        learn.remember(said)
-        print(f"  {BOLD}{name}{RESET}: {said}")
-        if "`" in said:
-            print(f"  {DIM}" + _("Not sure what it does? `bashou learn` takes it apart.") + RESET)
-    elif args.cmd == "lesson":
-        from .lesson import reader
-        raise SystemExit(reader.main([args.which] if args.which else []))
-    elif args.cmd == "adventure":
-        from .adventure import game
-        raise SystemExit(game.main())
-    elif args.cmd in ("arena", "security"):
-        from . import arena
-        raise SystemExit(arena.main(*(("security", args.which) if args.cmd == "security" else (args.mode, args.which))))
-    elif args.cmd == "help":
-        print_help()
-    elif args.cmd == "version":
-        from . import update
-        print("  Bashou " + (update.version() or _("(unknown version: not a git clone)")))
-        newer = state.load()["update_available"]
-        if newer:
-            print("  🆕 " + _("Bashou {version} is out: bashou update").format(version=newer))
-    elif args.cmd == "update":
-        from . import update
-        raise SystemExit(update.run(args.version, args.packages))
-    elif args.cmd == "skills":
-        raise SystemExit(config("skills", None))
-    elif args.cmd in ("setup", "on"):       # `on` reaches Python only when bashou.bash isn't loaded yet
-        from . import setup
-        raise SystemExit(setup.run())
-    elif args.cmd == "off":
-        print("  " + _("Bashou isn't running in this terminal."))
-    elif args.cmd == "config":
-        raise SystemExit(config(args.name, args.value))
-    elif args.cmd == "language":
-        raise SystemExit(config("language", None))
-    elif args.cmd == "fight":
-        from . import fight
-        fight.run()
-    elif args.cmd == "swap":
-        swap(args.pet)
-    elif args.cmd == "stats":
-        stats()
-    elif args.cmd == "share":
-        from . import share
-        raise SystemExit(share.main(args))
-    elif args.cmd == "start":
-        from . import starter
-        raise SystemExit(starter.main())
-    elif args.cmd == "reset":
-        raise SystemExit(reset())
-    elif args.cmd == "dev":
-        if args.action == "stage-all" and args.pet:
-            args.stage = int(args.pet)
-        dev(args)
-    else:
-        level()
+    handler = next((c.handler for c in COMMANDS if c.name == args.cmd), lambda a: level())
+    code = handler(args)
+    if isinstance(code, int):
+        raise SystemExit(code)

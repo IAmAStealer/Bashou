@@ -31,16 +31,13 @@ class CompletionTest(unittest.TestCase):
         self.assertEqual(words("_bashou_pets"), [p for p in NAMES if not FAMILIES[p].secret])   # no secret pet
         self.assertEqual(set(words("_bashou_challenges")), {c.id for c in challenges.ALL})
         self.assertEqual(words("_bashou_security"), [str(i) for i in range(1, len(challenges.SECURITY) + 1)])
-        parser_src = Path(cli.__file__).read_text()
-        shown = re.findall(r'sub\.add_parser\("([\w-]+)", help=', parser_src)
-        self.assertEqual(set(words("_bashou_commands")), set(shown))       # hidden commands aren't offered
-        listed = " ".join(cmd for _s, rows in cli.HELP for cmd, _t in rows)
-        for name in set(shown) - {"help", "level"}:                        # `bashou help` lists every one
-            self.assertRegex(listed, rf"bashou {name}\b|/ {name}\b", name)
+        offered = [c.name for c in cli.COMMANDS if not c.hidden]
+        self.assertEqual(set(words("_bashou_commands")), set(offered))     # hidden commands aren't offered
+        self.assertEqual(len(offered + [c.name for c in cli.COMMANDS if c.hidden]), len({c.name for c in cli.COMMANDS}))
         from bashou import i18n
         self.assertEqual(words("_bashou_languages"), list(i18n.LANGUAGES))
-        dev = re.search(r'choices=\[("unlock-all".*?)\]', parser_src).group(1)
-        self.assertEqual(words("_bashou_dev"), re.findall(r'"([\w-]+)"', dev))
+        dev = next(c for c in cli.COMMANDS if c.name == "dev")
+        self.assertEqual(words("_bashou_dev"), dev.args[0][1]["choices"])
 
     def test_completes(self):
         self.assertEqual(complete("bashou s"), ["share", "swap", "stats", "start"])

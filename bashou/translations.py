@@ -60,7 +60,7 @@ def messages():
     for ch in challenges.ALL + challenges.SECURITY + challenges.TRIALS:
         found += [ch.threat, ch.task, *ch.hints] + ([ch.help] if ch.help else [])
     found.append(challenges.HELP_HINT)
-    found += [text for section, rows in cli.HELP for text in (section, *(t for _c, t in rows))]
+    found += [cli.PET, cli.LEARN, cli.PLAY, cli.SETTINGS] + [c.row[1] for c in cli.COMMANDS if c.row]
     return list(dict.fromkeys(found))
 
 
