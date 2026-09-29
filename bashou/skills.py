@@ -4,27 +4,34 @@ Asked once before the starter (`bashou start`), changed any time with `bashou co
 adventure's paths only come from those skills; fights you already won still come back for review.
 """
 
+from dataclasses import dataclass
+
 from . import which
 from .i18n import _
 
 
-# skill -> what it covers, in the order of the list (the adventure's topics, world.TOPICS)
+@dataclass(frozen=True)
+class Skill:
+    text: str                   # what it covers, as the list shows it ("Bash: grep, sed, awk, find, pipes")
+    needs: str = ""             # the program its fights need; without it, the skill has questions only
+
+
+# In the order of the list (the adventure's topics, world.TOPICS). Debian and Rocky fights also need
+# their system (which.SYSTEMS).
 SKILLS = {
-    "bash": "Bash: grep, sed, awk, find, pipes",
-    "linux": "Linux: files, users, permissions, processes",
-    "systemd": "systemd: services, timers, logs",
-    "debian": "Debian and Ubuntu: apt, dpkg, repositories",
-    "rocky": "Rocky and Red Hat: dnf, rpm, repositories",
-    "python": "Python: small scripts to fix",
-    "c": "C: compiling, memory, pointers",
-    "rust": "Rust: variables, types, the compiler",
-    "logic": "Logic: coding basics, for beginners",
-    "cicd": "CI/CD: pipelines, secrets, runners",
-    "sql": "SQL: databases with SQLite (SELECT, JOIN, UPDATE)",
-    "network": "Network: IPv4, IPv6, DNS, TCP",
+    "bash": Skill("Bash: grep, sed, awk, find, pipes"),
+    "linux": Skill("Linux: files, users, permissions, processes"),
+    "systemd": Skill("systemd: services, timers, logs"),
+    "debian": Skill("Debian and Ubuntu: apt, dpkg, repositories"),
+    "rocky": Skill("Rocky and Red Hat: dnf, rpm, repositories"),
+    "python": Skill("Python: small scripts to fix", needs="python3"),
+    "c": Skill("C: compiling, memory, pointers", needs="gcc"),
+    "rust": Skill("Rust: variables, types, the compiler", needs="rustc"),
+    "logic": Skill("Logic: coding basics, for beginners"),
+    "cicd": Skill("CI/CD: pipelines, secrets, runners"),
+    "sql": Skill("SQL: databases with SQLite (SELECT, JOIN, UPDATE)", needs="sqlite3"),
+    "network": Skill("Network: IPv4, IPv6, DNS, TCP"),
 }
-# Fights need a program or a system: without it, the skill still has its adventure questions.
-NEEDS = {"python": "python3", "c": "gcc", "rust": "rustc", "sql": "sqlite3"}
 
 
 def picked(s):
@@ -38,8 +45,9 @@ def wanted(s, skill):
 
 def note(skill):
     """Why this skill has no fights here, or ""."""
-    if skill in NEEDS and not which.installed(NEEDS[skill]):
-        return _("no {program} here: questions only").format(program=NEEDS[skill])
+    needs = SKILLS[skill].needs
+    if needs and not which.installed(needs):
+        return _("no {program} here: questions only").format(program=needs)
     if skill in which.SYSTEMS and skill != which.system():
         return _("another system: questions only")
     return ""

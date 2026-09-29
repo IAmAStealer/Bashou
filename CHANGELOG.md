@@ -14,6 +14,9 @@ Every release has a section here, written for players. CI refuses to tag a relea
   and over. The damaged entry is dropped and everything else in your save is kept. If the starter
   itself can't be read, Bashou asks you to choose it again.
   A setting damaged the same way (a bubble range that isn't one) is set back to its default too.
+- Your pet's tips follow a path now. Each family's achievements lead one to the next (`grep -r`, then
+  `grep -E`, then `grep -C`), and your pet suggests the next one on the path, the same one until you
+  earn it, instead of a random easy one each time.
 - The adventure looks right in a tall, narrow (portrait) terminal. The status line at the bottom was
   cut off, hiding your chapter, hearts and meters: when it doesn't fit, it now takes two lines. And
   between forks your pet walked under an empty sky: a road now runs ahead of it to the horizon, and

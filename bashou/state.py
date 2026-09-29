@@ -8,6 +8,7 @@ import os
 import sys
 import time
 from contextlib import contextmanager
+from dataclasses import dataclass
 from pathlib import Path
 
 from . import achievements, creatures, i18n
@@ -18,20 +19,42 @@ STATE = DATA / "state.json"
 SAVE_VERSION = 4        # bump with a step in migrate() whenever the save's shape changes
 
 
-# name: (default (low, high), help)
+@dataclass(frozen=True)
+class Setting:
+    """A `bashou config` setting: one of `choices`, or else a range of numbers ("5-10", or "3")."""
+    default: object
+    help: str
+    choices: tuple = ()
+    off: bool = False           # a range that also takes "off"
+
+    def parse(self, text):
+        """The value to save for what you typed; ValueError if it doesn't fit."""
+        if self.choices:
+            if text not in self.choices:
+                raise ValueError(text)
+            return text
+        return "off" if self.off and text == "off" else list(parse_range(text))
+
+    def fits(self, value):
+        """A saved value this setting could have written (a damaged one doesn't)."""
+        if self.choices:
+            return value in self.choices
+        return (self.off and value == "off") or (
+            isinstance(value, list) and len(value) == 2 and all(type(n) is int for n in value) and 1 <= value[0] <= value[1])
+
+
 SETTINGS = {
-    "bubble": ((5, 10), "commands a speech bubble stays on screen (e.g. 5-10, or 3)"),
-    "updates": ("on", "look for a new version once a day (on/off)"),
-    "size": ("small", "pet size: small, or large for pets that have big pixel art (small/large)"),
-    "talk": ((10, 20), "minutes between the things your pet says on its own (e.g. 10-20, 30, or off)"),
-    "quiet": ((60, 60), "seconds without typing before it says one (it waits for a pause in your work)"),
+    "bubble": Setting((5, 10), "commands a speech bubble stays on screen (e.g. 5-10, or 3)"),
+    "updates": Setting("on", "look for a new version once a day (on/off)", choices=("on", "off")),
+    "size": Setting("small", "pet size: small, or large for pets that have big pixel art (small/large)",
+                    choices=("small", "large")),
+    "talk": Setting((10, 20), "minutes between the things your pet says on its own (e.g. 10-20, 30, or off)", off=True),
+    "quiet": Setting((60, 60), "seconds without typing before it says one (it waits for a pause in your work)"),
 }
-CHOICES = {"updates": ("on", "off"), "size": ("small", "large")}
-OFFABLE = {"talk"}                  # ranges that also accept "off"
 
 
 def setting(state, name):
-    value = state.get("settings", {}).get(name, SETTINGS[name][0])
+    value = state.get("settings", {}).get(name, SETTINGS[name].default)
     return tuple(value) if isinstance(value, (list, tuple)) else value
 
 
@@ -43,13 +66,7 @@ def show(value):
 
 def parse(name, text):
     """Check a new value against the setting's kind; ValueError if it doesn't fit."""
-    if isinstance(SETTINGS[name][0], tuple):
-        if name in OFFABLE and text == "off":
-            return "off"
-        return list(parse_range(text))
-    if text not in CHOICES[name]:
-        raise ValueError(text)
-    return text
+    return SETTINGS[name].parse(text)
 
 
 def parse_range(text):
@@ -146,16 +163,7 @@ def adventure_progress(adv):
 
 def settings_of(value):
     """Only settings that exist, with a value `bashou config` would accept."""
-    def good(name, v):
-        if name not in SETTINGS:
-            return False
-        if name in CHOICES:
-            return v in CHOICES[name]
-        if name in OFFABLE and v == "off":
-            return True
-        return (isinstance(v, list) and len(v) == 2 and all(isinstance(n, int) for n in v)
-                and 1 <= v[0] <= v[1])
-    return {k: v for k, v in kind(dict)(value).items() if good(k, v)}
+    return {k: v for k, v in kind(dict)(value).items() if k in SETTINGS and SETTINGS[k].fits(v)}
 
 
 LESSONS = {"read": [], "opened": [], "page": {}, "met": []}

@@ -123,7 +123,6 @@ class TablesTest(unittest.TestCase):
         starter_forms = [s for forms in creatures.STARTERS.values() for s in forms]
         self.assertIn_all(starter_forms, creatures.PETS, "starter sprites")
         self.assertIn_all(creatures.LARGE, creatures.PETS, "large sprites without a small one")
-        self.assertIn_all(state.CHOICES, state.SETTINGS, "setting choices")
 
     def test_unlocks(self):
         roster = set(creatures.NAMES)

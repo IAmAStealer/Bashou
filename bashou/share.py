@@ -93,7 +93,7 @@ def page_data():
         for sprite in forms:
             d = json.loads((pets / f"{sprite}.json").read_text())
             sprites[sprite] = {"palette": d["palette"], "base": d["base"]}
-    labels = {k: {"en": v.split(":")[0], "fr": (fr.get(v) or v).split(":")[0].strip()} for k, v in skills.SKILLS.items()}
+    labels = {k: {"en": v.split(":")[0], "fr": (fr.get(v) or v).split(":")[0].strip()} for k, v in ((k, s.text) for k, s in skills.SKILLS.items())}
     return {"families": families, "sprites": sprites, "skills": labels, "starters": list(STARTERS), "bounds": BOUNDS}
 
 

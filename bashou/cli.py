@@ -151,10 +151,10 @@ def ask_settings(ask=input):
           _("Enter keeps the value in [brackets], `default` resets it, Ctrl+C leaves without saving.") + RESET)
     answers = {}
     try:
-        for key, (default, text) in state.SETTINGS.items():
+        for key, setting in state.SETTINGS.items():
             if key == "updates" and update.packaged():
                 continue                                 # apt or dnf update it
-            print(f"\n  {_(text)}")
+            print(f"\n  {_(setting.help)}")
             while True:
                 value = ask(f"  {key} [{state.show(state.setting(s, key))}]: ").strip()
                 if not value:
@@ -211,9 +211,9 @@ def config(name, value):
     if not name or name == "list":
         from . import i18n, skills
         s = state.load()
-        for key, (default, text) in state.SETTINGS.items():
+        for key, setting in state.SETTINGS.items():
             print(f"  {BOLD}{key}{RESET} {state.show(state.setting(s, key))}  "
-                  f"{DIM}{_(text)} · " + _("default") + f" {state.show(default)}{RESET}")
+                  f"{DIM}{_(setting.help)} · " + _("default") + f" {state.show(setting.default)}{RESET}")
         chosen = s.get("skills", "all")
         print(f"  {BOLD}language{RESET} {s.get('language') or 'en'}  {DIM}"
               + _("the language Bashou speaks: bashou config language [{codes}]").format(

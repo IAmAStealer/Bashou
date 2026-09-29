@@ -137,7 +137,7 @@ def checklist_drawer(ticked):
                f"{DIM}{_('↑/↓ to move, Space to tick, Enter when done')}{RESET}\n\n"]
         for i, skill in enumerate(skills.SKILLS):
             box = "[x]" if skill in ticked else "[ ]"
-            text = f"{box} {_(skills.SKILLS[skill])}"
+            text = f"{box} {_(skills.SKILLS[skill].text)}"
             line = f"  {REV} {text} {RESET}" if i == pos else f"   {text} "
             why = skills.note(skill)
             out.append(line + (f"  {DIM}({why}){RESET}" if why else "") + "\n")
@@ -180,7 +180,7 @@ def show_skills(choice):
     if choice == "all":
         print("  " + _("You learn a bit of everything."))
     else:
-        print("  " + _("You learn: {skills}").format(skills=", ".join(_(skills.SKILLS[k]).split(":")[0].strip() for k in choice)))
+        print("  " + _("You learn: {skills}").format(skills=", ".join(_(skills.SKILLS[k].text).split(":")[0].strip() for k in choice)))
 
 
 def skills_main():

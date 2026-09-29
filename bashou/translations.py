@@ -51,8 +51,8 @@ def messages():
     for lesson in lessons.LESSONS:
         found += [lesson["title"]] + [text for text, example in lesson["pages"]]
     found += list(progress.CONSTRUCT_NAMES.values())
-    found += [text for default, text in state.SETTINGS.values()]
-    found += list(skills.SKILLS.values())
+    found += [setting.help for setting in state.SETTINGS.values()]
+    found += [skill.text for skill in skills.SKILLS.values()]
     found += list(learn.COMMANDS.values()) + list(learn.SYNTAX.values())
     found += [m for flags in learn.FLAGS.values() for m in flags.values()]
     found += [m for subs in learn.SUBCOMMANDS.values() for m in subs.values()]

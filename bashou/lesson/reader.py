@@ -111,7 +111,7 @@ def page_screen(lesson, n, cols, lines, breath=False, blink=False):
 
 def group(lesson):
     skill = next(iter(skills_of(lesson)), None)
-    return _(skills.SKILLS[skill]).split(":")[0] if skill else _("First steps")
+    return _(skills.SKILLS[skill].text).split(":")[0] if skill else _("First steps")
 
 
 class Library:
