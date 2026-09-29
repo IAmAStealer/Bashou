@@ -357,6 +357,21 @@ class FormIdTest(unittest.TestCase):
         self.assertEqual(s["evolving"], [{"who": "starter", "from": star[0], "to": star[1]}])
         self.assertEqual(state.read(json.dumps(s)), s)                             # ids stay as they are
 
+    def test_an_old_save_with_an_id_still_loads(self):
+        """Fuzzing: a save without starter_best (0.2.3 and older) whose looks already held an id raised
+        in migrate_ladder, and the whole save was set aside as unreadable."""
+        old = {**state.default(), "version": 1, "starter": "pebble", "looks": {"starter": "golem", "fox": 1},
+               "evolving": [{"who": "starter", "from": "pebble", "to": 2}]}
+        del old["starter_best"]
+        s = state.read(json.dumps(old))
+        self.assertEqual(s["looks"]["starter"], "golem")
+        self.assertEqual(s["evolving"][0]["from"], "pebble")
+
+    def test_a_damaged_version_is_an_old_save(self):
+        """Fuzzing: {"version": {...}} raised while choosing the upgrades, and the save was set aside."""
+        s = state.read(json.dumps({**state.default(), "version": {"": 1}, "ladder_best": {"slime": 2}}))
+        self.assertEqual(s["version"], state.SAVE_VERSION)
+
     def test_a_form_the_game_no_longer_has(self):
         s = {**state.default(), "starter": "star", "achievements": [f"a{i}" for i in range(95)],
              "starter_best": "gone", "looks": {"starter": "gone"}}

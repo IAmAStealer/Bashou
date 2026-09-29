@@ -329,6 +329,8 @@ def migrate_ladder(state):
         return
 
     def new(old_form):
+        if type(old_form) is not int:                      # already a sprite id (a hand edit): migrate_form_ids
+            return old_form
         sprite = OLD_LADDERS[line][max(1, min(3, old_form)) - 1]
         return creatures.STARTERS[line].index(sprite) + 1 if sprite in creatures.STARTERS[line] else 1
 
@@ -357,11 +359,17 @@ def migrate_form_ids(state):
                          for e in state["evolving"] if sprite(e["who"], e["from"]) and sprite(e["who"], e["to"])]
 
 
+def version_of(saved):
+    """The version a save was written with (the first ones had none; a damaged one counts as those)."""
+    version = saved.get("version", 1)
+    return version if type(version) is int else 1
+
+
 # (does the save need it, the step), oldest first
 MIGRATIONS = [
     (lambda saved: "starter_best" not in saved, migrate_ladder),
     (lambda saved: "ladder_best" not in saved, migrate_slime),
-    (lambda saved: "ladder_best" in saved and saved.get("version", 1) < 3, migrate_slime_ladder),
+    (lambda saved: "ladder_best" in saved and version_of(saved) < 3, migrate_slime_ladder),
     (lambda saved: "reviews" not in saved, migrate_reviews),
     (lambda saved: True, migrate_form_ids),        # version 4; also a number written by hand since
 ]
