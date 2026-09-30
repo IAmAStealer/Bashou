@@ -1,8 +1,8 @@
 {
  "id": "variables",
- "order": 28,
- "needs": [
-  "commands 100"
+ "order": 70,
+ "after": [
+  "wildcards"
  ],
  "masters": [
   "achievement capture",

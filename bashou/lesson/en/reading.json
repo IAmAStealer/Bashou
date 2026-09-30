@@ -1,8 +1,8 @@
 {
  "id": "reading",
- "order": 24,
- "needs": [
-  "commands 60"
+ "order": 50,
+ "after": [
+  "files"
  ],
  "masters": [
   "tool less 3",

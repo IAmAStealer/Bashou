@@ -45,6 +45,19 @@ LESSONS = [
          "CI keeps secrets for you: ${{ secrets.NAME }} on GitHub, a CI/CD variable on GitLab.",
          "grep -rni 'token\\|password' .github .gitlab-ci.yml"),
     ]},
+    {"id": "conditions", "tool": "if", "topics": ("logic",), "title": "Conditions: if, !, && and ||", "pages": [
+        ("Every command answers yes or no when it ends: its exit status. 0 means it worked (yes), anything else "
+         "means it didn't (no). if runs its block only when the command after it says yes.",
+         "if grep -q alice guests.txt; then echo welcome; fi"),
+        ("[ ] is a command too, made to test things: -f name is a file, -d name is a folder, \"$a\" = \"$b\" "
+         "compares two texts. Keep a space after [ and before ], or bash can't read it.",
+         "if [ -d backup ]; then echo 'the backup folder is here'; fi"),
+        ("! turns the answer around: yes becomes no. Read it aloud as NOT. One ! too many or too few, and a "
+         "script lets in exactly the people it should keep out.", "if ! grep -q eve guests.txt; then echo 'not invited'; fi"),
+        ("&& means AND: true only when both sides are true. || means OR: true as soon as one side is. Before "
+         "copying a file into a folder, you need the file AND the folder.",
+         "if [ -f notes.txt ] && [ -d backup ]; then cp notes.txt backup/; fi"),
+    ]},
     {"id": "sql", "tool": "sqlite3", "topics": ("sql",), "title": "SQL with SQLite", "pages": [
         ("A database keeps data in tables: rows and columns, like a spreadsheet the computer can search fast. "
          "SQLite keeps a whole database in one file: sqlite3 opens it, and creates it if it doesn't exist yet. "

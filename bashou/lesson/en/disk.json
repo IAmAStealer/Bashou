@@ -1,9 +1,9 @@
 {
  "id": "disk",
- "order": 55,
+ "order": 180,
  "skill": "linux",
- "needs": [
-  "commands 200"
+ "after": [
+  "files"
  ],
  "masters": [
   "achievement disk",

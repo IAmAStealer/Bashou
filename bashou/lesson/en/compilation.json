@@ -1,9 +1,11 @@
 {
  "id": "compilation",
- "order": 105,
+ "order": 280,
  "skill": "c",
- "needs": [
-  "tool gcc 1 | fights 3"
+ "after": [
+  "computer",
+  "scripts",
+  "logic"
  ],
  "masters": [
   "won semicolon_slug",

@@ -1,9 +1,10 @@
 {
  "id": "pipes",
- "order": 40,
+ "order": 120,
  "skill": "bash",
- "needs": [
-  "won needle_gnat | tool grep 5"
+ "after": [
+  "streams",
+  "grep"
  ],
  "masters": [
   "achievement plumber",

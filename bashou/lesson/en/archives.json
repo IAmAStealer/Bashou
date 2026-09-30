@@ -1,9 +1,10 @@
 {
  "id": "archives",
- "order": 57,
+ "order": 190,
  "skill": "linux",
- "needs": [
-  "tool tar 1 | commands 300"
+ "after": [
+  "disk",
+  "find"
  ],
  "masters": [
   "achievement packer",

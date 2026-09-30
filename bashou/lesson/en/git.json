@@ -1,8 +1,9 @@
 {
  "id": "git",
- "order": 68,
- "needs": [
-  "tool git 3"
+ "order": 240,
+ "after": [
+  "files",
+  "reading"
  ],
  "masters": [
   "achievement brancher",

@@ -4,10 +4,10 @@
 type; a lesson shows **how things work**, with a small drawing (a scheme) that grows from page to
 page and the owl pointing its wing at the line that matters.
 
-Lessons unlock with what you do (fights, achievements, commands), never by reading another lesson.
-Each one prepares the **next** step, not the one you are on: the stack and the heap unlock after your
-first C fight, before the fights about leaks and runaway recursion. Locked lessons show in the list
-with what unlocks them, so players see the road ahead.
+Lessons follow paths (see [curriculum.md](curriculum.md)): a lesson opens once the lessons before it
+(`after`) are **passed**, with what you do, never by reading: one of their fights won, one of their
+achievements, or enough achievements in all. Locked lessons show in the list with what opens them, so
+players see the road ahead.
 
 In the list, an open lesson is **green** while it's your next step, and turns back to white once
 you've **mastered** it: its `masters` conditions hold (the fights and achievements it prepares for).
@@ -21,7 +21,7 @@ No code needed: a lesson is one JSON file.
 
 ```json
 {"id": "stack_heap", "order": 110, "skill": "c",
- "needs": ["won semicolon_slug | tool gcc 3"],
+ "after": ["gcc_use"],
  "masters": ["won leak_lurker", "won stack_specter"],
  "title": "C memory: the stack and the heap",
  "summary": "Where your variables live, why malloc needs free, and what a leak is.",
@@ -39,12 +39,15 @@ No code needed: a lesson is one JSON file.
 
 - `order`: place in the list. `skill`: one of `bashou config skills`, or a list of them (the lesson only
   shows to players who learn one); leave it out for lessons everyone gets.
-- `needs`: what unlocks it. All of them must hold; `a | b` holds when one side does. Conditions:
-  `commands N`, `tool NAME N` (used N times), `won FIGHT_ID`, `fights N` (won), `achievement ID`.
-  The list shows the missing ones in words, with progress ("run 50 commands (32/50)").
-- `masters`: same conditions, what shows the player knows it now (usually the fights it prepares).
+- `after`: the lessons that come first (ids). It opens once each is passed: one of its `fights` won,
+  one of the `achievement ID` of its `masters`, or 3 achievements in all per step of depth. Only
+  `command_line` has none. The list shows what's missing in words ("pass “Paths”: win one of its
+  fights or earn 6 achievements (2/6)").
+- `masters`: what shows the player knows it now (usually the fights it prepares). All must hold;
+  `a | b` holds when one side does. Conditions: `commands N`, `tool NAME N` (used N times),
+  `won FIGHT_ID`, `fights N` (won), `achievement ID`.
 - `fights`: the fights this lesson helps with. **Every fight needs at least one lesson** (a test checks
-  it): meeting one of these fights opens the lesson even when `needs` don't hold yet, and `lesson` in
+  it): meeting one of these fights opens the lesson even when the lessons before it aren't passed, and `lesson` in
   the arena opens it. Place the lesson in its track in [curriculum.md](curriculum.md).
 - `scheme` (optional): lines of text, **50 columns at most**, 14 lines at most. `point`: the line
   (from 0) the owl points at. `mark`: words shown in color, usually what changed since the page

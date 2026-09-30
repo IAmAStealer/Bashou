@@ -1,9 +1,9 @@
 {
  "id": "streams",
- "order": 30,
+ "order": 90,
  "skill": "bash",
- "needs": [
-  "commands 50"
+ "after": [
+  "reading"
  ],
  "masters": [
   "achievement merge"

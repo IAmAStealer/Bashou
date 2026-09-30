@@ -1,9 +1,9 @@
 {
  "id": "gcc_use",
- "order": 107,
+ "order": 290,
  "skill": "c",
- "needs": [
-  "won semicolon_slug | tool gcc 5"
+ "after": [
+  "compilation"
  ],
  "masters": [
   "won linker_lynx",

@@ -1,12 +1,12 @@
 {
  "id": "debugger",
- "order": 118,
+ "order": 320,
  "skill": "c",
+ "after": [
+  "pointers"
+ ],
  "tools": [
   "gdb"
- ],
- "needs": [
-  "won stack_specter | won leak_lurker | won linker_lynx | tool gcc 10"
  ],
  "masters": [
   "won segfault_salamander",

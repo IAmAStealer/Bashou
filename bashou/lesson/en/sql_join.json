@@ -1,9 +1,9 @@
 {
  "id": "sql_join",
- "order": 150,
+ "order": 400,
  "skill": "sql",
- "needs": [
-  "won query_quokka | tool sqlite3 5"
+ "after": [
+  "sql_write"
  ],
  "masters": [
   "won join_jackal"

@@ -1,12 +1,13 @@
 {
  "id": "processes",
- "order": 60,
+ "order": 200,
  "skill": [
   "linux",
   "bash"
  ],
- "needs": [
-  "tool ps 1 | fights 3"
+ "after": [
+  "computer",
+  "users"
  ],
  "masters": [
   "achievement census",

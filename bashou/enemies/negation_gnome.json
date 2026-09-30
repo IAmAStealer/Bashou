@@ -1,0 +1,51 @@
+{
+ "name": "Negation Gnome",
+ "palette": {
+  "a": "#2a1830",
+  "h": "#c83c48",
+  "H": "#8a2434",
+  "s": "#f0c8a0",
+  "S": "#c89878",
+  "w": "#ffffff",
+  "m": "#101010",
+  "b": "#e8e8f0",
+  "B": "#a8a8c0",
+  "y": "#f0d048"
+ },
+ "base": [
+  "......aa.........",
+  ".....ahha.....y..",
+  "....ahhhha....y..",
+  "...ahhhhhha...y..",
+  "..aHHHHHHHHa..y..",
+  "...asssssssa.....",
+  "...amwsmwssa..y..",
+  "...asssSsssa.....",
+  "..abbbbbbbbba....",
+  "..abbBbbbBbba....",
+  "...abbbBbbba.....",
+  "....aa...aa......"
+ ],
+ "poses": {
+  "inhale": {
+   "5": "..asssssssssa...."
+  },
+  "closed": {
+   "6": "----SS-SS--------"
+  },
+  "left": {
+   "6": "----mw-mw--------"
+  },
+  "right": {
+   "6": "----wm-wm--------"
+  },
+  "fidget": {
+   "0": "-----aa.---------"
+  }
+ },
+ "particles": [
+  0,
+  10
+ ],
+ "lone_pixels": true
+}

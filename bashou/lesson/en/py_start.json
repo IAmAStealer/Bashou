@@ -1,9 +1,11 @@
 {
  "id": "py_start",
- "order": 125,
+ "order": 330,
  "skill": "python",
- "needs": [
-  "tool python3 1 | fights 3"
+ "after": [
+  "scripts",
+  "loops",
+  "logic"
  ],
  "masters": [
   "won colon_cobra"

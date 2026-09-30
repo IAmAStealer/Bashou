@@ -1,12 +1,12 @@
 {
  "id": "py_flow",
- "order": 128,
+ "order": 340,
  "skill": "python",
+ "after": [
+  "py_start"
+ ],
  "tools": [
   "python3"
- ],
- "needs": [
-  "won colon_cobra | tool python3 3"
  ],
  "masters": [
   "won dict_djinn",

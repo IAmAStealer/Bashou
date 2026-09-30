@@ -1,8 +1,8 @@
 {
  "id": "computer",
- "order": 15,
- "needs": [
-  "commands 30 | fights 1"
+ "order": 20,
+ "after": [
+  "command_line"
  ],
  "masters": [
   "achievement memory | achievement disk",

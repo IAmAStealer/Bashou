@@ -1,9 +1,9 @@
 {
  "id": "rust_vars",
- "order": 140,
+ "order": 370,
  "skill": "rust",
- "needs": [
-  "tool rustc 1 | commands 100"
+ "after": [
+  "stack_heap"
  ],
  "masters": [
   "won mut_marmot",

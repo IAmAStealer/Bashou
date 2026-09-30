@@ -166,8 +166,9 @@ class ProgressTest(unittest.TestCase):
         read("pipes", "permissions")                                      # 6: Bookworm
         self.s["challenges"] += [c.id for c in challenges.ALL if c.id not in self.s["challenges"]]
         read("pointers", "py_names", "sql_join", "pipeline", "rust_vars")  # 5 mastered: Librarian
-        read(*every[:12])                                                 # 12: Scholar, 10 mastered: Torchbearer
-        read(*every[:20])                                                 # 20: Well read
+        first = ['command_line', 'computer', 'paths', 'files', 'reading', 'wildcards', 'variables', 'streams', 'quotes', 'grep', 'text_tools', 'pipes', 'awk_sed', 'find', 'users', 'permissions', 'disk', 'archives', 'processes', 'scripts']
+        read(*first[:12])                                                 # 12: Scholar, 10 mastered: Torchbearer
+        read(*first)                                                      # 20: Well read
         read(*every)                                                      # every one: Alexandria
         self.assertEqual(seen, ["sparklings", "spark", "candle", "lantern", "torch", "campfire",
                                 "beacon", "phoenix"])                    # 2 at once skip the Ember and the Blaze

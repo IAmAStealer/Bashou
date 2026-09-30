@@ -1,9 +1,9 @@
 {
  "id": "grep",
- "order": 35,
+ "order": 110,
  "skill": "bash",
- "needs": [
-  "tool grep 1 | commands 60"
+ "after": [
+  "reading"
  ],
  "masters": [
   "won needle_gnat",

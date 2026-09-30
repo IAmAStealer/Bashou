@@ -1,7 +1,7 @@
 {
  "id": "command_line",
  "order": 10,
- "needs": [],
+ "after": [],
  "masters": [
   "achievement exit_code",
   "commands 500"

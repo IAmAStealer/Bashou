@@ -1,12 +1,12 @@
 {
  "id": "network",
- "order": 66,
+ "order": 230,
  "skill": [
   "linux",
   "network"
  ],
- "needs": [
-  "commands 400 | tool curl 3 | tool ssh 3"
+ "after": [
+  "processes"
  ],
  "masters": [
   "achievement headers",

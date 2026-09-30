@@ -1,12 +1,12 @@
 {
  "id": "ip_addr",
- "order": 180,
+ "order": 440,
  "skill": "network",
+ "after": [
+  "network"
+ ],
  "tools": [
   "ip"
- ],
- "needs": [
-  "tool ip 1 | commands 150"
  ],
  "masters": [
   "won address_adder",

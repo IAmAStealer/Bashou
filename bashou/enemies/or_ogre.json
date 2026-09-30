@@ -1,0 +1,48 @@
+{
+ "name": "Or Ogre",
+ "palette": {
+  "a": "#1e3018",
+  "g": "#6aa84f",
+  "G": "#4a7a38",
+  "w": "#ffffff",
+  "m": "#101010",
+  "t": "#f0ead8",
+  "r": "#7a2030",
+  "c": "#8a5a30"
+ },
+ "base": [
+  "....aaaaaaa......",
+  "...aggggggga.....",
+  "..aGgggggggGa....",
+  "..agmwgggmwga....",
+  "..aggggGggggac...",
+  "..agtrrrrrtga.cc.",
+  "..aggtgggtgga.cc.",
+  "...agggggggaa.c..",
+  "..aGGgggggGGGac..",
+  "..agggggggggga...",
+  "...aGGa...aGGa...",
+  "...aaa.....aaa..."
+ ],
+ "poses": {
+  "inhale": {
+   "1": "..aggggggggga...."
+  },
+  "closed": {
+   "3": "----GG---GG------"
+  },
+  "left": {
+   "3": "----mw---mw------"
+  },
+  "right": {
+   "3": "----wm---wm------"
+  },
+  "fidget": {
+   "10": "..aGGa....aGGa..."
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

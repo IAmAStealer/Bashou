@@ -1,9 +1,10 @@
 {
  "id": "services",
- "order": 80,
+ "order": 270,
  "skill": "systemd",
- "needs": [
-  "tool systemctl 1 | tool journalctl 1 | fights 5"
+ "after": [
+  "processes",
+  "streams"
  ],
  "masters": [
   "achievement status",

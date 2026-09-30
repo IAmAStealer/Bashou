@@ -1,8 +1,8 @@
 {
  "id": "wildcards",
- "order": 26,
- "needs": [
-  "commands 80"
+ "order": 60,
+ "after": [
+  "reading"
  ],
  "masters": [
   "tool ls 50",

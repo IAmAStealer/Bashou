@@ -1,9 +1,9 @@
 {
  "id": "sql_select",
- "order": 145,
+ "order": 380,
  "skill": "sql",
- "needs": [
-  "tool sqlite3 1 | fights 3"
+ "after": [
+  "text_tools"
  ],
  "masters": [
   "won query_quokka"

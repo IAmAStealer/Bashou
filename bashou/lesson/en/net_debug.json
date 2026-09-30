@@ -1,15 +1,16 @@
 {
  "id": "net_debug",
- "order": 190,
+ "order": 490,
  "skill": "network",
+ "after": [
+  "dns_tools",
+  "tcp"
+ ],
  "tools": [
   "ping",
   "ss",
   "ip",
   "dig"
- ],
- "needs": [
-  "tool ss 3 | tool ping 5 | commands 500"
  ],
  "masters": [
   "won refused_revenant",

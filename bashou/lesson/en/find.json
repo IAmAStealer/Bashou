@@ -1,12 +1,12 @@
 {
  "id": "find",
- "order": 46,
+ "order": 150,
  "skill": "bash",
+ "after": [
+  "wildcards"
+ ],
  "tools": [
   "find"
- ],
- "needs": [
-  "tool find 1 | commands 150"
  ],
  "masters": [
   "won find_wraith"

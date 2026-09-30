@@ -1,12 +1,12 @@
 {
  "id": "tcp",
- "order": 188,
+ "order": 480,
  "skill": "network",
+ "after": [
+  "ip_addr"
+ ],
  "tools": [
   "ss"
- ],
- "needs": [
-  "tool ss 1 | tool curl 5 | commands 300"
  ],
  "masters": [
   "won loopback_lurker",

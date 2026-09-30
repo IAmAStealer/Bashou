@@ -1,9 +1,9 @@
 {
  "id": "keys",
- "order": 160,
+ "order": 410,
  "skill": "linux",
- "needs": [
-  "won plaintext_pixie | won cipher_crow | tool gpg 3"
+ "after": [
+  "permissions"
  ],
  "masters": [
   "won forger_ferret",

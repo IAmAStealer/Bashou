@@ -1,9 +1,9 @@
 {
  "id": "permissions",
- "order": 50,
+ "order": 170,
  "skill": "linux",
- "needs": [
-  "commands 150"
+ "after": [
+  "users"
  ],
  "masters": [
   "achievement octal",

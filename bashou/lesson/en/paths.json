@@ -1,8 +1,8 @@
 {
  "id": "paths",
- "order": 20,
- "needs": [
-  "commands 20"
+ "order": 30,
+ "after": [
+  "command_line"
  ],
  "masters": [
   "achievement builder",

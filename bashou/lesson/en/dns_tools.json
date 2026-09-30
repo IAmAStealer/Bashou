@@ -1,14 +1,14 @@
 {
  "id": "dns_tools",
- "order": 186,
+ "order": 470,
  "skill": "network",
+ "after": [
+  "dns"
+ ],
  "tools": [
   "dig",
   "getent",
   "resolvectl"
- ],
- "needs": [
-  "tool dig 3 | tool getent 1 | commands 400"
  ],
  "masters": [
   "won resolver_rook",

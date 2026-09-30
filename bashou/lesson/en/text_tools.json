@@ -1,15 +1,15 @@
 {
  "id": "text_tools",
- "order": 37,
+ "order": 130,
  "skill": "bash",
+ "after": [
+  "pipes"
+ ],
  "tools": [
   "wc",
   "sort",
   "cut",
   "uniq"
- ],
- "needs": [
-  "commands 70 | fights 1"
  ],
  "masters": [
   "won line_moth",

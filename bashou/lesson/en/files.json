@@ -1,8 +1,8 @@
 {
  "id": "files",
- "order": 22,
- "needs": [
-  "commands 40"
+ "order": 40,
+ "after": [
+  "paths"
  ],
  "masters": [
   "achievement builder",

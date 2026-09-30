@@ -11,7 +11,7 @@ import sys
 
 from .. import achievements, challenges, creatures, progress, render, skills, state, terminal
 from ..i18n import _
-from . import HERE, load, met, progress_of, read, shown, skills_of, status, unlocked
+from . import HERE, load, met, progress_of, read, shown, skills_of, status, to_pass, unlocked, waiting_for
 from ..render import ESC, BOLD, DIM, RESET, REV
 
 ACCENT = f"{ESC}[38;2;240;200;110m"
@@ -314,7 +314,23 @@ def missing(s, conds):
 
 
 def how_to_unlock(s, lesson):
-    text = missing(s, lesson.get("needs", []))
+    """The lessons still to pass before this one, and the ways to pass each: "pass “Paths”: win one of
+    its fights, earn “Builder” or earn 6 achievements (2/6)"."""
+    titles = {le["id"]: le["title"] for le in load()}
+    parts = []
+    for before in waiting_for(s, lesson):
+        ways = [_("win one of its fights")] if before.get("fights") else []
+        names = [_("“{name}”").format(name=_(a.name)) for cond in before.get("masters", [])
+                 for c in cond.split("|") if c.split()[0] == "achievement"
+                 for a in achievements.ALL if a.id == c.split()[1]]
+        if names:
+            ways.append(_("earn {achievements}").format(achievements=_(" or ").join(names)))
+        n = to_pass(before)
+        ways.append(_("earn {n} achievements").format(n=n) + f" ({len(s['achievements'])}/{n})")
+        parts.append(_("pass “{lesson}”: {ways}").format(lesson=titles.get(before["id"], before["title"]),
+                                                        ways=", ".join(ways[:-1]) + _(", or ") + ways[-1]
+                                                        if len(ways) > 1 else ways[0]))
+    text = " · ".join(parts)
     first = next((challenges.BY_ID[f] for f in lesson.get("fights", []) if f in challenges.BY_ID), None)
     if first:
         text += " " + _("(or meet the {threat} in a fight)").format(threat=_(first.threat))

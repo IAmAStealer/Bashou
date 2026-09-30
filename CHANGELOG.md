@@ -13,6 +13,15 @@ Every release has a section here, written for players. CI refuses to tag a relea
 - With several terminals open, your pet lives in only one of them, the first you opened, instead of
   one pet (and one background process) in each. The commands you type in the other terminals still
   count for it. When you close its terminal, the pet moves to the next terminal where you press Enter.
+- The Sage Owl's library is now a path. Each lesson opens once you've passed the lessons that come
+  before it: win one of their fights, earn one of their achievements, or earn enough achievements in
+  all. Paths cross themes where one idea needs another: Python and C wait for shell scripts, loops and
+  logic, and SQL waits for the text tools. Commands alone no longer open lessons. The lessons you
+  already opened stay open, and a lesson from a skill you don't learn never blocks you.
+- A new Logic lesson explains how a program decides: yes or no answers, `if`, `!` (not), `&&` (and)
+  and `||` (or). Two new fights put it into practice: the Negation Gnome turns a party door's guard
+  around, and the Or Ogre makes a backup script copy when only half of what it needs is there. The
+  Sage Owl teaches it on the adventure's Logic road too, with a chest to open and new questions.
 
 ## v0.6.5 — 2026-09-29
 

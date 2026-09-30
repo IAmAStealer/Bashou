@@ -1,12 +1,13 @@
 {
  "id": "py_data",
- "order": 135,
+ "order": 360,
  "skill": "python",
+ "after": [
+  "py_names",
+  "pipes"
+ ],
  "tools": [
   "python3"
- ],
- "needs": [
-  "won colon_cobra | tool python3 5"
  ],
  "masters": [
   "won json_jinn",

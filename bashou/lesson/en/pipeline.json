@@ -1,9 +1,11 @@
 {
  "id": "pipeline",
- "order": 170,
+ "order": 430,
  "skill": "cicd",
- "needs": [
-  "won indent_imp | fights 5"
+ "after": [
+  "git",
+  "scripts",
+  "pass"
  ],
  "masters": [
   "won stage_specter",

@@ -1,12 +1,13 @@
 {
  "id": "pass",
- "order": 165,
+ "order": 420,
  "skill": "linux",
+ "after": [
+  "keys",
+  "scripts"
+ ],
  "tools": [
   "pass"
- ],
- "needs": [
-  "tool gpg 3 | tool pass 1 | won plaintext_pixie | won cipher_crow"
  ],
  "masters": [
   "won vault_vole",

@@ -388,5 +388,44 @@
   ],
   "answer": 0,
   "explain": "found démarre à False et passe à True la première fois qu'un nombre négatif apparaît. Rien ne le remet jamais à False, donc il reste True jusqu'à la fin. Il répond à « y en a-t-il au moins un ? » : c'est le motif du drapeau. En Python, any(n < 0 for n in nums) fait la même chose en une ligne."
+ },
+ {
+  "id": "logic-2-11",
+  "level": 2,
+  "q": "Un script commence par `if ! grep -q \"$1\" guests.txt; then echo open; fi`. Qui obtient open ?",
+  "choices": [
+   "Tous ceux qui ne sont PAS dans guests.txt",
+   "Seulement les invités de guests.txt",
+   "Personne : ! arrête le if",
+   "Tout le monde : grep -q n'affiche rien"
+  ],
+  "answer": 0,
+  "explain": "grep -q répond oui quand le nom est dans le fichier. Le ! retourne cette réponse, donc le bloc s'exécute quand le nom n'y est PAS : les inconnus entrent et les invités restent dehors. Un ! n'est qu'un caractère, facile à ajouter par erreur. Lis la condition à voix haute, « si PAS sur la liste, ouvre », pour entendre si elle dit ce que tu veux."
+ },
+ {
+  "id": "logic-2-12",
+  "level": 2,
+  "q": "Un script de sauvegarde doit copier notes.txt dans backup/ seulement quand les deux existent. Quelle condition est juste ?",
+  "choices": [
+   "[ -f notes.txt ] && [ -d backup ]",
+   "[ -f notes.txt ] || [ -d backup ]",
+   "! [ -f notes.txt ] && [ -d backup ]",
+   "[ -d notes.txt ] && [ -f backup ]"
+  ],
+  "answer": 0,
+  "explain": "&& (ET) n'est vrai que si les deux tests le sont : le fichier est là ET le dossier est là. || (OU) serait déjà vrai avec un seul des deux, et cp échouerait. -f teste un fichier et -d un dossier : les inverser pose les mauvaises questions."
+ },
+ {
+  "id": "logic-2-13",
+  "level": 2,
+  "q": "`grep -q root /etc/passwd` trouve root. Qu'affiche `echo $?` juste après ?",
+  "choices": [
+   "0",
+   "1",
+   "true",
+   "root"
+  ],
+  "answer": 0,
+  "explain": "Chaque commande se termine avec un code de retour, un nombre gardé dans $?. 0 veut dire réussite (ici : trouvé), tout autre nombre veut dire échec (1 : pas trouvé, pour grep). C'est l'inverse de ce qu'on attend souvent, parce qu'il y a une seule façon de réussir et beaucoup d'échouer. if, && et || lisent tous ce nombre."
  }
 ]

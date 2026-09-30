@@ -1,12 +1,12 @@
 {
  "id": "sql_write",
- "order": 147,
+ "order": 390,
  "skill": "sql",
+ "after": [
+  "sql_select"
+ ],
  "tools": [
   "sqlite3"
- ],
- "needs": [
-  "won query_quokka | tool sqlite3 3"
  ],
  "masters": [
   "won table_troll",

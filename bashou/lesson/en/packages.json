@@ -1,13 +1,13 @@
 {
  "id": "packages",
- "order": 70,
+ "order": 250,
  "skill": [
   "linux",
   "debian",
   "rocky"
  ],
- "needs": [
-  "tool apt 1 | tool dnf 1 | fights 5"
+ "after": [
+  "users"
  ],
  "masters": [
   "won version_vole | won release_raven",

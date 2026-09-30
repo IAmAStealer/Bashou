@@ -1,12 +1,12 @@
 {
  "id": "ipv6",
- "order": 182,
+ "order": 450,
  "skill": "network",
+ "after": [
+  "ip_addr"
+ ],
  "tools": [
   "ip"
- ],
- "needs": [
-  "tool ip 3 | commands 300"
  ],
  "masters": [
   "won six_serpent"

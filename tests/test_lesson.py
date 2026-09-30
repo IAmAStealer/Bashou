@@ -126,42 +126,90 @@ class FightsTest(unittest.TestCase):
 
 
 class UnlockTest(unittest.TestCase):
+    """Owner, 2026-09-30: lessons are chained (`after`). A lesson is passed with one of its fights won,
+    one of its own achievements, or 3 achievements per step of depth."""
+
     def test_a_new_player_starts_with_the_first_lesson(self):
         s = state.default()
         self.assertEqual([le["id"] for le in lesson.new(s, LESSONS)], ["command_line"])
         paths = BY_ID["paths"]
         self.assertFalse(lesson.unlocked(s, paths))
-        self.assertEqual(reader.how_to_unlock(s, paths), "run 20 commands (0/20) (or meet the Dust Bunny in a fight)")
-        s["commands"] = 20                                       # no need to read command_line first
+        self.assertEqual(reader.how_to_unlock(s, paths),
+                         "pass “Reading a command line”: earn “Exit code”, or earn 3 achievements (0/3) "
+                         "(or meet the Dust Bunny in a fight)")
+        s["commands"] = 10 ** 6                                  # counters alone open nothing now
+        self.assertFalse(lesson.unlocked(s, paths))
+        s["achievements"].append("exit_code")                    # no need to read command_line first
         self.assertTrue(lesson.unlocked(s, paths))
+
+    def test_passed_by_a_fight_an_own_achievement_or_the_total(self):
+        paths = BY_ID["paths"]                                   # depth 2: 6 achievements in all
+        s = state.default()
+        self.assertFalse(lesson.passed(s, paths))
+        s["challenges"].append("dust_bunny")
+        self.assertTrue(lesson.passed(s, paths))
+        s = state.default()
+        s["achievements"].append("shortcut")
+        self.assertTrue(lesson.passed(s, paths))
+        s = state.default()
+        s["achievements"] = [a.id for a in achievements.ALL if a.id not in ("builder", "shortcut")][:5]
+        self.assertFalse(lesson.passed(s, paths))
+        s["achievements"] = [a.id for a in achievements.ALL if a.id not in ("builder", "shortcut")][:6]
+        self.assertTrue(lesson.passed(s, paths))
 
     def test_next_step_until_mastered(self):
         s = state.default()
         heap = BY_ID["stack_heap"]
         self.assertEqual(lesson.status(s, heap), "locked")
-        s["challenges"].append("semicolon_slug")
+        s["challenges"].append("linker_lynx")                   # gcc_use passed
         self.assertEqual(lesson.status(s, heap), "next")
         self.assertEqual(reader.missing(s, heap["masters"]),
                          "beat the Leak Lurker in a fight · beat the Stack Specter in a fight")
         s["challenges"] += ["leak_lurker", "stack_specter"]
         self.assertEqual(lesson.status(s, heap), "mastered")
 
-    def test_either_side_of_a_bar_is_enough(self):
+    def test_every_lesson_before_must_be_passed(self):
         s = state.default()
-        heap = BY_ID["stack_heap"]
-        self.assertFalse(lesson.unlocked(s, heap))
-        self.assertIn("(0/3)", reader.how_to_unlock(s, heap))
-        s["tools"]["gcc"] = 3
-        self.assertTrue(lesson.unlocked(s, heap))
+        pipes = BY_ID["pipes"]                                   # after streams and grep
+        s["achievements"].append("merge")                        # streams passed
+        self.assertFalse(lesson.unlocked(s, pipes))
+        self.assertIn(f"“{BY_ID['grep']['title']}”", reader.how_to_unlock(s, pipes))
+        self.assertNotIn(BY_ID["streams"]["title"], reader.how_to_unlock(s, pipes))
+        s["challenges"].append("needle_gnat")
+        self.assertTrue(lesson.unlocked(s, pipes))
+
+    def test_a_lesson_of_a_skill_you_dont_learn_doesnt_block(self):
         s = state.default()
-        s["challenges"].append("semicolon_slug")
-        self.assertTrue(lesson.unlocked(s, heap))
+        py = BY_ID["py_start"]                                   # after scripts, loops (bash) and logic
+        s["achievements"] += ["exit_code", "loop"]              # scripts, loops passed
+        s["skills"] = ["python"]                                 # logic unticked: skipped
+        self.assertTrue(lesson.unlocked(s, py))
+        s["skills"] = ["python", "logic"]
+        self.assertFalse(lesson.unlocked(s, py))
+        s["challenges"].append("or_ogre")
+        self.assertTrue(lesson.unlocked(s, py))
+
+    def test_a_lesson_already_opened_stays_open(self):
+        s = state.default()
+        s["lessons"]["opened"].append("debugger")               # opened under the old rules
+        self.assertTrue(lesson.unlocked(s, BY_ID["debugger"]))
+
+    def test_the_graph(self):
+        ids = set(BY_ID)
+        self.assertEqual([le["id"] for le in LESSONS if not le.get("after")], ["command_line"])
+        for le in LESSONS:
+            with self.subTest(lesson=le["id"]):
+                self.assertNotIn("needs", le, "owner: lessons open by `after`, no counter escape")
+                for before in le.get("after", []):
+                    self.assertIn(before, ids)
+                    self.assertLess(BY_ID[before]["order"], le["order"], "the library lists the path in order")
+        depths = lesson.depths()                                 # raises on a loop
+        self.assertEqual(depths["command_line"], 1)
+        self.assertEqual(depths["paths"], 2)
 
     def test_every_lesson_can_be_unlocked(self):
         s = state.default()
-        s.update(commands=10 ** 6, fights_won=100, challenges=[c.id for c in challenges.ALL],
-                 achievements=[a.id for a in achievements.ALL])
-        s["tools"] = {c.split()[1]: 1000 for le in LESSONS for c in conditions(le) if c.startswith("tool ")}
+        s.update(achievements=[a.id for a in achievements.ALL])
         self.assertEqual([le["id"] for le in LESSONS if not lesson.unlocked(s, le)], [])
 
     def test_only_the_skills_you_learn(self):
@@ -216,7 +264,7 @@ class ReaderTest(unittest.TestCase):
         lib.pos = next(i for i, le in enumerate(lib.lessons) if le["id"] == "paths")
         lib.key("enter")
         self.assertIsNone(lib.lesson)
-        self.assertIn("run 20 commands", lib.message)
+        self.assertIn("pass “", lib.message)
 
     def test_leaving_keeps_the_page(self):
         lib = reader.Library(LESSONS, "command_line")

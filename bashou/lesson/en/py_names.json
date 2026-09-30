@@ -1,9 +1,9 @@
 {
  "id": "py_names",
- "order": 130,
+ "order": 350,
  "skill": "python",
- "needs": [
-  "won colon_cobra | tool python3 5"
+ "after": [
+  "py_flow"
  ],
  "masters": [
   "won list_leech"

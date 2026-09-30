@@ -1,13 +1,13 @@
 {
  "id": "awk_sed",
- "order": 42,
+ "order": 140,
  "skill": "bash",
+ "after": [
+  "text_tools"
+ ],
  "tools": [
   "awk",
   "sed"
- ],
- "needs": [
-  "tool awk 1 | tool sed 1 | fights 4"
  ],
  "masters": [
   "won field_wasp | won awk_golem",

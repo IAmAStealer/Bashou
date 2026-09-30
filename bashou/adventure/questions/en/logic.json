@@ -388,5 +388,44 @@
   ],
   "answer": 0,
   "explain": "found starts False and is set to True the first time a negative number shows up. Nothing ever sets it back to False, so it stays True until the end. It answers 'is there at least one?': this is the flag pattern. Python's any(n < 0 for n in nums) does the same in one line."
+ },
+ {
+  "id": "logic-2-11",
+  "level": 2,
+  "q": "A script starts with `if ! grep -q \"$1\" guests.txt; then echo open; fi`. Who gets open?",
+  "choices": [
+   "Everyone who is NOT in guests.txt",
+   "Only the guests in guests.txt",
+   "Nobody: ! stops the if",
+   "Everyone: grep -q prints nothing"
+  ],
+  "answer": 0,
+  "explain": "grep -q says yes when the name is in the file. The ! turns that answer around, so the block runs when the name is NOT there: strangers get in and guests don't. One ! is a single character, easy to add by mistake. Read a condition aloud, \"if NOT on the list, open\", to hear whether it says what you mean."
+ },
+ {
+  "id": "logic-2-12",
+  "level": 2,
+  "q": "A backup script must copy notes.txt into backup/ only when both exist. Which condition is right?",
+  "choices": [
+   "[ -f notes.txt ] && [ -d backup ]",
+   "[ -f notes.txt ] || [ -d backup ]",
+   "! [ -f notes.txt ] && [ -d backup ]",
+   "[ -d notes.txt ] && [ -f backup ]"
+  ],
+  "answer": 0,
+  "explain": "&& (AND) is true only when both tests are: the file is there AND the folder is there. || (OR) would already be true with just one of them, and cp would then fail. -f tests for a file and -d for a folder, so swapping them asks the wrong questions."
+ },
+ {
+  "id": "logic-2-13",
+  "level": 2,
+  "q": "`grep -q root /etc/passwd` finds root. What does `echo $?` print right after?",
+  "choices": [
+   "0",
+   "1",
+   "true",
+   "root"
+  ],
+  "answer": 0,
+  "explain": "Every command ends with an exit status, a number kept in $?. 0 means success (here: found), any other number means failure (1: not found for grep). It's the opposite of what many expect, because there is one way to succeed and many ways to fail. if, && and || all read this number."
  }
 ]

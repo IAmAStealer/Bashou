@@ -1,9 +1,9 @@
 {
  "id": "stack_heap",
- "order": 110,
+ "order": 300,
  "skill": "c",
- "needs": [
-  "won semicolon_slug | tool gcc 3"
+ "after": [
+  "gcc_use"
  ],
  "masters": [
   "won leak_lurker",

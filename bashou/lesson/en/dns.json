@@ -1,12 +1,12 @@
 {
  "id": "dns",
- "order": 184,
+ "order": 460,
  "skill": "network",
+ "after": [
+  "ip_addr"
+ ],
  "tools": [
   "dig"
- ],
- "needs": [
-  "tool dig 1 | tool ping 3 | commands 200"
  ],
  "masters": [
   "achievement resolver"

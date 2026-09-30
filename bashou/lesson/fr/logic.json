@@ -1,0 +1,143 @@
+{
+ "title": "Logique : oui, non, ET, OU, NON",
+ "summary": "Comment un programme décide : chaque test répond oui ou non, et NON, ET, OU combinent ces réponses.",
+ "pages": [
+  {
+   "scheme": [
+    " $ grep -q alice guests.txt",
+    " $ echo $?",
+    " 0          ← oui : alice est sur la liste",
+    "",
+    " $ grep -q eve guests.txt",
+    " $ echo $?",
+    " 1          ← non : eve n'y est pas"
+   ],
+   "point": 2,
+   "mark": [
+    "$?"
+   ],
+   "text": [
+    "Chaque commande répond à une question quand elle se termine : a-t-elle réussi ? Cette réponse est son code de retour.",
+    "",
+    "- 0 veut dire oui, elle a réussi. Tout autre nombre veut dire non (grep : 1 pour pas trouvé, 2 pour une erreur).",
+    "- $? contient la réponse de la dernière commande.",
+    "- -q demande à grep de ne rien afficher : seule la réponse compte. -x ne garde que les lignes entières, donc al ne trouve pas alice."
+   ]
+  },
+  {
+   "scheme": [
+    " if grep -q \"$1\" guests.txt; then",
+    "     │",
+    "     ├─ oui (0) ─▶  echo open",
+    "     │",
+    "     └─ non ─────▶  else  echo closed",
+    " fi"
+   ],
+   "point": 2,
+   "mark": [
+    "oui (0)",
+    "non"
+   ],
+   "text": [
+    "if lance une commande et prend un chemin ou l'autre selon sa réponse.",
+    "",
+    "- then : ce qu'il faut faire quand la réponse est oui. else (facultatif) : quand c'est non.",
+    "- fi ferme le if : c'est if écrit à l'envers.",
+    "",
+    "C'est ainsi qu'un programme décide : il pose une question oui/non, puis choisit un chemin."
+   ]
+  },
+  {
+   "scheme": [
+    " [ -f notes.txt ]     un fichier qui existe ?",
+    " [ -d backup ]        est-ce un dossier ?",
+    " [ \"$a\" = \"$b\" ]      le même texte ?",
+    " [ \"$n\" -gt 10 ]      plus de 10 ?"
+   ],
+   "point": 0,
+   "mark": [
+    "-f",
+    "-d",
+    "=",
+    "-gt"
+   ],
+   "text": [
+    "[ ] est une commande faite pour les questions : elle répond oui ou non, comme grep -q.",
+    "",
+    "- Laisse une espace après [ et avant ] : [-f x] n'est pas compris.",
+    "- Mets les variables entre guillemets doubles : une variable vide casserait le test.",
+    "$ if [ -d backup ]; then echo 'prêt'; fi"
+   ]
+  },
+  {
+   "scheme": [
+    "   réponse   ! réponse",
+    "   oui   ─▶  non",
+    "   non   ─▶  oui",
+    "",
+    " if ! grep -q \"$1\" guests.txt",
+    "      = si le nom n'est PAS sur la liste"
+   ],
+   "point": 5,
+   "mark": [
+    "!",
+    "PAS"
+   ],
+   "text": [
+    "! retourne une réponse : lis-le à voix haute comme NON (NOT).",
+    "",
+    "- Laisse une espace après : ! grep, pas !grep. Dans un test aussi : [ ! -f notes.txt ].",
+    "- Un seul caractère, facile à ajouter ou à oublier : avec un ! de trop, une garde laisse entrer ceux qu'elle devait bloquer.",
+    "",
+    "Lis tes conditions à voix haute : la phrase doit dire ce que tu veux dire."
+   ]
+  },
+  {
+   "scheme": [
+    "  fichier? dossier?  &&  (ET)     ||  (OU)",
+    "  oui      oui       oui          oui",
+    "  oui      non       non          oui",
+    "  non      oui       non          oui",
+    "  non      non       non          non",
+    "",
+    " [ -f notes.txt ] && [ -d backup ]"
+   ],
+   "point": 6,
+   "mark": [
+    "&&",
+    "||"
+   ],
+   "text": [
+    "&& (ET) répond oui seulement quand les deux réponses sont oui. || (OU) répond oui dès que l'une des deux est oui.",
+    "",
+    "- Pour copier un fichier dans un dossier, il faut le fichier ET le dossier : &&.",
+    "- Bash s'arrête dès qu'il sait : a && b ne lance b que si a a dit oui, a || b que si a a dit non.",
+    "$ mkdir backup || echo 'impossible de le créer'"
+   ]
+  },
+  {
+   "scheme": [
+    "           NON    ET     OU     oui c'est",
+    " bash      !      &&     ||     exit 0",
+    " python    not    and    or     True",
+    " c         !      &&     ||     pas 0",
+    "",
+    " bash    if [ \"$n\" -gt 5 ] && [ \"$ok\" = yes ]",
+    " python  if n > 5 and ok:",
+    " c       if (n > 5 && ok)"
+   ],
+   "point": 0,
+   "mark": [
+    "NON",
+    "ET",
+    "OU"
+   ],
+   "text": [
+    "Chaque langage a les trois mêmes mots : non, et, ou (not, and, or). Seule l'écriture change.",
+    "",
+    "- Regarde la dernière colonne : pour bash, 0 veut dire oui (ça a marché). En Python et en C, 0 veut dire faux.",
+    "- Avant Python ou C, assure-toi de savoir lire une condition à voix haute et dire quand elle est vraie."
+   ]
+  }
+ ]
+}

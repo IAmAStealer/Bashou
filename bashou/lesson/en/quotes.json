@@ -1,9 +1,10 @@
 {
  "id": "quotes",
- "order": 32,
+ "order": 100,
  "skill": "bash",
- "needs": [
-  "commands 200 | achievement capture"
+ "after": [
+  "variables",
+  "streams"
  ],
  "masters": [
   "achievement capture",

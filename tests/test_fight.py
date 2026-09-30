@@ -77,6 +77,10 @@ SOLUTIONS = {
     "trial_ss_ipv6": ("ss -6tlnH | awk '{{sub(/.*:/, \"\", $4); if ($4 + 0 >= 20000 && $4 + 0 < 40000) print $4}}'", None),
     "trial_gdb_line": ("gcc -g count.c -o count && gdb -q -batch -ex run -ex bt ./count 2>&1"
                        " | grep -o 'count.c:[0-9]*' | head -1 | cut -d: -f2", None),
+    # logic fights: fix the condition
+    "negation_gnome": ("sed -i 's/if ! grep/if grep/' door.sh", None),
+    "trial_logic_door": ("sed -i 's/if ! grep/if grep/' door.sh", None),
+    "or_ogre": ("sed -i 's/||/\\&\\&/' save.sh", None),
     # rust fights (rustc): fix the file
     "mut_marmot": ("sed -i 's/let errors = 0;/let mut errors = 0;/' counter.rs", None),
     "const_condor": ("sed -i 's/^const MAX_POINTS = /const MAX_POINTS: u32 = /' points.rs", None),

@@ -19,19 +19,46 @@ A topic is complete when it has all four: questions, a lesson, one or more fight
 ## Rules
 
 - **Nobody is stuck on a fight.** Every fight is in the `fights` list of at least one lesson
-  (`tests/test_lesson.py` checks it). Meeting a fight opens its lessons even if their `needs` don't
-  hold yet, and `lesson` in the arena opens the lesson right there.
+  (`tests/test_lesson.py` checks it). Meeting a fight opens its lessons even if the lessons before
+  them aren't passed yet, and `lesson` in the arena opens the lesson right there.
 - **Aim for one lesson for about three fights.** A lesson covers an idea (text columns, C memory, SQL
   writes), not one fight.
-- **The next step, not the current one.** `needs` open a lesson just before the player needs it:
-  a few commands more, the first fight of a skill, the tool used once. Never "read lesson X".
+- **A real path (owner, 2026-09-30).** `after` lists the lessons that come first; a lesson opens once
+  each of them is **passed**: one of its fights won, one of the achievements in its `masters`, or
+  3 achievements in all per step of depth (depth = the longest path from `command_line`, which is 1).
+  Reading a lesson never opens the next one: doing does. No counters (`commands N`) any more. A lesson
+  of a skill the player doesn't learn doesn't block, and a lesson already opened stays open.
+- **Cross links.** Paths cross themes where one idea needs another: Python and C wait for shell
+  scripts, loops and Logic; SQL waits for text columns; CI/CD for git, scripts and pass.
 - **Short steps that stack.** Each lesson uses only what earlier lessons in its track taught, and
   says so when it builds on one ("see the lesson on keys").
 - **Mastered means done, not read.** `masters` names the fights and achievements that prove it.
 
+## Paths between lessons
+
+`A → B`: B comes after A. `A + B → C`: C needs both.
+
+- First steps: command_line → computer; command_line → paths → files → reading → wildcards →
+  variables; files + reading → git
+- Bash: reading → streams; reading → grep; streams + grep → pipes → text_tools → awk_sed;
+  wildcards → find; variables + streams → quotes → scripts → loops
+- Linux: files → users → permissions → keys; keys + scripts → pass; files → disk;
+  disk + find → archives; computer + users → processes
+- systemd: processes + streams → services
+- Packages: users → packages; packages + network → repos
+- Network: processes → network → ip_addr → ipv6; ip_addr → dns → dns_tools; ip_addr → tcp;
+  dns_tools + tcp → net_debug
+- Logic: variables → logic
+- Python: scripts + loops + logic → py_start → py_flow → py_names; py_names + pipes → py_data
+- C: computer + scripts + logic → compilation → gcc_use → stack_heap → pointers → debugger
+- Rust: stack_heap → rust_vars
+- SQL: text_tools → sql_select → sql_write → sql_join
+- CI/CD: git + scripts + pass → pipeline
+
 ## Tracks
 
-Lessons in library order (`order`), with the fights they prepare.
+Lessons by theme, with the fights they prepare. The library lists them in `order`, which follows the
+paths above.
 
 ### First steps (everyone)
 
@@ -78,6 +105,10 @@ Lessons in library order (`order`), with the fights they prepare.
 
 1. `services` — a service's life (no fights yet: its achievements master it)
 
+### Logic
+
+1. `logic` — yes/no answers, if, !, && and || · Negation Gnome, Or Ogre
+
 ### C
 
 1. `compilation` — source to program, reading errors · Semicolon Slug
@@ -122,7 +153,6 @@ Lessons in library order (`order`), with the fights they prepare.
 
 ## Known gaps
 
-- **Logic** (coding basics) has adventure questions but no lesson and no fights.
 - **systemd** and **Rust** stop after one lesson: next steps would be timers and journalctl filters,
   ownership and borrowing, each with fights.
 - **Bash** has no fights yet for scripts, loops and quotes; **Linux** none for users, permissions,

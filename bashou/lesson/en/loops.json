@@ -1,9 +1,9 @@
 {
  "id": "loops",
- "order": 64,
+ "order": 220,
  "skill": "bash",
- "needs": [
-  "commands 300 | achievement loop"
+ "after": [
+  "scripts"
  ],
  "masters": [
   "achievement loop",

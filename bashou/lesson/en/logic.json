@@ -1,0 +1,157 @@
+{
+ "id": "logic",
+ "order": 80,
+ "skill": "logic",
+ "after": [
+  "variables"
+ ],
+ "masters": [
+  "won negation_gnome",
+  "won or_ogre"
+ ],
+ "fights": [
+  "negation_gnome",
+  "or_ogre"
+ ],
+ "title": "Logic: yes, no, and, or, not",
+ "summary": "How a program decides: every test answers yes or no, and not, and, or combine those answers.",
+ "pages": [
+  {
+   "scheme": [
+    " $ grep -q alice guests.txt",
+    " $ echo $?",
+    " 0          ← yes: alice is on the list",
+    "",
+    " $ grep -q eve guests.txt",
+    " $ echo $?",
+    " 1          ← no: eve isn't"
+   ],
+   "point": 2,
+   "mark": [
+    "$?"
+   ],
+   "text": [
+    "Every command answers a question when it ends: did it work? That answer is its exit status.",
+    "",
+    "- 0 means yes, it worked. Any other number means no (grep: 1 for not found, 2 for an error).",
+    "- $? holds the answer of the last command.",
+    "- -q tells grep to stay quiet: only the answer counts. -x matches whole lines only, so al doesn't find alice."
+   ]
+  },
+  {
+   "scheme": [
+    " if grep -q \"$1\" guests.txt; then",
+    "     │",
+    "     ├─ yes (0) ─▶  echo open",
+    "     │",
+    "     └─ no  ─────▶  else  echo closed",
+    " fi"
+   ],
+   "point": 2,
+   "mark": [
+    "yes (0)",
+    "no"
+   ],
+   "text": [
+    "if runs a command and takes one road or the other depending on its answer.",
+    "",
+    "- then: what to do when the answer is yes. else (optional): when it's no.",
+    "- fi closes the if: it's if written backwards.",
+    "",
+    "That is how a program decides: it asks a yes/no question, then picks a road."
+   ]
+  },
+  {
+   "scheme": [
+    " [ -f notes.txt ]     an existing file?",
+    " [ -d backup ]        is it a folder?",
+    " [ \"$a\" = \"$b\" ]      the same text?",
+    " [ \"$n\" -gt 10 ]      a number above 10?"
+   ],
+   "point": 0,
+   "mark": [
+    "-f",
+    "-d",
+    "=",
+    "-gt"
+   ],
+   "text": [
+    "[ ] is a command made for questions: it answers yes or no, like grep -q.",
+    "",
+    "- Keep a space after [ and before ]: [-f x] is not understood.",
+    "- Put variables in double quotes: an empty one would break the test.",
+    "$ if [ -d backup ]; then echo 'ready'; fi"
+   ]
+  },
+  {
+   "scheme": [
+    "   answer    ! answer",
+    "   yes   ─▶  no",
+    "   no    ─▶  yes",
+    "",
+    " if ! grep -q \"$1\" guests.txt",
+    "      = if the name is NOT on the list"
+   ],
+   "point": 5,
+   "mark": [
+    "!",
+    "NOT"
+   ],
+   "text": [
+    "! turns an answer around: read it aloud as NOT.",
+    "",
+    "- Leave a space after it: ! grep, not !grep. Inside a test too: [ ! -f notes.txt ].",
+    "- It's one character, easy to add or forget: a guard with one ! too many lets in exactly the people it should keep out.",
+    "",
+    "Read your conditions aloud: the sentence must say what you mean."
+   ]
+  },
+  {
+   "scheme": [
+    "  file?  folder?    &&  (AND)    ||  (OR)",
+    "  yes    yes        yes          yes",
+    "  yes    no         no           yes",
+    "  no     yes        no           yes",
+    "  no     no         no           no",
+    "",
+    " [ -f notes.txt ] && [ -d backup ]"
+   ],
+   "point": 6,
+   "mark": [
+    "&&",
+    "||"
+   ],
+   "text": [
+    "&& (AND) says yes only when both answers are yes. || (OR) says yes as soon as one of them is yes.",
+    "",
+    "- To copy a file into a folder, you need the file AND the folder: &&.",
+    "- Bash stops as soon as it knows: a && b runs b only if a said yes, a || b only if a said no.",
+    "$ mkdir backup || echo 'could not create it'"
+   ]
+  },
+  {
+   "scheme": [
+    "           not    and    or     yes is",
+    " bash      !      &&     ||     exit 0",
+    " python    not    and    or     True",
+    " c         !      &&     ||     not 0",
+    "",
+    " bash    if [ \"$n\" -gt 5 ] && [ \"$ok\" = yes ]",
+    " python  if n > 5 and ok:",
+    " c       if (n > 5 && ok)"
+   ],
+   "point": 0,
+   "mark": [
+    "not",
+    "and",
+    "or"
+   ],
+   "text": [
+    "Every language has the same three words: not, and, or. Only the spelling changes.",
+    "",
+    "- Watch the last column: for bash, 0 means yes (it worked). In Python and C, 0 means false.",
+    "- Before Python or C, make sure you can read a condition aloud and say when it's true."
+   ]
+  }
+ ]
+}

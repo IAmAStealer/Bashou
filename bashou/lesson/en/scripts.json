@@ -1,9 +1,9 @@
 {
  "id": "scripts",
- "order": 62,
+ "order": 210,
  "skill": "bash",
- "needs": [
-  "commands 250 | achievement loop"
+ "after": [
+  "quotes"
  ],
  "masters": [
   "achievement dry_run | achievement xray",

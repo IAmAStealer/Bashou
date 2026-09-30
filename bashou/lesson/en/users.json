@@ -1,9 +1,9 @@
 {
  "id": "users",
- "order": 48,
+ "order": 160,
  "skill": "linux",
- "needs": [
-  "commands 150"
+ "after": [
+  "files"
  ],
  "masters": [
   "achievement owner | achievement tight",

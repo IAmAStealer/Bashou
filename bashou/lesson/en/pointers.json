@@ -1,9 +1,9 @@
 {
  "id": "pointers",
- "order": 120,
+ "order": 310,
  "skill": "c",
- "needs": [
-  "won leak_lurker | won stack_specter | tool gcc 10"
+ "after": [
+  "stack_heap"
  ],
  "masters": [
   "won fencepost_fiend",

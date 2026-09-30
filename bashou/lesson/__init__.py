@@ -80,10 +80,60 @@ def met_fights(s):
     return set((s.get("lessons") or {}).get("met", [])) | set(s["challenges"]) | ({threat} if threat else set())
 
 
+PER_DEPTH = 3       # achievements in all that pass a lesson, per step of depth (owner)
+
+
+@functools.lru_cache(maxsize=1)
+def depths():
+    """{id: depth}: the longest path of `after` links from the first lesson (Command line = 1)."""
+    after = {le["id"]: le.get("after", []) for le in english()}
+    found = {}
+
+    def depth(lid, seen=()):
+        if lid not in found:
+            if lid in seen:
+                raise ValueError(f"lesson loop: {' -> '.join(seen + (lid,))}")
+            found[lid] = 1 + max((depth(p, seen + (lid,)) for p in after.get(lid, [])), default=0)
+        return found[lid]
+
+    for lid in after:
+        depth(lid)
+    return found
+
+
+def by_id():
+    return {le["id"]: le for le in english()}
+
+
+def to_pass(lesson):
+    """How many achievements in all pass this lesson."""
+    return PER_DEPTH * depths().get(lesson["id"], 1)
+
+
+def passed(s, lesson):
+    """You're through this lesson, and the ones after it may open: one of its fights won, one of the
+    achievements it prepares for earned, or enough achievements in all (3 per step of depth)."""
+    earned = s["achievements"]
+    own = [c.split()[1] for cond in lesson.get("masters", []) for c in cond.split("|")
+           if c.split()[0] == "achievement"]
+    return (bool(set(lesson.get("fights", [])) & set(s["challenges"])) or any(a in earned for a in own)
+            or len(earned) >= to_pass(lesson))
+
+
+def waiting_for(s, lesson):
+    """The lessons of `after` still to pass. One of a skill you don't learn doesn't count."""
+    lessons = by_id()
+    return [lessons[p] for p in lesson.get("after", [])
+            if not passed(s, lessons[p])
+            and (not skills_of(lessons[p]) or any(skills.wanted(s, k) for k in skills_of(lessons[p])))]
+
+
 def unlocked(s, lesson):
-    """Lessons open with what you do (fights, achievements, commands), never by reading another one.
-    A fight never waits for its lesson: meeting one of the lesson's `fights` opens it too."""
-    return holds(s, lesson.get("needs", [])) or bool(met_fights(s) & set(lesson.get("fights", [])))
+    """A lesson opens once the lessons before it (`after`) are passed: a real path, cross-theme too
+    (Python waits for shell scripts and loops). A fight never waits for its lesson: meeting one of the
+    lesson's `fights` opens it too. A lesson you already opened stays open."""
+    return (lesson["id"] in (s.get("lessons") or {}).get("opened", [])
+            or bool(met_fights(s) & set(lesson.get("fights", []))) or not waiting_for(s, lesson))
 
 
 def for_fight(lessons, fight_id):
