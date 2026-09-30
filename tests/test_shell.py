@@ -412,6 +412,64 @@ class ShellTest(unittest.TestCase):
         self.assertEqual(list(self.sh.data.glob("events.*")), [])
 
 
+
+class OnePetTest(unittest.TestCase):
+    """Owner: with several terminals open, each ran its own pet (drawn everywhere, one Python process
+    each). Now the first terminal has the pet; the others count their commands for it."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.shells = []
+
+    def tearDown(self):
+        for sh in self.shells:
+            sh.close()
+        time.sleep(0.5)
+        self.tmp.cleanup()
+
+    def open(self):
+        sh = Shell(self.tmp.name)
+        self.shells.append(sh)
+        sh.read(1)
+        return sh
+
+    def test_a_second_terminal_has_no_pet_but_its_commands_count(self):
+        first = self.open()
+        self.assertTrue(first.expect(b"38;2;216;200;160"))
+        second = self.open()
+        second.read(1.5)
+        self.assertEqual(second.value("BASHOU_PID"), "")
+        self.assertNotIn(b"38;2;216;200;160", second.out)
+        second.send("true\n")
+        second.send("echo hi\n")
+        self.assertTrue(first.wait_state(lambda s: s["commands"] == 3))   # value() ran an echo too
+
+    def test_the_pet_moves_when_its_terminal_closes(self):
+        first = self.open()
+        self.assertTrue(first.expect(b"38;2;216;200;160"))
+        pet = int(first.value("BASHOU_PID"))
+        second = self.open()
+        second.send("true\n")
+        first.send("exit\n", 1)
+        end = time.time() + TIMEOUT
+        while alive(pet) and time.time() < end:
+            time.sleep(0.1)
+        start = len(second.out)
+        second.send("echo moved\n", 0)
+        self.assertTrue(second.expect(b"38;2;216;200;160", start))
+        self.assertNotEqual(second.value("BASHOU_PID"), "")
+        self.assertTrue(second.wait_state(lambda s: s["commands"] >= 2))   # the guest's true is counted
+
+    def test_bashou_off_in_a_guest_keeps_it_without_pet(self):
+        first = self.open()
+        self.assertTrue(first.expect(b"38;2;216;200;160"))
+        second = self.open()
+        second.send("bashou off\n")
+        first.send("exit\n", 2)
+        second.send("true\n", 1)
+        self.assertEqual(second.value("BASHOU_PID"), "")
+
+
 class FirstLaunchTest(unittest.TestCase):
     def test_first_launch_asks_for_a_starter(self):
         """No save yet: language, skills, then starter, then the pet appears."""

@@ -60,6 +60,7 @@ class Companion:
         self.managed = self.room_file.exists()
         self.old_loader_told = False
         self.offset = 0            # bytes of the events file already counted
+        self.guests = {}           # the same for other terminals' guest.<pid> files, by name
         self.code = code_version()
         self.notes = []            # notifications waiting for the bubble
         self.bubble = None         # (text, commands run since shown, commands it stays)
@@ -109,18 +110,38 @@ class Companion:
 
     # --- events -----------------------------------------------------------
 
-    def read_events(self):
+    def home(self):
+        """True when this is the pet of all terminals (bashou.bash writes its shell in the pet file)."""
         try:
-            with open(self.events, "rb") as f:
-                f.seek(self.offset)
+            return int((state.CACHE / "pet").read_text()) == self.shell
+        except (OSError, ValueError):
+            return False
+
+    def guest_files(self):
+        return sorted(state.DATA.glob("guest.*")) if self.home() else []
+
+    def read_file(self, path, offset):
+        """(new offset, text of the whole lines written after offset)."""
+        try:
+            with open(path, "rb") as f:
+                f.seek(offset)
                 data = f.read()
         except FileNotFoundError:
-            return
+            return offset, ""
         end = data.rfind(b"\n") + 1
-        if not end:
-            return
-        self.offset += end
-        records = parse_log(data[:end].decode(errors="replace"))
+        return offset + end, data[:end].decode(errors="replace")
+
+    def read_events(self):
+        self.offset, text = self.read_file(self.events, self.offset)
+        # Commands typed in the terminals without a pet count too. A closed one's file goes once read.
+        for path in self.guest_files():
+            gone = not pid_alive(path.suffix[1:])
+            self.guests[path.name], more = self.read_file(path, self.guests.get(path.name, 0))
+            text += more
+            if gone:
+                path.unlink(missing_ok=True)
+                del self.guests[path.name]
+        records = parse_log(text)
         if not records:
             return
         now = datetime.datetime.now()
@@ -137,7 +158,7 @@ class Companion:
 
     def events_size(self):
         try:
-            return self.events.stat().st_size
+            return self.events.stat().st_size + sum(f.stat().st_size for f in self.guest_files())
         except FileNotFoundError:
             return 0
 
@@ -334,7 +355,7 @@ class Companion:
             self.busy = True
             return
         # A new event (or the prompt's SIGUSR1) means a command ran and PS0 erased us.
-        if self.events_size() != self.offset:
+        if self.events_size() != self.offset + sum(self.guests.values()):
             self.busy = True
         if self.busy or self.tick % 4 == 0:
             self.read_events()
@@ -360,7 +381,7 @@ class Companion:
             return False
         return newest != self.code and time.time() - newest > 2
 
-    HANDOVER = ("offset", "bubble", "bubble_at", "notes", "talk_at", "warn_at", "threat", "threat_text", "threat_id",
+    HANDOVER = ("offset", "guests", "bubble", "bubble_at", "notes", "talk_at", "warn_at", "threat", "threat_text", "threat_id",
                 "threat_until", "fights_won", "old_loader_told")
 
     def restart(self):
@@ -414,6 +435,18 @@ class Companion:
                     f.unlink()
                 except FileNotFoundError:
                     pass
+
+def pid_alive(pid):
+    try:
+        os.kill(int(pid), 0)
+    except ValueError:
+        return True                                     # not a shell's file: left alone
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        pass
+    return True
+
 
 def sweep_events():
     """Event files of terminals that are gone (a crash, a kill -9) still hold what was typed there:

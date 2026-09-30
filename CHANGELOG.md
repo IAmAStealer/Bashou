@@ -10,6 +10,9 @@ Every release has a section here, written for players. CI refuses to tag a relea
   drawing a broken screen that can look stuck. `bashou share` needs room for the whole QR code, or
   your phone can't scan it.
 - In a narrow window, the progress bar of `bashou` is shorter, so it stays on one line.
+- With several terminals open, your pet lives in only one of them, the first you opened, instead of
+  one pet (and one background process) in each. The commands you type in the other terminals still
+  count for it. When you close its terminal, the pet moves to the next terminal where you press Enter.
 
 ## v0.6.5 — 2026-09-29
 

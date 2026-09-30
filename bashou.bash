@@ -20,6 +20,10 @@ _bashou_events=$_bashou_data/events.$$
 _bashou_erase=${BASHOU_CACHE:-$HOME/.cache/bashou}/erase.$$
 _bashou_height=${BASHOU_CACHE:-$HOME/.cache/bashou}/height.$$
 _bashou_room=${BASHOU_CACHE:-$HOME/.cache/bashou}/room.$$
+# One pet for all your terminals: this file holds the PID of the shell it lives in. The other shells are
+# guests: no pet drawn there, their commands go to guest.<pid> and the pet counts them too.
+_bashou_home=${BASHOU_CACHE:-$HOME/.cache/bashou}/pet
+_bashou_guest=
 # The events file holds what you type, for your pet: yours only, whatever the umask (older versions
 # made the folders 755, readable by other accounts where home folders are).
 (umask 077; mkdir -p "$_bashou_data" "${_bashou_erase%/*}"; : >> "$_bashou_events") 2>/dev/null
@@ -33,12 +37,16 @@ _bashou_restarts=0
 # $HISTCMD only moves when a command is added, so empty Enters are not counted.
 _bashou_log() {
   local status=$? last=$_
+  # The pet's terminal closed: it moves into this one.
+  if [[ -n $_bashou_guest ]] && ! _bashou_elsewhere && _bashou_claim; then
+    bashou on
+  fi
   if [[ -n $BASHOU_PID ]]; then
     _bashou_make_room
   fi
   # No cursor reports from this terminal: at least `clear` puts the prompt back under the pet.
   [[ $_bashou_dsr == off && ( $last == clear || $last == reset ) ]] && _bashou_below
-  if [[ -n $BASHOU_PID && -n $_bashou_hc && $HISTCMD != "$_bashou_hc" ]]; then
+  if [[ ( -n $BASHOU_PID || -n $_bashou_guest ) && -n $_bashou_hc && $HISTCMD != "$_bashou_hc" ]]; then
     printf '%s\t' "$status" >> "$_bashou_events"
     HISTTIMEFORMAT='' history 1 >> "$_bashou_events"
   fi
@@ -49,6 +57,25 @@ _bashou_log() {
     bashou on
   fi
   return "$status"
+}
+
+# True when the pet lives in another shell that is still open. Builtins only: guests check at each prompt.
+_bashou_elsewhere() {
+  local pid
+  [[ -r $_bashou_home ]] && IFS= read -r pid < "$_bashou_home"
+  [[ -n $pid && $pid != "$$" ]] && kill -0 "$pid" 2>/dev/null
+}
+
+# Take the pet's home for this shell, unless another shell took it first: two terminals opened at the
+# same moment (a tmux session coming back) must not both start one. noclobber makes the write atomic.
+_bashou_claim() {
+  local taken=1
+  [[ $- == *C* ]] || { set -C; taken=; }
+  { echo "$$" > "$_bashou_home"; } 2>/dev/null ||
+    { ! _bashou_elsewhere && rm -f "$_bashou_home" && { echo "$$" > "$_bashou_home"; } 2>/dev/null; }
+  local ok=$?
+  [[ -n $taken ]] || set +C
+  return "$ok"
 }
 
 # shellcheck source=bashou/room.bash
@@ -75,6 +102,7 @@ _bashou_ps0() {
 bashou() {
   case $1 in
     off)
+      _bashou_guest=
       [[ -n $BASHOU_PID ]] || return 0
       _bashou_ps0
       kill "$BASHOU_PID" 2>/dev/null
@@ -82,6 +110,9 @@ bashou() {
       ;;
     on)
       [[ -z $BASHOU_PID ]] || return 0
+      _bashou_guest=
+      _bashou_events=$_bashou_data/events.$$
+      echo "$$" >| "$_bashou_home" 2>/dev/null       # guests' commands now come to this pet
       echo 0 > "$_bashou_room" 2>/dev/null           # this loader makes room: the pet waits for it
       # SIGUSR1 ignored until Python installs its handler (the default action would kill it).
       { (trap '' USR1; exec python3 "$BASHOU_DIR/launch.py" bashou.companion "$$") </dev/null 2>/dev/null & } 2>/dev/null
@@ -131,7 +162,7 @@ complete -F _bashou_complete bashou
 [[ ${PROMPT_COMMAND[0]} == _bashou_log* ]] || PROMPT_COMMAND="_bashou_log${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
 # shellcheck disable=SC2016  # expanded later, by bash, each time PS0 is shown
 [[ $PS0 == *_bashou_ps0* ]] || PS0='$(_bashou_ps0)'"$PS0"
-trap 'bashou off' EXIT
+trap 'bashou off; _bashou_elsewhere || rm -f "$_bashou_home"' EXIT
 
 # First time: choose a starter (builtins only to check, Python only for the picker).
 _bashou_ready() {
@@ -140,5 +171,10 @@ _bashou_ready() {
   [[ $s == *'"language": "'* ]] && [[ $s == *'"starter": "'* || $s == *'"cat"'* ]]
 }
 if _bashou_ready || bashou start; then
-  bashou on                                          # the first prompt makes room for it
+  if _bashou_claim; then
+    bashou on                                        # the first prompt makes room for it
+  else
+    _bashou_guest=1                                  # the pet lives in another terminal
+    _bashou_events=$_bashou_data/guest.$$
+  fi
 fi
