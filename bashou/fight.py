@@ -361,6 +361,7 @@ def arena(ch, intro, rng=None, fight=False, help_first=False, limit=None):
     meta = {"challenge": ch.id, "hints": 0, "help_first": help_first}
     try:
         meta.update(ch.setup(work, rng or random.Random()))
+        challenges.with_editor(meta, state.setting(state.load(), "editor"))
         (base / "meta.json").write_text(json.dumps(meta))
         (base / "arena.rc").write_text(RC)
         (base / "tip_uniq").write_text(ACCENT + "💡 " + _(                # shown once, on uniq without sort

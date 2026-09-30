@@ -1,6 +1,6 @@
 {
  "id": "services",
- "order": 270,
+ "order": 300,
  "skill": "systemd",
  "after": [
   "processes",
@@ -10,6 +10,11 @@
   "achievement status",
   "achievement logbook",
   "achievement reload"
+ ],
+ "recall": [
+  "systemd-1-01",
+  "systemd-1-02",
+  "systemd-1-03"
  ],
  "title": "A service's life with systemd",
  "summary": "Unit files, start versus enable, and where to read what went wrong.",

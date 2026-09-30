@@ -1,6 +1,6 @@
 {
  "id": "text_tools",
- "order": 130,
+ "order": 160,
  "skill": "bash",
  "after": [
   "pipes"
@@ -15,6 +15,10 @@
   "won line_moth",
   "won column_crab",
   "won peak_harpy"
+ ],
+ "recall": [
+  "bash-1-13",
+  "bash-1-14"
  ],
  "fights": [
   "line_moth",

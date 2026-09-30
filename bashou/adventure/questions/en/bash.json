@@ -323,5 +323,135 @@
   ],
   "answer": 0,
   "explain": "Read it step by step: sort groups identical lines, uniq -c turns each group into one line with its count, sort -rn orders those counts from biggest to smallest, head -3 keeps the top three. Without the first sort, uniq counts the same line several times. It's one of the most useful pipelines for reading logs."
+ },
+ {
+  "id": "bash-1-15",
+  "level": 1,
+  "q": "You opened notes.txt with vi and started typing, but the letters do strange things instead of appearing. Why?",
+  "choices": [
+   "It's in normal mode, where keys are commands: i to type",
+   "The file is read-only",
+   "vi only accepts uppercase letters",
+   "The terminal is broken: close it"
+  ],
+  "answer": 0,
+  "explain": "vi has two modes. It opens in normal mode, where each key is a command (dd deletes a line, x a character). Press i to enter insert mode and type; Esc goes back. If you got lost, Esc then :q! quits without saving anything, and you can start again."
+ },
+ {
+  "id": "bash-1-16",
+  "level": 1,
+  "q": "You changed a config file in nano and press Ctrl+X. nano asks \"Save modified buffer?\". What is it telling you?",
+  "choices": [
+   "Your changes aren't saved: Y saves them, N drops them",
+   "The file is damaged",
+   "You must be root to quit",
+   "nano wants a backup copy first"
+  ],
+  "answer": 0,
+  "explain": "\"Buffer\" is nano's word for the text you're editing. It warns you before quitting with unsaved changes: Y writes them (Enter confirms the file name), N drops them. Ctrl+O saves without quitting, handy to save often."
+ },
+ {
+  "id": "bash-1-17",
+  "level": 1,
+  "q": "You want the lines of app.log that START with ERROR, not the ones that only mention it later. Which pattern?",
+  "choices": [
+   "grep '^ERROR' app.log",
+   "grep 'ERROR$' app.log",
+   "grep '*ERROR' app.log",
+   "grep -v ERROR app.log"
+  ],
+  "answer": 0,
+  "explain": "In a pattern, ^ means \"the start of the line\" and $ means \"the end\". '^ERROR' keeps only the lines that begin with it, so a message quoting the word later doesn't match. -v would do the opposite: keep the lines without ERROR."
+ },
+ {
+  "id": "bash-2-12",
+  "level": 2,
+  "q": "Why write grep -E '[0-9]+' log.txt with the pattern in single quotes?",
+  "choices": [
+   "So the shell leaves [ ] and + alone for grep",
+   "Single quotes make grep faster",
+   "grep only reads patterns in quotes",
+   "To search for the quote characters too"
+  ],
+  "answer": 0,
+  "explain": "The shell reads your line before grep runs, and [ ], * and ? mean something to it too (file name patterns). Inside single quotes the shell changes nothing, so grep gets exactly the pattern you wrote. It's a habit worth keeping for every regex, in grep, sed and awk."
+ },
+ {
+  "id": "bash-1-18",
+  "level": 1,
+  "q": "You need every .log file under /var/log, in all its subfolders too. Which command finds them?",
+  "choices": [
+   "find /var/log -name '*.log'",
+   "ls /var/log/*.log",
+   "grep .log /var/log",
+   "cat /var/log/*.log"
+  ],
+  "answer": 0,
+  "explain": "find walks through a folder and every folder inside it, and keeps what matches: -name '*.log' matches the names. ls /var/log/*.log only looks one level down, in /var/log itself. grep searches inside files, not for file names."
+ },
+ {
+  "id": "bash-2-13",
+  "level": 2,
+  "q": "Why put the pattern in quotes in find . -name '*.txt'?",
+  "choices": [
+   "Unquoted, the shell may expand *.txt here before find runs",
+   "find refuses patterns without quotes",
+   "Quotes make the search case-insensitive",
+   "It's only a matter of style"
+  ],
+  "answer": 0,
+  "explain": "The shell expands * before running a command. If the current folder has notes.txt, an unquoted *.txt becomes notes.txt, and find then looks only for that name. With quotes, find gets the pattern itself and applies it in every folder."
+ },
+ {
+  "id": "bash-1-19",
+  "level": 1,
+  "q": "Each line of access.txt looks like `alice 200 /home`. How do you print only the second column, the status code?",
+  "choices": [
+   "awk '{print $2}' access.txt",
+   "grep 200 access.txt",
+   "cut access.txt 2",
+   "sort -k2 access.txt"
+  ],
+  "answer": 0,
+  "explain": "awk splits each line into fields at the spaces: $1 is alice, $2 is 200, $3 is /home. '{print $2}' prints the second one for every line. grep 200 would print whole lines, and only those that contain 200 anywhere."
+ },
+ {
+  "id": "bash-1-20",
+  "level": 1,
+  "q": "A colleague sends backup.tar.gz. What do you do before unpacking it where you stand?",
+  "choices": [
+   "List what's inside with tar -tzf backup.tar.gz",
+   "Unpack it as root to be safe",
+   "Rename it to .zip",
+   "Delete your current folder first"
+  ],
+  "answer": 0,
+  "explain": "tar -t lists the content without writing anything. You see whether everything sits in one folder or would scatter dozens of files where you are, and whether a file would overwrite one of yours. Then unpack with tar -xzf, or add -C to choose the folder."
+ },
+ {
+  "id": "bash-1-21",
+  "level": 1,
+  "q": "In git, what does a commit keep?",
+  "choices": [
+   "A snapshot of what you added with git add, plus a message",
+   "Every file on your disk",
+   "Only the last line you changed",
+   "A copy sent to the server right away"
+  ],
+  "answer": 0,
+  "explain": "git add chooses which changes go in, git commit records them as one snapshot you can come back to, with who and why. Nothing leaves your machine until you git push. Small commits with clear messages make it easy to find when something broke."
+ },
+ {
+  "id": "bash-2-14",
+  "level": 2,
+  "q": "You broke a file in a git repository and haven't committed yet. How do you get the last committed version back?",
+  "choices": [
+   "git restore file.txt",
+   "git commit file.txt",
+   "git push --force",
+   "Delete the .git folder"
+  ],
+  "answer": 0,
+  "explain": "git restore puts the file back as it was in the last commit, dropping the changes you made since. It's safe to experiment in a repository for this reason: git status shows what changed, git diff shows how, and git restore undoes it. The .git folder is the history itself: never delete it."
  }
 ]

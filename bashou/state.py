@@ -50,6 +50,7 @@ SETTINGS = {
                     choices=("small", "large")),
     "talk": Setting((10, 20), "minutes between the things your pet says on its own (e.g. 10-20, 30, or off)", off=True),
     "quiet": Setting((60, 60), "seconds without typing before it says one (it waits for a pause in your work)"),
+    "editor": Setting("nano", "the text editor your hints and lessons show (nano/vi)", choices=("nano", "vi")),
 }
 
 

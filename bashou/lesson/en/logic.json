@@ -1,6 +1,6 @@
 {
  "id": "logic",
- "order": 80,
+ "order": 100,
  "skill": "logic",
  "after": [
   "variables"
@@ -8,6 +8,11 @@
  "masters": [
   "won negation_gnome",
   "won or_ogre"
+ ],
+ "recall": [
+  "logic-2-11",
+  "logic-2-12",
+  "logic-2-13"
  ],
  "fights": [
   "negation_gnome",

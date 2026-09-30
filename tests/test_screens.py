@@ -170,11 +170,21 @@ class ScreensTest(unittest.TestCase):
                 t = Term(cols, rows)
                 t.write(printed(lib.draw))
                 self.check("lesson", size, t)
+                with state.locked() as s:                  # the warm-up comes the first time only
+                    s["lessons"]["opened"] = [le for le in s["lessons"]["opened"] if le != "help"]
+                lib = reader.Library(lessons, "help")
+                self.assertTrue(lib.quiz)
+                for name in ("warm-up", "warm-up-answer"):
+                    t = Term(cols, rows)
+                    t.write(printed(lib.draw))
+                    self.check(name, size, t, "Warm-up")
+                    lib.key("enter")
 
     def test_first_launch_pickers(self):
         screens = {"starter": lambda: starter.draw(0, False), "language": lambda: starter.draw_languages(0, False),
                    "skills-mode": lambda: starter.draw_mode(1, False),
-                   "skills": lambda: starter.checklist_drawer({"bash"})(0, False)}
+                   "skills": lambda: starter.checklist_drawer({"bash"})(0, False),
+                   "editor": lambda: starter.draw_editor(0, False)}
         for size in sizes("start"):
             with self.at(size) as (cols, rows):
                 for name, draw in screens.items():

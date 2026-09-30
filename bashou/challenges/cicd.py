@@ -356,7 +356,7 @@ ALL = [
                    "without renaming the stages. Then: verify",
               hints=["The file starts with a dot, so ls hides it: ls -a shows it. stages: lists build, test and "
                      "deploy, in the order they run; each job's stage: must be one of them.",
-                     "The unit job runs the tests, so its stage is test. Open the file (nano .gitlab-ci.yml) and "
+                     "The unit job runs the tests, so its stage is test. Open the file ({editor} .gitlab-ci.yml) and "
                      "change the unit job's line to `  stage: test`, keeping its 2 spaces."],
               setup=stage_setup, verify=stage_verify),
     Challenge(level=2, id="secret_sprite", threat="Secret Sprite", **CICD,

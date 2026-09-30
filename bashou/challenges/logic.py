@@ -114,7 +114,7 @@ ALL = [
                      "NOT on the list, open\". Then run bash door.sh {guest} and bash door.sh {stranger} to "
                      "see the difference.",
                      "Remove the ! (and its space) from the if line: `if grep -qx \"$1\" guests.txt; then`. "
-                     "With nano: nano door.sh, fix the line, Ctrl+O to save, Ctrl+X to quit. Or in one "
+                     "Open it with {editor} door.sh, fix the line ({save_keys}). Or in one "
                      "command: sed -i 's/if ! grep/if grep/' door.sh"],
               setup=door_setup, verify=door_verify),
     Challenge(level=1, id="or_ogre", threat="Or Ogre", after=("negation_gnome",), **LOGIC,
@@ -125,7 +125,7 @@ ALL = [
                      "sides must be true. Here the script needs the file AND the folder. Try it: move the "
                      "folder away (mv {folder} gone), run bash save.sh, then put it back (mv gone {folder}).",
                      "On the if line, replace || with &&: `if [ -f {file} ] && [ -d {folder} ]; then`. With "
-                     "nano: nano save.sh. Or in one command: sed -i 's/||/\\&\\&/' save.sh"],
+                     "{editor}: {editor} save.sh. Or in one command: sed -i 's/||/\\&\\&/' save.sh"],
               setup=save_setup, verify=save_verify),
 ]
 

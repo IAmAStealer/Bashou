@@ -1,6 +1,6 @@
 {
  "id": "dns",
- "order": 460,
+ "order": 490,
  "skill": "network",
  "after": [
   "ip_addr"
@@ -10,6 +10,10 @@
  ],
  "masters": [
   "achievement resolver"
+ ],
+ "recall": [
+  "network-1-06",
+  "network-1-07"
  ],
  "fights": [
   "nxdomain_nixie"

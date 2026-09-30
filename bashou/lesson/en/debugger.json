@@ -1,6 +1,6 @@
 {
  "id": "debugger",
- "order": 320,
+ "order": 350,
  "skill": "c",
  "after": [
   "pointers"
@@ -11,6 +11,10 @@
  "masters": [
   "won segfault_salamander",
   "won breakpoint_beetle"
+ ],
+ "recall": [
+  "c-2-13",
+  "c-2-14"
  ],
  "fights": [
   "segfault_salamander",

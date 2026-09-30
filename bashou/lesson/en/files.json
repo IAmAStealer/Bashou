@@ -1,12 +1,16 @@
 {
  "id": "files",
- "order": 40,
+ "order": 50,
  "after": [
   "paths"
  ],
  "masters": [
   "achievement builder",
   "achievement copycat"
+ ],
+ "recall": [
+  "bash-1-04",
+  "bash-1-11"
  ],
  "title": "Files: make, copy, move, delete",
  "summary": "mkdir, touch, cp, mv and rm: the everyday moves, and the one that has no undo.",

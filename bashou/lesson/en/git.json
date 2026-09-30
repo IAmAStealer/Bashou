@@ -1,13 +1,16 @@
 {
  "id": "git",
- "order": 240,
+ "order": 270,
  "after": [
-  "files",
-  "reading"
+  "scripts"
  ],
  "masters": [
   "achievement brancher",
   "achievement stasher"
+ ],
+ "recall": [
+  "bash-1-21",
+  "bash-2-14"
  ],
  "title": "git: snapshots and branches",
  "summary": "What a commit is, how git add and commit work together, and what a branch really is.",

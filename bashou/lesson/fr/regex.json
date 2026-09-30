@@ -1,0 +1,91 @@
+{
+ "title": "Les motifs : premiers pas avec les expressions régulières",
+ "summary": "Chercher une forme au lieu d'un mot : n'importe quel chiffre, le début d'une ligne, quatre chiffres de suite.",
+ "pages": [
+  {
+   "scheme": [
+    " ^ERROR   commence par ERROR",
+    " done$    finit par done",
+    " c.t      cat, cut, c9t : . = un caractère",
+    " lo*g     lg, log, loog : * répète o"
+   ],
+   "point": 0,
+   "mark": [
+    "^",
+    "$",
+    ".",
+    "*"
+   ],
+   "text": [
+    "Une expression régulière (regex) décrit la forme d'un texte, pas un mot exact. grep, sed et awk les comprennent tous.",
+    "",
+    "- Quelques caractères ont un sens spécial : ^ début de ligne, $ fin, . n'importe quel caractère, * celui d'avant, 0 fois ou plus.",
+    "$ grep '^ERROR' app.log"
+   ]
+  },
+  {
+   "scheme": [
+    " [0-9]     7, 0, 5 : un chiffre",
+    " [^ ]      a, 7, - : tout sauf une espace",
+    "",
+    " avec grep -E :",
+    " lo+g      log, loog, mais pas lg",
+    " [0-9]{4}  2026 : exactement 4 chiffres",
+    " chat|chien  chat ou chien"
+   ],
+   "point": 0,
+   "mark": [
+    "[0-9]",
+    "-E",
+    "lo+g"
+   ],
+   "text": [
+    "Les crochets donnent une liste de caractères permis : [0-9] est n'importe quel chiffre.",
+    "",
+    "- Un ^ juste après le crochet veut dire « sauf » : [^ ] est un caractère qui n'est pas une espace.",
+    "- grep -E (étendu) ajoute des répétitions pratiques : + veut dire un ou plus, {4} exactement quatre, | veut dire ou.",
+    "- Mets toujours le motif entre guillemets simples : le shell passe alors * et les crochets à grep sans y toucher."
+   ]
+  },
+  {
+   "scheme": [
+    " 2026-09-30 12:04 disk almost full",
+    "",
+    " 2026      -  09        -  30",
+    " [0-9]{4}  -  [0-9]{2}  -  [0-9]{2}",
+    "",
+    " [0-9]{4}-[0-9]{2}-[0-9]{2}"
+   ],
+   "point": 3,
+   "mark": [
+    "[0-9]{4}"
+   ],
+   "text": [
+    "Construis un motif morceau par morceau, en lisant le texte voulu : quatre chiffres, un tiret, deux chiffres, un tiret, deux chiffres.",
+    "",
+    "- ^ devant ne garde que les lignes qui commencent par une date.",
+    "- Teste-le sur le fichier avec grep avant de t'en servir ailleurs.",
+    "$ grep -E '^[0-9]{4}-[0-9]{2}-[0-9]{2}' app.log"
+   ]
+  },
+  {
+   "scheme": [
+    " grep -E '[0-9]+' f       lignes avec un nombre",
+    " sed -E 's/[0-9]+/N/g' f  nombres -> N",
+    " awk '/^ERROR/' f         lignes qui collent"
+   ],
+   "point": 1,
+   "mark": [
+    "sed -E",
+    "awk"
+   ],
+   "text": [
+    "Les mêmes motifs marchent dans sed et awk, que tu vas voir ensuite.",
+    "",
+    "- sed -E s'en sert pour trouver quoi remplacer.",
+    "- awk en met un entre barres obliques pour choisir les lignes à traiter. Pas besoin de -E : il comprend toujours + {4} |.",
+    "C'est assez de regex pour le quotidien : commence simple, et n'ajoute un morceau que quand tu en as besoin."
+   ]
+  }
+ ]
+}

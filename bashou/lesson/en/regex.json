@@ -1,0 +1,104 @@
+{
+ "id": "regex",
+ "order": 140,
+ "skill": "bash",
+ "after": [
+  "grep"
+ ],
+ "masters": [
+  "achievement regex"
+ ],
+ "recall": [
+  "bash-1-17",
+  "bash-2-12"
+ ],
+ "title": "Patterns: a first taste of regular expressions",
+ "summary": "Search for a shape instead of a word: any digit, the start of a line, four digits in a row.",
+ "pages": [
+  {
+   "scheme": [
+    " ^ERROR   starts with ERROR",
+    " done$    ends with done",
+    " c.t      cat, cut, c9t: . is any character",
+    " lo*g     lg, log, loog: * repeats o"
+   ],
+   "point": 0,
+   "mark": [
+    "^",
+    "$",
+    ".",
+    "*"
+   ],
+   "text": [
+    "A regular expression (regex) describes the shape of a text, not one exact word. grep, sed and awk all understand them.",
+    "",
+    "- A few characters have a special meaning: ^ start of the line, $ end, . any character, * the one before, 0 or more times.",
+    "$ grep '^ERROR' app.log"
+   ]
+  },
+  {
+   "scheme": [
+    " [0-9]     7, 0, 5: one digit",
+    " [^ ]      a, 7, -: anything but a space",
+    "",
+    " with grep -E:",
+    " lo+g      log, loog, but not lg",
+    " [0-9]{4}  2026: exactly 4 digits",
+    " cat|dog   cat or dog"
+   ],
+   "point": 0,
+   "mark": [
+    "[0-9]",
+    "-E",
+    "lo+g"
+   ],
+   "text": [
+    "Square brackets give a list of allowed characters: [0-9] is any one digit.",
+    "",
+    "- A ^ just inside the brackets means \"not\": [^ ] is one character that isn't a space.",
+    "- grep -E (extended) adds handy repeats: + means one or more, {4} exactly four, | means or.",
+    "- Always put the pattern in single quotes, so the shell passes * and the brackets to grep untouched."
+   ]
+  },
+  {
+   "scheme": [
+    " 2026-09-30 12:04 disk almost full",
+    "",
+    " 2026      -  09        -  30",
+    " [0-9]{4}  -  [0-9]{2}  -  [0-9]{2}",
+    "",
+    " [0-9]{4}-[0-9]{2}-[0-9]{2}"
+   ],
+   "point": 3,
+   "mark": [
+    "[0-9]{4}"
+   ],
+   "text": [
+    "Build a pattern piece by piece, reading the text you want: four digits, a dash, two digits, a dash, two digits.",
+    "",
+    "- ^ in front keeps only the lines that start with a date.",
+    "- Test it on the file with grep before you use it anywhere else.",
+    "$ grep -E '^[0-9]{4}-[0-9]{2}-[0-9]{2}' app.log"
+   ]
+  },
+  {
+   "scheme": [
+    " grep -E '[0-9]+' f       lines with a number",
+    " sed -E 's/[0-9]+/N/g' f  numbers become N",
+    " awk '/^ERROR/' f         matching lines"
+   ],
+   "point": 1,
+   "mark": [
+    "sed -E",
+    "awk"
+   ],
+   "text": [
+    "The same patterns work in sed and awk, which you'll meet next.",
+    "",
+    "- sed -E uses them to find what to replace.",
+    "- awk puts one between slashes to pick the lines to work on. It needs no -E: it always understands + {4} |.",
+    "That's enough regex for daily work: start simple, and add a piece only when you need it."
+   ]
+  }
+ ]
+}

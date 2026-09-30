@@ -1,0 +1,97 @@
+{
+ "id": "help",
+ "order": 20,
+ "after": [
+  "command_line"
+ ],
+ "masters": [
+  "tool man 1"
+ ],
+ "recall": [
+  "bash-1-08"
+ ],
+ "title": "Help yourself: --help, man and error messages",
+ "summary": "Every tool explains itself. Read its help and its errors, and you never stay stuck for long.",
+ "pages": [
+  {
+   "scheme": [
+    " $ sort --help",
+    " Usage: sort [OPTION]... [FILE]...",
+    "             ▔▔▔▔▔▔▔▔▔▔▔ ▔▔▔▔▔▔▔▔▔",
+    "   [ ] = optional     ... = as many as you like"
+   ],
+   "point": 1,
+   "mark": [
+    "[OPTION]...",
+    "[FILE]..."
+   ],
+   "text": [
+    "Almost every command answers --help with a short guide. The Usage line shows how to write it.",
+    "",
+    "- Words in [ ] are optional: sort alone works, it reads what you type until Ctrl+D.",
+    "- ... means you can give several: sort a.txt b.txt sorts both together."
+   ]
+  },
+  {
+   "scheme": [
+    " $ sort --help | grep -i case",
+    "  -f, --ignore-case  fold lower case to upper…",
+    "  ▔▔  ▔▔▔▔▔▔▔▔▔▔▔▔▔  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔",
+    "  short long form    what it does"
+   ],
+   "point": 1,
+   "mark": [
+    "-f",
+    "--ignore-case"
+   ],
+   "text": [
+    "Below the Usage line, one line per option: a short form, a long form, and what it does. Both forms do the same thing.",
+    "",
+    "- The list is long? Search it: grep -i finds a word whatever its case.",
+    "- \"fold lower case to upper\" means: sort as if every letter were uppercase.",
+    "- Or page through it: sort --help | less, q quits."
+   ]
+  },
+  {
+   "scheme": [
+    " $ man find",
+    "   NAME  SYNOPSIS  DESCRIPTION  …  EXAMPLES",
+    "",
+    "   /word  search       n  next match",
+    "   q      quit",
+    "",
+    " $ man -k compress     which tools compress?"
+   ],
+   "point": 3,
+   "mark": [
+    "/word",
+    " q "
+   ],
+   "text": [
+    "man opens the manual: longer than --help, with explanations, and some pages end with an EXAMPLES section.",
+    "",
+    "- It opens in a pager: arrows scroll, /word searches, n jumps to the next match, q quits.",
+    "- man -k searches the one-line descriptions of all manuals, when you don't know the tool's name yet."
+   ]
+  },
+  {
+   "scheme": [
+    " $ cat notes.tx",
+    " cat: notes.tx: No such file or directory",
+    " ▔▔▔  ▔▔▔▔▔▔▔▔  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔",
+    " who  on what   what went wrong"
+   ],
+   "point": 1,
+   "mark": [
+    "No such file or directory"
+   ],
+   "text": [
+    "An error message is a clue, not a punishment. Read it from left to right: which program, on what, what went wrong.",
+    "",
+    "- command not found: a typo, or the tool isn't installed.",
+    "- No such file or directory: check the name and where you are (ls, pwd).",
+    "- Permission denied: the file exists, but you may not do that to it."
+   ]
+  }
+ ]
+}

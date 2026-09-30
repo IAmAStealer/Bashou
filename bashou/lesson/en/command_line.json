@@ -1,10 +1,12 @@
 {
  "id": "command_line",
  "order": 10,
- "after": [],
  "masters": [
   "achievement exit_code",
   "commands 500"
+ ],
+ "recall": [
+  "bash-1-09"
  ],
  "title": "Reading a command line",
  "summary": "What each word you type means, how the shell finds the program, and how it says it worked.",

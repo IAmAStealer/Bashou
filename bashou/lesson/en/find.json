@@ -1,6 +1,6 @@
 {
  "id": "find",
- "order": 150,
+ "order": 180,
  "skill": "bash",
  "after": [
   "wildcards"
@@ -10,6 +10,10 @@
  ],
  "masters": [
   "won find_wraith"
+ ],
+ "recall": [
+  "bash-1-18",
+  "bash-2-13"
  ],
  "fights": [
   "find_wraith"

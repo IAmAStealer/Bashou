@@ -1,6 +1,6 @@
 {
  "id": "repos",
- "order": 260,
+ "order": 290,
  "skill": [
   "debian",
   "rocky"
@@ -16,6 +16,11 @@
  "masters": [
   "won candidate_crow | won enabled_ettin",
   "won mirror_mimic | won repo_revenant"
+ ],
+ "recall": [
+  "debian-1-04",
+  "rocky-1-05",
+  "debian-3-01"
  ],
  "fights": [
   "candidate_crow",

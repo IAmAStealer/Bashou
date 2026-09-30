@@ -1,6 +1,6 @@
 {
  "id": "py_data",
- "order": 360,
+ "order": 390,
  "skill": "python",
  "after": [
   "py_names",
@@ -13,6 +13,10 @@
   "won json_jinn",
   "won base64_banshee",
   "won injection_imp"
+ ],
+ "recall": [
+  "python-1-02",
+  "python-2-09"
  ],
  "fights": [
   "json_jinn",

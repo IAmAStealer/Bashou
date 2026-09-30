@@ -111,6 +111,7 @@ def main():
     if not sys.stdin.isatty():
         return 1
     show_skills(ask_skills(s.get("skills", "all")))
+    ask_editor()
     line = choose()
     if not line:
         print(f"  {DIM}" + _("No starter yet. Run `bashou start` when you're ready.") + RESET)
@@ -120,6 +121,33 @@ def main():
     print("  " + _("{name} is your starter! It levels up every 5 achievements.").format(
         name=f"{BOLD}{_(PETS[STARTERS[line][0]].name)}{RESET}"))
     return 0
+
+
+# --- the editor your hints show (owner: editing a file comes at the start) -------------------------
+
+EDITORS = ("nano", "vi")
+
+
+def draw_editor(pos, breath):
+    out = [f"{ESC}[H{ESC}[2J"] + [line + "\n" for line in render.heading(
+        _("Which editor do you want to learn?"), _("↑/↓, Enter · `bashou config editor` to change it later"),
+        render.columns())] + ["\n"]
+    labels = (_("nano: simple, what you type goes into the file (a good start)"),
+              _("vi: two modes, on every system, even the smallest"))
+    for i, label in enumerate(labels):
+        for k, part in enumerate(render.wrap(label, render.columns() - 6, 3)):
+            out.append(f"  {REV} {part} {RESET}\n" if i == pos else f"   {part}\n")
+    sys.stdout.write("".join(out))
+    sys.stdout.flush()
+
+
+def ask_editor():
+    """Ask and save the editor setting. q keeps what was there."""
+    current = state.setting(state.load(), "editor")
+    pos = pick(draw_editor, len(EDITORS), LANG_KEYS, EDITORS.index(current) if current in EDITORS else 0)
+    if pos is not None:
+        with state.locked() as s:
+            s.setdefault("settings", {})["editor"] = EDITORS[pos]
 
 
 # --- what you want to learn (bashou/skills.py) --------------------------------------------------

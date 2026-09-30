@@ -1,6 +1,6 @@
 {
  "id": "disk",
- "order": 180,
+ "order": 210,
  "skill": "linux",
  "after": [
   "files"
@@ -8,6 +8,10 @@
  "masters": [
   "achievement disk",
   "achievement sizer"
+ ],
+ "recall": [
+  "linux-1-06",
+  "linux-2-06"
  ],
  "title": "Disk space: df and du",
  "summary": "How full the disk is, and which folder takes the room.",

@@ -1,6 +1,6 @@
 {
  "id": "dns_tools",
- "order": 470,
+ "order": 500,
  "skill": "network",
  "after": [
   "dns"
@@ -13,6 +13,10 @@
  "masters": [
   "won resolver_rook",
   "won nxdomain_nixie"
+ ],
+ "recall": [
+  "network-2-09",
+  "network-3-01"
  ],
  "fights": [
   "resolver_rook",

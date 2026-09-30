@@ -1,0 +1,86 @@
+{
+ "title": "Se débrouiller seul : --help, man et les messages d'erreur",
+ "summary": "Chaque outil s'explique lui-même. Lis son aide et ses erreurs, et tu ne restes jamais bloqué longtemps.",
+ "pages": [
+  {
+   "scheme": [
+    " $ sort --help",
+    " Usage: sort [OPTION]... [FILE]...",
+    "             ▔▔▔▔▔▔▔▔▔▔▔ ▔▔▔▔▔▔▔▔▔",
+    "   [ ] = facultatif   ... = autant que tu veux"
+   ],
+   "point": 1,
+   "mark": [
+    "[OPTION]...",
+    "[FILE]..."
+   ],
+   "text": [
+    "Presque toutes les commandes répondent à --help avec un petit guide. La ligne Usage (en français : Utilisation) montre comment l'écrire.",
+    "",
+    "- Les mots entre [ ] sont facultatifs : sort tout seul marche, il lit ce que tu tapes jusqu'à Ctrl+D.",
+    "- ... veut dire que tu peux en donner plusieurs : sort a.txt b.txt trie les deux ensemble."
+   ]
+  },
+  {
+   "scheme": [
+    " $ sort --help | grep -i case",
+    "  -f, --ignore-case  fold lower case to upper…",
+    "  ▔▔  ▔▔▔▔▔▔▔▔▔▔▔▔▔  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔",
+    "  court longue       ce qu'elle fait"
+   ],
+   "point": 1,
+   "mark": [
+    "-f",
+    "--ignore-case"
+   ],
+   "text": [
+    "Sous la ligne Usage, une ligne par option : une forme courte, une forme longue, et ce qu'elle fait. Les deux formes font la même chose.",
+    "",
+    "- La liste est longue ? Cherche dedans : grep -i trouve un mot sans tenir compte des majuscules.",
+    "- « fold lower case to upper » veut dire : trier comme si toutes les lettres étaient en majuscules.",
+    "- Ou fais-la défiler : sort --help | less, q pour quitter."
+   ]
+  },
+  {
+   "scheme": [
+    " $ man find",
+    "   NAME  SYNOPSIS  DESCRIPTION  …  EXAMPLES",
+    "",
+    "   /mot   chercher     n  suivant",
+    "   q      quitter",
+    "",
+    " $ man -k compress     quels outils compressent ?"
+   ],
+   "point": 3,
+   "mark": [
+    "/mot",
+    " q "
+   ],
+   "text": [
+    "man ouvre le manuel : plus long que --help, avec des explications, et certaines pages finissent par une section EXAMPLES.",
+    "",
+    "- Il s'ouvre dans un lecteur : les flèches défilent, /mot cherche, n va au résultat suivant, q quitte.",
+    "- man -k cherche dans les descriptions d'une ligne de tous les manuels, quand tu ne connais pas encore le nom de l'outil."
+   ]
+  },
+  {
+   "scheme": [
+    " $ cat notes.tx",
+    " cat: notes.tx: No such file or directory",
+    " ▔▔▔  ▔▔▔▔▔▔▔▔  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔",
+    " qui  sur quoi  ce qui ne va pas"
+   ],
+   "point": 1,
+   "mark": [
+    "No such file or directory"
+   ],
+   "text": [
+    "Un message d'erreur est un indice, pas une punition. Lis-le de gauche à droite : quel programme, sur quoi, ce qui ne va pas.",
+    "",
+    "- command not found : une faute de frappe, ou l'outil n'est pas installé.",
+    "- No such file or directory (en français : Aucun fichier ou dossier de ce nom) : vérifie le nom et où tu es (ls, pwd).",
+    "- Permission denied (Permission non accordée) : le fichier existe, mais tu n'as pas le droit de faire ça."
+   ]
+  }
+ ]
+}

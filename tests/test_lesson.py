@@ -132,18 +132,18 @@ class UnlockTest(unittest.TestCase):
     def test_a_new_player_starts_with_the_first_lesson(self):
         s = state.default()
         self.assertEqual([le["id"] for le in lesson.new(s, LESSONS)], ["command_line"])
-        paths = BY_ID["paths"]
-        self.assertFalse(lesson.unlocked(s, paths))
-        self.assertEqual(reader.how_to_unlock(s, paths),
-                         "pass “Reading a command line”: earn “Exit code”, or earn 3 achievements (0/3) "
-                         "(or meet the Dust Bunny in a fight)")
+        helper = BY_ID["help"]
+        self.assertFalse(lesson.unlocked(s, helper))
+        self.assertEqual(reader.how_to_unlock(s, helper),
+                         "pass “Reading a command line”: earn “Exit code”, or earn 3 achievements (0/3)")
         s["commands"] = 10 ** 6                                  # counters alone open nothing now
-        self.assertFalse(lesson.unlocked(s, paths))
+        self.assertFalse(lesson.unlocked(s, helper))
         s["achievements"].append("exit_code")                    # no need to read command_line first
-        self.assertTrue(lesson.unlocked(s, paths))
+        self.assertTrue(lesson.unlocked(s, helper))
 
     def test_passed_by_a_fight_an_own_achievement_or_the_total(self):
-        paths = BY_ID["paths"]                                   # depth 2: 6 achievements in all
+        paths = BY_ID["paths"]
+        n = lesson.to_pass(paths)                                # 3 per step of depth
         s = state.default()
         self.assertFalse(lesson.passed(s, paths))
         s["challenges"].append("dust_bunny")
@@ -152,9 +152,9 @@ class UnlockTest(unittest.TestCase):
         s["achievements"].append("shortcut")
         self.assertTrue(lesson.passed(s, paths))
         s = state.default()
-        s["achievements"] = [a.id for a in achievements.ALL if a.id not in ("builder", "shortcut")][:5]
+        s["achievements"] = [a.id for a in achievements.ALL if a.id not in ("builder", "shortcut")][:n - 1]
         self.assertFalse(lesson.passed(s, paths))
-        s["achievements"] = [a.id for a in achievements.ALL if a.id not in ("builder", "shortcut")][:6]
+        s["achievements"] = [a.id for a in achievements.ALL if a.id not in ("builder", "shortcut")][:n]
         self.assertTrue(lesson.passed(s, paths))
 
     def test_next_step_until_mastered(self):
@@ -205,7 +205,7 @@ class UnlockTest(unittest.TestCase):
                     self.assertLess(BY_ID[before]["order"], le["order"], "the library lists the path in order")
         depths = lesson.depths()                                 # raises on a loop
         self.assertEqual(depths["command_line"], 1)
-        self.assertEqual(depths["paths"], 2)
+        self.assertEqual(depths["help"], 2)
 
     def test_every_lesson_can_be_unlocked(self):
         s = state.default()
@@ -254,10 +254,55 @@ class ReaderTest(unittest.TestCase):
         with state.locked() as s:
             s.update(commands=600, achievements=["exit_code"])            # command_line mastered
         lib = reader.Library(LESSONS)
-        self.assertEqual(lib.lessons[lib.pos]["id"], "computer")
+        self.assertEqual(lib.lessons[lib.pos]["id"], "help")
         rows = {text for r, c, text in lib.list_screen(80, 40)}
-        self.assertTrue(any(reader.NEXT in t and "Inside the computer" in t for t in rows))
+        self.assertTrue(any(reader.NEXT in t and "Help yourself" in t for t in rows))
         self.assertFalse(any(reader.NEXT in t and "Reading a command line" in t for t in rows))
+
+    def test_a_warm_up_on_the_lessons_before_the_first_time(self):
+        """Owner: a few questions on what came just before, the first time a lesson opens; Esc skips."""
+        with state.locked() as s:
+            s["achievements"].append("exit_code")
+        lib = reader.Library(LESSONS, "help")
+        self.assertTrue(lib.quiz)
+        self.assertTrue({q["id"] for q in lib.quiz} <= set(BY_ID["command_line"]["recall"]))
+        rows = " ".join(text for r, c, text in lib.screen(80, 24))
+        self.assertIn(lib.quiz[0]["q"], rows)
+        lib.key("enter")                                        # answer
+        self.assertIn(lib.quiz[0]["explain"].split()[0], " ".join(t for r, c, t in lib.screen(80, 24)))
+        while lib.quiz:                                         # answer (if not yet), then next
+            if lib.chosen is None:
+                lib.key("enter")
+            lib.key("enter")
+        self.assertEqual(lib.lesson["id"], "help")             # then the pages
+        self.assertIn("🦉", lib.screen(80, 24)[0][2])
+        lib.key("quit")
+        lib.key("enter")                                        # opened before: no warm-up again
+        self.assertEqual(lib.quiz, [])
+
+    def test_the_warm_up_can_be_skipped(self):
+        with state.locked() as s:
+            s["achievements"].append("exit_code")
+        lib = reader.Library(LESSONS, "help")
+        lib.key("quit")
+        self.assertEqual(lib.quiz, [])
+        self.assertEqual(lib.lesson["id"], "help")
+
+    def test_every_recall_question_exists(self):
+        from bashou.adventure import quiz
+        for le in LESSONS:
+            self.assertTrue(le.get("recall"), le["id"])
+            for qid in le["recall"]:
+                with self.subTest(lesson=le["id"], question=qid):
+                    self.assertIn(qid, {q["id"] for q in quiz.bank(qid.rsplit("-", 2)[0], "en")})
+
+    def test_the_editor_pages_follow_the_setting(self):
+        for editor, other in (("nano", "vi"), ("vi", "nano")):
+            with state.locked() as s:
+                s.setdefault("settings", {})["editor"] = editor
+            ed = next(le for le in reader.Library(LESSONS).all if le["id"] == "editor")
+            self.assertTrue(any(p.get("editor") == editor for p in ed["pages"]))
+            self.assertFalse(any(p.get("editor") == other for p in ed["pages"]))
 
     def test_a_locked_lesson_says_how_to_open_it(self):
         lib = reader.Library(LESSONS)

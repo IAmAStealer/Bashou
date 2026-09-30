@@ -1,6 +1,6 @@
 {
  "id": "network",
- "order": 230,
+ "order": 260,
  "skill": [
   "linux",
   "network"
@@ -11,6 +11,11 @@
  "masters": [
   "achievement headers",
   "achievement resolver"
+ ],
+ "recall": [
+  "network-1-01",
+  "network-1-02",
+  "network-1-04"
  ],
  "title": "Networks: addresses and ports",
  "summary": "IP addresses, names, ports, and what listening on 0.0.0.0 means.",

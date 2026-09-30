@@ -1,6 +1,6 @@
 {
  "id": "tcp",
- "order": 480,
+ "order": 510,
  "skill": "network",
  "after": [
   "ip_addr"
@@ -11,6 +11,10 @@
  "masters": [
   "won loopback_lurker",
   "won handshake_heron"
+ ],
+ "recall": [
+  "network-2-10",
+  "network-2-11"
  ],
  "fights": [
   "loopback_lurker",

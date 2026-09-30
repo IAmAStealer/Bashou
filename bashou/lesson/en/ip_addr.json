@@ -1,6 +1,6 @@
 {
  "id": "ip_addr",
- "order": 440,
+ "order": 470,
  "skill": "network",
  "after": [
   "network"
@@ -11,6 +11,10 @@
  "masters": [
   "won address_adder",
   "won subnet_sprite"
+ ],
+ "recall": [
+  "network-2-01",
+  "network-2-03"
  ],
  "fights": [
   "address_adder",

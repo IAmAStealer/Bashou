@@ -1,6 +1,6 @@
 {
  "id": "sql_write",
- "order": 390,
+ "order": 420,
  "skill": "sql",
  "after": [
   "sql_select"
@@ -12,6 +12,11 @@
   "won table_troll",
   "won insert_imp",
   "won update_urchin"
+ ],
+ "recall": [
+  "sql-1-07",
+  "sql-1-08",
+  "sql-1-09"
  ],
  "fights": [
   "table_troll",

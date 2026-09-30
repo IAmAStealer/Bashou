@@ -1,6 +1,6 @@
 {
  "id": "rust_vars",
- "order": 370,
+ "order": 400,
  "skill": "rust",
  "after": [
   "stack_heap"
@@ -9,6 +9,11 @@
   "won mut_marmot",
   "won shadow_shade",
   "won byte_basilisk"
+ ],
+ "recall": [
+  "rust-1-02",
+  "rust-1-11",
+  "rust-1-13"
  ],
  "fights": [
   "mut_marmot",

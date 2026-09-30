@@ -1,6 +1,6 @@
 {
  "id": "ipv6",
- "order": 450,
+ "order": 480,
  "skill": "network",
  "after": [
   "ip_addr"
@@ -10,6 +10,10 @@
  ],
  "masters": [
   "won six_serpent"
+ ],
+ "recall": [
+  "network-2-04",
+  "network-2-05"
  ],
  "fights": [
   "six_serpent"

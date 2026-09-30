@@ -10,9 +10,10 @@ import random
 import sys
 
 from .. import achievements, challenges, creatures, progress, render, skills, state, terminal
+from ..adventure import quiz
 from ..i18n import _
-from . import HERE, load, met, progress_of, read, shown, skills_of, status, to_pass, unlocked, waiting_for
-from ..render import ESC, BOLD, DIM, RESET, REV
+from . import HERE, by_id, load, met, progress_of, read, shown, skills_of, status, to_pass, unlocked, waiting_for
+from ..render import ESC, BOLD, DIM, RESET, REV, GOOD, BAD
 
 ACCENT = f"{ESC}[38;2;240;200;110m"
 CMD = f"{ESC}[38;2;130;210;120m"
@@ -114,10 +115,82 @@ def group(lesson):
     return _(skills.SKILLS[skill].text).split(":")[0] if skill else _("First steps")
 
 
+def for_editor(lessons, editor):
+    """The lessons with only the pages of your editor (`bashou config editor`): a page may say
+    "editor": "nano" or "vi"."""
+    return [dict(le, pages=[p for p in le["pages"] if p.get("editor", editor) == editor]) for le in lessons]
+
+
+# --- warm-up: a few questions on the lessons before, the first time a lesson opens (owner) ------------
+
+WARMUP = 2
+
+
+def recall_ids(s, lesson):
+    """The `recall` questions of the lessons this one comes after (those of skills you learn)."""
+    lessons = by_id()
+    ids = []
+    for before in (lessons[p] for p in lesson.get("after", [])):
+        if not skills_of(before) or any(skills.wanted(s, k) for k in skills_of(before)):
+            ids += [q for q in before.get("recall", []) if q not in ids]
+    return ids
+
+
+def warmup(s, lesson, rng=None):
+    """Up to WARMUP questions, their choices shuffled like in the adventure (quiz.pick)."""
+    rng = rng or random.Random()
+    ids = recall_ids(s, lesson)
+    found = []
+    for qid in rng.sample(ids, min(WARMUP, len(ids))):
+        q = next((q for q in quiz.bank(qid.rsplit("-", 2)[0]) if q["id"] == qid), None)
+        if q:
+            order = list(range(len(q["choices"])))
+            rng.shuffle(order)
+            found.append({**q, "choices": [q["choices"][i] for i in order], "answer": order.index(q["answer"])})
+    return found
+
+
+def warmup_screen(lesson, questions, total, pos, chosen, cols, lines):
+    """(row, col, text) pieces: the question, its choices, and once answered, the explanation."""
+    q = questions[0]
+    width = min(cols - 4, 76)
+    head = "🦉 " + _("Warm-up before “{title}”").format(title=lesson["title"]) + f" · {total - len(questions) + 1}/{total}"
+    out = [(1 + k, 2, part) for k, part in enumerate(render.fit(f"{TITLE}{BOLD}{head}", width))]
+    row = len(out) + 2
+    for part in render.wrap(_("What you learned just before: does it still come back?"), width, 2):
+        out.append((row, 2, DIM + part + RESET))
+        row += 1
+    row += 1
+    for part in render.wrap(q["q"], width, 5):
+        out.append((row, 2, BOLD + part + RESET))
+        row += 1
+    row += 1
+    for i, choice in enumerate(q["choices"]):
+        if chosen is None:
+            style, mark = (REV if i == pos else ""), " "
+        else:
+            style, mark = ((GOOD, "✔") if i == q["answer"] else (BAD, "✘") if i == chosen else (DIM, " "))
+        for k, part in enumerate(render.wrap(choice, width - 4, 3)):
+            out.append((row, 3, f"{style}{mark if k == 0 else ' '} {part} {RESET}"))
+            row += 1
+    if chosen is not None:
+        row += 1
+        verdict = _("Right!") if chosen == q["answer"] else _("Not quite.")
+        for part in render.wrap(verdict + " " + q["explain"], width, 12):
+            out.append((row, 2, part))
+            row += 1
+        keys = _("Enter: next question") if len(questions) > 1 else _("Enter: open the lesson")
+    else:
+        keys = _("↑/↓, Enter: answer · q: skip the warm-up")
+    out.append((lines, 2, DIM + keys + RESET))
+    return out
+
+
 class Library:
     def __init__(self, lessons, open_id=None):
-        self.all = lessons
         self.s = state.load()
+        self.all = lessons = for_editor(lessons, state.setting(self.s, "editor"))
+        self.quiz, self.choice, self.chosen = [], 0, None     # the warm-up, while it's on
         self.lessons = shown(self.s, lessons)
         self.pos = 0
         self.lesson = None             # the lesson being read, or None on the list
@@ -190,6 +263,9 @@ class Library:
         if not unlocked(self.s, le):
             self.message = _("Not yet. To unlock it: {how}").format(how=how_to_unlock(self.s, le))
             return
+        if le["id"] not in progress_of(self.s)["opened"]:
+            self.quiz, self.choice, self.chosen = warmup(self.s, le), 0, None
+            self.quiz_total = len(self.quiz)
         with state.locked() as s:
             p = progress_of(s)
             if le["id"] not in p["opened"]:
@@ -220,7 +296,23 @@ class Library:
             if notes:
                 self.message += " " + " ".join(notes)
 
+    def warmup_key(self, k):
+        if k == "quit":
+            self.quiz = []
+        elif self.chosen is None:
+            if k in ("up", "left"):
+                self.choice = (self.choice - 1) % len(self.quiz[0]["choices"])
+            elif k in ("down", "right"):
+                self.choice = (self.choice + 1) % len(self.quiz[0]["choices"])
+            elif k == "enter":
+                self.chosen = self.choice
+        elif k == "enter":
+            self.quiz, self.choice, self.chosen = self.quiz[1:], 0, None
+        return True
+
     def key(self, k):
+        if self.lesson and self.quiz:
+            return self.warmup_key(k)
         if self.lesson:
             last = len(self.lesson["pages"]) - 1
             if k in ("right", "down"):
@@ -247,10 +339,16 @@ class Library:
         self.message = ""
         return True
 
+    def screen(self, cols, lines):
+        if self.lesson and self.quiz:
+            return warmup_screen(self.lesson, self.quiz, self.quiz_total, self.choice, self.chosen, cols, lines)
+        if self.lesson:
+            return page_screen(self.lesson, self.page, cols, lines, self.breath, self.blink)
+        return self.list_screen(cols, lines)
+
     def draw(self):
         size = os.get_terminal_size()
-        pieces = (page_screen(self.lesson, self.page, size.columns, size.lines, self.breath, self.blink)
-                  if self.lesson else self.list_screen(size.columns, size.lines))
+        pieces = self.screen(size.columns, size.lines)
         out = [f"{ESC}[H{ESC}[2J"]
         for row, col, text in pieces:
             if 1 <= row <= size.lines:                     # below the last line the terminal would scroll

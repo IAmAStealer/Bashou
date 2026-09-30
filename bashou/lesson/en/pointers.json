@@ -1,6 +1,6 @@
 {
  "id": "pointers",
- "order": 310,
+ "order": 340,
  "skill": "c",
  "after": [
   "stack_heap"
@@ -8,6 +8,11 @@
  "masters": [
   "won fencepost_fiend",
   "won overflow_ogre"
+ ],
+ "recall": [
+  "c-1-05",
+  "c-1-06",
+  "c-1-04"
  ],
  "fights": [
   "fencepost_fiend",

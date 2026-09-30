@@ -1,6 +1,6 @@
 {
  "id": "archives",
- "order": 190,
+ "order": 220,
  "skill": "linux",
  "after": [
   "disk",
@@ -9,6 +9,9 @@
  "masters": [
   "achievement packer",
   "achievement unpacker"
+ ],
+ "recall": [
+  "bash-1-20"
  ],
  "title": "Archives: tar and gzip",
  "summary": "Pack a folder into one file, look inside, and unpack it where you want.",

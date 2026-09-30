@@ -1,6 +1,6 @@
 {
  "id": "grep",
- "order": 110,
+ "order": 130,
  "skill": "bash",
  "after": [
   "reading"
@@ -8,6 +8,9 @@
  "masters": [
   "won needle_gnat",
   "achievement digger"
+ ],
+ "recall": [
+  "bash-1-06"
  ],
  "fights": [
   "needle_gnat",

@@ -1,6 +1,6 @@
 {
  "id": "permissions",
- "order": 170,
+ "order": 200,
  "skill": "linux",
  "after": [
   "users"
@@ -8,6 +8,11 @@
  "masters": [
   "achievement octal",
   "achievement symbolic"
+ ],
+ "recall": [
+  "linux-1-08",
+  "linux-1-09",
+  "bash-2-08"
  ],
  "title": "Permissions: who can do what",
  "summary": "Read the -rwxr-x--- of ls -l, and change it with chmod without opening everything.",

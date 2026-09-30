@@ -1,12 +1,16 @@
 {
  "id": "computer",
- "order": 20,
+ "order": 30,
  "after": [
   "command_line"
  ],
  "masters": [
   "achievement memory | achievement disk",
   "achievement census"
+ ],
+ "recall": [
+  "linux-1-07",
+  "linux-1-04"
  ],
  "title": "Inside the computer: CPU and RAM",
  "summary": "What the processor, the memory and the disk each do, and why a program is loaded before it runs.",

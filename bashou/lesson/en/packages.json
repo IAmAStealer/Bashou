@@ -1,6 +1,6 @@
 {
  "id": "packages",
- "order": 250,
+ "order": 280,
  "skill": [
   "linux",
   "debian",
@@ -12,6 +12,11 @@
  "masters": [
   "won version_vole | won release_raven",
   "won stowaway_stoat | won census_centipede"
+ ],
+ "recall": [
+  "debian-1-01",
+  "rocky-1-01",
+  "debian-2-06"
  ],
  "fights": [
   "version_vole",

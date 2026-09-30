@@ -1,6 +1,6 @@
 {
  "id": "pipes",
- "order": 120,
+ "order": 150,
  "skill": "bash",
  "after": [
   "streams",
@@ -9,6 +9,10 @@
  "masters": [
   "achievement plumber",
   "achievement tally"
+ ],
+ "recall": [
+  "bash-2-11",
+  "bash-1-06"
  ],
  "fights": [
   "pipe_eel",

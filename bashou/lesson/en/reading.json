@@ -1,12 +1,15 @@
 {
  "id": "reading",
- "order": 50,
+ "order": 70,
  "after": [
-  "files"
+  "editor"
  ],
  "masters": [
   "tool less 3",
   "tool tail 3"
+ ],
+ "recall": [
+  "linux-1-12"
  ],
  "fights": [
   "first_line_imp",

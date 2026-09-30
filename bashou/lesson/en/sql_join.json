@@ -1,12 +1,15 @@
 {
  "id": "sql_join",
- "order": 400,
+ "order": 430,
  "skill": "sql",
  "after": [
   "sql_write"
  ],
  "masters": [
   "won join_jackal"
+ ],
+ "recall": [
+  "sql-2-01"
  ],
  "fights": [
   "join_jackal"

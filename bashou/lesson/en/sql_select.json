@@ -1,12 +1,16 @@
 {
  "id": "sql_select",
- "order": 380,
+ "order": 410,
  "skill": "sql",
  "after": [
   "text_tools"
  ],
  "masters": [
   "won query_quokka"
+ ],
+ "recall": [
+  "sql-1-04",
+  "sql-1-05"
  ],
  "fights": [
   "query_quokka"

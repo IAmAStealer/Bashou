@@ -1,6 +1,6 @@
 {
  "id": "py_flow",
- "order": 340,
+ "order": 370,
  "skill": "python",
  "after": [
   "py_start"
@@ -12,6 +12,10 @@
   "won dict_djinn",
   "won loop_lich",
   "won ouroboros"
+ ],
+ "recall": [
+  "python-1-11",
+  "python-2-08"
  ],
  "fights": [
   "dict_djinn",

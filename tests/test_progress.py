@@ -196,7 +196,7 @@ class ProgressTest(unittest.TestCase):
         self.s["skills"] = ["rust"]
         self.s["achievements"] += [a.id for a in achievements.ALL if a.pet != "spark"]
         self.s.update(commands=500, fights_won=4)
-        self.s["tools"].update(less=3, tail=3, ls=50)
+        self.s["tools"].update(less=3, tail=3, ls=50, man=1, nano=3)
         self.s["challenges"] += ["mut_marmot", "const_condor", "shadow_shade", "byte_basilisk"]
         self.s["lessons"]["read"] = [le["id"] for le in lesson.shown(self.s, lesson.english())]
         progress.check(self.s)

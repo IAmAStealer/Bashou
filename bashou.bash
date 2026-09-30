@@ -130,16 +130,17 @@ _bashou_languages="en fr"
 _bashou_dev="unlock-all stage stage-all level threat restore"
 _bashou_challenges="line_moth column_crab jumble_sprite last_word_wisp first_line_imp needle_gnat field_wasp dust_bunny verse_viper peak_harpy grep_hydra awk_golem find_wraith uniq_swarm sed_serpent ps_phantom pipe_eel colon_cobra semicolon_slug list_leech dict_djinn loop_lich ouroboros json_jinn base64_banshee percent_poltergeist injection_imp token_trickster leak_lurker fencepost_fiend stack_specter overflow_ogre linker_lynx warning_wraith segfault_salamander breakpoint_beetle mut_marmot const_condor shadow_shade byte_basilisk version_vole candidate_crow stowaway_stoat autoremove_adder release_raven hitchhiker_hare census_centipede mirror_mimic repo_revenant enabled_ettin indent_imp stage_specter secret_sprite needs_newt manual_mole query_quokka table_troll insert_imp update_urchin join_jackal upsert_unicorn plaintext_pixie cipher_crow forger_ferret vault_vole cleartext_cricket negation_gnome or_ogre loopback_lurker address_adder subnet_sprite route_raven resolver_rook six_serpent handshake_heron refused_revenant nxdomain_nixie established_ettin"
 _bashou_security="1 2 3 4 5 6"
-_bashou_lessons="list command_line computer paths files reading wildcards variables logic streams quotes grep pipes text_tools awk_sed find users permissions disk archives processes scripts loops network git packages repos services compilation gcc_use stack_heap pointers debugger py_start py_flow py_names py_data rust_vars sql_select sql_write sql_join keys pass pipeline ip_addr ipv6 dns dns_tools tcp net_debug"
+_bashou_lessons="list command_line help computer paths files editor reading wildcards variables logic streams quotes grep regex pipes text_tools awk_sed find users permissions disk archives processes scripts loops network git packages repos services compilation gcc_use stack_heap pointers debugger py_start py_flow py_names py_data rust_vars sql_select sql_write sql_join keys pass pipeline ip_addr ipv6 dns dns_tools tcp net_debug"
 
 _bashou_complete() {
   local cur=${COMP_WORDS[COMP_CWORD]} words
   case "$COMP_CWORD:${COMP_WORDS[1]}:${COMP_WORDS[2]}" in
     1:*)              words=$_bashou_commands ;;
     2:swap:*)         words="starter $_bashou_pets" ;;
-    2:config:*)       words="list bubble updates size talk quiet language skills" ;;
+    2:config:*)       words="list bubble updates size talk quiet editor language skills" ;;
     2:update:*)       words="--version" ;;
     3:config:size)    words="small large default" ;;
+    3:config:editor)  words="nano vi default" ;;
     2:arena:*)        words="fight security" ;;
     3:arena:security) words=$_bashou_security ;;
     2:lesson:*)       words=$_bashou_lessons ;;

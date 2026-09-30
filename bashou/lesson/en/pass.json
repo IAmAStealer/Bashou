@@ -1,6 +1,6 @@
 {
  "id": "pass",
- "order": 420,
+ "order": 450,
  "skill": "linux",
  "after": [
   "keys",
@@ -12,6 +12,10 @@
  "masters": [
   "won vault_vole",
   "won cleartext_cricket"
+ ],
+ "recall": [
+  "linux-1-14",
+  "linux-1-15"
  ],
  "fights": [
   "vault_vole",

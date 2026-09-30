@@ -1,12 +1,15 @@
 {
  "id": "wildcards",
- "order": 60,
+ "order": 80,
  "after": [
   "reading"
  ],
  "masters": [
   "tool ls 50",
   "fights 3"
+ ],
+ "recall": [
+  "bash-1-11"
  ],
  "title": "Wildcards: * and ?",
  "summary": "How one short pattern becomes a list of file names, before the command even starts.",

@@ -1,12 +1,16 @@
 {
  "id": "paths",
- "order": 30,
+ "order": 40,
  "after": [
-  "command_line"
+  "help"
  ],
  "masters": [
   "achievement builder",
   "achievement shortcut"
+ ],
+ "recall": [
+  "bash-1-01",
+  "bash-1-03"
  ],
  "fights": [
   "dust_bunny"

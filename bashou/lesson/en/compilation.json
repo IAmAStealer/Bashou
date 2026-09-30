@@ -1,6 +1,6 @@
 {
  "id": "compilation",
- "order": 280,
+ "order": 310,
  "skill": "c",
  "after": [
   "computer",
@@ -10,6 +10,10 @@
  "masters": [
   "won semicolon_slug",
   "won fencepost_fiend | won leak_lurker | won stack_specter"
+ ],
+ "recall": [
+  "c-1-03",
+  "c-1-02"
  ],
  "fights": [
   "semicolon_slug"

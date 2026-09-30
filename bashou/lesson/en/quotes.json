@@ -1,14 +1,17 @@
 {
  "id": "quotes",
- "order": 100,
+ "order": 120,
  "skill": "bash",
  "after": [
-  "variables",
+  "logic",
   "streams"
  ],
  "masters": [
   "achievement capture",
   "fights 5"
+ ],
+ "recall": [
+  "bash-2-07"
  ],
  "title": "Quotes: ' and \"",
  "summary": "Single quotes keep text as it is, double quotes still expand $: when to use which.",

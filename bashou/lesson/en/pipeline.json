@@ -1,6 +1,6 @@
 {
  "id": "pipeline",
- "order": 430,
+ "order": 460,
  "skill": "cicd",
  "after": [
   "git",
@@ -10,6 +10,11 @@
  "masters": [
   "won stage_specter",
   "won needs_newt"
+ ],
+ "recall": [
+  "cicd-1-10",
+  "cicd-1-12",
+  "cicd-2-11"
  ],
  "fights": [
   "indent_imp",

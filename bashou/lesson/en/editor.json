@@ -1,0 +1,124 @@
+{
+ "id": "editor",
+ "order": 60,
+ "after": [
+  "files"
+ ],
+ "masters": [
+  "tool nano 3 | tool vim 3 | tool vi 3"
+ ],
+ "recall": [
+  "bash-1-15",
+  "bash-1-16"
+ ],
+ "title": "Editing a file in the terminal",
+ "summary": "Open a file, change it, save it and quit, without leaving the terminal: nano or vi, your choice.",
+ "pages": [
+  {
+   "scheme": [
+    " $ nano notes.txt      or      $ vi notes.txt",
+    "   ┌──────────────────────────┐",
+    "   │ buy bread                │",
+    "   │ call the vet_            │",
+    "   └──────────────────────────┘"
+   ],
+   "point": 0,
+   "mark": [
+    "nano",
+    "vi"
+   ],
+   "text": [
+    "On a server there is no mouse and no window: you edit files right in the terminal.",
+    "",
+    "- nano is simple: what you type goes into the file. vi is everywhere, even on the smallest systems.",
+    "- The file doesn't exist yet? It's created when you save.",
+    "- bashou config editor picks the one your hints and this lesson show."
+   ]
+  },
+  {
+   "editor": "nano",
+   "scheme": [
+    " ┌ notes.txt ────────────────────┐",
+    " │ buy bread                     │",
+    " │ call the vet_                 │",
+    " └───────────────────────────────┘",
+    "  ^O Write Out   ^X Exit   ^W Where Is",
+    "  ^K Cut         ^U Paste"
+   ],
+   "point": 4,
+   "mark": [
+    "^O",
+    "^X"
+   ],
+   "text": [
+    "In nano you type straight into the file. The keys at the bottom are shortcuts: ^ means Ctrl.",
+    "",
+    "- Ctrl+O saves (Enter confirms the name), Ctrl+X quits. With unsaved changes it asks \"Save modified buffer?\": Y saves, N drops them.",
+    "- Ctrl+W searches (newer nano shows it as ^F; both work), Ctrl+K cuts a whole line, Ctrl+U pastes it back."
+   ]
+  },
+  {
+   "editor": "vi",
+   "scheme": [
+    " normal mode  ── i ──▶  insert mode",
+    "  (commands)  ◀─ Esc ─   (you type text)",
+    "",
+    "  :w  save    :q  quit    :wq  both",
+    "  :q! quit without saving"
+   ],
+   "point": 0,
+   "mark": [
+    "i ──▶",
+    "◀─ Esc"
+   ],
+   "text": [
+    "vi has two modes. It opens in normal mode, where keys are commands, not text.",
+    "",
+    "- i switches to insert mode: now you type text. Esc goes back to normal mode.",
+    "- In normal mode, : starts a command: :w saves, :q quits, but refuses if you have unsaved changes: then :wq saves and quits, :q! quits and drops them.",
+    "- Lost? Press Esc twice: you're back in normal mode."
+   ]
+  },
+  {
+   "editor": "vi",
+   "scheme": [
+    "  buy bread                buy bread",
+    "▶ call the vet   ── dd ─▶  feed the cat",
+    "  feed the cat",
+    "                 ◀─ u ──",
+    "",
+    "  x  one char   /vet  search   n  next"
+   ],
+   "point": 1,
+   "mark": [
+    "dd",
+    "u ──"
+   ],
+   "text": [
+    "A few normal-mode keys cover most edits.",
+    "",
+    "- /word searches, n jumps to the next match.",
+    "- dd deletes the line under the cursor, x one character, u undoes the last change.",
+    "0 goes to the start of the line, $ to the end."
+   ]
+  },
+  {
+   "scheme": [
+    " main.c:12:5: error: expected ';'",
+    "        ▲▲",
+    " $ nano +12 main.c     $ vi +12 main.c"
+   ],
+   "point": 2,
+   "mark": [
+    "12",
+    "+12"
+   ],
+   "text": [
+    "Errors often give a line number. Open the file right on that line with +N.",
+    "",
+    "- git, crontab and others open an editor too: they use $EDITOR. Set it once; new terminals will use it:",
+    "$ echo 'export EDITOR=nano' >> ~/.bashrc"
+   ]
+  }
+ ]
+}

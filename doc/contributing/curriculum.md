@@ -38,10 +38,11 @@ A topic is complete when it has all four: questions, a lesson, one or more fight
 
 `A → B`: B comes after A. `A + B → C`: C needs both.
 
-- First steps: command_line → computer; command_line → paths → files → reading → wildcards →
-  variables; files + reading → git
-- Bash: reading → streams; reading → grep; streams + grep → pipes → text_tools → awk_sed;
-  wildcards → find; variables + streams → quotes → scripts → loops
+- First steps: command_line → computer; command_line → help → paths → files → editor → reading →
+  wildcards → variables
+- Bash: reading → streams; reading → grep → regex; streams + grep → pipes → text_tools;
+  regex + text_tools → awk_sed; wildcards → find; variables → logic; logic + streams → quotes →
+  scripts → loops; scripts → git
 - Linux: files → users → permissions → keys; keys + scripts → pass; files → disk;
   disk + find → archives; computer + users → processes
 - systemd: processes + streams → services
@@ -55,6 +56,12 @@ A topic is complete when it has all four: questions, a lesson, one or more fight
 - SQL: text_tools → sql_select → sql_write → sql_join
 - CI/CD: git + scripts + pass → pipeline
 
+## Warm-up
+
+The first time a lesson opens, the library asks 2 questions from the `recall` lists of the lessons
+before it (adventure question ids), explanation shown either way, Esc skips. Recall comes back
+right when it's needed, on the brick you're about to build on. Every lesson has a `recall` list.
+
 ## Tracks
 
 Lessons by theme, with the fights they prepare. The library lists them in `order`, which follows the
@@ -63,9 +70,11 @@ paths above.
 ### First steps (everyone)
 
 1. `command_line` — how the shell reads a line
+1. `help` — --help, man, reading an error message
 2. `computer` — CPU, RAM, disk
 3. `paths` — the file tree · Dust Bunny
 4. `files` — mkdir, cp, mv, rm
+4. `editor` — nano or vi (`bashou config editor`): open, change, save, quit
 5. `reading` — cat, less, head, tail · First-line Imp, Last-word Wisp
 6. `wildcards` — * and ?
 7. `variables` — shell variables, $( ), export
@@ -76,6 +85,7 @@ paths above.
 1. `streams` — stdout, stderr, redirections
 2. `quotes` — ' and "
 3. `grep` · Needle Gnat, Log Hydra
+3. `regex` — a first taste of patterns, enough for awk and sed
 4. `text_tools` — wc, sort, cut, uniq · Line Moth, Column Crab, Jumble Sprite, Peak Harpy, Echo Swarm
 5. `pipes` — chains, step by step · Knot Eel, Echo Swarm, Peak Harpy
 6. `awk_sed` — columns and edits · Field Wasp, Ledger Golem, Verse Viper, Typo Serpent

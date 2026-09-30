@@ -1,6 +1,6 @@
 {
  "id": "loops",
- "order": 220,
+ "order": 250,
  "skill": "bash",
  "after": [
   "scripts"
@@ -8,6 +8,10 @@
  "masters": [
   "achievement loop",
   "achievement reader"
+ ],
+ "recall": [
+  "bash-2-03",
+  "bash-2-05"
  ],
  "title": "Loops: for and while read",
  "summary": "Repeat a command for each file, or for each line of a file.",

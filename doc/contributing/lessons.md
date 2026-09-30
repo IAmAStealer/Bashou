@@ -23,6 +23,7 @@ No code needed: a lesson is one JSON file.
 {"id": "stack_heap", "order": 110, "skill": "c",
  "after": ["gcc_use"],
  "masters": ["won leak_lurker", "won stack_specter"],
+ "recall": ["c-1-07", "c-1-01"],
  "title": "C memory: the stack and the heap",
  "summary": "Where your variables live, why malloc needs free, and what a leak is.",
  "pages": [
@@ -46,6 +47,11 @@ No code needed: a lesson is one JSON file.
 - `masters`: what shows the player knows it now (usually the fights it prepares). All must hold;
   `a | b` holds when one side does. Conditions: `commands N`, `tool NAME N` (used N times),
   `won FIGHT_ID`, `fights N` (won), `achievement ID`.
+- `recall`: ids of adventure questions about this lesson (`bashou/adventure/questions`). The first
+  time a lesson opens, the library asks 2 of the `recall` questions of the lessons before it: a
+  warm-up on the bricks it builds on.
+- `editor` (on a page, optional): `"nano"` or `"vi"`: the page only shows to players with that
+  editor (`bashou config editor`). The translation keeps the same pages.
 - `fights`: the fights this lesson helps with. **Every fight needs at least one lesson** (a test checks
   it): meeting one of these fights opens the lesson even when the lessons before it aren't passed, and `lesson` in
   the arena opens it. Place the lesson in its track in [curriculum.md](curriculum.md).

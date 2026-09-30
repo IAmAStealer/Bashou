@@ -1,6 +1,6 @@
 {
  "id": "processes",
- "order": 200,
+ "order": 230,
  "skill": [
   "linux",
   "bash"
@@ -13,6 +13,10 @@
   "achievement census",
   "achievement signal",
   "won ps_phantom"
+ ],
+ "recall": [
+  "linux-1-04",
+  "linux-1-11"
  ],
  "fights": [
   "ps_phantom"

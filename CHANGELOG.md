@@ -22,6 +22,15 @@ Every release has a section here, written for players. CI refuses to tag a relea
   and `||` (or). Two new fights put it into practice: the Negation Gnome turns a party door's guard
   around, and the Or Ogre makes a backup script copy when only half of what it needs is there. The
   Sage Owl teaches it on the adventure's Logic road too, with a chest to open and new questions.
+- Three new lessons fill gaps at the start of the path. "Help yourself" shows how to read `--help`,
+  `man` and an error message, so you're never stuck for long. "Editing a file in the terminal"
+  teaches nano or vi: Bashou asks which one when you start (`bashou config editor` changes it), and
+  the hints of the fights where you fix a file show that editor's keys. "Patterns" is a gentle first
+  taste of regular expressions, just what `awk` and `sed` need next.
+- Logic now comes before quotes and scripts, since scripts are full of `if` and `&&`, and git comes
+  after scripts.
+- The first time you open a lesson, the Sage Owl warms you up with two questions about the lessons
+  just before it, with the explanation either way. Esc skips it.
 
 ## v0.6.5 — 2026-09-29
 

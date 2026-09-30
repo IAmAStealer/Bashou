@@ -1,12 +1,15 @@
 {
  "id": "variables",
- "order": 70,
+ "order": 90,
  "after": [
   "wildcards"
  ],
  "masters": [
   "achievement capture",
   "achievement loop"
+ ],
+ "recall": [
+  "bash-2-02"
  ],
  "title": "Shell variables",
  "summary": "Store a value, use it with $, and pass it on to the programs you start.",

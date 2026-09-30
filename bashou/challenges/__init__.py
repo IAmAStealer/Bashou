@@ -18,6 +18,14 @@ def fill(text, meta):
     return text
 
 
+def with_editor(meta, editor):
+    """{editor} and {save_keys} in hints: the editor the player picked (`bashou config editor`)."""
+    keys = {"nano": _("Ctrl+O then Enter to save, Ctrl+X to quit"),
+            "vi": _("i to type, Esc when done, then :wq and Enter to save and quit")}
+    meta.setdefault("args", {}).update(editor=editor, save_keys=keys.get(editor, keys["nano"]))
+    return meta
+
+
 HELP_HINT = ("Ask {tool} itself: `{tool} --help` (-h works for many tools, not all: `ls -h` means human sizes). "
              "The Usage line shows how to write it: [ ] is optional, ... means you can give several. "
              "Below, one line per option: short form (-x), long form (--xxx), what it does. "

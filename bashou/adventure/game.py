@@ -122,7 +122,8 @@ class Game:
         if getattr(self, "_meta_for", None) != self.trial.id:
             import tempfile
             with tempfile.TemporaryDirectory() as tmp:
-                self._meta = self.trial.setup(Path(tmp), random.Random(self.trial_seed()))
+                self._meta = challenges.with_editor(self.trial.setup(Path(tmp), random.Random(self.trial_seed())),
+                                                    state.setting(state.load(), "editor"))
                 if self.trial.cleanup:                  # only the names were needed: stop what it started
                     self.trial.cleanup(self._meta)
             self._meta_for = self.trial.id

@@ -1,8 +1,9 @@
 {
  "id": "awk_sed",
- "order": 140,
+ "order": 170,
  "skill": "bash",
  "after": [
+  "regex",
   "text_tools"
  ],
  "tools": [
@@ -12,6 +13,9 @@
  "masters": [
   "won field_wasp | won awk_golem",
   "won verse_viper | won sed_serpent"
+ ],
+ "recall": [
+  "bash-1-19"
  ],
  "fights": [
   "field_wasp",

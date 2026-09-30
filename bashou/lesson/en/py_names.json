@@ -1,12 +1,15 @@
 {
  "id": "py_names",
- "order": 350,
+ "order": 380,
  "skill": "python",
  "after": [
   "py_flow"
  ],
  "masters": [
   "won list_leech"
+ ],
+ "recall": [
+  "python-2-03"
  ],
  "fights": [
   "list_leech"

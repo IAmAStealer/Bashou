@@ -1,6 +1,6 @@
 {
  "id": "py_start",
- "order": 330,
+ "order": 360,
  "skill": "python",
  "after": [
   "scripts",
@@ -9,6 +9,10 @@
  ],
  "masters": [
   "won colon_cobra"
+ ],
+ "recall": [
+  "python-1-05",
+  "python-1-07"
  ],
  "fights": [
   "colon_cobra"

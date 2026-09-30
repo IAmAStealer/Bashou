@@ -1,6 +1,6 @@
 {
  "id": "stack_heap",
- "order": 300,
+ "order": 330,
  "skill": "c",
  "after": [
   "gcc_use"
@@ -8,6 +8,10 @@
  "masters": [
   "won leak_lurker",
   "won stack_specter"
+ ],
+ "recall": [
+  "c-1-07",
+  "c-1-01"
  ],
  "fights": [
   "leak_lurker",

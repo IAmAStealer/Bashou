@@ -1,6 +1,6 @@
 {
  "id": "keys",
- "order": 410,
+ "order": 440,
  "skill": "linux",
  "after": [
   "permissions"
@@ -8,6 +8,10 @@
  "masters": [
   "won forger_ferret",
   "achievement keymaker"
+ ],
+ "recall": [
+  "linux-2-12",
+  "linux-2-11"
  ],
  "fights": [
   "plaintext_pixie",

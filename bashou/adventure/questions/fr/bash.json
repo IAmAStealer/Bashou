@@ -323,5 +323,135 @@
   ],
   "answer": 0,
   "explain": "Lis-le étape par étape : sort regroupe les lignes identiques, uniq -c transforme chaque groupe en une ligne avec son nombre, sort -rn range ces nombres du plus grand au plus petit, head -3 garde les trois premiers. Sans le premier sort, uniq compte plusieurs fois la même ligne. C'est un des pipes les plus utiles pour lire des logs."
+ },
+ {
+  "id": "bash-1-15",
+  "level": 1,
+  "q": "Tu as ouvert notes.txt avec vi et commencé à taper, mais les lettres font des choses étranges au lieu de s'afficher. Pourquoi ?",
+  "choices": [
+   "Mode normal : les touches sont des commandes, i pour taper",
+   "Le fichier est en lecture seule",
+   "vi n'accepte que les majuscules",
+   "Le terminal est cassé : ferme-le"
+  ],
+  "answer": 0,
+  "explain": "vi a deux modes. Il s'ouvre en mode normal, où chaque touche est une commande (dd efface une ligne, x un caractère). Appuie sur i pour passer en mode insertion et taper ; Esc revient. Si tu es perdu, Esc puis :q! quitte sans rien enregistrer, et tu peux recommencer."
+ },
+ {
+  "id": "bash-1-16",
+  "level": 1,
+  "q": "Tu as modifié un fichier de config dans nano et tu appuies sur Ctrl+X. nano demande « Save modified buffer? ». Que te dit-il ?",
+  "choices": [
+   "Tes changements ne sont pas enregistrés : Y garde, N jette",
+   "Le fichier est abîmé",
+   "Il faut être root pour quitter",
+   "nano veut d'abord une copie de sauvegarde"
+  ],
+  "answer": 0,
+  "explain": "« Buffer » est le mot de nano pour le texte que tu modifies. Il te prévient avant de quitter avec des changements non enregistrés : Y les écrit (Entrée confirme le nom du fichier), N les abandonne. Ctrl+O enregistre sans quitter, pratique pour enregistrer souvent."
+ },
+ {
+  "id": "bash-1-17",
+  "level": 1,
+  "q": "Tu veux les lignes de app.log qui COMMENCENT par ERROR, pas celles qui le mentionnent plus loin. Quel motif ?",
+  "choices": [
+   "grep '^ERROR' app.log",
+   "grep 'ERROR$' app.log",
+   "grep '*ERROR' app.log",
+   "grep -v ERROR app.log"
+  ],
+  "answer": 0,
+  "explain": "Dans un motif, ^ veut dire « le début de la ligne » et $ « la fin ». '^ERROR' ne garde que les lignes qui commencent par ce mot : un message qui le cite plus loin ne correspond pas. -v ferait l'inverse : garder les lignes sans ERROR."
+ },
+ {
+  "id": "bash-2-12",
+  "level": 2,
+  "q": "Pourquoi écrire grep -E '[0-9]+' log.txt avec le motif entre guillemets simples ?",
+  "choices": [
+   "Pour que le shell laisse [ ] et + à grep",
+   "Les guillemets simples rendent grep plus rapide",
+   "grep ne lit que les motifs entre guillemets",
+   "Pour chercher aussi les guillemets"
+  ],
+  "answer": 0,
+  "explain": "Le shell lit ta ligne avant que grep ne démarre, et [ ], * et ? ont aussi un sens pour lui (motifs de noms de fichiers). Entre guillemets simples, le shell ne change rien, donc grep reçoit exactement le motif écrit. C'est une habitude à garder pour toutes les regex, dans grep, sed et awk."
+ },
+ {
+  "id": "bash-1-18",
+  "level": 1,
+  "q": "Il te faut tous les fichiers .log sous /var/log, dans tous ses sous-dossiers aussi. Quelle commande les trouve ?",
+  "choices": [
+   "find /var/log -name '*.log'",
+   "ls /var/log/*.log",
+   "grep .log /var/log",
+   "cat /var/log/*.log"
+  ],
+  "answer": 0,
+  "explain": "find parcourt un dossier et tous les dossiers qu'il contient, et garde ce qui correspond : -name '*.log' filtre sur les noms. ls /var/log/*.log ne regarde qu'un niveau, dans /var/log lui-même. grep cherche dans le contenu des fichiers, pas dans leurs noms."
+ },
+ {
+  "id": "bash-2-13",
+  "level": 2,
+  "q": "Pourquoi mettre le motif entre guillemets dans find . -name '*.txt' ?",
+  "choices": [
+   "Sans eux, le shell peut remplacer *.txt ici avant find",
+   "find refuse les motifs sans guillemets",
+   "Les guillemets rendent la recherche insensible à la casse",
+   "C'est juste une question de style"
+  ],
+  "answer": 0,
+  "explain": "Le shell remplace * avant de lancer une commande. Si le dossier courant contient notes.txt, un *.txt sans guillemets devient notes.txt, et find ne cherche plus que ce nom-là. Avec les guillemets, find reçoit le motif lui-même et l'applique dans chaque dossier."
+ },
+ {
+  "id": "bash-1-19",
+  "level": 1,
+  "q": "Chaque ligne de access.txt ressemble à `alice 200 /home`. Comment afficher seulement la deuxième colonne, le code de statut ?",
+  "choices": [
+   "awk '{print $2}' access.txt",
+   "grep 200 access.txt",
+   "cut access.txt 2",
+   "sort -k2 access.txt"
+  ],
+  "answer": 0,
+  "explain": "awk découpe chaque ligne en champs aux espaces : $1 vaut alice, $2 vaut 200, $3 vaut /home. '{print $2}' affiche le deuxième pour chaque ligne. grep 200 afficherait des lignes entières, et seulement celles qui contiennent 200 quelque part."
+ },
+ {
+  "id": "bash-1-20",
+  "level": 1,
+  "q": "Un collègue t'envoie backup.tar.gz. Que fais-tu avant de le décompresser là où tu es ?",
+  "choices": [
+   "Lister son contenu avec tar -tzf backup.tar.gz",
+   "Le décompresser en root par sécurité",
+   "Le renommer en .zip",
+   "Supprimer d'abord ton dossier courant"
+  ],
+  "answer": 0,
+  "explain": "tar -t liste le contenu sans rien écrire. Tu vois si tout est rangé dans un dossier ou si des dizaines de fichiers vont s'éparpiller là où tu es, et si un fichier écraserait l'un des tiens. Ensuite, décompresse avec tar -xzf, ou ajoute -C pour choisir le dossier."
+ },
+ {
+  "id": "bash-1-21",
+  "level": 1,
+  "q": "Dans git, que garde un commit ?",
+  "choices": [
+   "Un instantané de ce que git add a ajouté, avec un message",
+   "Tous les fichiers de ton disque",
+   "Seulement la dernière ligne modifiée",
+   "Une copie envoyée tout de suite au serveur"
+  ],
+  "answer": 0,
+  "explain": "git add choisit quels changements y entrent, git commit les enregistre en un instantané où tu pourras revenir, avec qui et pourquoi. Rien ne quitte ta machine avant git push. De petits commits aux messages clairs permettent de retrouver facilement quand quelque chose a cassé."
+ },
+ {
+  "id": "bash-2-14",
+  "level": 2,
+  "q": "Tu as cassé un fichier dans un dépôt git et tu n'as pas encore fait de commit. Comment retrouver la dernière version enregistrée ?",
+  "choices": [
+   "git restore file.txt",
+   "git commit file.txt",
+   "git push --force",
+   "Supprimer le dossier .git"
+  ],
+  "answer": 0,
+  "explain": "git restore remet le fichier comme il était au dernier commit, en abandonnant les changements faits depuis. C'est pour ça qu'on peut expérimenter sans crainte dans un dépôt : git status montre ce qui a changé, git diff comment, et git restore l'annule. Le dossier .git, c'est l'historique lui-même : ne le supprime jamais."
  }
 ]

@@ -1,6 +1,6 @@
 {
  "id": "users",
- "order": 160,
+ "order": 190,
  "skill": "linux",
  "after": [
   "files"
@@ -8,6 +8,10 @@
  "masters": [
   "achievement owner | achievement tight",
   "tool sudo 5"
+ ],
+ "recall": [
+  "linux-1-03",
+  "linux-3-07"
  ],
  "title": "Users, groups and sudo",
  "summary": "Who you are on the machine, what root is, and what sudo really does.",
