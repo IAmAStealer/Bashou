@@ -117,7 +117,7 @@ paths above.
 
 ### Logic
 
-1. `logic` — yes/no answers, if, !, && and || · Negation Gnome, Or Ogre
+1. `logic` — yes/no answers, if, !, && and || · Negation Gnome, Coin Wraith
 
 ### C
 

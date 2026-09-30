@@ -186,7 +186,7 @@ class UnlockTest(unittest.TestCase):
         self.assertTrue(lesson.unlocked(s, py))
         s["skills"] = ["python", "logic"]
         self.assertFalse(lesson.unlocked(s, py))
-        s["challenges"].append("or_ogre")
+        s["challenges"].append("coin_wraith")
         self.assertTrue(lesson.unlocked(s, py))
 
     def test_a_lesson_already_opened_stays_open(self):

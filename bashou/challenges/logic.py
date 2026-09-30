@@ -59,7 +59,7 @@ def door_verify(work, meta, value):
                 and all(run(tmp / "door.sh", tmp, s) == "closed" for s in STRANGERS))
 
 
-# --- Or Ogre: `||` where both conditions must hold ------------------------------------------------
+# --- Coin Wraith: heads OR tails, `||` where both conditions must hold ------------------------------------------------
 
 SAVE = """#!/bin/bash
 # Saves {file} into the folder {folder}/, but only when BOTH are there: the file and the folder.
@@ -117,9 +117,9 @@ ALL = [
                      "Open it with {editor} door.sh, fix the line ({save_keys}). Or in one "
                      "command: sed -i 's/if ! grep/if grep/' door.sh"],
               setup=door_setup, verify=door_verify),
-    Challenge(level=1, id="or_ogre", threat="Or Ogre", after=("negation_gnome",), **LOGIC,
-              task="The Or Ogre swapped one word in save.sh: it should save {file} into {folder}/ only when both "
-                   "are there, but now it also tries when one of them is missing, and cp fails.\nFix the "
+    Challenge(level=1, id="coin_wraith", threat="Coin Wraith", after=("negation_gnome",), **LOGIC,
+              task="The Coin Wraith flipped one word in save.sh: it should save {file} into {folder}/ only when both "
+                   "are there, but now heads or tails, one of them is enough, and cp fails.\nFix the "
                    "condition. Then: verify",
               hints=["|| means OR: the whole condition is true as soon as ONE side is true. && means AND: both "
                      "sides must be true. Here the script needs the file AND the folder. Try it: move the "

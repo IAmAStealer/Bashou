@@ -80,7 +80,7 @@ SOLUTIONS = {
     # logic fights: fix the condition
     "negation_gnome": ("sed -i 's/if ! grep/if grep/' door.sh", None),
     "trial_logic_door": ("sed -i 's/if ! grep/if grep/' door.sh", None),
-    "or_ogre": ("sed -i 's/||/\\&\\&/' save.sh", None),
+    "coin_wraith": ("sed -i 's/||/\\&\\&/' save.sh", None),
     # rust fights (rustc): fix the file
     "mut_marmot": ("sed -i 's/let errors = 0;/let mut errors = 0;/' counter.rs", None),
     "const_condor": ("sed -i 's/^const MAX_POINTS = /const MAX_POINTS: u32 = /' points.rs", None),

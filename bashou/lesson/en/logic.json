@@ -7,7 +7,7 @@
  ],
  "masters": [
   "won negation_gnome",
-  "won or_ogre"
+  "won coin_wraith"
  ],
  "recall": [
   "logic-2-11",
@@ -16,7 +16,7 @@
  ],
  "fights": [
   "negation_gnome",
-  "or_ogre"
+  "coin_wraith"
  ],
  "title": "Logic: yes, no, and, or, not",
  "summary": "How a program decides: every test answers yes or no, and not, and, or combine those answers.",
