@@ -32,6 +32,13 @@ Every release has a section here, written for players. CI refuses to tag a relea
   after scripts.
 - The first time you open a lesson, the Sage Owl warms you up with two questions about the lessons
   just before it, with the explanation either way. Esc skips it.
+- Five new first fights for the start of the path, each with its lesson: the Flag Phantom makes you
+  find the option that ignores capitals in `sort --help`, the Typo Troll leaves a typo to fix in your
+  editor, the Clutter Critter scatters photos and documents to tidy into folders with `mkdir` and `mv`,
+  the Glob Goblin piles up reports to remove with one wildcard (and only the right ones), and the Core
+  Counter asks how many processors your computer has (`nproc`). On the adventure, the Sage Owl teaches
+  "Files and editing" and "Help and wildcards" on the road, each followed by a chest, and new questions
+  join the quiz.
 
 ## v0.6.5 — 2026-09-29
 

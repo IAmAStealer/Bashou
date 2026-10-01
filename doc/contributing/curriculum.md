@@ -70,13 +70,13 @@ paths above.
 ### First steps (everyone)
 
 1. `command_line` — how the shell reads a line
-1. `help` — --help, man, reading an error message
-2. `computer` — CPU, RAM, disk
+1. `help` — --help, man, reading an error message · Flag Phantom
+2. `computer` — CPU, RAM, disk · Core Counter
 3. `paths` — the file tree · Dust Bunny
-4. `files` — mkdir, cp, mv, rm
-4. `editor` — nano or vi (`bashou config editor`): open, change, save, quit
+4. `files` — mkdir, cp, mv, rm · Clutter Critter
+4. `editor` — nano or vi (`bashou config editor`): open, change, save, quit · Typo Troll
 5. `reading` — cat, less, head, tail · First-line Imp, Last-word Wisp
-6. `wildcards` — * and ?
+6. `wildcards` — * and ? · Glob Goblin
 7. `variables` — shell variables, $( ), export
 8. `git` — commits and branches
 

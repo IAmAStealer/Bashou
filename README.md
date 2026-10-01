@@ -46,7 +46,7 @@ tokens spent to learn what a command does.
   investigation with no clock (a hidden file, a cron backdoor, a SUID binary). Lose, and the arena
   closes for an hour.
 - **`bashou adventure`**: a walk through 12 topics (coding logic, bash, Linux, systemd, Python, Rust,
-  C, Debian, Rocky Linux, CI/CD, SQL, networks) with 356 questions about what goes wrong and what to check first, bosses, and
+  C, Debian, Rocky Linux, CI/CD, SQL, networks) with 361 questions about what goes wrong and what to check first, bosses, and
   chests that open with real commands.
 
 ![bashou fight: a Planet and its hearts face the Log Hydra, the task in a bubble, and the arena

@@ -2,6 +2,28 @@
 
 # Each page: (text, example). A lesson counts as "met" for the tool (see fight.learned).
 LESSONS = [
+    {"id": "files_editing", "tool": "mv", "topics": ("bash", "linux"), "title": "Files and editing", "pages": [
+        ("mkdir creates a folder, and takes several names at once. A folder is just a place for files: "
+         "ls shows what's inside, ls -R shows the folders inside folders too.", "mkdir photos docs"),
+        ("mv moves files: the last name is where they go. Give it a folder and the files keep their names; "
+         "give it a new name and the file is renamed. cp does the same but keeps the original.",
+         "mv beach.jpg cat.jpg photos/"),
+        ("To change what's inside a text file, open it in an editor. nano shows its keys at the bottom: "
+         "Ctrl+O saves, Ctrl+X quits. In vi, press i to type, Esc to stop, then :wq to save and quit.",
+         "nano recipe.txt"),
+        ("For one word to replace, sed can do it without opening the file: s/old/new/ replaces, -i writes "
+         "the change into the file itself.", "sed -i 's/suger/sugar/' recipe.txt"),
+    ]},
+    {"id": "help_wildcards", "tool": "*", "topics": ("bash", "linux"), "title": "Help and wildcards", "pages": [
+        ("Every tool explains itself: --help lists its options, one per line, short form (-f), long form "
+         "(--ignore-case) and what it does. Too long? Add | less, and q quits.", "sort --help | less"),
+        ("A * in a name stands for any characters. Bash turns the pattern into the list of matching names "
+         "before the command even starts, so the command just sees the names.", "ls *.jpg"),
+        ("rm has no undo, no recycle bin. So first look at what a pattern catches with ls, and only then "
+         "remove: the same pattern gives the same list.", "ls report-2025-*.csv"),
+        ("A pattern matches the whole name, from the first letter: report-* doesn't catch old-report-1.csv. "
+         "? stands for exactly one character, [12] for one of the characters inside.", "rm report-2025-*.csv"),
+    ]},
     {"id": "sort", "tool": "sort", "topics": ("bash", "linux"), "title": "sort, the organizer", "pages": [
         ("sort prints the lines of a file in alphabetical order. The file itself doesn't change.",
          "sort names.txt"),

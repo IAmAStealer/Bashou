@@ -1,0 +1,51 @@
+{
+ "name": "Clutter Critter",
+ "palette": {
+  "a": "#262020",
+  "f": "#9a9090",
+  "F": "#6a6060",
+  "k": "#302828",
+  "w": "#f0f0f0",
+  "m": "#000000",
+  "n": "#e0a0a0",
+  "p": "#f4f0d8",
+  "P": "#c8c0a0",
+  "y": "#f0c860"
+ },
+ "base": [
+  "..aa.......aa....",
+  ".afFa.....aFfa...",
+  ".affaaaaaaaffa...",
+  "..afffffffffa....",
+  ".akkwmkkkmwkka...",
+  ".akkkkkfkkkkka...",
+  "..afffnnnfffa....",
+  "...affffffFa.....",
+  "..afFfffffFfa.pp.",
+  ".pp.afFFFfa..pPp.",
+  "pPpp.aa.aa..yPP..",
+  ".pPp..pPpp..yy..."
+ ],
+ "poses": {
+  "inhale": {
+   "3": ".afffffffffffa..."
+  },
+  "closed": {
+   "4": "----kk---kk------"
+  },
+  "left": {
+   "4": "----mw---mw------"
+  },
+  "right": {
+   "4": "----wm---wm------"
+  },
+  "fidget": {
+   "0": "..aa.........aa..",
+   "1": ".afFa.......aFfa."
+  }
+ },
+ "particles": [
+  0,
+  5
+ ]
+}

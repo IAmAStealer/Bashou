@@ -453,5 +453,57 @@
   ],
   "answer": 0,
   "explain": "git restore remet le fichier comme il était au dernier commit, en abandonnant les changements faits depuis. C'est pour ça qu'on peut expérimenter sans crainte dans un dépôt : git status montre ce qui a changé, git diff comment, et git restore l'annule. Le dossier .git, c'est l'historique lui-même : ne le supprime jamais."
+ },
+ {
+  "id": "bash-1-22",
+  "level": 1,
+  "q": "Dans sort --help, que dit la ligne `-f, --ignore-case` ?",
+  "choices": [
+   "Une option, deux écritures : ignorer les majuscules",
+   "-f doit être suivi d'un nom de fichier",
+   "--ignore-case ne marche que sans -f",
+   "sort ignore la casse du fichier en l'enregistrant"
+  ],
+  "answer": 0,
+  "explain": "L'aide liste chaque option une fois, avec sa forme courte (un tiret, une lettre) et sa forme longue (deux tirets, un mot), séparées par une virgule : elles veulent dire exactement la même chose. sort -f noms.txt et sort --ignore-case noms.txt donnent le même résultat. La forme longue se lit mieux dans un script, la courte se tape plus vite."
+ },
+ {
+  "id": "bash-1-23",
+  "level": 1,
+  "q": "Tu as modifié un fichier dans nano. Quelles touches l'enregistrent et quittent ?",
+  "choices": [
+   "Ctrl+O, Entrée, puis Ctrl+X",
+   "Échap puis :q",
+   "Ctrl+C",
+   "Ctrl+S puis Ctrl+Q"
+  ],
+  "answer": 0,
+  "explain": "nano affiche ses touches en bas de l'écran ; ^ veut dire Ctrl. Ctrl+O écrit le fichier (Entrée confirme le nom), Ctrl+X quitte. Si tu fais Ctrl+X d'abord, nano demande s'il faut enregistrer. :q, c'est vi, et il refuse de quitter s'il reste des changements non enregistrés : là-bas, :wq enregistre et quitte."
+ },
+ {
+  "id": "bash-1-24",
+  "level": 1,
+  "q": "photos/ existe. Que fait `mv beach.jpg cat.jpg photos/` ?",
+  "choices": [
+   "Déplace les deux fichiers dans photos/, avec les mêmes noms",
+   "Renomme beach.jpg en cat.jpg",
+   "Copie les deux fichiers et garde les originaux",
+   "Échoue : mv ne prend que deux noms"
+  ],
+  "answer": 0,
+  "explain": "mv prend autant de fichiers que tu veux, et le dernier nom est leur destination. Quand ce dernier nom est un dossier, les fichiers vont dedans et gardent leur nom. Avec seulement deux noms et pas de dossier de ce nom, mv renomme le premier. mv ne garde jamais l'original : ça, c'est cp."
+ },
+ {
+  "id": "bash-1-25",
+  "level": 1,
+  "q": "Le dossier contient report-2025-01.csv, report-2024-01.csv et old-report-2025-02.csv. Que supprime `rm report-2025-*.csv` ?",
+  "choices": [
+   "Seulement report-2025-01.csv",
+   "Les trois fichiers",
+   "report-2025-01.csv et old-report-2025-02.csv",
+   "Rien : * ne marche qu'avec ls"
+  ],
+  "answer": 0,
+  "explain": "Bash transforme le motif en noms avant que rm démarre : * remplace n'importe quels caractères, mais le reste du motif doit correspondre exactement, dès la première lettre. old-report-... ne commence pas par report, et report-2024-... contient 2024. Comme rm n'a pas d'annulation, lance d'abord ls report-2025-*.csv : il montre exactement ce que rm supprimerait."
  }
 ]

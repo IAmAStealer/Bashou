@@ -1,0 +1,51 @@
+{
+ "name": "Typo Troll",
+ "palette": {
+  "a": "#1c3020",
+  "g": "#70a850",
+  "G": "#4a7a38",
+  "n": "#a0c870",
+  "m": "#101810",
+  "w": "#f0f0e0",
+  "t": "#d8c060",
+  "e": "#e88aa0",
+  "b": "#6a4a30"
+ },
+ "base": [
+  ".................",
+  "....aaaaaaa......",
+  "...aggggggga.....",
+  "..aggmggmggga....",
+  "..aggggnggggat...",
+  "..aggggnnggga.t..",
+  "..agwgwgwgwga..t.",
+  "...aggggggga...e.",
+  "..abbbbbbbbba....",
+  ".aGbbbbbbbbbGa...",
+  "..abbbbbbbbba....",
+  "...aGa...aGa....."
+ ],
+ "poses": {
+  "inhale": {
+   "1": "...aaaaaaaaa....."
+  },
+  "closed": {
+   "3": "-----G--G--------"
+  },
+  "left": {
+   "3": "----mg-mgg-------"
+  },
+  "right": {
+   "3": "------gm-gm------"
+  },
+  "fidget": {
+   "4": "-------------t...",
+   "5": "-------------t...",
+   "6": "-------------e..."
+  }
+ },
+ "particles": [
+  0,
+  12
+ ]
+}

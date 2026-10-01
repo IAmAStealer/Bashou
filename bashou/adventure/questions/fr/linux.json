@@ -492,5 +492,18 @@
   ],
   "answer": 0,
   "explain": "pass chiffre chaque mot de passe pour la ou les clés listées dans ~/.password-store/.gpg-id, et déchiffre avec ta clé privée quand tu lances pass show. Perds la clé privée et les mots de passe sont perdus : garde-en une sauvegarde (gpg --export-secret-keys) en lieu sûr, hors ligne."
+ },
+ {
+  "id": "linux-1-16",
+  "level": 1,
+  "q": "Qu'affiche `nproc` ?",
+  "choices": [
+   "Combien de cœurs les programmes peuvent utiliser",
+   "Combien de programmes tournent",
+   "Combien de mémoire est libre",
+   "Le numéro du processus en cours"
+  ],
+  "answer": 0,
+  "explain": "nproc veut dire number of processors, nombre de processeurs. Un cœur exécute un programme à la fois ; avec 8 cœurs, 8 programmes tournent vraiment en même temps, et les autres attendent leur tour. C'est pour ça que make -j$(nproc) construit autant de morceaux à la fois qu'il y a de cœurs. ps ou top comptent les programmes, free montre la mémoire, et echo $$ affiche le numéro du shell lui-même."
  }
 ]

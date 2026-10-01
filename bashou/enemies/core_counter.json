@@ -1,0 +1,51 @@
+{
+ "name": "Core Counter",
+ "palette": {
+  "a": "#101418",
+  "s": "#506070",
+  "S": "#384450",
+  "b": "#2a3440",
+  "p": "#d0b048",
+  "g": "#58e070",
+  "G": "#2a8040",
+  "w": "#e8f0f8",
+  "m": "#000000"
+ },
+ "base": [
+  ".................",
+  "...p.p.p.p.p.....",
+  "..aaaaaaaaaaa....",
+  "p.asssssssssa.p..",
+  "..aswwsswwssa....",
+  "p.aswmsswmssa.p..",
+  "..asssssssssa....",
+  "p.asbgGgGgbsa.p..",
+  "..asssssssssa....",
+  "..aaaaaaaaaaa....",
+  "...p.p.p.p.p.....",
+  "................."
+ ],
+ "poses": {
+  "inhale": {
+   "7": "----bGgGgGb------"
+  },
+  "closed": {
+   "4": "----ss--ss-------",
+   "5": "----ww--ww-------"
+  },
+  "left": {
+   "5": "----mw--mw-------"
+  },
+  "right": {
+   "5": "----wm--wm-------"
+  },
+  "fidget": {
+   "7": "----bgggggb------"
+  }
+ },
+ "particles": [
+  0,
+  13
+ ],
+ "lone_pixels": true
+}

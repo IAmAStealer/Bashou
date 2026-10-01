@@ -453,5 +453,57 @@
   ],
   "answer": 0,
   "explain": "git restore puts the file back as it was in the last commit, dropping the changes you made since. It's safe to experiment in a repository for this reason: git status shows what changed, git diff shows how, and git restore undoes it. The .git folder is the history itself: never delete it."
+ },
+ {
+  "id": "bash-1-22",
+  "level": 1,
+  "q": "In sort --help, the line `-f, --ignore-case` says what?",
+  "choices": [
+   "One option, two spellings: it ignores capitals",
+   "-f needs a file name right after it",
+   "--ignore-case only works without -f",
+   "sort ignores the file's case when it saves it"
+  ],
+  "answer": 0,
+  "explain": "Help pages list each option once, with its short form (one dash, one letter) and its long form (two dashes, a word), separated by a comma: they mean exactly the same. sort -f names.txt and sort --ignore-case names.txt give the same result. The long form is easier to read in a script, the short one faster to type."
+ },
+ {
+  "id": "bash-1-23",
+  "level": 1,
+  "q": "You've changed a file in nano. Which keys save it and leave?",
+  "choices": [
+   "Ctrl+O, Enter, then Ctrl+X",
+   "Esc then :q",
+   "Ctrl+C",
+   "Ctrl+S then Ctrl+Q"
+  ],
+  "answer": 0,
+  "explain": "nano lists its keys at the bottom of the screen; ^ means Ctrl. Ctrl+O writes the file Out (Enter confirms the name), Ctrl+X eXits. If you press Ctrl+X first, nano asks whether to save. :q belongs to vi, and it refuses to quit when there are unsaved changes: :wq saves and quits there."
+ },
+ {
+  "id": "bash-1-24",
+  "level": 1,
+  "q": "photos/ exists. What does `mv beach.jpg cat.jpg photos/` do?",
+  "choices": [
+   "Moves both files into photos/, with the same names",
+   "Renames beach.jpg to cat.jpg",
+   "Copies both files and keeps the originals",
+   "Fails: mv takes only two names"
+  ],
+  "answer": 0,
+  "explain": "mv takes as many files as you like, and the last name is where they go. When that last name is a folder, the files move inside and keep their names. With only two names and no such folder, mv renames the first one. mv never keeps the original: that's cp."
+ },
+ {
+  "id": "bash-1-25",
+  "level": 1,
+  "q": "The folder holds report-2025-01.csv, report-2024-01.csv and old-report-2025-02.csv. What does `rm report-2025-*.csv` remove?",
+  "choices": [
+   "Only report-2025-01.csv",
+   "All three files",
+   "report-2025-01.csv and old-report-2025-02.csv",
+   "Nothing: * only works with ls"
+  ],
+  "answer": 0,
+  "explain": "Bash turns the pattern into names before rm starts: * stands for any characters, but the rest of the pattern must match exactly, from the first letter. old-report-... doesn't start with report, and report-2024-... has 2024. Since rm has no undo, run ls report-2025-*.csv first: it shows exactly what rm would remove."
  }
 ]

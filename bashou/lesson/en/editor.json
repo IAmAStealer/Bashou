@@ -5,11 +5,14 @@
   "files"
  ],
  "masters": [
-  "tool nano 3 | tool vim 3 | tool vi 3"
+  "tool nano 3 | tool vim 3 | tool vi 3 | won typo_troll"
  ],
  "recall": [
   "bash-1-15",
   "bash-1-16"
+ ],
+ "fights": [
+  "typo_troll"
  ],
  "title": "Editing a file in the terminal",
  "summary": "Open a file, change it, save it and quit, without leaving the terminal: nano or vi, your choice.",

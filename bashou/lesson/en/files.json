@@ -6,11 +6,14 @@
  ],
  "masters": [
   "achievement builder",
-  "achievement copycat"
+  "achievement copycat | won clutter_critter"
  ],
  "recall": [
   "bash-1-04",
   "bash-1-11"
+ ],
+ "fights": [
+  "clutter_critter"
  ],
  "title": "Files: make, copy, move, delete",
  "summary": "mkdir, touch, cp, mv and rm: the everyday moves, and the one that has no undo.",

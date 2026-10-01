@@ -1,0 +1,51 @@
+{
+ "name": "Glob Goblin",
+ "palette": {
+  "a": "#1a2a18",
+  "g": "#90b848",
+  "G": "#5a8030",
+  "y": "#f8e048",
+  "m": "#200808",
+  "r": "#c03030",
+  "c": "#704898",
+  "C": "#4a2c6a",
+  "w": "#ffffff"
+ },
+ "base": [
+  ".......aaa.......",
+  "a.....aGGGa.....a",
+  "ag...aggggga...ga",
+  ".aggagggggggagga.",
+  "..aggyrgggyrgga..",
+  "....agggggggga...",
+  ".....agwmwmga....",
+  "....acccccccca...",
+  "...accycycycca...",
+  "...acccyyyccca...",
+  "....acycycyca....",
+  ".....aGa.aGa....."
+ ],
+ "poses": {
+  "inhale": {
+   "0": "......aaaaa......"
+  },
+  "closed": {
+   "4": "-----GG---GG-----"
+  },
+  "left": {
+   "4": "-----ry---ry-----"
+  },
+  "right": {
+   "4": "-----yr---yr-----"
+  },
+  "fidget": {
+   "8": "------ccycc------",
+   "9": "------yyyyy------",
+   "10": "------ccycc------"
+  }
+ },
+ "particles": [
+  0,
+  12
+ ]
+}

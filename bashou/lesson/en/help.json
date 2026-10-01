@@ -5,10 +5,13 @@
   "command_line"
  ],
  "masters": [
-  "tool man 1"
+  "tool man 1 | won flag_phantom"
  ],
  "recall": [
   "bash-1-08"
+ ],
+ "fights": [
+  "flag_phantom"
  ],
  "title": "Help yourself: --help, man and error messages",
  "summary": "Every tool explains itself. Read its help and its errors, and you never stay stuck for long.",

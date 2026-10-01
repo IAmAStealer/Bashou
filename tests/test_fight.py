@@ -77,6 +77,14 @@ SOLUTIONS = {
     "trial_ss_ipv6": ("ss -6tlnH | awk '{{sub(/.*:/, \"\", $4); if ($4 + 0 >= 20000 && $4 + 0 < 40000) print $4}}'", None),
     "trial_gdb_line": ("gcc -g count.c -o count && gdb -q -batch -ex run -ex bt ./count 2>&1"
                        " | grep -o 'count.c:[0-9]*' | head -1 | cut -d: -f2", None),
+    # everyday fights: read --help, edit, tidy, wildcards, nproc
+    "flag_phantom": ("sort -f names.txt | head -1", None),
+    "typo_troll": ("sed -i 's/flower/flour/; s/egss/eggs/; s/mlik/milk/; s/slat/salt/; s/suger/sugar/' recipe.txt", None),
+    "clutter_critter": ("mkdir photos docs && mv *.jpg photos/ && mv *.txt docs/", None),
+    "glob_goblin": ("rm report-2025-*.csv", None),
+    "trial_glob_reports": ("rm report-2025-*.csv", None),
+    "trial_tidy_notes": ("mv *.txt notes/", None),
+    "core_counter": ("nproc", None),
     # logic fights: fix the condition
     "negation_gnome": ("sed -i 's/if ! grep/if grep/' door.sh", None),
     "trial_logic_door": ("sed -i 's/if ! grep/if grep/' door.sh", None),
@@ -238,6 +246,18 @@ class ChallengeTest(unittest.TestCase):
                 with self.subTest(ch.id), tempfile.TemporaryDirectory() as tmp:
                     meta = ch.setup(Path(tmp), random.Random(1))
                     self.assertFalse(ch.check(Path(tmp), meta, "done"))
+
+    def test_everyday_fights_refuse_the_easy_wrong_move(self):
+        """A plain sort puts a capital on top, a too wide pattern removes files that stay, a loose file fails."""
+        cases = [("flag_phantom", "LC_ALL=C sort names.txt | head -1"), ("glob_goblin", "rm *.csv"),
+                 ("clutter_critter", "mkdir photos docs && mv *.jpg photos/"), ("typo_troll", "true")]
+        for cid, cmd in cases:
+            ch = challenges.BY_ID[cid]
+            for seed in range(3):
+                with self.subTest(cid, seed=seed), tempfile.TemporaryDirectory() as tmp:
+                    meta = ch.setup(Path(tmp), random.Random(seed))
+                    out = subprocess.run(["bash", "-c", cmd], cwd=tmp, capture_output=True, text=True).stdout.strip()
+                    self.assertFalse(ch.check(Path(tmp), meta, out or "done"))
 
     def test_the_pipe_eel_needs_a_real_pipeline(self):
         with tempfile.TemporaryDirectory() as base:

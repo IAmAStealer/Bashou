@@ -492,5 +492,18 @@
   ],
   "answer": 0,
   "explain": "pass encrypts every password it stores for the key(s) listed in ~/.password-store/.gpg-id, and decrypts with your private key when you run pass show. Lose the private key and the passwords are gone: keep a backup of it (gpg --export-secret-keys) somewhere safe and offline."
+ },
+ {
+  "id": "linux-1-16",
+  "level": 1,
+  "q": "What does `nproc` print?",
+  "choices": [
+   "How many processors (cores) programs can use",
+   "How many programs are running",
+   "How much memory is free",
+   "The number of the current process"
+  ],
+  "answer": 0,
+  "explain": "nproc means number of processors. A processor core runs one program at a time; with 8 cores, 8 programs really run at the same moment, and the others wait their turn. That's why make -j$(nproc) builds as many pieces at once as there are cores. ps or top count programs, free shows memory, and echo $$ prints the shell's own process number."
  }
 ]

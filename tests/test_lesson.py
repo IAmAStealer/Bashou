@@ -135,7 +135,8 @@ class UnlockTest(unittest.TestCase):
         helper = BY_ID["help"]
         self.assertFalse(lesson.unlocked(s, helper))
         self.assertEqual(reader.how_to_unlock(s, helper),
-                         "pass “Reading a command line”: earn “Exit code”, or earn 3 achievements (0/3)")
+                         "pass “Reading a command line”: earn “Exit code”, or earn 3 achievements (0/3)"
+                         " (or meet the Flag Phantom in a fight)")
         s["commands"] = 10 ** 6                                  # counters alone open nothing now
         self.assertFalse(lesson.unlocked(s, helper))
         s["achievements"].append("exit_code")                    # no need to read command_line first

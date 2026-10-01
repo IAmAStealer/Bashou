@@ -6,10 +6,13 @@
  ],
  "masters": [
   "tool ls 50",
-  "fights 3"
+  "fights 3 | won glob_goblin"
  ],
  "recall": [
   "bash-1-11"
+ ],
+ "fights": [
+  "glob_goblin"
  ],
  "title": "Wildcards: * and ?",
  "summary": "How one short pattern becomes a list of file names, before the command even starts.",

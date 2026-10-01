@@ -1,0 +1,52 @@
+{
+ "name": "Flag Phantom",
+ "palette": {
+  "a": "#3a3a58",
+  "w": "#e8ecf8",
+  "W": "#a8b0d0",
+  "m": "#202034",
+  "p": "#8a6a40",
+  "r": "#e04848",
+  "R": "#a02c38"
+ },
+ "base": [
+  "...........p.....",
+  "....aaaaa..prrr..",
+  "...awwwwwa.prrRr.",
+  "..awwwwwwwapRRR..",
+  "..awmmwmmwap.....",
+  "..awmmwmmwap.....",
+  "..awwwwwwwwp.....",
+  "..awwwmmwwwa.....",
+  "..awwwwwwwWa.....",
+  "..awWwwwWwWa.....",
+  "..awaWwaWaWa.....",
+  "...a.a.a.a.a....."
+ ],
+ "poses": {
+  "inhale": {
+   "1": "...aaaaaaa.p....."
+  },
+  "closed": {
+   "4": "----ww-ww--------",
+   "5": "----mm-mm--------"
+  },
+  "left": {
+   "4": "---mmw-mmw-------",
+   "5": "---mmw-mmw-------"
+  },
+  "right": {
+   "4": "----wmmwmm-------",
+   "5": "----wmmwmm-------"
+  },
+  "fidget": {
+   "1": "-----------prr...",
+   "2": "-----------prrr..",
+   "3": "-----------pRRrR."
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}
