@@ -9,13 +9,16 @@
   "processes"
  ],
  "masters": [
-  "achievement headers | tool curl 3 | tool ping 3",
+  "achievement headers | tool curl 3 | tool ping 3 | won header_hound",
   "achievement resolver"
  ],
  "recall": [
   "network-1-01",
   "network-1-02",
   "network-1-04"
+ ],
+ "fights": [
+  "header_hound"
  ],
  "title": "Networks: addresses and ports",
  "summary": "IP addresses, names, ports, and what listening on 0.0.0.0 means.",

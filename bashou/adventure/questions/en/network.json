@@ -479,5 +479,18 @@
   ],
   "answer": 0,
   "explain": "traceroute sends probes that expire at each router along the way, and each router is supposed to send back a \"time exceeded\" message. Many don't, or rate-limit it, so they show as * * *. If later hops and the destination answer, traffic goes through them fine."
+ },
+ {
+  "id": "network-1-13",
+  "level": 1,
+  "q": "What does `curl -I https://example.com/file.zip` show?",
+  "choices": [
+   "Only the headers: type, size, date…",
+   "The whole file on the screen",
+   "Only the server's IP address",
+   "The file, saved as file.zip"
+  ],
+  "answer": 0,
+  "explain": "-I (--head) asks only for the headers: lines the server sends before a file, like Content-Type, Content-Length (the size in bytes) or Last-Modified. Handy to check a big download, or a redirect, without downloading anything. -O would save the file."
  }
 ]

@@ -67,6 +67,35 @@ LESSONS = [
         ("A condition before the braces picks lines; END runs after the last one.",
          "awk '$2 > 30 {n++} END {print n}' people.txt"),
     ]},
+    {"id": "rights_disk_archives", "tool": "chmod", "topics": ("linux",), "title": "Rights, disk and archives", "pages": [
+        ("ls -l shows each file's rights in three groups: you (user), your group, everyone else (others). "
+         "r reads, w writes, x runs. id tells you who you are and which groups you belong to.", "ls -l; id"),
+        ("chmod changes the rights. In numbers, r = 4, w = 2, x = 1, added up per group: 600 is rw for you "
+         "and nothing for the others, 755 lets everyone read and run but only you write.",
+         "chmod 600 diary.txt; chmod 755 backup.sh"),
+        ("df shows how full each disk is, du how much space a folder takes with everything inside. -h prints "
+         "sizes people can read, -s one total per folder.", "du -sh * | sort -h"),
+        ("tar packs many files into one, gzip squeezes it: a .tar.gz. -c creates, -t lists, -x unpacks, z for "
+         "gzip, f for the archive's name, and -C picks the folder to unpack into.", "tar -xzf backup.tar.gz -C restore/"),
+    ]},
+    {"id": "services", "tool": "systemctl", "topics": ("systemd",), "title": "Services and unit files", "pages": [
+        ("A service is a program that runs in the background, started by systemd. systemctl status NAME says "
+         "if it runs, since when, and its last log lines.", "systemctl status cron"),
+        ("Each service is described by a unit file, in sections: [Unit] says what it is, [Service] how to run it "
+         "(ExecStart is the command), [Install] when to start it at boot (WantedBy).", "systemctl cat cron"),
+        ("After you change a unit file, systemctl daemon-reload makes systemd read it again. enable starts it "
+         "at every boot, --now also starts it right away.", "sudo systemctl daemon-reload; sudo systemctl enable --now app"),
+    ]},
+    {"id": "git_basics", "tool": "git", "topics": ("bash", "linux"), "title": "git: commits, branches, merges", "pages": [
+        ("git keeps the history of a folder. git status shows what changed, git add picks what goes into the "
+         "next commit, git commit -m saves it with a message. Only what you added is saved.",
+         "git add notes.txt; git commit -m 'Add milk'"),
+        ("A branch is a separate line of commits, to try something without touching main. git switch -c NAME "
+         "creates one and moves onto it; git switch main comes back.", "git switch -c try-ideas"),
+        ("git merge brings a branch's commits into the one you're on. When both changed the same line, git stops "
+         "and writes both versions between <<<<<<<, ======= and >>>>>>> markers. Edit the file, then git add and "
+         "git commit.", "git merge chef; git status"),
+    ]},
     {"id": "pipelines", "tool": "yaml", "topics": ("cicd",), "title": "Pipeline files", "pages": [
         ("GitHub Actions reads .github/workflows/*.yml, GitLab reads .gitlab-ci.yml. Names that start with "
          "a dot are hidden: ls -a shows them.", "ls -a; cat .gitlab-ci.yml"),

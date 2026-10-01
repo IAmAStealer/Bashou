@@ -1,0 +1,51 @@
+{
+ "name": "Conflict Chimera",
+ "palette": {
+  "a": "#1c1020",
+  "r": "#e05050",
+  "R": "#a03040",
+  "b": "#5080e0",
+  "B": "#3050a0",
+  "w": "#ffffff",
+  "m": "#101010",
+  "y": "#f0d048",
+  "p": "#9a70b0",
+  "P": "#6a4880"
+ },
+ "base": [
+  ".aaaa.....aaaa...",
+  "arrrra...abbbba..",
+  "arwmra...abmwba..",
+  "arrrRa...aBbbba..",
+  ".aRRa.....aBBa...",
+  "..aRa.....aBa....",
+  "...aappppppa.....",
+  "..apppyyypppa....",
+  "..appppppppppa...",
+  "..aPppppppppPa...",
+  "...aPa...aPa.....",
+  "...aa.....aa....."
+ ],
+ "poses": {
+  "inhale": {
+   "8": ".appppppppppppa.."
+  },
+  "closed": {
+   "2": "-rRRr-----bBBb---"
+  },
+  "left": {
+   "2": "--mw--------mw---"
+  },
+  "right": {
+   "2": "---wm------wm----"
+  },
+  "fidget": {
+   "0": "aaaa.......aaaa..",
+   "1": "rrra.......abbba."
+  }
+ },
+ "particles": [
+  0,
+  6
+ ]
+}

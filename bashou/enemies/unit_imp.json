@@ -1,0 +1,50 @@
+{
+ "name": "Unit Imp",
+ "palette": {
+  "a": "#300c10",
+  "r": "#d84838",
+  "R": "#a02828",
+  "y": "#f0d048",
+  "w": "#ffffff",
+  "m": "#101010",
+  "s": "#a8b0b8",
+  "S": "#707880"
+ },
+ "base": [
+  "...a.......a.....",
+  "...ra.....ar.....",
+  "...rRaaaaaRr.....",
+  "....arrrrra......",
+  "...arwmrwmra.....",
+  "...arrrrrrra.....",
+  "....arRRRra....a.",
+  "...arrsssrra..ar.",
+  "..arrsSsSsrra.r..",
+  "..arrsssssrraar..",
+  "...arrsSsrra.....",
+  "....aRa.aRa......"
+ ],
+ "poses": {
+  "inhale": {
+   "5": "..arrrrrrrrra...."
+  },
+  "closed": {
+   "4": "-----RR-RR-------"
+  },
+  "left": {
+   "4": "-----mw-mw-------"
+  },
+  "right": {
+   "4": "-----wm-wm-------"
+  },
+  "fidget": {
+   "7": "-------sSs-------",
+   "8": "------SsssS------",
+   "9": "-------sSs-------"
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

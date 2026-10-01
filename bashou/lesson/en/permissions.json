@@ -6,13 +6,16 @@
   "users"
  ],
  "masters": [
-  "achievement octal | tool chmod 3",
+  "achievement octal | tool chmod 3 | won chmod_chimera",
   "achievement symbolic"
  ],
  "recall": [
   "linux-1-08",
   "linux-1-09",
   "bash-2-08"
+ ],
+ "fights": [
+  "chmod_chimera"
  ],
  "title": "Permissions: who can do what",
  "summary": "Read the -rwxr-x--- of ls -l, and change it with chmod without opening everything.",

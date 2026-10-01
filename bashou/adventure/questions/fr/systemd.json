@@ -258,5 +258,18 @@
   ],
   "answer": 0,
   "explain": "Une unité .timer dit quand (OnCalendar=*-*-* 03:00:00) et lance l'unité .service du même nom, qui dit quoi lancer. Active et démarre le timer, pas le service. Tu gagnes les journaux dans journalctl, le rattrapage des passages manqués avec Persistent=true, et systemctl list-timers montre le prochain passage."
+ },
+ {
+  "id": "systemd-1-11",
+  "level": 1,
+  "q": "Dans un fichier unit, quelle section contient ExecStart, la commande à lancer ?",
+  "choices": [
+   "[Service]",
+   "[Unit]",
+   "[Install]",
+   "[Exec]"
+  ],
+  "answer": 0,
+  "explain": "[Unit] décrit le service et son ordre (After=), [Service] dit comment le lancer (ExecStart, Restart, User), [Install] dit quand il démarre une fois activé (WantedBy=multi-user.target). Une ligne dans la mauvaise section est ignorée, ou le service ne démarre pas."
  }
 ]

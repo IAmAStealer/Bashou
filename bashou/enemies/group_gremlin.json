@@ -1,0 +1,50 @@
+{
+ "name": "Group Gremlin",
+ "palette": {
+  "a": "#1c1430",
+  "g": "#8a70c8",
+  "G": "#5c4898",
+  "e": "#f0a0c0",
+  "w": "#ffffff",
+  "m": "#101010",
+  "r": "#d04848",
+  "b": "#f0f0e0",
+  "B": "#3070d0"
+ },
+ "base": [
+  "a...............a",
+  "ga.............ag",
+  "gea..aaaaaaa..aeg",
+  ".gea.aggggga.aeg.",
+  "..gaaggggggggag..",
+  "...agwmgggwmga...",
+  "...aggggggggga...",
+  "....aggwwwgga....",
+  "...agGgrrrgGga...",
+  "...aGgabbbagGa...",
+  "....aaabBbaaa....",
+  ".....aga.aga....."
+ ],
+ "poses": {
+  "inhale": {
+   "4": "..gaggggggggggag."
+  },
+  "closed": {
+   "5": "-----GG---GG-----"
+  },
+  "left": {
+   "5": "-----mw---mw-----"
+  },
+  "right": {
+   "5": "-----wm---wm-----"
+  },
+  "fidget": {
+   "0": ".a.............a.",
+   "1": "ag.............ga"
+  }
+ },
+ "particles": [
+  0,
+  3
+ ]
+}

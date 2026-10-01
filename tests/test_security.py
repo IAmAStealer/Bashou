@@ -58,7 +58,11 @@ class SecurityTest(unittest.TestCase):
         for path, tree in self.trees():
             text = (ROOT / path).read_text()
             if '["git"' in text:                               # an argv list that runs git
-                self.assertEqual(path.name, "update.py", f"{path} runs git")
+                self.assertIn(path.name, ("update.py", "gitfights.py"), f"{path} runs git")
+        # the git fights only work in their own local repository: nothing that reaches a network
+        text = (ROOT / "bashou" / "challenges" / "gitfights.py").read_text()
+        for word in ("clone", "fetch", "pull", "push", "remote", "submodule", "ls-remote"):
+            self.assertNotIn(f'"{word}"', text, word)
 
 
 if __name__ == "__main__":

@@ -49,7 +49,8 @@ class ArenaBugs(unittest.TestCase):
         expected.update({ch.id: "gcc" if "gcc" in ch.tools else "python3" for ch in challenges.code.ALL})
         expected.update({ch.id: "apt" if "apt" in ch.tools else "rpm" for ch in challenges.packages.ALL})
         expected.update({ch.id: "rustc" for ch in challenges.rust.ALL})
-        expected.update({ch.id: ch.tools[0] for ch in challenges.everyday.ALL + challenges.scripting.ALL})
+        expected.update({ch.id: ch.tools[0] for m in (challenges.everyday, challenges.scripting, challenges.system,
+                                                     challenges.gitfights) for ch in m.ALL})
         expected.update({ch.id: ch.tools[0] for ch in challenges.network.ALL})
         expected.update({"linker_lynx": "gcc", "warning_wraith": "gcc", "segfault_salamander": "gdb", "breakpoint_beetle": "gdb"})
         editor = challenges.BY_ID["mirror_mimic"].tools[0]                  # the first editor installed

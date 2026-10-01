@@ -5,12 +5,17 @@
   "scripts"
  ],
  "masters": [
-  "achievement brancher | tool git 3",
+  "achievement brancher | tool git 3 | won commit_crowd | won branch_bramble | won conflict_chimera",
   "achievement stasher"
  ],
  "recall": [
   "bash-1-21",
   "bash-2-14"
+ ],
+ "fights": [
+  "commit_crowd",
+  "branch_bramble",
+  "conflict_chimera"
  ],
  "title": "git: snapshots and branches",
  "summary": "What a commit is, how git add and commit work together, and what a branch really is.",

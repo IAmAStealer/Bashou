@@ -570,5 +570,44 @@
   ],
   "answer": 0,
   "explain": "[A-Z]{2} is exactly two capital letters, [0-9]{4} four digits. Without -x, grep also keeps lines where the pattern appears inside, like ABC-1234 (it contains BC-1234). -x asks the whole line to be the pattern. -E lets you write {2} without backslashes."
+ },
+ {
+  "id": "bash-1-30",
+  "level": 1,
+  "q": "notes.txt and todo.txt changed. What does `git add notes.txt` then `git commit -m x` save?",
+  "choices": [
+   "Only notes.txt",
+   "Both files",
+   "Nothing: add needs -A",
+   "Every file of the folder"
+  ],
+  "answer": 0,
+  "explain": "A commit saves what is staged: what you added since the last commit. todo.txt stays changed, waiting for its own add. That's how one commit holds one idea. git status shows both lists; git add . or git commit -a take everything at once."
+ },
+ {
+  "id": "bash-1-31",
+  "level": 1,
+  "q": "What does `git switch -c try-ideas` do?",
+  "choices": [
+   "Creates the branch try-ideas and moves onto it",
+   "Deletes the branch try-ideas",
+   "Merges try-ideas into main",
+   "Renames main to try-ideas"
+  ],
+  "answer": 0,
+  "explain": "-c (create) makes a new branch from where you are and switches to it. Commits made there don't change main: git switch main brings you back to it as it was. Older git writes the same thing as git checkout -b try-ideas."
+ },
+ {
+  "id": "bash-2-16",
+  "level": 2,
+  "q": "A merge stops: menu.txt has <<<<<<<, ======= and >>>>>>> lines. What's next?",
+  "choices": [
+   "Edit it, remove the markers, git add, git commit",
+   "git commit right away",
+   "Delete the .git folder",
+   "git push --force"
+  ],
+  "answer": 0,
+  "explain": "Both branches changed the same lines, and git can't choose. Between <<<<<<< and ======= is your side, between ======= and >>>>>>> the other branch's. Write the file the way it should be, without the markers; git add tells git it's settled, and git commit ends the merge."
  }
 ]

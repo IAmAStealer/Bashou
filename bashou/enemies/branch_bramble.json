@@ -1,0 +1,49 @@
+{
+ "name": "Branch Bramble",
+ "palette": {
+  "a": "#14200c",
+  "g": "#5a9838",
+  "G": "#3a6a28",
+  "t": "#e8e0c0",
+  "w": "#ffffff",
+  "m": "#101010",
+  "p": "#c03868",
+  "P": "#e06898"
+ },
+ "base": [
+  "..P.......P......",
+  ".PpP..t..PpP.....",
+  "..aga.a.aga....t.",
+  "...aGagaGa....ag.",
+  ".t..aggga..t.aG..",
+  "..agggggggga.aG..",
+  ".agwmgggwmgga.ag.",
+  "aggggGGGgggggag..",
+  ".agggggggggggga..",
+  "..aGgggggggGa....",
+  "...aGGaaaGGa.....",
+  "....aa...aa......"
+ ],
+ "poses": {
+  "inhale": {
+   "5": ".agggggggggga...."
+  },
+  "closed": {
+   "6": "---GG---GG-------"
+  },
+  "left": {
+   "6": "---mw---mw-------"
+  },
+  "right": {
+   "6": "---wm---wm-------"
+  },
+  "fidget": {
+   "0": "...P.......P.....",
+   "1": "..PpP....PpP....."
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

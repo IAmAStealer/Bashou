@@ -1,0 +1,48 @@
+{
+ "name": "Commit Crowd",
+ "palette": {
+  "a": "#181820",
+  "r": "#e06060",
+  "g": "#60c070",
+  "b": "#6090e0",
+  "w": "#ffffff",
+  "m": "#101010",
+  "y": "#f0d048"
+ },
+ "base": [
+  ".................",
+  ".....aaaa........",
+  "....abbbba.......",
+  "..aaawbwbaaa.....",
+  ".arrrabmbagggga..",
+  "arwrwabbbagwgwga.",
+  "armrmaaaaagmgmga.",
+  "arrrraybyaggggga.",
+  ".arrrabbbaggggaa.",
+  ".arrrabbbaagggga.",
+  "..aaaabbbaaaaaa..",
+  ".....aa.aa......."
+ ],
+ "poses": {
+  "inhale": {
+   "1": "....aaaaaa......."
+  },
+  "closed": {
+   "5": "-r-r-------g-g---",
+   "3": "-----b-b---------"
+  },
+  "left": {
+   "5": "-wrwr------wgwg--"
+  },
+  "right": {
+   "5": "-rwrw------gwgw--"
+  },
+  "fidget": {
+   "3": "-----bwbw--------"
+  }
+ },
+ "particles": [
+  0,
+  12
+ ]
+}

@@ -1,0 +1,50 @@
+{
+ "name": "Header Hound",
+ "palette": {
+  "a": "#1c140c",
+  "d": "#b88850",
+  "D": "#8a6030",
+  "l": "#e8c898",
+  "w": "#ffffff",
+  "m": "#101010",
+  "e": "#f4f4ec",
+  "E": "#c0c0b0",
+  "r": "#d04040"
+ },
+ "base": [
+  ".................",
+  ".aa......aa......",
+  "aDDa....aDDa.....",
+  "aDdaaaaaadDa.....",
+  ".adddddddda......",
+  ".adwmddwmda......",
+  ".addddllldda.....",
+  "..adlllmmlleeeee.",
+  "..adddlllaeErrEe.",
+  ".addddddda.eEEEe.",
+  "addDddddDDa......",
+  "aDa.aDa.aDa......"
+ ],
+ "poses": {
+  "inhale": {
+   "4": "addddddddddda...."
+  },
+  "closed": {
+   "5": "---DD--DD--------"
+  },
+  "left": {
+   "5": "---mw--mw--------"
+  },
+  "right": {
+   "5": "---wm--wm--------"
+  },
+  "fidget": {
+   "1": "..a......a.......",
+   "2": ".aDa....aDa......"
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

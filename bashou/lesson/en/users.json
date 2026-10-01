@@ -6,12 +6,15 @@
   "files"
  ],
  "masters": [
-  "achievement owner | achievement tight",
+  "achievement owner | achievement tight | won group_gremlin",
   "tool sudo 1"
  ],
  "recall": [
   "linux-1-03",
   "linux-3-07"
+ ],
+ "fights": [
+  "group_gremlin"
  ],
  "title": "Users, groups and sudo",
  "summary": "Who you are on the machine, what root is, and what sudo really does.",

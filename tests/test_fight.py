@@ -14,6 +14,8 @@ from bashou import challenges, fight, state, which
 from bashou.challenges import cicd, repos, secrets, sql
 
 # Reference solutions, run with bash in the arena folder. {x} is filled from the task text.
+UNIT_FIX = "f=$(ls *.service); e=$(grep ^ExecStart $f); sed -i \"s|^WantedBy=.*|$e|; \\$s|^ExecStart=.*|WantedBy=multi-user.target|\" $f"
+
 SOLUTIONS = {
     "line_moth": ("wc -l < notes.txt", None),
     "column_crab": ("cut -d, -f2 servers.csv | sed -n '{x}p'", r"on line (\d+)"),
@@ -92,6 +94,22 @@ SOLUTIONS = {
     "shebang_shade": ("sed -i '1s/.*/#!\\/bin\\/bash/' report.sh && chmod +x report.sh", None),
     "rename_rat": ("for f in *.JPG; do mv \"$f\" \"${{f%.JPG}}.jpg\"; done", None),
     "pattern_pixie": ("grep -cxE '[A-Z]{{2}}-[0-9]{{4}}' codes.txt", None),
+    # linux fights: id, rights, du, tar, a unit file, headers
+    "group_gremlin": ("id -gn", None),
+    "chmod_chimera": ("chmod 600 diary.txt && chmod 755 backup.sh", None),
+    "trial_private_diary": ("chmod 600 diary.txt", None),
+    "hoarder_hog": ("du -s * | sort -n | tail -1 | cut -f2", None),
+    "tar_tortoise": ("tar -xzf backup.tar.gz -C restore/", None),
+    "unit_imp": (UNIT_FIX, None),
+    "trial_unit_file": (UNIT_FIX, None),
+    "header_hound": ("curl -sI http://127.0.0.1:{x}/report.csv | awk 'tolower($1) == \"content-length:\" {{print $2}}' | tr -d '\\r'",
+                     r"127\.0\.0\.1:(\d+)"),
+    # git fights, in their own small repository
+    "commit_crowd": ("git add notes.txt && git commit -qm 'Add milk'", None),
+    "branch_bramble": ("git switch -c {x} && git add idea.txt && git commit -qm 'An idea'", r"branch named (\S+),"),
+    "conflict_chimera": ("printf 'Starter: soup\\nDessert: apple pie\\nDessert: chocolate cake\\n' > menu.txt"
+                         " && git add menu.txt && git commit -q --no-edit", None),
+    "trial_first_commit": ("git add map.txt && git commit -qm 'Add the map'", None),
     # logic fights: fix the condition
     "negation_gnome": ("sed -i 's/if ! grep/if grep/' door.sh", None),
     "trial_logic_door": ("sed -i 's/if ! grep/if grep/' door.sh", None),
@@ -260,7 +278,12 @@ class ChallengeTest(unittest.TestCase):
                  ("clutter_critter", "mkdir photos docs && mv *.jpg photos/"), ("typo_troll", "true"),
                  ("stderr_stalker", "./check.sh > errors.txt 2>&1"), ("pattern_pixie", "grep -cE '[A-Z]{2}-[0-9]{4}' codes.txt"),
                  ("space_sprite", "n=$(ls | grep ' '); cp $n backup/"),
-                 ("shebang_shade", "chmod +x report.sh"), ("rename_rat", "for f in *.JPG; do cp \"$f\" \"${f%.JPG}.jpg\"; done")]
+                 ("shebang_shade", "chmod +x report.sh"), ("rename_rat", "for f in *.JPG; do cp \"$f\" \"${f%.JPG}.jpg\"; done"),
+                 ("chmod_chimera", "chmod 700 diary.txt; chmod +x backup.sh"), ("tar_tortoise", "tar -xzf backup.tar.gz"),
+                 ("hoarder_hog", "for d in */; do echo $(ls $d | wc -l) ${d%/}; done | sort -n | tail -1 | cut -d' ' -f2"),
+                 ("commit_crowd", "git add . && git commit -qm all"), ("unit_imp", "true"),
+                 ("branch_bramble", "git add idea.txt && git commit -qm idea"),
+                 ("conflict_chimera", "git add menu.txt && git commit -q --no-edit")]
         for cid, cmd in cases:
             ch = challenges.BY_ID[cid]
             for seed in range(3):

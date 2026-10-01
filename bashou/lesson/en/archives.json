@@ -7,11 +7,14 @@
   "find"
  ],
  "masters": [
-  "achievement packer | tool tar 3",
+  "achievement packer | tool tar 3 | won tar_tortoise",
   "achievement unpacker"
  ],
  "recall": [
   "bash-1-20"
+ ],
+ "fights": [
+  "tar_tortoise"
  ],
  "title": "Archives: tar and gzip",
  "summary": "Pack a folder into one file, look inside, and unpack it where you want.",

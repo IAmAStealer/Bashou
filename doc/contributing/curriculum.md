@@ -78,7 +78,7 @@ paths above.
 5. `reading` — cat, less, head, tail · First-line Imp, Last-word Wisp
 6. `wildcards` — * and ? · Glob Goblin
 7. `variables` — shell variables, $( ), export
-8. `git` — commits and branches
+8. `git` — commits and branches · Commit Crowd, Branch Bramble, Conflict Chimera
 
 ### Bash (text tools)
 
@@ -95,12 +95,12 @@ paths above.
 
 ### Linux
 
-1. `users` — uid, groups, sudo
-2. `permissions`
-3. `disk` — df, du
-4. `archives` — tar
+1. `users` — uid, groups, sudo · Group Gremlin
+2. `permissions` · Chmod Chimera
+3. `disk` — df, du · Hoarder Hog
+4. `archives` — tar · Tar Tortoise
 5. `processes` — ps, signals · Process Phantom
-6. `network` — addresses, ports, listening
+6. `network` — addresses, ports, listening · Header Hound
 7. `keys` — public and private keys · Plaintext Pixie, Cipher Crow, Forger Ferret
 8. `pass` — a password store · Vault Vole, Cleartext Cricket
 
@@ -113,7 +113,7 @@ paths above.
 
 ### systemd
 
-1. `services` — a service's life (no fights yet: its achievements master it)
+1. `services` — a service's life · Unit Imp
 
 ### Logic
 
@@ -148,7 +148,7 @@ paths above.
 
 ### Network
 
-1. `network` — addresses and ports (also in Linux)
+1. `network` — addresses and ports (also in Linux) · Header Hound
 2. `ip_addr` — IPv4 addresses, prefixes, the gateway · Address Adder, Subnet Sprite, Route Raven
 3. `ipv6` — reading and shortening, link-local, /64 and SLAAC · Six Serpent
 4. `dns` — the resolution chain, records, TTL · NXDomain Nixie

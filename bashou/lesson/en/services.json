@@ -7,7 +7,7 @@
   "streams"
  ],
  "masters": [
-  "achievement status | tool systemctl 3",
+  "achievement status | tool systemctl 3 | won unit_imp",
   "achievement logbook",
   "achievement reload"
  ],
@@ -15,6 +15,9 @@
   "systemd-1-01",
   "systemd-1-02",
   "systemd-1-03"
+ ],
+ "fights": [
+  "unit_imp"
  ],
  "title": "A service's life with systemd",
  "summary": "Unit files, start versus enable, and where to read what went wrong.",

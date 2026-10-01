@@ -6,12 +6,15 @@
   "files"
  ],
  "masters": [
-  "achievement disk | tool df 3 | tool du 3",
+  "achievement disk | tool df 3 | tool du 3 | won hoarder_hog",
   "achievement sizer"
  ],
  "recall": [
   "linux-1-06",
   "linux-2-06"
+ ],
+ "fights": [
+  "hoarder_hog"
  ],
  "title": "Disk space: df and du",
  "summary": "How full the disk is, and which folder takes the room.",

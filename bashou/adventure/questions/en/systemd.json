@@ -258,5 +258,18 @@
   ],
   "answer": 0,
   "explain": "A .timer unit says when (OnCalendar=*-*-* 03:00:00) and starts the .service unit of the same name, which says what to run. Enable and start the timer, not the service. You get logs in journalctl, missed runs caught up with Persistent=true, and systemctl list-timers shows the next run."
+ },
+ {
+  "id": "systemd-1-11",
+  "level": 1,
+  "q": "In a unit file, which section holds ExecStart, the command to run?",
+  "choices": [
+   "[Service]",
+   "[Unit]",
+   "[Install]",
+   "[Exec]"
+  ],
+  "answer": 0,
+  "explain": "[Unit] describes the service and its order (After=), [Service] says how to run it (ExecStart, Restart, User), [Install] says when it starts once enabled (WantedBy=multi-user.target). A line in the wrong section is ignored, or the unit won't start."
  }
 ]

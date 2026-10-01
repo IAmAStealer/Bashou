@@ -479,5 +479,18 @@
   ],
   "answer": 0,
   "explain": "traceroute envoie des sondes qui expirent à chaque routeur du chemin, et chaque routeur est censé renvoyer un message « time exceeded ». Beaucoup ne le font pas, ou limitent ce débit, et s'affichent en * * *. Si les sauts suivants et la destination répondent, le trafic passe très bien par eux."
+ },
+ {
+  "id": "network-1-13",
+  "level": 1,
+  "q": "Qu'affiche `curl -I https://example.com/file.zip` ?",
+  "choices": [
+   "Seulement les en-têtes : type, taille, date…",
+   "Le fichier entier à l'écran",
+   "Seulement l'adresse IP du serveur",
+   "Le fichier, enregistré en file.zip"
+  ],
+  "answer": 0,
+  "explain": "-I (--head) demande seulement les en-têtes : les lignes que le serveur envoie avant un fichier, comme Content-Type, Content-Length (la taille en octets) ou Last-Modified. Pratique pour vérifier un gros téléchargement, ou une redirection, sans rien télécharger. -O enregistrerait le fichier."
  }
 ]

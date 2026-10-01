@@ -505,5 +505,57 @@
   ],
   "answer": 0,
   "explain": "nproc veut dire number of processors, nombre de processeurs. Un cœur exécute un programme à la fois ; avec 8 cœurs, 8 programmes tournent vraiment en même temps, et les autres attendent leur tour. C'est pour ça que make -j$(nproc) construit autant de morceaux à la fois qu'il y a de cœurs. ps ou top comptent les programmes, free montre la mémoire, et echo $$ affiche le numéro du shell lui-même."
+ },
+ {
+  "id": "linux-1-17",
+  "level": 1,
+  "q": "Qu'affiche `id -gn` ?",
+  "choices": [
+   "Le nom de ton groupe principal",
+   "Ton numéro d'utilisateur",
+   "Tous les membres du groupe",
+   "Les groupes de root"
+  ],
+  "answer": 0,
+  "explain": "id affiche qui tu es : uid (ton numéro d'utilisateur), gid (ton groupe principal) et groups (tous tes groupes). -g garde le groupe principal seulement, -n affiche son nom au lieu de son numéro. Les fichiers que tu crées appartiennent à ce groupe."
+ },
+ {
+  "id": "linux-1-18",
+  "level": 1,
+  "q": "Après `chmod 755 backup.sh`, qui peut le lancer ?",
+  "choices": [
+   "Tout le monde ; seul toi peux le modifier",
+   "Seulement toi",
+   "Personne avant sudo",
+   "Seulement ton groupe"
+  ],
+  "answer": 0,
+  "explain": "Chaque chiffre est un groupe : toi, ton groupe, les autres. 7 = 4+2+1 = rwx, 5 = 4+1 = r-x. Donc toi tu lis, écris et lances ; les autres lisent et lancent mais ne peuvent pas modifier. ls -l affiche rwxr-xr-x."
+ },
+ {
+  "id": "linux-1-19",
+  "level": 1,
+  "q": "Quelle commande dit quel dossier prend le plus de place sur le disque ?",
+  "choices": [
+   "du -sh * | sort -h",
+   "ls -l | sort",
+   "df -h",
+   "wc -c *"
+  ],
+  "answer": 0,
+  "explain": "du (disk usage) additionne la place d'un dossier avec tout ce qu'il contient ; -s donne un total par dossier, -h des tailles lisibles, et sort -h trie ces tailles (la plus grande en dernier). ls -l montre un dossier comme une petite entrée, pas son contenu. df dit à quel point chaque disque est plein, pas quel dossier le remplit."
+ },
+ {
+  "id": "linux-1-20",
+  "level": 1,
+  "q": "Que change `-C restore/` dans `tar -xzf backup.tar.gz -C restore/` ?",
+  "choices": [
+   "L'endroit où les fichiers sont dépaquetés",
+   "Le nom de l'archive",
+   "Il compresse au lieu de dépaqueter",
+   "Il liste seulement les fichiers"
+  ],
+  "answer": 0,
+  "explain": "tar dépaquette dans le dossier où tu es, sauf si -C en nomme un autre (il doit exister). -x dépaquette, -z parce que c'est du gzip, -f nomme l'archive. Pour regarder dedans d'abord sans rien dépaqueter : tar -tzf backup.tar.gz."
  }
 ]

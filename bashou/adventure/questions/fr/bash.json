@@ -570,5 +570,44 @@
   ],
   "answer": 0,
   "explain": "[A-Z]{2}, c'est exactement deux majuscules, [0-9]{4} quatre chiffres. Sans -x, grep garde aussi les lignes où le motif apparaît à l'intérieur, comme ABC-1234 (qui contient BC-1234). -x demande que la ligne entière soit le motif. -E permet d'écrire {2} sans backslash."
+ },
+ {
+  "id": "bash-1-30",
+  "level": 1,
+  "q": "notes.txt et todo.txt ont changé. Que sauvegarde `git add notes.txt` puis `git commit -m x` ?",
+  "choices": [
+   "Seulement notes.txt",
+   "Les deux fichiers",
+   "Rien : add a besoin de -A",
+   "Tous les fichiers du dossier"
+  ],
+  "answer": 0,
+  "explain": "Un commit sauvegarde ce qui est indexé : ce que tu as ajouté depuis le dernier commit. todo.txt reste modifié, en attente de son propre add. C'est comme ça qu'un commit contient une seule idée. git status montre les deux listes ; git add . ou git commit -a prennent tout d'un coup."
+ },
+ {
+  "id": "bash-1-31",
+  "level": 1,
+  "q": "Que fait `git switch -c try-ideas` ?",
+  "choices": [
+   "Crée la branche try-ideas et passe dessus",
+   "Supprime la branche try-ideas",
+   "Fusionne try-ideas dans main",
+   "Renomme main en try-ideas"
+  ],
+  "answer": 0,
+  "explain": "-c (create) crée une nouvelle branche à partir de là où tu es et passe dessus. Les commits faits là ne changent pas main : git switch main t'y ramène tel qu'il était. Les vieux git écrivent la même chose git checkout -b try-ideas."
+ },
+ {
+  "id": "bash-2-16",
+  "level": 2,
+  "q": "Une fusion s'arrête : menu.txt contient des lignes <<<<<<<, ======= et >>>>>>>. Et ensuite ?",
+  "choices": [
+   "L'éditer, enlever les marqueurs, git add, git commit",
+   "git commit tout de suite",
+   "Supprimer le dossier .git",
+   "git push --force"
+  ],
+  "answer": 0,
+  "explain": "Les deux branches ont changé les mêmes lignes, et git ne peut pas choisir. Entre <<<<<<< et ======= c'est ton côté, entre ======= et >>>>>>> celui de l'autre branche. Écris le fichier comme il doit être, sans les marqueurs ; git add dit à git que c'est réglé, et git commit termine la fusion."
  }
 ]
