@@ -6,12 +6,15 @@
   "scripts"
  ],
  "masters": [
-  "achievement loop",
+  "achievement loop | won rename_rat",
   "achievement reader"
  ],
  "recall": [
   "bash-2-03",
   "bash-2-05"
+ ],
+ "fights": [
+  "rename_rat"
  ],
  "title": "Loops: for and while read",
  "summary": "Repeat a command for each file, or for each line of a file.",

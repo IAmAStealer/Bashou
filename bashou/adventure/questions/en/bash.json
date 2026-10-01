@@ -505,5 +505,70 @@
   ],
   "answer": 0,
   "explain": "Bash turns the pattern into names before rm starts: * stands for any characters, but the rest of the pattern must match exactly, from the first letter. old-report-... doesn't start with report, and report-2024-... has 2024. Since rm has no undo, run ls report-2025-*.csv first: it shows exactly what rm would remove."
+ },
+ {
+  "id": "bash-1-26",
+  "level": 1,
+  "q": "`./check.sh 2> errors.txt` puts what into errors.txt?",
+  "choices": [
+   "Only the error messages (stderr)",
+   "Only the normal output (stdout)",
+   "Both outputs",
+   "The second line of the output"
+  ],
+  "answer": 0,
+  "explain": "A program has two outputs: stdout, number 1, for results, and stderr, number 2, for errors. > alone means 1>, so it catches stdout; 2> catches stderr. The other output still shows on the screen. To get both in one file: > all.txt 2>&1."
+ },
+ {
+  "id": "bash-1-27",
+  "level": 1,
+  "q": "A file is named `my notes.txt`. What does `cp my notes.txt backup/` do?",
+  "choices": [
+   "Copies two files, my and notes.txt",
+   "Copies my notes.txt",
+   "Renames the file",
+   "Asks which file you mean"
+  ],
+  "answer": 0,
+  "explain": "Bash cuts the line at every space before cp starts, so cp receives three names: my, notes.txt and backup/. It copies the first two (or complains they don't exist). Quotes keep the name in one piece: cp \"my notes.txt\" backup/. Tab completion adds the backslash for you: my\\ notes.txt."
+ },
+ {
+  "id": "bash-1-28",
+  "level": 1,
+  "q": "`./report.sh` answers Permission denied. What's missing?",
+  "choices": [
+   "The x (execute) right: chmod +x report.sh",
+   "sudo in front",
+   "The .sh at the end",
+   "A space after ./"
+  ],
+  "answer": 0,
+  "explain": "To run a file as ./report.sh, it needs the x right; ls -l shows rw-r--r-- without it. chmod +x report.sh adds it. sudo would be the wrong fix: the problem isn't who you are, it's the file's rights. bash report.sh also works without x, since bash just reads the file."
+ },
+ {
+  "id": "bash-1-29",
+  "level": 1,
+  "q": "Why doesn't `mv *.JPG *.jpg` rename every photo?",
+  "choices": [
+   "mv renames one file at a time: it needs a loop",
+   "mv can't rename",
+   "Capitals are forbidden in names",
+   "It works, but only as root"
+  ],
+  "answer": 0,
+  "explain": "Bash expands the patterns first: *.JPG becomes the list of photos, and *.jpg matches nothing yet. mv then gets several names and expects the last to be a folder. A loop runs one mv per file: for f in *.JPG; do mv \"$f\" \"${f%.JPG}.jpg\"; done."
+ },
+ {
+  "id": "bash-2-15",
+  "level": 2,
+  "q": "Which lines does `grep -xE '[A-Z]{2}-[0-9]{4}'` keep?",
+  "choices": [
+   "AB-1234 only, nothing more on the line",
+   "AB-1234 and ABC-1234",
+   "Every line with a dash",
+   "AB-1234 and ab-1234"
+  ],
+  "answer": 0,
+  "explain": "[A-Z]{2} is exactly two capital letters, [0-9]{4} four digits. Without -x, grep also keeps lines where the pattern appears inside, like ABC-1234 (it contains BC-1234). -x asks the whole line to be the pattern. -E lets you write {2} without backslashes."
  }
 ]

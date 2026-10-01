@@ -82,16 +82,16 @@ paths above.
 
 ### Bash (text tools)
 
-1. `streams` — stdout, stderr, redirections
-2. `quotes` — ' and "
+1. `streams` — stdout, stderr, redirections · Stderr Stalker
+2. `quotes` — ' and " · Space Sprite
 3. `grep` · Needle Gnat, Log Hydra
-3. `regex` — a first taste of patterns, enough for awk and sed
+3. `regex` — a first taste of patterns, enough for awk and sed · Pattern Pixie
 4. `text_tools` — wc, sort, cut, uniq · Line Moth, Column Crab, Jumble Sprite, Peak Harpy, Echo Swarm
 5. `pipes` — chains, step by step · Knot Eel, Echo Swarm, Peak Harpy
 6. `awk_sed` — columns and edits · Field Wasp, Ledger Golem, Verse Viper, Typo Serpent
 7. `find` · Maze Wraith
-8. `scripts` — shebang, arguments, set -euo pipefail
-9. `loops` — for, while read
+8. `scripts` — shebang, arguments, set -euo pipefail · Shebang Shade
+9. `loops` — for, while read · Rename Rat
 
 ### Linux
 

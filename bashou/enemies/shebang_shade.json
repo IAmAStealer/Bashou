@@ -1,0 +1,47 @@
+{
+ "name": "Shebang Shade",
+ "palette": {
+  "a": "#140c24",
+  "s": "#5a3c8a",
+  "S": "#3c2660",
+  "w": "#f0e8ff",
+  "y": "#f0d048",
+  "m": "#140c24"
+ },
+ "base": [
+  ".....aaaaaa......",
+  "....asssssssa....",
+  "...asswwsswwsa...",
+  "...assmwssmwsa...",
+  "...asssssssssa...",
+  "..asssSSSSSSssa..",
+  "..assysyssysSsa..",
+  "..asyyyyssysSsa..",
+  "..assysyssysSsa..",
+  "..asyyyysssSSsa..",
+  "...asysyssySsa...",
+  "....aSaSaSaSa...."
+ ],
+ "poses": {
+  "inhale": {
+   "0": "....aaaaaaaa....."
+  },
+  "closed": {
+   "2": "-----ss--ss------",
+   "3": "-----ww--ww------"
+  },
+  "left": {
+   "3": "-----mw--mw------"
+  },
+  "right": {
+   "3": "-----wm--wm------"
+  },
+  "fidget": {
+   "11": "....SaSaSaSaS...."
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

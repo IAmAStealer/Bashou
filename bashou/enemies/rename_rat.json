@@ -1,0 +1,52 @@
+{
+ "name": "Rename Rat",
+ "palette": {
+  "a": "#201818",
+  "g": "#a09898",
+  "G": "#706868",
+  "p": "#f0a8b0",
+  "m": "#000000",
+  "w": "#ffffff",
+  "t": "#f4e8c0",
+  "T": "#c8b080",
+  "r": "#d04040"
+ },
+ "base": [
+  ".aa.....aa.......",
+  "apGa...apGa......",
+  "agGgaaagGga......",
+  ".agggggggga......",
+  ".agwmgggwmga.....",
+  "agggggggggggpa...",
+  ".agggggggggaa....",
+  "..aggttttga......",
+  "..agtTrTtga..aa..",
+  "..aggttttgga.ap..",
+  "...agggggggaap...",
+  "....aGa.aGaaa...."
+ ],
+ "poses": {
+  "inhale": {
+   "6": "agggggggggga....."
+  },
+  "closed": {
+   "4": "---gG---gG-------"
+  },
+  "left": {
+   "4": "---mw---mw-------"
+  },
+  "right": {
+   "4": "---wm---wm-------"
+  },
+  "fidget": {
+   "8": "-------------pa--",
+   "9": "------------ap-..",
+   "10": "-----------ap....",
+   "11": "----------a......"
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

@@ -1,0 +1,46 @@
+{
+ "name": "Stderr Stalker",
+ "palette": {
+  "a": "#1a0c18",
+  "k": "#6a3858",
+  "K": "#4a2440",
+  "r": "#ff3838",
+  "R": "#a01c24",
+  "y": "#ffd040"
+ },
+ "base": [
+  "......aaaaa......",
+  ".....akkkkka.....",
+  "....akkKKKkka....",
+  "...akkKaaaKkka...",
+  "...akKarRraKka...",
+  "...akKaaaaaKka...",
+  "...akkKKKKKkka...",
+  "..akkkkkkkkkkka..",
+  "..akKkkkkkkkKka..",
+  ".akkKkkkkkkkKkka.",
+  ".akKkkKkkkKkkKka.",
+  ".aaKaaKaaaKaaKaa."
+ ],
+ "poses": {
+  "inhale": {
+   "7": ".akkkkkkkkkkkkka."
+  },
+  "closed": {
+   "4": "-------RRR-------"
+  },
+  "left": {
+   "4": "------rRa--------"
+  },
+  "right": {
+   "4": "--------aRr------"
+  },
+  "fidget": {
+   "4": "------rrrrr------"
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}

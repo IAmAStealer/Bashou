@@ -505,5 +505,70 @@
   ],
   "answer": 0,
   "explain": "Bash transforme le motif en noms avant que rm démarre : * remplace n'importe quels caractères, mais le reste du motif doit correspondre exactement, dès la première lettre. old-report-... ne commence pas par report, et report-2024-... contient 2024. Comme rm n'a pas d'annulation, lance d'abord ls report-2025-*.csv : il montre exactement ce que rm supprimerait."
+ },
+ {
+  "id": "bash-1-26",
+  "level": 1,
+  "q": "`./check.sh 2> errors.txt` met quoi dans errors.txt ?",
+  "choices": [
+   "Seulement les messages d'erreur (stderr)",
+   "Seulement la sortie normale (stdout)",
+   "Les deux sorties",
+   "La deuxième ligne de la sortie"
+  ],
+  "answer": 0,
+  "explain": "Un programme a deux sorties : stdout, numéro 1, pour les résultats, et stderr, numéro 2, pour les erreurs. > seul veut dire 1>, il attrape stdout ; 2> attrape stderr. L'autre sortie s'affiche toujours à l'écran. Pour avoir les deux dans un fichier : > tout.txt 2>&1."
+ },
+ {
+  "id": "bash-1-27",
+  "level": 1,
+  "q": "Un fichier s'appelle `my notes.txt`. Que fait `cp my notes.txt backup/` ?",
+  "choices": [
+   "Copie deux fichiers, my et notes.txt",
+   "Copie my notes.txt",
+   "Renomme le fichier",
+   "Demande de quel fichier tu parles"
+  ],
+  "answer": 0,
+  "explain": "Bash coupe la ligne à chaque espace avant que cp démarre : cp reçoit trois noms, my, notes.txt et backup/. Il copie les deux premiers (ou se plaint qu'ils n'existent pas). Les guillemets gardent le nom d'un seul morceau : cp \"my notes.txt\" backup/. La touche Tab ajoute le backslash pour toi : my\\ notes.txt."
+ },
+ {
+  "id": "bash-1-28",
+  "level": 1,
+  "q": "`./report.sh` répond Permission denied. Que manque-t-il ?",
+  "choices": [
+   "Le droit x (exécution) : chmod +x report.sh",
+   "sudo devant",
+   "Le .sh à la fin",
+   "Un espace après ./"
+  ],
+  "answer": 0,
+  "explain": "Pour lancer un fichier avec ./report.sh, il lui faut le droit x ; ls -l montre rw-r--r-- sans lui. chmod +x report.sh l'ajoute. sudo serait la mauvaise solution : le problème n'est pas qui tu es, ce sont les droits du fichier. bash report.sh marche aussi sans x, car bash lit simplement le fichier."
+ },
+ {
+  "id": "bash-1-29",
+  "level": 1,
+  "q": "Pourquoi `mv *.JPG *.jpg` ne renomme-t-il pas toutes les photos ?",
+  "choices": [
+   "mv renomme un fichier à la fois : il faut une boucle",
+   "mv ne sait pas renommer",
+   "Les majuscules sont interdites",
+   "Ça marche, mais seulement en root"
+  ],
+  "answer": 0,
+  "explain": "Bash développe d'abord les motifs : *.JPG devient la liste des photos, et *.jpg ne trouve encore rien. mv reçoit alors plusieurs noms et attend un dossier à la fin. Une boucle lance un mv par fichier : for f in *.JPG; do mv \"$f\" \"${f%.JPG}.jpg\"; done."
+ },
+ {
+  "id": "bash-2-15",
+  "level": 2,
+  "q": "Quelles lignes garde `grep -xE '[A-Z]{2}-[0-9]{4}'` ?",
+  "choices": [
+   "AB-1234 seulement, rien d'autre sur la ligne",
+   "AB-1234 et ABC-1234",
+   "Toutes les lignes avec un tiret",
+   "AB-1234 et ab-1234"
+  ],
+  "answer": 0,
+  "explain": "[A-Z]{2}, c'est exactement deux majuscules, [0-9]{4} quatre chiffres. Sans -x, grep garde aussi les lignes où le motif apparaît à l'intérieur, comme ABC-1234 (qui contient BC-1234). -x demande que la ligne entière soit le motif. -E permet d'écrire {2} sans backslash."
  }
 ]

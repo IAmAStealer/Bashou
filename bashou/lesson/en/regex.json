@@ -6,11 +6,14 @@
   "grep"
  ],
  "masters": [
-  "achievement regex"
+  "achievement regex | won pattern_pixie"
  ],
  "recall": [
   "bash-1-17",
   "bash-2-12"
+ ],
+ "fights": [
+  "pattern_pixie"
  ],
  "title": "Patterns: a first taste of regular expressions",
  "summary": "Search for a shape instead of a word: any digit, the start of a line, four digits in a row.",

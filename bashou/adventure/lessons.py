@@ -24,6 +24,20 @@ LESSONS = [
         ("A pattern matches the whole name, from the first letter: report-* doesn't catch old-report-1.csv. "
          "? stands for exactly one character, [12] for one of the characters inside.", "rm report-2025-*.csv"),
     ]},
+    {"id": "streams_scripts", "tool": "2>", "topics": ("bash", "linux"), "title": "Streams and scripts", "pages": [
+        ("A program has two outputs. stdout (number 1) gets the normal results, stderr (number 2) the error "
+         "messages. Both show on the screen, so they look the same until you split them.", "ls notes.txt nowhere"),
+        ("> sends stdout into a file, 2> sends stderr. So you can keep the errors and let the rest scroll by, "
+         "or the opposite. /dev/null is a bin that swallows whatever you send it.",
+         "./check.sh 2> errors.txt"),
+        ("Bash cuts every line at its spaces before running it. A name with a space becomes two names, unless "
+         "quotes keep it together. Quote every \"$variable\" too, for the same reason.", "cp \"my notes.txt\" backup/"),
+        ("A script is a file of commands. Its first line, the shebang, names the program that reads it: "
+         "#!/bin/bash. chmod +x gives the right to run it, then ./ runs it from here.",
+         "chmod +x report.sh; ./report.sh"),
+        ("A for loop runs the same commands once per item: $f holds one file name each turn. Put echo in front "
+         "first to see what it would do, then remove it.", "for f in *.JPG; do echo mv \"$f\" \"${f%.JPG}.jpg\"; done"),
+    ]},
     {"id": "sort", "tool": "sort", "topics": ("bash", "linux"), "title": "sort, the organizer", "pages": [
         ("sort prints the lines of a file in alphabetical order. The file itself doesn't change.",
          "sort names.txt"),

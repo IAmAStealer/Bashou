@@ -1,0 +1,49 @@
+{
+ "name": "Space Sprite",
+ "palette": {
+  "a": "#183048",
+  "b": "#78c8f0",
+  "B": "#4890c0",
+  "w": "#e8f8ff",
+  "W": "#b0dcf0",
+  "m": "#102030",
+  "p": "#f0a0c0"
+ },
+ "base": [
+  ".................",
+  "..WW.........WW..",
+  ".WwwW.aaaaa.WwwW.",
+  ".WwwWabbbbbaWwwW.",
+  "..WWabmbbbmbaWW..",
+  "...abpbbbbbpba...",
+  "....abbmmmbba....",
+  ".....aBbbbBa.....",
+  "......aBbBa......",
+  ".......aba.......",
+  "........a........",
+  "................."
+ ],
+ "poses": {
+  "inhale": {
+   "1": ".WW...........WW.",
+   "2": "WwwW..aaaaa..WwwW"
+  },
+  "closed": {
+   "4": "-----B---B-------"
+  },
+  "left": {
+   "4": "----amb---mbb----"
+  },
+  "right": {
+   "4": "-----bm---bma----"
+  },
+  "fidget": {
+   "1": "WW.............WW",
+   "2": "WwW...aaaaa...WwW"
+  }
+ },
+ "particles": [
+  0,
+  6
+ ]
+}

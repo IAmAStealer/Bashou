@@ -7,11 +7,14 @@
   "streams"
  ],
  "masters": [
-  "achievement capture",
+  "achievement capture | won space_sprite",
   "fights 5"
  ],
  "recall": [
   "bash-2-07"
+ ],
+ "fights": [
+  "space_sprite"
  ],
  "title": "Quotes: ' and \"",
  "summary": "Single quotes keep text as it is, double quotes still expand $: when to use which.",

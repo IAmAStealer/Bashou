@@ -1,0 +1,53 @@
+{
+ "name": "Pattern Pixie",
+ "palette": {
+  "a": "#301028",
+  "p": "#f090c8",
+  "P": "#c05898",
+  "h": "#a040d0",
+  "s": "#f8d8c0",
+  "m": "#200818",
+  "w": "#e0fbff",
+  "y": "#fff060",
+  "Y": "#d0b020",
+  "c": "#90e4f4",
+  "C": "#48a8c8"
+ },
+ "base": [
+  ".....aaaaaa..y.y.",
+  "....ahhhhhha..y..",
+  "...ahhhhhhhhay.y.",
+  "C..ahhhhhhhha..C.",
+  "CC.ahhhhhhhha.CC.",
+  "CwCahsmssmshaCwC.",
+  "CwwahssppsshawwC.",
+  ".CCahhassahhaCC..",
+  ".CC.apPpPpPa.CC..",
+  "CwC.apPpPpPa.CwC.",
+  "CC..aPpPpPpa..CC.",
+  ".....aa..aa......"
+ ],
+ "poses": {
+  "inhale": {
+   "0": "----aaaaaaaa-----"
+  },
+  "closed": {
+   "5": "------P--P-------"
+  },
+  "left": {
+   "5": "-----ms-ms-------"
+  },
+  "right": {
+   "5": "------sm-sm------"
+  },
+  "fidget": {
+   "0": "-------------.y.-",
+   "1": "-------------yyy-",
+   "2": "-------------.y.-"
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}

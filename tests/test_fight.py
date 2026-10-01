@@ -85,6 +85,13 @@ SOLUTIONS = {
     "trial_glob_reports": ("rm report-2025-*.csv", None),
     "trial_tidy_notes": ("mv *.txt notes/", None),
     "core_counter": ("nproc", None),
+    # shell fights: streams, quotes, shebang, loops, regex
+    "stderr_stalker": ("./check.sh 2> errors.txt", None),
+    "trial_errors_only": ("./check.sh 2> errors.txt", None),
+    "space_sprite": ("cp \"{x}\" backup/", r'name: "([^"]+)"'),
+    "shebang_shade": ("sed -i '1s/.*/#!\\/bin\\/bash/' report.sh && chmod +x report.sh", None),
+    "rename_rat": ("for f in *.JPG; do mv \"$f\" \"${{f%.JPG}}.jpg\"; done", None),
+    "pattern_pixie": ("grep -cxE '[A-Z]{{2}}-[0-9]{{4}}' codes.txt", None),
     # logic fights: fix the condition
     "negation_gnome": ("sed -i 's/if ! grep/if grep/' door.sh", None),
     "trial_logic_door": ("sed -i 's/if ! grep/if grep/' door.sh", None),
@@ -250,7 +257,10 @@ class ChallengeTest(unittest.TestCase):
     def test_everyday_fights_refuse_the_easy_wrong_move(self):
         """A plain sort puts a capital on top, a too wide pattern removes files that stay, a loose file fails."""
         cases = [("flag_phantom", "LC_ALL=C sort names.txt | head -1"), ("glob_goblin", "rm *.csv"),
-                 ("clutter_critter", "mkdir photos docs && mv *.jpg photos/"), ("typo_troll", "true")]
+                 ("clutter_critter", "mkdir photos docs && mv *.jpg photos/"), ("typo_troll", "true"),
+                 ("stderr_stalker", "./check.sh > errors.txt 2>&1"), ("pattern_pixie", "grep -cE '[A-Z]{2}-[0-9]{4}' codes.txt"),
+                 ("space_sprite", "n=$(ls | grep ' '); cp $n backup/"),
+                 ("shebang_shade", "chmod +x report.sh"), ("rename_rat", "for f in *.JPG; do cp \"$f\" \"${f%.JPG}.jpg\"; done")]
         for cid, cmd in cases:
             ch = challenges.BY_ID[cid]
             for seed in range(3):

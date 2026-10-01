@@ -44,6 +44,12 @@ Every release has a section here, written for players. CI refuses to tag a relea
   three times for the others: `grep`, `find`, `tar`, `git`, `chmod`, `ps`, `gcc`, `dig` and many more.
   A command counts inside a pipe too (`cat app.log | grep error | sort` counts for grep and sort), as
   long as the whole line works. The Sage Owl lists these commands among the ways to pass a lesson.
+- Five new shell fights, one for each lesson they practise: the Stderr Stalker hides error lines among
+  normal ones until you catch them with `2>`, the Space Sprite slips a space into a file name (quotes
+  save you), the Shebang Shade breaks a script's first line and its right to run, the Rename Rat
+  needs a `for` loop to rename every photo, and the Pattern Pixie mixes fake parcel codes that only a
+  precise `grep -E` pattern sees through. On the adventure, the Sage Owl teaches "Streams and scripts"
+  on the road, with a chest, and new questions join the quiz.
 
 ## v0.6.5 — 2026-09-29
 

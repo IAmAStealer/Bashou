@@ -6,13 +6,16 @@
   "quotes"
  ],
  "masters": [
-  "achievement dry_run | achievement xray",
+  "achievement dry_run | achievement xray | won shebang_shade",
   "achievement exit_code"
  ],
  "recall": [
   "bash-2-04",
   "bash-2-08",
   "bash-2-06"
+ ],
+ "fights": [
+  "shebang_shade"
  ],
  "title": "Your first script",
  "summary": "Put commands in a file, make it runnable, and give it arguments.",
