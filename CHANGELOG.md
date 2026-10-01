@@ -50,8 +50,8 @@ Every release has a section here, written for players. CI refuses to tag a relea
   needs a `for` loop to rename every photo, and the Pattern Pixie mixes fake parcel codes that only a
   precise `grep -E` pattern sees through. On the adventure, the Sage Owl teaches "Streams and scripts"
   on the road, with a chest, and new questions join the quiz.
-- Six new Linux fights: the Group Gremlin asks which group you belong to (`id`), the Chmod Chimera
-  mixes up the rights of two files, the Hoarder Hog fills folders until only `du` tells which one is
+- Six new Linux fights: the Group Gremlin asks which group you belong to (`id`), the Padlock Pest
+  mixes up the rights of two files, the Bloat Blob fills folders until only `du` tells which one is
   the biggest, the Tar Tortoise sits on an archive to unpack into the right folder, the Unit Imp
   swaps two lines of a service's unit file, and the Header Hound guards a web server that only
   `curl -I` gets the size from.

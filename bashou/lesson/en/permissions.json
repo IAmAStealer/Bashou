@@ -6,7 +6,7 @@
   "users"
  ],
  "masters": [
-  "achievement octal | tool chmod 3 | won chmod_chimera",
+  "achievement octal | tool chmod 3 | won padlock_pest",
   "achievement symbolic"
  ],
  "recall": [
@@ -15,7 +15,7 @@
   "bash-2-08"
  ],
  "fights": [
-  "chmod_chimera"
+  "padlock_pest"
  ],
  "title": "Permissions: who can do what",
  "summary": "Read the -rwxr-x--- of ls -l, and change it with chmod without opening everything.",

@@ -1,0 +1,51 @@
+{
+ "name": "Bloat Blob",
+ "palette": {
+  "a": "#20102c",
+  "b": "#9a68d8",
+  "B": "#6a40a8",
+  "l": "#c8a8f0",
+  "f": "#ece2bc",
+  "F": "#8a8070",
+  "w": "#ffffff",
+  "m": "#101010",
+  "r": "#e06080"
+ },
+ "base": [
+  "..afffFaafffFa...",
+  "..afFFfaafFFfa...",
+  "..affffaaffffa...",
+  "..abbbbbbbbbbba..",
+  ".ablbbbbbbbbbbba.",
+  ".albbwmbbbwmbbba.",
+  "ablbbbbbbbbbbbbba",
+  "abbbbrbmmmbrbbbBa",
+  "abbbbbbbbbbbbbbBa",
+  ".abbbbbbbbbbbbBa.",
+  "..aBBbbbbbbbBBa..",
+  "...aaaaaaaaaaa..."
+ ],
+ "poses": {
+  "inhale": {
+   "3": ".abbbbbbbbbbbbba.",
+   "10": ".aBBbbbbbbbbbBBa."
+  },
+  "closed": {
+   "5": "-----BB---BB-----"
+  },
+  "left": {
+   "5": "-----mw---mw-----"
+  },
+  "right": {
+   "5": "-----wm---wm-----"
+  },
+  "fidget": {
+   "0": "..aFfffaaFfffa...",
+   "1": "..afFFfaafFFfa..."
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

@@ -39,7 +39,7 @@ GROUP_GREMLIN = Challenge(
 )
 
 
-# --- Chmod Chimera: the right rights on two files -----------------------------------------------------
+# --- Padlock Pest: the right rights on two files -----------------------------------------------------
 
 def rights_setup(work, rng):
     (work / "diary.txt").write_text("Dear diary, today I learned chmod.\n")
@@ -57,9 +57,9 @@ def rights_verify(work, meta, value):
 
 
 CHMOD_CHIMERA = Challenge(
-    level=1, id="chmod_chimera", pet="hedgehog", tools=("chmod",), threat="Chmod Chimera", requires=["chmod"],
+    level=1, id="padlock_pest", pet="hedgehog", tools=("chmod",), threat="Padlock Pest", requires=["chmod"],
     skill="linux", fix=True,
-    task="The Chmod Chimera mixed up the rights.\ndiary.txt: only you may read and write it, nobody else gets "
+    task="The Padlock Pest mixed up the rights.\ndiary.txt: only you may read and write it, nobody else gets "
          "anything (rw-------). backup.sh: you may do everything, everyone else may read and run it "
          "(rwxr-xr-x). Then: verify",
     help="Here, look at how MODE is written: u, g, o (user, group, others) with +, - or =, or a number.",
@@ -71,7 +71,7 @@ CHMOD_CHIMERA = Challenge(
 )
 
 
-# --- Hoarder Hog: du, and which folder is the biggest ------------------------------------------------
+# --- Bloat Blob: du, and which folder is the biggest ------------------------------------------------
 
 def hoard_setup(work, rng):
     big, many, small = rng.sample(ROOMS, 3)
@@ -87,8 +87,8 @@ def hoard_setup(work, rng):
 
 
 HOARDER_HOG = Challenge(
-    level=1, id="hoarder_hog", pet="meerkat", tools=("du",), threat="Hoarder Hog", requires=["du"], skill="linux",
-    task="The Hoarder Hog stuffed three folders here. Which folder takes the most disk space?",
+    level=1, id="bloat_blob", pet="meerkat", tools=("du",), threat="Bloat Blob", requires=["du"], skill="linux",
+    task="The Bloat Blob swelled three folders here. Which folder takes the most disk space?",
     help="Here, find -s (one total per folder) and -h (sizes people can read: K, M, G).",
     hints=["ls shows files, not how much space a folder uses with everything inside. du (disk usage) adds it "
            "up. Careful: the folder with the most files isn't always the biggest.",

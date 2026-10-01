@@ -96,9 +96,9 @@ SOLUTIONS = {
     "pattern_pixie": ("grep -cxE '[A-Z]{{2}}-[0-9]{{4}}' codes.txt", None),
     # linux fights: id, rights, du, tar, a unit file, headers
     "group_gremlin": ("id -gn", None),
-    "chmod_chimera": ("chmod 600 diary.txt && chmod 755 backup.sh", None),
+    "padlock_pest": ("chmod 600 diary.txt && chmod 755 backup.sh", None),
     "trial_private_diary": ("chmod 600 diary.txt", None),
-    "hoarder_hog": ("du -s * | sort -n | tail -1 | cut -f2", None),
+    "bloat_blob": ("du -s * | sort -n | tail -1 | cut -f2", None),
     "tar_tortoise": ("tar -xzf backup.tar.gz -C restore/", None),
     "unit_imp": (UNIT_FIX, None),
     "trial_unit_file": (UNIT_FIX, None),
@@ -279,8 +279,8 @@ class ChallengeTest(unittest.TestCase):
                  ("stderr_stalker", "./check.sh > errors.txt 2>&1"), ("pattern_pixie", "grep -cE '[A-Z]{2}-[0-9]{4}' codes.txt"),
                  ("space_sprite", "n=$(ls | grep ' '); cp $n backup/"),
                  ("shebang_shade", "chmod +x report.sh"), ("rename_rat", "for f in *.JPG; do cp \"$f\" \"${f%.JPG}.jpg\"; done"),
-                 ("chmod_chimera", "chmod 700 diary.txt; chmod +x backup.sh"), ("tar_tortoise", "tar -xzf backup.tar.gz"),
-                 ("hoarder_hog", "for d in */; do echo $(ls $d | wc -l) ${d%/}; done | sort -n | tail -1 | cut -d' ' -f2"),
+                 ("padlock_pest", "chmod 700 diary.txt; chmod +x backup.sh"), ("tar_tortoise", "tar -xzf backup.tar.gz"),
+                 ("bloat_blob", "for d in */; do echo $(ls $d | wc -l) ${d%/}; done | sort -n | tail -1 | cut -d' ' -f2"),
                  ("commit_crowd", "git add . && git commit -qm all"), ("unit_imp", "true"),
                  ("branch_bramble", "git add idea.txt && git commit -qm idea"),
                  ("conflict_chimera", "git add menu.txt && git commit -q --no-edit")]

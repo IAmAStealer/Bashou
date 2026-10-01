@@ -96,8 +96,8 @@ paths above.
 ### Linux
 
 1. `users` — uid, groups, sudo · Group Gremlin
-2. `permissions` · Chmod Chimera
-3. `disk` — df, du · Hoarder Hog
+2. `permissions` · Padlock Pest
+3. `disk` — df, du · Bloat Blob
 4. `archives` — tar · Tar Tortoise
 5. `processes` — ps, signals · Process Phantom
 6. `network` — addresses, ports, listening · Header Hound

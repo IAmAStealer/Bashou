@@ -1,0 +1,52 @@
+{
+ "name": "Padlock Pest",
+ "palette": {
+  "a": "#1c1408",
+  "s": "#d8dce4",
+  "S": "#8890a0",
+  "y": "#f0c840",
+  "Y": "#b08820",
+  "h": "#fff0a0",
+  "w": "#ffffff",
+  "m": "#101010",
+  "k": "#3a2808"
+ },
+ "base": [
+  ".....aaaaaaa.....",
+  "....asSSSSSsa....",
+  "...asa.....asa...",
+  "...asa.....asa...",
+  "..aaaaaaaaaaaaa..",
+  "..ahyyyyyyyyyYa..",
+  "..ahwmyyyyywmYa..",
+  "..ayyyykkkyyyYa..",
+  "..ayyyykkkyyyYa..",
+  "..aYyyyykyyyYYa..",
+  "..aYYYYYkYYYYYa..",
+  "...aaaaaaaaaaa..."
+ ],
+ "poses": {
+  "inhale": {
+   "0": "....aaaaaaaaa...."
+  },
+  "closed": {
+   "6": "----YY-----YY----"
+  },
+  "left": {
+   "6": "----mw-----mw----"
+  },
+  "right": {
+   "6": "----wm-----wm----"
+  },
+  "fidget": {
+   "1": "....asSSSSSsa....",
+   "2": "...asa.....a.a...",
+   "3": "...asa......a....",
+   "0": ".....aaaaaa......"
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}
