@@ -11,7 +11,7 @@
   "resolvectl"
  ],
  "masters": [
-  "won resolver_rook",
+  "won resolver_rook | tool dig 3 | tool host 3 | tool nslookup 3",
   "won nxdomain_nixie"
  ],
  "recall": [

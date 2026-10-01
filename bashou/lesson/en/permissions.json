@@ -6,7 +6,7 @@
   "users"
  ],
  "masters": [
-  "achievement octal",
+  "achievement octal | tool chmod 3",
   "achievement symbolic"
  ],
  "recall": [

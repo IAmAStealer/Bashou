@@ -173,6 +173,16 @@ class UnlockTest(unittest.TestCase):
         self.assertTrue(lesson.passed(s, help_))
         self.assertIn("use man once", reader.how_to_unlock(state.default(), BY_ID["paths"]))
 
+    def test_a_command_inside_a_pipe_counts_for_its_lesson(self):
+        """Owner: someone who uses grep mostly inside pipes knows it too."""
+        grep = BY_ID["grep"]
+        s = state.default()
+        for _ in range(lesson.tool_uses(grep)):
+            self.assertFalse(lesson.passed(s, grep))
+            progress.record(s, 0, "cat app.log | grep -i error | sort | uniq -c", "2026-10-01", 12)
+        self.assertTrue(lesson.passed(s, grep))
+        self.assertTrue(lesson.passed(s, BY_ID["text_tools"]))
+
     def test_next_step_until_mastered(self):
         s = state.default()
         heap = BY_ID["stack_heap"]

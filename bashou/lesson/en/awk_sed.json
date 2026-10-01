@@ -11,7 +11,7 @@
   "sed"
  ],
  "masters": [
-  "won field_wasp | won awk_golem",
+  "won field_wasp | won awk_golem | tool awk 3 | tool sed 3",
   "won verse_viper | won sed_serpent"
  ],
  "recall": [

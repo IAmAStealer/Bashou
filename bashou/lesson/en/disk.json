@@ -6,7 +6,7 @@
   "files"
  ],
  "masters": [
-  "achievement disk",
+  "achievement disk | tool df 3 | tool du 3",
   "achievement sizer"
  ],
  "recall": [

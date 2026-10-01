@@ -8,7 +8,7 @@
   "logic"
  ],
  "masters": [
-  "won colon_cobra"
+  "won colon_cobra | tool python3 3"
  ],
  "recall": [
   "python-1-05",

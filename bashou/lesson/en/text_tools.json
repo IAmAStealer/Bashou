@@ -12,7 +12,7 @@
   "uniq"
  ],
  "masters": [
-  "won line_moth",
+  "won line_moth | tool wc 3 | tool sort 3 | tool cut 3 | tool uniq 3",
   "won column_crab",
   "won peak_harpy"
  ],

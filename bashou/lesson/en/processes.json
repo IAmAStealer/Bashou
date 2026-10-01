@@ -10,7 +10,7 @@
   "users"
  ],
  "masters": [
-  "achievement census",
+  "achievement census | tool ps 3 | tool pgrep 3 | tool kill 3",
   "achievement signal",
   "won ps_phantom"
  ],

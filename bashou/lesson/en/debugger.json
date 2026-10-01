@@ -9,7 +9,7 @@
   "gdb"
  ],
  "masters": [
-  "won segfault_salamander",
+  "won segfault_salamander | tool gdb 3",
   "won breakpoint_beetle"
  ],
  "recall": [

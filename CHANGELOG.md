@@ -41,7 +41,9 @@ Every release has a section here, written for players. CI refuses to tag a relea
   join the quiz.
 - A lesson also opens the ones after it when you use its command and it works: once for the lessons
   many others wait for (like `man` for "Help yourself", `nano` or `vi` for the editor, `mv` for files),
-  three times for the others. The Sage Owl lists these commands among the ways to pass a lesson.
+  three times for the others: `grep`, `find`, `tar`, `git`, `chmod`, `ps`, `gcc`, `dig` and many more.
+  A command counts inside a pipe too (`cat app.log | grep error | sort` counts for grep and sort), as
+  long as the whole line works. The Sage Owl lists these commands among the ways to pass a lesson.
 
 ## v0.6.5 — 2026-09-29
 

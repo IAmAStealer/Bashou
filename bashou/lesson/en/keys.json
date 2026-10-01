@@ -6,7 +6,7 @@
   "permissions"
  ],
  "masters": [
-  "won forger_ferret",
+  "won forger_ferret | tool gpg 3 | tool ssh-keygen 3",
   "achievement keymaker"
  ],
  "recall": [

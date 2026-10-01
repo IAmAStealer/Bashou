@@ -6,7 +6,7 @@
   "stack_heap"
  ],
  "masters": [
-  "won mut_marmot",
+  "won mut_marmot | tool rustc 3",
   "won shadow_shade",
   "won byte_basilisk"
  ],

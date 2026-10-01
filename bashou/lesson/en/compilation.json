@@ -8,7 +8,7 @@
   "logic"
  ],
  "masters": [
-  "won semicolon_slug",
+  "won semicolon_slug | tool gcc 3",
   "won fencepost_fiend | won leak_lurker | won stack_specter"
  ],
  "recall": [

@@ -13,7 +13,7 @@
   "dig"
  ],
  "masters": [
-  "won refused_revenant",
+  "won refused_revenant | tool tcpdump 3",
   "won established_ettin"
  ],
  "recall": [

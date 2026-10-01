@@ -9,7 +9,7 @@
   "ss"
  ],
  "masters": [
-  "won loopback_lurker",
+  "won loopback_lurker | tool ss 3",
   "won handshake_heron"
  ],
  "recall": [

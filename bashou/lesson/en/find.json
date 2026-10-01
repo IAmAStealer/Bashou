@@ -9,7 +9,7 @@
   "find"
  ],
  "masters": [
-  "won find_wraith"
+  "won find_wraith | tool find 3"
  ],
  "recall": [
   "bash-1-18",

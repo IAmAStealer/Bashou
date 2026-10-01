@@ -6,7 +6,7 @@
   "text_tools"
  ],
  "masters": [
-  "won query_quokka"
+  "won query_quokka | tool sqlite3 3"
  ],
  "recall": [
   "sql-1-04",

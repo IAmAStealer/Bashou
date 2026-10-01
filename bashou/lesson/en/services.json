@@ -7,7 +7,7 @@
   "streams"
  ],
  "masters": [
-  "achievement status",
+  "achievement status | tool systemctl 3",
   "achievement logbook",
   "achievement reload"
  ],

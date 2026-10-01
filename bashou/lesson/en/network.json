@@ -9,7 +9,7 @@
   "processes"
  ],
  "masters": [
-  "achievement headers",
+  "achievement headers | tool curl 3 | tool ping 3",
   "achievement resolver"
  ],
  "recall": [
