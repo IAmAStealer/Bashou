@@ -12,7 +12,7 @@ import sys
 from .. import achievements, challenges, creatures, progress, render, skills, state, terminal
 from ..adventure import quiz
 from ..i18n import _
-from . import HERE, by_id, load, met, progress_of, read, shown, skills_of, status, to_pass, unlocked, waiting_for
+from . import HERE, by_id, load, met, own, progress_of, read, shown, skills_of, status, to_pass, unlocked, waiting_for
 from ..render import ESC, BOLD, DIM, RESET, REV, GOOD, BAD
 
 ACCENT = f"{ESC}[38;2;240;200;110m"
@@ -423,6 +423,9 @@ def how_to_unlock(s, lesson):
                  for a in achievements.ALL if a.id == c.split()[1]]
         if names:
             ways.append(_("earn {achievements}").format(achievements=_(" or ").join(names)))
+        tools = own(before, "tool")
+        if tools:
+            ways.append(_(" or ").join(describe(" ".join(t), s) for t in tools))
         n = to_pass(before)
         ways.append(_("earn {n} achievements").format(n=n) + f" ({len(s['achievements'])}/{n})")
         parts.append(_("pass “{lesson}”: {ways}").format(lesson=titles.get(before["id"], before["title"]),

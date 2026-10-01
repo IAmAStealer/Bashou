@@ -171,7 +171,7 @@ class ProgressTest(unittest.TestCase):
         read(*first)                                                      # 20: Well read
         read(*every)                                                      # every one: Alexandria
         self.assertEqual(seen, ["sparklings", "spark", "candle", "lantern", "torch", "campfire",
-                                "beacon", "phoenix"])                    # 2 at once skip the Ember and the Blaze
+                                "blaze", "phoenix"])                     # 2 at once skip the Ember and the Beacon
         self.assertEqual(len(creatures.FORMS["spark"]), 10)
 
     @mock.patch("bashou.which.installed", return_value=True)

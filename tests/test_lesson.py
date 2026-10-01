@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from bashou import achievements, challenges, lesson, render, skills, state
+from bashou import achievements, challenges, lesson, progress, render, skills, state
 from bashou.lesson import HERE, reader
 
 LESSONS = lesson.load("en")
@@ -157,6 +157,21 @@ class UnlockTest(unittest.TestCase):
         self.assertFalse(lesson.passed(s, paths))
         s["achievements"] = [a.id for a in achievements.ALL if a.id not in ("builder", "shortcut")][:n]
         self.assertTrue(lesson.passed(s, paths))
+
+    def test_passed_by_its_command_once_or_three_times(self):
+        """Owner: a command that worked (exit status 0) passes the lesson, once when many lessons wait
+        behind it, 3 times otherwise. A failed command doesn't count."""
+        for le in LESSONS:
+            for _, tool, n in lesson.own(le, "tool"):
+                self.assertEqual(int(n), lesson.tool_uses(le), f"{le['id']}: tool {tool} {n}")
+        help_ = BY_ID["help"]
+        self.assertEqual(lesson.tool_uses(help_), 1)
+        s = state.default()
+        progress.record(s, 1, "man ls", "2026-10-01", 12)
+        self.assertFalse(lesson.passed(s, help_))
+        progress.record(s, 0, "man ls", "2026-10-01", 12)
+        self.assertTrue(lesson.passed(s, help_))
+        self.assertIn("use man once", reader.how_to_unlock(state.default(), BY_ID["paths"]))
 
     def test_next_step_until_mastered(self):
         s = state.default()

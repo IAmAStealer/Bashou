@@ -6,7 +6,7 @@
  ],
  "masters": [
   "achievement memory | achievement disk",
-  "achievement census | won core_counter"
+  "achievement census | tool nproc 1 | won core_counter"
  ],
  "recall": [
   "linux-1-07",

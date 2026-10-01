@@ -39,6 +39,9 @@ Every release has a section here, written for players. CI refuses to tag a relea
   Counter asks how many processors your computer has (`nproc`). On the adventure, the Sage Owl teaches
   "Files and editing" and "Help and wildcards" on the road, each followed by a chest, and new questions
   join the quiz.
+- A lesson also opens the ones after it when you use its command and it works: once for the lessons
+  many others wait for (like `man` for "Help yourself", `nano` or `vi` for the editor, `mv` for files),
+  three times for the others. The Sage Owl lists these commands among the ways to pass a lesson.
 
 ## v0.6.5 — 2026-09-29
 

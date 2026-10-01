@@ -5,7 +5,7 @@
   "files"
  ],
  "masters": [
-  "tool nano 3 | tool vim 3 | tool vi 3 | won typo_troll"
+  "tool nano 1 | tool vim 1 | tool vi 1 | won typo_troll"
  ],
  "recall": [
   "bash-1-15",

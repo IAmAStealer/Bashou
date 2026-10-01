@@ -105,18 +105,46 @@ def by_id():
     return {le["id"]: le for le in english()}
 
 
+MANY_AFTER = 10     # a lesson that opens this many lessons (all the way down) passes with one good use of its tool
+
+
+def opens(lesson_id):
+    """How many lessons wait for this one, directly or further down the path."""
+    after = {le["id"]: le.get("after", []) for le in english()}
+    found, todo = set(), [lesson_id]
+    while todo:
+        lid = todo.pop()
+        for child, before in after.items():
+            if lid in before and child not in found:
+                found.add(child)
+                todo.append(child)
+    return len(found)
+
+
+def tool_uses(lesson):
+    """How many times a command of the lesson (its "tool" masters) must work (exit status 0) to pass it:
+    once when many lessons wait behind it, 3 times otherwise (owner)."""
+    return 1 if opens(lesson["id"]) >= MANY_AFTER else 3
+
+
 def to_pass(lesson):
     """How many achievements in all pass this lesson."""
     return PER_DEPTH * depths().get(lesson["id"], 1)
 
 
+def own(lesson, kind):
+    """The conditions of one kind ("achievement", "tool") among the lesson's masters, as split words."""
+    return [c.split() for cond in lesson.get("masters", []) for c in cond.split("|") if c.split()[0] == kind]
+
+
 def passed(s, lesson):
     """You're through this lesson, and the ones after it may open: one of its fights won, one of the
-    achievements it prepares for earned, or enough achievements in all (3 per step of depth)."""
+    achievements it prepares for earned, one of its commands used with success (see tool_uses), or
+    enough achievements in all (3 per step of depth)."""
     earned = s["achievements"]
-    own = [c.split()[1] for cond in lesson.get("masters", []) for c in cond.split("|")
-           if c.split()[0] == "achievement"]
-    return (bool(set(lesson.get("fights", [])) & set(s["challenges"])) or any(a in earned for a in own)
+    return (bool(set(lesson.get("fights", [])) & set(s["challenges"]))
+            or any(a in earned for _, a in own(lesson, "achievement"))
+            or any(met(s, " ".join(t)) for t in own(lesson, "tool"))
             or len(earned) >= to_pass(lesson))
 
 

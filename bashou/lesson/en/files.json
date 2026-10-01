@@ -5,8 +5,8 @@
   "paths"
  ],
  "masters": [
-  "achievement builder",
-  "achievement copycat | won clutter_critter"
+  "achievement builder | tool mkdir 1",
+  "achievement copycat | tool mv 1 | won clutter_critter"
  ],
  "recall": [
   "bash-1-04",
