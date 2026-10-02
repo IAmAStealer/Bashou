@@ -430,7 +430,9 @@ COMMANDS = [
              ("--packages", dict(action="store_true", help="move to Bashou's apt or dnf repository (shows every command first)"))]),
     Command("version", version, ("bashou version", "which version of Bashou this is", SETTINGS)),
     Command("help", lambda a: print_help()),
-    # old names, still working
+    # other names, still working
+    Command("achv", lambda a: achievements_list(), hidden=True),                # short names of bashou achievements
+    Command("achievement", lambda a: achievements_list(), hidden=True),
     Command("language", lambda a: config("language", None), hidden=True),       # now bashou config language
     Command("skills", lambda a: config("skills", None), hidden=True),           # now bashou config skills
     Command("setup", run("setup", "run"), hidden=True),                         # now bashou on

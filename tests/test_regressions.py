@@ -495,6 +495,23 @@ class BoardTest(TempState):
         self.assertEqual(state.load()["active"], "starter")
 
 
+class AliasTest(unittest.TestCase):
+    """Owner: `bashou achv` and `bashou achievement` show the achievements too."""
+
+    def test_achievements_has_short_names(self):
+        from bashou import cli
+        outputs = []
+        for name in ("achievements", "achv", "achievement"):
+            out = io.StringIO()
+            with mock.patch("sys.argv", ["bashou", name]), mock.patch("bashou.state.load", return_value=state.default()), \
+                    contextlib.redirect_stdout(out):
+                cli.main()
+            outputs.append(out.getvalue())
+        self.assertTrue(outputs[0])
+        self.assertEqual(outputs[0], outputs[1])
+        self.assertEqual(outputs[0], outputs[2])
+
+
 if __name__ == "__main__":
     unittest.main()
 
