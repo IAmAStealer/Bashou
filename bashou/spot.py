@@ -223,11 +223,12 @@ def layout(game, cols, rows):
     full = round(bar_w * left / GAME_SECONDS)
     mark, color = ("✔", GOOD) if game.last and game.last[0] else ("✗", BAD) if game.last else ("", "")
     parts = [(1, 2, "█" * full, ""), (1, 2 + full, "░" * (bar_w - full), DIM), (1, bar_w + 4, f"{left:4.1f} s", BOLD),
-             (1, cols - 7, f"{game.score:>3}", BOLD), (1, cols - 3, mark, color)]
+             (1, cols - 5, f"{game.score:>3}", BOLD)]
     mid, middle = rows // 2 + 1, cols // 2 + 1
     up, lft, rgt, down = (_(KINDS[k][0]) for k in game.answers)
     text = game.text
     parts += [(mid, middle - len(text) // 2, text, BOLD),
+              (mid - 5, middle, mark, color),                    # right or wrong, just above the answers
               (mid - 3, middle - (len(up) + 2) // 2, f"↑ {up}", ""),
               (mid + 3, middle - (len(down) + 2) // 2, f"↓ {down}", ""),
               (mid, middle - len(text) // 2 - GAP - len(lft) - 2, f"← {lft}", ""),     # close to the string

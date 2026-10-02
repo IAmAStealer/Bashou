@@ -185,6 +185,8 @@ class GameTest(unittest.TestCase):
                 on_mid = sorted((c, c + len(t) - 1) for r, c, t, st in parts if r == mid)
                 for (a, b), (x, y) in zip(on_mid, on_mid[1:]):
                     self.assertEqual(x - b - 1, spot.GAP, (cols, on_mid))                    # room, but close
+                if g.last:                                                                   # ✔/✗ above the top answer
+                    self.assertEqual(row_of["✔" if g.last[0] else "✗"], (mid - 5, cols // 2 + 1))
                 rows_used = sorted({r for r, c, t, st in parts if t})
                 self.assertEqual(rows_used[0], 1)                                            # the clock on top
                 self.assertTrue(all(abs(r - mid) >= 3 for r in rows_used if r not in (1, rows, mid)))
