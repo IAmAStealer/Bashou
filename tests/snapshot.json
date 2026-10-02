@@ -7230,27 +7230,27 @@
    },
    "eagle": {
     "palette": {
-     "a": "#4a2e18",
-     "o": "#7a4e2a",
-     "w": "#f4f2ea",
-     "c": "#c8c4b8",
-     "y": "#f0b030",
+     "w": "#fdf8ea",
+     "W": "#e8e2cc",
+     "g": "#c8c0b4",
      "m": "#141008",
-     "t": "#6a4428"
+     "y": "#f0b030",
+     "b": "#6e3c20",
+     "d": "#45261a"
     },
     "base": [
-     ".....ccccc.......",
-     "....cwwwwwc......",
-     "...cwwwmwwwyy....",
-     "...cwwwwwwyyyy...",
-     "....cwwwwwc.y....",
-     "...aooooooooa....",
-     "..aoooooooooooa..",
-     ".aooooooooooooooa",
-     "aooaoooooooooaooa",
-     "a..aooooooooa...a",
-     "....aaoooaaa.....",
-     "..tttyttttyttt..."
+     "......wwwww......",
+     ".....Wwwwwwww....",
+     "....ggwwwwwgg....",
+     "....WmwyyywmW....",
+     "....WwwyyywwW....",
+     "....WwwyywwwW....",
+     "...dbwwwwwwwbd...",
+     "...dbbwbwbwbbd...",
+     "...dbdbbbbbdbd...",
+     "...dbdbbbbbdbd...",
+     "....ddbbbbbdd....",
+     ".....yydddyy....."
     ]
    }
   },
