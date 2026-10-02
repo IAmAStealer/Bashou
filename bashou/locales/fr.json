@@ -805,6 +805,7 @@
  "SHA-1 hash": "Hash SHA-1",
  "Encrypted": "Chiffré",
  "JWT token": "Jeton JWT",
+ "Basic auth": "Auth Basic",
  "Email": "E-mail",
  "URL": "URL",
  "ISO 8601 date": "Date ISO 8601",

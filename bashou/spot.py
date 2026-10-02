@@ -1,7 +1,7 @@
 """`bashou spot`: what is this string? (owner, 2026-10-02/03)
 
 An IPv6, a hash, base64, a regex, a line of Rust… A string in the center, 4 answers on the arrow keys, 20
-seconds for the whole game. The bag holds the 20 kinds twice; a good answer takes the string out, a
+seconds for the whole game. The bag holds every kind twice; a good answer takes the string out, a
 wrong one puts its kind back in the bag. No explanation: you go fast and learn from your mistakes, like
 when you skim real logs and configs.
 """
@@ -21,6 +21,7 @@ from .render import BOLD, DIM, ESC, RESET
 GAME_SECONDS = 20
 COPIES = 2                       # each kind twice in the bag: it can come back
 LONGEST, LABEL = 40, 14           # string and answer lengths: all on one line of 80 columns
+GAP = 5                          # columns between the string and the answers on its sides
 GOOD, BAD, GOLD = "\033[38;2;120;200;120m", "\033[38;2;230;110;100m", "\033[38;2;240;200;90m"
 TIERS = [(10, "Sharp eyes"), (20, "Hawk eyes"), (30, "Eagle eyes")]     # good answers in one game
 
@@ -81,6 +82,12 @@ def jwt(rng):
     return f"{head}.{body}.{sig}"                                  # eyJ….eyJ….…: easy to spot
 
 
+def basic_auth(rng):
+    """An HTTP header's value: "Basic", then user:password in base64 (readable by anyone: not a secret)."""
+    pair = f"{rng.choice(WORDS)}:{rng.choice(WORDS)}{rng.randint(1, 99)}"
+    return "Basic " + base64.b64encode(pair.encode()).decode()
+
+
 def email(rng):
     return f"{rng.choice(WORDS)}{rng.choice(['', '.', '_'])}{rng.choice(WORDS)}@{rng.choice(WORDS)}.{rng.choice(TLDS)}"
 
@@ -128,7 +135,7 @@ KINDS = {
     "uuid": ("UUID", "net", uuid4),
     "base64": ("Base64", "code", b64), "hex": ("Hexadecimal", "code", hexa), "md5": ("MD5 hash", "code", md5),
     "sha1": ("SHA-1 hash", "code", sha1), "encrypted": ("Encrypted", "code", encrypted),
-    "jwt": ("JWT token", "code", jwt),
+    "jwt": ("JWT token", "code", jwt), "basic": ("Basic auth", "code", basic_auth),
     "email": ("Email", "text", email), "url": ("URL", "text", url), "regex": ("Regex", "text", pick(REGEXES)),
     "date": ("ISO 8601 date", "text", iso_date), "timestamp": ("Unix timestamp", "text", timestamp),
     "python": ("Python", "lang", pick(PYTHON)), "rust": ("Rust", "lang", pick(RUST)), "c": ("C", "lang", pick(C)),
@@ -216,8 +223,8 @@ def layout(game, cols, rows):
     parts += [(mid, middle - len(text) // 2, text, BOLD),
               (mid - 3, middle - (len(up) + 2) // 2, f"↑ {up}", ""),
               (mid + 3, middle - (len(down) + 2) // 2, f"↓ {down}", ""),
-              (mid, 2, f"← {lft}", ""),
-              (mid, cols - len(rgt) - 2, f"{rgt} →", ""),
+              (mid, middle - len(text) // 2 - GAP - len(lft) - 2, f"← {lft}", ""),     # close to the string
+              (mid, middle - len(text) // 2 + len(text) + GAP, f"{rgt} →", ""),
               (rows, 2, _("q: quit"), DIM)]
     return parts
 

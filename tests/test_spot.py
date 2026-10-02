@@ -20,7 +20,7 @@ class KindsTest(unittest.TestCase):
     """Owner: 20 kinds of strings seen in IT, generated at random (never the same twice)."""
 
     def test_twenty_kinds_each_generated_right(self):
-        self.assertEqual(len(spot.KINDS), 20)
+        self.assertEqual(len(spot.KINDS), 21)
         rng = random.Random(1)
         checks = {
             "ipv4": lambda t: ipaddress.IPv4Address(t),
@@ -33,6 +33,7 @@ class KindsTest(unittest.TestCase):
             "sha1": lambda t: self.assertRegex(t, r"^[0-9a-f]{40}$"),
             "encrypted": lambda t: self.assertTrue(base64.b64decode(t).startswith(b"Salted__")),
             "jwt": lambda t: self.assertRegex(t, r"^eyJ[\w-]+\.eyJ[\w-]+\.[\w-]+$"),
+            "basic": lambda t: self.assertRegex(base64.b64decode(t.split(" ")[1]).decode(), r"^\w+:\w+$"),
             "email": lambda t: self.assertRegex(t, r"^[\w.]+@\w+\.\w+$"),
             "url": lambda t: self.assertRegex(t, r"^https?://"),
             "regex": re.compile,
@@ -77,7 +78,7 @@ class GameTest(unittest.TestCase):
 
     def test_the_bag_holds_every_kind_twice(self):
         g = self.game()
-        self.assertEqual(len(g.bag) + 1, 40)
+        self.assertEqual(len(g.bag) + 1, 2 * len(spot.KINDS))
         self.assertEqual(sorted(g.bag + [g.kind]), sorted(list(spot.KINDS) * 2))
 
     def test_a_good_answer_takes_it_out_a_wrong_one_puts_it_back(self):
@@ -103,9 +104,9 @@ class GameTest(unittest.TestCase):
 
     def test_an_empty_bag_ends_the_game(self):
         g = self.game()
-        for _ in range(40):
+        for _ in range(2 * len(spot.KINDS)):
             g.answer(self.right(g))
-        self.assertEqual(g.score, 40)
+        self.assertEqual(g.score, 2 * len(spot.KINDS))
         self.assertTrue(g.over())
 
     def test_other_keys_do_nothing(self):
@@ -135,7 +136,7 @@ class GameTest(unittest.TestCase):
                 self.assertLessEqual(abs((c + len(g.text) / 2) - (cols / 2 + 1)), 1)        # centered
                 on_mid = sorted((c, c + len(t) - 1) for r, c, t, st in parts if r == mid)
                 for (a, b), (x, y) in zip(on_mid, on_mid[1:]):
-                    self.assertGreaterEqual(x - b, 3, (cols, on_mid))                         # room between
+                    self.assertEqual(x - b - 1, spot.GAP, (cols, on_mid))                    # room, but close
                 rows_used = sorted({r for r, c, t, st in parts if t})
                 self.assertEqual(rows_used[0], 1)                                            # the clock on top
                 self.assertTrue(all(abs(r - mid) >= 3 for r in rows_used if r not in (1, rows, mid)))
