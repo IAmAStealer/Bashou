@@ -5,44 +5,49 @@
   "achievements": 2
  },
  "palette": {
-  "a": "#2f6b34",
-  "o": "#5fb24a",
-  "w": "#b8e07a",
-  "y": "#e8d24a",
-  "m": "#1c2a1c",
+  "k": "#1f5848",
+  "g": "#4f9e5a",
+  "l": "#7cc46a",
+  "h": "#8ed8a8",
+  "s": "#c8e8cc",
+  "e": "#f6efd2",
+  "p": "#10322c",
   "t": "#7a5232"
  },
  "base": [
-  ".................",
-  "..........aaa....",
-  ".........aoooa...",
-  "...aaaaaaoyyyoa..",
-  "..aooooooymmyoaa.",
-  ".aoowooowoyyooooa",
-  ".aooooooooooooaa.",
-  "..aowwwwwwwwoa...",
-  "aa.aoa..aoa......",
-  "a.a.ta...ta......",
-  "aoa..............",
-  ".aattttttttttttt."
+  "........k........",
+  ".......kgkk......",
+  "......kgllgkk....",
+  ".....kglggggsssk.",
+  "...kkhhlgggsepesk",
+  ".khhllgggggsepesk",
+  ".kllggggggggsssgk",
+  ".kggglgggggggggk.",
+  "kgkkkgkkkkgkkkk..",
+  "kgkgkgk...gk.....",
+  "kgggkggk.kggk....",
+  ".kkktkkkttkkkttt."
  ],
  "poses": {
   "inhale": {
-   "6": "aoooooooooooooaa."
+   "7": "---------------gk",
+   "8": "--------------kk-"
   },
   "closed": {
-   "4": "---------yyyy----"
+   "4": "-----------sgggs-",
+   "5": "-----------sssss-"
   },
   "left": {
-   "4": "---------ymmyy---"
+   "4": "------------pee--",
+   "5": "------------pee--"
   },
   "right": {
-   "4": "----------ymmy---"
+   "4": "------------eep--",
+   "5": "------------eep--"
   },
   "fidget": {
-   "5": "----------------a",
-   "6": "---------------aw",
-   "7": "----------------w"
+   "6": "---------------gk",
+   "7": "---------------kh"
   }
  },
  "particles": [
