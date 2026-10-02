@@ -30,7 +30,7 @@ _spec.loader.exec_module(screenshot)
 SIZES = {"full": (160, 48), "portrait": (60, 96), "small": (80, 24)}
 TINY = (40, 12)                                                  # a very small window
 RUNS = {"level": [], "pets": ["pets"], "achievements": ["achievements"], "evolve": ["evolve"], "swap": ["swap"],
-        "stats": ["stats"], "share": ["share", "--name", "Tester"], "lesson": ["lesson"], "project": ["project"],
+        "stats": ["stats"], "share": ["share", "--name", "Tester"], "lesson": ["lesson"], "project": ["project"], "spot": ["spot"],
         "learn": ["learn", "grep", "-rn", "TODO", "."], "talk": ["talk"], "fight": ["fight"], "arena": ["arena"],
         "adventure": ["adventure"], "on": ["on"], "off": ["off"], "config": ["config", "list"], "start": ["start"],
         "reset": ["reset"], "version": ["version"], "help": ["help"]}
@@ -322,7 +322,7 @@ class TooSmallTest(unittest.TestCase):
     def test_only_screens_and_only_in_a_terminal(self):
         self.assertEqual(self.run_at("pets", 10, 5), (False, ""))                  # plain text: it wraps
         self.assertEqual(self.run_at("adventure", 10, 5, tty=False), (False, ""))  # piped: no screen drawn
-        self.assertEqual(set(SMALLEST), {"evolve", "swap", "lesson", "adventure", "start", "share"})
+        self.assertEqual(set(SMALLEST), {"evolve", "swap", "lesson", "adventure", "start", "share", "spot"})
 
 if __name__ == "__main__":
     unittest.main()

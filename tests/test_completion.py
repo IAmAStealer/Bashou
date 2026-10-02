@@ -40,7 +40,7 @@ class CompletionTest(unittest.TestCase):
         self.assertEqual(words("_bashou_dev"), dev.args[0][1]["choices"])
 
     def test_completes(self):
-        self.assertEqual(complete("bashou s"), ["share", "swap", "stats", "start"])
+        self.assertEqual(complete("bashou s"), ["spot", "share", "swap", "stats", "start"])
         self.assertEqual(complete("bashou swap st"), ["starter"])
         self.assertEqual(complete("bashou swap f"), ["frog", "fox"])
         self.assertEqual(complete("bashou dev st"), ["stage", "stage-all"])

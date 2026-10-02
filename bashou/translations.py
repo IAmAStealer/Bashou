@@ -40,6 +40,8 @@ def messages():
     found += dialogue.TYPO_FIX + dialogue.TYPO_NONE + dialogue.PROJECT_NUDGES
     from .project import LEVELS
     found += LEVELS
+    from . import spot
+    found += [label for label, family, make in spot.KINDS.values()] + [name for need, name in spot.TIERS]
     for family in creatures.FAMILIES.values():
         found += [family.voice] + family.tips + family.personal + [t for t in (family.name, family.blurb,
                                                                               family.unlock.get("how")) if t]

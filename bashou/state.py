@@ -211,6 +211,7 @@ FIELDS = {
     "lessons": (LESSONS, lessons_progress),           # `bashou lesson`: read, opened, page to resume, fights met
     "share_name": ("", kind(str)),                    # the nickname on `bashou share` cards
     "projects": (PROJECTS, projects_progress),        # `bashou project`: current one, steps done, days
+    "spot": ({"best": 0, "games": 0}, record(best=int, games=int)),   # `bashou spot`: best score, games played
 }
 
 
