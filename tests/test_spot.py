@@ -7,7 +7,8 @@ import re
 import unittest
 import urllib.parse
 
-from bashou import spot
+from bashou import creatures, progress, spot, state
+from bashou.spot import screen
 
 
 # Validation regexes from the web (2026-10-03): IPv4 and IPv6 from ditig.com
@@ -124,12 +125,12 @@ class GameTest(unittest.TestCase):
         self.assertEqual(g.last, (False, kind))
         self.assertIn(kind, g.bag + [g.kind])
 
-    def test_twenty_seconds_for_the_whole_game(self):
+    def test_25_seconds_for_the_whole_game(self):
         g = self.game()
-        self.clock.now = 19.9
+        self.clock.now = spot.GAME_SECONDS - 0.1
         self.assertFalse(g.over())
         g.answer(self.right(g))
-        self.clock.now = 20.0
+        self.clock.now = spot.GAME_SECONDS
         self.assertTrue(g.over())
         g.answer(self.right(g))                                               # too late: not counted
         self.assertEqual(g.score, 1)
@@ -160,13 +161,14 @@ class GameTest(unittest.TestCase):
                 return [self.left.pop(0)] if self.left else []
 
         with contextlib.redirect_stdout(io.StringIO()):
-            self.assertEqual(spot.play(Keys("\x1b[A", "r"), 80, 14), "restart")
-            self.assertIsNone(spot.play(Keys("q"), 80, 14))
+            self.assertEqual(screen.play(Keys("\x1b[A", "r"), 80, 14), "restart")
+            self.assertIsNone(screen.play(Keys("q"), 80, 14))
 
     def test_tiers(self):
-        self.assertEqual(spot.tier(9), "")
+        self.assertEqual(spot.tier(4), "")
         self.assertEqual(spot.tier(10), "Sharp eyes")
-        self.assertEqual(spot.tier(30), "Eagle eyes")
+        self.assertEqual(spot.tier(20), "Eagle eyes")                             # the last one: 20
+        self.assertEqual(spot.GAME_SECONDS, 25)
 
     def test_the_string_in_the_middle_the_answers_around_the_clock_on_top(self):
         """Owner: the string right in the middle, little distraction, the time at the top of the terminal,
@@ -174,7 +176,7 @@ class GameTest(unittest.TestCase):
         for cols, rows in ((80, 14), (160, 48), (100, 30)):
             g = self.game()
             for _ in range(80):
-                parts = spot.layout(g, cols, rows)
+                parts = screen.layout(g, cols, rows)
                 for r, c, text, style in parts:
                     self.assertTrue(1 <= r <= rows and c >= 1 and c + len(text) - 1 <= cols, (cols, rows, text))
                 mid = rows // 2 + 1
@@ -196,8 +198,45 @@ class GameTest(unittest.TestCase):
 
     def test_the_end_screen_fits(self):
         g = self.game()
-        for line in spot.end_screen(g, 5, 80, 14).split("\n"):
-            self.assertLessEqual(spot.visible_len(line.replace("\x1b[H\x1b[2J", "")), 80)
+        for line in screen.end_screen(g, 5, 80, 14).split("\n"):
+            self.assertLessEqual(screen.visible_len(line.replace("\x1b[H\x1b[2J", "")), 80)
+
+class RewardTest(unittest.TestCase):
+    """Owner, 2026-10-03: 11 good answers and no new pet, no achievement (the prototype had none)."""
+
+    def test_a_best_score_saved_before_brings_the_chameleon(self):
+        s = state.read('{"language": "en", "starter": "star", "spot": {"best": 11, "games": 3}}')
+        notes = progress.check(s)
+        self.assertIn("chameleon", s["pets"])
+        self.assertLessEqual({"first_glance", "quick_eye", "sharp_eyes"}, set(s["achievements"]))
+        self.assertNotIn("hawk_eyes", s["achievements"])
+        self.assertEqual(creatures.form("chameleon", progress.reached(s, "chameleon")), "mantis")
+        self.assertTrue(any("Chameleon" in n for n in notes), notes)
+
+    def test_the_eagle_needs_every_achievement(self):
+        s = state.default()
+        s["spot"] = {"best": 20, "games": 10, "kinds": list(spot.KINDS), "clean": 10}
+        progress.check(s)
+        self.assertEqual(creatures.form("chameleon", progress.reached(s, "chameleon")), "eagle")
+        self.assertEqual(len(creatures.FORMS["chameleon"]), 5)
+
+    def test_a_game_is_saved_with_its_kinds_and_announces_achievements(self):
+        import tempfile
+        from pathlib import Path
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(state, "DATA", Path(tmp)), \
+                mock.patch.object(state, "STATE", Path(tmp) / "state.json"):
+            clock = Clock()
+            g = spot.Game(random.Random(4), clock)
+            for _ in range(6):
+                g.answer(spot.ARROWS[g.answers.index(g.kind)])
+            before, notes = screen.save(g)
+            saved = state.load()["spot"]
+            self.assertEqual((before, saved["best"], saved["games"], saved["clean"]), (0, 6, 1, 6))
+            self.assertEqual(set(saved["kinds"]), g.known)
+            self.assertTrue(any("First glance" in n for n in notes), notes)
+            self.assertIn("First glance", screen.end_screen(g, before, 80, 24, notes))
+
 
 if __name__ == "__main__":
     unittest.main()

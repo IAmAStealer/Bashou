@@ -1,0 +1,21 @@
+{
+ "name": "Chameleon",
+ "first": "chameleon",
+ "order": 32,
+ "unlock": {
+  "achievement": "first_glance",
+  "how": "play a game of bashou spot"
+ },
+ "voice": "*flick*",
+ "tips": [
+  "`bashou spot` : an IPv6, a hash, base64? Say what it is, fast. 25 seconds, go!",
+  "A JWT always starts with eyJ: it's base64 for {\"",
+  "Groups of 8-4-4-4-12 hex digits, and the third starts with 4? A UUID, version 4.",
+  "Basic auth is only base64: anyone can read the password back. Never send it without HTTPS."
+ ],
+ "personal": [
+  "My eyes move one by one. Yours can learn to spot a hash in a log at a glance.",
+  "A mistake in `bashou spot` puts the string back in the bag. You'll see it again, and know it.",
+  "Fast tongue, sharp eyes. Every hunter in my family has one or the other."
+ ]
+}

@@ -464,7 +464,7 @@ class BoardTest(TempState):
         board.key("down")                                    # a full row: the pet below it
         self.assertEqual(board.ids[board.pos], "spark")
         board.key("down")                                    # into the partial last row: its last pet
-        self.assertEqual(board.ids[board.pos], "landscape")
+        self.assertEqual(board.ids[board.pos], "chameleon")
         board.key("down")
         self.assertEqual(board.ids[board.pos], "starter")
 

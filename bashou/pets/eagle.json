@@ -1,0 +1,49 @@
+{
+ "name": "Eagle",
+ "palette": {
+  "a": "#4a2e18",
+  "o": "#7a4e2a",
+  "w": "#f4f2ea",
+  "c": "#c8c4b8",
+  "y": "#f0b030",
+  "m": "#141008",
+  "t": "#6a4428"
+ },
+ "base": [
+  ".....ccccc.......",
+  "....cwwwwwc......",
+  "...cwwwmwwwyy....",
+  "...cwwwwwwyyyy...",
+  "....cwwwwwc.y....",
+  "...aooooooooa....",
+  "..aoooooooooooa..",
+  ".aooooooooooooooa",
+  "aooaoooooooooaooa",
+  "a..aooooooooa...a",
+  "....aaoooaaa.....",
+  "..tttyttttyttt..."
+ ],
+ "poses": {
+  "inhale": {
+   "6": ".aoooooooooooooa."
+  },
+  "closed": {
+   "2": "-------w---------"
+  },
+  "left": {
+   "2": "------mw---------"
+  },
+  "right": {
+   "2": "-------wm--------"
+  },
+  "fidget": {
+   "7": "aooooooooooooooa.",
+   "8": "oooaoooooooooaooa",
+   "9": "o..aooooooooa...a"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

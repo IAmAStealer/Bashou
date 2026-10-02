@@ -415,7 +415,7 @@ COMMANDS = [
     Command("arena", run("arena", "main", "mode", "which"),
             ("bashou arena", "fight when you want: a timed fight, or a security investigation", PLAY),
             [("mode", dict(nargs="?", help="fight or security")), ("which", dict(nargs="?", help="security: number or id (see the list)"))]),
-    Command("spot", run("spot"), ("bashou spot", "IPv6, hash, base64, regex, Rust…: say what a string is, fast", PLAY),
+    Command("spot", run("spot.screen"), ("bashou spot", "IPv6, hash, base64, regex, Rust…: say what a string is, fast", PLAY),
             size=(80, 14)),                          # a 40-character string with an answer on each side
     Command("adventure", run("adventure.game"), ("bashou adventure", "walk into the world with your starter", PLAY),
             size=(50, 20)),

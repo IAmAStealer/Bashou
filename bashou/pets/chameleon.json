@@ -1,0 +1,52 @@
+{
+ "name": "Chameleon",
+ "next": "mantis",
+ "next_at": {
+  "achievements": 2
+ },
+ "palette": {
+  "a": "#2f6b34",
+  "o": "#5fb24a",
+  "w": "#b8e07a",
+  "y": "#e8d24a",
+  "m": "#1c2a1c",
+  "t": "#7a5232"
+ },
+ "base": [
+  ".................",
+  "..........aaa....",
+  ".........aoooa...",
+  "...aaaaaaoyyyoa..",
+  "..aooooooymmyoaa.",
+  ".aoowooowoyyooooa",
+  ".aooooooooooooaa.",
+  "..aowwwwwwwwoa...",
+  "aa.aoa..aoa......",
+  "a.a.ta...ta......",
+  "aoa..............",
+  ".aattttttttttttt."
+ ],
+ "poses": {
+  "inhale": {
+   "6": "aoooooooooooooaa."
+  },
+  "closed": {
+   "4": "---------yyyy----"
+  },
+  "left": {
+   "4": "---------ymmyy---"
+  },
+  "right": {
+   "4": "----------ymmy---"
+  },
+  "fidget": {
+   "5": "----------------a",
+   "6": "---------------aw",
+   "7": "----------------w"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

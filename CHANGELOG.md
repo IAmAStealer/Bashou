@@ -20,6 +20,14 @@ Every release has a section here, written for players. CI refuses to tag a relea
   steps, then each finished project and each language. Finishing the projects of one language is enough
   to reach the town.
 - Your pet sometimes reminds you of the project you started, and where you stopped.
+- New game: `bashou spot`. A string shows in the middle of the screen: an IPv4 or IPv6 address, a MAC, a
+  UUID, base64, a hash, something encrypted, a JWT, HTTP Basic auth, an email, a URL, a regex, a date, a
+  timestamp, or a line of Python, Rust, C, Bash or SQL. Say what it is with the arrow keys, as many times as
+  you can in 25 seconds. A wrong answer puts that kind back in the bag, so you meet it again. `r` starts over.
+- A new pet comes with it, for sharp eyes and speed: the Chameleon, then the Mantis, the Cheetah, the Falcon
+  and the Eagle. 8 achievements: your first game, 5, 10, 15 and 20 good answers in a game, every kind
+  recognised once, 10 games, and 10 good answers without a mistake. The end of a game shows the ones you earned.
+- `bashou achv` and `bashou achievement` show your achievements, like `bashou achievements`.
 
 ## v0.7.0 — 2026-10-02
 

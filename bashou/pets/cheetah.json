@@ -1,0 +1,51 @@
+{
+ "name": "Cheetah",
+ "next": "falcon",
+ "next_at": {
+  "achievements": 6
+ },
+ "palette": {
+  "a": "#8a5a1e",
+  "o": "#e8b450",
+  "w": "#f8e8c0",
+  "k": "#3a2814",
+  "m": "#1c1410"
+ },
+ "base": [
+  ".................",
+  "...........a..a..",
+  "..........aoaaoa.",
+  "..........aomomoa",
+  "..........aokwkoa",
+  ".aaaaaaaaaaowwwa.",
+  "aokoookoookooaa..",
+  "aooookoookoooa...",
+  ".aowwwwwwwwwoa...",
+  "..ao.ao...ao.ao..",
+  "..ao.ao...ao.ao..",
+  "..aa.aa...aa.aa.."
+ ],
+ "poses": {
+  "inhale": {
+   "8": "aaowwwwwwwwwoa..."
+  },
+  "closed": {
+   "3": "----------aoaoaoa"
+  },
+  "left": {
+   "3": "----------amoamoa"
+  },
+  "right": {
+   "3": "----------aomaoma"
+  },
+  "fidget": {
+   "6": "-ok--------------",
+   "5": "aa---------------",
+   "4": "a................"
+  }
+ },
+ "particles": [
+  0,
+  8
+ ]
+}

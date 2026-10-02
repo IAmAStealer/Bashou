@@ -169,6 +169,15 @@ def settings_of(value):
 
 LESSONS = {"read": [], "opened": [], "page": {}, "met": []}
 PROJECTS = {"current": "", "done": {}, "days": []}
+SPOT = {"best": 0, "games": 0, "kinds": [], "clean": 0}
+
+
+def spot_progress(value):
+    """`bashou spot`: best score, games played, kinds answered right at least once, best game without a mistake."""
+    value = {**SPOT, **kind(dict)(value)}
+    return {k: value[k] if isinstance(value[k], int) and not isinstance(value[k], bool) else 0
+            for k in ("best", "games", "clean")} | {"kinds": list_of(kind(str))(value["kinds"])
+                                                    if isinstance(value["kinds"], list) else []}
 
 
 def projects_progress(value):
@@ -211,7 +220,7 @@ FIELDS = {
     "lessons": (LESSONS, lessons_progress),           # `bashou lesson`: read, opened, page to resume, fights met
     "share_name": ("", kind(str)),                    # the nickname on `bashou share` cards
     "projects": (PROJECTS, projects_progress),        # `bashou project`: current one, steps done, days
-    "spot": ({"best": 0, "games": 0}, record(best=int, games=int)),   # `bashou spot`: best score, games played
+    "spot": (SPOT, spot_progress),                    # `bashou spot`: best score, games, kinds recognised
 }
 
 

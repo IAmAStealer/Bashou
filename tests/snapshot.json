@@ -1142,6 +1142,53 @@
     "★★★★★★★★★★"
    ]
   ],
+  "chameleon": [
+   [
+    1,
+    "Chameleon",
+    "★☆☆☆☆"
+   ],
+   [
+    1,
+    "Chameleon",
+    "★☆☆☆☆"
+   ],
+   [
+    2,
+    "Mantis",
+    "★★☆☆☆"
+   ],
+   [
+    2,
+    "Mantis",
+    "★★☆☆☆"
+   ],
+   [
+    3,
+    "Cheetah",
+    "★★★☆☆"
+   ],
+   [
+    3,
+    "Cheetah",
+    "★★★☆☆"
+   ],
+   [
+    4,
+    "Falcon",
+    "★★★★☆"
+   ],
+   [
+    4,
+    "Falcon",
+    "★★★★☆"
+   ],
+   [
+    5,
+    "Eagle",
+    "★★★★★"
+   ]
+  ],
   "starter:star": [
    [
     1,
@@ -2695,7 +2742,8 @@
   "spark": "read a lesson to the end: bashou lesson",
   "packet": "0/10 × ip/ss/ping",
   "cat": "???",
-  "landscape": "finish the first step of a project: bashou project"
+  "landscape": "finish the first step of a project: bashou project",
+  "chameleon": "play a game of bashou spot"
  },
  "share_page": {
   "families": {
@@ -3389,6 +3437,29 @@
      "Village",
      "Port",
      "Ville"
+    ]
+   },
+   "chameleon": {
+    "forms": [
+     "chameleon",
+     "mantis",
+     "cheetah",
+     "falcon",
+     "eagle"
+    ],
+    "en": [
+     "Chameleon",
+     "Mantis",
+     "Cheetah",
+     "Falcon",
+     "Eagle"
+    ],
+    "fr": [
+     "Caméléon",
+     "Mante",
+     "Guépard",
+     "Faucon",
+     "Aigle"
     ]
    }
   },
@@ -7060,6 +7131,125 @@
      "..DddddddddDwWfff",
      "....DdddddDwWwww."
     ]
+   },
+   "chameleon": {
+    "palette": {
+     "a": "#2f6b34",
+     "o": "#5fb24a",
+     "w": "#b8e07a",
+     "y": "#e8d24a",
+     "m": "#1c2a1c",
+     "t": "#7a5232"
+    },
+    "base": [
+     ".................",
+     "..........aaa....",
+     ".........aoooa...",
+     "...aaaaaaoyyyoa..",
+     "..aooooooymmyoaa.",
+     ".aoowooowoyyooooa",
+     ".aooooooooooooaa.",
+     "..aowwwwwwwwoa...",
+     "aa.aoa..aoa......",
+     "a.a.ta...ta......",
+     "aoa..............",
+     ".aattttttttttttt."
+    ]
+   },
+   "mantis": {
+    "palette": {
+     "a": "#3a6e2a",
+     "o": "#7cc24e",
+     "w": "#c8ec8a",
+     "m": "#1c2a1c"
+    },
+    "base": [
+     ".............a.a.",
+     "............a.a..",
+     "..........aoooooa",
+     "..........mooooom",
+     "...........aowoa.",
+     "............aoa..",
+     "...........aoa.oo",
+     "...........aoaao.",
+     "..........aooooa.",
+     "..aaaaaaaaooa....",
+     ".aowwwwwwooa.....",
+     "..a.a..a..a.a...."
+    ]
+   },
+   "cheetah": {
+    "palette": {
+     "a": "#8a5a1e",
+     "o": "#e8b450",
+     "w": "#f8e8c0",
+     "k": "#3a2814",
+     "m": "#1c1410"
+    },
+    "base": [
+     ".................",
+     "...........a..a..",
+     "..........aoaaoa.",
+     "..........aomomoa",
+     "..........aokwkoa",
+     ".aaaaaaaaaaowwwa.",
+     "aokoookoookooaa..",
+     "aooookoookoooa...",
+     ".aowwwwwwwwwoa...",
+     "..ao.ao...ao.ao..",
+     "..ao.ao...ao.ao..",
+     "..aa.aa...aa.aa.."
+    ]
+   },
+   "falcon": {
+    "palette": {
+     "a": "#2e3a52",
+     "o": "#5a6e8c",
+     "w": "#eef0f2",
+     "k": "#202838",
+     "y": "#f0c040",
+     "m": "#141820",
+     "t": "#7a5232"
+    },
+    "base": [
+     ".................",
+     "......aaaa.......",
+     ".....aooooa......",
+     "....aoomyooa.....",
+     "....akkwwyyy.....",
+     "....akwwwwa......",
+     "...aowwwwwoa.....",
+     "...aowkwwwoa.....",
+     "...aowwwkwoa.....",
+     "....aowwwoa......",
+     ".....aaoaa.......",
+     "..tttyttyttttt..."
+    ]
+   },
+   "eagle": {
+    "palette": {
+     "a": "#4a2e18",
+     "o": "#7a4e2a",
+     "w": "#f4f2ea",
+     "c": "#c8c4b8",
+     "y": "#f0b030",
+     "m": "#141008",
+     "t": "#6a4428"
+    },
+    "base": [
+     ".....ccccc.......",
+     "....cwwwwwc......",
+     "...cwwwmwwwyy....",
+     "...cwwwwwwyyyy...",
+     "....cwwwwwc.y....",
+     "...aooooooooa....",
+     "..aoooooooooooa..",
+     ".aooooooooooooooa",
+     "aooaoooooooooaooa",
+     "a..aooooooooa...a",
+     "....aaoooaaa.....",
+     "..tttyttttyttt..."
+    ]
    }
   },
   "skills": {
@@ -7161,6 +7351,7 @@
   "*creak*",
   "*dig dig*",
   "*flap*",
+  "*flick*",
   "*giggles* `{fix}` has fewer typos than `{typo}`.",
   "*huff*",
   "*peek*",
@@ -7196,6 +7387,7 @@
   "A * in a name stands for any characters. Bash turns the pattern into the list of matching names before the command even starts, so the command just sees the names.",
   "A .tar.gz is many files packed into one (tar), then squeezed (gzip). tar -tzf backup.tar.gz lists what's inside without unpacking. -x unpacks, and -C picks where: by default it's the folder you're in.",
   "A Dust Bunny rolled into crates/.\nWhich file in there ends in .key?",
+  "A JWT always starts with eyJ: it's base64 for {\"",
   "A JWT is header.payload.signature, each part base64url without padding.",
   "A Loopback Lurker (process {pid}) listens on this machine, on 127.0.0.1 only.\nOn which port? Answer with: answer <port>",
   "A Process Phantom named {name} haunts this machine.\nWhat is its PID?",
@@ -7226,6 +7418,7 @@
   "A locked chest!",
   "A locked chest! It opens with a shell trick:",
   "A locked note lies in this chest: note.txt.gpg, passphrase {pw}. Open it: what is the vault code? answer <code>",
+  "A mistake in `bashou spot` puts the string back in the bag. You'll see it again, and know it.",
   "A name is 1 to 12 letters, digits, - or _ (no spaces): it shows on the image.",
   "A new page opened in the owl's library. It shows how things work inside: `bashou lesson`",
   "A new quest calls you, hero: {title}.",
@@ -7306,6 +7499,7 @@
   "Bashou {version} is out → bashou update",
   "Bashou {version} is out: bashou update",
   "Basic auth",
+  "Basic auth is only base64: anyone can read the password back. Never send it without HTTPS.",
   "Basilisk",
   "Bat",
   "Beacon",
@@ -7362,6 +7556,7 @@
   "Census",
   "Census Centipede",
   "Chain small tools, one step each: grep keeps the lines with error, sort puts identical lines side by side, uniq -c counts each group.",
+  "Chameleon",
   "Change the language? (y/N) ",
   "Change the line to DB_PASSWORD=\"$(pass show db/prod)\" and try bash deploy.sh. In real life, also change a password that was ever committed: it stays in the git history.",
   "Change what you learn? (y/N) ",
@@ -7371,10 +7566,12 @@
   "Checkpoint",
   "Checkpoint saved. {topic} is now level {level}.",
   "Checksum",
+  "Cheetah",
   "Chipmunk",
   "Choose your starter",
   "Cipher Crow",
   "City planner",
+  "Clean sweep",
   "Cleartext Cricket",
   "Climber",
   "Clutter Critter",
@@ -7438,6 +7635,7 @@
   "Dust Bunny",
   "Each DNS query and its answer share an id number: tcpdump prints it first, with + after a query. Find the NXDomain answer's id, then the query with that id.",
   "Each service is described by a unit file, in sections: [Unit] says what it is, [Service] how to run it (ExecStart is the command), [Install] when to start it at boot (WantedBy).",
+  "Eagle",
   "Eagle eyes",
   "Echo Swarm",
   "Edited a unit file? `systemctl daemon-reload`.",
@@ -7477,12 +7675,15 @@
   "Explain it to me. Out loud. I'll wait.",
   "Exploiter",
   "Explorer",
+  "Falcon",
+  "Fast tongue, sharp eyes. Every hunter in my family has one or the other.",
   "Fat paws again? `{typo}` → `{fix}`",
   "Feel like a detective? `bashou arena security` has small investigations.",
   "Fencepost Fiend",
   "Fennec",
   "Fern",
   "Field Wasp",
+  "Field guide",
   "Field reader",
   "Fight: a constant must say its type; a let can guess it.",
   "Fight: a long name writes past the 8-byte buffer. In real code that is how attackers get in.",
@@ -7510,6 +7711,7 @@
   "Fire slime",
   "First brick",
   "First flag",
+  "First glance",
   "First steps",
   "First-line Imp",
   "Five minutes on {title}? Step {n} is a small one. `bashou project`",
@@ -7548,6 +7750,7 @@
   "Gremlin",
   "Group Gremlin",
   "Group identical names with sort, count each group with uniq -c, then sort those counts with sort -rn: the biggest comes first.",
+  "Groups of 8-4-4-4-12 hex digits, and the third starts with 4? A UUID, version 4.",
   "Hacker cat",
   "Handshake Heron",
   "Hatchling",
@@ -7747,6 +7950,7 @@
   "Make spell.sh runnable, then run it (./spell.sh).",
   "Make the terminal a bit bigger for the adventure (50×20 at least).",
   "Mandarin duck",
+  "Mantis",
   "Manual Mole",
   "Many small jobs make one big job.",
   "Mapper",
@@ -7781,6 +7985,7 @@
   "Mouseling",
   "Mushroom",
   "Mut Marmot",
+  "My eyes move one by one. Yours can learn to spot a hash in a log at a glance.",
   "NXDomain Nixie",
   "Name",
   "Needle Gnat",
@@ -7915,6 +8120,7 @@
   "Queen bee",
   "Query Quokka",
   "Questmaster",
+  "Quick eye",
   "Ranges",
   "Ranking",
   "Raw",
@@ -7931,6 +8137,7 @@
   "Refused Revenant",
   "Refused? The machine answered: nothing listens there. Timed out? Nothing answered at all.",
   "Regex",
+  "Regular",
   "Relay",
   "Release Raven",
   "Reload",
@@ -8477,6 +8684,7 @@
   "`bashou learn` takes a command apart, piece by piece.",
   "`bashou lesson` : the owl's library. Green means it's your next step.",
   "`bashou project` : a real program to build, one small step at a time.",
+  "`bashou spot` : an IPv6, a hash, base64? Say what it is, fast. 25 seconds, go!",
   "`bashou spot` is a game for your terminal: run it there.",
   "`cd -` jumps back to the previous folder.",
   "`chmod +x script.sh` makes it runnable.",
@@ -8773,6 +8981,11 @@
   "git merge brings a branch's commits into the one you're on. When both changed the same line, git stops and writes both versions between <<<<<<<, ======= and >>>>>>> markers. Edit the file, then git add and git commit.",
   "git status shows map.txt as untracked. git add puts it in the next commit, git commit -m 'message' makes the commit, git log shows it.",
   "git: commits, branches, merges",
+  "give 10 good answers in one game of `bashou spot`",
+  "give 10 good answers without a mistake in one game of `bashou spot`",
+  "give 15 good answers in one game of `bashou spot`",
+  "give 20 good answers in one game of `bashou spot`",
+  "give 5 good answers in one game of `bashou spot`",
   "give it a terminal",
   "give up (try again any time)",
   "give up after {value} seconds",
@@ -8945,6 +9158,9 @@
   "pgrep -a python lists python processes.",
   "pipe: the output of the left command goes into the next one",
   "place arguments with `xargs -I{}`",
+  "play 10 games of `bashou spot`",
+  "play a game of `bashou spot`",
+  "play a game of bashou spot",
   "prices.txt has an item and a price per line. What's the total? Then: answer <number>",
   "print a password",
   "print chosen lines with `sed -n …p`",
@@ -8991,6 +9207,7 @@
   "reads text line by line and splits each line into columns ($1, $2…)",
   "reads the input from this file",
   "reads the system logs",
+  "recognise every kind of string at least once in `bashou spot`",
   "recursive: copy the folder and everything in it",
   "recursive: every file in every folder",
   "reload the unit files after you edited one",

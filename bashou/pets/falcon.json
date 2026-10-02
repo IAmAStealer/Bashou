@@ -1,0 +1,52 @@
+{
+ "name": "Falcon",
+ "next": "eagle",
+ "next_at": {
+  "achievements": "all"
+ },
+ "palette": {
+  "a": "#2e3a52",
+  "o": "#5a6e8c",
+  "w": "#eef0f2",
+  "k": "#202838",
+  "y": "#f0c040",
+  "m": "#141820",
+  "t": "#7a5232"
+ },
+ "base": [
+  ".................",
+  "......aaaa.......",
+  ".....aooooa......",
+  "....aoomyooa.....",
+  "....akkwwyyy.....",
+  "....akwwwwa......",
+  "...aowwwwwoa.....",
+  "...aowkwwwoa.....",
+  "...aowwwkwoa.....",
+  "....aowwwoa......",
+  ".....aaoaa.......",
+  "..tttyttyttttt..."
+ ],
+ "poses": {
+  "inhale": {
+   "7": "..aoowkwwwooa...."
+  },
+  "closed": {
+   "3": "----aoooyooa-----"
+  },
+  "left": {
+   "3": "----aomyooa------"
+  },
+  "right": {
+   "3": "----aooymoa------"
+  },
+  "fidget": {
+   "6": "..aaowwwwwoa.....",
+   "7": ".aoaowkwwwoa....."
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

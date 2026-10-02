@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from datetime import date, timedelta
 from typing import Callable, Optional
 
-from . import challenges, creatures, lesson, safety, which
+from . import challenges, creatures, lesson, safety, spot, which
 
 
 @dataclass
@@ -443,6 +443,24 @@ ALL += [A("climber", "landscape", "Climber", "finish a medium project", state=la
         A("summit", "landscape", "Summit", "finish a hard project", state=lambda s: bool(projects_done(s, difficulty="hard"))),
         A("steady_builder", "landscape", "Steady builder", "finish project steps 7 days in a row",
           state=lambda s: project_streak(s) >= 7)]
+
+# Chameleon: `bashou spot`, say what a string is (owner, 2026-10-03). Animals with sharp eyes or speed:
+# Chameleon, Mantis, Cheetah, Falcon, Eagle. The scores are the game's stars (spot.TIERS).
+def _spot(s):
+    return s.get("spot") or {}
+
+
+ALL += [A("first_glance", "chameleon", "First glance", "play a game of `bashou spot`", state=lambda s: _spot(s).get("games", 0) >= 1)]
+for _i, (_n, _name) in enumerate(spot.TIERS):
+    ALL.append(A(_name.lower().replace(" ", "_"), "chameleon", _name,
+                 "give {n} good answers in one game of `bashou spot`".replace("{n}", str(_n)),
+                 state=lambda s, n=_n: _spot(s).get("best", 0) >= n,
+                 next=spot.TIERS[_i + 1][1].lower().replace(" ", "_") if _i + 1 < len(spot.TIERS) else ""))
+ALL += [A("field_guide", "chameleon", "Field guide", "recognise every kind of string at least once in `bashou spot`",
+          state=lambda s: set(spot.KINDS) <= set(_spot(s).get("kinds", []))),
+        A("spot_regular", "chameleon", "Regular", "play 10 games of `bashou spot`", state=lambda s: _spot(s).get("games", 0) >= 10),
+        A("clean_sweep", "chameleon", "Clean sweep", "give 10 good answers without a mistake in one game of `bashou spot`",
+          state=lambda s: _spot(s).get("clean", 0) >= 10)]
 
 # Secret achievements: security tools. Nothing announces them; they just pop up, and the first one
 # brings a pet that isn't on the board ("secret" in its family file).

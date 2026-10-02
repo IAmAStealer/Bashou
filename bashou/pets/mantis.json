@@ -1,0 +1,50 @@
+{
+ "name": "Mantis",
+ "next": "cheetah",
+ "next_at": {
+  "achievements": 4
+ },
+ "palette": {
+  "a": "#3a6e2a",
+  "o": "#7cc24e",
+  "w": "#c8ec8a",
+  "m": "#1c2a1c"
+ },
+ "base": [
+  ".............a.a.",
+  "............a.a..",
+  "..........aoooooa",
+  "..........mooooom",
+  "...........aowoa.",
+  "............aoa..",
+  "...........aoa.oo",
+  "...........aoaao.",
+  "..........aooooa.",
+  "..aaaaaaaaooa....",
+  ".aowwwwwwooa.....",
+  "..a.a..a..a.a...."
+ ],
+ "poses": {
+  "inhale": {
+   "9": ".aaaaaaaaaooa...."
+  },
+  "closed": {
+   "3": "----------aoooooa"
+  },
+  "left": {
+   "3": "----------moooooa"
+  },
+  "right": {
+   "3": "----------aooooom"
+  },
+  "fidget": {
+   "6": "-----------aoa.o.",
+   "7": "-----------aoaaoo",
+   "5": "------------aoa.o"
+  }
+ },
+ "particles": [
+  0,
+  9
+ ]
+}
