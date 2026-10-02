@@ -7182,25 +7182,29 @@
    },
    "cheetah": {
     "palette": {
-     "a": "#8a5a1e",
-     "o": "#e8b450",
-     "w": "#f8e8c0",
-     "k": "#3a2814",
-     "m": "#1c1410"
+     "k": "#3a2214",
+     "o": "#e8a050",
+     "O": "#f4cc94",
+     "e": "#c07850",
+     "s": "#6a3020",
+     "r": "#e0702a",
+     "m": "#2a1410",
+     "n": "#4a2020",
+     "c": "#fae4c0"
     },
     "base": [
-     ".................",
-     "...........a..a..",
-     "..........aoaaoa.",
-     "..........aomomoa",
-     "..........aokwkoa",
-     ".aaaaaaaaaaowwwa.",
-     "aokoookoookooaa..",
-     "aooookoookoooa...",
-     ".aowwwwwwwwwoa...",
-     "..ao.ao...ao.ao..",
-     "..ao.ao...ao.ao..",
-     "..aa.aa...aa.aa.."
+     ".kkk..kkkkk..kkk.",
+     "keeokksososkkoeek",
+     "koeoosooooosooeok",
+     ".kooOOoooooOOook.",
+     ".kosrmooooomrsok.",
+     ".kooosooooosoook.",
+     ".kooOOscccsOOook.",
+     "..kooOsnnnsOook..",
+     "...koOccsccOok...",
+     "....kOcsOscOk....",
+     ".....kOcccOk.....",
+     "......kkkkk......"
     ]
    },
    "falcon": {
