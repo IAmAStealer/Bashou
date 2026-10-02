@@ -115,6 +115,22 @@ class GameTest(unittest.TestCase):
         g.answer("enter")
         self.assertEqual((g.kind, g.score, g.mistakes), (kind, 0, 0))
 
+    def test_r_restarts_and_q_quits_in_the_middle_of_a_game(self):
+        """Owner: r starts a new game at once (the one going on doesn't count)."""
+        import contextlib
+        import io
+
+        class Keys:
+            def __init__(self, *keys):
+                self.left = list(keys)
+
+            def keys(self, timeout):
+                return [self.left.pop(0)] if self.left else []
+
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(spot.play(Keys("\x1b[A", "r"), 80, 14), "restart")
+            self.assertIsNone(spot.play(Keys("q"), 80, 14))
+
     def test_tiers(self):
         self.assertEqual(spot.tier(9), "")
         self.assertEqual(spot.tier(10), "Sharp eyes")

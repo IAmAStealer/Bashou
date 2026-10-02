@@ -225,7 +225,7 @@ def layout(game, cols, rows):
               (mid + 3, middle - (len(down) + 2) // 2, f"↓ {down}", ""),
               (mid, middle - len(text) // 2 - GAP - len(lft) - 2, f"← {lft}", ""),     # close to the string
               (mid, middle - len(text) // 2 + len(text) + GAP, f"{rgt} →", ""),
-              (rows, 2, _("q: quit"), DIM)]
+              (rows, 2, _("r: restart · q: quit"), DIM)]
     return parts
 
 
@@ -258,7 +258,7 @@ def end_screen(game, best_before, cols, rows):
     nxt = next((need for need, _name in TIERS if game.score < need), None)
     if nxt:
         lines.append(DIM + _("{n} good answers for the next star").format(n=nxt) + RESET)
-    lines += ["", DIM + _("Enter: play again · q: quit") + RESET]
+    lines += ["", DIM + _("Enter or r: play again · q: quit") + RESET]
     top = max(0, (rows - len(lines)) // 2)
     out = [center(line, cols + (len(line) - visible_len(line))) for line in lines]
     return f"{ESC}[H{ESC}[2J" + "\n" * top + "\n".join(out)
@@ -268,16 +268,21 @@ def visible_len(text):
     return len(re.sub(r"\x1b\[[0-9;]*m", "", text))
 
 
+KEYS = {"r": "restart"}
+
+
 def play(screen, cols, rows):
-    """One game. Returns its Game, or None when the player quit in the middle."""
+    """One game. Returns its Game, "restart" (r: a new game at once, this one not counted) or None (q)."""
     game = Game()
     while not game.over():
         sys.stdout.write(draw(game, cols, rows))
         sys.stdout.flush()
         for key in screen.keys(0.1):
-            k = terminal.name(key)
+            k = terminal.name(key, KEYS)
             if k == "quit":
                 return None
+            if k == "restart":
+                return k
             game.answer(k)
     return game
 
@@ -292,14 +297,16 @@ def main():
             game = play(screen, cols, rows)
             if game is None:
                 return 0
+            if game == "restart":
+                continue
             before, _best = save(game.score)
             sys.stdout.write(end_screen(game, before, cols, rows))
             sys.stdout.flush()
             time.sleep(0.6)                    # a last arrow pressed in a hurry doesn't skip the result
             screen.keys(0)
             while True:
-                keys = [terminal.name(k) for k in screen.keys(1)]
+                keys = [terminal.name(k, KEYS) for k in screen.keys(1)]
                 if "quit" in keys:
                     return 0
-                if "enter" in keys:
+                if "enter" in keys or "restart" in keys:
                     break
