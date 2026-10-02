@@ -1,0 +1,82 @@
+{
+ "id": "rust_netwatch",
+ "order": 11,
+ "language": "rust",
+ "name": "netwatch",
+ "difficulty": "easy",
+ "title": "An internet outage logger",
+ "pitch": "Your connection drops, and your internet provider says everything is fine. This program checks the connection every 30 seconds and logs every outage with its time and length. After a month, you have proof.",
+ "lessons": [
+  "rust_vars",
+  "network",
+  "tcp"
+ ],
+ "steps": [
+  {
+   "do": "Create the project with `cargo new netwatch`, and check once if the internet answers: open a TCP connection to a well-known server (for example 1.1.1.1 on port 53) with a timeout.",
+   "done": "the program prints \"online\", and \"offline\" when you turn off your Wi-Fi.",
+   "hint": "`TcpStream::connect_timeout` from std::net, with a `SocketAddr` and a `Duration` of 2 seconds.",
+   "why": "A TCP connection that opens proves the whole path works: your Wi-Fi, your router, your provider. The timeout stops the program from waiting forever when it doesn't."
+  },
+  {
+   "do": "Check every 30 seconds, in a loop.",
+   "done": "the status prints again and again, and changes when you unplug.",
+   "hint": "`loop { … std::thread::sleep(Duration::from_secs(30)); }`. Test with 3 seconds.",
+   "why": "A monitor is a loop that never ends. Test it with a short delay: waiting 30 seconds per try is slow debugging."
+  },
+  {
+   "do": "Print only the changes: \"offline at 14:02\", \"back at 14:05\".",
+   "done": "nothing prints while the status stays the same.",
+   "hint": "Keep the previous status in a variable, and compare.",
+   "why": "Remembering the last state and reacting to changes is called edge detection. It turns a flood of checks into a few useful events."
+  },
+  {
+   "do": "Add the date and time with the chrono crate, and the length of each outage.",
+   "done": "\"back at 14:05, offline for 3 min\" is printed.",
+   "hint": "`chrono::Local::now()` for the time; subtract two times to get a duration.",
+   "why": "Time is harder than it looks (time zones, clock changes). A crate like chrono gets it right for you."
+  },
+  {
+   "do": "Check two or three servers, and call it an outage only when all of them fail.",
+   "done": "a wrong address in the list doesn't count as an outage.",
+   "hint": "Put the addresses in a Vec, and use `.iter().any(…)` to know if at least one answered.",
+   "why": "One server can be down on its own. Asking several avoids false alarms, the same reason alarms have more than one sensor."
+  },
+  {
+   "do": "Save each outage to a CSV file.",
+   "done": "the outages are still there after restarting the program.",
+   "hint": "`OpenOptions::new().append(true).create(true)` opens the file to add lines to its end.",
+   "why": "Append-only files are simple and safe: an outage written is never lost, even if the program stops right after."
+  },
+  {
+   "do": "Handle errors without unwrap: a log file you can't write, a bad server address.",
+   "done": "each problem prints a clear message.",
+   "hint": "`match` on the Result, or `?` in a function that returns a Result, and `eprintln!` for messages.",
+   "why": "A program meant to run for weeks must not panic on the first problem. Decide which errors stop it and which ones it can live with."
+  },
+  {
+   "do": "Add `netwatch report`: the number of outages, the total time offline and the longest one, per day and per month.",
+   "done": "the report matches the CSV file.",
+   "hint": "Read the CSV back, group by date with a HashMap or BTreeMap (it keeps keys sorted).",
+   "why": "The log is the raw data; the report is the answer. Keeping them apart means you can change the report without losing anything."
+  },
+  {
+   "do": "Run the checks in a thread, so the program can check and write the report at the same time.",
+   "done": "the checks go on while the report is written.",
+   "hint": "`std::thread::spawn`, and a channel (`std::sync::mpsc`) to send outages from the checking thread.",
+   "why": "Rust checks at compile time that threads don't share data in unsafe ways. Channels are the simplest safe way to make them talk."
+  },
+  {
+   "do": "Run it all the time, as a systemd user service or at startup.",
+   "done": "it logs outages after a reboot without you starting it.",
+   "hint": "A unit file in ~/.config/systemd/user/, then `systemctl --user enable --now netwatch`.",
+   "why": "A monitor you have to start yourself will be off on the day it matters. Services start with the machine."
+  },
+  {
+   "do": "Optional: measure the latency too, and log the slow periods, not only the outages.",
+   "done": "the report shows the slowest hours.",
+   "hint": "Time the connection with `Instant::now()` and `.elapsed()`.",
+   "why": "Slow is often worse than down, because people wait instead of reporting it. Now you can show both."
+  }
+ ]
+}

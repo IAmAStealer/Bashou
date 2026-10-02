@@ -1,0 +1,95 @@
+{
+ "id": "c_contacts",
+ "order": 9,
+ "language": "c",
+ "name": "contacts",
+ "difficulty": "medium",
+ "title": "A contact book",
+ "pitch": "Names, phone numbers, emails, saved in a file and searchable. In C, this small program teaches the big ideas: structs, memory you ask for and give back, linked lists, and checking your memory with valgrind.",
+ "lessons": [
+  "compilation",
+  "stack_heap",
+  "pointers",
+  "debugger"
+ ],
+ "steps": [
+  {
+   "do": "Write a struct contact with a name, a phone number and an email; fill one in your code and print it.",
+   "done": "the contact is printed.",
+   "hint": "Fixed-size char arrays (`char name[64];`) and `strcpy` or `snprintf` to fill them.",
+   "why": "A struct is the shape of your data. Deciding the sizes now (64 characters for a name?) is a real design choice."
+  },
+  {
+   "do": "Make an array of 3 contacts and print them all with a loop.",
+   "done": "the 3 contacts are printed.",
+   "hint": "A function `print_contact(const struct contact *c)` keeps the loop short.",
+   "why": "Passing a pointer instead of the whole struct avoids copying it, and `const` promises the function won't change it."
+  },
+  {
+   "do": "Read a contact typed by the user with fgets. Find out why `scanf(\"%s\")` is dangerous here.",
+   "done": "a name with a space, like \"Ada Lovelace\", is read whole.",
+   "hint": "`fgets(buf, sizeof buf, stdin)`, then remove the `\\n` at the end (`strcspn` finds it).",
+   "why": "`scanf(\"%s\")` stops at the first space and doesn't know the size of your array: a long name writes past its end. That's a buffer overflow, one of the most common security holes in C."
+  },
+  {
+   "do": "Create one contact with malloc, use it, and free it.",
+   "done": "the program prints it and frees it.",
+   "hint": "`malloc(sizeof *c)`, check it isn't NULL, `free(c)` when done.",
+   "why": "Memory from malloc lives on the heap until you free it: it outlives the function that made it. That freedom is why you must give it back yourself."
+  },
+  {
+   "do": "Replace the array with a linked list, so the book can grow without a fixed size.",
+   "done": "you can add 10 contacts and print them all.",
+   "hint": "Add `struct contact *next;` to the struct. Adding at the front is the easiest: the new one points to the old first.",
+   "why": "Each element knows where the next one is. A linked list grows one piece at a time, and drawing it on paper (boxes and arrows) is the best way to get it right."
+  },
+  {
+   "do": "Search for a contact by name.",
+   "done": "an existing name is found, and a missing one prints \"not found\".",
+   "hint": "Walk the list with `for (p = head; p; p = p->next)` and compare with `strcmp`.",
+   "why": "Comparing strings with `==` compares addresses, not text. `strcmp` compares the letters."
+  },
+  {
+   "do": "Delete a contact from the list, and free its memory.",
+   "done": "the deleted contact no longer shows up, whether it was first, in the middle or last.",
+   "hint": "Keep a pointer to the previous element; the first element is a special case (or use a pointer to a pointer).",
+   "why": "Deleting from a list has edge cases: first, last, only one. Testing each is how you find the bug that only shows up sometimes."
+  },
+  {
+   "do": "Check your memory with valgrind.",
+   "done": "valgrind reports no leaks and no errors.",
+   "hint": "Compile with `-g`, run `valgrind --leak-check=full ./contacts`, and free the whole list before exiting.",
+   "why": "Leaks and invalid reads don't always crash; they wait. valgrind shows them now, with the line where they started."
+  },
+  {
+   "do": "Save the contacts to a text file when the program ends, and load them when it starts.",
+   "done": "the contacts are still there after restarting the program.",
+   "hint": "One contact per line, fields separated by a character that can't be in a name (a tab, for example).",
+   "why": "Choosing a separator that can't appear in your data avoids a whole class of bugs. That's why CSV needs quotes and tabs are often simpler."
+  },
+  {
+   "do": "Handle bad input: a too-long name, a broken line in the file, a missing file at the first start.",
+   "done": "none of them crashes the program.",
+   "hint": "`fgets` with the size of the buffer cuts long input; check what `sscanf` returns; a missing file just means an empty book.",
+   "why": "Defensive code expects the impossible. A missing file at the first start isn't an error, it's normal."
+  },
+  {
+   "do": "Add a menu loop: add, list, search, delete, quit.",
+   "done": "you can do everything without restarting.",
+   "hint": "A `while` loop, a number or a letter read with `fgets`, and a `switch`.",
+   "why": "The menu ties all the functions together into a program someone else could use."
+  },
+  {
+   "do": "Split the code into .c and .h files, and build it with a Makefile.",
+   "done": "`make` builds the program, and changing one file only rebuilds that one.",
+   "hint": "contact.h holds the struct and the function declarations; contact.c the code; main.c the menu.",
+   "why": "Real C projects are many files. A Makefile rebuilds only what changed, which matters when there are hundreds."
+  },
+  {
+   "do": "Optional: sort the contacts by name, or export them as CSV.",
+   "done": "the list prints in alphabetical order.",
+   "hint": "Insert each new contact at the right place, or copy the pointers into an array and use `qsort`.",
+   "why": "Keeping a list sorted as you insert, or sorting it all at once: two strategies with different costs. Both are good to know."
+  }
+ ]
+}

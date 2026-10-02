@@ -1,0 +1,77 @@
+{
+ "id": "shell_backup",
+ "order": 5,
+ "language": "shell",
+ "name": "backup",
+ "difficulty": "easy",
+ "title": "A backup script",
+ "pitch": "Disks die and files get deleted by mistake. You'll write a script that saves a folder into dated archives, keeps only the last few, runs every day on its own, and can bring a file back.",
+ "lessons": [
+  "scripts",
+  "archives",
+  "variables",
+  "services"
+ ],
+ "steps": [
+  {
+   "do": "Create a test folder with a few files and subfolders.",
+   "done": "`ls -R` shows them.",
+   "hint": "`mkdir -p test/a/b`, then `echo` some text into a few files.",
+   "why": "A small folder you know by heart makes it easy to check that a backup holds everything."
+  },
+  {
+   "do": "Pack the folder into one archive with tar.",
+   "done": "a .tar.gz file appears.",
+   "hint": "`tar -czf backup.tar.gz test`: c to create, z to compress, f for the file name.",
+   "why": "tar turns a whole tree of files into one file, keeping names, folders and permissions. That's why backups and software downloads use it."
+  },
+  {
+   "do": "List what's inside the archive without unpacking it.",
+   "done": "you see every file of the folder.",
+   "hint": "`tar -tzf`: t lists instead of creating.",
+   "why": "A backup you never checked is a hope, not a backup. Listing is the quick check."
+  },
+  {
+   "do": "Give the archive a dated name, like backup-2026-10-02.tar.gz.",
+   "done": "the name has today's date.",
+   "hint": "`$(date +%F)` puts today's date into a command.",
+   "why": "Dated names keep several backups side by side and sort in time order. %F writes the date as year-month-day, which sorts correctly as text."
+  },
+  {
+   "do": "Put it in a script that takes the folder to save and the destination folder as arguments.",
+   "done": "`./backup.sh ~/test ~/backups` works, and a missing argument prints how to use it.",
+   "hint": "`$1` and `$2`, and `[[ $# -eq 2 ]]` to check you got both.",
+   "why": "Arguments let the same script back up any folder anywhere. Checking them first stops a typo from becoming a strange error further down."
+  },
+  {
+   "do": "Keep only the last 5 backups: delete the older ones.",
+   "done": "after 7 runs, only the 5 newest archives are left.",
+   "hint": "Dated names sort in time order: `ls`, `head -n -5` and `xargs rm`, or a loop. Test with fake dates (`touch backup-2020-01-0{1..7}.tar.gz`).",
+   "why": "Backups that are never cleaned fill the disk, and then the next backup fails. Deleting is dangerous, so test this part with fake files first."
+  },
+  {
+   "do": "Check every command: if tar fails (a full disk, a missing folder), the script says so and exits with an error code.",
+   "done": "a missing folder gives a clear message, and `echo $?` shows a code that isn't 0.",
+   "hint": "`set -euo pipefail`, or `tar … || { echo \"backup failed\" >&2; exit 1; }`.",
+   "why": "A backup that fails silently is the worst kind: you find out on the day you need it. Loud failures are a feature."
+  },
+  {
+   "do": "Run it every day automatically, with cron or a systemd timer.",
+   "done": "a new archive appears the next day (or the next minute, for the test).",
+   "hint": "`crontab -e` and a line like `0 3 * * * /path/backup.sh …`. Use full paths: cron doesn't load your shell's settings.",
+   "why": "The best backup is the one you don't have to remember. Scheduled jobs run in a bare environment, which is why full paths matter there."
+  },
+  {
+   "do": "Restore one file from a backup into another folder.",
+   "done": "the restored file is the same as the original: `diff` prints nothing.",
+   "hint": "`tar -xzf archive -C other_folder path/inside/archive`.",
+   "why": "Restoring is the real test of a backup. Practising it before a disaster is what professionals do."
+  },
+  {
+   "do": "Optional: exclude some files, or copy only what changed with rsync.",
+   "done": "the excluded files are not in the archive.",
+   "hint": "`tar --exclude='*.tmp'`, or `rsync -a --delete` for a mirror.",
+   "why": "Real backups skip caches and temporary files. Knowing rsync opens the door to backups on another machine."
+  }
+ ]
+}

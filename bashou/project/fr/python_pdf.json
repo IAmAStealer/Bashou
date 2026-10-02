@@ -1,0 +1,72 @@
+{
+ "title": "Fusionner ou découper des PDF",
+ "pitch": "Rassembler des pages scannées en un seul PDF, ou sortir une page d'un long document, sans envoyer tes papiers sur un site web. Une petite bibliothèque fait le plus dur : tu apprends à t'en servir, puis tu en fais un vrai outil en ligne de commande.",
+ "steps": [
+  {
+   "do": "Crée un dossier de test et COPIE-y deux ou trois PDF. Travaille sur des copies : un programme en cours d'écriture peut écraser un fichier par erreur.",
+   "done": "le dossier contient 2 ou 3 PDF, et les originaux sont à l'abri ailleurs.",
+   "hint": "N'importe quels PDF conviennent : une facture, un billet, un mode d'emploi. Si tu n'en as pas, la plupart des logiciels savent « imprimer en PDF ».",
+   "why": "Travailler sur des copies est la première habitude de quiconque écrit des programmes qui touchent à des fichiers. Un bug ne coûte rien quand les originaux sont à l'abri."
+  },
+  {
+   "do": "Crée un environnement virtuel pour ton projet et installe-y la bibliothèque pypdf avec pip.",
+   "done": "`import pypdf` fonctionne dans ton programme, sans erreur.",
+   "hint": "Cherche `python3 -m venv`, active-le, puis lance `pip install pypdf` à l'intérieur.",
+   "why": "Un environnement virtuel sépare les bibliothèques de chaque projet : installer quelque chose pour l'un ne casse jamais l'autre. pip est la façon dont les programmeurs Python récupèrent les bibliothèques écrites par d'autres."
+  },
+  {
+   "do": "Ouvre un PDF avec pypdf et affiche son nombre de pages.",
+   "done": "le nombre correspond à ce qu'affiche ton lecteur de PDF.",
+   "hint": "pypdf a une classe `PdfReader` ; ses `pages` se comportent comme une liste, et `len()` fonctionne dessus.",
+   "why": "Avant de modifier un fichier, on le lit. Compter les pages prouve que ton programme comprend vraiment le fichier, et `len()` sur autre chose qu'une liste montre comment Python réutilise les mêmes idées partout."
+  },
+  {
+   "do": "Fusionne deux PDF dans un nouveau fichier appelé merged.pdf.",
+   "done": "merged.pdf contient les pages des deux fichiers, dans l'ordre.",
+   "hint": "Un `PdfWriter` rassemble des pages : ajoute toutes les pages du premier fichier, puis du second, puis écris-le dans un fichier ouvert en mode \"wb\".",
+   "why": "Lire depuis un objet et écrire dans un autre, c'est la forme de la plupart des outils sur les fichiers. Le mode \"wb\" compte : un PDF, ce sont des données binaires, pas du texte."
+  },
+  {
+   "do": "Fusionne tous les PDF du dossier, triés par nom, en un seul fichier.",
+   "done": "un seul fichier les contient tous, dans l'ordre alphabétique de leurs noms.",
+   "hint": "`pathlib.Path(dossier).glob(\"*.pdf\")` les liste, et `sorted()` les met dans l'ordre.",
+   "why": "Passer de deux fichiers nommés à « tous les fichiers d'un dossier », c'est là qu'un script commence à te faire gagner du temps. Trier compte : l'ordre dans lequel un dossier liste ses fichiers n'est pas garanti."
+  },
+  {
+   "do": "Découpe : enregistre une page d'un PDF dans son propre fichier.",
+   "done": "page_1.pdf ne contient que cette page.",
+   "hint": "Les mêmes outils, dans l'autre sens : un writer avec une seule page dedans.",
+   "why": "Découper, c'est fusionner à l'envers. Voir que deux fonctions partagent les mêmes briques, c'est comme ça qu'on commence à concevoir des programmes au lieu de copier du code."
+  },
+  {
+   "do": "Découpe un PDF entier en un fichier par page.",
+   "done": "un PDF de 5 pages donne 5 fichiers, de page_1.pdf à page_5.pdf.",
+   "hint": "Une boucle sur les pages, avec `enumerate()` pour avoir le numéro de chaque page, et une f-string pour le nom du fichier.",
+   "why": "Les gens comptent à partir de 1, Python à partir de 0. Tous les programmeurs rencontrent cet écart ; `enumerate(pages, start=1)` est une façon propre de le combler."
+  },
+  {
+   "do": "Extrais une plage de pages, par exemple de 2 à 4, dans un nouveau PDF.",
+   "done": "le nouveau fichier contient exactement les pages 2, 3 et 4.",
+   "hint": "Une tranche (slice) de la liste des pages : réfléchis à où elle commence et où elle s'arrête (la fin n'est pas incluse).",
+   "why": "Les plages sont une source classique d'erreurs d'un cran (off-by-one). Tester avec une plage que tu peux vérifier à l'œil, c'est comme ça qu'on les attrape."
+  },
+  {
+   "do": "Laisse l'utilisateur choisir depuis la ligne de commande, sans modifier le code : `python pdf.py merge a.pdf b.pdf out.pdf` et `python pdf.py split a.pdf`.",
+   "done": "les deux commandes fonctionnent, et une commande inconnue affiche comment utiliser le programme.",
+   "hint": "`sys.argv` contient les mots tapés après `python` ; le module `argparse` fait la même chose avec une aide plus jolie.",
+   "why": "Les arguments transforment un script qu'on modifie en un outil qu'on utilise. C'est la frontière entre « mon code » et « mon programme »."
+  },
+  {
+   "do": "Gère les erreurs : un fichier absent, un fichier qui n'est pas un PDF, un numéro de page qui n'existe pas, et un fichier de sortie qui existe déjà (ne l'écrase pas).",
+   "done": "chaque erreur affiche un message clair au lieu de planter, et aucun fichier n'est jamais écrasé.",
+   "hint": "`try` / `except` autour de la partie risquée ; `Path.exists()` avant d'écrire.",
+   "why": "Un programme pour les autres doit survivre à leurs erreurs. Un message clair leur dit quoi corriger ; une trace d'erreur leur dit seulement que ton programme a cassé."
+  },
+  {
+   "do": "Facultatif : tourner des pages, ou ouvrir un PDF protégé par mot de passe.",
+   "done": "ça marche sur un fichier de test.",
+   "hint": "Regarde la documentation de pypdf : les pages peuvent être tournées, et le reader sait déchiffrer.",
+   "why": "Lire la documentation d'une bibliothèque pour y trouver une fonction toi-même est une compétence à part entière, et la plus utile à travailler."
+  }
+ ]
+}

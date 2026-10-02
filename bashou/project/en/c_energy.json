@@ -1,0 +1,77 @@
+{
+ "id": "c_energy",
+ "order": 8,
+ "language": "c",
+ "name": "energy",
+ "difficulty": "easy",
+ "title": "Track your electricity or your fuel",
+ "pitch": "How much do you really use each month, and what does it cost? You enter your meter readings or your fill-ups; the program keeps them in a file and shows you the months, the averages and the trend.",
+ "lessons": [
+  "compilation",
+  "gcc_use",
+  "stack_heap",
+  "pointers"
+ ],
+ "steps": [
+  {
+   "do": "Choose what you track: electricity meter readings, or fill-ups (date, liters, price, kilometers). Write 3 readings in your code and print them.",
+   "done": "the 3 readings are printed.",
+   "hint": "Plain variables and `printf` are enough for now. `%.2f` prints two decimals.",
+   "why": "Real numbers from your own life make it easy to see if a result is wrong."
+  },
+  {
+   "do": "Put one reading in a struct, and keep them in an array.",
+   "done": "a loop prints them all.",
+   "hint": "`struct reading { char date[11]; double value; };` and an array of them.",
+   "why": "A struct groups the fields that belong together, so one reading travels as one thing. It's C's way to describe your data."
+  },
+  {
+   "do": "Compute what you used between two readings (kWh, or liters per 100 km).",
+   "done": "the result matches your own calculation on paper.",
+   "hint": "Subtract the previous reading from the current one. For fuel: liters × 100 / kilometers driven.",
+   "why": "Checking a program against a calculation made by hand is the simplest test there is, and it catches real bugs."
+  },
+  {
+   "do": "Read a new reading typed by the user, and check it: a date, positive numbers, a meter that doesn't go backwards.",
+   "done": "a wrong value is refused with a clear message.",
+   "hint": "`fgets` reads a whole line safely, then `sscanf` takes the values out of it and returns how many it found.",
+   "why": "`scanf` alone leaves junk in the input when it fails. Reading a line, then parsing it, keeps the input under control."
+  },
+  {
+   "do": "Save the readings to a CSV file, and load them at start.",
+   "done": "your readings are still there after restarting.",
+   "hint": "`fprintf(f, \"%s,%.2f\\n\", …)` to write; `fgets` + `sscanf` with a comma in the format to read.",
+   "why": "CSV is plain text: you can open it in a spreadsheet, check it by eye, or fix it in an editor."
+  },
+  {
+   "do": "Print the use and the cost for each month.",
+   "done": "one line per month, and the total of the year.",
+   "hint": "The month is the first 7 characters of an ISO date (2026-10). `strncmp` compares the start of two strings.",
+   "why": "Grouping by month is the same idea as grouping by theme in any language: a key, and a running total."
+  },
+  {
+   "do": "Print the average, the best and the worst month.",
+   "done": "they match what you see in the monthly list.",
+   "hint": "One loop: keep the smallest and largest seen so far, and the sum.",
+   "why": "One pass over the data, a few variables that remember: an algorithm you'll write many times."
+  },
+  {
+   "do": "Let the list grow without a fixed size, with malloc and realloc.",
+   "done": "1000 readings load without a crash, and valgrind reports no leaks.",
+   "hint": "Start with room for 16, double it with `realloc` when it's full, `free` at the end. Run `valgrind ./energy`.",
+   "why": "Fixed arrays break the day your data grows. Doubling the size when it's full is the trick behind most growable lists, in every language."
+  },
+  {
+   "do": "Handle a broken line in the file (a missing field, a letter instead of a number).",
+   "done": "the program says which line is wrong and keeps the others.",
+   "hint": "Count lines as you read, and check what `sscanf` returns.",
+   "why": "Files get edited by hand and get damaged. Telling the user the line number makes the problem easy to fix."
+  },
+  {
+   "do": "Optional: a bar chart of the months made of # characters.",
+   "done": "the chart shows your winter months taller (or your holiday trips).",
+   "hint": "Scale each month to the biggest one: `width = value * 40 / max`.",
+   "why": "A picture shows a trend faster than a column of numbers, even one made of # characters."
+  }
+ ]
+}

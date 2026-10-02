@@ -1,0 +1,74 @@
+{
+ "id": "rust_menu",
+ "order": 12,
+ "language": "rust",
+ "name": "menu",
+ "difficulty": "medium",
+ "title": "From a weekly menu to a shopping list",
+ "pitch": "Write your recipes once. Each week, pick your meals: the program adds up the ingredients, converts the units, removes what you already have and groups the list by store aisle.",
+ "lessons": [
+  "rust_vars"
+ ],
+ "steps": [
+  {
+   "do": "Create the project with `cargo new menu`. Write a Recipe struct (name, servings, ingredients) and an Ingredient struct (name, quantity, unit); fill one recipe in your code and print it.",
+   "done": "the recipe is printed.",
+   "hint": "A recipe holds a `Vec<Ingredient>`; quantities are `f64`.",
+   "why": "Structs inside structs describe real data: a recipe has ingredients, each with its own fields."
+  },
+  {
+   "do": "Write 3 of your real recipes in a file (TOML or JSON) and load them with serde.",
+   "done": "the program prints the 3 recipes from the file.",
+   "hint": "The toml crate reads TOML, which is pleasant to write by hand: `[[recipe]]` sections.",
+   "why": "Data in a file can change without recompiling. TOML is made for files people write themselves."
+  },
+  {
+   "do": "Choose the week's meals from the command line: `cargo run -- pasta curry pasta`.",
+   "done": "the chosen recipes are printed, and an unknown name prints a clear message.",
+   "hint": "`.iter().find(|r| r.name == name)` returns an Option: None means not found.",
+   "why": "Option is how Rust says \"maybe nothing\". You have to handle the None case: no null pointer surprises."
+  },
+  {
+   "do": "Add up the ingredients of the chosen meals in a HashMap.",
+   "done": "two recipes with 200 g and 300 g of rice give \"rice: 500 g\".",
+   "hint": "`*map.entry(name).or_insert(0.0) += quantity;`",
+   "why": "entry() finds the key or creates it in one step. It's the Rust way to count and add up."
+  },
+  {
+   "do": "Scale the quantities to the number of people: a recipe for 2, cooked for 4.",
+   "done": "the quantities double.",
+   "hint": "Multiply by people / recipe servings, as f64.",
+   "why": "Mixing integers and decimals needs an explicit conversion in Rust (`as f64`). Nothing changes type behind your back."
+  },
+  {
+   "do": "Handle units: grams and kilograms, milliliters and liters, with an enum for the unit.",
+   "done": "500 g + 1 kg gives 1.5 kg, and grams are never added to liters.",
+   "hint": "Convert everything to a base unit (grams, milliliters) when adding, and choose the nicest unit when printing.",
+   "why": "An enum makes impossible values impossible: a unit can only be one you listed. Converting to a base unit is how real software (and physics) avoids mixing units."
+  },
+  {
+   "do": "Group the list by store aisle (vegetables, dairy, dry goods…), from the recipe file.",
+   "done": "the list prints aisle by aisle.",
+   "hint": "An aisle for each ingredient in the file, and a BTreeMap from aisle to ingredients to keep them sorted.",
+   "why": "The order of a list matters to the person using it. A sorted map gives you a stable, predictable order."
+  },
+  {
+   "do": "Remove what you already have: a pantry file with what's in your cupboards.",
+   "done": "rice you already have is not on the list, or only the part you're missing.",
+   "hint": "Load the pantry into a HashMap too, and subtract.",
+   "why": "Same data structure, used the other way: once you have a map of quantities, adding and removing are easy."
+  },
+  {
+   "do": "Save the shopping list to a text file you can print or send to your phone.",
+   "done": "the file is easy to read in the store.",
+   "hint": "`write!` and `writeln!` work on files like `print!` does on the screen.",
+   "why": "The output is what you'll use. Making it pleasant to read is part of the job, not decoration."
+  },
+  {
+   "do": "Optional: plan the week by day (lunch and dinner), or pick meals at random among the ones you didn't eat last week.",
+   "done": "the plan has no meal twice in a row.",
+   "hint": "The rand crate's `choose` picks from a list; keep last week's plan in a file.",
+   "why": "A small rule (no meal twice in a row) turns a random pick into a useful one."
+  }
+ ]
+}

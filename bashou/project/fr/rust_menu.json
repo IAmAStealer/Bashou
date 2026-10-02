@@ -1,0 +1,66 @@
+{
+ "title": "D'un menu de la semaine à une liste de courses",
+ "pitch": "Écris tes recettes une fois. Chaque semaine, choisis tes repas : le programme additionne les ingrédients, convertit les unités, retire ce que tu as déjà et range la liste par rayon du magasin.",
+ "steps": [
+  {
+   "do": "Crée le projet avec `cargo new menu`. Écris une struct Recipe (nom, nombre de personnes, ingrédients) et une struct Ingredient (nom, quantité, unité) ; remplis une recette dans ton code et affiche-la.",
+   "done": "la recette est affichée.",
+   "hint": "Une recette contient un `Vec<Ingredient>` ; les quantités sont des `f64`.",
+   "why": "Des structs dans des structs décrivent de vraies données : une recette a des ingrédients, chacun avec ses champs."
+  },
+  {
+   "do": "Écris 3 de tes vraies recettes dans un fichier (TOML ou JSON) et charge-les avec serde.",
+   "done": "le programme affiche les 3 recettes du fichier.",
+   "hint": "La crate toml lit le TOML, agréable à écrire à la main : des sections `[[recipe]]`.",
+   "why": "Des données dans un fichier peuvent changer sans recompiler. Le TOML est fait pour les fichiers que les gens écrivent eux-mêmes."
+  },
+  {
+   "do": "Choisis les repas de la semaine sur la ligne de commande : `cargo run -- pates curry pates`.",
+   "done": "les recettes choisies sont affichées, et un nom inconnu affiche un message clair.",
+   "hint": "`.iter().find(|r| r.name == name)` renvoie une Option : None veut dire introuvable.",
+   "why": "Option, c'est la façon de Rust de dire « peut-être rien ». Tu dois traiter le cas None : pas de surprise de pointeur nul."
+  },
+  {
+   "do": "Additionne les ingrédients des repas choisis dans une HashMap.",
+   "done": "deux recettes avec 200 g et 300 g de riz donnent « riz : 500 g ».",
+   "hint": "`*map.entry(nom).or_insert(0.0) += quantite;`",
+   "why": "entry() trouve la clé ou la crée en une seule étape. C'est la façon Rust de compter et d'additionner."
+  },
+  {
+   "do": "Adapte les quantités au nombre de personnes : une recette pour 2, cuisinée pour 4.",
+   "done": "les quantités doublent.",
+   "hint": "Multiplie par personnes / personnes de la recette, en f64.",
+   "why": "Mélanger entiers et décimaux demande une conversion explicite en Rust (`as f64`). Rien ne change de type dans ton dos."
+  },
+  {
+   "do": "Gère les unités : grammes et kilos, millilitres et litres, avec une enum pour l'unité.",
+   "done": "500 g + 1 kg donnent 1,5 kg, et on n'ajoute jamais des grammes à des litres.",
+   "hint": "Convertis tout dans une unité de base (grammes, millilitres) pour additionner, et choisis la plus jolie unité pour afficher.",
+   "why": "Une enum rend impossibles les valeurs impossibles : une unité ne peut être qu'une de celles que tu as listées. Convertir dans une unité de base, c'est comme ça que les vrais logiciels (et la physique) évitent de mélanger les unités."
+  },
+  {
+   "do": "Range la liste par rayon du magasin (légumes, crèmerie, épicerie…), d'après le fichier de recettes.",
+   "done": "la liste s'affiche rayon par rayon.",
+   "hint": "Un rayon pour chaque ingrédient dans le fichier, et une BTreeMap du rayon vers les ingrédients pour les garder triés.",
+   "why": "L'ordre d'une liste compte pour la personne qui s'en sert. Une map triée te donne un ordre stable et prévisible."
+  },
+  {
+   "do": "Retire ce que tu as déjà : un fichier placard avec ce qu'il y a dans tes placards.",
+   "done": "le riz que tu as déjà n'est pas sur la liste, ou seulement la part qui manque.",
+   "hint": "Charge aussi le placard dans une HashMap, et soustrais.",
+   "why": "La même structure de données, utilisée dans l'autre sens : une fois que tu as une map de quantités, ajouter et retirer sont faciles."
+  },
+  {
+   "do": "Enregistre la liste de courses dans un fichier texte que tu peux imprimer ou envoyer sur ton téléphone.",
+   "done": "le fichier est facile à lire au magasin.",
+   "hint": "`write!` et `writeln!` marchent sur les fichiers comme `print!` à l'écran.",
+   "why": "La sortie, c'est ce dont tu vas te servir. La rendre agréable à lire fait partie du travail, ce n'est pas de la décoration."
+  },
+  {
+   "do": "Facultatif : planifie la semaine jour par jour (midi et soir), ou tire des repas au hasard parmi ceux que tu n'as pas mangés la semaine dernière.",
+   "done": "le planning n'a jamais deux fois le même repas d'affilée.",
+   "hint": "`choose` de la crate rand tire dans une liste ; garde le planning de la semaine dernière dans un fichier.",
+   "why": "Une petite règle (jamais deux fois d'affilée) transforme un tirage au hasard en tirage utile."
+  }
+ ]
+}

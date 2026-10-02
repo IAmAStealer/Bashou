@@ -156,6 +156,22 @@ def new_lesson(state, rng):
     return rng.choice(INVITES["lesson"]) if lesson.new(state) else None
 
 
+PROJECT_NUDGES = ["Your project is waiting: step {n} of {title}. `bashou project`",
+                  "Five minutes on {title}? Step {n} is a small one. `bashou project`",
+                  "Stuck on step {n} of {title}? `bashou project hint` gives you a nudge."]
+
+
+def project_nudge(state, rng):
+    """Now and then, the project you started: one small step, not a list (owner, 2026-10-02)."""
+    from . import project
+    prog = project.progress_of(state)
+    p = next((p for p in project.load() if p["id"] == prog["current"]), None)
+    n = prog["done"].get(prog["current"], 0)
+    if not p or n >= len(p["steps"]):
+        return None
+    return _(rng.choice(PROJECT_NUDGES)).format(n=n + 1, title=p["title"])
+
+
 def line(state, pet, rng=random):
     """One thing for `pet` to say, with its voice. A waiting threat comes first."""
     threat = fight.announcement(state)
@@ -165,7 +181,7 @@ def line(state, pet, rng=random):
     traits = [t for trait, lines in TRAITS.items() if trait in earned for t in lines]
     pools = [(hint(state, pet, rng), 4), (rng.choice(creatures.FAMILIES[pet].tips), 4),
              (rng.choice(traits + creatures.FAMILIES[pet].personal), 2), (invite(state, rng), 3), (discover(state, rng), 4),
-             (new_lesson(state, rng), 3)]
+             (new_lesson(state, rng), 3), (project_nudge(state, rng), 2)]
     pools = [(text, w) for text, w in pools if text]
     text = rng.choices([t for t, w in pools], [w for t, w in pools])[0]
     return f"{_(creatures.FAMILIES[pet].voice)} {_(text)}"

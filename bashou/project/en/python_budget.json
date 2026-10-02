@@ -1,0 +1,107 @@
+{
+ "id": "python_budget",
+ "order": 3,
+ "language": "python",
+ "name": "budget",
+ "difficulty": "hard",
+ "title": "A web page of your budget, with expenses by theme",
+ "pitch": "Track where your money goes, on a page in your browser that only you can see. It's the biggest of the three Python projects: it mixes Python, files, HTML, forms and a small web server. The first steps don't even need the web, and a beginner who stops at step 5 already has a useful program.",
+ "lessons": [
+  "py_start",
+  "py_flow",
+  "py_names",
+  "py_data"
+ ],
+ "steps": [
+  {
+   "do": "Without any web yet: write a program that asks for an expense (an amount, a theme like \"food\" or \"rent\", a short note) and prints it.",
+   "done": "you type an expense and see it printed back.",
+   "hint": "`input()` reads what you type, as text. `float()` turns \"12.50\" into a number.",
+   "why": "Start with the core of the program, in the simplest place: the terminal. The web page comes later, around something that already works."
+  },
+  {
+   "do": "Keep several expenses in a list and print the total.",
+   "done": "three expenses give the right total.",
+   "hint": "A list of dictionaries works well: `{\"amount\": 12.5, \"theme\": \"food\", \"note\": \"bread\"}`. `sum()` adds numbers.",
+   "why": "Choosing how to store your data is the most important decision in a program. A list of dictionaries is simple, and it will turn into a file and a web table without changing shape."
+  },
+  {
+   "do": "Save the expenses to a file (CSV or JSON) and load them when the program starts.",
+   "done": "you close the program, open it again, and your expenses are still there.",
+   "hint": "The json module: `json.dump` writes your list, `json.load` reads it back. Think about the very first run, when the file doesn't exist yet.",
+   "why": "A program's memory disappears when it stops. Saving to a file is how programs remember, and JSON keeps your list of dictionaries exactly as it is."
+  },
+  {
+   "do": "Print the total for each theme.",
+   "done": "food and rent each show their own total.",
+   "hint": "A dictionary from theme to total: add each expense's amount to its theme's entry.",
+   "why": "Grouping and adding up is what turns a list of facts into an answer (\"where does my money go?\"). You'll use this pattern everywhere."
+  },
+  {
+   "do": "Handle bad input: a word instead of a number, a negative amount, an empty theme.",
+   "done": "each mistake asks again instead of crashing.",
+   "hint": "A `while True` loop with `try` / `except ValueError` around the conversion, and `break` when the input is good.",
+   "why": "Never trust input, even your own. A budget with one wrong value is a wrong budget, so check data at the moment it comes in."
+  },
+  {
+   "do": "Write a simple HTML page by hand (a title and a table with two fake expenses) and open it in your browser.",
+   "done": "the browser shows your table.",
+   "hint": "Tags you need: `<h1>`, `<table>`, `<tr>`, `<th>`, `<td>`. Open the file with your browser directly.",
+   "why": "Before a program writes HTML, you need to know what good HTML looks like. Writing it once by hand gives you the target."
+  },
+  {
+   "do": "Make your program generate that HTML page from your saved expenses.",
+   "done": "after adding an expense, reloading the page shows it.",
+   "hint": "Build the rows with a loop and an f-string, then write the whole page to a .html file.",
+   "why": "Programs that write other files (HTML, reports, configs) are everywhere. This one is already a static website generator, a tiny one."
+  },
+  {
+   "do": "Install Flask in a virtual environment and serve a \"Hello\" page on http://localhost:5000. Keep it on localhost: your budget is private.",
+   "done": "the browser shows \"Hello\" at that address.",
+   "hint": "Flask's quickstart has a five-line example. Don't use `host=\"0.0.0.0\"`: that would open it to your network.",
+   "why": "A web server is a program that waits for requests and answers them. localhost means \"this computer only\": nobody else on the network can reach it."
+  },
+  {
+   "do": "Serve your expenses table from Flask instead of the generated file.",
+   "done": "the page lists your saved expenses.",
+   "hint": "Load the JSON in the function of your route, and return the HTML you were already building.",
+   "why": "The page is now made at the moment you ask for it, so it's always up to date. That's the difference between a static page and a dynamic one."
+  },
+  {
+   "do": "Add an HTML form to add an expense from the page (amount, theme, note), and save it.",
+   "done": "an expense added in the browser is still there after restarting the program.",
+   "hint": "A `<form method=\"post\">`, a route that accepts POST, and `request.form` to read the fields. Then redirect to the page.",
+   "why": "A form sends data from the browser to your program. Redirecting after saving stops the browser from sending the same expense twice when you reload."
+  },
+  {
+   "do": "Check the form on the server side too, like in step 5.",
+   "done": "a bad amount shows an error message on the page, and nothing is saved.",
+   "hint": "Reuse your checking code from step 5, in a function both versions can call.",
+   "why": "Anyone can send anything to a web server, whatever your form allows. The server must check everything itself: that's a basic rule of web security."
+  },
+  {
+   "do": "Choose the theme from a list instead of typing it, and show the total per theme on the page.",
+   "done": "the page shows one total for each theme.",
+   "hint": "A `<select>` with `<option>` tags, built from your list of themes. Reuse the grouping from step 4.",
+   "why": "Free text gives you \"Food\", \"food\" and \"fod\" as three themes. A fixed list keeps your data clean, so the totals stay right."
+  },
+  {
+   "do": "Add a date to each expense, and show only one month at a time.",
+   "done": "you can switch between two months.",
+   "hint": "Store dates as text like \"2026-10-02\": they sort correctly, and the month is the first 7 characters.",
+   "why": "Dates written year-month-day (ISO 8601) sort as plain text and leave no doubt about day versus month. Most programs store them this way."
+  },
+  {
+   "do": "Delete or edit an expense.",
+   "done": "a wrong expense can be fixed from the page.",
+   "hint": "Give each expense an id (a number that never changes) so a link or a button can say which one.",
+   "why": "Data needs a stable way to be named. Positions in a list change when you delete something; ids don't."
+  },
+  {
+   "do": "Optional: a monthly budget per theme with a warning when you go over it, or a chart of the themes.",
+   "done": "going over your food budget shows the warning.",
+   "hint": "Store the limits in the same JSON file, and compare them with your totals per theme.",
+   "why": "Now the program doesn't only show your data, it tells you something about it. That's the step from a record to a tool."
+  }
+ ]
+}

@@ -1,0 +1,82 @@
+{
+ "id": "python_pdf",
+ "order": 1,
+ "language": "python",
+ "name": "pdf",
+ "difficulty": "very easy",
+ "title": "Merge or split PDFs",
+ "pitch": "Join scanned pages into one PDF, or take one page out of a long one, without uploading your papers to a website. A small library does the hard part: you learn to use it, then turn it into a real command-line tool.",
+ "lessons": [
+  "py_start",
+  "py_flow",
+  "py_names"
+ ],
+ "steps": [
+  {
+   "do": "Create a test folder and COPY two or three PDFs into it. Work on copies: a program in progress can overwrite a file by mistake.",
+   "done": "the folder holds 2 or 3 PDFs, and the originals are safe somewhere else.",
+   "hint": "Any PDFs will do: an invoice, a ticket, a manual. If you have none, most programs can \"print to PDF\".",
+   "why": "Working on copies is the first habit of anyone who writes programs that touch files. A bug costs you nothing when the originals are safe."
+  },
+  {
+   "do": "Create a virtual environment for your project and install the pypdf library in it with pip.",
+   "done": "`import pypdf` works in your program without an error.",
+   "hint": "Look up `python3 -m venv`, then activate it and run `pip install pypdf` inside it.",
+   "why": "A virtual environment keeps each project's libraries apart, so installing something for one project never breaks another. pip is how Python programmers get the libraries other people wrote."
+  },
+  {
+   "do": "Open one PDF with pypdf and print how many pages it has.",
+   "done": "the number matches what your PDF reader shows.",
+   "hint": "pypdf has a `PdfReader` class; its `pages` behave like a list, and `len()` works on them.",
+   "why": "Before changing a file, you read it. Counting pages proves your program really understands the file, and `len()` on something that isn't a plain list shows how Python reuses the same ideas everywhere."
+  },
+  {
+   "do": "Merge two PDFs into a new file called merged.pdf.",
+   "done": "merged.pdf has the pages of both files, in order.",
+   "hint": "A `PdfWriter` collects pages: add every page of the first file, then of the second, then write it to a file opened in \"wb\" mode.",
+   "why": "Reading from one object and writing to another is the shape of most file tools. The \"wb\" mode matters: a PDF is binary data, not text."
+  },
+  {
+   "do": "Merge every PDF of the folder, sorted by name, into one file.",
+   "done": "one file holds all of them, in alphabetical order of their names.",
+   "hint": "`pathlib.Path(folder).glob(\"*.pdf\")` lists them, and `sorted()` puts them in order.",
+   "why": "Going from two named files to \"every file in a folder\" is where a script starts saving you real time. Sorting matters: the order a folder lists its files in is not guaranteed."
+  },
+  {
+   "do": "Split: save one page of a PDF as its own file.",
+   "done": "page_1.pdf holds only that page.",
+   "hint": "Same tools, the other way around: a writer with just one page in it.",
+   "why": "Splitting is merging backwards. Seeing that two features share the same building blocks is how you start to design programs instead of copying code."
+  },
+  {
+   "do": "Split a whole PDF into one file per page.",
+   "done": "a 5-page PDF gives 5 files, named page_1.pdf to page_5.pdf.",
+   "hint": "A loop over the pages, with `enumerate()` to get each page's number, and an f-string for the file name.",
+   "why": "People count from 1, Python counts from 0. Every programmer meets this gap; `enumerate(pages, start=1)` is one clean way to bridge it."
+  },
+  {
+   "do": "Extract a range of pages, for example 2 to 4, into a new PDF.",
+   "done": "the new file has exactly pages 2, 3 and 4.",
+   "hint": "A slice of the pages list: think about where it starts and where it stops (the stop is not included).",
+   "why": "Ranges are a classic source of off-by-one mistakes. Testing with a range you can check by eye is how you catch them."
+  },
+  {
+   "do": "Let the user choose from the command line, without editing the code: `python pdf.py merge a.pdf b.pdf out.pdf` and `python pdf.py split a.pdf`.",
+   "done": "both commands work, and a wrong command prints how to use the program.",
+   "hint": "`sys.argv` holds the words typed after `python`; the `argparse` module does the same with a nicer help.",
+   "why": "Arguments turn a script you edit into a tool you use. It's the line between \"my code\" and \"my program\"."
+  },
+  {
+   "do": "Handle mistakes: a missing file, a file that isn't a PDF, a page number that doesn't exist, and an output file that already exists (don't overwrite it).",
+   "done": "each mistake prints a clear message instead of a crash, and no file is ever overwritten.",
+   "hint": "`try` / `except` around the risky part; `Path.exists()` before writing.",
+   "why": "A program for other people must survive their mistakes. A clear message tells them what to fix; a traceback only tells them your program broke."
+  },
+  {
+   "do": "Optional: rotate pages, or open a password-protected PDF.",
+   "done": "it works on one test file.",
+   "hint": "Look in the pypdf documentation: pages can be rotated, and the reader can decrypt.",
+   "why": "Reading a library's documentation to find a feature yourself is a skill on its own, and the most useful one you can practise."
+  }
+ ]
+}

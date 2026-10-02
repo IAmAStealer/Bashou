@@ -30,7 +30,7 @@ _spec.loader.exec_module(screenshot)
 SIZES = {"full": (160, 48), "portrait": (60, 96), "small": (80, 24)}
 TINY = (40, 12)                                                  # a very small window
 RUNS = {"level": [], "pets": ["pets"], "achievements": ["achievements"], "evolve": ["evolve"], "swap": ["swap"],
-        "stats": ["stats"], "share": ["share", "--name", "Tester"], "lesson": ["lesson"],
+        "stats": ["stats"], "share": ["share", "--name", "Tester"], "lesson": ["lesson"], "project": ["project"],
         "learn": ["learn", "grep", "-rn", "TODO", "."], "talk": ["talk"], "fight": ["fight"], "arena": ["arena"],
         "adventure": ["adventure"], "on": ["on"], "off": ["off"], "config": ["config", "list"], "start": ["start"],
         "reset": ["reset"], "version": ["version"], "help": ["help"]}

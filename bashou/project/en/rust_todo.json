@@ -1,0 +1,68 @@
+{
+ "id": "rust_todo",
+ "order": 10,
+ "language": "rust",
+ "name": "todo",
+ "difficulty": "easy",
+ "title": "A todo list on the command line",
+ "pitch": "Add, list and finish tasks from your terminal, saved in a file. It's small, and it walks you through what makes Rust different: structs, enums with match, and errors you have to handle.",
+ "lessons": [
+  "rust_vars"
+ ],
+ "steps": [
+  {
+   "do": "Create the project with `cargo new todo` and run it.",
+   "done": "`cargo run` prints \"Hello, world!\".",
+   "hint": "If cargo isn't installed, rustup.rs explains how to get it.",
+   "why": "cargo creates the project, builds it and runs it. Every Rust project you'll meet uses it."
+  },
+  {
+   "do": "Write a Task struct (its text, and whether it's done) and print one.",
+   "done": "the task is printed.",
+   "hint": "`#[derive(Debug)]` above the struct lets you print it with `{:?}`.",
+   "why": "Rust asks you to describe your data before using it. derive asks the compiler to write some common code for you."
+  },
+  {
+   "do": "Keep tasks in a Vec<Task>, add a few and list them with their numbers.",
+   "done": "the list prints with numbers, starting at 1.",
+   "hint": "`.iter().enumerate()` gives each item with its index.",
+   "why": "Vec is Rust's growable list. Iterators like enumerate are how Rust loops over things without index mistakes."
+  },
+  {
+   "do": "Read the command from the arguments: `cargo run -- add \"buy bread\"`, `cargo run -- list`.",
+   "done": "both commands work.",
+   "hint": "`std::env::args()` gives the words; `.collect::<Vec<String>>()` makes a list of them. The `--` separates cargo's arguments from yours.",
+   "why": "Everything after `--` goes to your program, not to cargo: a convention many tools share."
+  },
+  {
+   "do": "Turn the command into an enum and handle it with match.",
+   "done": "an unknown command prints how to use the program.",
+   "hint": "`enum Command { Add(String), List, Done(usize) }`, and a function that turns the arguments into one.",
+   "why": "An enum lists every possible case, and match makes you handle each of them: forget one and the program doesn't compile. That's one of Rust's best features."
+  },
+  {
+   "do": "Save the tasks to a JSON file with serde, and load them at start.",
+   "done": "the tasks are still there at the next run.",
+   "hint": "Add serde (with the derive feature) and serde_json to Cargo.toml; `#[derive(Serialize, Deserialize)]` on Task.",
+   "why": "Crates are Rust's libraries, and Cargo.toml lists the ones your project uses. serde turns your structs into JSON and back with one line of derive."
+  },
+  {
+   "do": "Replace every unwrap() with Result and ?: a missing file, broken JSON, a task number that doesn't exist.",
+   "done": "each mistake prints a clear message instead of a panic.",
+   "hint": "Make functions return `Result<…, String>` (or Box<dyn Error>), use `?` to pass errors up, and print them once in main.",
+   "why": "unwrap() says \"this can't fail\". When it can, Rust makes you decide what happens. `?` keeps that decision short to write."
+  },
+  {
+   "do": "Mark a task as done, and delete a task.",
+   "done": "`done 2` and `delete 3` work and are saved.",
+   "hint": "`get_mut(i)` gives a task you can change, `remove(i)` deletes one. Remember the user counts from 1.",
+   "why": "Borrowing a value to change it (&mut) is the core of Rust's rules: one writer at a time, checked by the compiler."
+  },
+  {
+   "do": "Optional: due dates, or arguments parsed with the clap crate.",
+   "done": "`--help` lists every command.",
+   "hint": "clap's derive API turns a struct into a full command-line parser.",
+   "why": "Good crates save days of work. Learning to read their documentation on docs.rs is part of learning Rust."
+  }
+ ]
+}

@@ -1,0 +1,116 @@
+{
+ "id": "rust_papers",
+ "order": 13,
+ "language": "rust",
+ "name": "papers",
+ "difficulty": "hard",
+ "title": "Find duplicates, then sort your administrative papers",
+ "pitch": "Two parts. First, find duplicate files in a folder of papers and move the extra copies aside. Then, read the text of each PDF and sort it into a theme folder (tax, bank, health…) and a year. Part 1 is medium, part 2 is hard.",
+ "lessons": [
+  "rust_vars"
+ ],
+ "steps": [
+  {
+   "do": "Part 1, duplicates. COPY a folder of papers (PDFs, scans, photos of documents) into a test folder, with at least one duplicate you made on purpose.",
+   "done": "the copy holds a few files, and one of them twice under two names.",
+   "hint": "`cp invoice.pdf invoice-copy.pdf` makes a duplicate you know about.",
+   "why": "A known duplicate is your test: if the program doesn't find it, the program is wrong."
+  },
+  {
+   "do": "List the files of the folder with std::fs::read_dir.",
+   "done": "every file name is printed.",
+   "hint": "read_dir returns a Result of an iterator of Results: each level can fail, so handle each one.",
+   "why": "Every file operation can fail (permissions, a file deleted meanwhile). Rust shows it in the types, so you can't forget."
+  },
+  {
+   "do": "List the files of every subfolder too.",
+   "done": "files deep in subfolders are listed.",
+   "hint": "A recursive function, or the walkdir crate.",
+   "why": "A folder tree is a recursive structure: a folder holds files and folders. A recursive function follows its shape."
+  },
+  {
+   "do": "Group the files by size in a HashMap. Only files with the same size can be duplicates.",
+   "done": "the program prints the groups with more than one file.",
+   "hint": "`metadata().len()` is the size; `HashMap<u64, Vec<PathBuf>>`.",
+   "why": "Comparing sizes first is cheap and rules out most files. Doing the cheap check before the expensive one is how fast programs are built."
+  },
+  {
+   "do": "Compute a hash of the files that share a size, and group them by hash.",
+   "done": "your duplicate is found, and two different files of the same size are not.",
+   "hint": "The sha2 crate; read the file and feed it to the hasher, then compare the results.",
+   "why": "A hash is a fingerprint of the content: same content, same hash. Two different files with the same SHA-256 is practically impossible."
+  },
+  {
+   "do": "Print a report: each group of duplicates, and the space they waste.",
+   "done": "the report lists your duplicate.",
+   "hint": "Wasted space = size × (copies − 1).",
+   "why": "A number like \"1.2 GB wasted\" is what makes someone decide to clean up."
+  },
+  {
+   "do": "Dry run: print which copies would be moved, keeping one of each.",
+   "done": "the list looks right.",
+   "hint": "Keep the first one of each group (the shortest path, for example) and list the others.",
+   "why": "Deciding which copy to keep is a rule you choose. Printing it first lets you check the rule before it acts."
+  },
+  {
+   "do": "Move the extra copies into a duplicates/ folder. Never delete: the user decides.",
+   "done": "the folder holds one copy of each file, and the extras are in duplicates/.",
+   "hint": "`std::fs::rename` moves a file within the same disk.",
+   "why": "Moving instead of deleting makes every mistake reversible. Good tools leave the final decision to people."
+  },
+  {
+   "do": "Part 2, sorting by theme. Extract the text of one PDF and print it.",
+   "done": "you see the words of the paper.",
+   "hint": "The pdf-extract crate has a function that takes a path and returns the text.",
+   "why": "Many PDFs hold real text inside; scans are pictures and hold none. You'll handle those later."
+  },
+  {
+   "do": "Write a list of themes with their keywords (tax, bank, health, house, salary…) in a config file, and load it.",
+   "done": "the program prints each theme with its keywords.",
+   "hint": "TOML: `[themes]` with `tax = [\"tax\", \"income\", …]`, loaded into a HashMap<String, Vec<String>>.",
+   "why": "Keywords change from one country and one language to another. In a config file, anyone can adapt them without touching the code."
+  },
+  {
+   "do": "Score each theme: how many of its keywords appear in the paper. Pick the theme with the best score.",
+   "done": "a tax paper gets the \"tax\" theme.",
+   "hint": "Lowercase the text first (`to_lowercase`), then count with `contains` or `matches`.",
+   "why": "Scoring is a simple form of classification, the same idea behind spam filters."
+  },
+  {
+   "do": "Papers with no matching keyword, or no text at all, go to unknown.",
+   "done": "a random image goes to unknown.",
+   "hint": "A score of 0 means no theme.",
+   "why": "A program must say \"I don't know\" instead of guessing wrong. unknown is a pile you sort by hand."
+  },
+  {
+   "do": "Dry run: print where each paper would go (`invoice.pdf -> house`).",
+   "done": "the list looks right.",
+   "hint": "Reuse the dry-run idea from part 1.",
+   "why": "Same safety, new rule: check the plan before acting."
+  },
+  {
+   "do": "Copy the papers into their theme folders.",
+   "done": "each paper is in its theme folder.",
+   "hint": "`create_dir_all` then `std::fs::copy`.",
+   "why": "Copy first: the originals stay where they were until you trust the result."
+  },
+  {
+   "do": "Find a date in the text and sort by year inside each theme.",
+   "done": "a 2024 paper lands in tax/2024/.",
+   "hint": "The regex crate: a pattern for dd/mm/yyyy and yyyy-mm-dd.",
+   "why": "Regexes find patterns in text. Dates are written many ways, so expect to adjust your pattern after a few real papers."
+  },
+  {
+   "do": "Handle two papers with the same name in the same folder: don't let one overwrite the other.",
+   "done": "both survive.",
+   "hint": "Check `exists()` before copying, and add a number to the name.",
+   "why": "Same lesson as every project that moves files: never overwrite silently."
+  },
+  {
+   "do": "Optional: read scanned papers (pictures with no text) with OCR, using tesseract.",
+   "done": "a scanned paper gets a theme instead of unknown.",
+   "hint": "Run tesseract with `std::process::Command` and read its output.",
+   "why": "Calling another program from Rust lets you use decades of work (tesseract) in a few lines."
+  }
+ ]
+}

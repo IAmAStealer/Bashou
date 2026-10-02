@@ -1,0 +1,72 @@
+{
+ "name": "Town",
+ "palette": {
+  "g": "#5fa040",
+  "G": "#3e7a30",
+  "d": "#8a5a34",
+  "D": "#5c3a22",
+  "t": "#6e4428",
+  "R": "#7a3020",
+  "r": "#b04a30",
+  "h": "#e0c890",
+  "H": "#a88858",
+  "y": "#ffe070",
+  "s": "#8a8a94",
+  "f": "#c8a070",
+  "w": "#3a8ad0",
+  "W": "#a8dcff",
+  "M": "#36405a",
+  "m": "#424e6a",
+  "N": "#9aa8c0",
+  "Y": "#fff6c0",
+  "u": "#c8a850",
+  "e": "#26402c",
+  "A": "#3e4862",
+  "a": "#4a5672",
+  "n": "#a4b0c6",
+  "E": "#2e4c34",
+  "O": "#fff0b0",
+  "b": "#d8d0c0"
+ },
+ "base": [
+  ".y.....y..O....y.",
+  "...N.............",
+  "..NmN...N....R...",
+  ".MmmmM.Nmn..uyu..",
+  "MMmmmMMRsaAMrrr..",
+  "MMMMMMRrRMMMhhhEe",
+  "eReeRRrrrRrRrrree",
+  "RrRRrRyhtHyHhhhee",
+  "hyHhyHhhtHhHhthee",
+  ".GgggggggggGbbbf.",
+  "..DddddddddDwWfff",
+  "....DdddddDwWwww."
+ ],
+ "poses": {
+  "inhale": {
+   "3": "-------------Y---"
+  },
+  "left": {
+   "3": "---------N-------",
+   "4": "---------m-------"
+  },
+  "right": {
+   "3": "---------N-------",
+   "4": "---------mM------"
+  },
+  "closed": {
+   "3": "---------N--HHH--",
+   "4": "---------mM------"
+  },
+  "fidget": {
+   "0": "-.-----.---------",
+   "10": "------------wWwf-",
+   "11": "-----------Wwfff-"
+  }
+ },
+ "particles": [
+  0,
+  12
+ ],
+ "lone_pixels": true
+}

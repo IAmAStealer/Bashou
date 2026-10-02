@@ -1,0 +1,72 @@
+{
+ "title": "Un journal des coupures d'internet",
+ "pitch": "Ta connexion coupe, et ton fournisseur d'accès dit que tout va bien. Ce programme vérifie la connexion toutes les 30 secondes et note chaque coupure avec son heure et sa durée. Au bout d'un mois, tu as des preuves.",
+ "steps": [
+  {
+   "do": "Crée le projet avec `cargo new netwatch`, et vérifie une fois si internet répond : ouvre une connexion TCP vers un serveur bien connu (par exemple 1.1.1.1 sur le port 53) avec un délai maximum.",
+   "done": "le programme affiche « en ligne », et « hors ligne » quand tu coupes ton Wi-Fi.",
+   "hint": "`TcpStream::connect_timeout` de std::net, avec une `SocketAddr` et une `Duration` de 2 secondes.",
+   "why": "Une connexion TCP qui s'ouvre prouve que tout le chemin marche : ton Wi-Fi, ta box, ton fournisseur. Le délai maximum empêche le programme d'attendre pour toujours quand ce n'est pas le cas."
+  },
+  {
+   "do": "Vérifie toutes les 30 secondes, dans une boucle.",
+   "done": "l'état s'affiche encore et encore, et change quand tu débranches.",
+   "hint": "`loop { … std::thread::sleep(Duration::from_secs(30)); }`. Teste avec 3 secondes.",
+   "why": "Un outil de surveillance, c'est une boucle qui ne finit jamais. Teste-la avec un court délai : attendre 30 secondes par essai, c'est du débogage lent."
+  },
+  {
+   "do": "N'affiche que les changements : « hors ligne à 14:02 », « de retour à 14:05 ».",
+   "done": "rien ne s'affiche tant que l'état ne change pas.",
+   "hint": "Garde l'état précédent dans une variable, et compare.",
+   "why": "Se souvenir du dernier état et réagir aux changements s'appelle détecter un front. Ça transforme un flot de vérifications en quelques événements utiles."
+  },
+  {
+   "do": "Ajoute la date et l'heure avec la crate chrono, et la durée de chaque coupure.",
+   "done": "« de retour à 14:05, hors ligne pendant 3 min » est affiché.",
+   "hint": "`chrono::Local::now()` pour l'heure ; soustrais deux heures pour obtenir une durée.",
+   "why": "Le temps est plus difficile qu'il n'y paraît (fuseaux horaires, changements d'heure). Une crate comme chrono le gère correctement pour toi."
+  },
+  {
+   "do": "Vérifie deux ou trois serveurs, et ne parle de coupure que quand ils échouent tous.",
+   "done": "une mauvaise adresse dans la liste ne compte pas comme une coupure.",
+   "hint": "Mets les adresses dans un Vec, et utilise `.iter().any(…)` pour savoir si au moins un a répondu.",
+   "why": "Un serveur peut tomber tout seul. En interroger plusieurs évite les fausses alertes, pour la même raison qu'une alarme a plus d'un capteur."
+  },
+  {
+   "do": "Enregistre chaque coupure dans un fichier CSV.",
+   "done": "les coupures sont toujours là après avoir relancé le programme.",
+   "hint": "`OpenOptions::new().append(true).create(true)` ouvre le fichier pour ajouter des lignes à la fin.",
+   "why": "Les fichiers où l'on ne fait qu'ajouter sont simples et sûrs : une coupure écrite n'est jamais perdue, même si le programme s'arrête juste après."
+  },
+  {
+   "do": "Gère les erreurs sans unwrap : un fichier journal impossible à écrire, une mauvaise adresse de serveur.",
+   "done": "chaque problème affiche un message clair.",
+   "hint": "`match` sur le Result, ou `?` dans une fonction qui renvoie un Result, et `eprintln!` pour les messages.",
+   "why": "Un programme fait pour tourner des semaines ne doit pas paniquer au premier problème. Décide quelles erreurs l'arrêtent et avec lesquelles il peut vivre."
+  },
+  {
+   "do": "Ajoute `netwatch report` : le nombre de coupures, le temps total hors ligne et la plus longue, par jour et par mois.",
+   "done": "le rapport correspond au fichier CSV.",
+   "hint": "Relis le CSV, regroupe par date avec une HashMap ou une BTreeMap (elle garde les clés triées).",
+   "why": "Le journal, ce sont les données brutes ; le rapport, c'est la réponse. Les garder séparés permet de changer le rapport sans rien perdre."
+  },
+  {
+   "do": "Fais tourner les vérifications dans un thread, pour que le programme puisse vérifier et écrire le rapport en même temps.",
+   "done": "les vérifications continuent pendant que le rapport s'écrit.",
+   "hint": "`std::thread::spawn`, et un canal (`std::sync::mpsc`) pour envoyer les coupures depuis le thread qui vérifie.",
+   "why": "Rust vérifie à la compilation que les threads ne partagent pas des données de façon dangereuse. Les canaux sont le moyen sûr le plus simple de les faire communiquer."
+  },
+  {
+   "do": "Fais-le tourner en permanence, comme service utilisateur systemd ou au démarrage.",
+   "done": "il note les coupures après un redémarrage sans que tu le lances.",
+   "hint": "Un fichier d'unité dans ~/.config/systemd/user/, puis `systemctl --user enable --now netwatch`.",
+   "why": "Un outil de surveillance qu'il faut lancer soi-même sera éteint le jour où ça compte. Les services démarrent avec la machine."
+  },
+  {
+   "do": "Facultatif : mesure aussi la latence, et note les périodes lentes, pas seulement les coupures.",
+   "done": "le rapport montre les heures les plus lentes.",
+   "hint": "Chronomètre la connexion avec `Instant::now()` et `.elapsed()`.",
+   "why": "Lent est souvent pire que coupé, parce que les gens attendent au lieu de le signaler. Maintenant tu peux montrer les deux."
+  }
+ ]
+}

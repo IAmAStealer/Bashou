@@ -1,0 +1,90 @@
+{
+ "title": "Trier tes photos dans des dossiers par année et par mois",
+ "pitch": "Des milliers de photos dans un seul dossier ? Ton programme lira la date de prise de vue de chaque photo et la rangera dans un dossier 2024/05. Tu commences par créer un dossier, et tu finis avec un outil à qui tu peux confier tes souvenirs.",
+ "steps": [
+  {
+   "do": "Crée un dossier de test à la main et COPIE-y quelques-unes de tes photos. Copie-les : ton programme pourrait les détruire.",
+   "done": "un dossier de test contient des copies de quelques photos.",
+   "hint": "Prends des photos d'un téléphone et d'un appareil photo si tu peux : ils n'enregistrent pas tous leur date de la même façon.",
+   "why": "Une photo ne se retélécharge pas. Travailler sur des copies tant que tu n'as pas confiance en ton programme n'est pas une option ici."
+  },
+  {
+   "do": "Crée ton programme .py et fais-lui créer un dossier pour l'année en cours.",
+   "done": "un dossier qui porte le nom de l'année (comme 2026) apparaît.",
+   "hint": "Regarde `os.makedirs` ou `pathlib.Path.mkdir`, et `datetime.date.today().year` pour l'année.",
+   "why": "Ton premier programme qui modifie le disque. Commence par la plus petite action que tu peux vérifier à l'œil."
+  },
+  {
+   "do": "Lance ton programme une deuxième fois : il plante parce que le dossier existe déjà. Corrige ça.",
+   "done": "tu peux le lancer deux fois de suite sans erreur.",
+   "hint": "`os.makedirs` comme `Path.mkdir` ont une option pour dire « ce n'est pas grave s'il existe déjà ».",
+   "why": "Les vrais programmes tournent encore et encore. Un programme qui ne marche que la première fois est un piège : le rendre sûr à relancer est une habitude à prendre maintenant."
+  },
+  {
+   "do": "Dans le dossier de l'année, crée un dossier pour le mois.",
+   "done": "un dossier comme 2026/10 existe.",
+   "hint": "Un chemin se construit morceau par morceau : `Path(\"2026\") / \"10\"`. Pense à « 10 » contre « 1 » pour octobre et janvier.",
+   "why": "Écrire les mois sur deux chiffres (01, 02… 12) les garde dans le bon ordre partout, même dans un gestionnaire de fichiers qui trie les noms comme du texte."
+  },
+  {
+   "do": "Écris une fonction `make_folder(year, month)` qui crée le dossier année/mois pour n'importe quelle date.",
+   "done": "l'appeler avec n'importe quelle année et n'importe quel mois crée le bon dossier.",
+   "hint": "Déplace le code que tu as déjà dans un `def`, et remplace les valeurs fixes par des paramètres.",
+   "why": "Une fonction donne un nom à un travail, pour le réutiliser sans le copier. C'est le moment où ton script commence à avoir une structure."
+  },
+  {
+   "do": "Maintenant il faut lire les photos : ouvre un fichier photo depuis ton programme.",
+   "done": "ton programme ouvre une photo et la referme sans erreur.",
+   "hint": "`open(chemin, \"rb\")`, dans un bloc `with`. Une photo, ce sont des données binaires : le « b » compte.",
+   "why": "Tout fichier n'est que des octets. Un fichier texte, ce sont des octets que ton programme lit comme des lettres ; une photo, des octets dans un format qu'une bibliothèque sait lire."
+  },
+  {
+   "do": "Lire la date des photos demande une bibliothèque : crée un environnement virtuel et installe Pillow avec pip.",
+   "done": "`from PIL import Image` fonctionne dans ton programme.",
+   "hint": "`python3 -m venv`, active-le, puis `pip install Pillow` (le paquet s'appelle Pillow, le module PIL).",
+   "why": "Personne n'écrit tout de zéro. Savoir ajouter une bibliothèque à un projet, sans toucher au reste de ton système, fait partie de chaque vrai projet."
+  },
+  {
+   "do": "Cherche ce qu'est l'EXIF, et lis les données EXIF d'une photo pour trouver sa date de prise de vue.",
+   "done": "ton programme affiche la date d'une photo.",
+   "hint": "`Image.open(...).getexif()` de Pillow donne un objet qui ressemble à un dictionnaire. L'étiquette de la date s'appelle DateTimeOriginal (elle peut aussi être dans DateTime).",
+   "why": "L'EXIF, ce sont des informations que l'appareil écrit dans la photo : date, modèle, parfois le lieu. Les lire, c'est savoir ce que le nom du fichier ne dit pas."
+  },
+  {
+   "do": "Écris une fonction qui transforme la date EXIF en l'année et le mois dont ta fonction `make_folder` a besoin.",
+   "done": "elle renvoie (2024, 5) pour une photo prise en mai 2024.",
+   "hint": "La date EXIF ressemble à \"2024:05:17 14:03:22\". `datetime.strptime` sait la lire, ou tu peux découper le texte.",
+   "why": "Transformer des données d'un format à un autre est une grande partie de la programmation. Le faire dans sa propre petite fonction la rend facile à tester avec quelques exemples."
+  },
+  {
+   "do": "Gère les photos sans date EXIF : utilise la date de modification du fichier, ou range-les dans un dossier `unknown`.",
+   "done": "une capture d'écran (elle n'a pas d'EXIF) est rangée aussi.",
+   "hint": "`Path.stat().st_mtime` donne la date de modification, et `datetime.fromtimestamp` en fait une date.",
+   "why": "Les vraies données sont désordonnées : captures d'écran, images retouchées, photos passées par une messagerie perdent souvent leur EXIF. Un outil qui ne gère que le cas parfait casse sur le premier vrai dossier."
+  },
+  {
+   "do": "Essai à blanc : pour chaque photo du dossier, affiche où elle irait (`IMG_001.jpg -> 2024/05`) sans rien déplacer.",
+   "done": "la liste est juste pour toutes tes photos de test.",
+   "hint": "Une boucle sur les fichiers, tes fonctions, et seulement `print` pour l'instant.",
+   "why": "Les vrais outils ont un mode essai à blanc parce que vérifier un plan ne coûte rien, et réparer une erreur coûte cher. Utilise-le chaque fois qu'un programme va déplacer beaucoup de fichiers."
+  },
+  {
+   "do": "Copie les photos dans leurs dossiers. Déplace-les seulement quand tu as confiance en ton programme.",
+   "done": "chaque photo est dans son dossier année/mois.",
+   "hint": "`shutil.copy2` copie un fichier en gardant ses dates ; `shutil.move` le déplace.",
+   "why": "Copier d'abord, supprimer ensuite : si quelque chose a raté, rien n'est perdu. `copy2` garde les dates d'origine, donc les copies restent fidèles."
+  },
+  {
+   "do": "Gère deux photos qui ont le même nom dans le même mois : l'une ne doit pas écraser l'autre.",
+   "done": "deux IMG_0001.jpg du même mois survivent toutes les deux.",
+   "hint": "Avant de copier, vérifie si la cible existe ; si oui, ajoute un numéro au nom (IMG_0001_2.jpg).",
+   "why": "Les appareils réutilisent les noms (IMG_0001 revient après 9999, et deux téléphones comptent pareil). Écraser un fichier en silence est l'un des pires bugs qu'un programme puisse avoir, parce que personne ne le remarque avant qu'il soit trop tard."
+  },
+  {
+   "do": "Facultatif : regroupe l'année et le mois dans un objet (une classe ou une dataclass) et utilise-le dans tes fonctions.",
+   "done": "le programme trie toujours tout de la même façon.",
+   "hint": "Regarde `@dataclass` du module dataclasses : quelques lignes te donnent une petite classe avec des champs.",
+   "why": "Changer l'intérieur d'un programme sans changer ce qu'il fait s'appelle refactoriser. Avoir un essai à blanc et des photos de test, c'est ce qui le rend sans risque."
+  }
+ ]
+}

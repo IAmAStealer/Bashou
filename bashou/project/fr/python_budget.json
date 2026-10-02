@@ -1,0 +1,96 @@
+{
+ "title": "Une page web de ton budget, avec les dépenses par thème",
+ "pitch": "Suis où part ton argent, sur une page dans ton navigateur que personne d'autre ne peut voir. C'est le plus gros des trois projets Python : il mélange Python, fichiers, HTML, formulaires et un petit serveur web. Les premières étapes n'ont même pas besoin du web, et un débutant qui s'arrête à l'étape 5 a déjà un programme utile.",
+ "steps": [
+  {
+   "do": "Sans web pour l'instant : écris un programme qui demande une dépense (un montant, un thème comme « courses » ou « loyer », une petite note) et l'affiche.",
+   "done": "tu tapes une dépense et tu la vois réaffichée.",
+   "hint": "`input()` lit ce que tu tapes, sous forme de texte. `float()` transforme \"12.50\" en nombre.",
+   "why": "Commence par le cœur du programme, à l'endroit le plus simple : le terminal. La page web viendra plus tard, autour de quelque chose qui marche déjà."
+  },
+  {
+   "do": "Garde plusieurs dépenses dans une liste et affiche le total.",
+   "done": "trois dépenses donnent le bon total.",
+   "hint": "Une liste de dictionnaires marche bien : `{\"amount\": 12.5, \"theme\": \"courses\", \"note\": \"pain\"}`. `sum()` additionne des nombres.",
+   "why": "Choisir comment ranger tes données est la décision la plus importante d'un programme. Une liste de dictionnaires est simple, et elle deviendra un fichier puis un tableau web sans changer de forme."
+  },
+  {
+   "do": "Enregistre les dépenses dans un fichier (CSV ou JSON) et recharge-les au démarrage du programme.",
+   "done": "tu fermes le programme, tu le rouvres, et tes dépenses sont toujours là.",
+   "hint": "Le module json : `json.dump` écrit ta liste, `json.load` la relit. Pense au tout premier lancement, quand le fichier n'existe pas encore.",
+   "why": "La mémoire d'un programme disparaît quand il s'arrête. Enregistrer dans un fichier, c'est comme ça que les programmes se souviennent, et JSON garde ta liste de dictionnaires telle quelle."
+  },
+  {
+   "do": "Affiche le total de chaque thème.",
+   "done": "courses et loyer affichent chacun leur propre total.",
+   "hint": "Un dictionnaire qui va du thème au total : ajoute le montant de chaque dépense à l'entrée de son thème.",
+   "why": "Regrouper et additionner, c'est ce qui transforme une liste de faits en une réponse (« où part mon argent ? »). Tu utiliseras ce schéma partout."
+  },
+  {
+   "do": "Gère les mauvaises saisies : un mot au lieu d'un nombre, un montant négatif, un thème vide.",
+   "done": "chaque erreur redemande au lieu de planter.",
+   "hint": "Une boucle `while True` avec `try` / `except ValueError` autour de la conversion, et `break` quand la saisie est bonne.",
+   "why": "Ne fais jamais confiance à une saisie, même la tienne. Un budget avec une valeur fausse est un budget faux : vérifie les données au moment où elles arrivent."
+  },
+  {
+   "do": "Écris une page HTML simple à la main (un titre et un tableau avec deux fausses dépenses) et ouvre-la dans ton navigateur.",
+   "done": "le navigateur affiche ton tableau.",
+   "hint": "Les balises dont tu as besoin : `<h1>`, `<table>`, `<tr>`, `<th>`, `<td>`. Ouvre le fichier directement avec ton navigateur.",
+   "why": "Avant qu'un programme écrive du HTML, il faut savoir à quoi ressemble du bon HTML. L'écrire une fois à la main te donne la cible."
+  },
+  {
+   "do": "Fais générer cette page HTML par ton programme, à partir de tes dépenses enregistrées.",
+   "done": "après avoir ajouté une dépense, recharger la page la montre.",
+   "hint": "Construis les lignes avec une boucle et une f-string, puis écris toute la page dans un fichier .html.",
+   "why": "Les programmes qui écrivent d'autres fichiers (HTML, rapports, configurations) sont partout. Celui-ci est déjà un générateur de site statique, un tout petit."
+  },
+  {
+   "do": "Installe Flask dans un environnement virtuel et sers une page « Hello » sur http://localhost:5000. Reste sur localhost : ton budget est privé.",
+   "done": "le navigateur affiche « Hello » à cette adresse.",
+   "hint": "Le quickstart de Flask a un exemple de cinq lignes. N'utilise pas `host=\"0.0.0.0\"` : ça l'ouvrirait à ton réseau.",
+   "why": "Un serveur web est un programme qui attend des requêtes et y répond. localhost veut dire « cet ordinateur seulement » : personne d'autre sur le réseau ne peut l'atteindre."
+  },
+  {
+   "do": "Sers ton tableau de dépenses depuis Flask au lieu du fichier généré.",
+   "done": "la page liste tes dépenses enregistrées.",
+   "hint": "Charge le JSON dans la fonction de ta route, et renvoie le HTML que tu construisais déjà.",
+   "why": "La page est maintenant fabriquée au moment où tu la demandes, donc elle est toujours à jour. C'est la différence entre une page statique et une page dynamique."
+  },
+  {
+   "do": "Ajoute un formulaire HTML pour ajouter une dépense depuis la page (montant, thème, note), et enregistre-la.",
+   "done": "une dépense ajoutée dans le navigateur est toujours là après avoir relancé le programme.",
+   "hint": "Un `<form method=\"post\">`, une route qui accepte POST, et `request.form` pour lire les champs. Puis redirige vers la page.",
+   "why": "Un formulaire envoie des données du navigateur vers ton programme. Rediriger après l'enregistrement empêche le navigateur de renvoyer la même dépense quand tu recharges."
+  },
+  {
+   "do": "Vérifie aussi le formulaire côté serveur, comme à l'étape 5.",
+   "done": "un mauvais montant affiche un message d'erreur sur la page, et rien n'est enregistré.",
+   "hint": "Réutilise ton code de vérification de l'étape 5, dans une fonction que les deux versions peuvent appeler.",
+   "why": "N'importe qui peut envoyer n'importe quoi à un serveur web, quoi que permette ton formulaire. Le serveur doit tout vérifier lui-même : c'est une règle de base de la sécurité web."
+  },
+  {
+   "do": "Choisis le thème dans une liste au lieu de le taper, et affiche le total par thème sur la page.",
+   "done": "la page affiche un total pour chaque thème.",
+   "hint": "Un `<select>` avec des balises `<option>`, construit à partir de ta liste de thèmes. Réutilise le regroupement de l'étape 4.",
+   "why": "Le texte libre te donne « Courses », « courses » et « couses » comme trois thèmes. Une liste fixe garde tes données propres, donc les totaux restent justes."
+  },
+  {
+   "do": "Ajoute une date à chaque dépense, et n'affiche qu'un mois à la fois.",
+   "done": "tu peux passer d'un mois à un autre.",
+   "hint": "Enregistre les dates en texte comme \"2026-10-02\" : elles se trient correctement, et le mois, ce sont les 7 premiers caractères.",
+   "why": "Les dates écrites année-mois-jour (ISO 8601) se trient comme du texte et ne laissent aucun doute entre le jour et le mois. La plupart des programmes les enregistrent ainsi."
+  },
+  {
+   "do": "Supprime ou modifie une dépense.",
+   "done": "une dépense fausse peut être corrigée depuis la page.",
+   "hint": "Donne à chaque dépense un identifiant (un nombre qui ne change jamais), pour qu'un lien ou un bouton puisse dire laquelle.",
+   "why": "Les données ont besoin d'un nom stable. Les positions dans une liste changent quand tu supprimes quelque chose ; les identifiants, non."
+  },
+  {
+   "do": "Facultatif : un budget mensuel par thème avec un avertissement quand tu le dépasses, ou un graphique des thèmes.",
+   "done": "dépasser ton budget courses affiche l'avertissement.",
+   "hint": "Enregistre les limites dans le même fichier JSON, et compare-les avec tes totaux par thème.",
+   "why": "Maintenant le programme ne fait plus que montrer tes données, il t'apprend quelque chose dessus. C'est le passage d'un registre à un outil."
+  }
+ ]
+}

@@ -1,0 +1,60 @@
+{
+ "title": "Une liste de tâches en ligne de commande",
+ "pitch": "Ajoute, liste et termine des tâches depuis ton terminal, enregistrées dans un fichier. C'est petit, et ça te fait traverser ce qui rend Rust différent : les structs, les enums avec match, et les erreurs qu'on est obligé de gérer.",
+ "steps": [
+  {
+   "do": "Crée le projet avec `cargo new todo` et lance-le.",
+   "done": "`cargo run` affiche « Hello, world! ».",
+   "hint": "Si cargo n'est pas installé, rustup.rs explique comment l'obtenir.",
+   "why": "cargo crée le projet, le compile et le lance. Tous les projets Rust que tu croiseras l'utilisent."
+  },
+  {
+   "do": "Écris une struct Task (son texte, et si elle est faite) et affiches-en une.",
+   "done": "la tâche est affichée.",
+   "hint": "`#[derive(Debug)]` au-dessus de la struct permet de l'afficher avec `{:?}`.",
+   "why": "Rust te demande de décrire tes données avant de t'en servir. derive demande au compilateur d'écrire pour toi du code courant."
+  },
+  {
+   "do": "Garde les tâches dans un Vec<Task>, ajoute-en quelques-unes et liste-les avec leur numéro.",
+   "done": "la liste s'affiche avec des numéros, à partir de 1.",
+   "hint": "`.iter().enumerate()` donne chaque élément avec son indice.",
+   "why": "Vec est la liste extensible de Rust. Les itérateurs comme enumerate sont la façon de Rust de parcourir les choses sans erreur d'indice."
+  },
+  {
+   "do": "Lis la commande dans les arguments : `cargo run -- add \"acheter du pain\"`, `cargo run -- list`.",
+   "done": "les deux commandes marchent.",
+   "hint": "`std::env::args()` donne les mots ; `.collect::<Vec<String>>()` en fait une liste. Le `--` sépare les arguments de cargo des tiens.",
+   "why": "Tout ce qui vient après `--` va à ton programme, pas à cargo : une convention que beaucoup d'outils partagent."
+  },
+  {
+   "do": "Transforme la commande en enum et traite-la avec match.",
+   "done": "une commande inconnue affiche comment utiliser le programme.",
+   "hint": "`enum Command { Add(String), List, Done(usize) }`, et une fonction qui transforme les arguments en l'un d'eux.",
+   "why": "Une enum liste tous les cas possibles, et match t'oblige à traiter chacun : oublies-en un et le programme ne compile pas. C'est une des meilleures idées de Rust."
+  },
+  {
+   "do": "Enregistre les tâches dans un fichier JSON avec serde, et recharge-les au démarrage.",
+   "done": "les tâches sont toujours là au lancement suivant.",
+   "hint": "Ajoute serde (avec la fonctionnalité derive) et serde_json dans Cargo.toml ; `#[derive(Serialize, Deserialize)]` sur Task.",
+   "why": "Les crates sont les bibliothèques de Rust, et Cargo.toml liste celles que ton projet utilise. serde transforme tes structs en JSON et inversement avec une ligne de derive."
+  },
+  {
+   "do": "Remplace chaque unwrap() par Result et ? : un fichier absent, un JSON cassé, un numéro de tâche qui n'existe pas.",
+   "done": "chaque erreur affiche un message clair au lieu d'un panic.",
+   "hint": "Fais renvoyer `Result<…, String>` (ou Box<dyn Error>) à tes fonctions, utilise `?` pour remonter les erreurs, et affiche-les une seule fois dans main.",
+   "why": "unwrap() veut dire « ça ne peut pas échouer ». Quand ça peut, Rust te fait décider de ce qui se passe. `?` rend cette décision courte à écrire."
+  },
+  {
+   "do": "Marque une tâche comme faite, et supprime une tâche.",
+   "done": "`done 2` et `delete 3` marchent et sont enregistrés.",
+   "hint": "`get_mut(i)` donne une tâche que tu peux modifier, `remove(i)` en supprime une. N'oublie pas que l'utilisateur compte à partir de 1.",
+   "why": "Emprunter une valeur pour la modifier (&mut) est le cœur des règles de Rust : un seul écrivain à la fois, vérifié par le compilateur."
+  },
+  {
+   "do": "Facultatif : des dates d'échéance, ou des arguments analysés avec la crate clap.",
+   "done": "`--help` liste toutes les commandes.",
+   "hint": "L'API derive de clap transforme une struct en analyseur complet de ligne de commande.",
+   "why": "Les bonnes crates font gagner des jours de travail. Apprendre à lire leur documentation sur docs.rs fait partie de l'apprentissage de Rust."
+  }
+ ]
+}

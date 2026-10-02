@@ -124,12 +124,13 @@ bashou() {
 }
 
 # Tab completion. Static lists (no Python on Tab); tests/test_completion.py keeps them in sync.
-_bashou_commands="help level pets achievements fight arena talk learn lesson share evolve swap stats start config update version adventure reset on off"
-_bashou_pets="bat frog turtle mushroom slime sofa octopus dragon fox owl mole snake ghost spider ant axolotl gremlin snail beaver squirrel pigeon hedgehog bee whale meerkat leopard duck spark packet"
+_bashou_commands="help level pets achievements fight arena talk learn lesson project share evolve swap stats start config update version adventure reset on off"
+_bashou_pets="bat frog turtle mushroom slime sofa octopus dragon fox owl mole snake ghost spider ant axolotl gremlin snail beaver squirrel pigeon hedgehog bee whale meerkat leopard duck spark packet landscape"
 _bashou_languages="en fr"
 _bashou_dev="unlock-all stage stage-all level threat restore"
 _bashou_challenges="line_moth column_crab jumble_sprite last_word_wisp flag_phantom typo_troll clutter_critter glob_goblin core_counter stderr_stalker space_sprite shebang_shade rename_rat pattern_pixie group_gremlin padlock_pest bloat_blob tar_tortoise unit_imp header_hound commit_crowd branch_bramble conflict_chimera first_line_imp needle_gnat field_wasp dust_bunny verse_viper peak_harpy grep_hydra awk_golem find_wraith uniq_swarm sed_serpent ps_phantom pipe_eel colon_cobra semicolon_slug list_leech dict_djinn loop_lich ouroboros json_jinn base64_banshee percent_poltergeist injection_imp token_trickster leak_lurker fencepost_fiend stack_specter overflow_ogre linker_lynx warning_wraith segfault_salamander breakpoint_beetle mut_marmot const_condor shadow_shade byte_basilisk version_vole candidate_crow stowaway_stoat autoremove_adder release_raven hitchhiker_hare census_centipede mirror_mimic repo_revenant enabled_ettin indent_imp stage_specter secret_sprite needs_newt manual_mole query_quokka table_troll insert_imp update_urchin join_jackal upsert_unicorn plaintext_pixie cipher_crow forger_ferret vault_vole cleartext_cricket negation_gnome coin_wraith loopback_lurker address_adder subnet_sprite route_raven resolver_rook six_serpent handshake_heron refused_revenant nxdomain_nixie established_ettin"
 _bashou_security="1 2 3 4 5 6"
+_bashou_projects="photos pdf budget backup logs pomodoro energy contacts todo netwatch menu papers"
 _bashou_lessons="list command_line help computer paths files editor reading wildcards variables logic streams quotes grep regex pipes text_tools awk_sed find users permissions disk archives processes scripts loops network git packages repos services compilation gcc_use stack_heap pointers debugger py_start py_flow py_names py_data rust_vars sql_select sql_write sql_join keys pass pipeline ip_addr ipv6 dns dns_tools tcp net_debug"
 
 _bashou_complete() {
@@ -144,6 +145,9 @@ _bashou_complete() {
     2:arena:*)        words="fight security" ;;
     3:arena:security) words=$_bashou_security ;;
     2:lesson:*)       words=$_bashou_lessons ;;
+    2:project:*)      words="start next hint back" ;;
+    3:project:start)  words="python shell c rust" ;;
+    4:project:start)  words=$_bashou_projects ;;
     3:config:bubble)  words="default" ;;
     3:config:talk)    words="off default" ;;
     3:config:quiet)   words="default" ;;

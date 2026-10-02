@@ -37,7 +37,9 @@ def messages():
     for table in (dialogue.TRAITS, dialogue.INVITES, dialogue.DISCOVER):
         for lines in table.values():
             found += lines
-    found += dialogue.TYPO_FIX + dialogue.TYPO_NONE
+    found += dialogue.TYPO_FIX + dialogue.TYPO_NONE + dialogue.PROJECT_NUDGES
+    from .project import LEVELS
+    found += LEVELS
     for family in creatures.FAMILIES.values():
         found += [family.voice] + family.tips + family.personal + [t for t in (family.name, family.blurb,
                                                                               family.unlock.get("how")) if t]

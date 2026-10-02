@@ -1,0 +1,66 @@
+{
+ "title": "Un script de sauvegarde",
+ "pitch": "Les disques meurent et les fichiers s'effacent par erreur. Tu vas écrire un script qui sauvegarde un dossier dans des archives datées, n'en garde que les dernières, tourne tout seul chaque jour, et sait ramener un fichier.",
+ "steps": [
+  {
+   "do": "Crée un dossier de test avec quelques fichiers et sous-dossiers.",
+   "done": "`ls -R` les affiche.",
+   "hint": "`mkdir -p test/a/b`, puis `echo` un peu de texte dans quelques fichiers.",
+   "why": "Un petit dossier que tu connais par cœur rend facile de vérifier qu'une sauvegarde contient tout."
+  },
+  {
+   "do": "Emballe le dossier dans une archive avec tar.",
+   "done": "un fichier .tar.gz apparaît.",
+   "hint": "`tar -czf backup.tar.gz test` : c pour créer, z pour compresser, f pour le nom du fichier.",
+   "why": "tar transforme toute une arborescence en un seul fichier, en gardant les noms, les dossiers et les droits. C'est pour ça que les sauvegardes et les logiciels à télécharger l'utilisent."
+  },
+  {
+   "do": "Liste le contenu de l'archive sans la décompresser.",
+   "done": "tu vois tous les fichiers du dossier.",
+   "hint": "`tar -tzf` : t liste au lieu de créer.",
+   "why": "Une sauvegarde jamais vérifiée, c'est un espoir, pas une sauvegarde. Lister est la vérification rapide."
+  },
+  {
+   "do": "Donne à l'archive un nom daté, comme backup-2026-10-02.tar.gz.",
+   "done": "le nom contient la date du jour.",
+   "hint": "`$(date +%F)` met la date du jour dans une commande.",
+   "why": "Les noms datés gardent plusieurs sauvegardes côte à côte, triées dans l'ordre du temps. %F écrit la date année-mois-jour, qui se trie correctement comme du texte."
+  },
+  {
+   "do": "Mets-le dans un script qui prend en arguments le dossier à sauvegarder et le dossier de destination.",
+   "done": "`./backup.sh ~/test ~/backups` marche, et un argument manquant affiche comment l'utiliser.",
+   "hint": "`$1` et `$2`, et `[[ $# -eq 2 ]]` pour vérifier que tu as les deux.",
+   "why": "Les arguments permettent au même script de sauvegarder n'importe quel dossier n'importe où. Les vérifier d'abord empêche une faute de frappe de devenir une erreur bizarre plus loin."
+  },
+  {
+   "do": "Ne garde que les 5 dernières sauvegardes : supprime les plus anciennes.",
+   "done": "après 7 lancements, il ne reste que les 5 archives les plus récentes.",
+   "hint": "Les noms datés se trient dans l'ordre du temps : `ls`, `head -n -5` et `xargs rm`, ou une boucle. Teste avec de fausses dates (`touch backup-2020-01-0{1..7}.tar.gz`).",
+   "why": "Des sauvegardes jamais nettoyées remplissent le disque, et alors la suivante échoue. Supprimer est dangereux : teste cette partie avec de faux fichiers d'abord."
+  },
+  {
+   "do": "Vérifie chaque commande : si tar échoue (disque plein, dossier absent), le script le dit et se termine avec un code d'erreur.",
+   "done": "un dossier absent donne un message clair, et `echo $?` affiche un code différent de 0.",
+   "hint": "`set -euo pipefail`, ou `tar … || { echo \"sauvegarde ratée\" >&2; exit 1; }`.",
+   "why": "Une sauvegarde qui échoue en silence est la pire : tu le découvres le jour où tu en as besoin. Les échecs bruyants sont une fonctionnalité."
+  },
+  {
+   "do": "Lance-le automatiquement chaque jour, avec cron ou un timer systemd.",
+   "done": "une nouvelle archive apparaît le lendemain (ou la minute suivante, pour le test).",
+   "hint": "`crontab -e` et une ligne comme `0 3 * * * /chemin/backup.sh …`. Utilise des chemins complets : cron ne charge pas les réglages de ton shell.",
+   "why": "La meilleure sauvegarde est celle à laquelle tu n'as pas besoin de penser. Les tâches planifiées tournent dans un environnement nu, et c'est pour ça que les chemins complets comptent là."
+  },
+  {
+   "do": "Restaure un fichier depuis une sauvegarde dans un autre dossier.",
+   "done": "le fichier restauré est identique à l'original : `diff` n'affiche rien.",
+   "hint": "`tar -xzf archive -C autre_dossier chemin/dans/l/archive`.",
+   "why": "Restaurer est le vrai test d'une sauvegarde. S'entraîner avant la catastrophe, c'est ce que font les professionnels."
+  },
+  {
+   "do": "Facultatif : exclure certains fichiers, ou ne copier que ce qui a changé avec rsync.",
+   "done": "les fichiers exclus ne sont pas dans l'archive.",
+   "hint": "`tar --exclude='*.tmp'`, ou `rsync -a --delete` pour un miroir.",
+   "why": "Les vraies sauvegardes laissent de côté les caches et les fichiers temporaires. Connaître rsync ouvre la porte aux sauvegardes sur une autre machine."
+  }
+ ]
+}

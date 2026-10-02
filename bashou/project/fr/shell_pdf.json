@@ -1,0 +1,66 @@
+{
+ "title": "Fusionner ou découper des PDF avec un script",
+ "pitch": "Le même travail utile que le projet PDF en Python, fait avec des outils en ligne de commande et un script bash. Tu apprends à assembler des programmes existants, ce que le shell fait de mieux.",
+ "steps": [
+  {
+   "do": "Crée un dossier de test et COPIE-y quelques PDF.",
+   "done": "le dossier contient 2 ou 3 PDF, et les originaux sont à l'abri ailleurs.",
+   "hint": "`mkdir` et `cp`. Mets un fichier avec un espace dans son nom, comme \"mon scan.pdf\" : tu en auras besoin plus tard.",
+   "why": "Les scripts agissent vite et ne demandent pas deux fois. S'entraîner sur des copies veut dire qu'une erreur ne coûte rien."
+  },
+  {
+   "do": "Installe les outils avec ton gestionnaire de paquets : poppler-utils et qpdf.",
+   "done": "`pdfinfo -v` et `qpdf --version` répondent tous les deux.",
+   "hint": "`sudo apt install poppler-utils qpdf` sur Debian et Ubuntu, `sudo dnf install poppler-utils qpdf` sur Fedora et Rocky.",
+   "why": "Dans le shell, on écrit rarement la partie difficile soi-même : on trouve le bon outil et on le combine avec d'autres. Les paquets, c'est comme ça qu'on les obtient."
+  },
+  {
+   "do": "Affiche le nombre de pages d'un PDF avec pdfinfo.",
+   "done": "le nombre correspond à ce qu'affiche ton lecteur de PDF.",
+   "hint": "`pdfinfo fichier.pdf` affiche beaucoup de lignes ; `grep` garde celle que tu veux, et `awk` peut ne garder que le nombre.",
+   "why": "Beaucoup d'outils affichent plus que ce dont tu as besoin. Réduire leur sortie à une seule valeur est un savoir-faire que tu utiliseras dans chaque script."
+  },
+  {
+   "do": "Fusionne deux PDF dans merged.pdf.",
+   "done": "merged.pdf contient les pages des deux, dans l'ordre.",
+   "hint": "`pdfunite a.pdf b.pdf merged.pdf` : le dernier nom est la sortie. Avec qpdf : `qpdf --empty --pages a.pdf b.pdf -- merged.pdf`.",
+   "why": "Lis bien l'ordre des arguments : avec pdfunite, le dernier est le fichier qu'il écrit. Se tromper écrase un de tes PDF, et c'est pour ça qu'on travaille sur des copies."
+  },
+  {
+   "do": "Fusionne tous les PDF du dossier, triés par nom, y compris ceux qui ont des espaces dans leur nom.",
+   "done": "un seul fichier les contient tous, et \"mon scan.pdf\" en fait partie.",
+   "hint": "Un motif comme `*.pdf` est déjà trié. Mets les bons guillemets : `\"$@\"` ou un tableau gardent entiers les noms avec des espaces.",
+   "why": "Les espaces dans les noms de fichiers cassent plus de scripts shell que n'importe quoi d'autre. Mettre des guillemets autour des variables à chaque fois est l'habitude qui l'évite."
+  },
+  {
+   "do": "Extrais une page, puis une plage de pages (de 2 à 4), dans un nouveau PDF.",
+   "done": "chaque nouveau fichier contient exactement les pages demandées.",
+   "hint": "`qpdf in.pdf --pages . 2-4 -- out.pdf`, ou pdfseparate puis pdfunite.",
+   "why": "Des outils différents, le même travail : connaître deux façons de faire aide quand l'une n'est pas installée."
+  },
+  {
+   "do": "Découpe un PDF entier en un fichier par page.",
+   "done": "un PDF de 5 pages donne 5 fichiers.",
+   "hint": "`pdfseparate in.pdf page-%d.pdf` : le %d devient le numéro de page.",
+   "why": "Certains outils prennent un modèle pour le nom de leurs sorties. Lire le manuel d'un outil (`man pdfseparate`) t'évite souvent d'écrire une boucle."
+  },
+  {
+   "do": "Mets tout dans un script pdf.sh qui prend l'action en premier : `./pdf.sh merge out.pdf a.pdf b.pdf` et `./pdf.sh split a.pdf`.",
+   "done": "les deux actions marchent sans modifier le script.",
+   "hint": "Commence par `#!/usr/bin/env bash`, puis `chmod +x`. `$1` est l'action ; `shift` l'enlève, et `\"$@\"` est le reste. Un `case` choisit l'action.",
+   "why": "Un script avec des arguments, c'est une nouvelle commande à toi. `case` est la façon du shell de choisir entre plusieurs actions, et il se lit clairement."
+  },
+  {
+   "do": "Gère les erreurs : un fichier absent, un fichier qui n'est pas un PDF, un fichier de sortie qui existe déjà, et une commande qui échoue.",
+   "done": "chaque erreur affiche un message clair, et le script se termine avec un code différent de 0.",
+   "hint": "`set -euo pipefail` en haut, `[[ -e $fichier ]]` pour tester, `file --mime-type` pour vérifier que c'est un PDF, et `exit 1` après le message (envoyé sur stderr avec `>&2`).",
+   "why": "Les codes de sortie, c'est comme ça que les scripts disent aux autres programmes qu'ils ont échoué. Les messages vont sur stderr pour ne jamais se mélanger à la vraie sortie."
+  },
+  {
+   "do": "Facultatif : tourner des pages, ou ajouter un message `--help`.",
+   "done": "ça marche sur un fichier de test.",
+   "hint": "qpdf a `--rotate`. Un message d'aide, c'est une branche du `case` qui affiche comment utiliser le script.",
+   "why": "Le message d'aide est la première chose qu'un inconnu lit. En écrire un te fait voir ton outil avec ses yeux."
+  }
+ ]
+}

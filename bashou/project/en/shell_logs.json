@@ -1,0 +1,78 @@
+{
+ "id": "shell_logs",
+ "order": 6,
+ "language": "shell",
+ "name": "logs",
+ "difficulty": "medium",
+ "title": "A daily report from a log",
+ "pitch": "Logs say what happened on a machine, but nobody reads ten thousand lines. Your script will count errors, find the busiest addresses and hours, and write a short report every day.",
+ "lessons": [
+  "pipes",
+  "text_tools",
+  "awk_sed",
+  "grep",
+  "scripts"
+ ],
+ "steps": [
+  {
+   "do": "Copy a log into a test folder: a web server access log, or `journalctl` output saved to a file.",
+   "done": "the file holds a few hundred lines.",
+   "hint": "`journalctl --since yesterday > test.log`, or `/var/log/nginx/access.log` if you run a web server.",
+   "why": "Logs change all the time. A copy holds still, so your counts can be checked by hand."
+  },
+  {
+   "do": "Count the lines with wc.",
+   "done": "you know how many lines the log has.",
+   "hint": "`wc -l`.",
+   "why": "Know the size of your data first: it tells you if a result later looks plausible."
+  },
+  {
+   "do": "Count the errors with grep (the word error, or HTTP codes 5xx in an access log).",
+   "done": "the count matches what you see in the file.",
+   "hint": "`grep -c`, `-i` to ignore case, and a regex like `\" 5[0-9][0-9] \"` for the codes.",
+   "why": "A search is only as good as its pattern: too wide and it counts lines that aren't errors, too narrow and it misses some. Check a few matches by eye."
+  },
+  {
+   "do": "Find the 10 addresses that appear the most.",
+   "done": "the list is sorted from the most frequent to the least.",
+   "hint": "`awk '{print $1}' | sort | uniq -c | sort -rn | head`.",
+   "why": "This pipeline (extract, sort, count, sort again) answers \"what comes up most?\" about any data. It's one of the most useful lines in the shell."
+  },
+  {
+   "do": "Count the requests (or messages) per hour.",
+   "done": "you get one line per hour with a number.",
+   "hint": "Cut the hour out of the date field with `awk` or `cut`, then the same count as before.",
+   "why": "Counts over time show patterns: the night backup, the lunch rush, an attack at 3 am."
+  },
+  {
+   "do": "Keep only today's lines.",
+   "done": "a line from yesterday isn't counted.",
+   "hint": "Build today's date in the log's own format with `date +…`, and `grep` for it.",
+   "why": "Each log writes dates its own way. Matching their format, not yours, is the trick."
+  },
+  {
+   "do": "Put it in a script that takes the log file as its argument.",
+   "done": "`./report.sh access.log` prints the counts, and a missing file prints a clear message.",
+   "hint": "`$1`, `[[ -r $1 ]]` to check you can read it, and functions to keep each count apart.",
+   "why": "Functions make a long script readable: each one does one count and has a name that says which."
+  },
+  {
+   "do": "Make the report readable: a title, sections, and aligned columns.",
+   "done": "someone else understands the report without your help.",
+   "hint": "`printf \"%-15s %5d\\n\"` aligns columns; `column -t` can help too.",
+   "why": "A report is for people. Aligned numbers can be compared at a glance; ragged ones have to be read one by one."
+  },
+  {
+   "do": "Run it every day with cron or a systemd timer, and save each report in a dated file.",
+   "done": "a new report file appears each day.",
+   "hint": "Redirect the output: `report.sh log > reports/$(date +%F).txt`. In crontab, % must be written \\%.",
+   "why": "Automation is where scripts pay off. Note the cron trap: % has a special meaning in a crontab line."
+  },
+  {
+   "do": "Optional: compare with yesterday's report and show what grew.",
+   "done": "the report says how many more (or fewer) errors there are than yesterday.",
+   "hint": "Keep today's numbers in a small file, read yesterday's, and subtract with `$(( ))`.",
+   "why": "A trend says more than a number. That's how monitoring tools decide when to wake someone up."
+  }
+ ]
+}

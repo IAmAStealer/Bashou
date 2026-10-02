@@ -406,6 +406,9 @@ COMMANDS = [
     Command("learn", run("learn", "main", "command"),
             ("bashou learn <command>", "take a command apart, piece by piece (alone: your pet's last tip)", LEARN),
             [("command", dict(nargs=argparse.REMAINDER))]),
+    Command("project", run("project.command", "main", "words"),
+            ("bashou project", "a real program to build, one small step at a time (Python, Shell, C, Rust)", LEARN),
+            [("words", dict(nargs=argparse.REMAINDER))]),
     Command("talk", talk, ("bashou talk", "your pet gives you a tip now, with a command to try", LEARN)),
     Command("fight", lambda a: run("fight", "run")(a) and None,        # its result isn't an exit code
             ("bashou fight", "fight the threat your pet announced", PLAY)),

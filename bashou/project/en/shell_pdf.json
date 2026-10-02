@@ -1,0 +1,77 @@
+{
+ "id": "shell_pdf",
+ "order": 4,
+ "language": "shell",
+ "name": "pdf",
+ "difficulty": "very easy",
+ "title": "Merge or split PDFs with a script",
+ "pitch": "The same useful job as the Python PDF project, done with command-line tools and a bash script. You learn to glue existing programs together, which is what the shell is best at.",
+ "lessons": [
+  "scripts",
+  "variables",
+  "quotes",
+  "loops"
+ ],
+ "steps": [
+  {
+   "do": "Create a test folder and COPY a few PDFs into it.",
+   "done": "the folder holds 2 or 3 PDFs, and the originals are safe somewhere else.",
+   "hint": "`mkdir` and `cp`. Put one file with a space in its name, like \"my scan.pdf\": you'll need it later.",
+   "why": "Scripts act fast and don't ask twice. Practising on copies means a mistake costs nothing."
+  },
+  {
+   "do": "Install the tools with your package manager: poppler-utils and qpdf.",
+   "done": "`pdfinfo -v` and `qpdf --version` both answer.",
+   "hint": "`sudo apt install poppler-utils qpdf` on Debian and Ubuntu, `sudo dnf install poppler-utils qpdf` on Fedora and Rocky.",
+   "why": "In the shell, you rarely write the hard part yourself: you find the right tool and combine it with others. Packages are how you get them."
+  },
+  {
+   "do": "Print how many pages a PDF has with pdfinfo.",
+   "done": "the number matches what your PDF reader shows.",
+   "hint": "`pdfinfo file.pdf` prints many lines; `grep` keeps the one you want, and `awk` can keep only the number.",
+   "why": "Many tools print more than you need. Cutting their output down to one value is a skill you'll use in every script."
+  },
+  {
+   "do": "Merge two PDFs into merged.pdf.",
+   "done": "merged.pdf has the pages of both, in order.",
+   "hint": "`pdfunite a.pdf b.pdf merged.pdf`: the last name is the output. With qpdf: `qpdf --empty --pages a.pdf b.pdf -- merged.pdf`.",
+   "why": "Read the order of arguments carefully: with pdfunite, the last one is the file it writes. Getting it wrong overwrites one of your PDFs, which is why you work on copies."
+  },
+  {
+   "do": "Merge every PDF in the folder, sorted by name, including files with spaces in their names.",
+   "done": "one file holds all of them, and \"my scan.pdf\" is included.",
+   "hint": "A glob like `*.pdf` is already sorted. Quote it right: `\"$@\"` or an array keep names with spaces whole.",
+   "why": "Spaces in file names break more shell scripts than anything else. Quoting variables every time is the habit that prevents it."
+  },
+  {
+   "do": "Extract one page, then a range of pages (2 to 4), into a new PDF.",
+   "done": "each new file has exactly the pages you asked for.",
+   "hint": "`qpdf in.pdf --pages . 2-4 -- out.pdf`, or pdfseparate then pdfunite.",
+   "why": "Different tools, same job: knowing two ways to do something helps when one of them isn't installed."
+  },
+  {
+   "do": "Split a whole PDF into one file per page.",
+   "done": "a 5-page PDF gives 5 files.",
+   "hint": "`pdfseparate in.pdf page-%d.pdf`: the %d becomes the page number.",
+   "why": "Some tools take a pattern for their output names. Reading a tool's manual (`man pdfseparate`) often saves you writing a loop."
+  },
+  {
+   "do": "Put it all in a script pdf.sh that takes the action first: `./pdf.sh merge out.pdf a.pdf b.pdf` and `./pdf.sh split a.pdf`.",
+   "done": "both actions work without editing the script.",
+   "hint": "Start with `#!/usr/bin/env bash`, `chmod +x`. `$1` is the action; `shift` removes it, then `\"$@\"` is the rest. A `case` picks the action.",
+   "why": "A script with arguments is a new command of your own. `case` is the shell's way to choose between several actions, and it reads clearly."
+  },
+  {
+   "do": "Handle mistakes: a missing file, a file that isn't a PDF, an output file that already exists, and a command that fails.",
+   "done": "each mistake prints a clear message, and the script exits with a code that isn't 0.",
+   "hint": "`set -euo pipefail` at the top, `[[ -e $file ]]` to test, `file --mime-type` to check it's a PDF, and `exit 1` after the message (sent to stderr with `>&2`).",
+   "why": "Exit codes are how scripts tell other programs they failed. Messages go to stderr so they never end up mixed with real output."
+  },
+  {
+   "do": "Optional: rotate pages, or add a `--help` message.",
+   "done": "it works on one test file.",
+   "hint": "qpdf has `--rotate`. A help message is a `case` branch that prints how to use the script.",
+   "why": "A help message is the first thing a stranger reads. Writing one makes you see your tool through their eyes."
+  }
+ ]
+}

@@ -1,0 +1,101 @@
+{
+ "id": "python_photos",
+ "order": 2,
+ "language": "python",
+ "name": "photos",
+ "difficulty": "medium",
+ "title": "Sort your photos into folders by year and month",
+ "pitch": "Thousands of photos in one folder? Your program will read the date each photo was taken and put it in a 2024/05 folder. You start by making one folder, and end with a tool you can trust with your memories.",
+ "lessons": [
+  "py_start",
+  "py_flow",
+  "py_names",
+  "py_data"
+ ],
+ "steps": [
+  {
+   "do": "Create a test folder by hand and COPY some of your photos into it. Copy them: your program could destroy them.",
+   "done": "a test folder holds copies of a few photos.",
+   "hint": "Take photos from a phone and from a camera if you can: they don't all store their date the same way.",
+   "why": "Photos can't be downloaded again. Working on copies until you trust your program is not optional here."
+  },
+  {
+   "do": "Create your .py program and make it create a folder for this year.",
+   "done": "a folder named after this year (like 2026) appears.",
+   "hint": "Look at `os.makedirs` or `pathlib.Path.mkdir`, and `datetime.date.today().year` for the year.",
+   "why": "Your first program that changes the disk. Start with the smallest action you can check by eye."
+  },
+  {
+   "do": "Run your program a second time: it crashes because the folder already exists. Fix that.",
+   "done": "you can run it twice in a row without an error.",
+   "hint": "Both `os.makedirs` and `Path.mkdir` have an option for \"it's fine if it's already there\".",
+   "why": "Real programs run again and again. A program that only works the first time is a trap: making it safe to re-run is a habit worth learning now."
+  },
+  {
+   "do": "Inside the year folder, create a folder for the month.",
+   "done": "a folder like 2026/10 exists.",
+   "hint": "Paths can be built piece by piece: `Path(\"2026\") / \"10\"`. Think about \"10\" versus \"1\" for October and January.",
+   "why": "Writing months with two digits (01, 02… 12) keeps them sorted in the right order everywhere, even in a file manager that sorts names as text."
+  },
+  {
+   "do": "Write a function `make_folder(year, month)` that creates the year/month folder for any date.",
+   "done": "calling it with any year and month creates the right folder.",
+   "hint": "Move the code you already have into a `def`, and replace the fixed values with parameters.",
+   "why": "A function gives a name to a piece of work, so you can use it again without copying it. This is the moment your script starts to have a structure."
+  },
+  {
+   "do": "Now we need to read the photos: open a photo file from your program.",
+   "done": "your program opens one photo and closes it without an error.",
+   "hint": "`open(path, \"rb\")`, inside a `with` block. A photo is binary data, so the \"b\" matters.",
+   "why": "Every file is just bytes. Text files are bytes your program reads as letters; a photo is bytes in a format a library knows how to read."
+  },
+  {
+   "do": "Reading photo dates needs a library: create a virtual environment and install Pillow with pip.",
+   "done": "`from PIL import Image` works in your program.",
+   "hint": "`python3 -m venv`, activate it, then `pip install Pillow` (the package is Pillow, the module is PIL).",
+   "why": "Nobody writes everything from scratch. Knowing how to add a library to one project, without touching the rest of your system, is part of every real project."
+  },
+  {
+   "do": "Look up what EXIF is, and read a photo's EXIF data to find the date it was taken.",
+   "done": "your program prints the date of one photo.",
+   "hint": "Pillow's `Image.open(...).getexif()` gives a dictionary-like object. The date tag is called DateTimeOriginal (it can also sit in DateTime).",
+   "why": "EXIF is information the camera writes inside the photo: date, camera model, sometimes the place. Reading it means your program knows what the file name doesn't say."
+  },
+  {
+   "do": "Write a function that turns the EXIF date into the year and month your `make_folder` function needs.",
+   "done": "it returns (2024, 5) for a photo taken in May 2024.",
+   "hint": "The EXIF date looks like \"2024:05:17 14:03:22\". `datetime.strptime` can read it, or you can split the text.",
+   "why": "Turning data from one format into another is a large part of programming. Doing it in its own small function makes it easy to test with a few examples."
+  },
+  {
+   "do": "Handle photos with no EXIF date: use the file's modification date, or put them in an `unknown` folder.",
+   "done": "a screenshot (it has no EXIF) gets sorted too.",
+   "hint": "`Path.stat().st_mtime` gives the modification time, and `datetime.fromtimestamp` turns it into a date.",
+   "why": "Real data is messy: screenshots, edited images, photos from messaging apps often lose their EXIF. A tool that only handles the perfect case breaks on the first real folder."
+  },
+  {
+   "do": "Dry run: for every photo in the folder, print where it would go (`IMG_001.jpg -> 2024/05`) without moving anything.",
+   "done": "the list looks right for all your test photos.",
+   "hint": "Loop over the files, call your functions, and only `print` for now.",
+   "why": "Real tools have a dry-run mode because checking a plan is cheap and undoing a mistake is not. Use it every time a program is about to move many files."
+  },
+  {
+   "do": "Copy the photos into their folders. Move them only once you trust your program.",
+   "done": "every photo is in its year/month folder.",
+   "hint": "`shutil.copy2` copies a file and keeps its dates; `shutil.move` moves it.",
+   "why": "Copy first, delete later: if something went wrong, nothing is lost. `copy2` keeps the original dates, so the copies stay as faithful as the photos."
+  },
+  {
+   "do": "Handle two photos with the same name in the same month: don't let one overwrite the other.",
+   "done": "two IMG_0001.jpg from the same month both survive.",
+   "hint": "Before copying, check if the target exists; if it does, add a number to the name (IMG_0001_2.jpg).",
+   "why": "Cameras reuse names (IMG_0001 comes back after 9999, and two phones count the same way). Silently overwriting a file is one of the worst bugs a program can have, because nobody notices until it's too late."
+  },
+  {
+   "do": "Optional: group year and month into an object (a class or a dataclass) and use it in your functions.",
+   "done": "the program still sorts everything the same way.",
+   "hint": "Look at `@dataclass` from the dataclasses module: a few lines give you a small class with fields.",
+   "why": "Changing the inside of a program without changing what it does is called refactoring. Having a dry run and test photos is what makes it safe."
+  }
+ ]
+}

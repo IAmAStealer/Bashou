@@ -1,0 +1,84 @@
+{
+ "title": "Un carnet de contacts",
+ "pitch": "Des noms, des numéros, des e-mails, enregistrés dans un fichier et faciles à chercher. En C, ce petit programme enseigne les grandes idées : les structs, la mémoire qu'on demande et qu'on rend, les listes chaînées, et la vérification de la mémoire avec valgrind.",
+ "steps": [
+  {
+   "do": "Écris une struct contact avec un nom, un numéro de téléphone et un e-mail ; remplis-en une dans ton code et affiche-la.",
+   "done": "le contact est affiché.",
+   "hint": "Des tableaux de char de taille fixe (`char name[64];`) et `strcpy` ou `snprintf` pour les remplir.",
+   "why": "Une struct, c'est la forme de tes données. Décider des tailles maintenant (64 caractères pour un nom ?) est un vrai choix de conception."
+  },
+  {
+   "do": "Fais un tableau de 3 contacts et affiche-les tous avec une boucle.",
+   "done": "les 3 contacts sont affichés.",
+   "hint": "Une fonction `print_contact(const struct contact *c)` garde la boucle courte.",
+   "why": "Passer un pointeur au lieu de toute la struct évite de la copier, et `const` promet que la fonction ne la modifiera pas."
+  },
+  {
+   "do": "Lis un contact tapé par l'utilisateur avec fgets. Cherche pourquoi `scanf(\"%s\")` est dangereux ici.",
+   "done": "un nom avec un espace, comme « Ada Lovelace », est lu en entier.",
+   "hint": "`fgets(buf, sizeof buf, stdin)`, puis enlève le `\\n` à la fin (`strcspn` le trouve).",
+   "why": "`scanf(\"%s\")` s'arrête au premier espace et ne connaît pas la taille de ton tableau : un nom trop long écrit au-delà de sa fin. C'est un dépassement de tampon, une des failles de sécurité les plus courantes en C."
+  },
+  {
+   "do": "Crée un contact avec malloc, utilise-le, et libère-le.",
+   "done": "le programme l'affiche et le libère.",
+   "hint": "`malloc(sizeof *c)`, vérifie que ce n'est pas NULL, `free(c)` quand tu as fini.",
+   "why": "La mémoire donnée par malloc vit sur le tas jusqu'à ce que tu la libères : elle survit à la fonction qui l'a créée. Cette liberté est la raison pour laquelle tu dois la rendre toi-même."
+  },
+  {
+   "do": "Remplace le tableau par une liste chaînée, pour que le carnet grandisse sans taille fixe.",
+   "done": "tu peux ajouter 10 contacts et les afficher tous.",
+   "hint": "Ajoute `struct contact *next;` à la struct. Ajouter au début est le plus simple : le nouveau pointe vers l'ancien premier.",
+   "why": "Chaque élément sait où est le suivant. Une liste chaînée grandit morceau par morceau, et la dessiner sur papier (des boîtes et des flèches) est le meilleur moyen de ne pas se tromper."
+  },
+  {
+   "do": "Cherche un contact par son nom.",
+   "done": "un nom existant est trouvé, et un nom absent affiche « introuvable ».",
+   "hint": "Parcours la liste avec `for (p = head; p; p = p->next)` et compare avec `strcmp`.",
+   "why": "Comparer des chaînes avec `==` compare des adresses, pas du texte. `strcmp` compare les lettres."
+  },
+  {
+   "do": "Supprime un contact de la liste, et libère sa mémoire.",
+   "done": "le contact supprimé n'apparaît plus, qu'il ait été le premier, au milieu ou le dernier.",
+   "hint": "Garde un pointeur vers l'élément précédent ; le premier élément est un cas à part (ou utilise un pointeur de pointeur).",
+   "why": "Supprimer dans une liste a des cas limites : le premier, le dernier, le seul. Les tester chacun, c'est comme ça qu'on trouve le bug qui n'apparaît que de temps en temps."
+  },
+  {
+   "do": "Vérifie ta mémoire avec valgrind.",
+   "done": "valgrind ne signale ni fuite ni erreur.",
+   "hint": "Compile avec `-g`, lance `valgrind --leak-check=full ./contacts`, et libère toute la liste avant de quitter.",
+   "why": "Les fuites et les lectures invalides ne plantent pas toujours ; elles attendent. valgrind les montre maintenant, avec la ligne où elles commencent."
+  },
+  {
+   "do": "Enregistre les contacts dans un fichier texte à la fin du programme, et recharge-les au démarrage.",
+   "done": "les contacts sont toujours là après avoir relancé le programme.",
+   "hint": "Un contact par ligne, les champs séparés par un caractère qui ne peut pas être dans un nom (une tabulation, par exemple).",
+   "why": "Choisir un séparateur qui ne peut pas apparaître dans tes données évite toute une famille de bugs. C'est pour ça que le CSV a besoin de guillemets et que les tabulations sont souvent plus simples."
+  },
+  {
+   "do": "Gère les mauvaises saisies : un nom trop long, une ligne cassée dans le fichier, un fichier absent au premier lancement.",
+   "done": "aucune ne fait planter le programme.",
+   "hint": "`fgets` avec la taille du tampon coupe les saisies trop longues ; vérifie ce que renvoie `sscanf` ; un fichier absent veut juste dire un carnet vide.",
+   "why": "Le code défensif s'attend à l'impossible. Un fichier absent au premier lancement n'est pas une erreur, c'est normal."
+  },
+  {
+   "do": "Ajoute une boucle de menu : ajouter, lister, chercher, supprimer, quitter.",
+   "done": "tu peux tout faire sans relancer.",
+   "hint": "Une boucle `while`, un chiffre ou une lettre lu avec `fgets`, et un `switch`.",
+   "why": "Le menu relie toutes les fonctions en un programme que quelqu'un d'autre pourrait utiliser."
+  },
+  {
+   "do": "Découpe le code en fichiers .c et .h, et compile-le avec un Makefile.",
+   "done": "`make` compile le programme, et modifier un fichier ne recompile que celui-là.",
+   "hint": "contact.h contient la struct et les déclarations de fonctions ; contact.c le code ; main.c le menu.",
+   "why": "Les vrais projets C ont beaucoup de fichiers. Un Makefile ne recompile que ce qui a changé, ce qui compte quand il y en a des centaines."
+  },
+  {
+   "do": "Facultatif : trie les contacts par nom, ou exporte-les en CSV.",
+   "done": "la liste s'affiche dans l'ordre alphabétique.",
+   "hint": "Insère chaque nouveau contact au bon endroit, ou copie les pointeurs dans un tableau et utilise `qsort`.",
+   "why": "Garder une liste triée en insérant, ou tout trier d'un coup : deux stratégies aux coûts différents. Les deux sont bonnes à connaître."
+  }
+ ]
+}

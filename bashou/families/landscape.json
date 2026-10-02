@@ -1,0 +1,21 @@
+{
+ "name": "Landscape",
+ "first": "hillock",
+ "order": 31,
+ "unlock": {
+  "achievement": "first_brick",
+  "how": "finish the first step of a project: bashou project"
+ },
+ "voice": "*rustle*",
+ "tips": [
+  "`bashou project` : a real program to build, one small step at a time.",
+  "Stuck on a step? `bashou project hint` gives you a nudge, never the answer.",
+  "A step done is a stone laid. Say so with `bashou project next`, and I grow a little.",
+  "Small first, then better: every program you use today started as a few lines that barely worked."
+ ],
+ "personal": [
+  "Every town started as a hill with one tree on it.",
+  "Rome wasn't built in a day. Your photo sorter won't be either, and that's fine.",
+  "I grow with every step you finish. No hurry: rivers take their time too."
+ ]
+}

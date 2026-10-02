@@ -168,6 +168,15 @@ def settings_of(value):
 
 
 LESSONS = {"read": [], "opened": [], "page": {}, "met": []}
+PROJECTS = {"current": "", "done": {}, "days": []}
+
+
+def projects_progress(value):
+    """`bashou project`: the current project, steps done per project, days with a step done."""
+    value = {**PROJECTS, **kind(dict)(value)}
+    return {"current": value["current"] if isinstance(value["current"], str) else "",
+            "done": dict_of(kind(int))(value["done"]) if isinstance(value["done"], dict) else {},
+            "days": list_of(kind(str))(value["days"]) if isinstance(value["days"], list) else []}
 COUNT = {"date": "", "count": 0}
 FIELDS = {
     "version": (SAVE_VERSION, kind(int)),
@@ -201,6 +210,7 @@ FIELDS = {
     "evolving": ([], list_of(record(who=str, **{"from": (str, int), "to": (str, int)}))),   # for `bashou evolve`
     "lessons": (LESSONS, lessons_progress),           # `bashou lesson`: read, opened, page to resume, fights met
     "share_name": ("", kind(str)),                    # the nickname on `bashou share` cards
+    "projects": (PROJECTS, projects_progress),        # `bashou project`: current one, steps done, days
 }
 
 

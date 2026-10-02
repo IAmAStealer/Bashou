@@ -1,0 +1,75 @@
+{
+ "id": "c_pomodoro",
+ "order": 7,
+ "language": "c",
+ "name": "pomodoro",
+ "difficulty": "very easy",
+ "title": "A Pomodoro timer in the terminal",
+ "pitch": "25 minutes of work, 5 minutes of break: a timer you'll actually use while you study. It starts with two printf and a sleep, and grows into a tool that counts your sessions and survives Ctrl+C.",
+ "lessons": [
+  "compilation",
+  "gcc_use"
+ ],
+ "steps": [
+  {
+   "do": "Print \"Work!\", wait 5 seconds, then print \"Break!\".",
+   "done": "the two messages come 5 seconds apart.",
+   "hint": "`sleep()` from <unistd.h>. Compile with `gcc -Wall pomodoro.c -o pomodoro`.",
+   "why": "Your first C program that waits. `-Wall` turns on the compiler's warnings: read them, they catch mistakes before you run anything."
+  },
+  {
+   "do": "Show a countdown that updates on the same line instead of filling the screen.",
+   "done": "the seconds go down on one line.",
+   "hint": "`\\r` sends the cursor back to the start of the line. `fflush(stdout)` makes it show right away.",
+   "why": "Output is buffered: C waits for a full line before showing it. `fflush` forces it out, and you'll meet buffering again in files and pipes."
+  },
+  {
+   "do": "Show the time as minutes and seconds, like 24:59.",
+   "done": "1500 seconds shows as 25:00.",
+   "hint": "Integer division `/` gives the minutes, the remainder `%` gives the seconds; `%02d` pads with a zero.",
+   "why": "`/` and `%` on integers are a pair you'll use for clocks, grids and pages. `%02d` keeps 25:05 from becoming 25:5."
+  },
+  {
+   "do": "Beep or show a clear message when the time is up.",
+   "done": "you notice the end without watching the screen.",
+   "hint": "Printing `\\a` makes the terminal beep (if its bell is on).",
+   "why": "A timer is only useful if it gets your attention. `\\a` is an old control character every terminal knows."
+  },
+  {
+   "do": "Chain the cycle: 25 minutes of work, 5 of break, 4 times, then a long break of 15 minutes.",
+   "done": "the timer goes through the whole cycle by itself (test it with seconds instead of minutes).",
+   "hint": "A function `countdown(seconds, label)` and a `for` loop around it.",
+   "why": "Testing with seconds instead of minutes is a real technique: make the slow thing fast while you check the logic."
+  },
+  {
+   "do": "Take the durations from the command line, with sensible defaults: `./pomodoro 25 5`.",
+   "done": "`./pomodoro 1 1` runs one-minute periods, and a word instead of a number prints how to use it.",
+   "hint": "`int main(int argc, char *argv[])`, and `strtol` to read numbers (it tells you where the number stopped).",
+   "why": "`atoi(\"abc\")` silently returns 0. `strtol` lets you detect bad input, which is why careful C code prefers it."
+  },
+  {
+   "do": "Save each finished work session (date and time) in a file.",
+   "done": "the file grows by one line per session.",
+   "hint": "`fopen(path, \"a\")` opens for appending; `time()`, `localtime()` and `strftime()` format the date.",
+   "why": "\"a\" adds to the end without erasing what's there. Mixing up \"w\" and \"a\" is a classic way to lose a history file."
+  },
+  {
+   "do": "Add `./pomodoro stats` to print how many sessions you did today and this week.",
+   "done": "the numbers match the file.",
+   "hint": "Read the file line by line with `fgets`, and compare the date at the start of each line.",
+   "why": "Reading back what your program wrote closes the loop: the file format you chose earlier now decides how easy this step is."
+  },
+  {
+   "do": "Handle Ctrl+C: save the unfinished session as stopped instead of losing it.",
+   "done": "Ctrl+C prints a message and the file says \"stopped\".",
+   "hint": "`signal(SIGINT, handler)`. Inside the handler, only set a flag (`volatile sig_atomic_t`); act on it in your loop.",
+   "why": "Signals interrupt your program at any moment. Doing little in the handler and the real work in the loop is the safe pattern."
+  },
+  {
+   "do": "Optional: pause with a key, or a desktop notification with notify-send.",
+   "done": "the pause stops the countdown and it starts again where it was.",
+   "hint": "`system(\"notify-send …\")` is the quick way. A pause key needs the terminal in raw mode (termios).",
+   "why": "Calling another program from yours is often the quickest way to add a feature."
+  }
+ ]
+}

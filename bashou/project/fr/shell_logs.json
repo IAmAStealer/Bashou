@@ -1,0 +1,66 @@
+{
+ "title": "Un rapport quotidien à partir d'un journal",
+ "pitch": "Les journaux (logs) disent ce qui s'est passé sur une machine, mais personne ne lit dix mille lignes. Ton script comptera les erreurs, trouvera les adresses et les heures les plus actives, et écrira un court rapport chaque jour.",
+ "steps": [
+  {
+   "do": "Copie un journal dans un dossier de test : le journal d'accès d'un serveur web, ou la sortie de `journalctl` enregistrée dans un fichier.",
+   "done": "le fichier contient quelques centaines de lignes.",
+   "hint": "`journalctl --since yesterday > test.log`, ou `/var/log/nginx/access.log` si tu fais tourner un serveur web.",
+   "why": "Les journaux changent tout le temps. Une copie reste immobile, donc tes comptes peuvent être vérifiés à la main."
+  },
+  {
+   "do": "Compte les lignes avec wc.",
+   "done": "tu sais combien de lignes contient le journal.",
+   "hint": "`wc -l`.",
+   "why": "Connais d'abord la taille de tes données : elle te dit si un résultat, plus tard, est vraisemblable."
+  },
+  {
+   "do": "Compte les erreurs avec grep (le mot error, ou les codes HTTP 5xx dans un journal d'accès).",
+   "done": "le compte correspond à ce que tu vois dans le fichier.",
+   "hint": "`grep -c`, `-i` pour ignorer la casse, et une regex comme `\" 5[0-9][0-9] \"` pour les codes.",
+   "why": "Une recherche ne vaut que par son motif : trop large, elle compte des lignes qui ne sont pas des erreurs ; trop étroit, elle en rate. Vérifie quelques résultats à l'œil."
+  },
+  {
+   "do": "Trouve les 10 adresses qui apparaissent le plus.",
+   "done": "la liste est triée de la plus fréquente à la moins fréquente.",
+   "hint": "`awk '{print $1}' | sort | uniq -c | sort -rn | head`.",
+   "why": "Ce pipeline (extraire, trier, compter, retrier) répond à « qu'est-ce qui revient le plus ? » pour n'importe quelles données. C'est une des lignes les plus utiles du shell."
+  },
+  {
+   "do": "Compte les requêtes (ou les messages) par heure.",
+   "done": "tu obtiens une ligne par heure avec un nombre.",
+   "hint": "Découpe l'heure dans le champ de la date avec `awk` ou `cut`, puis le même comptage qu'avant.",
+   "why": "Les comptes dans le temps montrent des habitudes : la sauvegarde de la nuit, le rush de midi, une attaque à 3 h du matin."
+  },
+  {
+   "do": "Ne garde que les lignes d'aujourd'hui.",
+   "done": "une ligne d'hier n'est pas comptée.",
+   "hint": "Construis la date du jour dans le format du journal avec `date +…`, et cherche-la avec `grep`.",
+   "why": "Chaque journal écrit les dates à sa façon. Suivre leur format, pas le tien, c'est l'astuce."
+  },
+  {
+   "do": "Mets-le dans un script qui prend le fichier journal en argument.",
+   "done": "`./report.sh access.log` affiche les comptes, et un fichier absent affiche un message clair.",
+   "hint": "`$1`, `[[ -r $1 ]]` pour vérifier que tu peux le lire, et des fonctions pour séparer chaque comptage.",
+   "why": "Les fonctions rendent un long script lisible : chacune fait un comptage et porte un nom qui dit lequel."
+  },
+  {
+   "do": "Rends le rapport lisible : un titre, des sections et des colonnes alignées.",
+   "done": "quelqu'un d'autre comprend le rapport sans ton aide.",
+   "hint": "`printf \"%-15s %5d\\n\"` aligne des colonnes ; `column -t` peut aider aussi.",
+   "why": "Un rapport, c'est pour des gens. Des nombres alignés se comparent d'un coup d'œil ; des nombres en vrac se lisent un par un."
+  },
+  {
+   "do": "Lance-le chaque jour avec cron ou un timer systemd, et enregistre chaque rapport dans un fichier daté.",
+   "done": "un nouveau fichier de rapport apparaît chaque jour.",
+   "hint": "Redirige la sortie : `report.sh journal > rapports/$(date +%F).txt`. Dans une crontab, % doit s'écrire \\%.",
+   "why": "L'automatisation est là où les scripts rapportent. Attention au piège de cron : % a un sens spécial dans une ligne de crontab."
+  },
+  {
+   "do": "Facultatif : compare avec le rapport d'hier et montre ce qui a augmenté.",
+   "done": "le rapport dit combien d'erreurs de plus (ou de moins) qu'hier.",
+   "hint": "Garde les nombres du jour dans un petit fichier, lis ceux d'hier, et soustrais avec `$(( ))`.",
+   "why": "Une tendance en dit plus qu'un nombre. C'est comme ça que les outils de surveillance décident quand réveiller quelqu'un."
+  }
+ ]
+}

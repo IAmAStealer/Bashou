@@ -1,0 +1,66 @@
+{
+ "title": "Suivre ton électricité ou ton carburant",
+ "pitch": "Combien consommes-tu vraiment chaque mois, et combien ça coûte ? Tu saisis tes relevés de compteur ou tes pleins ; le programme les garde dans un fichier et te montre les mois, les moyennes et la tendance.",
+ "steps": [
+  {
+   "do": "Choisis ce que tu suis : les relevés de ton compteur électrique, ou tes pleins (date, litres, prix, kilomètres). Écris 3 relevés dans ton code et affiche-les.",
+   "done": "les 3 relevés sont affichés.",
+   "hint": "Des variables simples et `printf` suffisent pour l'instant. `%.2f` affiche deux décimales.",
+   "why": "De vrais nombres tirés de ta vie rendent facile de voir quand un résultat est faux."
+  },
+  {
+   "do": "Mets un relevé dans une struct, et garde-les dans un tableau.",
+   "done": "une boucle les affiche tous.",
+   "hint": "`struct reading { char date[11]; double value; };` et un tableau de ces structs.",
+   "why": "Une struct regroupe les champs qui vont ensemble, donc un relevé voyage comme une seule chose. C'est la façon de C de décrire tes données."
+  },
+  {
+   "do": "Calcule ce que tu as consommé entre deux relevés (en kWh, ou en litres aux 100 km).",
+   "done": "le résultat correspond à ton propre calcul sur papier.",
+   "hint": "Soustrais le relevé précédent du relevé actuel. Pour le carburant : litres × 100 / kilomètres parcourus.",
+   "why": "Vérifier un programme contre un calcul fait à la main est le test le plus simple qui existe, et il attrape de vrais bugs."
+  },
+  {
+   "do": "Lis un nouveau relevé tapé par l'utilisateur, et vérifie-le : une date, des nombres positifs, un compteur qui ne recule pas.",
+   "done": "une mauvaise valeur est refusée avec un message clair.",
+   "hint": "`fgets` lit une ligne entière sans risque, puis `sscanf` en sort les valeurs et renvoie combien il en a trouvé.",
+   "why": "`scanf` seul laisse des restes dans l'entrée quand il échoue. Lire une ligne, puis l'analyser, garde l'entrée sous contrôle."
+  },
+  {
+   "do": "Enregistre les relevés dans un fichier CSV, et recharge-les au démarrage.",
+   "done": "tes relevés sont toujours là après un redémarrage.",
+   "hint": "`fprintf(f, \"%s,%.2f\\n\", …)` pour écrire ; `fgets` + `sscanf` avec une virgule dans le format pour lire.",
+   "why": "Le CSV est du texte simple : tu peux l'ouvrir dans un tableur, le vérifier à l'œil ou le corriger dans un éditeur."
+  },
+  {
+   "do": "Affiche la consommation et le coût de chaque mois.",
+   "done": "une ligne par mois, et le total de l'année.",
+   "hint": "Le mois, ce sont les 7 premiers caractères d'une date ISO (2026-10). `strncmp` compare le début de deux chaînes.",
+   "why": "Regrouper par mois, c'est la même idée que regrouper par thème dans n'importe quel langage : une clé, et un total qui grandit."
+  },
+  {
+   "do": "Affiche la moyenne, le meilleur et le pire mois.",
+   "done": "ils correspondent à ce que tu vois dans la liste par mois.",
+   "hint": "Une seule boucle : garde le plus petit et le plus grand vus jusque-là, et la somme.",
+   "why": "Un seul passage sur les données, quelques variables qui se souviennent : un algorithme que tu écriras souvent."
+  },
+  {
+   "do": "Laisse la liste grandir sans taille fixe, avec malloc et realloc.",
+   "done": "1000 relevés se chargent sans planter, et valgrind ne signale aucune fuite.",
+   "hint": "Commence avec de la place pour 16, double-la avec `realloc` quand c'est plein, `free` à la fin. Lance `valgrind ./energy`.",
+   "why": "Les tableaux fixes cassent le jour où tes données grandissent. Doubler la taille quand c'est plein est l'astuce derrière la plupart des listes qui grandissent, dans tous les langages."
+  },
+  {
+   "do": "Gère une ligne cassée dans le fichier (un champ manquant, une lettre au lieu d'un nombre).",
+   "done": "le programme dit quelle ligne est fausse et garde les autres.",
+   "hint": "Compte les lignes en lisant, et vérifie ce que renvoie `sscanf`.",
+   "why": "Les fichiers se modifient à la main et s'abîment. Donner le numéro de ligne rend le problème facile à corriger."
+  },
+  {
+   "do": "Facultatif : un graphique en barres des mois, fait de caractères #.",
+   "done": "le graphique montre tes mois d'hiver plus hauts (ou tes départs en vacances).",
+   "hint": "Mets chaque mois à l'échelle du plus grand : `largeur = valeur * 40 / max`.",
+   "why": "Une image montre une tendance plus vite qu'une colonne de nombres, même une image faite de #."
+  }
+ ]
+}

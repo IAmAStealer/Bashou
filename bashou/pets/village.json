@@ -1,0 +1,65 @@
+{
+ "name": "Village",
+ "next": "port",
+ "next_at": {
+  "achievements": 10
+ },
+ "palette": {
+  "g": "#5fa040",
+  "G": "#3e7a30",
+  "d": "#8a5a34",
+  "D": "#5c3a22",
+  "t": "#6e4428",
+  "l": "#3f8a3c",
+  "L": "#78c050",
+  "R": "#7a3020",
+  "r": "#b04a30",
+  "h": "#e0c890",
+  "H": "#a88858",
+  "y": "#ffe070",
+  "s": "#8a8a94",
+  "k": "#c8c8d0",
+  "M": "#36405a",
+  "m": "#424e6a",
+  "N": "#9aa8c0",
+  "e": "#26402c",
+  "E": "#2e4c34"
+ },
+ "base": [
+  ".................",
+  "...N.........N...",
+  "..NmN...N...NmN..",
+  ".MmmmM.NmN.MmmmM.",
+  "MMmmmMMmmmMMRsmMM",
+  "MMMMMMMMLMMRrRMMM",
+  "eReeEReLlLRrrrRee",
+  "RrReRrRetehyhtHee",
+  "hyHehyHetehhhtHee",
+  ".GgggggggggggggG.",
+  "..DdddddddddddD..",
+  "....DdddddddD...."
+ ],
+ "poses": {
+  "inhale": {
+   "3": "-------------k---"
+  },
+  "closed": {
+   "7": "-----------H-----",
+   "8": "-H---H-----------"
+  },
+  "left": {
+   "5": "--------L--------"
+  },
+  "right": {
+   "5": "--------L--------"
+  },
+  "fidget": {
+   "4": "-------------.k--",
+   "3": "--------------k--"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

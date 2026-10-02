@@ -3,6 +3,24 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.8.0 — 2026-10-02
+
+- New: `bashou project`. You want to practise a language but don't know what to program? 13 real
+  projects to build, in Python, Shell, C and Rust, from very easy to hard: merge or split PDFs, sort your
+  photos into folders by date, a web page of your budget, a backup script, a daily report from a log, a
+  Pomodoro timer, an electricity or fuel tracker, a contact book, a todo list, an internet outage logger,
+  a shopping list from your weekly menu, and a sorter for your administrative papers.
+- One small step at a time: each step says what to do and when it's done, never how, because searching
+  is part of learning. Type `bashou project next` when it's done: Bashou explains what that step taught
+  you, then shows the next one. Stuck? `bashou project hint` gives you a nudge, never the answer. Each
+  project remembers its own step, so you can switch between them.
+- A new pet grows with your projects: the Landscape. It starts as a small hill with a tree, and becomes a
+  cabin, a garden, a river, a waterfall, a mill, mountains, a village, a port with its lighthouse, and a
+  town under the stars. 32 new achievements come with it, often at first: the first step, 3 steps, 5
+  steps, then each finished project and each language. Finishing the projects of one language is enough
+  to reach the town.
+- Your pet sometimes reminds you of the project you started, and where you stopped.
+
 ## v0.7.0 — 2026-10-02
 
 - In a very small window, the commands that draw a screen (`bashou evolve`, `swap`, `lesson`,

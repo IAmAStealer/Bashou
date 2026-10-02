@@ -1,0 +1,66 @@
+{
+ "title": "Un minuteur Pomodoro dans le terminal",
+ "pitch": "25 minutes de travail, 5 minutes de pause : un minuteur dont tu te serviras vraiment pendant tes révisions. Il commence avec deux printf et un sleep, et devient un outil qui compte tes séances et survit à Ctrl+C.",
+ "steps": [
+  {
+   "do": "Affiche « Travail ! », attends 5 secondes, puis affiche « Pause ! ».",
+   "done": "les deux messages arrivent à 5 secondes d'écart.",
+   "hint": "`sleep()` de <unistd.h>. Compile avec `gcc -Wall pomodoro.c -o pomodoro`.",
+   "why": "Ton premier programme C qui attend. `-Wall` active les avertissements du compilateur : lis-les, ils attrapent des erreurs avant même de lancer quoi que ce soit."
+  },
+  {
+   "do": "Affiche un compte à rebours qui se met à jour sur la même ligne au lieu de remplir l'écran.",
+   "done": "les secondes descendent sur une seule ligne.",
+   "hint": "`\\r` ramène le curseur au début de la ligne. `fflush(stdout)` affiche tout de suite.",
+   "why": "La sortie passe par un tampon : C attend une ligne complète avant de l'afficher. `fflush` la force à sortir, et tu retrouveras ce tampon dans les fichiers et les pipes."
+  },
+  {
+   "do": "Affiche le temps en minutes et secondes, comme 24:59.",
+   "done": "1500 secondes s'affichent 25:00.",
+   "hint": "La division entière `/` donne les minutes, le reste `%` donne les secondes ; `%02d` complète avec un zéro.",
+   "why": "`/` et `%` sur des entiers forment une paire que tu utiliseras pour les horloges, les grilles et les pages. `%02d` évite que 25:05 devienne 25:5."
+  },
+  {
+   "do": "Sonne ou affiche un message clair quand le temps est écoulé.",
+   "done": "tu remarques la fin sans regarder l'écran.",
+   "hint": "Afficher `\\a` fait sonner le terminal (si sa cloche est active).",
+   "why": "Un minuteur n'est utile que s'il attire ton attention. `\\a` est un vieux caractère de contrôle que tous les terminaux connaissent."
+  },
+  {
+   "do": "Enchaîne le cycle : 25 minutes de travail, 5 de pause, 4 fois, puis une longue pause de 15 minutes.",
+   "done": "le minuteur fait tout le cycle tout seul (teste-le avec des secondes au lieu de minutes).",
+   "hint": "Une fonction `countdown(secondes, nom)` et une boucle `for` autour.",
+   "why": "Tester avec des secondes au lieu de minutes est une vraie technique : rends rapide ce qui est lent pendant que tu vérifies la logique."
+  },
+  {
+   "do": "Prends les durées sur la ligne de commande, avec des valeurs par défaut raisonnables : `./pomodoro 25 5`.",
+   "done": "`./pomodoro 1 1` fait des périodes d'une minute, et un mot au lieu d'un nombre affiche comment l'utiliser.",
+   "hint": "`int main(int argc, char *argv[])`, et `strtol` pour lire les nombres (il te dit où le nombre s'est arrêté).",
+   "why": "`atoi(\"abc\")` renvoie 0 sans rien dire. `strtol` permet de détecter une mauvaise saisie, et c'est pour ça que le code C soigné le préfère."
+  },
+  {
+   "do": "Enregistre chaque séance de travail terminée (date et heure) dans un fichier.",
+   "done": "le fichier grandit d'une ligne par séance.",
+   "hint": "`fopen(chemin, \"a\")` ouvre en ajout ; `time()`, `localtime()` et `strftime()` formatent la date.",
+   "why": "\"a\" ajoute à la fin sans effacer ce qui est là. Confondre \"w\" et \"a\" est une façon classique de perdre un fichier d'historique."
+  },
+  {
+   "do": "Ajoute `./pomodoro stats` pour afficher combien de séances tu as faites aujourd'hui et cette semaine.",
+   "done": "les nombres correspondent au fichier.",
+   "hint": "Lis le fichier ligne par ligne avec `fgets`, et compare la date au début de chaque ligne.",
+   "why": "Relire ce que ton programme a écrit boucle la boucle : le format de fichier choisi plus tôt décide maintenant si cette étape est facile."
+  },
+  {
+   "do": "Gère Ctrl+C : enregistre la séance en cours comme interrompue au lieu de la perdre.",
+   "done": "Ctrl+C affiche un message et le fichier dit « interrompue ».",
+   "hint": "`signal(SIGINT, handler)`. Dans le handler, ne fais que lever un drapeau (`volatile sig_atomic_t`) ; agis dessus dans ta boucle.",
+   "why": "Les signaux interrompent ton programme à n'importe quel moment. En faire peu dans le handler et le vrai travail dans la boucle, c'est le schéma sûr."
+  },
+  {
+   "do": "Facultatif : une pause avec une touche, ou une notification de bureau avec notify-send.",
+   "done": "la pause arrête le compte à rebours, et il repart là où il en était.",
+   "hint": "`system(\"notify-send …\")` est le moyen rapide. Une touche de pause demande de passer le terminal en mode brut (termios).",
+   "why": "Appeler un autre programme depuis le tien est souvent le moyen le plus rapide d'ajouter une fonction."
+  }
+ ]
+}

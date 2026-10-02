@@ -23,7 +23,7 @@ tokens spent to learn what a command does.
   With no command, it explains the last one your pet suggested.
 - **Your pet gives tips** as you go (Ctrl+R, `cd -`, `du -sh *`…) and notices the tools you haven't
   tried yet.
-- **131 achievements** reward real skills: a pipe of 3 commands, `find -exec`, `sed -i`, `git bisect`,
+- **163 achievements** reward real skills: a pipe of 3 commands, `find -exec`, `sed -i`, `git bisect`,
   `tar -tf`…
 - **Threats** show up now and then. `bashou fight` opens a sandbox shell where you beat them with the
   right tool: `grep` against the Log Hydra, `awk` against the Ledger Golem. A successful command with
@@ -42,6 +42,10 @@ tokens spent to learn what a command does.
 - **`bashou lesson`**: the Sage Owl's library. Lessons with drawings that grow page by page (the stack
   and the heap, where output goes, permissions…), unlocked as you play, each one preparing your next step.
   In a fight, `lesson` opens the one that explains it.
+- **`bashou project`**: you want to practise a language but don't know *what* to program? 13 real
+  projects in Python, Shell, C and Rust, from very easy to hard: merge PDFs, sort your photos by date, a
+  backup script, a Pomodoro timer, an internet outage logger… One small step at a time: each step says what
+  to do and when it's done, never how, with a hint if you're stuck and a short explanation once it's done.
 - **`bashou arena`**: come and fight when you want. A timed fight (hearts and a clock), or a security
   investigation with no clock (a hidden file, a cron backdoor, a SUID binary). Lose, and the arena
   closes for an hour.
@@ -57,10 +61,10 @@ shell below](doc/img/duel.svg)
 Choose a starter: Stardust, Seedling or Pebble. It grows up to level 20 and changes shape along the
 way. What it becomes is for you to find out.
 
-29 more pets hide in your terminal. Each one comes from what it stands for: a Droplet after your
+30 more pets hide in your terminal. Each one comes from what it stands for: a Droplet after your
 first 10 commands (it keeps changing shape as you type), a night coder for your first programs, a
 mushroom for your own scripts, others for a new tool used often enough, a long pipe, a fight lost or
-won, a walk in the adventure… The swap board shows only their silhouette until you meet them.
+won, a walk in the adventure, a landscape that grows with your projects… The swap board shows only their silhouette until you meet them.
 
 ![The three starters, Stardust, Seedling and Pebble, then three of the first pets you can meet: a
 Droplet after 10 commands, a Mouseling after 10 programs, a Spore after 5 scripts](doc/img/pets.svg)

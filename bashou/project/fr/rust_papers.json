@@ -1,0 +1,108 @@
+{
+ "title": "Trouver les doublons, puis trier tes papiers administratifs",
+ "pitch": "Deux parties. D'abord, trouver les fichiers en double dans un dossier de papiers et mettre les copies en trop de côté. Ensuite, lire le texte de chaque PDF et le ranger dans un dossier par thème (impôts, banque, santé…) et par année. La partie 1 est moyenne, la partie 2 difficile.",
+ "steps": [
+  {
+   "do": "Partie 1, les doublons. COPIE un dossier de papiers (PDF, scans, photos de documents) dans un dossier de test, avec au moins un doublon fait exprès.",
+   "done": "la copie contient quelques fichiers, dont un en double sous deux noms.",
+   "hint": "`cp facture.pdf facture-copie.pdf` fait un doublon que tu connais.",
+   "why": "Un doublon connu, c'est ton test : si le programme ne le trouve pas, le programme a tort."
+  },
+  {
+   "do": "Liste les fichiers du dossier avec std::fs::read_dir.",
+   "done": "chaque nom de fichier est affiché.",
+   "hint": "read_dir renvoie un Result d'un itérateur de Results : chaque niveau peut échouer, donc traite chacun.",
+   "why": "Chaque opération sur un fichier peut échouer (droits, fichier supprimé entre-temps). Rust le montre dans les types, pour que tu ne puisses pas l'oublier."
+  },
+  {
+   "do": "Liste aussi les fichiers de chaque sous-dossier.",
+   "done": "les fichiers au fond des sous-dossiers sont listés.",
+   "hint": "Une fonction récursive, ou la crate walkdir.",
+   "why": "Une arborescence est une structure récursive : un dossier contient des fichiers et des dossiers. Une fonction récursive suit sa forme."
+  },
+  {
+   "do": "Regroupe les fichiers par taille dans une HashMap. Seuls des fichiers de même taille peuvent être des doublons.",
+   "done": "le programme affiche les groupes de plus d'un fichier.",
+   "hint": "`metadata().len()` donne la taille ; `HashMap<u64, Vec<PathBuf>>`.",
+   "why": "Comparer les tailles d'abord ne coûte presque rien et élimine la plupart des fichiers. Faire la vérification bon marché avant la coûteuse, c'est comme ça qu'on construit des programmes rapides."
+  },
+  {
+   "do": "Calcule un hash des fichiers qui ont la même taille, et regroupe-les par hash.",
+   "done": "ton doublon est trouvé, et deux fichiers différents de même taille ne le sont pas.",
+   "hint": "La crate sha2 ; lis le fichier et donne-le au hasher, puis compare les résultats.",
+   "why": "Un hash est une empreinte du contenu : même contenu, même hash. Deux fichiers différents avec le même SHA-256, c'est pratiquement impossible."
+  },
+  {
+   "do": "Affiche un rapport : chaque groupe de doublons, et la place qu'ils gaspillent.",
+   "done": "le rapport liste ton doublon.",
+   "hint": "Place gaspillée = taille × (copies − 1).",
+   "why": "Un nombre comme « 1,2 Go gaspillés », c'est ce qui décide quelqu'un à faire le ménage."
+  },
+  {
+   "do": "Essai à blanc : affiche quelles copies seraient déplacées, en gardant une de chaque.",
+   "done": "la liste est juste.",
+   "hint": "Garde la première de chaque groupe (le chemin le plus court, par exemple) et liste les autres.",
+   "why": "Décider quelle copie garder est une règle que tu choisis. L'afficher d'abord te laisse vérifier la règle avant qu'elle agisse."
+  },
+  {
+   "do": "Déplace les copies en trop dans un dossier duplicates/. Ne supprime jamais : c'est l'utilisateur qui décide.",
+   "done": "le dossier garde une copie de chaque fichier, et les autres sont dans duplicates/.",
+   "hint": "`std::fs::rename` déplace un fichier sur le même disque.",
+   "why": "Déplacer au lieu de supprimer rend chaque erreur réparable. Les bons outils laissent la décision finale aux gens."
+  },
+  {
+   "do": "Partie 2, le tri par thème. Extrais le texte d'un PDF et affiche-le.",
+   "done": "tu vois les mots du papier.",
+   "hint": "La crate pdf-extract a une fonction qui prend un chemin et renvoie le texte.",
+   "why": "Beaucoup de PDF contiennent du vrai texte ; les scans sont des images et n'en contiennent pas. Tu t'en occuperas plus tard."
+  },
+  {
+   "do": "Écris une liste de thèmes avec leurs mots-clés (impôts, banque, santé, maison, salaire…) dans un fichier de configuration, et charge-la.",
+   "done": "le programme affiche chaque thème avec ses mots-clés.",
+   "hint": "TOML : `[themes]` avec `impots = [\"impôt\", \"revenu\", …]`, chargé dans une HashMap<String, Vec<String>>.",
+   "why": "Les mots-clés changent d'un pays et d'une langue à l'autre. Dans un fichier de configuration, n'importe qui peut les adapter sans toucher au code."
+  },
+  {
+   "do": "Donne un score à chaque thème : combien de ses mots-clés apparaissent dans le papier. Choisis le thème au meilleur score.",
+   "done": "un avis d'impôt obtient le thème « impôts ».",
+   "hint": "Passe d'abord le texte en minuscules (`to_lowercase`), puis compte avec `contains` ou `matches`.",
+   "why": "Donner un score est une forme simple de classification, la même idée que derrière les filtres anti-spam."
+  },
+  {
+   "do": "Les papiers sans mot-clé reconnu, ou sans texte du tout, vont dans unknown.",
+   "done": "une image quelconque va dans unknown.",
+   "hint": "Un score de 0 veut dire aucun thème.",
+   "why": "Un programme doit savoir dire « je ne sais pas » au lieu de deviner faux. unknown, c'est une pile que tu tries à la main."
+  },
+  {
+   "do": "Essai à blanc : affiche où irait chaque papier (`facture.pdf -> maison`).",
+   "done": "la liste est juste.",
+   "hint": "Réutilise l'idée de l'essai à blanc de la partie 1.",
+   "why": "La même sécurité, une nouvelle règle : vérifier le plan avant d'agir."
+  },
+  {
+   "do": "Copie les papiers dans leurs dossiers de thème.",
+   "done": "chaque papier est dans son dossier de thème.",
+   "hint": "`create_dir_all` puis `std::fs::copy`.",
+   "why": "Copier d'abord : les originaux restent où ils étaient tant que tu n'as pas confiance dans le résultat."
+  },
+  {
+   "do": "Trouve une date dans le texte et range par année à l'intérieur de chaque thème.",
+   "done": "un papier de 2024 arrive dans impots/2024/.",
+   "hint": "La crate regex : un motif pour jj/mm/aaaa et aaaa-mm-jj.",
+   "why": "Les regex trouvent des motifs dans du texte. Les dates s'écrivent de mille façons : attends-toi à ajuster ton motif après quelques vrais papiers."
+  },
+  {
+   "do": "Gère deux papiers qui ont le même nom dans le même dossier : l'un ne doit pas écraser l'autre.",
+   "done": "les deux survivent.",
+   "hint": "Vérifie `exists()` avant de copier, et ajoute un numéro au nom.",
+   "why": "La même leçon que dans chaque projet qui déplace des fichiers : ne jamais écraser en silence."
+  },
+  {
+   "do": "Facultatif : lis les papiers scannés (des images sans texte) avec une reconnaissance de caractères (OCR), grâce à tesseract.",
+   "done": "un papier scanné obtient un thème au lieu de unknown.",
+   "hint": "Lance tesseract avec `std::process::Command` et lis sa sortie.",
+   "why": "Appeler un autre programme depuis Rust te permet d'utiliser des décennies de travail (tesseract) en quelques lignes."
+  }
+ ]
+}

@@ -1,0 +1,71 @@
+{
+ "name": "Mountains",
+ "next": "village",
+ "next_at": {
+  "achievements": 9
+ },
+ "palette": {
+  "g": "#5fa040",
+  "G": "#3e7a30",
+  "d": "#8a5a34",
+  "D": "#5c3a22",
+  "t": "#6e4428",
+  "l": "#3f8a3c",
+  "L": "#78c050",
+  "R": "#7a3020",
+  "r": "#b04a30",
+  "h": "#e0c890",
+  "H": "#a88858",
+  "y": "#ffe070",
+  "s": "#8a8a94",
+  "k": "#c8c8d0",
+  "f": "#c8a070",
+  "w": "#3a8ad0",
+  "W": "#a8dcff",
+  "M": "#36405a",
+  "m": "#424e6a",
+  "N": "#9aa8c0",
+  "e": "#26402c",
+  "E": "#2e4c34",
+  "b": "#d8d0c0"
+ },
+ "base": [
+  ".................",
+  "...N.........N...",
+  "f.Nmf...N...NmN..",
+  ".fmfmM.NmN.MmmmM.",
+  "MRtRmMMmmmMMRsmMM",
+  "MfbfMMMLMMMRrRMMM",
+  "fbbHfELlLeRrrrRee",
+  "ebbHeeeteehyhtHee",
+  "ebtHeeeteehhhtHee",
+  ".GggwWwggggggggG.",
+  "..DdwWwdddddddD..",
+  "....wWwdddddD...."
+ ],
+ "poses": {
+  "inhale": {
+   "3": "-------------k---"
+  },
+  "closed": {
+   "7": "-----------H-----"
+  },
+  "left": {
+   "5": "------L-L--------"
+  },
+  "right": {
+   "5": "------L-L--------"
+  },
+  "fidget": {
+   "2": "-m---m-----------",
+   "3": "--f-f------------",
+   "4": "ff-t-ff----------",
+   "5": "-Mf-f------------",
+   "6": "-e---e-----------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

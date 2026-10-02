@@ -142,6 +142,57 @@ def nested_subst(line):
     return best >= 2
 
 
+def _projects():
+    from . import project                        # read only when a project achievement is checked
+    return project
+
+
+def steps_done(s):
+    return _projects().steps_done(s)
+
+
+def project_done(s, pid):
+    return pid in _projects().finished(s)
+
+
+def projects_done(s, language=None, difficulty=None):
+    """Finished projects, of a language and difficulty when given."""
+    known = {p["id"]: p for p in _projects().english()}
+    return [pid for pid in _projects().finished(s) if (not language or known[pid]["language"] == language)
+            and (not difficulty or known[pid]["difficulty"] == difficulty)]
+
+
+def project_streak(s):
+    return streak((s.get("projects") or {}).get("days", []))
+
+
+STEP_MILESTONES = [(1, "first_brick", "First brick"), (3, "foundations", "Foundations"), (5, "scaffolding", "Scaffolding"),
+                   (10, "walls_up", "Walls up"), (15, "roof_on", "Roof on"), (20, "site_builder", "Builder"),
+                   (30, "stonemason", "Stonemason"), (40, "architect", "Architect"), (50, "site_engineer", "Engineer"),
+                   (75, "master_builder", "Master builder"), (100, "city_planner", "City planner"),
+                   (150, "wonder", "Wonder of the world")]
+# Landscape: `bashou project`. Owner: lots of rewards to keep the motivation, from the first step.
+PROJECT_ACHIEVEMENTS = [
+    ("python_pdf", "pdf_tamer", "PDF tamer", "merge and split PDFs in Python: `bashou project start python pdf`"),
+    ("python_photos", "photo_sorter", "Photo sorter", "sort your photos by date in Python: `bashou project start python photos`"),
+    ("python_budget", "budget_keeper", "Budget keeper", "build your budget web page in Python: `bashou project start python budget`"),
+    ("shell_pdf", "pdf_juggler", "PDF juggler", "merge and split PDFs with a shell script: `bashou project start shell pdf`"),
+    ("shell_backup", "safe_keeper", "Safe keeper", "write a backup script: `bashou project start shell backup`"),
+    ("shell_logs", "log_reader", "Log reader", "turn a log into a daily report: `bashou project start shell logs`"),
+    ("c_pomodoro", "time_keeper", "Time keeper", "build a Pomodoro timer in C: `bashou project start c pomodoro`"),
+    ("c_energy", "meter_reader", "Meter reader", "track your electricity or fuel in C: `bashou project start c energy`"),
+    ("c_contacts", "address_book", "Address book", "build a contact book in C: `bashou project start c contacts`"),
+    ("rust_todo", "list_maker", "List maker", "build a todo list in Rust: `bashou project start rust todo`"),
+    ("rust_netwatch", "watchtower", "Watchtower", "log your internet outages in Rust: `bashou project start rust netwatch`"),
+    ("rust_menu", "shopping_planner", "Shopping planner", "turn a weekly menu into a shopping list in Rust: `bashou project start rust menu`"),
+    ("rust_papers", "paper_sorter", "Paper sorter", "find duplicates and sort your papers in Rust: `bashou project start rust papers`"),
+]
+LANGUAGE_ACHIEVEMENTS = [("python", "pythonista", "Pythonista", "finish a Python project"),
+                         ("shell", "shell_smith", "Shell smith", "finish a Shell project"),
+                         ("c", "c_crafter", "C crafter", "finish a C project"),
+                         ("rust", "rustacean", "Rustacean", "finish a Rust project")]
+
+
 A = Achievement
 ALL = [
     # Bat: habits
@@ -378,6 +429,20 @@ ALL = [
     A("selector", "axolotl", "Selector", "filter with `select()`", cmd=lambda c: c.arg("jq", r"select\("), next="mapper", example="jq '.[] | select(.ok)' f.json"),
     A("mapper", "axolotl", "Mapper", "transform arrays with `map()`", cmd=lambda c: c.arg("jq", r"map\("), example="jq 'map(.id)' f.json"),
 ]
+
+for _i, (_n, _id, _name) in enumerate(STEP_MILESTONES):
+    ALL.append(A(_id, "landscape", _name, ("finish a step of a project: `bashou project`" if _n == 1 else
+                                           "finish {n} steps of projects".replace("{n}", str(_n))),
+                 state=lambda s, n=_n: steps_done(s) >= n,
+                 next=STEP_MILESTONES[_i + 1][1] if _i + 1 < len(STEP_MILESTONES) else ""))
+for _pid, _id, _name, _how in PROJECT_ACHIEVEMENTS:
+    ALL.append(A(_id, "landscape", _name, _how, state=lambda s, pid=_pid: project_done(s, pid)))
+for _lang, _id, _name, _how in LANGUAGE_ACHIEVEMENTS:
+    ALL.append(A(_id, "landscape", _name, _how, state=lambda s, lang=_lang: bool(projects_done(s, lang))))
+ALL += [A("climber", "landscape", "Climber", "finish a medium project", state=lambda s: bool(projects_done(s, difficulty="medium"))),
+        A("summit", "landscape", "Summit", "finish a hard project", state=lambda s: bool(projects_done(s, difficulty="hard"))),
+        A("steady_builder", "landscape", "Steady builder", "finish project steps 7 days in a row",
+          state=lambda s: project_streak(s) >= 7)]
 
 # Secret achievements: security tools. Nothing announces them; they just pop up, and the first one
 # brings a pet that isn't on the board ("secret" in its family file).
