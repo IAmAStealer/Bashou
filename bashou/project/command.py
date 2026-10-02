@@ -137,8 +137,8 @@ def main(words):
         current = next((p for p in projects if p["id"] == prog["current"]), None)
         if action in ("", "list"):
             overview(s, projects)
-        elif action == "start":
-            p = find(words, projects)
+        elif action == "start" or action in LANGUAGES or action in {p["name"] for p in projects}:   # no `start` needed
+            p = find(words if action == "start" else [action] + words, projects)
             if not p:
                 print("  " + _("Which project? For example: bashou project start python photos"))
                 overview(s, projects)

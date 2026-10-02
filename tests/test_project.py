@@ -18,6 +18,11 @@ def run(*words):
     return code, re.sub(r"\x1b\[[0-9;]*m", "", out.getvalue())
 
 
+def flat(text):
+    """Without spaces and line breaks: wrapped output can be compared with the texts of the files."""
+    return re.sub(r"\s+", "", text)
+
+
 class DataTest(unittest.TestCase):
     """Each project is one JSON file per language (doc/contributing/projects.md)."""
 
@@ -143,6 +148,104 @@ class CommandTest(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertIn("No project started", out)
 
+
+
+class EveryCommandTest(unittest.TestCase):
+    """Owner: every command on every project, in every language, answers without an error; then a few
+    exact answers in English and in French."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.saved = state.DATA, state.STATE
+        state.DATA = Path(self.tmp.name)
+        state.STATE = state.DATA / "state.json"
+
+    def tearDown(self):
+        state.DATA, state.STATE = self.saved
+        i18n.use(None)
+        self.tmp.cleanup()
+
+    def ok(self, *words):
+        code, out = run(*words)
+        self.assertEqual(code, 0, (words, out))
+        self.assertTrue(out.strip(), words)
+        return out
+
+    def test_every_project_from_start_to_end(self):
+        for lang in i18n.LANGUAGES:
+            i18n.use(lang)
+            for p in project.load(lang):
+                with self.subTest(lang=lang, project=p["id"]):
+                    steps = p["steps"]
+                    out = self.ok(p["language"], p["name"])            # no `start` needed
+                    self.assertIn(flat(p["pitch"]), flat(out))
+                    self.assertIn(flat(steps[0]["do"]), flat(out))
+                    self.assertIn(flat(steps[0]["done"]), flat(out))
+                    for n, step in enumerate(steps):
+                        self.assertIn(flat(step["hint"]), flat(self.ok("hint")))
+                        self.assertIn(flat(step["do"]), flat(self.ok()))        # the overview shows the step
+                        out = self.ok("next")
+                        self.assertIn(flat(step["why"]), flat(out))
+                        if n + 1 < len(steps):
+                            self.assertIn(flat(steps[n + 1]["do"]), flat(out))
+                            self.assertNotIn(flat(steps[n + 1]["why"]), flat(out))   # one step at a time
+                        if n == 1:                                          # back, then forward again
+                            self.assertIn(flat(step["do"]), flat(self.ok("back")))
+                            self.assertIn(flat(step["why"]), flat(self.ok("next")))
+                    self.assertIn(p["id"], project.finished(state.load()))
+                    self.assertEqual(run("next")[0], 1)                     # finished: nothing current
+                    self.assertEqual(run("hint")[0], 1)
+                    self.assertIn(flat(steps[-1]["do"]), flat(self.ok("start", p["language"], p["name"])))
+                    self.ok()
+            self.assertEqual(sorted(project.finished(state.load())), sorted(p["id"] for p in project.english()))
+            state.STATE.unlink()
+
+    def test_wrong_words_answer_with_help(self):
+        for lang in i18n.LANGUAGES:
+            i18n.use(lang)
+            for words in (["start"], ["start", "cobol"], ["python"], ["pdf"], ["dance"], ["start", "python", "x"],
+                          ["next"], ["hint"], ["back"]):
+                with self.subTest(lang=lang, words=words):
+                    code, out = run(*words)
+                    self.assertEqual(code, 1, (words, out))
+                    self.assertTrue(out.strip())
+
+    def test_english_answers(self):
+        i18n.use("en")
+        out = self.ok("python", "pdf")
+        self.assertIn("Step 1/11 · Merge or split PDFs", out)
+        self.assertIn("Done when: the folder holds 2 or 3 PDFs", out)
+        self.assertIn("💡 Hint for step 1:", self.ok("hint"))
+        out = self.ok("next")
+        self.assertIn("✔ Step 1 done.", out)
+        self.assertIn("Step 2/11", out)
+        self.assertIn("Back one step: it's not done yet.", self.ok("back"))
+        self.assertIn("You're on the first step already.", self.ok("back"))
+        self.assertIn("Done? bashou project next · Stuck? bashou project hint", self.ok())
+        self.assertIn("Which project? For example: bashou project start python photos", run("pdf")[1])
+        self.ok("next")
+        self.assertIn("Welcome back: you stopped here.", self.ok("start", "python", "pdf"))
+        self.assertIn("bashou project [start <language> <project> | next | hint | back]", run("dance")[1])
+
+    def test_french_answers(self):
+        i18n.use("fr")
+        out = self.ok("python", "pdf")
+        self.assertIn("Étape 1/11 · Fusionner ou découper des PDF", out)
+        self.assertIn("Terminé quand : le dossier contient 2 ou 3 PDF", out)
+        self.assertIn("💡 Indice pour l'étape 1 :", self.ok("hint"))
+        out = self.ok("next")
+        self.assertIn("✔ Étape 1 terminée.", out)
+        self.assertIn("Travailler sur des copies", out)
+        self.assertIn("Étape 2/11", out)
+        self.assertIn("Une étape en arrière : elle n'est pas encore faite.", self.ok("back"))
+        self.assertIn("Fini ? bashou project next · Bloqué ? bashou project hint", self.ok())
+        self.assertIn("très facile", self.ok())
+        self.assertIn("Quel projet ? Par exemple : bashou project start python photos", run("pdf")[1])
+        self.ok("start", "shell", "pdf")
+        for _ in range(10):
+            out = self.ok("next")
+        self.assertIn("Fusionner ou découper des PDF avec un script : terminé !", out)
+        self.assertIn("Aucun projet commencé", run("next")[1])
 
 class LandscapeTest(unittest.TestCase):
     """Owner: lots of rewards to keep the motivation; the Landscape grows from a hill to a town."""
