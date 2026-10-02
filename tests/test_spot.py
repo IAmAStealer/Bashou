@@ -1,11 +1,28 @@
 import base64
+import datetime
 import ipaddress
+import json
 import random
 import re
 import unittest
-import uuid
+import urllib.parse
 
 from bashou import spot
+
+
+# Validation regexes from the web (2026-10-03): IPv4 and IPv6 from ditig.com
+# (https://www.ditig.com/validating-ipv4-and-ipv6-addresses-with-regexp), MAC and UUID v4 from
+# dev-toolbox.tech; base64 per RFC 4648 (groups of 4, = padding only at the end).
+IPV4 = r"^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$"
+IPV6 = (r"^((?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}|(?:[0-9A-Fa-f]{1,4}:){1,7}:|:(?::[0-9A-Fa-f]{1,4}){1,7}|"
+        r"(?:[0-9A-Fa-f]{1,4}:){1,6}:[0-9A-Fa-f]{1,4}|(?:[0-9A-Fa-f]{1,4}:){1,5}(?::[0-9A-Fa-f]{1,4}){1,2}|"
+        r"(?:[0-9A-Fa-f]{1,4}:){1,4}(?::[0-9A-Fa-f]{1,4}){1,3}|(?:[0-9A-Fa-f]{1,4}:){1,3}(?::[0-9A-Fa-f]{1,4}){1,4}|"
+        r"(?:[0-9A-Fa-f]{1,4}:){1,2}(?::[0-9A-Fa-f]{1,4}){1,5}|[0-9A-Fa-f]{1,4}:(?:(?::[0-9A-Fa-f]{1,4}){1,6})|"
+        r":(?:(?::[0-9A-Fa-f]{1,4}){1,6}))$")
+MAC = r"^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$"
+UUID4 = r"^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+BASE64 = r"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+BASE64URL = r"^[A-Za-z0-9_-]+$"
 
 
 class Clock:
@@ -22,26 +39,41 @@ class KindsTest(unittest.TestCase):
     def test_twenty_kinds_each_generated_right(self):
         self.assertEqual(len(spot.KINDS), 21)
         rng = random.Random(1)
+        def ipv6(t):
+            self.assertRegex(t, IPV6)
+            self.assertEqual(str(ipaddress.IPv6Address(t)), t)                 # canonical: RFC 5952
+            self.assertTrue(t.startswith("fe80::") or ipaddress.IPv6Address(t) in ipaddress.IPv6Network("2000::/3"))
+
+        def jwt(t):
+            parts = t.split(".")
+            self.assertEqual(len(parts), 3)
+            for part in parts:
+                self.assertRegex(part, BASE64URL)                                # base64url, no padding
+            head = json.loads(base64.urlsafe_b64decode(parts[0] + "=" * (-len(parts[0]) % 4)))
+            self.assertIn("alg", head)
+
         checks = {
-            "ipv4": lambda t: ipaddress.IPv4Address(t),
-            "ipv6": lambda t: ipaddress.IPv6Address(t),
-            "mac": lambda t: self.assertRegex(t, r"^([0-9a-f]{2}[:-]){5}[0-9a-f]{2}$"),
-            "uuid": lambda t: self.assertEqual(uuid.UUID(t).version, 4),
-            "base64": lambda t: base64.b64decode(t, validate=True).decode(),
+            "ipv4": lambda t: (self.assertRegex(t, IPV4), self.assertEqual(str(ipaddress.IPv4Address(t)), t)),
+            "ipv6": ipv6,
+            "mac": lambda t: self.assertRegex(t, MAC),
+            "uuid": lambda t: self.assertRegex(t, UUID4),
+            "base64": lambda t: (self.assertRegex(t, BASE64), base64.b64decode(t, validate=True).decode()),
             "hex": lambda t: self.assertRegex(t, r"^(0x[0-9a-f]+|[0-9a-f]{2}( [0-9a-f]{2})*)$"),
             "md5": lambda t: self.assertRegex(t, r"^[0-9a-f]{32}$"),
             "sha1": lambda t: self.assertRegex(t, r"^[0-9a-f]{40}$"),
-            "encrypted": lambda t: self.assertTrue(base64.b64decode(t).startswith(b"Salted__")),
-            "jwt": lambda t: self.assertRegex(t, r"^eyJ[\w-]+\.eyJ[\w-]+\.[\w-]+$"),
-            "basic": lambda t: self.assertRegex(base64.b64decode(t.split(" ")[1]).decode(), r"^\w+:\w+$"),
-            "email": lambda t: self.assertRegex(t, r"^[\w.]+@\w+\.\w+$"),
-            "url": lambda t: self.assertRegex(t, r"^https?://"),
+            "encrypted": lambda t: (self.assertRegex(t, BASE64), self.assertTrue(t.startswith("U2FsdGVkX1"))),
+            "jwt": jwt,
+            "basic": lambda t: (self.assertRegex(t, r"^Basic " + BASE64[1:]),
+                                self.assertRegex(base64.b64decode(t[6:]).decode(), r"^[^:]+:.+$")),
+            "email": lambda t: self.assertRegex(t, r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"),
+            "url": lambda t: self.assertTrue(urllib.parse.urlparse(t).scheme in ("http", "https")
+                                             and urllib.parse.urlparse(t).netloc),
             "regex": re.compile,
-            "date": lambda t: self.assertRegex(t, r"^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}Z)?$"),
-            "timestamp": lambda t: self.assertRegex(t, r"^1[4-9]\d{8}$"),
+            "date": lambda t: datetime.datetime.fromisoformat(t.replace("Z", "+00:00")),
+            "timestamp": lambda t: self.assertTrue(2014 <= datetime.datetime.fromtimestamp(int(t)).year <= 2031),
         }
         for kind, (label, family, make) in spot.KINDS.items():
-            for _ in range(50):
+            for _ in range(500):
                 text = make(rng)
                 self.assertTrue(text and len(text) <= spot.LONGEST, (kind, text))   # fits between the answers
                 if kind in checks:

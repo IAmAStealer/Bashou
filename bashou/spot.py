@@ -7,6 +7,7 @@ when you skim real logs and configs.
 """
 
 import base64
+import ipaddress
 import os
 import random
 import re
@@ -35,10 +36,16 @@ def ipv4(rng):
 
 
 def ipv6(rng):
-    groups = [f"{rng.randint(0, 0xffff):x}" for _ in range(8)]
-    if rng.random() < 0.5:
-        return ("fe80::" if rng.random() < 0.5 else "2001:db8::") + ":".join(groups[:rng.randint(2, 4)])
-    return ":".join(groups)
+    """A real-looking address in its canonical form (RFC 5952: lowercase, no leading zeros, :: only for the
+    longest run of zero groups): link-local fe80::/64, or global (2000::/3) with a 64-bit interface id."""
+    iid = rng.getrandbits(64)
+    if rng.random() < 0.4:
+        value = (0xfe80 << 112) | iid
+    else:
+        prefix = rng.choice([0x2001, 0x2a01, 0x2a02, 0x2600, 0x2c0f])
+        site = rng.getrandbits(48) if rng.random() < 0.6 else rng.getrandbits(16) << 32   # some with zero groups
+        value = (prefix << 112) | (site << 64) | (iid if rng.random() < 0.7 else rng.randint(1, 0xffff))
+    return str(ipaddress.IPv6Address(value))
 
 
 def mac(rng):
