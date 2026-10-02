@@ -45,7 +45,7 @@ _bashou_log() {
     _bashou_make_room
   fi
   # No cursor reports from this terminal: at least `clear` puts the prompt back under the pet.
-  [[ $_bashou_dsr == off && ( $last == clear || $last == reset ) ]] && _bashou_below
+  [[ -n $BASHOU_PID && $_bashou_dsr == off && ( $last == clear || $last == reset ) ]] && _bashou_below
   if [[ ( -n $BASHOU_PID || -n $_bashou_guest ) && -n $_bashou_hc && $HISTCMD != "$_bashou_hc" ]]; then
     printf '%s\t' "$status" >> "$_bashou_events"
     HISTTIMEFORMAT='' history 1 >> "$_bashou_events"
@@ -82,9 +82,10 @@ _bashou_claim() {
 source "$BASHOU_DIR/bashou/room.bash"
 
 # Ctrl+L too: clear the screen like readline does, then start below the pet (readline redraws the line).
+# Not in a guest terminal: no pet there, so no empty rows at the top.
 _bashou_clear() {
   printf '\e[H\e[2J'
-  _bashou_below
+  [[ -n $BASHOU_PID ]] && _bashou_below
 }
 bind -x '"\C-l": _bashou_clear' 2>/dev/null
 

@@ -504,6 +504,18 @@ class OnePetTest(unittest.TestCase):
         self.assertNotEqual(second.value("BASHOU_PID"), "")
         self.assertTrue(second.wait_state(lambda s: s["commands"] >= 2))   # the guest's true is counted
 
+    def test_ctrl_l_in_a_guest_leaves_no_empty_rows(self):
+        """Owner: Ctrl+L in a second terminal put the prompt 7 rows down, under a pet that isn't there."""
+        first = self.open()
+        self.assertTrue(first.expect(b"38;2;216;200;160"))
+        second = self.open()
+        start = len(second.out)
+        second.send("\x0c", 1)
+        self.assertTrue(second.expect(b"\x1b[H\x1b[2J", start))
+        after = second.out[second.out.index(b"\x1b[H\x1b[2J", start) + 7:]
+        self.assertNotRegex(after, rb"\x1b\[\d+B")
+        self.assertIn(b"$ ", after)
+
     def test_bashou_off_in_a_guest_keeps_it_without_pet(self):
         first = self.open()
         self.assertTrue(first.expect(b"38;2;216;200;160"))
