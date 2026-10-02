@@ -3,7 +3,7 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
-## v0.7.0 — 2026-10-01
+## v0.7.0 — 2026-10-02
 
 - In a very small window, the commands that draw a screen (`bashou evolve`, `swap`, `lesson`,
   `adventure`, `start` and `share`) tell you the window is too small and the size they need, instead of

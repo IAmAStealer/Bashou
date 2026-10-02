@@ -115,15 +115,51 @@ class Shell:
             os.waitpid(self.pid, 0)
         except OSError:
             pass
-        os.close(self.fd)
+        try:
+            os.close(self.fd)
+        except OSError:                                  # already closed by the test
+            pass
+        self.stop_leftovers()
+
+    def leftovers(self):
+        """Processes started by this shell that outlived it (the pet): they carry its BASHOU_CACHE."""
+        mark = f"BASHOU_CACHE={self.cache}".encode()
+        found = []
+        for entry in os.listdir("/proc"):
+            if entry.isdigit() and entry != str(os.getpid()):
+                try:
+                    if mark in Path(f"/proc/{entry}/environ").read_bytes().split(b"\0") and alive(int(entry)):
+                        found.append(int(entry))
+                except OSError:
+                    pass
+        return found
+
+    def stop_leftovers(self, timeout=3):
+        """The release of v0.7.0 failed on a slow CI machine: the pet still wrote in cache/ while the
+        test deleted its folder ("Directory not empty"). Stop them and wait until they are gone."""
+        for sig in (signal.SIGTERM, signal.SIGKILL):
+            for pid in self.leftovers():
+                try:
+                    os.kill(pid, sig)
+                except OSError:
+                    pass
+            end = time.time() + timeout
+            while self.leftovers() and time.time() < end:
+                time.sleep(0.05)
+            if not self.leftovers():
+                return
 
 
 def alive(pid):
+    """Running: a zombie (finished, not yet reaped by its parent) doesn't count."""
     try:
         os.kill(pid, 0)
-        return True
     except ProcessLookupError:
         return False
+    try:
+        return Path(f"/proc/{pid}/stat").read_text().rsplit(")", 1)[1].split()[0] != "Z"
+    except (OSError, IndexError):
+        return True
 
 
 class PackageHandoverTest(unittest.TestCase):
@@ -216,6 +252,14 @@ class RoomTest(unittest.TestCase):
         self.assertIn(b"\x1b[H\x1b[7M\x1b[22;1H", sh.out[start:])   # the old room goes first
         self.assertIn(b"\x1b[H\x1b[7L", sh.out[start:])
         self.assertLess(sh.out.index(b"\x1b[7M", start), sh.out.index(b"\x1b[7L", start))
+
+    def test_closing_the_shell_stops_its_pet(self):
+        """The v0.7.0 release failed: the pet outlived close() and wrote in cache/ during cleanup."""
+        pet = int(self.sh.value("BASHOU_PID"))
+        self.assertTrue(alive(pet))
+        self.sh.close()
+        self.assertFalse(alive(pet))
+        self.assertEqual(self.sh.leftovers(), [])
 
     def test_room_is_made_on_a_clear_screen_without_scrolling(self):
         sh = self.sh
