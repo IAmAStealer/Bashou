@@ -609,5 +609,57 @@
   ],
   "answer": 0,
   "explain": "Les deux branches ont changé les mêmes lignes, et git ne peut pas choisir. Entre <<<<<<< et ======= c'est ton côté, entre ======= et >>>>>>> celui de l'autre branche. Écris le fichier comme il doit être, sans les marqueurs ; git add dit à git que c'est réglé, et git commit termine la fusion."
+ },
+ {
+  "id": "bash-2-17",
+  "level": 2,
+  "q": "Un vieux script contient today=`date +%F`, avec des accents graves. Que fait cette ligne ?",
+  "choices": [
+   "Elle lance date +%F et range sa sortie, comme $(date +%F)",
+   "Elle range le texte date +%F tel quel",
+   "Elle lance date en arrière-plan et ne range rien",
+   "Elle écrit la date et laisse today vide"
+  ],
+  "answer": 0,
+  "explain": "Les accents graves sont l'ancienne forme de la substitution de commande : même travail que $( ). Tu les croiseras dans de vieux scripts et des réponses en ligne, sache les reconnaître. Dans tes scripts, écris $( ) : il s'imbrique sans barres obliques inversées, et ` se confond facilement avec l'apostrophe ', qui rangerait le texte tel quel."
+ },
+ {
+  "id": "bash-2-18",
+  "level": 2,
+  "q": "f=\"/home/sam/my notes/todo.txt\". Pourquoi cd $(dirname \"$f\") échoue-t-il ?",
+  "choices": [
+   "Sans guillemets, la sortie est coupée : cd reçoit 2 mots",
+   "dirname ne lit pas les chemins avec des espaces",
+   "$( ) ne peut pas contenir de guillemets doubles",
+   "cd n'accepte que les chemins qui finissent par /"
+  ],
+  "answer": 0,
+  "explain": "dirname écrit /home/sam/my notes, et sans guillemets autour de $( ) le shell coupe cette sortie à chaque espace : cd reçoit /home/sam/my et notes. Écris cd \"$(dirname \"$f\")\" : les guillemets à l'intérieur de $( ) repartent de zéro, cette imbrication est donc correcte. Même réflexe que \"$var\"."
+ },
+ {
+  "id": "bash-2-19",
+  "level": 2,
+  "q": "n=$(wc -l < list.txt), puis echo \"[$n]\". Qu'est-ce qui s'affiche pour un fichier de 42 lignes ?",
+  "choices": [
+   "[42]",
+   "[42 list.txt]",
+   "[42] suivi d'une ligne vide",
+   "[$(wc -l < list.txt)]"
+  ],
+  "answer": 0,
+  "explain": "$( ) retire les sauts de ligne à la fin de la sortie : la valeur se glisse dans une phrase ou un test comme [ \"$n\" -gt 10 ]. Avec le chevron <, le fichier arrive sur l'entrée standard : wc ne connaît pas son nom et n'écrit que le nombre. Écrit wc -l list.txt, il ajouterait le nom : 42 list.txt."
+ },
+ {
+  "id": "bash-2-20",
+  "level": 2,
+  "q": "Un script commence par set -e. Quelle ligne l'arrête quand backup_db échoue ?",
+  "choices": [
+   "out=$(backup_db)",
+   "echo \"$(backup_db)\"",
+   "echo $(backup_db) > backup.log",
+   "logger \"fini : $(backup_db)\""
+  ],
+  "answer": 0,
+  "explain": "x=$(cmd) garde le code de retour de cmd : set -e, if et || voient l'échec. Dans les autres lignes, $( ) n'est qu'un argument : le code qui compte est celui d'echo ou de logger, qui réussissent, et l'échec est perdu. Range d'abord la sortie, vérifie-la, puis utilise-la : if out=$(backup_db); then ..."
  }
 ]

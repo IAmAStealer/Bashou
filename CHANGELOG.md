@@ -31,6 +31,10 @@ Every release has a section here, written for players. CI refuses to tag a relea
 - `bashou here` brings your pet to the terminal you type it in. It lives in one terminal at a time; the
   commands you type in the others still count, and none is counted twice when it moves.
 - Ctrl+L in a terminal without the pet no longer leaves empty rows at the top.
+- New lesson in the Sage Owl's library, after "Your first script": command substitution, `$( )`. How
+  the shell runs the inside first, the old backticks you'll meet in old scripts, why it goes in double
+  quotes, the newline it removes, the exit code that `set -e` sees or loses, and how a script reads a
+  password from `pass` without ever holding it. 4 new Bash questions in the adventure go with it.
 
 ## v0.7.0 — 2026-10-02
 

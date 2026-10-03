@@ -42,7 +42,7 @@ A topic is complete when it has all four: questions, a lesson, one or more fight
   wildcards → variables
 - Bash: reading → streams; reading → grep → regex; streams + grep → pipes → text_tools;
   regex + text_tools → awk_sed; wildcards → find; variables → logic; logic + streams → quotes →
-  scripts → loops; scripts → git
+  scripts → loops; scripts → substitution; scripts → git
 - Linux: files → users → permissions → keys; keys + scripts → pass; files → disk;
   disk + find → archives; computer + users → processes
 - systemd: processes + streams → services
@@ -91,6 +91,7 @@ paths above.
 6. `awk_sed` — columns and edits · Field Wasp, Ledger Golem, Verse Viper, Typo Serpent
 7. `find` · Maze Wraith
 8. `scripts` — shebang, arguments, set -euo pipefail · Shebang Shade
+8. `substitution` — $( ) and backticks, quotes, exit code, pass in scripts
 9. `loops` — for, while read · Rename Rat
 
 ### Linux

@@ -406,7 +406,7 @@ ALL = [
     A("vault", "leopard", "Vault", "start a password store with `pass init`", cmd=lambda c: c.sub("pass", "init"), next="generator", example='pass init <your key id>'),
     A("generator", "leopard", "Generator", "let `pass generate` make a strong password", cmd=lambda c: c.sub("pass", "generate"), next="keeper", example='pass generate web/forum 24'),
     A("keeper", "leopard", "Keeper", "hand a password to a command with `$(pass show …)`, never in clear",
-      cmd=lambda c: c.sub("pass", "show") and "subst" in c.analysis.constructs, example='curl -u "admin:$(pass show web/admin)" https://example.org'),  # gitleaks:allow (reads it from pass)
+      cmd=lambda c: c.sub("pass", "show") and "subst" in c.analysis.constructs, example='export API_TOKEN="$(pass show web/token)"'),  # gitleaks:allow (reads it from pass)
 
     # Spark: the Sage Owl's library. Owner: fire, for the Library of Alexandria that burned, and for the books
     # still destroyed today; what you learn, nobody can burn. Ten forms, the Phoenix when the family is complete.

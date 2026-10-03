@@ -1,0 +1,122 @@
+{
+ "title": "La substitution de commande : $( )",
+ "summary": "Mettre la sortie d'une commande dans une autre : dates, comptes, chemins, mots de passe dans les scripts.",
+ "pages": [
+  {
+   "scheme": [
+    " $ echo \"Today is $(date +%A)\"",
+    "                  └────┬─────┘",
+    "  1. bash lance date +%A       ─▶ Monday",
+    "  2. puis lance echo \"Today is Monday\""
+   ],
+   "point": 2,
+   "mark": [
+    "$(date +%A)"
+   ],
+   "text": [
+    "$( ) lance d'abord la commande qu'il contient, puis met à sa place ce qu'elle a écrit.",
+    "",
+    "- La commande autour ne voit jamais $(date +%A) : elle reçoit seulement Monday.",
+    "- C'est la substitution de commande. Imbriquées, elles s'exécutent de l'intérieur vers l'extérieur."
+   ]
+  },
+  {
+   "scheme": [
+    " $(date)     la forme à écrire",
+    " `date`      l'ancienne forme, même résultat",
+    "",
+    " $ echo \"in $(basename \"$(pwd)\")\"",
+    " $ echo \"in `basename \\`pwd\\``\""
+   ],
+   "point": 1,
+   "mark": [
+    "`date`"
+   ],
+   "text": [
+    "Les accents graves ` ` font le même travail. Tu les croiseras dans de vieux scripts et des réponses en ligne : sache les reconnaître.",
+    "",
+    "- Écris $( ) : il s'imbrique sans barres obliques inversées, et ` se confond facilement avec '.",
+    "- Les deux lignes ci-dessus écrivent la même chose : la première est bien plus facile à lire."
+   ]
+  },
+  {
+   "scheme": [
+    " f=\"/home/sam/my notes/todo.txt\"",
+    "",
+    " cd $(dirname \"$f\")     cd reçoit 2 mots  ✘",
+    " cd \"$(dirname \"$f\")\"   cd reçoit 1 chemin ✔"
+   ],
+   "point": 3,
+   "mark": [
+    "\"$(dirname \"$f\")\""
+   ],
+   "text": [
+    "Sans guillemets, le shell coupe la sortie à chaque espace, et développe les * qu'elle contient.",
+    "",
+    "- Écris \"$( )\" entre guillemets doubles, comme \"$var\".",
+    "- Les guillemets à l'intérieur repartent de zéro : \"$(dirname \"$f\")\" est correct.",
+    "- Dans x=$(cmd) rien n'est coupé, mais les guillemets ne gênent jamais."
+   ]
+  },
+  {
+   "scheme": [
+    " $ n=$(wc -l < list.txt)",
+    " $ echo \"[$n]\"",
+    " [42]",
+    "     ▲",
+    "     └─ pas de saut de ligne à la fin"
+   ],
+   "point": 4,
+   "mark": [
+    "[42]"
+   ],
+   "text": [
+    "Les sauts de ligne à la fin de la sortie sont retirés. C'est pour ça que la valeur se glisse dans une phrase ou un test.",
+    "",
+    "- Ceux du milieu restent : $(ls) garde un nom par ligne, entre guillemets.",
+    "- wc -l < fichier n'écrit que le nombre ; wc -l fichier ajoute le nom."
+   ]
+  },
+  {
+   "scheme": [
+    " set -e",
+    " out=$(backup_db)          échec : arrêt du script",
+    " echo \"$(backup_db)\"       échec : echo réussit,",
+    "                           le script continue",
+    "",
+    " if out=$(backup_db); then ... fi"
+   ],
+   "point": 1,
+   "mark": [
+    "out=$(backup_db)"
+   ],
+   "text": [
+    "x=$(cmd) garde le code de retour de cmd : if, || et set -e voient l'échec.",
+    "",
+    "- Dans les arguments d'une autre commande, seul le code de celle-ci compte : echo réussit, l'échec est perdu.",
+    "- Donc range d'abord la sortie, vérifie-la, puis utilise-la."
+   ]
+  },
+  {
+   "scheme": [
+    " deploy.sh",
+    " ┌────────────────────────────────────────┐",
+    " │ export DB_PASSWORD=\"$(pass show db)\"   │",
+    " │ ./migrate                              │",
+    " └────────────────────────────────────────┘",
+    "",
+    " tool --password \"$(pass show db)\"  ✘ ps le montre"
+   ],
+   "point": 2,
+   "mark": [
+    "\"$(pass show db)\""
+   ],
+   "text": [
+    "Dans un script, $(pass show db) lit le mot de passe au moment où le script tourne : le fichier ne le contient jamais, il peut donc aller dans git.",
+    "",
+    "- Garde-le dans une variable. Les arguments d'une commande sont lisibles par tous les utilisateurs de la machine avec ps, pendant qu'elle tourne.",
+    "- pass écrit le mot de passe sur la première ligne. Si l'entrée contient d'autres lignes, ne garde que celle-là : $(pass show db | head -n 1)."
+   ]
+  }
+ ]
+}

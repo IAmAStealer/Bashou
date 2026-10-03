@@ -1,0 +1,138 @@
+{
+ "id": "substitution",
+ "order": 245,
+ "skill": "bash",
+ "after": [
+  "scripts"
+ ],
+ "masters": [
+  "achievement capture",
+  "achievement nested"
+ ],
+ "recall": [
+  "bash-2-02",
+  "bash-2-17",
+  "bash-2-18",
+  "bash-2-19"
+ ],
+ "title": "Command substitution: $( )",
+ "summary": "Put a command's output inside another command: dates, counts, paths, passwords in scripts.",
+ "pages": [
+  {
+   "scheme": [
+    " $ echo \"Today is $(date +%A)\"",
+    "                  └────┬─────┘",
+    "  1. bash runs date +%A        ─▶ Monday",
+    "  2. then runs echo \"Today is Monday\""
+   ],
+   "point": 2,
+   "mark": [
+    "$(date +%A)"
+   ],
+   "text": [
+    "$( ) runs the command inside it first, then puts what it printed in its place.",
+    "",
+    "- The outer command never sees $(date +%A): it only gets Monday.",
+    "- This is called command substitution. Nested ones run from the inside out."
+   ]
+  },
+  {
+   "scheme": [
+    " $(date)     the form to write",
+    " `date`      the old form, same result",
+    "",
+    " $ echo \"in $(basename \"$(pwd)\")\"",
+    " $ echo \"in `basename \\`pwd\\``\""
+   ],
+   "point": 1,
+   "mark": [
+    "`date`"
+   ],
+   "text": [
+    "Backticks ` ` do the same job. You meet them in old scripts and answers online: recognise them.",
+    "",
+    "- Write $( ): it nests without backslashes, and ` is easy to mix up with '.",
+    "- Both lines above print the same thing: the first one is much easier to read."
+   ]
+  },
+  {
+   "scheme": [
+    " f=\"/home/sam/my notes/todo.txt\"",
+    "",
+    " cd $(dirname \"$f\")     cd gets 2 words  ✘",
+    " cd \"$(dirname \"$f\")\"   cd gets 1 path   ✔"
+   ],
+   "point": 3,
+   "mark": [
+    "\"$(dirname \"$f\")\""
+   ],
+   "text": [
+    "Without quotes, the shell cuts the output at each space, and expands any * in it.",
+    "",
+    "- Write \"$( )\" with double quotes, like \"$var\".",
+    "- The quotes inside start fresh: \"$(dirname \"$f\")\" is correct.",
+    "- In x=$(cmd) nothing is cut, but the quotes never hurt."
+   ]
+  },
+  {
+   "scheme": [
+    " $ n=$(wc -l < list.txt)",
+    " $ echo \"[$n]\"",
+    " [42]",
+    "     ▲",
+    "     └─ no newline at the end"
+   ],
+   "point": 4,
+   "mark": [
+    "[42]"
+   ],
+   "text": [
+    "The newlines at the end of the output are removed. That is why the value fits in a sentence or a test.",
+    "",
+    "- Newlines in the middle stay: $(ls) keeps one name per line, inside quotes.",
+    "- wc -l < file prints only the number; wc -l file adds the name."
+   ]
+  },
+  {
+   "scheme": [
+    " set -e",
+    " out=$(backup_db)          fails: script stops",
+    " echo \"$(backup_db)\"       fails: echo works,",
+    "                           the script goes on",
+    "",
+    " if out=$(backup_db); then ... fi"
+   ],
+   "point": 1,
+   "mark": [
+    "out=$(backup_db)"
+   ],
+   "text": [
+    "x=$(cmd) keeps cmd's exit code, so if, || and set -e see the failure.",
+    "",
+    "- Inside another command's arguments, only that command's code counts: echo succeeds, the failure is lost.",
+    "- So store the output first, check it, then use it."
+   ]
+  },
+  {
+   "scheme": [
+    " deploy.sh",
+    " ┌────────────────────────────────────────┐",
+    " │ export DB_PASSWORD=\"$(pass show db)\"   │",
+    " │ ./migrate                              │",
+    " └────────────────────────────────────────┘",
+    "",
+    " tool --password \"$(pass show db)\"   ✘ ps shows it"
+   ],
+   "point": 2,
+   "mark": [
+    "\"$(pass show db)\""
+   ],
+   "text": [
+    "In a script, $(pass show db) reads the password when the script runs: the file never holds it, so it can go into git.",
+    "",
+    "- Keep it in a variable. A command's arguments can be read by every user of the machine with ps, while it runs.",
+    "- pass prints the password on the first line. If the entry holds more lines, keep only that one: $(pass show db | head -n 1)."
+   ]
+  }
+ ]
+}

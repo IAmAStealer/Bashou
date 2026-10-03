@@ -609,5 +609,57 @@
   ],
   "answer": 0,
   "explain": "Both branches changed the same lines, and git can't choose. Between <<<<<<< and ======= is your side, between ======= and >>>>>>> the other branch's. Write the file the way it should be, without the markers; git add tells git it's settled, and git commit ends the merge."
+ },
+ {
+  "id": "bash-2-17",
+  "level": 2,
+  "q": "An old script has today=`date +%F`, with backticks. What does this line do?",
+  "choices": [
+   "Runs date +%F and stores its output, like $(date +%F)",
+   "Stores the text date +%F as it is",
+   "Runs date in the background and stores nothing",
+   "Prints the date and leaves today empty"
+  ],
+  "answer": 0,
+  "explain": "Backticks are the old form of command substitution: same job as $( ). You'll meet them in old scripts and answers online, so recognise them. In your own scripts write $( ): it nests without backslashes, and ` is easy to confuse with the single quote ', which would store the text as it is."
+ },
+ {
+  "id": "bash-2-18",
+  "level": 2,
+  "q": "f=\"/home/sam/my notes/todo.txt\". Why does cd $(dirname \"$f\") fail?",
+  "choices": [
+   "Unquoted, the output is cut at the space: cd gets 2 words",
+   "dirname can't read paths with spaces",
+   "$( ) can't hold double quotes",
+   "cd only takes paths that end with /"
+  ],
+  "answer": 0,
+  "explain": "dirname prints /home/sam/my notes, and without quotes around $( ) the shell cuts that output at each space: cd gets /home/sam/my and notes. Write cd \"$(dirname \"$f\")\": the quotes inside $( ) start fresh, so this nesting is correct. Same habit as \"$var\"."
+ },
+ {
+  "id": "bash-2-19",
+  "level": 2,
+  "q": "n=$(wc -l < list.txt), then echo \"[$n]\". What is printed for a 42-line file?",
+  "choices": [
+   "[42]",
+   "[42 list.txt]",
+   "[42] followed by an empty line",
+   "[$(wc -l < list.txt)]"
+  ],
+  "answer": 0,
+  "explain": "$( ) removes the newlines at the end of the output, so the value fits in a sentence or a test like [ \"$n\" -gt 10 ]. With < the file comes on stdin, so wc doesn't know its name and prints only the number. Written wc -l list.txt, it would add the name: 42 list.txt."
+ },
+ {
+  "id": "bash-2-20",
+  "level": 2,
+  "q": "A script starts with set -e. Which line stops it when backup_db fails?",
+  "choices": [
+   "out=$(backup_db)",
+   "echo \"$(backup_db)\"",
+   "echo $(backup_db) > backup.log",
+   "logger \"done: $(backup_db)\""
+  ],
+  "answer": 0,
+  "explain": "x=$(cmd) keeps cmd's exit code, so set -e, if and || see the failure. In the other lines $( ) is only an argument: the exit code that counts is echo's or logger's, and they succeed, so the failure is lost. Store the output first, check it, then use it: if out=$(backup_db); then ..."
  }
 ]
