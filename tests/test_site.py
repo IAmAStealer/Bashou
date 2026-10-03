@@ -105,7 +105,7 @@ class HomePageTest(unittest.TestCase):
         html = (SITE.parent / "install.html").read_text()
         title = re.search(r"<title>([^<]+)</title>", html).group(1)
         description = re.search(r'<meta name="description" content="([^"]+)"', html).group(1)
-        for words in ("learn Linux commands", "bash scripting"):
+        for words in ("terminal pet", "Linux commands", "bash scripting"):          # the 3 most searched
             self.assertIn(words, title)
         self.assertLessEqual(len(description), 200)
         self.assertIn('rel="canonical" href="https://iamastealer.github.io/Bashou/"', html)

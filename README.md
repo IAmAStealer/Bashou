@@ -6,8 +6,8 @@
 [![Release](https://img.shields.io/github/v/release/IAmAStealer/Bashou)](https://github.com/IAmAStealer/Bashou/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-Learn Linux commands and bash scripting for free, in your own terminal. A little pixel-art pet lives in
-the corner of your terminal and grows while you learn the command line: bash first, then Linux, systemd,
+Learn Linux commands and bash scripting for free, in your own terminal, with a terminal pet: a little
+pixel-art pet lives in the corner of your terminal and grows while you learn the command line: bash first, then Linux, systemd,
 packages, gpg and pass, SQL, CI/CD, Python, C and Rust, whichever you pick. Run commands, try new tools,
 and collect new pets along the way.
 
