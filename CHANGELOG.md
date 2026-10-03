@@ -3,6 +3,16 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.8.1 — 2026-10-03
+
+- `bashou share`: the card now shows your best `bashou spot` score, and a row of your rare pets at the
+  bottom: the pets you grew to their last form first, then the hardest to meet (the secret Hacker cat,
+  the Spider, the Whale and the Leopard). Before the QR code, Bashou lists them with the rest. When there
+  are many, only the first ones go in the link, so the QR code stays small enough to scan.
+- The card is no longer jagged on a phone: the image is smoothed when the screen shows it smaller.
+- Links from older versions still open, without these new parts.
+- The README shows what's new in 0.8.0 and 0.7.0, with `bashou spot` and `bashou here`.
+
 ## v0.8.0 — 2026-10-03
 
 - New: `bashou project`. You want to practise a language but don't know what to program? 13 real

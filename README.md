@@ -15,6 +15,10 @@ a `bashou learn` explanation of a tar command](doc/img/prompt.svg)
 
 ## What's new
 
+**0.8.1**
+- **`bashou share`**: your card now shows your best `bashou spot` score and your rare pets: the ones you
+  grew to their last form, and the hardest to meet.
+
 **0.8.0**
 - **`bashou project`**: 13 real projects to build in Python, Shell, C or Rust, one small step at a time,
   and a new pet, the Landscape, that grows from a hill into a town as you finish them.
@@ -100,7 +104,8 @@ Droplet after 10 commands, a Mouseling after 10 programs, a Spore after 5 script
 ## Show off your pet
 
 Proud of how far you got? **`bashou share`** shows a QR code in your terminal. Scan it, and your phone
-draws a banner of your pet, its family and your progress, with a button to send it on Signal, WhatsApp
+draws a banner of your pet, its family and your progress (with your best `bashou spot` score and a row
+of your rare pets), with a button to send it on Signal, WhatsApp
 or anywhere you like. The first time, it asks for a nickname to show instead of your real name
 (`bashou share --name Nova` changes it).
 
