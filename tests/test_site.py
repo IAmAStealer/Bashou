@@ -96,3 +96,26 @@ class SamePixelArtTest(unittest.TestCase):
         for sprite_id, cells in painted.items():
             self.assertEqual({k: v.lower() for k, v in cells.items()},
                              {k: v.lower() for k, v in self.expected(sprite_id).items()}, sprite_id)
+
+
+class HomePageTest(unittest.TestCase):
+    """Owner (0.8.2): be found by people who search "learn linux commands", "bash scripting"… (Google Trends)."""
+
+    def test_the_home_page_says_what_people_search(self):
+        html = (SITE.parent / "install.html").read_text()
+        title = re.search(r"<title>([^<]+)</title>", html).group(1)
+        description = re.search(r'<meta name="description" content="([^"]+)"', html).group(1)
+        for words in ("learn Linux commands", "bash scripting"):
+            self.assertIn(words, title)
+        self.assertLessEqual(len(description), 200)
+        self.assertIn('rel="canonical" href="https://iamastealer.github.io/Bashou/"', html)
+        for picture in re.findall(r'<img src="([^"]+)"', html):
+            self.assertTrue((SITE.parent / picture).exists(), picture)
+
+    def test_the_site_has_a_sitemap_and_cards_stay_out_of_search(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            subprocess.run(["python3", str(SITE.parent.parent / "tools/package.py"), "site", tmp], check=True)
+            self.assertIn("<loc>https://iamastealer.github.io/Bashou/</loc>", (Path(tmp) / "sitemap.xml").read_text())
+            for picture in ("prompt.svg", "duel.svg", "share.png"):
+                self.assertTrue((Path(tmp) / "img" / picture).exists())
+        self.assertIn('<meta name="robots" content="noindex">', (SITE / "share.html").read_text())

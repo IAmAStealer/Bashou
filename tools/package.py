@@ -206,13 +206,25 @@ def dnf_repo(rpms, site, key):
     gpg("--local-user", key, "--armor", "--detach-sign", "-o", f"{repomd}.asc", str(repomd))
 
 
+SITEMAP = """<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://iamastealer.github.io/Bashou/</loc></url>
+</urlset>
+"""
+
+
 def site_pages(site):
-    """The share page (doc/site) and the pets it may draw: `bashou share` links there."""
+    """The share page (doc/site) and the pets it may draw: `bashou share` links there. The home page's
+    pictures and the sitemap for search engines (the cards are personal: not in it, and noindex)."""
     sys.path.insert(0, str(ROOT))
     from bashou import share
     for page in sorted((ROOT / "doc/site").iterdir()):
         shutil.copyfile(page, site / page.name)
     (site / "share-pets.json").write_text(json.dumps(share.page_data(), separators=(",", ":")))
+    (site / "img").mkdir(exist_ok=True)
+    for picture in ("prompt.svg", "duel.svg", "share.png"):
+        shutil.copyfile(ROOT / "doc/img" / picture, site / "img" / picture)
+    (site / "sitemap.xml").write_text(SITEMAP)
 
 
 def repo(dist, site, key):

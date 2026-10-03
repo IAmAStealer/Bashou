@@ -3,8 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bashou packages</title>
-<meta name="description" content="Install Bashou, a terminal pet that teaches bash, with apt or dnf.">
+<title>Bashou: learn Linux commands and bash scripting in your terminal, free</title>
+<meta name="description" content="Learn Linux commands, bash scripting and the command line for free, in your own terminal. A pixel-art pet teaches you as you work: lessons, fights, quizzes. Offline, no account.">
+<link rel="canonical" href="https://iamastealer.github.io/Bashou/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Bashou: learn Linux commands in your terminal">
+<meta property="og:description" content="A free, offline pixel-art pet that teaches Linux commands and bash scripting while you work.">
+<meta property="og:url" content="https://iamastealer.github.io/Bashou/">
+<meta property="og:image" content="https://iamastealer.github.io/Bashou/img/share.png">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Bashou",
+ "description": "Learn Linux commands and bash scripting in your terminal: a pixel-art pet that teaches you, offline.",
+ "applicationCategory": "EducationalApplication", "operatingSystem": "Linux",
+ "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+ "license": "https://opensource.org/licenses/MIT", "url": "https://iamastealer.github.io/Bashou/",
+ "codeRepository": "https://github.com/IAmAStealer/Bashou"}
+</script>
 <style>
   :root { --bg: #fdfcf8; --fg: #1d1d1b; --muted: #5b5b55; --code: #f0eee6; --link: #1a5fb4; }
   @media (prefers-color-scheme: dark) {
@@ -13,31 +27,61 @@
   body { background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, sans-serif; margin: 0 auto;
          max-width: 46rem; padding: 2rem 16px; }
   pre { background: var(--code); padding: .8rem 1rem; overflow-x: auto; border-radius: 6px; font-size: 14px; }
+  img { display: block; max-width: 100%; height: auto; margin: 1rem 0; border-radius: 8px; }
   a { color: var(--link); }
   p.note { color: var(--muted); }
 </style>
 </head>
 <body>
-<h1>Bashou packages</h1>
-<p>A pet in your terminal that grows as you learn bash.
-Source and guide: <a href="https://github.com/IAmAStealer/Bashou">github.com/IAmAStealer/Bashou</a>.</p>
-<p>Packages and repository data are signed with the <a href="bashou.asc">Bashou key</a>:
-apt and dnf refuse anything else.</p>
+<h1>Bashou: learn Linux commands in your terminal</h1>
+<p>Bashou is a free, open source way to learn the Linux command line and bash scripting, for beginners and
+beyond. A little pixel-art pet lives in the corner of your terminal: it grows as you use real commands,
+gives you tips, and explains what each command does. It runs offline, with no account and no AI.</p>
+<p>Source code and guide: <a href="https://github.com/IAmAStealer/Bashou">github.com/IAmAStealer/Bashou</a> (MIT license).</p>
 
-<h2>Debian, Ubuntu</h2>
+<img src="img/prompt.svg" width="856" height="436" alt="A pixel-art pet in the corner of a terminal, with a tip in its speech bubble, above an explanation of a tar command">
+
+<h2>What you learn</h2>
+<ul>
+  <li><strong>Linux commands</strong>: files, <code>grep</code>, <code>find</code>, pipes, <code>awk</code> and <code>sed</code>,
+    permissions, processes, disks, archives, packages with apt and dnf, systemd services.</li>
+  <li><strong>Bash scripting</strong>: variables, quotes, <code>$( )</code>, loops, <code>set -euo pipefail</code>.</li>
+  <li>And, if you pick them: networks (IPv4, IPv6, DNS, TCP), git, gpg and pass, SQL, CI/CD, Python, C and Rust.</li>
+</ul>
+
+<h2>How it teaches</h2>
+<ul>
+  <li><strong><code>bashou learn &lt;command&gt;</code></strong> takes any command apart and explains each option.</li>
+  <li><strong>Lessons</strong> with drawings, on a path from your first command to scripts.</li>
+  <li><strong>Fights</strong> in a sandbox shell: beat each threat with the right tool, then it comes back after 1, 7
+    and 30 days so you remember.</li>
+  <li><strong>Projects</strong> to build in Python, Shell, C or Rust, one small step at a time.</li>
+  <li><strong>An adventure</strong> with quiz questions about what goes wrong and what to check first, and a quick
+    game, <code>bashou spot</code>, to recognise an IPv6 address, a hash or base64 at a glance.</li>
+</ul>
+
+<img src="img/duel.svg" width="856" height="436" alt="A fight: the pet and its hearts face the Log Hydra, with the task in a bubble and a shell below">
+
+<h2>Install on Debian, Ubuntu</h2>
 <pre>sudo install -dm755 /etc/apt/keyrings
 sudo curl -fsSLo /etc/apt/keyrings/bashou.asc https://iamastealer.github.io/Bashou/bashou.asc
 printf '%s\n' 'Types: deb' 'URIs: https://iamastealer.github.io/Bashou/deb/' 'Suites: ./' \
   'Signed-By: /etc/apt/keyrings/bashou.asc' | sudo tee /etc/apt/sources.list.d/bashou.sources
 sudo apt update &amp;&amp; sudo apt install bashou</pre>
 
-<h2>Rocky, Alma, RHEL, Fedora</h2>
+<h2>Install on Rocky, Alma, RHEL, Fedora</h2>
 <pre>sudo curl -fsSLo /etc/yum.repos.d/bashou.repo https://iamastealer.github.io/Bashou/bashou.repo
 sudo dnf install bashou</pre>
 
 <h2>Then, for each user who wants a pet</h2>
 <pre>bashou on</pre>
 <p class="note">The first time, it adds one line to your <code>~/.bashrc</code>. Updates come with the rest of the system
-(<code>apt upgrade</code>, <code>dnf upgrade</code>).</p>
+(<code>apt upgrade</code>, <code>dnf upgrade</code>). Packages and repository data are signed with the
+<a href="bashou.asc">Bashou key</a>: apt and dnf refuse anything else. Any other Linux: install with git, see the
+<a href="https://github.com/IAmAStealer/Bashou#install">README</a>.</p>
+
+<h2>Your data stays on your machine</h2>
+<p>Bashou collects nothing: no account, no telemetry, no ads. It counts the tools you use, keeps those counters
+in your home folder and never sends them anywhere.</p>
 </body>
 </html>
