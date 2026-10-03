@@ -3,6 +3,15 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.8.2 — 2026-10-03
+
+- `bashou spot` has three new kinds of strings to recognise: a Linux password hash (`$1$…`, as in old
+  `/etc/shadow` files and `openssl passwd -1`), a CSRF token in a form (`_csrf=…`), and OAuth2 (the
+  `?code=…&state=…` that comes back after a login, or a `Bearer` token). Each is made the real way, so what
+  you learn to spot here is what you meet in logs and configs.
+- The website's home page now says what Bashou teaches, with screenshots, and search engines get a sitemap.
+  Share cards stay out of search results.
+
 ## v0.8.1 — 2026-10-03
 
 - `bashou share`: the card now shows your best `bashou spot` score, and a row of your rare pets at the

@@ -41,6 +41,9 @@ SPOTTER = {
     "encrypted": r"^U2FsdGVkX1[A-Za-z0-9+/]*={0,2}$",               # openssl enc: "Salted__" in base64
     "jwt": r"^eyJ[A-Za-z0-9_-]+\.eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$",
     "basic": rf"^Basic {B64}$",
+    "shadow": r"^\$1\$[./0-9A-Za-z]{1,8}\$[./0-9A-Za-z]{22}$",
+    "csrf": r"^_csrf=[0-9A-Za-z]+-[A-Za-z0-9_-]{27}$",
+    "oauth": r"^(\?code=[A-Za-z0-9_-]+&state=\w+|Bearer [A-Za-z0-9._~+/-]+=*)$",
     "email": r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$",
     "url": r"^https?://(www\.)?[a-z]+\.[a-z]{2,}(/[a-z]+){1,2}(\?[a-z]+=[a-z0-9]+)?$",
     "date": r"^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])(T([01]\d|2[0-3]):[0-5]\d:[0-5]\dZ)?$",
@@ -66,7 +69,7 @@ class KindsTest(unittest.TestCase):
     """Owner: 20 kinds of strings seen in IT, generated at random (never the same twice)."""
 
     def test_twenty_kinds_each_generated_right(self):
-        self.assertEqual(len(spot.KINDS), 21)
+        self.assertEqual(len(spot.KINDS), 24)
         rng = random.Random(1)
         def ipv6(t):
             self.assertRegex(t, IPV6)
@@ -91,6 +94,9 @@ class KindsTest(unittest.TestCase):
             "base64": lambda t: (self.assertRegex(t, BASE64), base64.b64decode(t, validate=True).decode()),
             "hex": lambda t: self.assertRegex(t, r"^(0x[0-9a-f]+|[0-9a-f]{2}( [0-9a-f]{2})*)$"),
             "md5": lambda t: self.assertRegex(t, r"^[0-9a-f]{32}$"),
+            "shadow": lambda t: (self.assertRegex(t, r"^\$1\$[./0-9A-Za-z]{8}\$[./0-9A-Za-z]{22}$"),),
+            "csrf": lambda t: self.assertRegex(t, r"^_csrf=[0-9A-Za-z]{6}-[A-Za-z0-9_-]{27}$"),
+            "oauth": lambda t: self.assertRegex(t, r"^(\?code=[A-Za-z0-9_-]{22}&state=[a-z0-9]{3,5}|Bearer [A-Za-z0-9_-]{22})$"),
             "sha1": lambda t: self.assertRegex(t, r"^[0-9a-f]{40}$"),
             "encrypted": lambda t: (self.assertRegex(t, BASE64), self.assertTrue(t.startswith("U2FsdGVkX1"))),
             "jwt": jwt,
@@ -299,3 +305,23 @@ class SpotterTest(unittest.TestCase):
                 labels = [spot.KINDS[k][0] for k in g.answers]          # what the screen shows
                 g.answer(spot.ARROWS[labels.index(spot.KINDS[found[0]][0])])
             self.assertEqual((g.score, g.mistakes), (2 * len(spot.KINDS), 0), seed)
+
+
+class RealFormatsTest(unittest.TestCase):
+    """Owner (0.8.2): Linux password hashes, CSRF and OAuth2 strings, each reproducible at least one real way."""
+
+    def test_md5crypt_is_openssl_s(self):
+        self.assertEqual(spot.md5crypt("password", "abcdefgh"), "$1$abcdefgh$G//4keteveJp0qb8z2DxG/")   # openssl passwd -1
+        import shutil, subprocess
+        if shutil.which("openssl"):
+            rng = random.Random(5)
+            for _ in range(20):
+                pw, salt = f"w{rng.randint(1, 10**6)}", "".join(rng.choice(spot.CRYPT64) for _ in range(rng.randint(1, 8)))
+                done = subprocess.run(["openssl", "passwd", "-1", "-salt", salt, pw], capture_output=True, text=True)
+                self.assertEqual(spot.md5crypt(pw, salt), done.stdout.strip(), (pw, salt))
+
+    def test_csrf_token_is_the_csrf_library_s(self):
+        import hashlib
+        token = spot.csrf_token("Ab12Cd", "s3cret")
+        digest = base64.b64encode(hashlib.sha1(b"Ab12Cd-s3cret").digest()).decode()
+        self.assertEqual(token, "Ab12Cd-" + digest.replace("+", "-").replace("/", "_").replace("=", ""))   # pillarjs/csrf

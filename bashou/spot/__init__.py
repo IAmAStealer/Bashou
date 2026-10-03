@@ -7,6 +7,7 @@ when you skim real logs and configs.
 """
 
 import base64
+import hashlib
 import ipaddress
 import random
 import time
@@ -103,6 +104,60 @@ def iso_date(rng):
     return rng.choice([d, f"{d}T{rng.randint(0, 23):02d}:{rng.randint(0, 59):02d}:{rng.randint(0, 59):02d}Z"])
 
 
+CRYPT64 = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+
+
+def md5crypt(password, salt):
+    """MD5-crypt, the "$1$" lines of old /etc/shadow files: `openssl passwd -1 -salt <salt> <password>` gives
+    the same (Poul-Henning Kamp's algorithm: 1000 rounds of MD5, then its own base64)."""
+    pw, sl = password.encode(), salt.encode()[:8]
+    alt = hashlib.md5(pw + sl + pw).digest()
+    ctx = pw + b"$1$" + sl + b"".join(alt[:min(16, n)] for n in range(len(pw), 0, -16))
+    n = len(pw)
+    while n:
+        ctx += b"\0" if n & 1 else pw[:1]
+        n >>= 1
+    final = hashlib.md5(ctx).digest()
+    for i in range(1000):
+        c = (pw if i & 1 else final) + (sl if i % 3 else b"") + (pw if i % 7 else b"") + (final if i & 1 else pw)
+        final = hashlib.md5(c).digest()
+
+    def to64(value, count):
+        return "".join(CRYPT64[(value >> 6 * k) & 0x3f] for k in range(count))
+    f = final
+    groups = [(0, 6, 12), (1, 7, 13), (2, 8, 14), (3, 9, 15), (4, 10, 5)]
+    return f"$1${sl.decode()}$" + "".join(to64(f[a] << 16 | f[b] << 8 | f[c], 4) for a, b, c in groups) + to64(f[11], 2)
+
+
+def shadow(rng):
+    salt = "".join(rng.choice(CRYPT64) for _ in range(8))
+    return md5crypt(f"{rng.choice(WORDS)}{rng.randint(1, 999)}", salt)
+
+
+def csrf_token(salt, secret):
+    """The Express `csrf` library's token: salt, "-", then base64url(SHA-1(salt + "-" + secret)) without "="."""
+    digest = hashlib.sha1(f"{salt}-{secret}".encode()).digest()
+    return f"{salt}-" + base64.urlsafe_b64encode(digest).decode().rstrip("=")
+
+
+def csrf(rng):
+    """As a form field: `_csrf=` and the token, with the library's saltLength option at 6 (8 by default, 2
+    characters too long for the screen)."""
+    alnum = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+    secret = base64.urlsafe_b64encode(bytes(rng.getrandbits(8) for _ in range(18))).decode()
+    return "_csrf=" + csrf_token("".join(rng.choice(alnum) for _ in range(6)), secret)
+
+
+def oauth(rng):
+    """What people see of OAuth2: the redirect after a login (RFC 6749 4.1.2: ?code=…&state=…), or the access
+    token in a request header (RFC 6750: Bearer …). 16 random bytes in base64url, like the RFC's examples."""
+    token = base64.urlsafe_b64encode(bytes(rng.getrandbits(8) for _ in range(16))).decode().rstrip("=")
+    if rng.random() < 0.5:
+        state = "".join(rng.choice("abcdefghijklmnopqrstuvwxyz0123456789") for _ in range(rng.randint(3, 5)))
+        return f"?code={token}&state={state}"
+    return f"Bearer {token}"
+
+
 def timestamp(rng):
     return str(rng.randint(1_400_000_000, 1_900_000_000))
 
@@ -136,6 +191,7 @@ KINDS = {
     "base64": ("Base64", "code", b64), "hex": ("Hexadecimal", "code", hexa), "md5": ("MD5 hash", "code", md5),
     "sha1": ("SHA-1 hash", "code", sha1), "encrypted": ("Encrypted", "code", encrypted),
     "jwt": ("JWT token", "code", jwt), "basic": ("Basic auth", "code", basic_auth),
+    "shadow": ("Password hash", "code", shadow), "csrf": ("CSRF token", "code", csrf), "oauth": ("OAuth2", "code", oauth),
     "email": ("Email", "text", email), "url": ("URL", "text", url), "regex": ("Regex", "text", pick(REGEXES)),
     "date": ("ISO 8601 date", "text", iso_date), "timestamp": ("Unix timestamp", "text", timestamp),
     "python": ("Python", "lang", pick(PYTHON)), "rust": ("Rust", "lang", pick(RUST)), "c": ("C", "lang", pick(C)),

@@ -77,7 +77,7 @@ it never draws over your text.
   backup script, a Pomodoro timer, an internet outage logger… One small step at a time: each step says what
   to do and when it's done, never how, with a hint if you're stuck and a short explanation once it's done.
 - **`bashou spot`**: a quick game. A string shows up: an IPv6 address, a MAC, a hash, base64, a JWT, a
-  date, a regex, a line of Python or SQL… Say what it is with the arrow keys, faster and faster, in 25
+  Linux password hash, a CSRF token, OAuth2, a date, a regex, a line of Python or SQL… Say what it is with the arrow keys, faster and faster, in 25
   seconds. The ones you'll meet in logs and configs, recognised at a glance.
 - **`bashou arena`**: come and fight when you want. A timed fight (hearts and a clock), or a security
   investigation with no clock (a hidden file, a cron backdoor, a SUID binary). Lose, and the arena
