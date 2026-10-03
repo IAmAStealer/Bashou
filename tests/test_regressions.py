@@ -512,6 +512,17 @@ class AliasTest(unittest.TestCase):
         self.assertEqual(outputs[0], outputs[2])
 
 
+class OneRightAnswerTest(unittest.TestCase):
+    def test_list_index_question_has_one_valid_index(self):
+        """Owner: "5 elements, which index?" had 4 and 0 among the choices: both are valid indexes of the
+        list, so it looked like two right answers. Only the right choice may be an index of 5 items."""
+        root = Path(__file__).resolve().parent.parent / "bashou/adventure/questions"
+        for lang in ("en", "fr"):
+            item = next(q for q in json.loads((root / lang / "logic.json").read_text()) if q["id"] == "logic-1-14")
+            valid = [c for c in item["choices"] if c.lstrip("-").isdigit() and -5 <= int(c) <= 4]
+            self.assertEqual(valid, [item["choices"][item["answer"]]], lang)
+
+
 if __name__ == "__main__":
     unittest.main()
 

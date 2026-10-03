@@ -171,12 +171,12 @@
  {
   "id": "logic-1-14",
   "level": 1,
-  "q": "A list has 5 items. What is its last valid index?",
+  "q": "A list has 5 items. At which index is the 5th item, the last one?",
   "choices": [
    "4",
    "5",
    "6",
-   "0"
+   "It depends on the items"
   ],
   "answer": 0,
   "explain": "Indexes start at 0, so 5 items sit at 0, 1, 2, 3 and 4. Index 5 is one step past the end. Python stops with an IndexError; C reads whatever memory comes next, a much worse bug. Remember: the last index is the length minus one."

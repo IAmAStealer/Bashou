@@ -35,6 +35,8 @@ Every release has a section here, written for players. CI refuses to tag a relea
   the shell runs the inside first, the old backticks you'll meet in old scripts, why it goes in double
   quotes, the newline it removes, the exit code that `set -e` sees or loses, and how a script reads a
   password from `pass` without ever holding it. 4 new Bash questions in the adventure go with it.
+- The Paradox Sphinx's question about the index of a list's last item had two choices that were valid
+  indexes. It now asks for the index of the 5th item, and only one choice is right.
 
 ## v0.7.0 — 2026-10-02
 

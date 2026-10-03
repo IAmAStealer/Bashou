@@ -171,12 +171,12 @@
  {
   "id": "logic-1-14",
   "level": 1,
-  "q": "Une liste a 5 éléments. Quel est son dernier indice valide ?",
+  "q": "Une liste a 5 éléments. À quel indice est le 5e élément, le dernier ?",
   "choices": [
    "4",
    "5",
    "6",
-   "0"
+   "Ça dépend des éléments"
   ],
   "answer": 0,
   "explain": "Les indices commencent à 0 : 5 éléments sont aux indices 0, 1, 2, 3 et 4. L'indice 5 est un pas après la fin. Python s'arrête avec une IndexError ; le C lit la mémoire qui suit, un bug bien pire. Retiens : le dernier indice vaut la longueur moins un."
