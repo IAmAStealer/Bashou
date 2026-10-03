@@ -32,7 +32,7 @@ TINY = (40, 12)                                                  # a very small 
 RUNS = {"level": [], "pets": ["pets"], "achievements": ["achievements"], "evolve": ["evolve"], "swap": ["swap"],
         "stats": ["stats"], "share": ["share", "--name", "Tester"], "lesson": ["lesson"], "project": ["project"], "spot": ["spot"],
         "learn": ["learn", "grep", "-rn", "TODO", "."], "talk": ["talk"], "fight": ["fight"], "arena": ["arena"],
-        "adventure": ["adventure"], "on": ["on"], "off": ["off"], "config": ["config", "list"], "start": ["start"],
+        "adventure": ["adventure"], "on": ["on"], "off": ["off"], "here": ["here"], "config": ["config", "list"], "start": ["start"],
         "reset": ["reset"], "version": ["version"], "help": ["help"]}
 NOT_RUN = {"update"}                                             # git or apt/dnf: not in a test
 DRAWN = "▀▄█░▌▐"                                                 # sprites, bars, QR codes

@@ -61,6 +61,7 @@ class Companion:
         self.old_loader_told = False
         self.offset = 0            # bytes of the events file already counted
         self.guests = {}           # the same for other terminals' guest.<pid> files, by name
+        self.left = False          # `bashou here` moved the pet to another terminal
         self.code = code_version()
         self.notes = []            # notifications waiting for the bubble
         self.bubble = None         # (text, commands run since shown, commands it stays)
@@ -120,6 +121,23 @@ class Companion:
     def guest_files(self):
         return sorted(state.DATA.glob("guest.*")) if self.home() else []
 
+    def moved(self):
+        """True when another open terminal took the pet (`bashou here`)."""
+        try:
+            pid = int((state.CACHE / "pet").read_text())
+        except (OSError, ValueError):
+            return False
+        return pid != self.shell and pid_alive(pid)
+
+    def leave(self):
+        """Count this terminal's last commands, take the drawing down and stop: the shell becomes a guest
+        at its next prompt."""
+        self.read_events()
+        if self.drawn:
+            os.write(1, (ESC + "7" + self.drawn + ESC + "8").encode())
+            self.drawn = None
+        self.left = True
+
     def read_file(self, path, offset):
         """(new offset, text of the whole lines written after offset)."""
         try:
@@ -133,14 +151,22 @@ class Companion:
 
     def read_events(self):
         self.offset, text = self.read_file(self.events, self.offset)
-        # Commands typed in the terminals without a pet count too. A closed one's file goes once read.
+        # Commands typed in the terminals without a pet count too. A closed one's file goes once read, and
+        # so does this terminal's own, from when it was a guest.
+        before, counted = dict(self.guests), None
         for path in self.guest_files():
-            gone = not pid_alive(path.suffix[1:])
-            self.guests[path.name], more = self.read_file(path, self.guests.get(path.name, 0))
+            if path.name not in self.guests:
+                # A pet that just moved here starts where the old one stopped: no command counted twice.
+                counted = counted if counted is not None else read_guest_offsets()
+                self.guests[path.name] = counted.get(path.name, 0)
+            gone = not pid_alive(path.suffix[1:]) or path.suffix[1:] == str(self.shell)
+            self.guests[path.name], more = self.read_file(path, self.guests[path.name])
             text += more
             if gone:
                 path.unlink(missing_ok=True)
                 del self.guests[path.name]
+        if self.guests != before:
+            write_guest_offsets(self.guests)
         records = parse_log(text)
         if not records:
             return
@@ -351,6 +377,9 @@ class Companion:
     # --- main loop --------------------------------------------------------
 
     def step(self):
+        if self.tick % 4 == 0 and self.moved():
+            self.leave()
+            return
         if not self.at_prompt():
             self.busy = True
             return
@@ -417,7 +446,7 @@ class Companion:
         sweep_events()
         errors = 0
         try:
-            while self.alive():
+            while self.alive() and not self.left:
                 time.sleep(TICK)
                 self.tick += 1
                 try:
@@ -446,6 +475,27 @@ def pid_alive(pid):
     except PermissionError:
         pass
     return True
+
+
+GUEST_OFFSETS = "guests.json"      # in the cache: what the pet already counted of each guest file
+
+
+def read_guest_offsets():
+    try:
+        saved = json.loads((state.CACHE / GUEST_OFFSETS).read_text())
+        return {k: v for k, v in saved.items() if isinstance(v, int)}
+    except (OSError, ValueError, AttributeError):
+        return {}
+
+
+def write_guest_offsets(offsets):
+    path = state.CACHE / GUEST_OFFSETS
+    tmp = path.with_suffix(f".{os.getpid()}")
+    try:
+        tmp.write_text(json.dumps(offsets))
+        tmp.replace(path)
+    except OSError:
+        pass
 
 
 def sweep_events():

@@ -352,6 +352,17 @@ def talk(_args):
         print(f"  {DIM}" + _("Not sure what it does? `bashou learn` takes it apart.") + RESET)
 
 
+def here(args):
+    """bashou.bash moves the pet, then says how it went (`moved` or `already`)."""
+    name = progress.current(state.load())[2]
+    if args.how == "moved":
+        print("  " + _("{name} moved to this terminal. Your commands in the other terminals still count.").format(name=name))
+    elif args.how == "already":
+        print("  " + _("{name} already lives in this terminal.").format(name=name))
+    else:
+        print("  " + _("Bashou isn't running in this terminal."))
+
+
 def version(_args):
     from . import update
     print("  Bashou " + (update.version() or _("(unknown version: not a git clone)")))
@@ -421,6 +432,8 @@ COMMANDS = [
             size=(50, 20)),
     Command("on", run("setup", "run"), ("bashou on / off", "show or hide the pet (the first `on` adds Bashou to ~/.bashrc)", SETTINGS)),
     Command("off", lambda a: print("  " + _("Bashou isn't running in this terminal."))),   # bashou.bash answers first
+    Command("here", here, ("bashou here", "move your pet to this terminal (it lives in one terminal at a time)", SETTINGS),
+            [("how", dict(nargs="?", help=argparse.SUPPRESS))]),                # bashou.bash moves it first
     Command("config", lambda a: config(a.name, a.value), ("bashou config", "settings, language and skills (bashou config list shows them)", SETTINGS),
             [("name", dict(nargs="?")), ("value", dict(nargs="?"))]),
     Command("start", run("starter"), ("bashou start", "choose your starter (once)", SETTINGS), size=(60, 16)),

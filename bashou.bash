@@ -41,6 +41,13 @@ _bashou_log() {
   if [[ -n $_bashou_guest ]] && ! _bashou_elsewhere && _bashou_claim; then
     bashou on
   fi
+  # `bashou here` in another terminal took the pet: this one becomes a guest (its pet took its drawing down).
+  if [[ -n $BASHOU_PID ]] && _bashou_elsewhere; then
+    kill "$BASHOU_PID" 2>/dev/null
+    BASHOU_PID=
+    _bashou_guest=1
+    _bashou_events=$_bashou_data/guest.$$
+  fi
   if [[ -n $BASHOU_PID ]]; then
     _bashou_make_room
   fi
@@ -120,12 +127,20 @@ bashou() {
       BASHOU_PID=$!
       disown "$BASHOU_PID"
       ;;
+    here)
+      # Move the pet to this terminal. The old one sees it at its next prompt and becomes a guest.
+      if [[ -n $BASHOU_PID ]]; then
+        python3 "$BASHOU_DIR/launch.py" bashou here already
+      else
+        bashou on && python3 "$BASHOU_DIR/launch.py" bashou here moved
+      fi
+      ;;
     *) python3 "$BASHOU_DIR/launch.py" bashou "$@" ;;
   esac
 }
 
 # Tab completion. Static lists (no Python on Tab); tests/test_completion.py keeps them in sync.
-_bashou_commands="help level pets achievements fight arena talk learn lesson project spot share evolve swap stats start config update version adventure reset on off"
+_bashou_commands="help level pets achievements fight arena talk learn lesson project spot share evolve swap stats start config update version adventure reset on off here"
 _bashou_pets="bat frog turtle mushroom slime sofa octopus dragon fox owl mole snake ghost spider ant axolotl gremlin snail beaver squirrel pigeon hedgehog bee whale meerkat leopard duck spark packet landscape chameleon"
 _bashou_languages="en fr"
 _bashou_dev="unlock-all stage stage-all level threat restore"

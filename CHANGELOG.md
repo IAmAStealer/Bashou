@@ -28,6 +28,9 @@ Every release has a section here, written for players. CI refuses to tag a relea
   and the Eagle. 8 achievements: your first game, 5, 10, 15 and 20 good answers in a game, every kind
   recognised once, 10 games, and 10 good answers without a mistake. The end of a game shows the ones you earned.
 - `bashou achv` and `bashou achievement` show your achievements, like `bashou achievements`.
+- `bashou here` brings your pet to the terminal you type it in. It lives in one terminal at a time; the
+  commands you type in the others still count, and none is counted twice when it moves.
+- Ctrl+L in a terminal without the pet no longer leaves empty rows at the top.
 
 ## v0.7.0 — 2026-10-02
 

@@ -504,6 +504,33 @@ class OnePetTest(unittest.TestCase):
         self.assertNotEqual(second.value("BASHOU_PID"), "")
         self.assertTrue(second.wait_state(lambda s: s["commands"] >= 2))   # the guest's true is counted
 
+    def test_bashou_here_moves_the_pet_and_counts_each_command_once(self):
+        """Owner: move the pet on purpose to the terminal you type in. The new pet must not count the
+        guests' commands again (it read their files from the start), and the old terminal becomes a guest."""
+        first = self.open()
+        self.assertTrue(first.expect(b"38;2;216;200;160"))
+        pet = int(first.value("BASHOU_PID"))                               # 1 command
+        second = self.open()
+        second.send("true\n")                                              # 2
+        self.assertTrue(first.wait_state(lambda s: s["commands"] == 2))
+        start = len(second.out)
+        second.send("bashou here\n", 0)                                    # 3
+        self.assertTrue(second.expect(b"moved to this terminal", start))
+        self.assertTrue(second.expect(b"38;2;216;200;160", start))
+        end = time.time() + TIMEOUT
+        while alive(pet) and time.time() < end:
+            time.sleep(0.1)
+        self.assertFalse(alive(pet))                                       # the old pet left by itself
+        first.send("true\n")                                               # 4, as a guest
+        self.assertEqual(first.value("BASHOU_PID"), "")                    # 5
+        self.assertTrue(second.wait_state(lambda s: s["commands"] == 5))
+        second.read(2)
+        self.assertEqual(second.state()["commands"], 5)                    # and not more
+        self.assertFalse((second.data / f"guest.{second.pid}").exists())   # its guest file was read and removed
+        start = len(second.out)
+        second.send("bashou here\n", 0)
+        self.assertTrue(second.expect(b"already lives in this terminal", start))
+
     def test_ctrl_l_in_a_guest_leaves_no_empty_rows(self):
         """Owner: Ctrl+L in a second terminal put the prompt 7 rows down, under a pet that isn't there."""
         first = self.open()
