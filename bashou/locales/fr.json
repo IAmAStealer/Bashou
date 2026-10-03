@@ -1380,6 +1380,7 @@
  "asks the DNS where a name points": "demande au DNS où pointe un nom",
  "measures how much space files and folders take": "mesure la place prise par des fichiers et des dossiers",
  "prints its arguments": "affiche ses arguments",
+ "sets a variable and hands it to the programs this shell starts (an environment variable)": "définit une variable et la transmet aux programmes que ce shell lance (une variable d'environnement)",
  "looks for files and folders, going down every folder": "cherche des fichiers et des dossiers, en descendant dans chaque dossier",
  "shows the memory in use and free": "montre la mémoire utilisée et libre",
  "asks the system databases (hosts, users, groups) the way programs do": "interroge les bases du système (hôtes, utilisateurs, groupes) comme le font les programmes",

@@ -31,6 +31,7 @@ COMMANDS = {
     "dig": "asks the DNS where a name points",
     "du": "measures how much space files and folders take",
     "echo": "prints its arguments",
+    "export": "sets a variable and hands it to the programs this shell starts (an environment variable)",
     "find": "looks for files and folders, going down every folder",
     "free": "shows the memory in use and free",
     "getent": "asks the system databases (hosts, users, groups) the way programs do",

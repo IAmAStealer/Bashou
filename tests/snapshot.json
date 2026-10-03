@@ -9281,6 +9281,7 @@
   "set a mode in numbers: `chmod 644`",
   "set a separator with `awk -F`",
   "set careful permissions: `chmod u+x` or `chmod 600`",
+  "sets a variable and hands it to the programs this shell starts (an environment variable)",
   "settings, language and skills (bashou config list shows them)",
   "show line numbers",
   "show lines around matches with `-A`, `-B` or `-C`",
