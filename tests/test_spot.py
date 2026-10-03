@@ -26,6 +26,34 @@ BASE64 = r"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
 BASE64URL = r"^[A-Za-z0-9_-]+$"
 
 
+B64 = r"(?:[A-Za-z0-9+/]{4})+(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?"
+OCTET = r"(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)"
+# How a player who knows the kinds tells them apart, from the string alone: exactly one must match.
+SPOTTER = {
+    "ipv4": rf"^{OCTET}(\.{OCTET}){{3}}$",
+    "ipv6": IPV6,
+    "mac": MAC,
+    "uuid": UUID4,
+    "base64": rf"^(?!U2FsdGVkX1|0x)(?![0-9a-f]+$){B64}$",       # 0x…, all hex digits: hex or a hash
+    "hex": r"^(0x[0-9a-f]+|[0-9a-f]{2}( [0-9a-f]{2})+)$",
+    "md5": r"^[0-9a-f]{32}$",
+    "sha1": r"^[0-9a-f]{40}$",
+    "encrypted": r"^U2FsdGVkX1[A-Za-z0-9+/]*={0,2}$",               # openssl enc: "Salted__" in base64
+    "jwt": r"^eyJ[A-Za-z0-9_-]+\.eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$",
+    "basic": rf"^Basic {B64}$",
+    "email": r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$",
+    "url": r"^https?://(www\.)?[a-z]+\.[a-z]{2,}(/[a-z]+){1,2}(\?[a-z]+=[a-z0-9]+)?$",
+    "date": r"^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])(T([01]\d|2[0-3]):[0-5]\d:[0-5]\dZ)?$",
+    "timestamp": r"^1\d{9}$",
+    "regex": r"^[\^(]|\$$|\\[dwsb]|\][+{]|\w\?$|u\?",
+    "python": r"^(def \w+\(.*\):|import \w+|for \w+ in \w+:|with open\(|if __name__|except \w+|print\(f\"|\w+ = \[.* for )",
+    "rust": r"^(fn \w+\(|let (mut )?\w+|use std::|impl \w+|#\[derive|match \w+ \{)",
+    "c": r"^(#include <|int main\(|char \*|printf\(\"|for \(int |struct \w+ \*|free\(|if \(\w+ == NULL\))",
+    "bash": r"^(for \w+ in .*; do|if \[\[|grep |#!/usr/bin/env bash|\w+=\$\{|while read|echo |\[ \$#)",
+    "sql": r"^(SELECT|INSERT INTO|UPDATE|CREATE TABLE|DELETE FROM|ALTER TABLE) ",
+}
+
+
 class Clock:
     def __init__(self):
         self.now = 0.0
@@ -245,3 +273,29 @@ class RewardTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SpotterTest(unittest.TestCase):
+    """Owner: a base64 answered wrong. A player who only sees the string tells its kind by the rules above
+    (strict regexes), never by what the game knows: every string must fit exactly one kind, the right one."""
+
+    def spot(self, text):
+        return [kind for kind, rule in SPOTTER.items() if re.search(rule, text)]
+
+    def test_every_string_fits_one_kind_only(self):
+        self.assertEqual(set(SPOTTER), set(spot.KINDS))
+        rng = random.Random(7)
+        for kind, (label, family, make) in spot.KINDS.items():
+            for _ in range(2000):
+                text = make(rng)
+                self.assertEqual(self.spot(text), [kind], text)
+
+    def test_a_player_reading_the_strings_wins_every_game(self):
+        for seed in range(200):
+            g = spot.Game(random.Random(seed), clock=Clock())
+            while not g.over():
+                found = self.spot(g.text)
+                self.assertEqual(len(found), 1, g.text)
+                labels = [spot.KINDS[k][0] for k in g.answers]          # what the screen shows
+                g.answer(spot.ARROWS[labels.index(spot.KINDS[found[0]][0])])
+            self.assertEqual((g.score, g.mistakes), (2 * len(spot.KINDS), 0), seed)
