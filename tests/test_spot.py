@@ -42,6 +42,8 @@ class KindsTest(unittest.TestCase):
         rng = random.Random(1)
         def ipv6(t):
             self.assertRegex(t, IPV6)
+            self.assertNotRegex(t, r"[A-F]|:::|(^|:)0[0-9a-f]")                  # lowercase, no leading zero
+            self.assertTrue(all(len(g) <= 4 for g in t.split(":")) and t.count("::") <= 1)
             self.assertEqual(str(ipaddress.IPv6Address(t)), t)                 # canonical: RFC 5952
             self.assertTrue(t.startswith("fe80::") or ipaddress.IPv6Address(t) in ipaddress.IPv6Network("2000::/3"))
 
@@ -67,11 +69,14 @@ class KindsTest(unittest.TestCase):
             "basic": lambda t: (self.assertRegex(t, r"^Basic " + BASE64[1:]),
                                 self.assertRegex(base64.b64decode(t[6:]).decode(), r"^[^:]+:.+$")),
             "email": lambda t: self.assertRegex(t, r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"),
-            "url": lambda t: self.assertTrue(urllib.parse.urlparse(t).scheme in ("http", "https")
-                                             and urllib.parse.urlparse(t).netloc),
+            "url": lambda t: (self.assertRegex(t, r"^https?://(www\.)?[a-z]+\.[a-z]{2,}(/[a-z]+){1,2}(\?[a-z]+=[a-z0-9]+)?$"),
+                              self.assertTrue(urllib.parse.urlparse(t).netloc)),
             "regex": re.compile,
-            "date": lambda t: datetime.datetime.fromisoformat(t.replace("Z", "+00:00")),
-            "timestamp": lambda t: self.assertTrue(2014 <= datetime.datetime.fromtimestamp(int(t)).year <= 2031),
+            "date": lambda t: (self.assertRegex(t, r"^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])"
+                                                   r"(T([01]\d|2[0-3]):[0-5]\d:[0-5]\dZ)?$"),
+                               datetime.datetime.fromisoformat(t.replace("Z", "+00:00"))),
+            "timestamp": lambda t: (self.assertRegex(t, r"^[1-9]\d{9}$"),                 # 10 digits: 2001 to 2286
+                                    self.assertTrue(2014 <= datetime.datetime.fromtimestamp(int(t)).year <= 2031)),
         }
         for kind, (label, family, make) in spot.KINDS.items():
             for _ in range(500):
