@@ -37,6 +37,21 @@ const hostile = {
   "unknown skill": pack({ ...base, sk: ["hacking"] }),
   "twice a skill": pack({ ...base, sk: ["bash", "bash"] }),
   "missing key": pack({ p: "packet", f: 1 }),
+  "spot 1000": pack({ ...base, spot: 1000 }),
+  "spot float": pack({ ...base, spot: 2.5 }),
+  "chapters (removed)": pack({ ...base, adv: 3 }),
+  "rare not a string": pack({ ...base, r: [["bat", 1]] }),
+  "rare unknown pet": pack({ ...base, r: "dodo1" }),
+  "rare starter": pack({ ...base, r: "star1" }),
+  "rare twice": pack({ ...base, r: "bat1,bat2" }),
+  "rare form too far": pack({ ...base, r: "bat9" }),
+  "rare form 0": pack({ ...base, r: "bat0" }),
+  "rare no form": pack({ ...base, r: "bat" }),
+  "rare html": pack({ ...base, r: "<b>1" }),
+  "rare __proto__": pack({ ...base, r: "__proto__1" }),
+  "rare constructor": pack({ ...base, r: "constructor1" }),
+  "rare empty item": pack({ ...base, r: "bat1,,cat1" }),
+  "too many rare": pack({ ...base, r: ["ant", "axolotl", "bat", "beaver", "bee", "cat", "dragon", "duck", "fox", "frog", "ghost"].map(p => p + "1").join(",") }),
 };
 
 (async () => {
@@ -45,6 +60,8 @@ const hostile = {
   if (!ok) { console.log("FAIL: the good link was refused"); failed++; }
   const named = await readCard(pack({ ...base, n: "Alexis_42" }), data);
   if (!named || named.n !== "Alexis_42") { console.log("FAIL: a good name was refused"); failed++; }
+  const full = await readCard(pack({ ...base, spot: 17, r: "bat3,cat1" }), data);
+  if (!full || full.r !== "bat3,cat1") { console.log("FAIL: a card with rare pets was refused"); failed++; }
   for (const [name, fragment] of Object.entries(hostile)) {
     if (await readCard(fragment, data) !== null) { console.log("FAIL: accepted " + name); failed++; }
   }

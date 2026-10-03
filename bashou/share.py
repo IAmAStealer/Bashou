@@ -22,7 +22,10 @@ from .render import BOLD, DIM, RESET
 
 PAGE = f"{SITE}/share.html"
 NAME = re.compile(r"[A-Za-z0-9_-]{1,12}")      # the page accepts exactly the same (share.js)
-KEYS = ("p", "f", "lv", "ach", "pets", "won", "read", "sk", "n", "s", "sf")
+KEYS = ("p", "f", "lv", "ach", "pets", "won", "read", "sk", "n", "s", "sf", "spot", "r")
+# Rare pets, after the fully grown ones: the hardest to meet (a secret, strace, kubectl, gpg and pass).
+HARD = ("cat", "spider", "whale", "leopard")
+MAX_RARE = 10
 
 
 def payload(s, name=""):
@@ -35,10 +38,40 @@ def payload(s, name=""):
             "ach": len(achievements.earned(s)), "pets": len(owned(s)), "won": s["fights_won"],
             "read": len((s.get("lessons") or {}).get("read", [])),
             "sk": [] if s["skills"] == "all" else sorted(s["skills"]),
-            "s": starter, "sf": progress.reached(s, "starter")}
+            "s": starter, "sf": progress.reached(s, "starter"),
+            "spot": s["spot"]["best"],
+            "r": ",".join(f"{pet}{form}" for pet, form in rare(s))}
     if name and NAME.fullmatch(name):
         data["n"] = name
-    return data
+    return fit(data)
+
+
+def fit(data):
+    """The link must fit a QR code a terminal can show: drop the last rare pets, then the spot score."""
+    while True:
+        try:
+            qr.encode(link(data))
+            return data
+        except ValueError:
+            if data["r"]:
+                data["r"] = data["r"].rpartition(",")[0]
+            elif "spot" in data:
+                del data["spot"], data["r"]
+            else:
+                raise
+
+
+def rare_pets(data):
+    """[(pet, form)] from the card's "r": "bat3,cat1"."""
+    return [(m.group(1), int(m.group(2))) for m in re.finditer(r"([a-z_]+)(\d+)", data.get("r", ""))]
+
+
+def rare(s):
+    """[pet, form] of the rare pets: every pet grown to its last form (board order), then the hard ones."""
+    pets = owned(s)
+    grown = [p for p in pets if len(creatures.forms(p)) > 1 and progress.reached(s, p) == len(creatures.forms(p))]
+    hard = [p for p in HARD if p in pets and p not in grown]
+    return [[p, progress.reached(s, p)] for p in sorted(grown, key=list(NAMES).index) + hard][:MAX_RARE]
 
 
 def encode(data):
@@ -71,13 +104,18 @@ def describe(data):
             (_("Pets"), str(data["pets"])), (_("Fights won"), str(data["won"])),
             (_("Lessons read"), str(data["read"])),
             (_("Skills"), ", ".join(data["sk"]) or _("a bit of everything"))]
+    if "spot" in data:
+        rows.append((_("Best in bashou spot"), str(data["spot"])))
+    if data.get("r"):
+        rows.append((_("Rare pets"), ", ".join(progress.sprite_of({}, p, f)[1] for p, f in rare_pets(data))))
     if "n" in data:
         rows.insert(0, (_("Name"), data["n"]))
     return rows
 
 
 # Upper bounds the page accepts (share.js reads them from share-pets.json).
-BOUNDS = {"lv": (1, progress.MAX_LEVEL), "ach": (0, 999), "pets": (0, 99), "won": (0, 99999), "read": (0, 999)}
+BOUNDS = {"lv": (1, progress.MAX_LEVEL), "ach": (0, 999), "pets": (0, 99), "won": (0, 99999), "read": (0, 999),
+          "spot": (0, 999), "r": (0, MAX_RARE)}          # r: how many rare pets
 
 
 def page_data():

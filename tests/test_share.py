@@ -29,10 +29,12 @@ class ShareTest(unittest.TestCase):
         self.assertTrue(share.link(data).startswith("https://iamastealer.github.io/Bashou/share.html#v1."))
 
     def test_the_longest_card_fits_a_small_qr_code(self):
+        from bashou import creatures
         data = share.payload(player(skills=sorted(skills.SKILLS)), "x" * 12)
-        data.update(lv=20, ach=999, pets=64, won=99999, read=999)
-        url = share.link(data)
-        self.assertLess(len(url), 300)
+        longest = sorted(creatures.NAMES, key=len)[-share.MAX_RARE:]
+        data.update(lv=20, ach=999, pets=64, won=99999, read=999, spot=999,
+                    r=",".join(f"{p}{len(creatures.forms(p))}" for p in longest))
+        url = share.link(share.fit(data))                          # rare pets dropped until it fits
         self.assertLessEqual(len(qr.encode(url)), 17 + 4 * 10)
 
     def test_the_name_filter(self):
@@ -46,6 +48,33 @@ class ShareTest(unittest.TestCase):
         rows = dict(share.describe(share.payload(player(), "Alexis")))
         self.assertEqual(rows["Name"], "Alexis")
         self.assertEqual(rows["Fights won"], "7")
+
+
+class RareTest(unittest.TestCase):
+    """Owner (0.8.1): the card shows rare pets and the best bashou spot score."""
+
+    def test_grown_pets_first_then_the_hard_ones(self):
+        from bashou import creatures, progress
+        s = player(pets=["spider", "bat", "slime", "cat"])
+        s["ladder_best"] = {"bat": creatures.forms("bat")[-1]}                # the Bat grew to its last form
+        s["spot"]["best"] = 17
+        data = share.payload(s, "Nova")
+        self.assertEqual(data["r"], f"bat{len(creatures.forms('bat'))},cat1,spider{progress.reached(s, 'spider')}")
+        self.assertEqual(data["spot"], 17)
+        self.assertNotIn("adv", data)                                        # owner: no adventure chapters
+        rows = dict(share.describe(data))
+        self.assertEqual(rows["Best in bashou spot"], "17")
+        self.assertIn("Hacker cat", rows["Rare pets"])
+
+    def test_no_rare_pet_and_never_more_than_ten(self):
+        from bashou import creatures
+        self.assertEqual(share.payload(player(pets=["slime", "fox"]))["r"], "")
+        s = player(pets=list(creatures.NAMES))
+        s["ladder_best"] = {p: creatures.forms(p)[-1] for p in creatures.NAMES}
+        self.assertEqual(len(share.rare(s)), share.MAX_RARE)
+        card = share.payload(s, "Nova")
+        self.assertGreaterEqual(len(share.rare_pets(card)), 4)               # as many as the QR code holds
+        self.assertEqual(share.rare_pets(card), [tuple(x) for x in share.rare(s)][:len(share.rare_pets(card))])
 
 
 class NicknameTest(unittest.TestCase):

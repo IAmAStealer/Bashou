@@ -7334,6 +7334,14 @@
    "read": [
     0,
     999
+   ],
+   "spot": [
+    0,
+    999
+   ],
+   "r": [
+    0,
+    10
    ]
   }
  },
@@ -7516,6 +7524,7 @@
   "Before running a script from the web: download, read, then run.",
   "Before the file itself, a web server sends headers: a few lines about it, like Content-Type and Content-Length (its size in bytes). curl -I asks for the headers only.",
   "Behind the stub",
+  "Best in bashou spot",
   "Best: {best}",
   "Bisector",
   "Bit",
@@ -8130,6 +8139,7 @@
   "Quick eye",
   "Ranges",
   "Ranking",
+  "Rare pets",
   "Raw",
   "Rawr!",
   "Read a pipe left to right: take a column, keep each value once (sort -u = sort then uniq), then count the lines.",

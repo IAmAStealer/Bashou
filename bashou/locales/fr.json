@@ -168,6 +168,8 @@
  "Reset Bashou?": "Réinitialiser Bashou ?",
  "Not sure what it does? `bashou learn` takes it apart.": "Pas sûr de ce que ça fait ? `bashou learn` la décortique.",
  "Bashou isn't running in this terminal.": "Bashou ne tourne pas dans ce terminal.",
+ "Best in bashou spot": "Record dans bashou spot",
+ "Rare pets": "Pets rares",
  "{name} moved to this terminal. Your commands in the other terminals still count.": "{name} s'est installé dans ce terminal. Tes commandes dans les autres terminaux comptent toujours.",
  "{name} already lives in this terminal.": "{name} vit déjà dans ce terminal.",
  "move your pet to this terminal (it lives in one terminal at a time)": "faire venir ton compagnon dans ce terminal (il vit dans un seul terminal à la fois)",

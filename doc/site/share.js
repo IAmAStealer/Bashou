@@ -5,7 +5,7 @@
 
 const MAX_FRAGMENT = 1024;
 const MAX_JSON = 4096;
-const KEYS = ["p", "f", "lv", "ach", "pets", "won", "read", "sk", "n", "s", "sf"];
+const KEYS = ["p", "f", "lv", "ach", "pets", "won", "read", "sk", "n", "s", "sf", "spot", "r"];
 const NAME = /^[A-Za-z0-9_-]{1,12}$/;          // the same as bashou/share.py
 
 const TEXT = {
@@ -16,7 +16,8 @@ const TEXT = {
                  "sent to a server. There is no account, no tracking and nothing stored.",
         tagline: "is a terminal pet that teaches Linux, bash and more.",
         level: "Level", achievements: "achievements", pets: "pets found",
-        won: "fights won", read: "lessons read", starter: "Starter", everything: "A bit of everything",
+        won: "fights won", read: "lessons read", spot: "best in spot",
+        rare: "Rare pets", starter: "Starter", everything: "A bit of everything",
         footer: "a terminal pet that teaches Linux", alt: "Bashou banner" },
   fr: { title: "Carte Bashou", drawing: "Dessin de la carte…", share: "Partager", save: "Enregistrer l'image",
         bad: "Cette carte est illisible. Demande un nouveau lien : bashou share.",
@@ -25,7 +26,8 @@ const TEXT = {
                  "n'est jamais envoyée à un serveur. Pas de compte, pas de pistage, rien n'est stocké.",
         tagline: "est un compagnon de terminal qui apprend Linux, bash et plus encore.",
         level: "Niveau", achievements: "succès", pets: "pets trouvés",
-        won: "combats gagnés", read: "leçons lues", starter: "Compagnon de départ", everything: "Un peu de tout",
+        won: "combats gagnés", read: "leçons lues", spot: "record spot",
+        rare: "Pets rares", starter: "Compagnon de départ", everything: "Un peu de tout",
         footer: "un compagnon de terminal qui apprend Linux", alt: "Bannière Bashou" },
 };
 
@@ -83,6 +85,22 @@ function check(card, data) {
   if (typeof card.n !== "string" || !NAME.test(card.n)) return null;      // every card has a nickname
   if (typeof card.s !== "string" || !data.starters.includes(card.s) || !own(data.families, card.s)) return null;
   if (!whole(card.sf, 1, data.families[card.s].forms.length)) return null;
+  // Added in 0.8.1: older links don't have them.
+  if (own(card, "spot") && !whole(card.spot, data.bounds.spot[0], data.bounds.spot[1])) return null;
+  if (own(card, "r")) {                                        // "bat3,cat1": each pet and its form
+    if (typeof card.r !== "string" || card.r.length > 200) return null;
+    const items = card.r ? card.r.split(",") : [];
+    if (items.length > data.bounds.r[1]) return null;
+    const seen = new Set();
+    for (const item of items) {
+      const m = /^([a-z_]{1,20})([1-9][0-9]?)$/.exec(item);
+      if (!m) return null;
+      const pet = m[1], form = Number(m[2]);
+      if (!own(data.families, pet) || data.starters.includes(pet) || seen.has(pet)) return null;
+      if (!whole(form, 1, data.families[pet].forms.length)) return null;
+      seen.add(pet);
+    }
+  }
   return card;
 }
 
@@ -141,10 +159,20 @@ function box(ctx, x, y, w, h, radius, color) {
   ctx.fill();
 }
 
+// Text that fits `width`: the font shrinks a pixel at a time, down to `smallest`.
+function fitFont(ctx, text, weight, size, smallest, width, font) {
+  for (; size > smallest; size--) {
+    ctx.font = `${weight} ${size}px ${font}`;
+    if (ctx.measureText(text).width <= width) return;
+  }
+  ctx.font = `${weight} ${smallest}px ${font}`;
+}
+
 function banner(card, data, t, lang) {
   const canvas = document.createElement("canvas");
+  const rare = card.r ? card.r.split(",").map(item => /^([a-z_]+)(\d+)$/.exec(item).slice(1)) : [];
   canvas.width = 1500;
-  canvas.height = 500;
+  canvas.height = rare.length ? 610 : 500;                      // a row of rare pets above the footer
   const ctx = canvas.getContext("2d");
   const family = data.families[card.p];
   const sprite = data.sprites[family.forms[card.f - 1]];
@@ -155,7 +183,7 @@ function banner(card, data, t, lang) {
   sky.addColorStop(0, "#15161f");
   sky.addColorStop(1, "#23263a");
   ctx.fillStyle = sky;
-  ctx.fillRect(0, 0, 1500, 500);
+  ctx.fillRect(0, 0, 1500, canvas.height);
   ctx.globalAlpha = 0.18;
   box(ctx, 50, 60, 460, 380, 36, color);
   ctx.globalAlpha = 1;
@@ -175,15 +203,17 @@ function banner(card, data, t, lang) {
   });
 
   const stats = [[card.ach, t.achievements], [card.pets, t.pets], [card.won, t.won], [card.read, t.read]];
+  if (own(card, "spot")) stats.push([card.spot, t.spot]);
+  const gap = 14, w = (1450 - x - gap * (stats.length - 1)) / stats.length;   // 4 boxes of 210, or 5 of 165
   stats.forEach(([n, label], i) => {
-    const bx = x + i * 222;
-    box(ctx, bx, 282, 202, 104, 16, "rgba(255,255,255,0.07)");
+    const bx = x + i * (w + gap);
+    box(ctx, bx, 282, w, 104, 16, "rgba(255,255,255,0.07)");
     ctx.fillStyle = "#ffffff";
     ctx.font = `700 46px ${font}`;
-    ctx.fillText(String(n), bx + 20, 336);
+    ctx.fillText(String(n), bx + 18, 336);
     ctx.fillStyle = "#b9bccc";
-    ctx.font = `400 22px ${font}`;
-    ctx.fillText(label, bx + 20, 370);
+    fitFont(ctx, label, 400, 22, 15, w - 30, font);
+    ctx.fillText(label, bx + 18, 370);
   });
 
   // the starter's latest form, at the end of the skills row
@@ -208,9 +238,21 @@ function banner(card, data, t, lang) {
     sx += w + 10;
   }
 
+  if (rare.length) {                                            // grown and hard-to-meet pets, as tags
+    ctx.fillStyle = "#b9bccc";
+    ctx.font = `600 22px ${font}`;
+    ctx.fillText(t.rare, 59, 535);
+    let rx = 59 + ctx.measureText(t.rare).width + 24;
+    for (const [pet, form] of rare) {
+      box(ctx, rx, 488, 92, 72, 14, "rgba(255,255,255,0.07)");
+      drawSprite(ctx, data.sprites[data.families[pet].forms[Number(form) - 1]], rx + 12, 500, 4);
+      rx += 104;
+    }
+  }
+
   ctx.fillStyle = "#8b8fa3";
   ctx.font = `400 20px ${font}`;
-  ctx.fillText(`bashou · ${t.footer} · github.com/IAmAStealer/Bashou`, 59, 478);
+  ctx.fillText(`bashou · ${t.footer} · github.com/IAmAStealer/Bashou`, 59, canvas.height - 22);
   return canvas;
 }
 
@@ -256,12 +298,14 @@ async function main() {
 
   function draw() {
     t = texts();
-    banner(card, data, t, lang).toBlob(blob => {
+    const canvas = banner(card, data, t, lang);
+    canvas.toBlob(blob => {
       if (url) URL.revokeObjectURL(url);
       url = URL.createObjectURL(blob);
       file = new File([blob], "bashou.png", { type: "image/png" });
       const img = $("card");
       img.src = url;
+      img.height = canvas.height;                               // taller with a row of rare pets
       img.alt = t.alt;
       img.hidden = false;
       $("save").href = url;
