@@ -3,7 +3,7 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
-## v0.8.0 — 2026-10-02
+## v0.8.0 — 2026-10-03
 
 - New: `bashou project`. You want to practise a language but don't know what to program? 13 real
   projects to build, in Python, Shell, C and Rust, from very easy to hard: merge or split PDFs, sort your
