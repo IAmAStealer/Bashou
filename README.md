@@ -13,10 +13,32 @@ you pick. Run commands, try new tools, and collect new pets along the way.
 ![A small pixel-art stardust in the corner of the terminal, with a tip in its speech bubble, above
 a `bashou learn` explanation of a tar command](doc/img/prompt.svg)
 
+## What's new
+
+**0.8.0**
+- **`bashou project`**: 13 real projects to build in Python, Shell, C or Rust, one small step at a time,
+  and a new pet, the Landscape, that grows from a hill into a town as you finish them.
+- **`bashou spot`**: an IPv6, a hash, base64, a JWT, a line of Rust? Say what the string is, as fast as
+  you can, in 25 seconds. A new pet comes with it: the Chameleon, up to the Eagle.
+- **`bashou here`** brings your pet to the terminal you're typing in.
+- A new lesson on command substitution, `$( )`: quotes, exit codes, and passwords from `pass` in scripts.
+
+**0.7.0**
+- The Sage Owl's library is a path now: each lesson opens once you've passed the ones before it, and
+  the owl warms you up with two questions on what you'll build on.
+- New lessons for the first steps (`--help` and `man`, nano or vi, a first taste of regex) and for logic.
+- 21 new fights: reading `--help`, fixing a typo in your editor, tidying files, wildcards, `nproc`, `if`
+  and `&&`, stderr, quotes, a broken shebang, a `for` loop, `grep -E`, groups, rights, `du`, `tar`, a
+  service file, `curl -I`, and git commits, branches and merge conflicts.
+- One pet for all your terminals: the others still count your commands.
+
+Every change, release by release: [CHANGELOG.md](CHANGELOG.md).
+
 ## Learn the terminal without asking an AI
 
 Bashou teaches in your real terminal, while you work. It runs offline: no account, no AI model, no
-tokens spent to learn what a command does.
+tokens spent to learn what a command does. It stays out of your way: one pet for all your terminals, and
+it never draws over your text.
 
 - **`bashou learn <command>`** takes a command apart and explains every piece: the command, each
   option, the arguments, pipes and redirections (71 commands, from `ls` to `tar`, `awk`, `gpg` and `kubectl`).
@@ -26,7 +48,9 @@ tokens spent to learn what a command does.
 - **171 achievements** reward real skills: a pipe of 3 commands, `find -exec`, `sed -i`, `git bisect`,
   `tar -tf`…
 - **Threats** show up now and then. `bashou fight` opens a sandbox shell where you beat them with the
-  right tool: `grep` against the Log Hydra, `awk` against the Ledger Golem. A successful command with
+  right tool: `grep` against the Log Hydra, `awk` against the Ledger Golem. They start with the first
+  steps (an option to find in `--help`, a typo to fix in your editor, files to tidy) and go up to Linux
+  rights, services and git merge conflicts. A successful command with
   the right tool hits the enemy; other commands cost you a heart. Code fights hand you a small broken
   Python or C file to fix (a missing `;`, a loop that never ends, a memory leak, a shell injection);
   package fights ask your own machine with `apt`, `dpkg` or `rpm`, or have you fix a repository file;
@@ -40,12 +64,16 @@ tokens spent to learn what a command does.
   servers listen on 127.0.0.1 only, and nothing leaves your machine.
   Beaten fights come back after 1, 7 and 30 days (spaced repetition), so what you learned stays.
 - **`bashou lesson`**: the Sage Owl's library. Lessons with drawings that grow page by page (the stack
-  and the heap, where output goes, permissions…), unlocked as you play, each one preparing your next step.
-  In a fight, `lesson` opens the one that explains it.
+  and the heap, where output goes, permissions, `$( )`…), on a path: each one opens once you've passed the
+  ones before it, by winning a fight or earning an achievement, and prepares your next step. Your editor
+  is yours to pick, nano or vi. In a fight, `lesson` opens the one that explains it.
 - **`bashou project`**: you want to practise a language but don't know *what* to program? 13 real
   projects in Python, Shell, C and Rust, from very easy to hard: merge PDFs, sort your photos by date, a
   backup script, a Pomodoro timer, an internet outage logger… One small step at a time: each step says what
   to do and when it's done, never how, with a hint if you're stuck and a short explanation once it's done.
+- **`bashou spot`**: a quick game. A string shows up: an IPv6 address, a MAC, a hash, base64, a JWT, a
+  date, a regex, a line of Python or SQL… Say what it is with the arrow keys, faster and faster, in 25
+  seconds. The ones you'll meet in logs and configs, recognised at a glance.
 - **`bashou arena`**: come and fight when you want. A timed fight (hearts and a clock), or a security
   investigation with no clock (a hidden file, a cron backdoor, a SUID binary). Lose, and the arena
   closes for an hour.
@@ -134,6 +162,7 @@ moves you over; your pets and progress are kept.
 ```bash
 bashou          # see how your pet is doing
 bashou -h       # all commands
+bashou here     # bring your pet to this terminal
 bashou update   # get the new version (your pet tells you when there is one; apt or dnf for packages)
 ```
 
