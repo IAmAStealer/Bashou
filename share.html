@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Bashou card</title>
+<meta name="description" content="A Bashou player's progress, drawn from the link itself: nothing is stored on a server.">
+<link rel="stylesheet" href="share.css">
+<script src="share.js" defer></script>
+</head>
+<body>
+<main>
+  <h1 id="title">Bashou card</h1>
+  <p id="status">Drawing the card…</p>
+  <img id="card" alt="" width="1500" height="500" hidden>
+  <p id="actions" hidden>
+    <button id="share" type="button" hidden>Share</button>
+    <a id="save" download="bashou.png">Save image</a>
+  </p>
+  <p id="langs" hidden>
+    <button id="lang-en" type="button" lang="en">English</button>
+    <button id="lang-fr" type="button" lang="fr">Français</button>
+  </p>
+  <p id="unverified" class="small" hidden>Anyone can make a card: this one isn't verified.</p>
+  <p id="privacy" class="small">This page drew the card on your device from the link itself: the part after the #
+    is never sent to a server. There is no account, no tracking and nothing stored.</p>
+  <p class="small"><a id="about" href="https://github.com/IAmAStealer/Bashou" rel="noopener noreferrer">Bashou</a>
+    <span id="tagline">is a terminal pet that teaches Linux, bash and more.</span></p>
+</main>
+</body>
+</html>
