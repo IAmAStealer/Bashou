@@ -3,7 +3,7 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
-## v0.8.2 — 2026-10-03
+## v0.8.2 — 2026-10-04
 
 - `bashou spot` has three new kinds of strings to recognise: a Linux password hash (`$1$…`, as in old
   `/etc/shadow` files and `openssl passwd -1`), a CSRF token in a form (`_csrf=…`), and OAuth2 (the

@@ -16,6 +16,11 @@ a `bashou learn` explanation of a tar command](doc/img/prompt.svg)
 
 ## What's new
 
+**0.8.2**
+- **Your starter grows further**: four new forms for each line, up to the Universe, the World tree and a Pet rock.
+- **`bashou spot`**: password hashes, CSRF tokens and OAuth2 strings to recognise.
+- A second secret pet, for players who like a good fight.
+
 **0.8.1**
 - **`bashou share`**: your card now shows your best `bashou spot` score and your rare pets: the ones you
   grew to their last form, and the hardest to meet.
