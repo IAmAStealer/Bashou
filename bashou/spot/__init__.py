@@ -111,16 +111,16 @@ def md5crypt(password, salt):
     """MD5-crypt, the "$1$" lines of old /etc/shadow files: `openssl passwd -1 -salt <salt> <password>` gives
     the same (Poul-Henning Kamp's algorithm: 1000 rounds of MD5, then its own base64)."""
     pw, sl = password.encode(), salt.encode()[:8]
-    alt = hashlib.md5(pw + sl + pw).digest()
+    alt = hashlib.md5(pw + sl + pw, usedforsecurity=False).digest()
     ctx = pw + b"$1$" + sl + b"".join(alt[:min(16, n)] for n in range(len(pw), 0, -16))
     n = len(pw)
     while n:
         ctx += b"\0" if n & 1 else pw[:1]
         n >>= 1
-    final = hashlib.md5(ctx).digest()
+    final = hashlib.md5(ctx, usedforsecurity=False).digest()
     for i in range(1000):
         c = (pw if i & 1 else final) + (sl if i % 3 else b"") + (pw if i % 7 else b"") + (final if i & 1 else pw)
-        final = hashlib.md5(c).digest()
+        final = hashlib.md5(c, usedforsecurity=False).digest()
 
     def to64(value, count):
         return "".join(CRYPT64[(value >> 6 * k) & 0x3f] for k in range(count))
@@ -136,7 +136,7 @@ def shadow(rng):
 
 def csrf_token(salt, secret):
     """The Express `csrf` library's token: salt, "-", then base64url(SHA-1(salt + "-" + secret)) without "="."""
-    digest = hashlib.sha1(f"{salt}-{secret}".encode()).digest()
+    digest = hashlib.sha1(f"{salt}-{secret}".encode(), usedforsecurity=False).digest()
     return f"{salt}-" + base64.urlsafe_b64encode(digest).decode().rstrip("=")
 
 
