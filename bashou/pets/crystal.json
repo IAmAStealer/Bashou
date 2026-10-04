@@ -1,7 +1,7 @@
 {
  "name": "Crystal golem",
  "next": "jade_golem",
- "next_at": {"level": 20},
+ "next_at": {"level": 12},
  "palette": {
   "a": "#555a64",
   "o": "#8c919b",

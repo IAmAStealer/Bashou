@@ -1,0 +1,55 @@
+{
+ "name": "Universe",
+ "symmetric": true,
+ "palette": {
+  "c": "#5a8ac0",
+  "C": "#d8ecff",
+  "K": "#2a2450",
+  "k": "#120f2c",
+  "p": "#c060e0",
+  "y": "#ffe080",
+  "b": "#6a80e0",
+  "B": "#b8d0ff",
+  "w": "#ffffff",
+  "e": "#d8dde0"
+ },
+ "base": [
+  ".....ccccccc.....",
+  "...ccCCKKKKKcc...",
+  "..cCKkkwkkkpKKc..",
+  ".cCKkbBkkkkppkKc.",
+  ".cKkkkkkykkkkkKc.",
+  "cKkkkkekkkekkbkKc",
+  "cKkkkkekkkekbBkKc",
+  "cKkpkkkkkkkkkkkKc",
+  ".cKkppkkkkkykkKc.",
+  ".cKKkkkbBkkkkKKc.",
+  "..ccKKkkkkKKKcc..",
+  "....ccccccccc...."
+ ],
+ "poses": {
+  "inhale": {
+   "1": "...ccCCCKKKKcc..."
+  },
+  "closed": {
+   "5": "------k---k------"
+  },
+  "left": {
+   "5": "-----ek--ek------",
+   "6": "-----ek--ek------"
+  },
+  "right": {
+   "5": "------ke--ke-----",
+   "6": "------ke--ke-----"
+  },
+  "fidget": {
+   "2": "-------k---------",
+   "4": "----w---k--------",
+   "7": "---------w---y---"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

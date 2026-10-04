@@ -1,0 +1,53 @@
+{
+ "name": "Nebula",
+ "next": "black_hole",
+ "next_at": {"level": 16},
+ "palette": {
+  "k": "#3a1850",
+  "p": "#7a3aa0",
+  "P": "#c058c0",
+  "q": "#ff9ad8",
+  "t": "#2c8aa0",
+  "T": "#7ae0e0",
+  "w": "#fff4d0",
+  "m": "#191919"
+ },
+ "base": [
+  ".....kkk...kkk...",
+  "...kkpPPk.kpPPk..",
+  "..kpPqqPPkPPqPpk.",
+  ".kpPqwqPPPPttTpk.",
+  ".kpPPqPPPPtTTtpk.",
+  "kpPPPPmPPPmTtPPpk",
+  "kpPPtPPPPPPPPPPpk",
+  ".kpttTPPqPPPPPpk.",
+  ".kpTTtPPPPPPwPpk.",
+  "..kptPPPPpPPPpk..",
+  "...kkpPPk.kppk...",
+  "....kkkk...kk...."
+ ],
+ "poses": {
+  "inhale": {
+   "0": "....kkkkk.kkkk...",
+   "11": "...kkkkkk.kkkk..."
+  },
+  "closed": {
+   "5": "------P---P------"
+  },
+  "left": {
+   "5": "-----mP--mP------"
+  },
+  "right": {
+   "5": "------Pm--Pm-----"
+  },
+  "fidget": {
+   "3": "-----q-----------",
+   "8": "------------P----",
+   "2": "------------w----"
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}

@@ -1,7 +1,7 @@
 {
  "name": "Flower",
  "next": "fern",
- "next_at": {"level": 11},
+ "next_at": {"level": 8},
  "palette": {
   "a": "#8c5f37",
   "o": "#cd9b64",

@@ -24,7 +24,7 @@ const hostile = {
   "no nickname": pack({ p: "packet", f: 3, lv: 5, ach: 20, pets: 4, won: 2, read: 3, sk: ["network"], s: "star", sf: 3 }),
   "no starter": pack({ p: "packet", f: 3, lv: 5, ach: 20, pets: 4, won: 2, read: 3, sk: ["network"], n: "Nova" }),
   "a pet as starter": pack({ ...base, s: "packet" }),
-  "starter form too far": pack({ ...base, sf: 8 }),
+  "starter form too far": pack({ ...base, sf: 12 }),
   "unknown pet": pack({ ...base, p: "constructor" }),
   "form too far": pack({ ...base, f: 11 }),
   "level 999": pack({ ...base, lv: 999 }),

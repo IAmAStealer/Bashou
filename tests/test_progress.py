@@ -255,39 +255,39 @@ class StarterTest(unittest.TestCase):
         self.assertEqual((progress.starter_level(s), progress.reached(s, "starter")), (1, 1))
         self.assertEqual(progress.current(s)[:3], ("sand_grain", 1, "Sand grain"))
         s["achievements"] = [f"a{i}" for i in range(15)]
-        self.assertEqual((progress.starter_level(s), progress.reached(s, "starter")), (4, 2))   # Gravel at level 3
+        self.assertEqual((progress.starter_level(s), progress.reached(s, "starter")), (4, 3))   # Pebble at level 4
         s["achievements"] = [f"a{i}" for i in range(50)]
-        self.assertEqual((progress.starter_level(s), progress.reached(s, "starter")), (11, 5))
-        self.assertEqual(progress.current(s)[2], "Rock golem")
+        self.assertEqual((progress.starter_level(s), progress.reached(s, "starter")), (11, 6))
+        self.assertEqual(progress.current(s)[2], "Crystal golem")
         s["achievements"] = [f"a{i}" for i in range(94)]
         self.assertEqual(progress.starter_level(s), progress.MAX_LEVEL - 1)
         s["achievements"] = [f"a{i}" for i in range(99)]
         self.assertEqual(progress.starter_level(s), progress.MAX_LEVEL)
-        self.assertEqual(progress.current(s)[:3], ("jade_golem", 3, "Jade golem"))
+        self.assertEqual(progress.current(s)[:3], ("pet_rock", 3, "Pet rock"))
 
     def test_level_up_and_evolution_notes(self):
         s = state.default()
         s["starter"] = "star"
         s["achievements"] = [f"a{i}" for i in range(4)]
         notes = progress.check(s, [a for a in __import__("bashou").achievements.ALL[:1]])
-        self.assertIn("⬆ Stardust reached level 2!", notes)
+        self.assertIn("✨ Stardust is evolving! Watch it: `bashou evolve`", notes)
+        self.assertEqual(progress.current(s)[:3], ("stardust", 1, "Stardust"))     # not watched yet
         s["achievements"] = [f"a{i}" for i in range(9)]
         notes = progress.check(s, [a for a in __import__("bashou").achievements.ALL[:1]])
-        self.assertIn("✨ Stardust is evolving! Watch it: `bashou evolve`", notes)
-        self.assertEqual(progress.current(s)[:3], ("stardust", 1, "Stardust"))     # a Comet: still tier 1
-        s["achievements"] = [f"a{i}" for i in range(19)]                   # to Comet (level 5) before watching
+        self.assertTrue(any(n.startswith("⬆ ") and n.endswith(" reached level 3!") for n in notes), notes)
+        s["achievements"] = [f"a{i}" for i in range(14)]                   # to Comet (level 4) before watching
         progress.check(s, [a for a in __import__("bashou").achievements.ALL[:1]])
         self.assertEqual(s["evolving"], [{"who": "starter", "from": "stardust", "to": creatures.STARTERS["star"][2]}])   # one animation, Stardust → Comet
 
     def test_pick_an_earlier_look(self):
         s = state.default()
         s["starter"], s["achievements"] = "star", [f"a{i}" for i in range(95)]
-        self.assertEqual(progress.current(s)[:3], ("red_giant", 3, "Red giant"))
+        self.assertEqual(progress.current(s)[:3], ("universe", 3, "Universe"))
         progress.set_look(s, "starter", 1)
         self.assertEqual(s["looks"]["starter"], "stardust")                      # saved by id
         self.assertEqual(progress.current(s)[:3], ("stardust", 3, "Stardust"))   # stardust that can dance
         s["looks"]["starter"] = creatures.STARTERS["star"][-1]
-        self.assertEqual(progress.look(s), 7)                                   # never beyond what's reached
+        self.assertEqual(progress.look(s), 11)                                   # never beyond what's reached
 
     def test_old_saves_keep_the_cat_as_starter(self):
         s = state.migrate({**state.default(), "pets": ["cat", "fox"], "active": "cat"})
@@ -312,7 +312,7 @@ class StarterTest(unittest.TestCase):
                     with mock.patch.object(state, "STATE", path):
                         s = state.load()
                 self.assertEqual(progress.current(s)[0], sprite)
-        s["achievements"] = [f"a{i}" for i in range(70)]                   # level 15: the Star comes
+        s["achievements"] = [f"a{i}" for i in range(45)]                   # level 10: the Star comes
         self.assertEqual(progress.reached(s, "starter"), 6)
 
     def test_pre_release_save_loads(self):

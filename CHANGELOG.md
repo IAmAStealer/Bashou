@@ -11,6 +11,10 @@ Every release has a section here, written for players. CI refuses to tag a relea
   you learn to spot here is what you meet in logs and configs.
 - The website's home page now says what Bashou teaches, with screenshots, and search engines get a sitemap.
   Share cards stay out of search results.
+- Your starter grows further: four new forms for each line, drawn in pixel art. The Star goes on to a Nebula,
+  a Black hole, a Galaxy and the whole Universe; the Seedling to an Old oak, a Blossom tree, a Forest and the
+  World tree; the Pebble to Amethyst, Ruby and Diamond golems, and at last a Pet rock in its box. The 11 forms
+  are spread over the 20 levels, and you keep every form you already reached.
 
 ## v0.8.1 — 2026-10-03
 

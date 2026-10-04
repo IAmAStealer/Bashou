@@ -9,8 +9,8 @@ from tests.test_regressions import TempState
 
 def evolving_stardust():
     s = state.default()
-    s["starter"], s["achievements"] = "star", [f"a{i}" for i in range(9)]
-    progress.check(s, achievements.ALL[:1])                              # the 10th: level 3, the Meteor
+    s["starter"], s["achievements"] = "star", [f"a{i}" for i in range(4)]
+    progress.check(s, achievements.ALL[:1])                              # the 5th: level 2, the Meteor
     return s
 
 
@@ -129,10 +129,11 @@ class FormSwitchTest(TempState):
         board = Board()
         board.pos = 0
         names = []
-        for _ in range(7):
+        for _ in range(11):
             board.key("form")
             names.append(progress.current(state.load())[2])
-        self.assertEqual(names, ["Stardust", "Meteor", "Comet", "Moon", "Planet", "Star", "Red giant"])
+        self.assertEqual(names, ["Stardust", "Meteor", "Comet", "Moon", "Planet", "Star", "Red giant", "Nebula",
+                                 "Black hole", "Galaxy", "Universe"])
         self.assertEqual(state.load()["looks"], {})                        # back to the latest: no pin left
         self.assertEqual(progress.current(state.load())[1], 3)             # actions never went back
 
@@ -180,9 +181,9 @@ class NoSpoilerTest(unittest.TestCase):
         from bashou.board import ladder_line
         s = state.default()
         s["starter"], s["achievements"] = "star", [f"a{i}" for i in range(15)]
-        self.assertEqual(ladder_line(s), "Stardust → Meteor → ? (level 5)")
+        self.assertEqual(ladder_line(s), "Stardust → Meteor → Comet → ? (level 6)")
         s["achievements"] = [f"a{i}" for i in range(99)]
-        self.assertEqual(ladder_line(s), "Stardust → Meteor → Comet → Moon → Planet → Star → Red giant")
+        self.assertEqual(ladder_line(s), "Stardust → Meteor → Comet → Moon → Planet → Star → Red giant → Nebula → Black hole → Galaxy → Universe")
 
     def test_the_starter_choice_names_only_the_first_form(self):
         from bashou import starter

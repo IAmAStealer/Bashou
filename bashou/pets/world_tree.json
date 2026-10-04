@@ -1,0 +1,54 @@
+{
+ "name": "World tree",
+ "symmetric": true,
+ "palette": {
+  "d": "#2a5a28",
+  "L": "#4f8a3a",
+  "l": "#8cc060",
+  "y": "#ffe080",
+  "b": "#2a6ac0",
+  "B": "#7ab8f0",
+  "g": "#60b050",
+  "n": "#3e2816",
+  "t": "#6a4428",
+  "T": "#94643a",
+  "m": "#191919"
+ },
+ "base": [
+  "..dddd.bBb.dddd..",
+  ".dLLlLdbgBbdLlLd.",
+  "dLlLLLdBbbgdLLlLd",
+  "dLLyLLLdbbdLLyLLd",
+  ".dLLLLLLddLLLLLd.",
+  "..dddLLLLLLLddd..",
+  ".....tTTTTTt.....",
+  ".....tTmTmTt.....",
+  ".....tTTTTTt.....",
+  "....ntTTTTTtn....",
+  "..nnntTTTTTtnnn..",
+  "nnn..nn.n.nn..nnn"
+ ],
+ "poses": {
+  "inhale": {
+   "0": ".ddddd.bBb.ddddd."
+  },
+  "closed": {
+   "7": "-------T-T-------"
+  },
+  "left": {
+   "7": "------mTmT-------"
+  },
+  "right": {
+   "7": "-------TmTm------"
+  },
+  "fidget": {
+   "1": "-------bBgb------",
+   "2": "-------BbgB------",
+   "3": "---L---------L---"
+  }
+ },
+ "particles": [
+  3,
+  14
+ ]
+}

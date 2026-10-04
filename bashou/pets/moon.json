@@ -1,7 +1,7 @@
 {
  "name": "Moon",
  "next": "planet",
- "next_at": {"level": 11},
+ "next_at": {"level": 8},
  "symmetric": true,
  "palette": {
   "h": "#4a4a52",

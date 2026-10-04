@@ -1,5 +1,7 @@
 {
  "name": "Tree spirit",
+ "next": "old_oak",
+ "next_at": {"level": 14},
  "palette": {
   "L": "#50a04b",
   "l": "#96d26e",

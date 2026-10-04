@@ -1,7 +1,7 @@
 {
  "name": "Rock golem",
  "next": "crystal",
- "next_at": {"level": 15},
+ "next_at": {"level": 10},
  "palette": {
   "a": "#555a64",
   "o": "#8c919b",

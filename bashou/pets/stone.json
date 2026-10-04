@@ -1,7 +1,7 @@
 {
  "name": "Stone",
  "next": "golem",
- "next_at": {"level": 11},
+ "next_at": {"level": 8},
  "symmetric": true,
  "palette": {
   "a": "#555a64",

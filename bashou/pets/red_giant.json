@@ -1,5 +1,7 @@
 {
  "name": "Red giant",
+ "next": "nebula",
+ "next_at": {"level": 14},
  "symmetric": true,
  "palette": {
   "g": "#4a1408",

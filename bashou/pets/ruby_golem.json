@@ -1,0 +1,54 @@
+{
+ "name": "Ruby golem",
+ "next": "diamond_golem",
+ "next_at": {"level": 18},
+ "symmetric": true,
+ "palette": {
+  "g": "#3a3a44",
+  "s": "#6a6a78",
+  "S": "#9a9aa8",
+  "G": "#b08020",
+  "Y": "#ffe080",
+  "k": "#600818",
+  "r": "#b01830",
+  "R": "#f04060",
+  "W": "#ffc0d0",
+  "m": "#1a0408"
+ },
+ "base": [
+  "....ssSSSSSss....",
+  "...sSSSSSSSSSs...",
+  ".gsSGYYYYYYYGSsg.",
+  "gssGYkrrrrrkYGssg",
+  "gSsGkrRWrrrrkGsSg",
+  "gSsGkrmrrrmrkGsSg",
+  "gssGkrrrrrrrkGssg",
+  ".gsGkrrRrrrrkGsg.",
+  ".gsGYkkrrrkkYGsg.",
+  "..gsGGYYYYYGGsg..",
+  "...gsssgggsssg...",
+  "..ggggg...ggggg.."
+ ],
+ "poses": {
+  "inhale": {
+   "4": "-----rRWWrrr-----"
+  },
+  "closed": {
+   "5": "------r---r------"
+  },
+  "left": {
+   "5": "-----mr--mr------"
+  },
+  "right": {
+   "5": "------rm--rm-----"
+  },
+  "fidget": {
+   "2": "-----YWYYYWY-----",
+   "7": "-------W---------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

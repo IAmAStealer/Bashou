@@ -1216,31 +1216,6 @@
     null
    ],
    [
-    1,
-    "Stardust",
-    null
-   ],
-   [
-    1,
-    "Stardust",
-    null
-   ],
-   [
-    1,
-    "Stardust",
-    null
-   ],
-   [
-    1,
-    "Stardust",
-    null
-   ],
-   [
-    1,
-    "Stardust",
-    null
-   ],
-   [
     2,
     "Meteor",
     null
@@ -1341,31 +1316,6 @@
     null
    ],
    [
-    3,
-    "Comet",
-    null
-   ],
-   [
-    3,
-    "Comet",
-    null
-   ],
-   [
-    3,
-    "Comet",
-    null
-   ],
-   [
-    3,
-    "Comet",
-    null
-   ],
-   [
-    3,
-    "Comet",
-    null
-   ],
-   [
     4,
     "Moon",
     null
@@ -1416,31 +1366,6 @@
     null
    ],
    [
-    4,
-    "Moon",
-    null
-   ],
-   [
-    4,
-    "Moon",
-    null
-   ],
-   [
-    4,
-    "Moon",
-    null
-   ],
-   [
-    4,
-    "Moon",
-    null
-   ],
-   [
-    4,
-    "Moon",
-    null
-   ],
-   [
     5,
     "Planet",
     null
@@ -1488,131 +1413,6 @@
    [
     5,
     "Planet",
-    null
-   ],
-   [
-    5,
-    "Planet",
-    null
-   ],
-   [
-    5,
-    "Planet",
-    null
-   ],
-   [
-    5,
-    "Planet",
-    null
-   ],
-   [
-    5,
-    "Planet",
-    null
-   ],
-   [
-    5,
-    "Planet",
-    null
-   ],
-   [
-    5,
-    "Planet",
-    null
-   ],
-   [
-    5,
-    "Planet",
-    null
-   ],
-   [
-    5,
-    "Planet",
-    null
-   ],
-   [
-    5,
-    "Planet",
-    null
-   ],
-   [
-    5,
-    "Planet",
-    null
-   ],
-   [
-    6,
-    "Star",
-    null
-   ],
-   [
-    6,
-    "Star",
-    null
-   ],
-   [
-    6,
-    "Star",
-    null
-   ],
-   [
-    6,
-    "Star",
-    null
-   ],
-   [
-    6,
-    "Star",
-    null
-   ],
-   [
-    6,
-    "Star",
-    null
-   ],
-   [
-    6,
-    "Star",
-    null
-   ],
-   [
-    6,
-    "Star",
-    null
-   ],
-   [
-    6,
-    "Star",
-    null
-   ],
-   [
-    6,
-    "Star",
-    null
-   ],
-   [
-    6,
-    "Star",
-    null
-   ],
-   [
-    6,
-    "Star",
-    null
-   ],
-   [
-    6,
-    "Star",
-    null
-   ],
-   [
-    6,
-    "Star",
-    null
-   ],
-   [
-    6,
-    "Star",
     null
    ],
    [
@@ -1693,6 +1493,206 @@
    [
     7,
     "Red giant",
+    null
+   ],
+   [
+    7,
+    "Red giant",
+    null
+   ],
+   [
+    7,
+    "Red giant",
+    null
+   ],
+   [
+    7,
+    "Red giant",
+    null
+   ],
+   [
+    7,
+    "Red giant",
+    null
+   ],
+   [
+    8,
+    "Nebula",
+    null
+   ],
+   [
+    8,
+    "Nebula",
+    null
+   ],
+   [
+    8,
+    "Nebula",
+    null
+   ],
+   [
+    8,
+    "Nebula",
+    null
+   ],
+   [
+    8,
+    "Nebula",
+    null
+   ],
+   [
+    8,
+    "Nebula",
+    null
+   ],
+   [
+    8,
+    "Nebula",
+    null
+   ],
+   [
+    8,
+    "Nebula",
+    null
+   ],
+   [
+    8,
+    "Nebula",
+    null
+   ],
+   [
+    8,
+    "Nebula",
+    null
+   ],
+   [
+    9,
+    "Black hole",
+    null
+   ],
+   [
+    9,
+    "Black hole",
+    null
+   ],
+   [
+    9,
+    "Black hole",
+    null
+   ],
+   [
+    9,
+    "Black hole",
+    null
+   ],
+   [
+    9,
+    "Black hole",
+    null
+   ],
+   [
+    9,
+    "Black hole",
+    null
+   ],
+   [
+    9,
+    "Black hole",
+    null
+   ],
+   [
+    9,
+    "Black hole",
+    null
+   ],
+   [
+    9,
+    "Black hole",
+    null
+   ],
+   [
+    9,
+    "Black hole",
+    null
+   ],
+   [
+    10,
+    "Galaxy",
+    null
+   ],
+   [
+    10,
+    "Galaxy",
+    null
+   ],
+   [
+    10,
+    "Galaxy",
+    null
+   ],
+   [
+    10,
+    "Galaxy",
+    null
+   ],
+   [
+    10,
+    "Galaxy",
+    null
+   ],
+   [
+    10,
+    "Galaxy",
+    null
+   ],
+   [
+    10,
+    "Galaxy",
+    null
+   ],
+   [
+    10,
+    "Galaxy",
+    null
+   ],
+   [
+    10,
+    "Galaxy",
+    null
+   ],
+   [
+    10,
+    "Galaxy",
+    null
+   ],
+   [
+    11,
+    "Universe",
+    null
+   ],
+   [
+    11,
+    "Universe",
+    null
+   ],
+   [
+    11,
+    "Universe",
+    null
+   ],
+   [
+    11,
+    "Universe",
+    null
+   ],
+   [
+    11,
+    "Universe",
+    null
+   ],
+   [
+    11,
+    "Universe",
     null
    ]
   ],
@@ -1723,31 +1723,6 @@
     null
    ],
    [
-    1,
-    "Seedling",
-    null
-   ],
-   [
-    1,
-    "Seedling",
-    null
-   ],
-   [
-    1,
-    "Seedling",
-    null
-   ],
-   [
-    1,
-    "Seedling",
-    null
-   ],
-   [
-    1,
-    "Seedling",
-    null
-   ],
-   [
     2,
     "Sprout",
     null
@@ -1848,31 +1823,6 @@
     null
    ],
    [
-    3,
-    "Grass",
-    null
-   ],
-   [
-    3,
-    "Grass",
-    null
-   ],
-   [
-    3,
-    "Grass",
-    null
-   ],
-   [
-    3,
-    "Grass",
-    null
-   ],
-   [
-    3,
-    "Grass",
-    null
-   ],
-   [
     4,
     "Flower",
     null
@@ -1923,31 +1873,6 @@
     null
    ],
    [
-    4,
-    "Flower",
-    null
-   ],
-   [
-    4,
-    "Flower",
-    null
-   ],
-   [
-    4,
-    "Flower",
-    null
-   ],
-   [
-    4,
-    "Flower",
-    null
-   ],
-   [
-    4,
-    "Flower",
-    null
-   ],
-   [
     5,
     "Fern",
     null
@@ -1995,131 +1920,6 @@
    [
     5,
     "Fern",
-    null
-   ],
-   [
-    5,
-    "Fern",
-    null
-   ],
-   [
-    5,
-    "Fern",
-    null
-   ],
-   [
-    5,
-    "Fern",
-    null
-   ],
-   [
-    5,
-    "Fern",
-    null
-   ],
-   [
-    5,
-    "Fern",
-    null
-   ],
-   [
-    5,
-    "Fern",
-    null
-   ],
-   [
-    5,
-    "Fern",
-    null
-   ],
-   [
-    5,
-    "Fern",
-    null
-   ],
-   [
-    5,
-    "Fern",
-    null
-   ],
-   [
-    5,
-    "Fern",
-    null
-   ],
-   [
-    6,
-    "Bush",
-    null
-   ],
-   [
-    6,
-    "Bush",
-    null
-   ],
-   [
-    6,
-    "Bush",
-    null
-   ],
-   [
-    6,
-    "Bush",
-    null
-   ],
-   [
-    6,
-    "Bush",
-    null
-   ],
-   [
-    6,
-    "Bush",
-    null
-   ],
-   [
-    6,
-    "Bush",
-    null
-   ],
-   [
-    6,
-    "Bush",
-    null
-   ],
-   [
-    6,
-    "Bush",
-    null
-   ],
-   [
-    6,
-    "Bush",
-    null
-   ],
-   [
-    6,
-    "Bush",
-    null
-   ],
-   [
-    6,
-    "Bush",
-    null
-   ],
-   [
-    6,
-    "Bush",
-    null
-   ],
-   [
-    6,
-    "Bush",
-    null
-   ],
-   [
-    6,
-    "Bush",
     null
    ],
    [
@@ -2200,6 +2000,206 @@
    [
     7,
     "Tree spirit",
+    null
+   ],
+   [
+    7,
+    "Tree spirit",
+    null
+   ],
+   [
+    7,
+    "Tree spirit",
+    null
+   ],
+   [
+    7,
+    "Tree spirit",
+    null
+   ],
+   [
+    7,
+    "Tree spirit",
+    null
+   ],
+   [
+    8,
+    "Old oak",
+    null
+   ],
+   [
+    8,
+    "Old oak",
+    null
+   ],
+   [
+    8,
+    "Old oak",
+    null
+   ],
+   [
+    8,
+    "Old oak",
+    null
+   ],
+   [
+    8,
+    "Old oak",
+    null
+   ],
+   [
+    8,
+    "Old oak",
+    null
+   ],
+   [
+    8,
+    "Old oak",
+    null
+   ],
+   [
+    8,
+    "Old oak",
+    null
+   ],
+   [
+    8,
+    "Old oak",
+    null
+   ],
+   [
+    8,
+    "Old oak",
+    null
+   ],
+   [
+    9,
+    "Blossom tree",
+    null
+   ],
+   [
+    9,
+    "Blossom tree",
+    null
+   ],
+   [
+    9,
+    "Blossom tree",
+    null
+   ],
+   [
+    9,
+    "Blossom tree",
+    null
+   ],
+   [
+    9,
+    "Blossom tree",
+    null
+   ],
+   [
+    9,
+    "Blossom tree",
+    null
+   ],
+   [
+    9,
+    "Blossom tree",
+    null
+   ],
+   [
+    9,
+    "Blossom tree",
+    null
+   ],
+   [
+    9,
+    "Blossom tree",
+    null
+   ],
+   [
+    9,
+    "Blossom tree",
+    null
+   ],
+   [
+    10,
+    "Forest",
+    null
+   ],
+   [
+    10,
+    "Forest",
+    null
+   ],
+   [
+    10,
+    "Forest",
+    null
+   ],
+   [
+    10,
+    "Forest",
+    null
+   ],
+   [
+    10,
+    "Forest",
+    null
+   ],
+   [
+    10,
+    "Forest",
+    null
+   ],
+   [
+    10,
+    "Forest",
+    null
+   ],
+   [
+    10,
+    "Forest",
+    null
+   ],
+   [
+    10,
+    "Forest",
+    null
+   ],
+   [
+    10,
+    "Forest",
+    null
+   ],
+   [
+    11,
+    "World tree",
+    null
+   ],
+   [
+    11,
+    "World tree",
+    null
+   ],
+   [
+    11,
+    "World tree",
+    null
+   ],
+   [
+    11,
+    "World tree",
+    null
+   ],
+   [
+    11,
+    "World tree",
+    null
+   ],
+   [
+    11,
+    "World tree",
     null
    ]
   ],
@@ -2230,31 +2230,6 @@
     null
    ],
    [
-    1,
-    "Sand grain",
-    null
-   ],
-   [
-    1,
-    "Sand grain",
-    null
-   ],
-   [
-    1,
-    "Sand grain",
-    null
-   ],
-   [
-    1,
-    "Sand grain",
-    null
-   ],
-   [
-    1,
-    "Sand grain",
-    null
-   ],
-   [
     2,
     "Gravel",
     null
@@ -2355,31 +2330,6 @@
     null
    ],
    [
-    3,
-    "Pebble",
-    null
-   ],
-   [
-    3,
-    "Pebble",
-    null
-   ],
-   [
-    3,
-    "Pebble",
-    null
-   ],
-   [
-    3,
-    "Pebble",
-    null
-   ],
-   [
-    3,
-    "Pebble",
-    null
-   ],
-   [
     4,
     "Stone",
     null
@@ -2430,31 +2380,6 @@
     null
    ],
    [
-    4,
-    "Stone",
-    null
-   ],
-   [
-    4,
-    "Stone",
-    null
-   ],
-   [
-    4,
-    "Stone",
-    null
-   ],
-   [
-    4,
-    "Stone",
-    null
-   ],
-   [
-    4,
-    "Stone",
-    null
-   ],
-   [
     5,
     "Rock golem",
     null
@@ -2502,131 +2427,6 @@
    [
     5,
     "Rock golem",
-    null
-   ],
-   [
-    5,
-    "Rock golem",
-    null
-   ],
-   [
-    5,
-    "Rock golem",
-    null
-   ],
-   [
-    5,
-    "Rock golem",
-    null
-   ],
-   [
-    5,
-    "Rock golem",
-    null
-   ],
-   [
-    5,
-    "Rock golem",
-    null
-   ],
-   [
-    5,
-    "Rock golem",
-    null
-   ],
-   [
-    5,
-    "Rock golem",
-    null
-   ],
-   [
-    5,
-    "Rock golem",
-    null
-   ],
-   [
-    5,
-    "Rock golem",
-    null
-   ],
-   [
-    5,
-    "Rock golem",
-    null
-   ],
-   [
-    6,
-    "Crystal golem",
-    null
-   ],
-   [
-    6,
-    "Crystal golem",
-    null
-   ],
-   [
-    6,
-    "Crystal golem",
-    null
-   ],
-   [
-    6,
-    "Crystal golem",
-    null
-   ],
-   [
-    6,
-    "Crystal golem",
-    null
-   ],
-   [
-    6,
-    "Crystal golem",
-    null
-   ],
-   [
-    6,
-    "Crystal golem",
-    null
-   ],
-   [
-    6,
-    "Crystal golem",
-    null
-   ],
-   [
-    6,
-    "Crystal golem",
-    null
-   ],
-   [
-    6,
-    "Crystal golem",
-    null
-   ],
-   [
-    6,
-    "Crystal golem",
-    null
-   ],
-   [
-    6,
-    "Crystal golem",
-    null
-   ],
-   [
-    6,
-    "Crystal golem",
-    null
-   ],
-   [
-    6,
-    "Crystal golem",
-    null
-   ],
-   [
-    6,
-    "Crystal golem",
     null
    ],
    [
@@ -2707,6 +2507,206 @@
    [
     7,
     "Jade golem",
+    null
+   ],
+   [
+    7,
+    "Jade golem",
+    null
+   ],
+   [
+    7,
+    "Jade golem",
+    null
+   ],
+   [
+    7,
+    "Jade golem",
+    null
+   ],
+   [
+    7,
+    "Jade golem",
+    null
+   ],
+   [
+    8,
+    "Amethyst golem",
+    null
+   ],
+   [
+    8,
+    "Amethyst golem",
+    null
+   ],
+   [
+    8,
+    "Amethyst golem",
+    null
+   ],
+   [
+    8,
+    "Amethyst golem",
+    null
+   ],
+   [
+    8,
+    "Amethyst golem",
+    null
+   ],
+   [
+    8,
+    "Amethyst golem",
+    null
+   ],
+   [
+    8,
+    "Amethyst golem",
+    null
+   ],
+   [
+    8,
+    "Amethyst golem",
+    null
+   ],
+   [
+    8,
+    "Amethyst golem",
+    null
+   ],
+   [
+    8,
+    "Amethyst golem",
+    null
+   ],
+   [
+    9,
+    "Ruby golem",
+    null
+   ],
+   [
+    9,
+    "Ruby golem",
+    null
+   ],
+   [
+    9,
+    "Ruby golem",
+    null
+   ],
+   [
+    9,
+    "Ruby golem",
+    null
+   ],
+   [
+    9,
+    "Ruby golem",
+    null
+   ],
+   [
+    9,
+    "Ruby golem",
+    null
+   ],
+   [
+    9,
+    "Ruby golem",
+    null
+   ],
+   [
+    9,
+    "Ruby golem",
+    null
+   ],
+   [
+    9,
+    "Ruby golem",
+    null
+   ],
+   [
+    9,
+    "Ruby golem",
+    null
+   ],
+   [
+    10,
+    "Diamond golem",
+    null
+   ],
+   [
+    10,
+    "Diamond golem",
+    null
+   ],
+   [
+    10,
+    "Diamond golem",
+    null
+   ],
+   [
+    10,
+    "Diamond golem",
+    null
+   ],
+   [
+    10,
+    "Diamond golem",
+    null
+   ],
+   [
+    10,
+    "Diamond golem",
+    null
+   ],
+   [
+    10,
+    "Diamond golem",
+    null
+   ],
+   [
+    10,
+    "Diamond golem",
+    null
+   ],
+   [
+    10,
+    "Diamond golem",
+    null
+   ],
+   [
+    10,
+    "Diamond golem",
+    null
+   ],
+   [
+    11,
+    "Pet rock",
+    null
+   ],
+   [
+    11,
+    "Pet rock",
+    null
+   ],
+   [
+    11,
+    "Pet rock",
+    null
+   ],
+   [
+    11,
+    "Pet rock",
+    null
+   ],
+   [
+    11,
+    "Pet rock",
+    null
+   ],
+   [
+    11,
+    "Pet rock",
     null
    ]
   ]
@@ -2755,7 +2755,11 @@
      "moon",
      "planet",
      "star",
-     "red_giant"
+     "red_giant",
+     "nebula",
+     "black_hole",
+     "galaxy",
+     "universe"
     ],
     "en": [
      "Stardust",
@@ -2764,7 +2768,11 @@
      "Moon",
      "Planet",
      "Star",
-     "Red giant"
+     "Red giant",
+     "Nebula",
+     "Black hole",
+     "Galaxy",
+     "Universe"
     ],
     "fr": [
      "Poussière",
@@ -2773,7 +2781,11 @@
      "Lune",
      "Planète",
      "Étoile",
-     "Géante rouge"
+     "Géante rouge",
+     "Nébuleuse",
+     "Trou noir",
+     "Galaxie",
+     "Univers"
     ]
    },
    "sprout": {
@@ -2784,7 +2796,11 @@
      "flower",
      "fern",
      "bush",
-     "tree"
+     "tree",
+     "old_oak",
+     "blossom_tree",
+     "forest",
+     "world_tree"
     ],
     "en": [
      "Seedling",
@@ -2793,7 +2809,11 @@
      "Flower",
      "Fern",
      "Bush",
-     "Tree spirit"
+     "Tree spirit",
+     "Old oak",
+     "Blossom tree",
+     "Forest",
+     "World tree"
     ],
     "fr": [
      "Graine",
@@ -2802,7 +2822,11 @@
      "Fleur",
      "Fougère",
      "Buisson",
-     "Esprit sylvestre"
+     "Esprit sylvestre",
+     "Vieux chêne",
+     "Cerisier fleuri",
+     "Forêt",
+     "Arbre-monde"
     ]
    },
    "pebble": {
@@ -2813,7 +2837,11 @@
      "stone",
      "golem",
      "crystal",
-     "jade_golem"
+     "jade_golem",
+     "amethyst_golem",
+     "ruby_golem",
+     "diamond_golem",
+     "pet_rock"
     ],
     "en": [
      "Sand grain",
@@ -2822,7 +2850,11 @@
      "Stone",
      "Rock golem",
      "Crystal golem",
-     "Jade golem"
+     "Jade golem",
+     "Amethyst golem",
+     "Ruby golem",
+     "Diamond golem",
+     "Pet rock"
     ],
     "fr": [
      "Grain de sable",
@@ -2831,7 +2863,11 @@
      "Pierre",
      "Golem de roche",
      "Golem de cristal",
-     "Golem de jade"
+     "Golem de jade",
+     "Golem améthyste",
+     "Golem de rubis",
+     "Golem de diamant",
+     "Caillou chéri"
     ]
    },
    "bat": {
@@ -3643,6 +3679,111 @@
      ".....ghhhhhg....."
     ]
    },
+   "nebula": {
+    "palette": {
+     "k": "#3a1850",
+     "p": "#7a3aa0",
+     "P": "#c058c0",
+     "q": "#ff9ad8",
+     "t": "#2c8aa0",
+     "T": "#7ae0e0",
+     "w": "#fff4d0",
+     "m": "#191919"
+    },
+    "base": [
+     ".....kkk...kkk...",
+     "...kkpPPk.kpPPk..",
+     "..kpPqqPPkPPqPpk.",
+     ".kpPqwqPPPPttTpk.",
+     ".kpPPqPPPPtTTtpk.",
+     "kpPPPPmPPPmTtPPpk",
+     "kpPPtPPPPPPPPPPpk",
+     ".kpttTPPqPPPPPpk.",
+     ".kpTTtPPPPPPwPpk.",
+     "..kptPPPPpPPPpk..",
+     "...kkpPPk.kppk...",
+     "....kkkk...kk...."
+    ]
+   },
+   "black_hole": {
+    "palette": {
+     "k": "#06060c",
+     "K": "#2a2a3e",
+     "r": "#9a3a10",
+     "o": "#f08020",
+     "y": "#ffd060",
+     "w": "#fff4c0",
+     "e": "#c8cdd0"
+    },
+    "base": [
+     "......rooor......",
+     "....royyyyyor....",
+     "...oyKKKKKKKyo...",
+     "..ryKkkkkkkkKyr..",
+     "..oKkkekkkekkKo..",
+     "..yKkkkkkkkkkKy..",
+     "rooyywwwwwwwyyoor",
+     "..ryyyyooooyyyr..",
+     "..oKkkkkkkkkkKo..",
+     "...oKKkkkkkKKo...",
+     "....roKKKKKor....",
+     "......rooor......"
+    ]
+   },
+   "galaxy": {
+    "palette": {
+     "b": "#3a4aa0",
+     "B": "#6a80e0",
+     "c": "#b8d0ff",
+     "o": "#d89a40",
+     "y": "#ffe080",
+     "Y": "#fff6d0",
+     "m": "#3a2810",
+     "s": "#ffffff"
+    },
+    "base": [
+     ".......bBBBb.....",
+     "....bBBccBBbb..s.",
+     "..bBcb....bBBb...",
+     ".bBc..ooyoo..bB..",
+     ".Bc..oyYYYyo..Bb.",
+     "bB..oyYmYmYyo.cB.",
+     "Bc..oyyYYYyyo..B.",
+     ".Bb..oyyyyyo..cb.",
+     "..bB..ooooo..Bb..",
+     "s..bBBb....bcB...",
+     ".....bbBccBBb....",
+     "........bBBb....."
+    ]
+   },
+   "universe": {
+    "palette": {
+     "c": "#5a8ac0",
+     "C": "#d8ecff",
+     "K": "#2a2450",
+     "k": "#120f2c",
+     "p": "#c060e0",
+     "y": "#ffe080",
+     "b": "#6a80e0",
+     "B": "#b8d0ff",
+     "w": "#ffffff",
+     "e": "#d8dde0"
+    },
+    "base": [
+     ".....ccccccc.....",
+     "...ccCCKKKKKcc...",
+     "..cCKkkwkkkpKKc..",
+     ".cCKkbBkkkkppkKc.",
+     ".cKkkkkkykkkkkKc.",
+     "cKkkkkekkkekkbkKc",
+     "cKkkkkekkkekbBkKc",
+     "cKkpkkkkkkkkkkkKc",
+     ".cKkppkkkkkykkKc.",
+     ".cKKkkkbBkkkkKKc.",
+     "..ccKKkkkkKKKcc..",
+     "....ccccccccc...."
+    ]
+   },
    "seedling": {
     "palette": {
      "a": "#6e4526",
@@ -3825,6 +3966,112 @@
      "..ttt.ttt.ttt...."
     ]
    },
+   "old_oak": {
+    "palette": {
+     "d": "#2f5f2a",
+     "L": "#4f8a3a",
+     "l": "#8cc060",
+     "a": "#b07a30",
+     "A": "#5a3a1a",
+     "n": "#3e2816",
+     "t": "#6a4428",
+     "T": "#94643a",
+     "m": "#191919"
+    },
+    "base": [
+     "...ddddd.ddddd...",
+     ".ddLLlLLdLLlLLdd.",
+     "dLLlLLLLLLLLlLLLd",
+     "dLLLALLlLLLLLALLd",
+     "dLLLaLLLLLLlLaLLd",
+     ".ddLLdLLLLLdLLdd.",
+     "...dddtTTTtddd...",
+     "....ntTmTmTtn....",
+     "....ntTTnTTtn....",
+     "...nttTTTTTttn...",
+     "..nntTTTTTTTtnn..",
+     ".nnn.nnn.nnn.nnn."
+    ]
+   },
+   "blossom_tree": {
+    "palette": {
+     "k": "#b04a78",
+     "P": "#f08cb8",
+     "p": "#ffc0dc",
+     "W": "#fff0f6",
+     "t": "#5a3a2a",
+     "T": "#7d5532",
+     "m": "#191919"
+    },
+    "base": [
+     "....kkkkkkkkk....",
+     "..kkPPpPPPPpPkk..",
+     ".kPPpWpPPPpWpPPk.",
+     "kPPPPpPPPPPPpPPPk",
+     "kPpPPPPPPpPPPPpPk",
+     ".kkPPkkPPPkkPPkk.",
+     "...kktTTTTTtkk...",
+     "..p..tTmTmTt...p.",
+     ".....tTTTTTt..p..",
+     ".p...tTTTTTt.....",
+     "....ttTTTTTtt....",
+     "...ttt..t..ttt..."
+    ]
+   },
+   "forest": {
+    "palette": {
+     "d": "#1e4a2a",
+     "g": "#2f7a3a",
+     "G": "#5ab050",
+     "l": "#a0e070",
+     "t": "#6a4428",
+     "s": "#4a3a20",
+     "m": "#191919"
+    },
+    "base": [
+     "........l........",
+     ".......gGg.......",
+     "..l...gGlGg...l..",
+     ".gGg..gGGGg..gGg.",
+     ".gGg.gGmGmGg.gGg.",
+     "gGlGggGGGGGgggGlg",
+     "gGGGgGGlGGGGggGGg",
+     "dgGgdgGGGGGGgdgGd",
+     ".dgdgGGGGGlGGgdd.",
+     "..t.dddddddddd.t.",
+     "..t.....t.....t..",
+     "sssssssssssssssss"
+    ]
+   },
+   "world_tree": {
+    "palette": {
+     "d": "#2a5a28",
+     "L": "#4f8a3a",
+     "l": "#8cc060",
+     "y": "#ffe080",
+     "b": "#2a6ac0",
+     "B": "#7ab8f0",
+     "g": "#60b050",
+     "n": "#3e2816",
+     "t": "#6a4428",
+     "T": "#94643a",
+     "m": "#191919"
+    },
+    "base": [
+     "..dddd.bBb.dddd..",
+     ".dLLlLdbgBbdLlLd.",
+     "dLlLLLdBbbgdLLlLd",
+     "dLLyLLLdbbdLLyLLd",
+     ".dLLLLLLddLLLLLd.",
+     "..dddLLLLLLLddd..",
+     ".....tTTTTTt.....",
+     ".....tTmTmTt.....",
+     ".....tTTTTTt.....",
+     "....ntTTTTTtn....",
+     "..nnntTTTTTtnnn..",
+     "nnn..nn.n.nn..nnn"
+    ]
+   },
    "sand_grain": {
     "palette": {
      "l": "#f0dfa8",
@@ -3992,6 +4239,115 @@
      "...aodwmwmwdoa...",
      "...aoodddddooa...",
      "...aaaaaaaaaaa..."
+    ]
+   },
+   "amethyst_golem": {
+    "palette": {
+     "a": "#3a3440",
+     "r": "#6a6470",
+     "R": "#9a94a0",
+     "v": "#4a2070",
+     "p": "#8a4ac0",
+     "P": "#c090f0",
+     "W": "#f4e8ff",
+     "m": "#1a0c24"
+    },
+    "base": [
+     "....aarrrrraa....",
+     "...aRRrrrrrRRa...",
+     ".arRavvvvvvvaRra.",
+     ".arvpPpvvvpPpvra.",
+     "arRvPWPpvpPWPvRra",
+     "arrvpmpPPPpmpvrra",
+     "arrvvpPPPPPpvvrra",
+     "arRvpPpvvvpPpvRra",
+     ".arrvvpPPPpvvrra.",
+     ".aarrvvvvvvvrraa.",
+     "..aarrrrrrrrraa..",
+     ".aaa..aaaaa..aaa."
+    ]
+   },
+   "ruby_golem": {
+    "palette": {
+     "g": "#3a3a44",
+     "s": "#6a6a78",
+     "S": "#9a9aa8",
+     "G": "#b08020",
+     "Y": "#ffe080",
+     "k": "#600818",
+     "r": "#b01830",
+     "R": "#f04060",
+     "W": "#ffc0d0",
+     "m": "#1a0408"
+    },
+    "base": [
+     "....ssSSSSSss....",
+     "...sSSSSSSSSSs...",
+     ".gsSGYYYYYYYGSsg.",
+     "gssGYkrrrrrkYGssg",
+     "gSsGkrRWrrrrkGsSg",
+     "gSsGkrmrrrmrkGsSg",
+     "gssGkrrrrrrrkGssg",
+     ".gsGkrrRrrrrkGsg.",
+     ".gsGYkkrrrkkYGsg.",
+     "..gsGGYYYYYGGsg..",
+     "...gsssgggsssg...",
+     "..ggggg...ggggg.."
+    ]
+   },
+   "diamond_golem": {
+    "palette": {
+     "k": "#3a5a7a",
+     "b": "#8ac8f0",
+     "B": "#c8ecff",
+     "w": "#ffffff",
+     "p": "#f0a0e0",
+     "y": "#fff080",
+     "m": "#2a3a4a"
+    },
+    "base": [
+     ".....kkkkkkk.....",
+     "....kBwBBBwBk....",
+     "...kBBbBBBbBBk...",
+     "..kbBbbBwBbbBbk..",
+     ".kkkkkkkkkkkkkkk.",
+     "..kbbbmBBBmbbbk..",
+     "...kbbBbBbBbbk...",
+     "y...kbbBwBbbk...p",
+     ".....kbBBBbk.....",
+     "......kbBbk......",
+     ".......kbk.......",
+     "........k........"
+    ]
+   },
+   "pet_rock": {
+    "palette": {
+     "k": "#2e2e36",
+     "d": "#56565f",
+     "r": "#84848e",
+     "R": "#aeaeb8",
+     "W": "#d6d6e0",
+     "e": "#f6f6f2",
+     "p": "#191919",
+     "n": "#7a5228",
+     "B": "#e8c088",
+     "b": "#c8995a",
+     "s": "#e8d070",
+     "S": "#b8983c"
+    },
+    "base": [
+     ".................",
+     ".....kkkkkkk.....",
+     "...kkWWRRrrrkk...",
+     "...kReeRReerdk...",
+     "..kRRpeRrperddk..",
+     "..krRRRrrrrdddk..",
+     ".skrrrrrrrrdddks.",
+     "nSskrrrrrrdddksSn",
+     "nBBBBBBBBBBBBBBBn",
+     "nbbbbbbbbbbbbbbbn",
+     "nbnbbbbbbbbbbbnbn",
+     "nnnnnnnnnnnnnnnnn"
     ]
    },
    "mouseling": {
@@ -7479,6 +7835,7 @@
   "Adventure saved: chapter {n}, {m} m walked. Come back with: bashou adventure",
   "After you change a unit file, systemctl daemon-reload makes systemd read it again. enable starts it at every boot, --now also starts it right away.",
   "Alexandria",
+  "Amethyst golem",
   "An array of count items goes from 0 to count - 1. Compare the two loops.",
   "An intruder changed one file of the website in site/ a few minutes ago.\nEvery other file is weeks old. Which file was changed?",
   "Another day together. Keep the streak!",
@@ -7528,9 +7885,11 @@
   "Best: {best}",
   "Bisector",
   "Bit",
+  "Black hole",
   "Blaze",
   "Bloat Blob",
   "Blob",
+  "Blossom tree",
   "Blub.",
   "Books still get destroyed today. Keep what they teach where no fire can reach it: in your head.",
   "Bookworm",
@@ -7630,6 +7989,7 @@
   "Describer",
   "Desert",
   "Desert of Dangling Pointers",
+  "Diamond golem",
   "Dict Djinn",
   "Did you read that script first? Whoever controls the URL controls your shell.",
   "Digger",
@@ -7748,6 +8108,7 @@
   "Frog",
   "From the ashes, a phoenix. From a mistake, a lesson.",
   "Functions: greet() { echo \"hi $1\"; }",
+  "Galaxy",
   "Garden",
   "Gary",
   "Generator",
@@ -8005,6 +8366,7 @@
   "My eyes move one by one. Yours can learn to spot a hash in a log at a glance.",
   "NXDomain Nixie",
   "Name",
+  "Nebula",
   "Needle Gnat",
   "Needs Newt",
   "Negation Gnome",
@@ -8054,6 +8416,7 @@
   "Octopito",
   "Octopus",
   "Official lines: wiki.debian.org/SourcesList. `man sources.list` explains each field. Since Debian 11, security uses <release>-security.",
+  "Old oak",
   "Old reports fill this chest. Remove report-2025-*.csv and nothing else. Then: verify",
   "Old tools lie half-buried in the sand. Some still bite.",
   "On a real system, a SUID program runs as its owner (often root), whoever starts it.\nOne program in bin/ has the SUID bit set. Which one?",
@@ -8096,6 +8459,7 @@
   "Peeker",
   "Percent Poltergeist",
   "Pet",
+  "Pet rock",
   "Pets",
   "Phoenix",
   "Photo sorter",
@@ -8186,6 +8550,7 @@
   "Roof on",
   "Route Raven",
   "Router",
+  "Ruby golem",
   "Run it now?",
   "Run it! What could go wrong? …Just kidding. Read it first.",
   "Run it:",
@@ -8585,6 +8950,7 @@
   "Unique",
   "Unit Imp",
   "Unit Wyrm",
+  "Universe",
   "Unix timestamp",
   "Unknown choice: {mode}. Try: bashou arena fight, or bashou arena security",
   "Unknown setting: {name}",
@@ -8654,6 +9020,7 @@
   "Wonder of the world",
   "Words that start with a dot are sqlite3's own commands: .tables lists the tables, .schema shows how one is built (its columns and their types), .quit leaves. You can also give them right after the file.",
   "Worker ant",
+  "World tree",
   "Write if (score == 100), then: gcc -Wall grade.c -o grade && ./grade 100 {mark} 7",
   "Write in the journal: add the line rested at the end of journal.txt, without erasing it.",
   "Write: const MAX_POINTS: u32 = …;",

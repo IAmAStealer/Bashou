@@ -1,5 +1,7 @@
 {
  "name": "Jade golem",
+ "next": "amethyst_golem",
+ "next_at": {"level": 14},
  "symmetric": true,
  "palette": {
   "a": "#4a3222",

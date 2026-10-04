@@ -1,7 +1,7 @@
 {
  "name": "Meteor",
  "next": "comet",
- "next_at": {"level": 5},
+ "next_at": {"level": 4},
  "palette": {
   "h": "#3a2c22",
   "e": "#6b5240",

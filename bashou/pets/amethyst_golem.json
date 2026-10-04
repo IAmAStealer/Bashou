@@ -1,0 +1,52 @@
+{
+ "name": "Amethyst golem",
+ "next": "ruby_golem",
+ "next_at": {"level": 16},
+ "symmetric": true,
+ "palette": {
+  "a": "#3a3440",
+  "r": "#6a6470",
+  "R": "#9a94a0",
+  "v": "#4a2070",
+  "p": "#8a4ac0",
+  "P": "#c090f0",
+  "W": "#f4e8ff",
+  "m": "#1a0c24"
+ },
+ "base": [
+  "....aarrrrraa....",
+  "...aRRrrrrrRRa...",
+  ".arRavvvvvvvaRra.",
+  ".arvpPpvvvpPpvra.",
+  "arRvPWPpvpPWPvRra",
+  "arrvpmpPPPpmpvrra",
+  "arrvvpPPPPPpvvrra",
+  "arRvpPpvvvpPpvRra",
+  ".arrvvpPPPpvvrra.",
+  ".aarrvvvvvvvrraa.",
+  "..aarrrrrrrrraa..",
+  ".aaa..aaaaa..aaa."
+ ],
+ "poses": {
+  "inhale": {
+   "6": "----vpPWPWPpv----"
+  },
+  "closed": {
+   "5": "-----p-----p-----"
+  },
+  "left": {
+   "5": "----mp----mp-----"
+  },
+  "right": {
+   "5": "-----pm----pm----"
+  },
+  "fidget": {
+   "3": "-----W-----W-----",
+   "7": "------W---W------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

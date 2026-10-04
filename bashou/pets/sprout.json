@@ -1,7 +1,7 @@
 {
  "name": "Sprout",
  "next": "grass",
- "next_at": {"level": 5},
+ "next_at": {"level": 4},
  "palette": {
   "a": "#8c5f37",
   "o": "#cd9b64",
