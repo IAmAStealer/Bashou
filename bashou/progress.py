@@ -50,8 +50,8 @@ def unlock_rule(state, pet):
         met = rule["achievement"] in state["achievements"]
     elif "family_achievement" in rule:
         met = bool({a.id for a in achievements.family(pet)} & set(state["achievements"]))
-    else:                                                  # "secret_found": a secret finds you
-        met = bool(achievements.secrets(state))
+    else:                                                  # "secret_found": one of its secrets finds you
+        met = any(a.pet == pet for a in achievements.secrets(state))
     return met, _(rule["how"]), _(rule["how"])
 
 

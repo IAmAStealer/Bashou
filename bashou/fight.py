@@ -198,12 +198,57 @@ def maybe_threat(s, rng=random, now=None):
     return announcement(s, now)
 
 
+# --- the Honey badger: it doesn't wait for threats (owner, 2026-10-04) --------------------------------
+# When it's your pet and the terminal has been quiet for a while, it gets bored and picks a fight itself.
+# The pet writes fight.<shell pid> in the cache; the loader sees it at the next prompt and opens the arena
+# right after your next command (bashou.bash), with no `bashou fight` to type.
+BADGER = "honey_badger"
+BORED_MINUTES = 10
+BADGER_PER_DAY = 2
+BADGER_WAITS = 12 * 3600       # its fight waits for you to come back, longer than a normal threat
+
+
+def next_fight(s, rng=random):
+    """The announced threat, else a review that is due, else a new fight you're ready for, else None."""
+    ch = pick(s)
+    if ch:
+        return ch
+    back = due(s)
+    if back:
+        return rng.choice(back)
+    new = [c for c in remaining(s) if ready(s, c)]
+    return rng.choice(new) if new else None
+
+
+def badger_fight(s, idle_ms, rng=random, now=None):
+    """Called under the lock from the companion. When the Honey badger is your pet and you've left the
+    terminal alone for BORED_MINUTES, it picks a fight (BADGER_PER_DAY at most). Returns True when it did."""
+    if progress.who_of(s) != BADGER or idle_ms < BORED_MINUTES * 60_000:
+        return False
+    now = now or time.time()
+    today = datetime.date.fromtimestamp(now).isoformat()
+    if s["badger_day"]["date"] != today:
+        s["badger_day"] = {"date": today, "count": 0}
+    if s["badger_day"]["count"] >= BADGER_PER_DAY:
+        return False
+    ch = next_fight(s, rng)
+    if not ch:
+        return False
+    review = ch.id in {c.id for c in due(s, today)}
+    s["threat"] = {"challenge": ch.id, "until": now + BADGER_WAITS, "review": review, "badger": True}
+    s["badger_day"]["count"] += 1
+    return True
+
+
 def announcement(s, now=None):
     """What the pet says about the waiting threat, or None."""
     t = active_threat(s, now)
     if not t or t["challenge"] not in challenges.BY_ID:
         return None
     ch = challenges.BY_ID[t["challenge"]]
+    if t.get("badger"):
+        return "🦡 " + _("Your Honey badger got bored and went to fight the {threat}! "
+                        "The arena opens after your next command.").format(threat=_(ch.threat))
     if t.get("review"):
         return "⚠ " + cap(_("The {threat} is back! Still remember `{tool}`? → bashou fight").format(
             threat=_(ch.threat), tool=ch.tool))
@@ -405,11 +450,14 @@ def arena(ch, intro, rng=None, fight=False, help_first=False, limit=None):
     return code, notes
 
 
-def run(ch=None, limit=None):
+def run(ch=None, limit=None, badger=False):
     """`bashou fight`: the threat your pet announced. `bashou arena` passes its own fight and a time
-    limit in seconds. Returns the arena's code, or None when there was nothing to fight."""
+    limit in seconds. Returns the arena's code, or None when there was nothing to fight. `badger`: the
+    loader opens the Honey badger's fight; when it's gone (fought already), it says nothing."""
     s = state.load()
     ch = ch or pick(s)
+    if not ch and badger:
+        return None
     if not ch:
         print(DIM + _("No threat around. Your pet will warn you when one comes.") + RESET)
         return None
@@ -430,6 +478,10 @@ def run(ch=None, limit=None):
             notes += progress.check(s)
         if won:
             s["fights_won"] += 1
+            today = datetime.date.today().isoformat()
+            if s["wins_day"]["date"] != today:
+                s["wins_day"] = {"date": today, "count": 0}
+            s["wins_day"]["count"] += 1
             if ch.id not in s["challenges"]:
                 s["challenges"].append(ch.id)
             if s.get("threat") and s["threat"]["challenge"] == ch.id:
@@ -467,7 +519,7 @@ def main():
         sys.exit(cmd_task(sys.argv[2]))
     if cmd == "lesson":
         sys.exit(cmd_lesson(sys.argv[2]))
-    run()
+    run(badger=cmd == "badger")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,22 @@
+{
+ "name": "Honey badger",
+ "first": "honey_badger",
+ "order": 33,
+ "secret": true,
+ "unlock": {
+  "achievement": "fearless",
+  "how": "???"
+ },
+ "voice": "*grr*",
+ "tips": [
+  "A fight you flee comes back. A fight you win comes back too, but it's easier each time.",
+  "`hint` in the arena costs nothing but pride. Take it.",
+  "Stuck? Look around first: `ls`, `cat`, `head` never hurt you in a fight.",
+  "Read the error message to the end. It usually says what's wrong."
+ ],
+ "personal": [
+  "I'm bored. Something needs fighting.",
+  "Honey badger doesn't wait for threats. Honey badger goes and finds them.",
+  "Three fights in one day. I like you."
+ ]
+}

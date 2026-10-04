@@ -863,3 +863,39 @@ class StrikeWordTest(unittest.TestCase):
                     self.assertEqual(ch.fix, "answer <" not in ch.task)
                 self.assertEqual("verify" in screen, ch.fix)
                 self.assertEqual("answer <value>" in screen, not ch.fix)
+
+
+class HoneyBadgerTest(unittest.TestCase):
+    """Owner, 2026-10-04: the Honey badger, a secret pet, picks fights itself when you've been idle."""
+    NOW = 1_800_000_000
+    BORED = fight.BORED_MINUTES * 60_000
+
+    def setUp(self):
+        self.s = {**state.default(), "pets": ["honey_badger"], "active": "honey_badger"}
+
+    def test_only_the_honey_badger_and_only_when_bored(self):
+        s = self.s
+        self.assertFalse(fight.badger_fight(s, self.BORED - 1, ThreatTest.Always(), self.NOW))
+        self.assertFalse(fight.badger_fight({**s, "active": "starter"}, self.BORED, ThreatTest.Always(), self.NOW))
+        self.assertIsNone(s["threat"])
+        self.assertTrue(fight.badger_fight(s, self.BORED, ThreatTest.Always(), self.NOW))
+        self.assertTrue(s["threat"]["badger"])
+        self.assertGreater(s["threat"]["until"], self.NOW + fight.THREAT_MINUTES * 60)   # waits for you
+        said = fight.announcement(s, now=self.NOW)
+        self.assertIn("Honey badger", said)
+        self.assertIn("after your next command", said)
+        self.assertEqual(fight.pick(s).id, s["threat"]["challenge"])
+
+    def test_two_a_day(self):
+        s = self.s
+        for _ in range(fight.BADGER_PER_DAY):
+            self.assertTrue(fight.badger_fight(s, self.BORED, ThreatTest.Always(), self.NOW))
+            s["threat"] = None                                           # fought
+        self.assertFalse(fight.badger_fight(s, self.BORED, ThreatTest.Always(), self.NOW))
+        self.assertTrue(fight.badger_fight(s, self.BORED, ThreatTest.Always(), self.NOW + 86_400))
+
+    def test_the_loader_says_nothing_when_its_fight_is_gone(self):
+        out = io.StringIO()
+        with mock.patch.object(state, "load", return_value=state.default()), contextlib.redirect_stdout(out):
+            self.assertIsNone(fight.run(badger=True))
+        self.assertEqual(out.getvalue(), "")

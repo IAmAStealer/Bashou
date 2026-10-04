@@ -200,6 +200,8 @@ FIELDS = {
     "active": ("starter", kind(str)),
     "achievements": ([], list_of(kind(str))),
     "fights_won": (0, kind(*NUMBER)),
+    "wins_day": (COUNT, record(date=str, count=NUMBER)),   # fights won today (the Honey badger's secret)
+    "badger_day": (COUNT, record(date=str, count=NUMBER)), # fights the Honey badger picked today
     "fights_lost": (0, kind(*NUMBER)),                # knocked out or fled (the Living sofa comforts you)
     "ladder_best": ({}, dict_of(kind(str, int))),     # pet -> highest form (sprite id) reached on a command ladder
     "challenges": ([], list_of(kind(str))),           # challenges beaten

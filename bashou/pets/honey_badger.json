@@ -1,0 +1,50 @@
+{
+ "name": "Honey badger",
+ "palette": {
+  "k": "#24232a",
+  "K": "#55525e",
+  "w": "#f4f1e8",
+  "W": "#c9c5bb",
+  "g": "#8d8980",
+  "e": "#e2483a",
+  "n": "#6a6470",
+  "c": "#e2d4a4"
+ },
+ "base": [
+  ".................",
+  "......wwwwww.....",
+  "....wwwwWwwwWW...",
+  "...wwWwwWWWWgWWW.",
+  "..wwWWgWWWggggWWk",
+  ".wwWggkkkkkkkkgkk",
+  "wWkekkkkkkkkkkkK.",
+  "nkkkkkkkkkkkkkkK.",
+  "....kkkkkkkkkkk..",
+  "....Kkk.....Kkk..",
+  "....Kkk.....Kkk..",
+  "..cccc.....cccc.."
+ ],
+ "poses": {
+  "inhale": {
+   "1": "-----w------w----"
+  },
+  "closed": {
+   "6": "---k-------------"
+  },
+  "left": {
+   "6": "--ek-------------"
+  },
+  "right": {
+   "6": "---ke------------"
+  },
+  "fidget": {
+   "3": "----------------k",
+   "5": "---------------k.",
+   "11": "-c---------------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

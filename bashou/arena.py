@@ -28,14 +28,7 @@ def closed_for(s, now=None):
 
 def pick_fight(s, rng=random):
     """The announced threat, else a review that is due, else a new fight you're ready for, else None."""
-    ch = fight.pick(s)
-    if ch:
-        return ch
-    back = fight.due(s)
-    if back:
-        return rng.choice(back)
-    new = [c for c in fight.remaining(s) if fight.ready(s, c)]
-    return rng.choice(new) if new else None
+    return fight.next_fight(s, rng)
 
 
 def menu(ask=input):

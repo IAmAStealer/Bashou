@@ -53,6 +53,7 @@ class Companion:
         self.resume_file = state.CACHE / f"resume.{shell}"
         self.height_file = state.CACHE / f"height.{shell}"     # lines the pet covers, for the loader
         self.room_file = state.CACHE / f"room.{shell}"         # 1 once the loader emptied those lines
+        self.fight_file = state.CACHE / f"fight.{shell}"       # the Honey badger's fight: the loader opens it
         self.height = None
         # A terminal opened before this version runs the old loader, which never writes the room file
         # (the pet updates itself, open shells don't): there the pet draws as it always did. The new
@@ -208,7 +209,7 @@ class Companion:
         self.threat = bool(threat)
         if threat:
             text = fight.announcement(s)
-            if threat["challenge"] != self.threat_id and text:
+            if (threat["challenge"] != self.threat_id or text != self.threat_text) and text:
                 self.announce(text)    # every terminal says it: a lone ⚠ explained nothing
             self.threat_text, self.threat_id, self.threat_until = text, threat["challenge"], threat["until"]
         self.fights_won = s["fights_won"]
@@ -291,7 +292,13 @@ class Companion:
     def check_threat(self):
         with state.locked() as s:
             note = fight.maybe_threat(s)
-        if note:
+            badger = not note and fight.badger_fight(s, now_ms() - self.last_activity())
+        if badger:
+            try:
+                self.fight_file.write_text("1\n")
+            except OSError:
+                pass
+        if note or badger:
             self.state_mtime = 0           # reload_pet() announces it and blinks the ⚠
 
     # --- drawing ----------------------------------------------------------
@@ -459,7 +466,7 @@ class Companion:
                     if errors >= 20:
                         raise
         finally:
-            for f in (self.events, self.erase_file, self.room_file, self.height_file):
+            for f in (self.events, self.erase_file, self.room_file, self.height_file, self.fight_file):
                 try:
                     f.unlink()
                 except FileNotFoundError:

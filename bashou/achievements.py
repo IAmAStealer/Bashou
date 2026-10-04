@@ -493,6 +493,9 @@ SECRET = [
       cmd=_uses("gobuster", "ffuf", "dirb", "dirbuster", "feroxbuster", "wfuzz")),
     A("forensic", "cat", "Forensic", "dig into a dump or a firmware", hidden=True,
       cmd=_uses("volatility", "volatility3", "vol.py", "binwalk", "autopsy", "foremost", "testdisk")),
+    # Its own secret pet: the Honey badger comes to players who go looking for fights.
+    A("fearless", "honey_badger", "Fearless", "win 3 fights in one day", hidden=True,
+      state=lambda s: s["wins_day"]["date"] == date.today().isoformat() and s["wins_day"]["count"] >= 3),
 ]
 ALL += SECRET
 

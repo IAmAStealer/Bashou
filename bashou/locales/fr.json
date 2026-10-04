@@ -2224,5 +2224,17 @@
  "Amethyst golem": "Golem améthyste",
  "Ruby golem": "Golem de rubis",
  "Diamond golem": "Golem de diamant",
- "Pet rock": "Caillou chéri"
+ "Pet rock": "Caillou chéri",
+ "Honey badger": "Ratel",
+ "Fearless": "Intrépide",
+ "win 3 fights in one day": "gagner 3 combats dans la même journée",
+ "*grr*": "*grr*",
+ "Your Honey badger got bored and went to fight the {threat}! The arena opens after your next command.": "Ton ratel s'ennuyait : il est parti combattre {threat} ! L'arène s'ouvre après ta prochaine commande.",
+ "A fight you flee comes back. A fight you win comes back too, but it's easier each time.": "Un combat que tu fuis revient. Un combat gagné revient aussi, mais il est plus facile à chaque fois.",
+ "`hint` in the arena costs nothing but pride. Take it.": "`hint` dans l'arène ne coûte qu'un peu de fierté. Prends-le.",
+ "Stuck? Look around first: `ls`, `cat`, `head` never hurt you in a fight.": "Bloqué ? Regarde d'abord autour de toi : `ls`, `cat`, `head` ne te coûtent rien en combat.",
+ "Read the error message to the end. It usually says what's wrong.": "Lis le message d'erreur jusqu'au bout. Il dit souvent ce qui ne va pas.",
+ "I'm bored. Something needs fighting.": "Je m'ennuie. Il faut que je me batte contre quelque chose.",
+ "Honey badger doesn't wait for threats. Honey badger goes and finds them.": "Le ratel n'attend pas les menaces. Le ratel va les chercher.",
+ "Three fights in one day. I like you.": "Trois combats dans la même journée. Tu me plais."
 }

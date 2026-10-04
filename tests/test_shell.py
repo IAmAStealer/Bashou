@@ -4,6 +4,7 @@ These guard the bugs that only show up with job control, a terminal and a live p
 They take a few seconds each.
 """
 
+import contextlib
 import json
 import os
 import pty
@@ -311,6 +312,33 @@ class ArenaRoomTest(unittest.TestCase):
         sh.row = 29
         sh.send("true\n", 0)
         self.assertTrue(sh.expect(b"\x1b[H\x1b[9M\x1b[20;1H", start))    # PS0: blank rows deleted
+
+
+class HoneyBadgerShellTest(unittest.TestCase):
+    """The Honey badger picked a fight (fight.<shell pid> in the cache): the arena opens right after
+    the next command, without typing `bashou fight`."""
+
+    def test_the_arena_opens_after_the_next_command(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            threat = {"challenge": "grep_hydra", "until": time.time() + 3600, "badger": True}
+            sh = Shell(tmp, state={"pets": ["honey_badger"], "active": "honey_badger", "threat": threat})
+            try:
+                sh.read(1)
+                sh.send("true\n", 1)
+                self.assertNotIn("⚔ arena".encode(), sh.out)              # nothing picked yet: no arena
+                (sh.cache / f"fight.{sh.pid}").write_text("1\n")
+                start = len(sh.out)
+                sh.send("true\n", 0)
+                self.assertTrue(sh.expect("⚔ arena".encode(), start))
+                self.assertFalse((sh.cache / f"fight.{sh.pid}").exists())  # once
+                sh.send("exit\n", 2)                                      # flee
+            finally:
+                pid = ""
+                with contextlib.suppress(AssertionError, OSError):
+                    pid = sh.value("BASHOU_PID")
+                sh.close()
+                if pid.isdigit() and alive(int(pid)):
+                    os.kill(int(pid), signal.SIGTERM)
 
 
 class NoCursorReportTest(unittest.TestCase):

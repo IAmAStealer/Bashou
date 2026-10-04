@@ -1189,6 +1189,18 @@
     "★★★★★"
    ]
   ],
+  "honey_badger": [
+   [
+    1,
+    "Honey badger",
+    "★"
+   ],
+   [
+    1,
+    "Honey badger",
+    "★"
+   ]
+  ],
   "starter:star": [
    [
     1,
@@ -2743,7 +2755,8 @@
   "packet": "0/10 × ip/ss/ping",
   "cat": "???",
   "landscape": "finish the first step of a project: bashou project",
-  "chameleon": "play a game of bashou spot"
+  "chameleon": "play a game of bashou spot",
+  "honey_badger": "???"
  },
  "share_page": {
   "families": {
@@ -3496,6 +3509,17 @@
      "Guépard",
      "Faucon",
      "Aigle"
+    ]
+   },
+   "honey_badger": {
+    "forms": [
+     "honey_badger"
+    ],
+    "en": [
+     "Honey badger"
+    ],
+    "fr": [
+     "Ratel"
     ]
    }
   },
@@ -7613,6 +7637,32 @@
      "....ddbbbbbdd....",
      ".....yydddyy....."
     ]
+   },
+   "honey_badger": {
+    "palette": {
+     "k": "#24232a",
+     "K": "#55525e",
+     "w": "#f4f1e8",
+     "W": "#c9c5bb",
+     "g": "#8d8980",
+     "e": "#e2483a",
+     "n": "#6a6470",
+     "c": "#e2d4a4"
+    },
+    "base": [
+     ".................",
+     "......wwwwww.....",
+     "....wwwwWwwwWW...",
+     "...wwWwwWWWWgWWW.",
+     "..wwWWgWWWggggWWk",
+     ".wwWggkkkkkkkkgkk",
+     "wWkekkkkkkkkkkkK.",
+     "nkkkkkkkkkkkkkkK.",
+     "....kkkkkkkkkkk..",
+     "....Kkk.....Kkk..",
+     "....Kkk.....Kkk..",
+     "..cccc.....cccc.."
+    ]
    }
   },
   "skills": {
@@ -7724,6 +7774,7 @@
   "*flap*",
   "*flick*",
   "*giggles* `{fix}` has fewer typos than `{typo}`.",
+  "*grr*",
   "*huff*",
   "*peek*",
   "*ping*",
@@ -7778,6 +7829,7 @@
   "A diary in this chest, diary.txt, can be read by everyone. Make it yours only: read and write for you, nothing for the others. Then: verify",
   "A door script hides in this chest: door.sh. It lets strangers in and keeps the guests of guests.txt out. Fix its condition. Then: verify",
   "A download piped into a shell runs whatever the server sends. Save it first: curl -fsSLo install.sh URL && less install.sh",
+  "A fight you flee comes back. A fight you win comes back too, but it's easier each time.",
   "A file in clear can be read by anyone who gets the disk, a backup or your repository. gpg (GnuPG) locks files. -c locks one with a passphrase, and the same passphrase opens it.",
   "A file needs the x permission to be run.",
   "A for loop runs the same commands once per item: $f holds one file name each turn. Put echo in front first to see what it would do, then remove it.",
@@ -8055,6 +8107,7 @@
   "Falcon",
   "Fast tongue, sharp eyes. Every hunter in my family has one or the other.",
   "Fat paws again? `{typo}` → `{fix}`",
+  "Fearless",
   "Feel like a detective? `bashou arena security` has small investigations.",
   "Fencepost Fiend",
   "Fennec",
@@ -8187,6 +8240,8 @@
   "Hit! {n} to go.",
   "Hitchhiker Hare",
   "Hoglet",
+  "Honey badger",
+  "Honey badger doesn't wait for threats. Honey badger goes and finds them.",
   "Hoo.",
   "Hop hop. What's next?",
   "Hops",
@@ -8211,6 +8266,7 @@
   "I want to see the world. Take me with you: `bashou adventure`",
   "I won't tell anyone about `{typo}`. Try `{fix}`.",
   "I'm a rock. You can count on me.",
+  "I'm bored. Something needs fighting.",
   "I'm made of stardust. And a bit of bash.",
   "I'm only a few bytes, but I cross oceans.",
   "INSERT INTO adds a row: name the columns, then give the values in the same order. Text goes between single quotes: INSERT INTO products (name, price, stock) VALUES ('{item}', {price}, {stock});",
@@ -8512,6 +8568,7 @@
   "Read a pipe left to right: take a column, keep each value once (sort -u = sort then uniq), then count the lines.",
   "Read rustc's error: it names the variable and even suggests the fix.",
   "Read the error from the bottom: the last line names the problem, the lines above point at where. A def or a for line ends with something.",
+  "Read the error message to the end. It usually says what's wrong.",
   "Read the if line aloud. grep -q finds the name quietly: it succeeds when the name is on the list. The ! in front turns that answer around, so the if now means \"if the name is NOT on the list, open\". Then run bash door.sh {guest} and bash door.sh {stranger} to see the difference.",
   "Read the man page before the exploit.",
   "Reader",
@@ -8667,6 +8724,7 @@
   "Stuck on a step? `bashou project hint` gives you a nudge, never the answer.",
   "Stuck on step {n} of {title}? `bashou project hint` gives you a nudge.",
   "Stuck? Explain your script to me, line by line. It often fixes itself.",
+  "Stuck? Look around first: `ls`, `cat`, `head` never hurt you in a fight.",
   "Subnet Sprite",
   "Substitute",
   "Summary",
@@ -8820,6 +8878,7 @@
   "This one needs {tools}, which isn't installed.",
   "This terminal was opened before my last update, so I may draw over your text. Type exec bash (or open a new terminal) to load the new version.",
   "Thousand",
+  "Three fights in one day. I like you.",
   "Three steps joined with | (a pipe): keep the city column (awk '{print $3}' or cut -d' ' -f3), keep each city once, count the lines (wc -l).",
   "Throne",
   "Thunder slime",
@@ -9044,6 +9103,7 @@
   "You leave the chest behind.",
   "You're in a sandbox folder with a real bash. Commands:",
   "You're on the first step already.",
+  "Your Honey badger got bored and went to fight the {threat}! The arena opens after your next command.",
   "Your card needs a nickname: it shows on the image instead of your real name.",
   "Your choice (1 or 2, Enter leaves): ",
   "Your files deserve a lock. `{cmd}` installs GnuPG, then `gpg -c notes.txt` locks a file.",
@@ -9092,6 +9152,7 @@
   "`git restore file` drops your changes.",
   "`gpg -c notes.txt` locks a file with a passphrase; `gpg -d notes.txt.gpg` opens it again.",
   "`gzip -k file` keeps the original.",
+  "`hint` in the arena costs nothing but pride. Take it.",
   "`history | grep ssh` finds that command from last week.",
   "`jq .` pretty-prints JSON.",
   "`ln -s target link` makes a shortcut.",
@@ -9856,6 +9917,7 @@
   "while read -r l; do echo \"$l\"; done < file",
   "whole words only",
   "win 10 fights",
+  "win 3 fights in one day",
   "win 30 fights",
   "win a fight",
   "win a fight: bashou fight",

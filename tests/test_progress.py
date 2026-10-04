@@ -454,3 +454,33 @@ class DamagedSaveTest(unittest.TestCase):
         self.assertNotIn("walked", adv)
         self.assertEqual(adv["bosses"], [{"topic": "grep"}])
         self.assertEqual(adv["levels"], {})
+
+
+class HoneyBadgerSecretTest(unittest.TestCase):
+    """The Honey badger comes with 3 wins in one day; each secret pet comes with its own secrets only
+    (any secret brought the Hacker cat, so Fearless would have too)."""
+
+    def test_three_wins_in_a_day(self):
+        import datetime
+        s = state.default()
+        s["wins_day"] = {"date": datetime.date.today().isoformat(), "count": 2}
+        progress.check(s)
+        self.assertNotIn("honey_badger", s["pets"])
+        s["wins_day"]["count"] = 3
+        notes = progress.check(s)
+        self.assertIn("honey_badger", s["pets"])
+        self.assertNotIn("cat", s["pets"])
+        self.assertTrue(any("Fearless" in n for n in notes))
+        self.assertFalse(any("honey" in n.lower() and "🏆" in n for n in notes))   # a secret doesn't name its pet
+
+    def test_yesterdays_wins_dont_count(self):
+        s = state.default()
+        s["wins_day"] = {"date": "2000-01-01", "count": 5}
+        progress.check(s)
+        self.assertNotIn("honey_badger", s["pets"])
+
+    def test_a_security_tool_brings_the_cat_only(self):
+        s = {**state.default(), "achievements": ["net_mapper"]}
+        progress.check(s)
+        self.assertIn("cat", s["pets"])
+        self.assertNotIn("honey_badger", s["pets"])

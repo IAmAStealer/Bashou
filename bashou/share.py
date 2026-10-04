@@ -23,8 +23,8 @@ from .render import BOLD, DIM, RESET
 PAGE = f"{SITE}/share.html"
 NAME = re.compile(r"[A-Za-z0-9_-]{1,12}")      # the page accepts exactly the same (share.js)
 KEYS = ("p", "f", "lv", "ach", "pets", "won", "read", "sk", "n", "s", "sf", "spot", "r")
-# Rare pets, after the fully grown ones: the hardest to meet (a secret, strace, kubectl, gpg and pass).
-HARD = ("cat", "spider", "whale", "leopard")
+# Rare pets, after the fully grown ones: the hardest to meet (two secrets, strace, kubectl, gpg and pass).
+HARD = ("cat", "honey_badger", "spider", "whale", "leopard")
 MAX_RARE = 10
 
 

@@ -20,6 +20,7 @@ _bashou_events=$_bashou_data/events.$$
 _bashou_erase=${BASHOU_CACHE:-$HOME/.cache/bashou}/erase.$$
 _bashou_height=${BASHOU_CACHE:-$HOME/.cache/bashou}/height.$$
 _bashou_room=${BASHOU_CACHE:-$HOME/.cache/bashou}/room.$$
+_bashou_fight=${BASHOU_CACHE:-$HOME/.cache/bashou}/fight.$$
 # One pet for all your terminals: this file holds the PID of the shell it lives in. The other shells are
 # guests: no pet drawn there, their commands go to guest.<pid> and the pet counts them too.
 _bashou_home=${BASHOU_CACHE:-$HOME/.cache/bashou}/pet
@@ -47,6 +48,11 @@ _bashou_log() {
     BASHOU_PID=
     _bashou_guest=1
     _bashou_events=$_bashou_data/guest.$$
+  fi
+  # The Honey badger got bored and picked a fight (bashou/fight.py): the arena opens, no need to ask.
+  if [[ -n $BASHOU_PID && -e $_bashou_fight ]]; then
+    rm -f "$_bashou_fight"
+    python3 "$BASHOU_DIR/launch.py" bashou.fight badger
   fi
   if [[ -n $BASHOU_PID ]]; then
     _bashou_make_room

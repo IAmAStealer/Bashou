@@ -15,6 +15,9 @@ Every release has a section here, written for players. CI refuses to tag a relea
   a Black hole, a Galaxy and the whole Universe; the Seedling to an Old oak, a Blossom tree, a Forest and the
   World tree; the Pebble to Amethyst, Ruby and Diamond golems, and at last a Pet rock in its box. The 11 forms
   are spread over the 20 levels, and you keep every form you already reached.
+- A second secret pet hides in the game, for players who like a good fight. Once it's yours, it doesn't wait
+  for threats: leave the terminal alone for a while and it picks one itself, and the arena opens right after
+  your next command (twice a day at most). Choose another pet with `bashou swap` when you want peace.
 
 ## v0.8.1 — 2026-10-03
 
