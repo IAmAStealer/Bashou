@@ -189,7 +189,8 @@ complete -F _bashou_complete bashou
 [[ ${PROMPT_COMMAND[0]} == _bashou_log* ]] || PROMPT_COMMAND="_bashou_log${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
 # shellcheck disable=SC2016  # expanded later, by bash, each time PS0 is shown
 [[ $PS0 == *_bashou_ps0* ]] || PS0='$(_bashou_ps0)'"$PS0"
-trap 'bashou off; _bashou_elsewhere || rm -f "$_bashou_home"' EXIT
+# On exit the terminal may be closing: no long wait for its answer (room.bash, _bashou_where).
+trap '_bashou_dsr=${_bashou_dsr/on}; bashou off; _bashou_elsewhere || rm -f "$_bashou_home"' EXIT
 
 # First time: choose a starter (builtins only to check, Python only for the picker).
 _bashou_ready() {

@@ -277,6 +277,33 @@ class RoomTest(unittest.TestCase):
         out = subprocess.run(["bash", "-c", script], input="typed ahead\n", capture_output=True, text=True)
         self.assertEqual(out.stdout.strip(), "skipped")
 
+    def test_a_late_answer_is_still_read(self):
+        """Owner: ^[[30;120R showed up on the screen. A busy terminal (WSL) answered after the 2 s wait:
+        the answer came when nobody read it any more. A terminal that answered once is waited for."""
+        script = (f"source <(sed -n '/^_bashou_dsr=/,/^_bashou_make_room()/p' {ROOT}/bashou/room.bash | head -n -1)\n"
+                  "_bashou_where; _bashou_where && echo \"@@$_bashou_at@@\" || echo @@skipped@@\n")
+        pid, fd = pty.fork()
+        if pid == 0:
+            os.execvp("bash", ["bash", "-c", script])
+        out, asked, end = b"", 0, time.time() + 20
+        try:
+            while out.count(b"@@") < 2 and time.time() < end:
+                if select.select([fd], [], [], 0.05)[0]:
+                    try:
+                        out += os.read(fd, 4096)
+                    except OSError:
+                        break
+                if out.count(b"\x1b[6n") >= asked + 2:   # both questions of one _bashou_where
+                    asked += 2
+                    if asked == 4:
+                        time.sleep(3)                    # the second time, the terminal is busy
+                    os.write(fd, b"\x1b[12;5R\x1b[30;140R")
+        finally:
+            os.kill(pid, signal.SIGKILL)
+            os.waitpid(pid, 0)
+            os.close(fd)
+        self.assertIn(b"@@12 5 30@@", out)
+
 
 class ArenaRoomTest(unittest.TestCase):
     """Owner, 2026-09-26: the arena's fight panel still hid lines (drawn over the text, then blanked):

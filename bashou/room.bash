@@ -25,15 +25,19 @@ _bashou_dsr=
 _bashou_gap=0
 _bashou_first=1
 _bashou_where() {   # the cursor's row and column, and the screen's last row: "row col bottom"
-  local row col bottom
+  local row col bottom wait=2
   [[ $_bashou_dsr == off ]] && return 1
   read -t 0 && return 1                              # keys typed ahead: asking would eat them
+  # A terminal that answered once will answer again, only late when busy (WSL after a long output):
+  # wait for it, or the answer comes after we stopped reading and shows up on the screen (^[[30;120R).
+  [[ $_bashou_dsr == on ]] && wait=10
   printf '\e[6n\e7\e[9999;9999H\e[6n\e8' > /dev/tty
-  if ! IFS='[;' read -rs -t 2 -dR _ row col || ! IFS='[;' read -rs -t 2 -dR _ bottom _ \
+  if ! IFS='[;' read -rs -t $wait -dR _ row col || ! IFS='[;' read -rs -t $wait -dR _ bottom _ \
      || [[ ! $row$col$bottom =~ ^[0-9]+$ ]]; then
     _bashou_dsr=off                                  # no answer: this terminal doesn't do it
     return 1
   fi
+  _bashou_dsr=on
   _bashou_at="$row $col $bottom"
 }
 
