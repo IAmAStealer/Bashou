@@ -377,6 +377,8 @@
  "←/→ to look, Enter to choose, q to decide later": "←/→ pour regarder, Entrée pour choisir, q pour décider plus tard",
  "You learn a bit of everything.": "Tu apprends un peu de tout.",
  "No starter yet. Run `bashou start` when you're ready.": "Pas encore de compagnon de départ. Lance `bashou start` quand tu es prêt.",
+ "No starter yet, so Bashou stays off. Run `bashou on` when you want to meet your pet.": "Pas encore de compagnon de départ : Bashou reste éteint. Lance `bashou on` quand tu veux rencontrer ton compagnon.",
+ "Bashou is off, in new terminals too. `bashou on` brings your pet back.": "Bashou est éteint, aussi dans les nouveaux terminaux. `bashou on` ramène ton compagnon.",
  "{name} is your starter! It levels up every 5 achievements.": "{name} est ton compagnon de départ ! Il gagne un niveau tous les 5 succès.",
  "Your starter is {name}'s line. `bashou reset` to start over.": "Ton compagnon de départ est de la lignée de {name}. `bashou reset` pour recommencer.",
  "Which editor do you want to learn?": "Quel éditeur veux-tu apprendre ?",

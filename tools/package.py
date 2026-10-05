@@ -5,8 +5,8 @@
     python3 tools/package.py site site/                  # only the share page, to try it: python3 -m http.server -d site
 
 The code goes to /usr/share/bashou (the same tree as a clone, plus a VERSION file) and /usr/bin/bashou runs
-its commands, /etc/profile.d/bashou.sh moves shells still loading a git copy to the package. Nothing
-turns the pet on: each user runs `bashou on` once. `build` needs dpkg-deb for the
+its commands, /etc/profile.d/bashou.sh turns the pet on in every user's interactive bash (not root's)
+and moves shells still loading a git copy to the package. `build` needs dpkg-deb for the
 .deb and rpmbuild for the .rpm (either is skipped when missing); `repo` needs apt-ftparchive, createrepo_c,
 rpmsign and gpg.
 """
@@ -26,7 +26,7 @@ URL = "https://github.com/IAmAStealer/Bashou"
 PAGES = "https://iamastealer.github.io/Bashou"
 SUMMARY = "A pet in your terminal that grows as you learn bash"
 DESCRIPTION = ("Bashou lives in the corner of your terminal and evolves as you use bash: fights, a quiz\n"
-               "adventure and hints teach the command line, offline. Each user turns it on with: bashou on")
+               "adventure and hints teach the command line, offline. It's on for every user; bashou off hides it.")
 
 WRAPPER = f"""#!/bin/sh
 # Bashou's commands outside the shell function it defines, e.g. `bashou on` in a new account.
@@ -34,7 +34,7 @@ exec python3 /{PREFIX}/launch.py bashou "$@"
 """
 
 # Read by login shells, and on Fedora and Rocky by every interactive bash, before ~/.bashrc: see handover.bash.
-PROFILE = f"""# Bashou: a ~/.bashrc that loads an old git copy of Bashou gets this package's instead.
+PROFILE = f"""# Bashou: the pet in every interactive bash (`bashou off` to hide it), from this package.
 if [ -n "${{BASH_VERSION:-}}" ] && [ -r /{PREFIX}/bashou/handover.bash ]; then
   case $- in *i*) . /{PREFIX}/bashou/handover.bash ;; esac
 fi

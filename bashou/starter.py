@@ -1,6 +1,7 @@
 """First launch: pick a language, what you want to learn, then your starter (once: only `bashou reset` lets
 you pick again). The same pickers serve `bashou config language` and `bashou config skills`."""
 
+import os
 import sys
 
 from . import creatures, render, skills, state, terminal
@@ -114,7 +115,10 @@ def main():
     ask_editor()
     line = choose()
     if not line:
-        print(f"  {DIM}" + _("No starter yet. Run `bashou start` when you're ready.") + RESET)
+        if os.environ.get("BASHOU_AUTO"):           # opened by the package's loader: it won't open again by itself
+            print(f"  {DIM}" + _("No starter yet, so Bashou stays off. Run `bashou on` when you want to meet your pet.") + RESET)
+        else:
+            print(f"  {DIM}" + _("No starter yet. Run `bashou start` when you're ready.") + RESET)
         return 1
     with state.locked() as s:
         s["starter"], s["active"] = line, "starter"

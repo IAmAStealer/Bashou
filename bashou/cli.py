@@ -363,6 +363,14 @@ def here(args):
         print("  " + _("Bashou isn't running in this terminal."))
 
 
+def off(args):
+    """bashou.bash stops the pet; `saved` when the package's automatic loading will skip new terminals too."""
+    if args.how == "saved":
+        print("  " + _("Bashou is off, in new terminals too. `bashou on` brings your pet back."))
+    else:
+        print("  " + _("Bashou isn't running in this terminal."))
+
+
 def version(_args):
     from . import update
     print("  Bashou " + (update.version() or _("(unknown version: not a git clone)")))
@@ -431,7 +439,7 @@ COMMANDS = [
     Command("adventure", run("adventure.game"), ("bashou adventure", "walk into the world with your starter", PLAY),
             size=(50, 20)),
     Command("on", run("setup", "run"), ("bashou on / off", "show or hide the pet (the first `on` adds Bashou to ~/.bashrc)", SETTINGS)),
-    Command("off", lambda a: print("  " + _("Bashou isn't running in this terminal."))),   # bashou.bash answers first
+    Command("off", off, args=[("how", dict(nargs="?", help=argparse.SUPPRESS))]),         # bashou.bash stops it first
     Command("here", here, ("bashou here", "move your pet to this terminal (it lives in one terminal at a time)", SETTINGS),
             [("how", dict(nargs="?", help=argparse.SUPPRESS))]),                # bashou.bash moves it first
     Command("config", lambda a: config(a.name, a.value), ("bashou config", "settings, language and skills (bashou config list shows them)", SETTINGS),

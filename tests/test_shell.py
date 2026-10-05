@@ -209,6 +209,103 @@ class PackageHandoverTest(unittest.TestCase):
                     sh.close()
 
 
+
+class PackageOnByDefaultTest(unittest.TestCase):
+    """Owner, 2026-10-05: Bashou wasn't on after installing the package; each user had to find `bashou on`.
+    The package's profile.d script now starts the pet in every user's bash (not root's), and `bashou off`
+    keeps it off in new terminals until `bashou on`."""
+
+    def shell(self, tmp, state=None):
+        rc = f"source {ROOT}/bashou/handover.bash\n"                    # profile.d, and a ~/.bashrc without Bashou
+        return Shell(tmp, bashrc=rc, state=state, env={"BASHOU_PACKAGE_DIR": str(ROOT)})
+
+    @unittest.skipIf(os.geteuid() == 0, "root gets no pet by default")
+    def test_the_pet_starts_without_bashou_on_and_off_holds_for_new_terminals(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            sh = self.shell(tmp)
+            try:
+                self.assertTrue(sh.expect(b"$ "))
+                self.assertEqual(sh.value("BASHOU_DIR"), str(ROOT))
+                self.assertTrue(sh.value("BASHOU_PID"))
+                start = len(sh.out)
+                sh.send("bashou off\n")
+                self.assertTrue(sh.expect(b"in new terminals too", start))
+                self.assertTrue((sh.data / "off").exists())
+                self.assertEqual(sh.value("BASHOU_PID"), "")
+            finally:
+                sh.close()
+            sh = self.shell(tmp)                                            # a new terminal: no pet
+            try:
+                self.assertTrue(sh.expect(b"$ "))
+                self.assertEqual(sh.value("BASHOU_DIR"), "")
+            finally:
+                sh.close()
+            (sh.data / "off").touch()
+            sh = self.shell(tmp)
+            try:
+                self.assertTrue(sh.expect(b"$ "))
+                self.assertTrue(sh.value("BASHOU_DIR") == "")
+            finally:
+                sh.close()
+
+    @unittest.skipIf(os.geteuid() == 0, "root gets no pet by default")
+    def test_bashou_on_clears_the_off_file(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            sh = self.shell(tmp)
+            try:
+                self.assertTrue(sh.expect(b"$ "))
+                sh.send("bashou off\n")
+                self.assertTrue((sh.data / "off").exists())
+                sh.send("bashou on\n")
+                self.assertFalse((sh.data / "off").exists())
+                self.assertTrue(sh.value("BASHOU_PID"))
+            finally:
+                sh.close()
+
+    @unittest.skipIf(os.geteuid() == 0, "root gets no pet by default")
+    def test_closing_the_off_terminal_doesnt_turn_the_pet_back_on_in_a_guest(self):
+        """Guests take the pet over when its terminal closes: not after `bashou off`."""
+        with tempfile.TemporaryDirectory() as tmp:
+            home, guest = self.shell(tmp), None
+            try:
+                self.assertTrue(home.expect(b"$ "))
+                guest = self.shell(tmp)
+                self.assertTrue(guest.expect(b"$ "))
+                self.assertEqual(guest.value("_bashou_guest"), "1")
+                home.send("bashou off\n")
+                os.kill(home.pid, signal.SIGKILL)               # not close(): it stops the guest too (same cache)
+                os.waitpid(home.pid, 0)
+                guest.send("true\n")
+                self.assertEqual(guest.value("BASHOU_PID"), "")
+            finally:
+                home.close()
+                if guest:
+                    guest.close()
+
+    @unittest.skipIf(os.geteuid() == 0, "root gets no pet by default")
+    def test_quitting_the_first_starter_picker_keeps_it_closed_in_new_terminals(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            sh = self.shell(tmp, state=False)
+            try:
+                for _ in range(20):                       # language, skills, editor, starter: q through them all
+                    if (sh.data / "off").exists():
+                        break
+                    sh.send("q", 0.5)
+                self.assertTrue(sh.expect(b"Bashou stays off"))
+                self.assertTrue((sh.data / "off").exists())
+            finally:
+                sh.close()
+
+    @unittest.skipUnless(os.geteuid() == 0, "only root is left out")
+    def test_root_gets_no_pet_by_default(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            sh = self.shell(tmp)
+            try:
+                self.assertTrue(sh.expect(b"$ ") or sh.expect(b"# "))
+                self.assertEqual(sh.value("BASHOU_DIR"), "")
+            finally:
+                sh.close()
+
 class RoomTest(unittest.TestCase):
     """Owner, 2026-09-26: scrolling up, lines of `--help` had holes where the pet and its bubble were
     drawn. The top rows are now emptied before the pet is drawn (their lines go up into the

@@ -25,6 +25,9 @@ _bashou_fight=${BASHOU_CACHE:-$HOME/.cache/bashou}/fight.$$
 # guests: no pet drawn there, their commands go to guest.<pid> and the pet counts them too.
 _bashou_home=${BASHOU_CACHE:-$HOME/.cache/bashou}/pet
 _bashou_guest=
+# Loaded by the package for everyone (handover.bash sets _bashou_auto): `bashou off` writes this file so new
+# terminals start without the pet, until `bashou on`.
+_bashou_off=$_bashou_data/off
 # The events file holds what you type, for your pet: yours only, whatever the umask (older versions
 # made the folders 755, readable by other accounts where home folders are).
 (umask 077; mkdir -p "$_bashou_data" "${_bashou_erase%/*}"; : >> "$_bashou_events") 2>/dev/null
@@ -39,8 +42,8 @@ _bashou_restarts=0
 _bashou_log() {
   local status=$? last=$_
   # The pet's terminal closed: it moves into this one.
-  if [[ -n $_bashou_guest ]] && ! _bashou_elsewhere && _bashou_claim; then
-    bashou on
+  if [[ -n $_bashou_guest && ( -z $_bashou_auto || ! -e $_bashou_off ) ]] && ! _bashou_elsewhere && _bashou_claim; then
+    _bashou_on
   fi
   # `bashou here` in another terminal took the pet: this one becomes a guest (its pet took its drawing down).
   if [[ -n $BASHOU_PID ]] && _bashou_elsewhere; then
@@ -67,7 +70,7 @@ _bashou_log() {
   # Poke the pet so it redraws now (PS0 erased it). If it died, bring it back (3 tries max).
   if [[ -n $BASHOU_PID ]] && ! kill -USR1 "$BASHOU_PID" 2>/dev/null && (( _bashou_restarts++ < 3 )); then
     BASHOU_PID=
-    bashou on
+    _bashou_on
   fi
   return "$status"
 }
@@ -113,25 +116,39 @@ _bashou_ps0() {
   printf '%s' "$seq"
 }
 
+_bashou_off() {
+  _bashou_guest=
+  [[ -n $BASHOU_PID ]] || return 0
+  _bashou_ps0
+  kill "$BASHOU_PID" 2>/dev/null
+  BASHOU_PID=
+}
+
+_bashou_on() {
+  [[ -z $BASHOU_PID ]] || return 0
+  _bashou_guest=
+  _bashou_events=$_bashou_data/events.$$
+  echo "$$" >| "$_bashou_home" 2>/dev/null           # guests' commands now come to this pet
+  echo 0 > "$_bashou_room" 2>/dev/null               # this loader makes room: the pet waits for it
+  # SIGUSR1 ignored until Python installs its handler (the default action would kill it).
+  { (trap '' USR1; exec python3 "$BASHOU_DIR/launch.py" bashou.companion "$$") </dev/null 2>/dev/null & } 2>/dev/null
+  BASHOU_PID=$!
+  disown "$BASHOU_PID"
+}
+
+# You typed `bashou on` or `off`: with the package's automatic loading, the choice also holds for new terminals.
 bashou() {
   case $1 in
     off)
-      _bashou_guest=
-      [[ -n $BASHOU_PID ]] || return 0
-      _bashou_ps0
-      kill "$BASHOU_PID" 2>/dev/null
-      BASHOU_PID=
+      _bashou_off
+      if [[ -n $_bashou_auto && ! -e $_bashou_off ]] && : > "$_bashou_off" 2>/dev/null; then
+        python3 "$BASHOU_DIR/launch.py" bashou off saved
+      fi
       ;;
     on)
-      [[ -z $BASHOU_PID ]] || return 0
-      _bashou_guest=
-      _bashou_events=$_bashou_data/events.$$
-      echo "$$" >| "$_bashou_home" 2>/dev/null       # guests' commands now come to this pet
-      echo 0 > "$_bashou_room" 2>/dev/null           # this loader makes room: the pet waits for it
-      # SIGUSR1 ignored until Python installs its handler (the default action would kill it).
-      { (trap '' USR1; exec python3 "$BASHOU_DIR/launch.py" bashou.companion "$$") </dev/null 2>/dev/null & } 2>/dev/null
-      BASHOU_PID=$!
-      disown "$BASHOU_PID"
+      rm -f "$_bashou_off"
+      _bashou_ready || bashou start || return 1
+      _bashou_on
       ;;
     here)
       # Move the pet to this terminal. The old one sees it at its next prompt and becomes a guest.
@@ -190,7 +207,7 @@ complete -F _bashou_complete bashou
 # shellcheck disable=SC2016  # expanded later, by bash, each time PS0 is shown
 [[ $PS0 == *_bashou_ps0* ]] || PS0='$(_bashou_ps0)'"$PS0"
 # On exit the terminal may be closing: no long wait for its answer (room.bash, _bashou_where).
-trap '_bashou_dsr=${_bashou_dsr/on}; bashou off; _bashou_elsewhere || rm -f "$_bashou_home"' EXIT
+trap '_bashou_dsr=${_bashou_dsr/on}; _bashou_off; _bashou_elsewhere || rm -f "$_bashou_home"' EXIT
 
 # First time: choose a starter (builtins only to check, Python only for the picker).
 _bashou_ready() {
@@ -198,11 +215,14 @@ _bashou_ready() {
   [[ -r $_bashou_data/state.json ]] && IFS= read -rd '' s < "$_bashou_data/state.json"
   [[ $s == *'"language": "'* ]] && [[ $s == *'"starter": "'* || $s == *'"cat"'* ]]
 }
-if _bashou_ready || bashou start; then
+if _bashou_ready || BASHOU_AUTO=$_bashou_auto bashou start; then
   if _bashou_claim; then
-    bashou on                                        # the first prompt makes room for it
+    _bashou_on                                       # the first prompt makes room for it
   else
     _bashou_guest=1                                  # the pet lives in another terminal
     _bashou_events=$_bashou_data/guest.$$
   fi
+elif [[ -n $_bashou_auto && -t 0 ]]; then
+  # q in the starter picker the package opened by itself: don't open it again in every new terminal.
+  : > "$_bashou_off" 2>/dev/null
 fi

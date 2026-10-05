@@ -153,6 +153,14 @@ class SetupTest(unittest.TestCase):
         self.run_setup()
         self.assertIn("source /usr/share/bashou/bashou.bash", self.bashrc.read_text())
 
+    def test_on_ends_an_off(self):
+        """`bashou on` from a shell without Bashou: the package's loader starts the pet again in new terminals."""
+        off = Path(self.tmp.name) / "off"
+        off.touch()
+        with contextlib.redirect_stdout(io.StringIO()):
+            setup.run(self.bashrc, Path("/usr/share/bashou/bashou.bash"), off)
+        self.assertFalse(off.exists())
+
     def test_new_bashrc_and_odd_paths(self):
         self.run_setup("/home/me/my games/bashou.bash")
         self.assertEqual(self.bashrc.read_text(), "source '/home/me/my games/bashou.bash'\n")

@@ -155,8 +155,9 @@ sudo curl -fsSLo /etc/yum.repos.d/bashou.repo https://iamastealer.github.io/Bash
 sudo dnf install bashou
 ```
 
-Then each user who wants a pet runs `bashou on` (the first time, it adds one line to their `~/.bashrc`). Updates come
-with `apt upgrade` or `dnf upgrade`.
+Open a new terminal: every user (but root) meets their pet there. `bashou off` hides it, in new terminals too,
+until `bashou on`. On Debian and Ubuntu, a terminal that isn't a login shell may not show it: run `bashou on` once
+there (it adds one line to your `~/.bashrc`). Updates come with `apt upgrade` or `dnf upgrade`.
 
 **Any other Linux**, or to follow the code as it's written, with git:
 

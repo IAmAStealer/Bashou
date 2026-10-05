@@ -1,12 +1,16 @@
-"""`bashou on` (once `bashou setup`): the one line in ~/.bashrc that loads Bashou, for you only.
+"""`bashou on` (once `bashou setup`) in a shell that didn't load Bashou: the one line in ~/.bashrc that
+loads it, for you only.
 
-A package installs Bashou for the whole machine but turns it on for nobody: each user opts in.
+The package turns the pet on by itself (handover.bash), but only where bash reads /etc/profile.d: on Debian
+and Ubuntu, login shells only. This line covers the other terminals, and turns the pet back on after a
+`bashou off`.
 """
 
 import re
 import shlex
 from pathlib import Path
 
+from . import state
 from .i18n import _
 
 LOADER = Path(__file__).resolve().parent.parent / "bashou.bash"
@@ -22,8 +26,9 @@ def loaded(text):
     return bool(re.search(r"^\s*(source|\.)\s+\S*bashou\.bash\b", text, re.M))
 
 
-def run(bashrc=None, loader=LOADER):
+def run(bashrc=None, loader=LOADER, off=None):
     bashrc = Path(bashrc or Path.home() / ".bashrc")
+    Path(off or state.DATA / "off").unlink(missing_ok=True)     # `bashou off` is over
     try:
         text = bashrc.read_text()
     except FileNotFoundError:
