@@ -209,6 +209,7 @@ def dnf_repo(rpms, site, key):
 SITEMAP = """<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://iamastealer.github.io/Bashou/</loc></url>
+  <url><loc>https://iamastealer.github.io/Bashou/fr/</loc></url>
 </urlset>
 """
 
@@ -236,6 +237,8 @@ def repo(dist, site, key):
     dnf_repo(sorted(dist.glob("*.rpm")), site, key)
     (site / "bashou.repo").write_text(DNF_REPO)
     shutil.copyfile(ROOT / "doc/install.html", site / "index.html")
+    (site / "fr").mkdir(exist_ok=True)
+    shutil.copyfile(ROOT / "doc/install.fr.html", site / "fr/index.html")
     site_pages(site)
     (site / ".nojekyll").touch()
     return 0

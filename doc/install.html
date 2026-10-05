@@ -7,6 +7,8 @@
 <title>Bashou: a terminal pet that teaches Linux commands and bash scripting, free</title>
 <meta name="description" content="Learn Linux commands, bash scripting and the command line for free with a terminal pet: a pixel-art pet in your own terminal teaches you as you work. Lessons, fights, quizzes. Offline, no account.">
 <link rel="canonical" href="https://iamastealer.github.io/Bashou/">
+<link rel="alternate" hreflang="en" href="https://iamastealer.github.io/Bashou/">
+<link rel="alternate" hreflang="fr" href="https://iamastealer.github.io/Bashou/fr/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Bashou: a terminal pet that teaches Linux commands">
 <meta property="og:description" content="A free, offline pixel-art pet that teaches Linux commands and bash scripting while you work.">
@@ -34,6 +36,7 @@
 </style>
 </head>
 <body>
+<p class="note"><strong>English</strong> · <a href="fr/" hreflang="fr" lang="fr">Français</a></p>
 <h1>Bashou: a terminal pet that teaches Linux commands</h1>
 <p>Bashou is a free, open source way to learn the Linux command line and bash scripting, for beginners and
 beyond. It's a terminal pet: a little pixel-art pet lives in the corner of your terminal and grows as you use real commands,
@@ -74,9 +77,10 @@ sudo apt update &amp;&amp; sudo apt install bashou</pre>
 <pre>sudo curl -fsSLo /etc/yum.repos.d/bashou.repo https://iamastealer.github.io/Bashou/bashou.repo
 sudo dnf install bashou</pre>
 
-<h2>Then, for each user who wants a pet</h2>
+<h2>Then open a new terminal</h2>
+<p>Your pet is there. If it isn't (on Debian and Ubuntu, some terminals don't read the system's settings), run:</p>
 <pre>bashou on</pre>
-<p class="note">The first time, it adds one line to your <code>~/.bashrc</code>. Updates come with the rest of the system
+<p class="note">It adds one line to your <code>~/.bashrc</code>, and <code>bashou off</code> hides the pet. Updates come with the rest of the system
 (<code>apt upgrade</code>, <code>dnf upgrade</code>). Packages and repository data are signed with the
 <a href="bashou.asc">Bashou key</a>: apt and dnf refuse anything else. Any other Linux: install with git, see the
 <a href="https://github.com/IAmAStealer/Bashou#install">README</a>.</p>

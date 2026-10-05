@@ -112,6 +112,20 @@ class HomePageTest(unittest.TestCase):
         for picture in re.findall(r'<img src="([^"]+)"', html):
             self.assertTrue((SITE.parent / picture).exists(), picture)
 
+    def test_a_french_home_page_at_fr(self):
+        """Owner, 2026-10-05: Bashou/fr on the site, each page pointing to the other for search engines."""
+        import os
+        html = (SITE.parent / "install.fr.html").read_text()
+        self.assertIn('<html lang="fr">', html)
+        self.assertIn('rel="canonical" href="https://iamastealer.github.io/Bashou/fr/"', html)
+        for page in (html, (SITE.parent / "install.html").read_text()):
+            self.assertIn('hreflang="fr" href="https://iamastealer.github.io/Bashou/fr/"', page)
+            self.assertIn('hreflang="en" href="https://iamastealer.github.io/Bashou/"', page)
+        for picture in re.findall(r'<img src="([^"]+)"', html):                # served from fr/
+            self.assertTrue(Path(os.path.normpath(SITE.parent / "fr" / picture)).exists(), picture)
+        self.assertIn("<loc>https://iamastealer.github.io/Bashou/fr/</loc>",
+                      (SITE.parent.parent / "tools/package.py").read_text())
+
     def test_the_site_has_a_sitemap_and_cards_stay_out_of_search(self):
         with tempfile.TemporaryDirectory() as tmp:
             subprocess.run(["python3", str(SITE.parent.parent / "tools/package.py"), "site", tmp], check=True)

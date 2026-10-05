@@ -283,3 +283,7 @@ class ReadmeCountsTest(unittest.TestCase):
         }
         for pattern, real in counts.items():
             self.assertEqual(int(re.search(pattern, text).group(1)), real, pattern)
+        text = (Path(__file__).resolve().parent.parent / "README.fr.md").read_text()
+        for pattern, real in zip((r"\((\d+) commandes, de", r"\*\*(\d+) succès\*\*", r"travers (\d+) thèmes",
+                                  r"avec (\d+) questions", r"(\d+) autres compagnons se cachent"), counts.values()):
+            self.assertEqual(int(re.search(pattern, text).group(1)), real, pattern)
