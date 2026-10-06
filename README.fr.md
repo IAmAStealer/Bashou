@@ -129,7 +129,7 @@ Bashou a ses propres dépôts signés : installe-le une fois, et il se met à jo
 **Debian, Ubuntu** (apt) :
 
 ```bash
-sudo install -dm755 /etc/apt/keyrings
+sudo mkdir -p -m 755 /etc/apt/keyrings
 sudo curl -fsSLo /etc/apt/keyrings/bashou.asc https://iamastealer.github.io/Bashou/bashou.asc
 printf '%s\n' 'Types: deb' 'URIs: https://iamastealer.github.io/Bashou/deb/' 'Suites: ./' \
   'Signed-By: /etc/apt/keyrings/bashou.asc' | sudo tee /etc/apt/sources.list.d/bashou.sources

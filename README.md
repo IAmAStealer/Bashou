@@ -143,7 +143,7 @@ Bashou has its own signed repositories: install it once, and it updates with the
 **Debian, Ubuntu** (apt):
 
 ```bash
-sudo install -dm755 /etc/apt/keyrings
+sudo mkdir -p -m 755 /etc/apt/keyrings
 sudo curl -fsSLo /etc/apt/keyrings/bashou.asc https://iamastealer.github.io/Bashou/bashou.asc
 printf '%s\n' 'Types: deb' 'URIs: https://iamastealer.github.io/Bashou/deb/' 'Suites: ./' \
   'Signed-By: /etc/apt/keyrings/bashou.asc' | sudo tee /etc/apt/sources.list.d/bashou.sources

@@ -67,7 +67,7 @@ gives you tips, and explains what each command does. It runs offline, with no ac
 <img src="img/duel.svg" width="856" height="436" alt="A fight: the pet and its hearts face the Log Hydra, with the task in a bubble and a shell below">
 
 <h2>Install on Debian, Ubuntu</h2>
-<pre>sudo install -dm755 /etc/apt/keyrings
+<pre>sudo mkdir -p -m 755 /etc/apt/keyrings
 sudo curl -fsSLo /etc/apt/keyrings/bashou.asc https://iamastealer.github.io/Bashou/bashou.asc
 printf '%s\n' 'Types: deb' 'URIs: https://iamastealer.github.io/Bashou/deb/' 'Suites: ./' \
   'Signed-By: /etc/apt/keyrings/bashou.asc' | sudo tee /etc/apt/sources.list.d/bashou.sources

@@ -68,7 +68,7 @@ commande. Il marche hors ligne, sans compte et sans IA. Le jeu est en français 
 <img src="../img/duel.svg" width="856" height="436" alt="Un combat : le compagnon et ses cœurs face à l'Hydre des logs, avec la tâche dans une bulle et un shell en dessous">
 
 <h2>Installer sur Debian, Ubuntu</h2>
-<pre>sudo install -dm755 /etc/apt/keyrings
+<pre>sudo mkdir -p -m 755 /etc/apt/keyrings
 sudo curl -fsSLo /etc/apt/keyrings/bashou.asc https://iamastealer.github.io/Bashou/bashou.asc
 printf '%s\n' 'Types: deb' 'URIs: https://iamastealer.github.io/Bashou/deb/' 'Suites: ./' \
   'Signed-By: /etc/apt/keyrings/bashou.asc' | sudo tee /etc/apt/sources.list.d/bashou.sources
