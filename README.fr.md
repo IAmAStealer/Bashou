@@ -8,16 +8,50 @@
 [![Release](https://img.shields.io/github/v/release/IAmAStealer/Bashou)](https://github.com/IAmAStealer/Bashou/releases/latest)
 [![Licence : MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-Apprends les commandes Linux et les scripts bash gratuitement, dans ton propre terminal, avec un compagnon :
-un petit animal en pixel art vit dans le coin de ton terminal et grandit pendant que tu apprends la ligne de
-commande : bash d'abord, puis Linux, systemd, les paquets, gpg et pass, SQL, la CI/CD, Python, C et Rust,
-selon ce que tu choisis. Lance des commandes, essaie de nouveaux outils, et rencontre de nouveaux compagnons
-en chemin.
+Apprends les commandes Linux et les scripts bash gratuitement, dans ton propre terminal.
+
+Un petit compagnon en pixel art vit dans le coin de ton terminal. Il grandit pendant que tu apprends la ligne
+de commande. Commence par bash. Ensuite, choisis : Linux, systemd, les paquets, gpg et pass, SQL, la CI/CD,
+Python, C ou Rust. Lance des commandes, essaie de nouveaux outils, et rencontre de nouveaux compagnons en chemin.
 
 Le jeu est traduit en français : `bashou config language fr`.
 
 ![Une petite poussière d'étoile en pixel art dans le coin du terminal, avec une astuce dans sa bulle, au-dessus
 d'une explication `bashou learn` d'une commande tar](doc/img/prompt.svg)
+
+## Installer
+
+Bashou a ses propres dépôts signés : installe-le une fois, et il se met à jour avec le reste de ton système.
+
+**Debian, Ubuntu** (apt) :
+
+```bash
+sudo mkdir -p -m 755 /etc/apt/keyrings
+sudo curl -fsSLo /etc/apt/keyrings/bashou.asc https://iamastealer.github.io/Bashou/bashou.asc
+printf '%s\n' 'Types: deb' 'URIs: https://iamastealer.github.io/Bashou/deb/' 'Suites: ./' \
+  'Signed-By: /etc/apt/keyrings/bashou.asc' | sudo tee /etc/apt/sources.list.d/bashou.sources
+sudo apt update && sudo apt install bashou
+```
+
+**Rocky, Alma, RHEL, Fedora** (dnf) :
+
+```bash
+sudo curl -fsSLo /etc/yum.repos.d/bashou.repo https://iamastealer.github.io/Bashou/bashou.repo
+sudo dnf install bashou
+```
+
+Ouvre un nouveau terminal : ton compagnon est là. Chaque utilisateur a le sien, sauf root.
+`bashou off` le cache, aussi dans les nouveaux terminaux. `bashou on` le fait revenir.
+Pas de compagnon sur Debian ou Ubuntu ? Lance `bashou on` une fois : ça ajoute une ligne à ton `~/.bashrc`.
+Les mises à jour arrivent avec `apt upgrade` ou `dnf upgrade`.
+
+**Tout autre Linux**, ou pour suivre le code au fur et à mesure, avec git :
+
+```bash
+git clone https://github.com/IAmAStealer/Bashou.git ~/.bashou && echo 'source ~/.bashou/bashou.bash' >> ~/.bashrc && source ~/.bashrc
+```
+
+Il te faut bash et python3. La plupart des Linux les ont déjà.
 
 ## Quoi de neuf
 
@@ -121,40 +155,6 @@ c'est ton gestionnaire de paquets qui s'en occupe).
 
 Bashou est un petit projet perso, fait avec des jetons d'IA en trop par quelqu'un qui aime enseigner et aider
 les gens. Il n'y a rien à vendre.
-
-## Installer
-
-Bashou a ses propres dépôts signés : installe-le une fois, et il se met à jour avec le reste de ton système.
-
-**Debian, Ubuntu** (apt) :
-
-```bash
-sudo mkdir -p -m 755 /etc/apt/keyrings
-sudo curl -fsSLo /etc/apt/keyrings/bashou.asc https://iamastealer.github.io/Bashou/bashou.asc
-printf '%s\n' 'Types: deb' 'URIs: https://iamastealer.github.io/Bashou/deb/' 'Suites: ./' \
-  'Signed-By: /etc/apt/keyrings/bashou.asc' | sudo tee /etc/apt/sources.list.d/bashou.sources
-sudo apt update && sudo apt install bashou
-```
-
-**Rocky, Alma, RHEL, Fedora** (dnf) :
-
-```bash
-sudo curl -fsSLo /etc/yum.repos.d/bashou.repo https://iamastealer.github.io/Bashou/bashou.repo
-sudo dnf install bashou
-```
-
-Ouvre un nouveau terminal : chaque utilisateur (sauf root) y rencontre son compagnon. `bashou off` le cache,
-aussi dans les nouveaux terminaux, jusqu'à `bashou on`. Sur Debian et Ubuntu, un terminal qui n'est pas un
-shell de connexion peut ne pas le montrer : lance `bashou on` une fois dedans (ça ajoute une ligne à ton
-`~/.bashrc`). Les mises à jour arrivent avec `apt upgrade` ou `dnf upgrade`.
-
-**Tout autre Linux**, ou pour suivre le code au fur et à mesure, avec git :
-
-```bash
-git clone https://github.com/IAmAStealer/Bashou.git ~/.bashou && echo 'source ~/.bashou/bashou.bash' >> ~/.bashrc && source ~/.bashrc
-```
-
-Il te faut bash et python3 (déjà là sur la plupart des Linux).
 
 ## Utiliser
 

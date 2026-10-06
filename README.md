@@ -8,13 +8,50 @@
 [![Release](https://img.shields.io/github/v/release/IAmAStealer/Bashou)](https://github.com/IAmAStealer/Bashou/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-Learn Linux commands and bash scripting for free, in your own terminal, with a terminal pet: a little
-pixel-art pet lives in the corner of your terminal and grows while you learn the command line: bash first, then Linux, systemd,
-packages, gpg and pass, SQL, CI/CD, Python, C and Rust, whichever you pick. Run commands, try new tools,
-and collect new pets along the way.
+Learn Linux commands and bash scripting for free, in your own terminal.
+
+A little pixel-art pet lives in the corner of your terminal. It grows while you learn the command line.
+Start with bash. Then pick what you want: Linux, systemd, packages, gpg and pass, SQL, CI/CD, Python, C or Rust.
+Run commands, try new tools, and collect new pets along the way.
 
 ![A small pixel-art stardust in the corner of the terminal, with a tip in its speech bubble, above
 a `bashou learn` explanation of a tar command](doc/img/prompt.svg)
+
+## Install
+
+Bashou has its own signed repositories: install it once, and it updates with the rest of your system.
+
+**Debian, Ubuntu** (apt):
+
+```bash
+sudo mkdir -p -m 755 /etc/apt/keyrings
+sudo curl -fsSLo /etc/apt/keyrings/bashou.asc https://iamastealer.github.io/Bashou/bashou.asc
+printf '%s\n' 'Types: deb' 'URIs: https://iamastealer.github.io/Bashou/deb/' 'Suites: ./' \
+  'Signed-By: /etc/apt/keyrings/bashou.asc' | sudo tee /etc/apt/sources.list.d/bashou.sources
+sudo apt update && sudo apt install bashou
+```
+
+**Rocky, Alma, RHEL, Fedora** (dnf):
+
+```bash
+sudo curl -fsSLo /etc/yum.repos.d/bashou.repo https://iamastealer.github.io/Bashou/bashou.repo
+sudo dnf install bashou
+```
+
+Open a new terminal: your pet is there. Every user gets one, except root.
+`bashou off` hides it, in new terminals too. `bashou on` brings it back.
+No pet on Debian or Ubuntu? Run `bashou on` once: it adds one line to your `~/.bashrc`.
+Updates come with `apt upgrade` or `dnf upgrade`.
+
+**Any other Linux**, or to follow the code as it's written, with git:
+
+```bash
+git clone https://github.com/IAmAStealer/Bashou.git ~/.bashou && echo 'source ~/.bashou/bashou.bash' >> ~/.bashrc && source ~/.bashrc
+```
+
+You need bash and python3. Most Linux systems already have them.
+Installed with git on Debian or Red Hat, and want the repository instead? Run `bashou update --packages`.
+It shows every command it will run, asks you, then moves you over. Your pets and progress are kept.
 
 ## What's new
 
@@ -135,41 +172,6 @@ to your package manager).
 
 Bashou is a small side project, made with spare AI tokens by someone who likes teaching and helping
 people. There is nothing to sell.
-
-## Install
-
-Bashou has its own signed repositories: install it once, and it updates with the rest of your system.
-
-**Debian, Ubuntu** (apt):
-
-```bash
-sudo mkdir -p -m 755 /etc/apt/keyrings
-sudo curl -fsSLo /etc/apt/keyrings/bashou.asc https://iamastealer.github.io/Bashou/bashou.asc
-printf '%s\n' 'Types: deb' 'URIs: https://iamastealer.github.io/Bashou/deb/' 'Suites: ./' \
-  'Signed-By: /etc/apt/keyrings/bashou.asc' | sudo tee /etc/apt/sources.list.d/bashou.sources
-sudo apt update && sudo apt install bashou
-```
-
-**Rocky, Alma, RHEL, Fedora** (dnf):
-
-```bash
-sudo curl -fsSLo /etc/yum.repos.d/bashou.repo https://iamastealer.github.io/Bashou/bashou.repo
-sudo dnf install bashou
-```
-
-Open a new terminal: every user (but root) meets their pet there. `bashou off` hides it, in new terminals too,
-until `bashou on`. On Debian and Ubuntu, a terminal that isn't a login shell may not show it: run `bashou on` once
-there (it adds one line to your `~/.bashrc`). Updates come with `apt upgrade` or `dnf upgrade`.
-
-**Any other Linux**, or to follow the code as it's written, with git:
-
-```bash
-git clone https://github.com/IAmAStealer/Bashou.git ~/.bashou && echo 'source ~/.bashou/bashou.bash' >> ~/.bashrc && source ~/.bashrc
-```
-
-You need bash and python3 (already there on most Linux systems). Installed with git on Debian or Red Hat
-and want the repository instead? `bashou update --packages` shows every command it will run, asks, then
-moves you over; your pets and progress are kept.
 
 ## Use
 
