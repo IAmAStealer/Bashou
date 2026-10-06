@@ -6,9 +6,9 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time! A good report gets fixed fast: tell us what you did, what you saw, and
-        what you expected. Found a security problem? Please use the private report instead (see the link on
-        the previous page).
+        Thanks for taking the time! You can write in English or French. A good report gets fixed fast: tell us
+        what you did, what you saw, and what you expected. Found a security problem? Please use the private
+        report instead (see the link on the previous page).
   - type: dropdown
     id: area
     attributes:

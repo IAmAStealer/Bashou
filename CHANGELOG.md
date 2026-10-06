@@ -3,6 +3,17 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.8.3 — 2026-10-06
+
+- Bashou speaks French on the web too: there is a French README (`README.fr.md`) and a French home page at
+  `/fr`. Search engines know which page is for which language. You can report a bug or suggest an idea in
+  French with the new French forms, and the contributing guide has a French version too.
+- Bashou is on for every user right after `apt install` or `dnf install`: open a new terminal and your pet
+  is there. `bashou off` now keeps it off in new terminals, until you run `bashou on` again.
+- The Squab has a new look: no more horns, its wing lifts when it breathes, and its beak opens like the
+  duckling's.
+- Bashou no longer leaves `^[[30;120R` on the screen when the terminal is slow to answer.
+
 ## v0.8.2 — 2026-10-04
 
 - `bashou spot` has three new kinds of strings to recognise: a Linux password hash (`$1$…`, as in old

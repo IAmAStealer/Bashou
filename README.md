@@ -117,7 +117,7 @@ of your rare pets), with a button to send it on Signal, WhatsApp
 or anywhere you like. The first time, it asks for a nickname to show instead of your real name
 (`bashou share --name Nova` changes it).
 
-![A Bashou banner: Alexis's Satellite, level 12, the ten forms of the Packet family from Bit to
+![A Bashou banner: IAmAStealer's Satellite, level 12, the ten forms of the Packet family from Bit to
 Constellation, 58 achievements, 14 pets, 23 fights won, 17 lessons read, the skills Bash, Linux
 and Network, and the starter, a Moon](doc/img/share.png)
 

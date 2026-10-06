@@ -1,0 +1,51 @@
+name: Proposer une idée (en français)
+description: Une fonctionnalité, un nouveau compagnon, un nouveau combat, une meilleure façon d'enseigner quelque chose
+title: "Idée : "
+labels: ["idea"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Bashou enseigne le terminal avec un compagnon, des combats, des questions d'aventure et des leçons. Les
+        meilleures idées aident quelqu'un à apprendre une chose de plus, ou à prendre plaisir à l'apprendre.
+        Tu peux écrire en français ou en anglais.
+  - type: dropdown
+    id: area
+    attributes:
+      label: De quoi il s'agit
+      options:
+        - Un nouveau combat (une menace à battre avec un outil)
+        - Un nouveau compagnon, ou du pixel art
+        - Questions d'aventure ou boss
+        - Une leçon dans la bibliothèque du Hibou sage
+        - Une nouvelle compétence (un sujet que Bashou n'enseigne pas encore)
+        - bashou learn
+        - Installation, configuration, réglages
+        - Autre chose
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Ce qui manque aujourd'hui
+      description: Ce qu'un joueur ne peut pas apprendre, ne peut pas faire, ou trouve difficile. Un vrai moment aide.
+      placeholder: Quand j'utilise journalctl, je ne sais jamais comment garder seulement les erreurs du jour, et rien dans Bashou ne le montre.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Ton idée
+      description: Ce que le joueur verrait et ferait. Des commandes, un croquis, un dessin sont les bienvenus.
+    validations:
+      required: true
+  - type: textarea
+    id: other
+    attributes:
+      label: Autres pistes auxquelles tu as pensé
+  - type: checkboxes
+    id: help
+    attributes:
+      label: Aider
+      options:
+        - label: J'aimerais aider à le construire (questions, leçons et pixel art ne demandent pas de code).

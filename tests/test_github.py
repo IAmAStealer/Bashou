@@ -40,6 +40,17 @@ class IssueFormsTest(unittest.TestCase):
         bug = self.forms()["1-bug.yml"]
         self.assertEqual({"what", "expected", "version", "install", "system"} - {b.get("id") for b in bug["body"]}, set())
 
+    def test_french_forms_match_the_english_ones(self):
+        """Owner (0.8.3): people can report bugs and ideas in French."""
+        forms = self.forms()
+        for en, fr in (("1-bug.yml", "6-bug-fr.yml"), ("2-idea.yml", "7-idea-fr.yml")):
+            ids = lambda form: [b.get("id") for b in form["body"]]
+            self.assertEqual(ids(forms[en]), ids(forms[fr]))
+            self.assertEqual(forms[en]["labels"], forms[fr]["labels"])
+        readme = (GITHUB.parent / "README.fr.md").read_text()
+        for link in ("template=6-bug-fr.yml", "template=7-idea-fr.yml", ".github/CONTRIBUTING.fr.md"):
+            self.assertIn(link, readme)
+
     def test_security_goes_private(self):
         config = yaml.safe_load((GITHUB / "ISSUE_TEMPLATE/config.yml").read_text())
         self.assertFalse(config["blank_issues_enabled"])
@@ -48,7 +59,7 @@ class IssueFormsTest(unittest.TestCase):
 
 class CommunityFilesTest(unittest.TestCase):
     def test_community_files_exist(self):
-        for name in ("CONTRIBUTING.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "PULL_REQUEST_TEMPLATE.md"):
+        for name in ("CONTRIBUTING.md", "CONTRIBUTING.fr.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "PULL_REQUEST_TEMPLATE.md"):
             self.assertTrue((GITHUB / name).is_file(), name)
 
 

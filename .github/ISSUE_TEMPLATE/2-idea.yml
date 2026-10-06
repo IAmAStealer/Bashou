@@ -7,7 +7,7 @@ body:
     attributes:
       value: |
         Bashou teaches the terminal with a pet, fights, adventure questions and lessons. Ideas that help
-        someone learn one more thing, or enjoy learning it, are the best ones.
+        someone learn one more thing, or enjoy learning it, are the best ones. You can write in English or French.
   - type: dropdown
     id: area
     attributes:

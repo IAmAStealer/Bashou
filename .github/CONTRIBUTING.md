@@ -1,5 +1,7 @@
 # Contributing
 
+*[Français](CONTRIBUTING.fr.md)*
+
 Ideas, bug reports, pixel art, translations, questions and security challenges are welcome.
 
 Most contributions don't need any code: you edit a JSON file (or draw PNGs) and run a check.
@@ -18,7 +20,7 @@ Most contributions don't need any code: you edit a JSON file (or draw PNGs) and 
 Translating with an AI agent: see [doc/agents/translation.md](../doc/agents/translation.md).
 
 Bugs and ideas: [open an issue](https://github.com/IAmAStealer/Bashou/issues/new/choose) and pick a form
-(bug, idea, lesson, adventure question, security challenge). Not comfortable with JSON? The *Adventure
+(bug, idea, lesson, adventure question, security challenge), in English or French. Not comfortable with JSON? The *Adventure
 question* and *Lesson* forms work too. Security problems go through the
 [private report](https://github.com/IAmAStealer/Bashou/security/advisories/new), never a public issue.
 

@@ -182,9 +182,9 @@ Ta progression reste dans `~/.local/share/bashou` (supprime-le aussi pour tout o
 ## Plus
 
 Le [guide](doc/GUIDE.md) (en anglais) explique les compagnons, les succès, les combats et les traductions.
-Un bug, une idée ? [Signale un bug](https://github.com/IAmAStealer/Bashou/issues/new?template=1-bug.yml)
-ou [propose une idée](https://github.com/IAmAStealer/Bashou/issues/new?template=2-idea.yml).
+Un bug, une idée ? [Signale un bug](https://github.com/IAmAStealer/Bashou/issues/new?template=6-bug-fr.yml)
+ou [propose une idée](https://github.com/IAmAStealer/Bashou/issues/new?template=7-idea-fr.yml).
 Envie d'aider ? Pixel art, leçons, défis de sécurité et questions d'aventure sont les bienvenus :
-[contribuer](.github/CONTRIBUTING.md).
+[contribuer](.github/CONTRIBUTING.fr.md).
 
 Licence MIT.

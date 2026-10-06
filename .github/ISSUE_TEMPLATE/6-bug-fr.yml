@@ -1,0 +1,93 @@
+name: Signaler un bug (en français)
+description: Quelque chose ne marche pas comme prévu dans Bashou
+title: "Bug : "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de prendre le temps ! Un bon signalement est corrigé vite : dis-nous ce que tu as fait, ce que tu
+        as vu et ce que tu attendais. Tu peux écrire en français ou en anglais. Un problème de sécurité ?
+        Utilise plutôt le signalement privé (le lien est sur la page précédente).
+  - type: dropdown
+    id: area
+    attributes:
+      label: Où
+      options:
+        - Le compagnon, l'invite ou les bulles
+        - bashou fight (une menace, l'arène)
+        - bashou adventure (questions, boss)
+        - bashou lesson (la bibliothèque du Hibou sage)
+        - bashou learn
+        - Succès ou évolutions des compagnons
+        - Installation, configuration ou mise à jour (apt, dnf, git)
+        - Traduction
+        - Autre chose
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: Ce qui s'est passé
+      description: Ce que tu as fait, et ce que Bashou a fait. Colle le message exact s'il y en a un.
+      placeholder: |
+        J'ai lancé `bashou fight`, l'Hydre des logs demandait combien de lignes [ERROR]…
+        J'ai tapé `grep -c '\[ERROR\]' app.log`, obtenu 7, répondu 7, et elle a dit « Pas tout à fait ».
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Ce que tu attendais
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Comment le refaire
+      description: Les commandes, dans l'ordre, si tu peux. « Ça arrive à chaque fois » ou « une seule fois » aide aussi.
+      placeholder: |
+        1. bashou fight
+        2. …
+  - type: input
+    id: version
+    attributes:
+      label: Version de Bashou
+      description: "Ce qu'affiche `bashou version`"
+      placeholder: Bashou v0.8.3
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: Installé avec
+      options:
+        - apt (Debian, Ubuntu)
+        - dnf (Rocky, Fedora, Red Hat)
+        - git clone
+        - Je ne sais pas
+    validations:
+      required: true
+  - type: input
+    id: system
+    attributes:
+      label: Système, shell et terminal
+      description: "`grep PRETTY /etc/os-release`, `echo $BASH_VERSION`, et l'application de terminal (GNOME Terminal, Windows Terminal, WSL, iTerm2, tmux…)"
+      placeholder: Debian 13, bash 5.2.37, Windows Terminal + WSL2
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Sortie ou capture d'écran
+      description: Une capture aide pour tout ce qui est dessiné (compagnons, combats, leçons). Le texte est collé tel quel.
+      render: text
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Avant d'envoyer
+      options:
+        - label: J'ai regardé les tickets ouverts et celui-ci n'y est pas encore.
+          required: true
+        - label: Ce que je colle ne contient ni mot de passe, ni jeton, ni chemin privé que je veux garder pour moi (les fichiers de Bashou enregistrent les commandes que tu tapes).
+          required: true
