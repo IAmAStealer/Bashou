@@ -666,7 +666,7 @@ class OnePetTest(unittest.TestCase):
         second.send("true\n")                                              # 2
         if not first.wait_state(lambda s: s["commands"] == 2):
             files = {f.name: f.read_bytes() for d in (first.data, first.cache) for f in d.iterdir()
-                     if f.name.startswith(("guest", "events", "pet", "room", "height"))}
+                     if f.name.startswith(("guest", "events", "pet", "errors"))}
             self.fail(f"DEBUG commands={first.state().get('commands')} files={files} "
                       f"pet={pet} alive={alive(pet)} first={first.pid} second={second.pid}\n"
                       f"FIRST={first.out[-1500:]!r}\nSECOND={second.out[-1500:]!r}")
