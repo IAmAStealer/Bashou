@@ -624,7 +624,8 @@ class OnePetTest(unittest.TestCase):
         self.tmp.cleanup()
 
     def open(self):
-        sh = Shell(self.tmp.name)
+        # Only the first terminal writes the save: another one would reset what the pet already counted.
+        sh = Shell(self.tmp.name, state=False if self.shells else None)
         self.shells.append(sh)
         sh.read(1)
         return sh
@@ -671,7 +672,7 @@ class OnePetTest(unittest.TestCase):
         self.assertTrue(second.expect(b"38;2;216;200;160", start))
         end = time.time() + TIMEOUT
         while alive(pet) and time.time() < end:
-            time.sleep(0.1)
+            first.read(0.1)                    # a full terminal would block the old pet's drawing
         self.assertFalse(alive(pet))                                       # the old pet left by itself
         first.send("true\n")                                               # 4, as a guest
         self.assertEqual(first.value("BASHOU_PID"), "")                    # 5
