@@ -664,7 +664,12 @@ class OnePetTest(unittest.TestCase):
         pet = int(first.value("BASHOU_PID"))                               # 1 command
         second = self.open()
         second.send("true\n")                                              # 2
-        self.assertTrue(first.wait_state(lambda s: s["commands"] == 2))
+        if not first.wait_state(lambda s: s["commands"] == 2):
+            files = {f.name: f.read_bytes() for d in (first.data, first.cache) for f in d.iterdir()
+                     if f.name.startswith(("guest", "events", "pet", "room", "height"))}
+            self.fail(f"DEBUG commands={first.state().get('commands')} files={files} "
+                      f"pet={pet} alive={alive(pet)} first={first.pid} second={second.pid}\n"
+                      f"FIRST={first.out[-1500:]!r}\nSECOND={second.out[-1500:]!r}")
         start = len(second.out)
         second.send("bashou here\n", 0)                                    # 3
         self.assertTrue(second.expect(b"moved to this terminal", start))
