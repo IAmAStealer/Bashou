@@ -677,7 +677,12 @@ class OnePetTest(unittest.TestCase):
         end = time.time() + TIMEOUT
         while alive(pet) and time.time() < end:
             time.sleep(0.1)
-        self.assertFalse(alive(pet))                                       # the old pet left by itself
+        if alive(pet):
+            files = {f.name: f.read_bytes()[-3000:] for d in (first.data, first.cache) for f in d.iterdir()
+                     if f.name.startswith(("guest", "pet", "errors"))}
+            proc = {k: Path(f"/proc/{pet}/{k}").read_text()[:300] for k in ("stat", "wchan")}
+            self.fail(f"DEBUG alive files={files} proc={proc} first={first.pid} second={second.pid} "
+                      f"\nFIRST={first.out[-800:]!r}\nSECOND={second.out[-800:]!r}")
         first.send("true\n")                                               # 4, as a guest
         self.assertEqual(first.value("BASHOU_PID"), "")                    # 5
         self.assertTrue(second.wait_state(lambda s: s["commands"] == 5))
