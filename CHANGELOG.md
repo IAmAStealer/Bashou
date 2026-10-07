@@ -3,7 +3,7 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
-## v0.8.3 — 2026-10-06
+## v0.8.3 — 2026-10-07
 
 - Bashou speaks French on the web too: there is a French README (`README.fr.md`) and a French home page at
   `/fr`. Search engines know which page is for which language. You can report a bug or suggest an idea in
@@ -13,6 +13,7 @@ Every release has a section here, written for players. CI refuses to tag a relea
 - The Squab has a new look: no more horns, its wing lifts when it breathes, and its beak opens like the
   duckling's.
 - Bashou no longer leaves `^[[30;120R` on the screen when the terminal is slow to answer.
+- The README shows how to install right after the introduction, in shorter sentences.
 
 ## v0.8.2 — 2026-10-04
 

@@ -55,6 +55,13 @@ Il te faut bash et python3. La plupart des Linux les ont déjà.
 
 ## Quoi de neuf
 
+**0.8.3**
+- **Bashou parle français** sur le web : un README en français, une page d'accueil en français, et des
+  formulaires en français pour signaler un bug ou proposer une idée.
+- **Actif dès l'installation** : avec `apt` ou `dnf`, ouvre un nouveau terminal et ton compagnon est là.
+  `bashou off` le garde éteint jusqu'à `bashou on`.
+- Le Pigeonneau a un nouveau look.
+
 **0.8.2**
 - **Ton compagnon de départ grandit plus loin** : quatre nouvelles formes pour chaque lignée, jusqu'à l'Univers,
   l'Arbre-monde et un Caillou chéri.

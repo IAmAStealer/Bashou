@@ -55,6 +55,13 @@ It shows every command it will run, asks you, then moves you over. Your pets and
 
 ## What's new
 
+**0.8.3**
+- **Bashou speaks French** on the web: a French README, a French home page, and French forms to report a
+  bug or suggest an idea.
+- **On right after installing**: with `apt` or `dnf`, open a new terminal and your pet is there.
+  `bashou off` keeps it off until `bashou on`.
+- The Squab has a new look.
+
 **0.8.2**
 - **Your starter grows further**: four new forms for each line, up to the Universe, the World tree and a Pet rock.
 - **`bashou spot`**: password hashes, CSRF tokens and OAuth2 strings to recognise.
