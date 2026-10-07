@@ -169,6 +169,12 @@ class Companion:
         if self.guests != before:
             write_guest_offsets(self.guests)
         records = parse_log(text)
+        try:
+            with open(state.CACHE / "debug.log", "a") as dbg:
+                dbg.write(f"{time.time():.2f} pid={os.getpid()} guests={self.guests} "
+                          f"before={before} counted={counted} text={text!r} records={records}\n")
+        except Exception:
+            pass
         if not records:
             return
         now = datetime.datetime.now()
@@ -182,6 +188,11 @@ class Companion:
                 if status == 127:
                     self.laugh_at_typo(s, command)
                 self.warn_risky(command)
+            try:
+                with open(state.CACHE / "debug.log", "a") as dbg:
+                    dbg.write(f"{time.time():.2f} saving commands={s['commands']}\n")
+            except Exception:
+                pass
 
     def events_size(self):
         try:
