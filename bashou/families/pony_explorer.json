@@ -1,0 +1,22 @@
+{
+ "name": "Explorer pony",
+ "first": "pony_explorer",
+ "order": 36,
+ "secret": true,
+ "herd": "pony",
+ "unlock": {
+  "pony": true,
+  "how": "found in Bashou's repository"
+ },
+ "voice": "*neigh*",
+ "tips": [
+  "`git clone` copies a whole project to your computer, history included, so you can read every file.",
+  "`ls -a` shows hidden files too: their names start with a dot, and they often hold settings.",
+  "`tree -L 2` draws a folder and its subfolders, two levels deep: a quick map of a new project."
+ ],
+ "personal": [
+  "You went through the repo! Real explorers read the code.",
+  "Every folder is a new trail.",
+  "I always say what I see: that file needs a README."
+ ]
+}

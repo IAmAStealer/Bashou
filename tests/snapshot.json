@@ -1201,6 +1201,83 @@
     "★"
    ]
   ],
+  "pony_foal": [
+   [
+    1,
+    "Foal",
+    "★"
+   ]
+  ],
+  "pony_wrecking": [
+   [
+    1,
+    "Wrecking pony",
+    "★"
+   ]
+  ],
+  "pony_explorer": [
+   [
+    1,
+    "Explorer pony",
+    "★"
+   ]
+  ],
+  "pony_package": [
+   [
+    1,
+    "Package pony",
+    "★"
+   ]
+  ],
+  "pony_web": [
+   [
+    1,
+    "Web pony",
+    "★"
+   ]
+  ],
+  "pony_jealous": [
+   [
+    1,
+    "Jealous pony",
+    "★"
+   ]
+  ],
+  "pony_moo": [
+   [
+    1,
+    "Moo pony",
+    "★"
+   ]
+  ],
+  "pony_heart": [
+   [
+    1,
+    "Heart pony",
+    "★"
+   ]
+  ],
+  "pony_library": [
+   [
+    1,
+    "Library pony",
+    "★"
+   ]
+  ],
+  "pony_chef": [
+   [
+    1,
+    "Chef pony",
+    "★"
+   ]
+  ],
+  "pony_vim": [
+   [
+    1,
+    "Vim pony",
+    "★"
+   ]
+  ],
   "starter:star": [
    [
     1,
@@ -2756,7 +2833,18 @@
   "cat": "???",
   "landscape": "finish the first step of a project: bashou project",
   "chameleon": "play a game of bashou spot",
-  "honey_badger": "???"
+  "honey_badger": "???",
+  "pony_foal": "found in `bashou --help`",
+  "pony_wrecking": "found in the changelog",
+  "pony_explorer": "found in Bashou's repository",
+  "pony_package": "found in `apt search bashou`",
+  "pony_web": "found in the source of Bashou's site",
+  "pony_jealous": "ran `cowsay`",
+  "pony_moo": "ran `apt moo`",
+  "pony_heart": "ran `make love`",
+  "pony_library": "ran `man woman`",
+  "pony_chef": "ran `sudo make me a sandwich`",
+  "pony_vim": "typed `:wq` in the shell"
  },
  "share_page": {
   "families": {
@@ -3520,6 +3608,127 @@
     ],
     "fr": [
      "Ratel"
+    ]
+   },
+   "pony_foal": {
+    "forms": [
+     "pony_foal"
+    ],
+    "en": [
+     "Foal"
+    ],
+    "fr": [
+     "Poulain"
+    ]
+   },
+   "pony_wrecking": {
+    "forms": [
+     "pony_wrecking"
+    ],
+    "en": [
+     "Wrecking pony"
+    ],
+    "fr": [
+     "Poney casseur"
+    ]
+   },
+   "pony_explorer": {
+    "forms": [
+     "pony_explorer"
+    ],
+    "en": [
+     "Explorer pony"
+    ],
+    "fr": [
+     "Poney aventurier"
+    ]
+   },
+   "pony_package": {
+    "forms": [
+     "pony_package"
+    ],
+    "en": [
+     "Package pony"
+    ],
+    "fr": [
+     "Poney colis"
+    ]
+   },
+   "pony_web": {
+    "forms": [
+     "pony_web"
+    ],
+    "en": [
+     "Web pony"
+    ],
+    "fr": [
+     "Poney du web"
+    ]
+   },
+   "pony_jealous": {
+    "forms": [
+     "pony_jealous"
+    ],
+    "en": [
+     "Jealous pony"
+    ],
+    "fr": [
+     "Poney jaloux"
+    ]
+   },
+   "pony_moo": {
+    "forms": [
+     "pony_moo"
+    ],
+    "en": [
+     "Moo pony"
+    ],
+    "fr": [
+     "Poney meuh"
+    ]
+   },
+   "pony_heart": {
+    "forms": [
+     "pony_heart"
+    ],
+    "en": [
+     "Heart pony"
+    ],
+    "fr": [
+     "Poney cœur"
+    ]
+   },
+   "pony_library": {
+    "forms": [
+     "pony_library"
+    ],
+    "en": [
+     "Library pony"
+    ],
+    "fr": [
+     "Poney biblio"
+    ]
+   },
+   "pony_chef": {
+    "forms": [
+     "pony_chef"
+    ],
+    "en": [
+     "Chef pony"
+    ],
+    "fr": [
+     "Poney chef"
+    ]
+   },
+   "pony_vim": {
+    "forms": [
+     "pony_vim"
+    ],
+    "en": [
+     "Vim pony"
+    ],
+    "fr": [
+     "Poney Vim"
     ]
    }
   },
@@ -7664,6 +7873,341 @@
      "....Kkk.....Kkk..",
      "..cccc.....cccc.."
     ]
+   },
+   "pony_foal": {
+    "palette": {
+     "k": "#857761",
+     "b": "#f3d9b1",
+     "B": "#c9a77c",
+     "n": "#a8826a",
+     "m": "#9b6b43",
+     "M": "#6e4628",
+     "L": "#c99566",
+     "w": "#ffffff",
+     "e": "#241c2c",
+     "o": "#5a4636"
+    },
+    "base": [
+     "..b.mmm..........",
+     ".bbmmLLm.........",
+     ".bwbmLMLm........",
+     "bbebbmLMLm.......",
+     "bbbbbbbmLMm..mmm.",
+     "nbbbbbbbmLM.mLLMm",
+     "....bbbbbbbbbbLMm",
+     ".....bbbbbbbbbmLM",
+     ".....BbbbbbbbB.LM",
+     ".....bB....bB..mM",
+     ".....bB....bB..M.",
+     ".....oo....oo...."
+    ]
+   },
+   "pony_wrecking": {
+    "palette": {
+     "k": "#757085",
+     "b": "#d6cdf2",
+     "B": "#a497d4",
+     "n": "#8a7cc0",
+     "m": "#f15a24",
+     "M": "#b8202a",
+     "L": "#fbb03b",
+     "i": "#1fb5c9",
+     "w": "#ffffff",
+     "o": "#5a4636",
+     "y": "#ffd23a",
+     "Y": "#c99a12"
+    },
+    "base": [
+     ".yyyYmm..........",
+     "YYYYYYLm.........",
+     ".bkkmLMLm........",
+     "bbiwbmLMLm.......",
+     "bbiibbbmLMm..mmm.",
+     "nbbbbbbbmLM.mLLMm",
+     "....bbbbbbbbbbLMm",
+     ".....bbbbbbbbbmLM",
+     ".....BbbbbbbbB.LM",
+     ".....bB....bB..mM",
+     ".....bB....bB..M.",
+     ".....oo....oo...."
+    ]
+   },
+   "pony_explorer": {
+    "palette": {
+     "k": "#5b816e",
+     "b": "#a6ecc9",
+     "B": "#62c39a",
+     "n": "#4aa883",
+     "m": "#f7a823",
+     "M": "#a85a12",
+     "L": "#ffe08a",
+     "i": "#2e9c6a",
+     "w": "#ffffff",
+     "o": "#5a4636",
+     "t": "#e6d29a",
+     "T": "#a8935a",
+     "s": "#c0392b",
+     "S": "#ffffff"
+    },
+    "base": [
+     ".tttTmm..........",
+     "TTTTTTLm.........",
+     ".bkkmLMLm........",
+     "bbiwbmLMLm.......",
+     "bbiibbbmLMm..mmm.",
+     "nbbbbbbbmLM.mLLMm",
+     "....bbbbbbsSbbLMm",
+     ".....bbbbbSsbbmLM",
+     ".....BbbbbbbbB.LM",
+     ".....bB....bB..mM",
+     ".....bB....bB..M.",
+     ".....oo....oo...."
+    ]
+   },
+   "pony_package": {
+    "palette": {
+     "k": "#8c7565",
+     "b": "#ffd6b8",
+     "B": "#f0a77c",
+     "n": "#de8e63",
+     "m": "#e8326f",
+     "M": "#8e1748",
+     "L": "#ff9cc2",
+     "i": "#2a8fd8",
+     "w": "#ffffff",
+     "o": "#5a4636",
+     "x": "#d9a65c",
+     "X": "#9c6f33",
+     "s": "#d81b60"
+    },
+    "base": [
+     "..b.mmm..........",
+     ".bbmmLLm.........",
+     ".bbbmLMLm........",
+     "bbiwbmLMxxxxX....",
+     "bbiibbbmxsxxXmmm.",
+     "nbbbbbbbXXXXXLLMm",
+     "....bbbbbbbbbbLMm",
+     ".....bbbbbbbbbmLM",
+     ".....BbbbbbbbB.LM",
+     ".....bB....bB..mM",
+     ".....bB....bB..M.",
+     ".....oo....oo...."
+    ]
+   },
+   "pony_web": {
+    "palette": {
+     "k": "#85878c",
+     "b": "#f2f6ff",
+     "B": "#b9c4e8",
+     "n": "#9aa6d4",
+     "m": "#3b6fe0",
+     "M": "#1d2f8a",
+     "L": "#7fe3ff",
+     "i": "#d6336c",
+     "w": "#ffffff",
+     "o": "#5a4636",
+     "y": "#fff2a8",
+     "Y": "#e0b13a",
+     "s": "#2f6fe0",
+     "S": "#7fe0ff"
+    },
+    "base": [
+     "y.b.mmm..........",
+     ".YbmmLLm.........",
+     ".bkkmLMLm........",
+     "bbiwbmLMLm.......",
+     "bbiibbbmLMm..mmm.",
+     "nbbbbbbbmLM.mLLMm",
+     "....bbbbbbsSbbLMm",
+     ".....bbbbbSsbbmLM",
+     ".....BbbbbbbbB.LM",
+     ".....bB....bB..mM",
+     ".....bB....bB..M.",
+     ".....oo....oo...."
+    ]
+   },
+   "pony_jealous": {
+    "palette": {
+     "k": "#6d8654",
+     "b": "#c7f59a",
+     "B": "#8fcd5a",
+     "n": "#76b246",
+     "m": "#0f9e85",
+     "M": "#0b5c55",
+     "L": "#f5ef5c",
+     "i": "#7a3fc4",
+     "w": "#ffffff",
+     "o": "#5a4636",
+     "s": "#ffffff"
+    },
+    "base": [
+     "..b.mmm..........",
+     ".bbmmLLm.........",
+     ".bkkmLMLm........",
+     "bbiwbmLMLm.......",
+     "bbiibbbmLMm..mmm.",
+     "nbbbbbbbmLM.mLLMm",
+     "....bbbbbbssbbLMm",
+     ".....bbbbbsbbbmLM",
+     ".....BbbbbbbbB.LM",
+     ".....bB....bB..mM",
+     ".....bB....bB..M.",
+     ".....oo....oo...."
+    ]
+   },
+   "pony_moo": {
+    "palette": {
+     "k": "#8c7c83",
+     "b": "#ffe3ef",
+     "B": "#e0a9c0",
+     "n": "#f29cb7",
+     "m": "#b04fd6",
+     "M": "#5b1f8a",
+     "L": "#f2a6ff",
+     "i": "#14a3a0",
+     "w": "#ffffff",
+     "o": "#5a4636",
+     "c": "#7a4fa8",
+     "h": "#f3e2b0"
+    },
+    "base": [
+     ".hb.mmm..........",
+     ".bbmmLLm.........",
+     ".bbbmLMLm........",
+     "bbiwbmLMLm.......",
+     "bbiibbbmLMm..mmm.",
+     "nbbbbbbbmLM.mLLMm",
+     "....bbccbbbbcbLMm",
+     ".....bbcbbbccbmLM",
+     ".....BbbbbbbbB.LM",
+     ".....bB....bB..mM",
+     ".....bB....bB..M.",
+     ".....oo....oo...."
+    ]
+   },
+   "pony_heart": {
+    "palette": {
+     "k": "#8c6b65",
+     "b": "#ffc4b8",
+     "B": "#f08e7c",
+     "n": "#dc7563",
+     "m": "#ff3d7f",
+     "M": "#a3124a",
+     "L": "#ffd86b",
+     "i": "#2f8f5a",
+     "w": "#ffffff",
+     "o": "#5a4636",
+     "g": "#fff4ec",
+     "G": "#e9b6a6",
+     "s": "#e8336f"
+    },
+    "base": [
+     "..b.mmm..........",
+     ".bbmmLLm.........",
+     ".bbbmLMLm........",
+     "bbiwbmLMLm.......",
+     "bbiibbbmLMm..mmm.",
+     "nbbbbbbbmLM.mLLMm",
+     "....bggGbbsbsbLMm",
+     ".....bgGGbbsbbmLM",
+     ".....BbbbbbbbB.LM",
+     ".....bB....bB..mM",
+     ".....bB....bB..M.",
+     ".....oo....oo...."
+    ]
+   },
+   "pony_library": {
+    "palette": {
+     "k": "#6d748c",
+     "b": "#c7d3ff",
+     "B": "#8c9de8",
+     "n": "#7585d4",
+     "m": "#14b3a8",
+     "M": "#123a7a",
+     "L": "#86f5e0",
+     "i": "#1f6fd0",
+     "w": "#ffffff",
+     "o": "#5a4636",
+     "s": "#c0392b",
+     "S": "#ffffff"
+    },
+    "base": [
+     "..b.mmm..........",
+     ".bbmmLLm.........",
+     ".bbbmLMLm........",
+     "bbiwbmLMLm.......",
+     "bbiibbbmLMm..mmm.",
+     "nbbbbbbbmLM.mLLMm",
+     "....bbbbbbsSbbLMm",
+     ".....bbbbbsSbbmLM",
+     ".....BbbbbbbbB.LM",
+     ".....bB....bB..mM",
+     ".....bB....bB..M.",
+     ".....oo....oo...."
+    ]
+   },
+   "pony_chef": {
+    "palette": {
+     "k": "#8c8775",
+     "b": "#fff7d6",
+     "B": "#e5d49a",
+     "n": "#d1bd7c",
+     "m": "#e5283c",
+     "M": "#93101f",
+     "L": "#ffffff",
+     "i": "#2f6fe0",
+     "w": "#ffffff",
+     "o": "#5a4636",
+     "z": "#ffffff",
+     "Z": "#c9ccd6",
+     "s": "#9aa3b5"
+    },
+    "base": [
+     ".zzzZmm..........",
+     ".ZZZmLLm.........",
+     ".bkkmLMLm........",
+     "bbiwbmLMLm.......",
+     "bbiibbbmLMm..mmm.",
+     "nbbbbbbbmLM.mLLMm",
+     "....bbbbbbsbbbLMm",
+     ".....bbbbsbbbbmLM",
+     ".....BbbbbbbbB.LM",
+     ".....bB....bB..mM",
+     ".....bB....bB..M.",
+     ".....oo....oo...."
+    ]
+   },
+   "pony_vim": {
+    "palette": {
+     "b": "#d9d4e3",
+     "B": "#9e96b0",
+     "n": "#857c99",
+     "m": "#3f3152",
+     "M": "#17111f",
+     "L": "#8a6fae",
+     "i": "#3ddc5a",
+     "w": "#ffffff",
+     "e": "#241c2c",
+     "o": "#5a4636",
+     "y": "#8cff6a",
+     "Y": "#1d8f3a",
+     "s": "#3ddc5a"
+    },
+    "base": [
+     "y.b.mmm..........",
+     ".YbmmLLm.........",
+     ".beemLMLm........",
+     "bbiwbmLMLm.......",
+     "bbiibbbmLMm..mmm.",
+     "nbbbbbbbmLM.mLLMm",
+     "....bbbbbsbsbbLMm",
+     ".....bbbbbsbbbmLM",
+     ".....BbbbbbbbB.LM",
+     ".....bB....bB..mM",
+     ".....bB....bB..M.",
+     ".....oo....oo...."
+    ]
    }
   },
   "skills": {
@@ -7777,6 +8321,7 @@
   "*giggles* `{fix}` has fewer typos than `{typo}`.",
   "*grr*",
   "*huff*",
+  "*neigh*",
   "*peek*",
   "*ping*",
   "*puff*",
@@ -7807,12 +8352,14 @@
   "> sends stdout into a file, 2> sends stderr. So you can keep the errors and let the rest scroll by, or the opposite. /dev/null is a bin that swallows whatever you send it.",
   ">> appends, > would replace the whole file.",
   "???",
+  "A \"breaking change\" stops an old habit from working: a renamed option, a removed command.",
   "A * in a name stands for any characters. Bash turns the pattern into the list of matching names before the command even starts, so the command just sees the names.",
   "A .tar.gz is many files packed into one (tar), then squeezed (gzip). tar -tzf backup.tar.gz lists what's inside without unpacking. -x unpacks, and -C picks where: by default it's the folder you're in.",
   "A Dust Bunny rolled into crates/.\nWhich file in there ends in .key?",
   "A JWT always starts with eyJ: it's base64 for {\"",
   "A JWT is header.payload.signature, each part base64url without padding.",
   "A Loopback Lurker (process {pid}) listens on this machine, on 127.0.0.1 only.\nOn which port? Answer with: answer <port>",
+  "A Makefile target says what to build, from which files, and how. `make` only rebuilds what changed.",
   "A Process Phantom named {name} haunts this machine.\nWhat is its PID?",
   "A bit of everything (all skills)",
   "A branch is a separate line of commits, to try something without touching main. git switch -c NAME creates one and moves onto it; git switch main comes back.",
@@ -7820,9 +8367,11 @@
   "A breakpoint pauses the program at a function or a line. break month_end stops at every call of month_end(); print balance shows the variable there.",
   "A broken unit file lies in this chest, {unit}. Put each line back in its section. Then: verify",
   "A card needs a nickname: bashou share --name NICK",
+  "A changelog lists what changed in each version. Read it before updating to know what might break.",
   "A commit takes what is staged (added), not every change. git status shows three groups: staged, changed but not staged, untracked. git add picks the files one by one. Avoid git add . or git commit -a here: they take the whole crowd.",
   "A condition before the braces picks lines; END runs after the last one.",
   "A const always says its type after its name, like a function argument.",
+  "A cow? Why always the cow?",
   "A crash? `gcc -g prog.c -o prog && gdb -q ./prog`, then run and bt: gdb shows the line that died.",
   "A database keeps data in tables: rows and columns, like a spreadsheet the computer can search fast. SQLite keeps a whole database in one file: sqlite3 opens it, and creates it if it doesn't exist yet. Delete the file and the database is gone, nothing else to clean up.",
   "A debugger runs the program and stops right where it crashes.",
@@ -7848,11 +8397,15 @@
   "A new quest calls you, hero: {title}.",
   "A new road, a new quest. Your pet is ready.",
   "A noisy script, check.sh, hides in this chest. Run it and save only its error lines into errors.txt. Then: verify",
+  "A package is a program wrapped with what the system needs to install, update and remove it cleanly.",
   "A password typed in a command stays in your history. SSH keys are safer.",
   "A pattern describes the text: [A-Z] is one capital letter, [0-9] one digit, {2} means twice. So [A-Z]{2}-[0-9]{4} is AB-1234. Without -x it also matches inside longer lines (xAB-1234, ABC-1234): -x keeps only lines that are the pattern and nothing more.",
   "A pattern matches the whole name, from the first letter: report-* doesn't catch old-report-1.csv. ? stands for exactly one character, [12] for one of the characters inside.",
+  "A perfect sandwich takes the right ingredients, in the right order.",
+  "A pipe `|` sends the output of the command on its left to the input of the command on its right.",
   "A pipe | sends what one command prints into the next command, as if it were a file.",
   "A pipeline file hides in this chest: .github/workflows/ci.yml. One line is out of line. Put it back, so the job test has its two steps. Then: verify",
+  "A pony peeks in, a little jealous of the cow. To welcome it: `bashou pony {word}`",
   "A processor (core) runs one program at a time; with several, several programs run at once. One short command, n for number and proc for processors, prints how many there are.",
   "A program has two outputs. stdout (number 1) gets the normal results, stderr (number 2) the error messages. Both show on the screen, so they look the same until you split them.",
   "A program has two outputs: stdout (1) for normal results, stderr (2) for errors. Both show on the screen, which is why they look the same. > sends stdout into a file; 2> sends stderr. Try ./check.sh > /dev/null: only the errors stay on the screen.",
@@ -7889,6 +8442,7 @@
   "After you change a unit file, systemctl daemon-reload makes systemd read it again. enable starts it at every boot, --now also starts it right away.",
   "Alexandria",
   "Amethyst golem",
+  "An HTML comment starts with `<!--` and ends with `-->`. The browser hides it, but the source shows it.",
   "An array of count items goes from 0 to count - 1. Compare the two loops.",
   "An intruder changed one file of the website in site/ a few minutes ago.\nEvery other file is weeks old. Which file was changed?",
   "Another day together. Keep the streak!",
@@ -7900,6 +8454,7 @@
   "Ask {tool} itself: `{tool} --help` (-h works for many tools, not all: `ls -h` means human sizes). The Usage line shows how to write it: [ ] is optional, ... means you can give several. Below, one line per option: short form (-x), long form (--xxx), what it does. Too long? `{tool} --help | less`, q quits.",
   "Auditor",
   "Autoremove Adder",
+  "Aww, you tried to make love. Here's a hug instead.",
   "Axolotl",
   "Back one step: it's not done yet.",
   "Back to the last checkpoint. Bosses are there to make it stick!",
@@ -7928,6 +8483,7 @@
   "Basic auth is only base64: anyone can read the password back. Never send it without HTTPS.",
   "Basilisk",
   "Bat",
+  "Be kind to your terminal, it works hard.",
   "Beacon",
   "Beanbag",
   "Beaver",
@@ -7950,6 +8506,7 @@
   "Boo~",
   "Branch Bramble",
   "Brancher",
+  "Breaking change! Ha, I broke out of the changelog.",
   "Breakpoint Beetle",
   "Bright and curious. A speck of dust with big dreams.",
   "Brood",
@@ -7997,6 +8554,7 @@
   "Checkpoint saved. {topic} is now level {level}.",
   "Checksum",
   "Cheetah",
+  "Chef pony",
   "Chipmunk",
   "Choose your starter",
   "Cipher Crow",
@@ -8049,6 +8607,7 @@
   "Digger",
   "Disk",
   "Diver",
+  "Don't touch my kitchen without sudo.",
   "Done when gcc -Wall says nothing and ./grade 100 {mark} 7 prints perfect, pass, fail.",
   "Done when: {done}",
   "Done! New terminals use the package. Once the old ones are closed, the git copy can go: rm -rf {old}",
@@ -8068,6 +8627,7 @@
   "Each service is described by a unit file, in sections: [Unit] says what it is, [Service] how to run it (ExecStart is the command), [Install] when to start it at boot (WantedBy).",
   "Eagle",
   "Eagle eyes",
+  "Easter eggs are jokes hidden by developers. You find them by reading and trying: that's how you learn a tool.",
   "Echo Swarm",
   "Edited a unit file? `systemctl daemon-reload`.",
   "Eight arms, eight pipes.",
@@ -8087,10 +8647,13 @@
   "Enter: open it (a real shell opens) · space: leave it",
   "Enter: open the lesson",
   "Enter: set off · s: save & quit",
+  "Esc. Colon. W. Q. Every time.",
   "Established",
   "Established Ettin",
+  "Every answer is in a manual somewhere.",
   "Every checkpoint is a small victory.",
   "Every command answers yes or no when it ends: its exit status. 0 means it worked (yes), anything else means it didn't (no). if runs its block only when the command after it says yes.",
+  "Every folder is a new trail.",
   "Every hop, someone reads my address and points the way.",
   "Every line has fields, if you look closely.",
   "Every recursion needs a case that returns without calling itself.",
@@ -8099,13 +8662,16 @@
   "Every tool explains itself: --help lists its options, one per line, short form (-f), long form (--ignore-case) and what it does. Too long? Add | less, and q quits.",
   "Every town started as a hill with one tree on it.",
   "Every user has a number (uid) and belongs to groups: one main group, which new files get, and maybe others. id prints all of it at once: uid, gid (the main group) and groups. The name is in brackets after gid=.",
+  "Every web page is text: press Ctrl+U in your browser to read its HTML source.",
   "Every {n} achievements also level up your starter.",
+  "Everyone deserves a second try.",
   "ExecStart=... belongs under [Service], WantedBy=multi-user.target under [Install]. Open {editor} {unit}, swap the two lines, {save_keys}.",
   "Executor",
   "Exit code",
   "Explain it to me. Out loud. I'll wait.",
   "Exploiter",
   "Explorer",
+  "Explorer pony",
   "Falcon",
   "Fast tongue, sharp eyes. Every hunter in my family has one or the other.",
   "Fat paws again? `{typo}` → `{fix}`",
@@ -8140,6 +8706,7 @@
   "Files and editing",
   "Filter",
   "Find the line that doesn't start where its neighbours do. runs-on: and steps: both belong to the job, so they line up; name: and run: both belong to the same step, so they line up too.",
+  "Fine. I'm not jealous. Much.",
   "Fire slime",
   "First brick",
   "First flag",
@@ -8152,6 +8719,7 @@
   "Flawless",
   "Flower",
   "Flying squirrel",
+  "Foal",
   "Follow",
   "For one word to replace, sed can do it without opening the file: s/old/new/ replaces, -i writes the change into the file itself.",
   "Forensic",
@@ -8186,10 +8754,13 @@
   "Groups of 8-4-4-4-12 hex digits, and the third starts with 4? A UUID, version 4.",
   "Hacker cat",
   "Handshake Heron",
+  "Hard hat on. Who's next?",
   "Hatchling",
+  "Have you mooed today? I have.",
   "Hawk eyes",
   "Header Hound",
   "Headers",
+  "Heart pony",
   "Hedgehog",
   "Hehe, `{typo}`? I think you meant `{fix}`.",
   "Hehehe.",
@@ -8251,13 +8822,17 @@
   "How many .gem files are hidden in cave/, at any depth? Then: answer <number>",
   "How many different cities are in people.txt (3rd column)? Then: answer <number>",
   "I always find my way home. Even through a tunnel.",
+  "I always say what I see: that file needs a README.",
+  "I brought you something! It's a package.",
   "I can find anything. Anything.",
+  "I can say things too, you know.",
   "I can take the shape of any output.",
   "I dig through text all day.",
   "I grow with every step you finish. No hurry: rivers take their time too.",
   "I guard your shell.",
   "I hear every syscall on my web.",
   "I keep watch. Disks, memory, all of it.",
+  "I like quiet terminals and long man pages.",
   "I like the terminal after dark.",
   "I like things counted and sorted.",
   "I pack everything for winter.",
@@ -8270,7 +8845,9 @@
   "I'm a rock. You can count on me.",
   "I'm bored. Something needs fighting.",
   "I'm made of stardust. And a bit of bash.",
+  "I'm new here too. Shall we learn together?",
   "I'm only a few bytes, but I cross oceans.",
+  "I've been in vim since 1998. Don't ask how to leave.",
   "INSERT INTO adds a row: name the columns, then give the values in the same order. Text goes between single quotes: INSERT INTO products (name, price, stock) VALUES ('{item}', {price}, {stock});",
   "INSERT INTO stock (item, qty) VALUES ('{item}', {n}) ON CONFLICT(item) DO UPDATE SET qty = qty + excluded.qty;  Try it on a copy: cp stock.db test.db; sqlite3 test.db < {file}",
   "INSERT … ON CONFLICT(item) DO UPDATE tries the insert, and when the item already exists (item is the PRIMARY KEY) runs the update instead: an \"upsert\". In the update, excluded.qty is the qty you tried to insert. INSERT OR REPLACE is not the same: it deletes the old row, so the old qty and the shelf are lost.",
@@ -8309,6 +8886,7 @@
   "JSON is my favourite pond.",
   "JWT token",
   "Jade golem",
+  "Jealous pony",
   "Jobs run side by side unless told otherwise. needs: test makes deploy wait for test, and skips it if test fails. A job-level if: decides whether it runs at all.",
   "Jobs run side by side unless you set an order: needs: on GitHub, stages: on GitLab. A deploy should wait for the tests, and be skipped when they fail.",
   "Join Jackal",
@@ -8351,6 +8929,7 @@
   "Level",
   "Leviathan",
   "Librarian",
+  "Library pony",
   "Like a program",
   "Line Moth",
   "Linker Lynx",
@@ -8388,6 +8967,7 @@
   "Mandarin duck",
   "Mantis",
   "Manual Mole",
+  "Manuals have sections: 1 for commands, 5 for file formats. `man 5 passwd` reads the file format, not the command.",
   "Many small jobs make one big job.",
   "Mapper",
   "Marsh of Merge Conflicts",
@@ -8415,6 +8995,9 @@
   "Mole king",
   "Molekin",
   "Month",
+  "Moo pony",
+  "Moo. Neigh. Moo-neigh.",
+  "Moo? A pony answers the cow. To welcome it: `bashou pony {word}`",
   "Moon",
   "Mountain ghost",
   "Mountains",
@@ -8422,6 +9005,7 @@
   "Mushroom",
   "Mut Marmot",
   "My eyes move one by one. Yours can learn to spot a hash in a log at a glance.",
+  "My horn picks up Wi-Fi. Probably.",
   "NXDomain Nixie",
   "Name",
   "Nebula",
@@ -8444,8 +9028,11 @@
   "No fight is ready for you right now: the ones you know are beaten and none is due for a review. Try a security investigation: bashou arena security",
   "No lesson called {name}.",
   "No lesson for this one yet: try hint.",
+  "No manual for that, but a pony brings you a book. To welcome it: `bashou pony {word}`",
+  "No pony answers to that name.",
   "No project started yet. Pick one: bashou project start python photos",
   "No release {version}. Releases: {list}",
+  "No rule to make love… but a pony comes for a hug. To welcome it: `bashou pony {word}`",
   "No starter yet, so Bashou stays off. Run `bashou on` when you want to meet your pet.",
   "No starter yet. Run `bashou start` when you're ready.",
   "No such challenge: {key}. `bashou arena security` lists them.",
@@ -8474,7 +9061,10 @@
   "Octal",
   "Octopito",
   "Octopus",
+  "Of course I know HTML. I know everything about the web.",
   "Official lines: wiki.debian.org/SourcesList. `man sources.list` explains each field. Since Debian 11, security uses <release>-security.",
+  "Okay, a sandwich. A pony in a chef's hat brings it. To welcome it: `bashou pony {word}`",
+  "Okay. One sandwich. Because you said sudo.",
   "Old oak",
   "Old reports fill this chest. Remove report-2025-*.csv and nothing else. Then: verify",
   "Old tools lie half-buried in the sand. Some still bite.",
@@ -8488,6 +9078,7 @@
   "Only `{tool}` hurts it; looking around (ls, cat…) is free. It'll be back.",
   "Only one form so far: it evolves with achievements.",
   "Only test what you're allowed to test. Written permission, always.",
+  "Only use `sudo` when a command really needs it. As root, small mistakes become big ones.",
   "Onward! `bashou adventure` has more roads to walk.",
   "Open a new terminal (or: source ~/.bashrc) to meet your pet.",
   "Open the file in an editor: {editor} recipe.txt. Move with the arrow keys to line {n}, fix the word, then save and quit ({save_keys}). cat recipe.txt shows the result.",
@@ -8501,6 +9092,7 @@
   "PDF juggler",
   "PDF tamer",
   "Pack the loot: put the folder loot/ into a compressed archive loot.tar.gz.",
+  "Package pony",
   "Packer",
   "Packet",
   "Padlock Pest",
@@ -8541,6 +9133,8 @@
   "Polish the sword: rename rusty_sword.txt to shiny_sword.txt.",
   "Polyglot",
   "Polymath",
+  "Ponies",
+  "Ponies found: {n}/{total}.",
   "Porcupine",
   "Port",
   "Poster",
@@ -8570,11 +9164,14 @@
   "Rawr!",
   "Read a pipe left to right: take a column, keep each value once (sort -u = sort then uniq), then count the lines.",
   "Read rustc's error: it names the variable and even suggests the fix.",
+  "Read the description: there's always a surprise inside.",
   "Read the error from the bottom: the last line names the problem, the lines above point at where. A def or a for line ends with something.",
   "Read the error message to the end. It usually says what's wrong.",
+  "Read the help of the tools you use every day: you'll find options you never knew about.",
   "Read the if line aloud. grep -q finds the name quietly: it succeeds when the name is on the list. The ! in front turns that answer around, so the if now means \"if the name is NOT on the list, open\". Then run bash door.sh {guest} and bash door.sh {stranger} to see the difference.",
   "Read the man page before the exploit.",
   "Reader",
+  "Real ponies use hjkl.",
   "Real programs to build, one small step at a time. Each step says what to do and when it's done, not how: searching is part of learning. Pick one that you would really use.",
   "Red giant",
   "Red squirrel",
@@ -8655,9 +9252,11 @@
   "Services and unit files",
   "Settings",
   "Shadow Shade",
+  "Sharing is the best part of free software.",
   "Sharp eyes",
   "Shebang Shade",
   "Shell smith",
+  "Shh. I'm reading.",
   "Shopping planner",
   "Shortcut",
   "Signal",
@@ -8724,6 +9323,7 @@
   "Streak",
   "Streams and scripts",
   "Stuck in the arena? Type `hint`.",
+  "Stuck in vim? Press Esc, then type `:q!` and Enter to leave without saving, or `:wq` to save and leave.",
   "Stuck on a step? `bashou project hint` gives you a nudge, never the answer.",
   "Stuck on step {n} of {title}? `bashou project hint` gives you a nudge.",
   "Stuck? Explain your script to me, line by line. It often fixes itself.",
@@ -8873,10 +9473,12 @@
   "Then in {file}, the line that loads {old} becomes: {new}",
   "These commands will run, in this order (sudo asks for your password):",
   "These files are YAML, written like an outline: a line pushed further right belongs to the line above it. Each level is 2 spaces further right. Only spaces, never tabs.",
+  "Things break. Then we fix them, better.",
   "This chest holds loot.db, a list of treasures. How many of them are rare? answer <number>",
   "This chest is a git repository with one new file, map.txt. Save it in a first commit (any message). Then: verify",
   "This copy of Bashou isn't a git clone, so it can't update itself.",
   "This is all your card shares:",
+  "This joke comes from xkcd comic 149: \"make me a sandwich\" fails, and \"sudo make me a sandwich\" works.",
   "This one asks a question: answer <value>",
   "This one needs {tools}, which isn't installed.",
   "This terminal was opened before my last update, so I may draw over your text. Type exec bash (or open a new terminal) to load the new version.",
@@ -9030,7 +9632,9 @@
   "Version Vole",
   "Veteran",
   "Victory! The {boss} is defeated.",
+  "View source. Always view source.",
   "Village",
+  "Vim pony",
   "Walls up",
   "Want to learn SQL? `{cmd}` installs SQLite: a whole database in one file. SQL fights will come.",
   "Want to play detective? `bashou arena security` has small investigations.",
@@ -9059,14 +9663,17 @@
   "Watchtower",
   "Water me with commands.",
   "Waterfall",
+  "Web pony",
   "Web scanner",
   "Week",
   "Welcome back: you stopped here.",
   "Well read",
   "Whale",
   "What do you want to learn?",
+  "What does this command do? And this one? And that one?",
   "What you learned just before: does it still come back?",
   "What? {name} is evolving!",
+  "When a command fails, read its error message to the end: it usually says exactly what is missing.",
   "When a threat shows up, `bashou fight` opens the arena.",
   "When it works, type: verify",
   "When ls shows exactly the five monthly files: rm report-2025-*.csv",
@@ -9074,6 +9681,7 @@
   "Which one? (number, Enter leaves): ",
   "Which project? For example: bashou project start python photos",
   "White duck",
+  "Why did the pony moo? To confuse the cow!",
   "Win and it's like any fight. Lose, and the gates close for an hour.",
   "Wisp",
   "With {editor}: {editor} recipe.txt, fix {bad} into {good}, {save_keys}. Or in one command, without opening the file: sed -i 's/{bad}/{good}/' recipe.txt",
@@ -9083,6 +9691,7 @@
   "Words that start with a dot are sqlite3's own commands: .tables lists the tables, .schema shows how one is built (its columns and their types), .quit leaves. You can also give them right after the file.",
   "Worker ant",
   "World tree",
+  "Wrecking pony",
   "Write if (score == 100), then: gcc -Wall grade.c -o grade && ./grade 100 {mark} 7",
   "Write in the journal: add the line rested at the end of journal.txt, without erasing it.",
   "Write: const MAX_POINTS: u32 = …;",
@@ -9099,12 +9708,26 @@
   "You already finished {title}. Its steps stay here to read again:",
   "You beat the {threat}!",
   "You fled. The {threat} will be back.",
+  "You found me in `bashou --help`. Most programs answer to `--help` with a summary of their options, so curious people try it first. Keep doing that with every new tool.",
+  "You found me in an HTML comment in the source of Bashou's site. Browsers hide comments, but View source (Ctrl+U) shows everything a page is made of.",
+  "You found me in doc/easter_egg, deep in Bashou's repository. Reading a project's files is how you learn how it really works, and nothing in there can break.",
+  "You found me in the changelog. Every Bashou release lists what changed, and a \"breaking change\" is one that stops an old habit from working. Reading the changelog before updating saves you surprises.",
+  "You found me in the package description that `apt search` and `dnf search` show. Those searches read the name and short description of every package they know.",
   "You have {n} minutes. The time left shows in the prompt.",
   "You know your way around now. Want to learn Rust? `{cmd}` installs it, and Rust fights will come.",
   "You learn a bit of everything.",
   "You learn: {skills}",
   "You leave the chest behind.",
+  "You ran `apt moo`, a joke hidden in apt for years. Developers love hiding jokes in their tools: they reward people who try things.",
+  "You ran `cowsay`, the program that makes a cow say your text. I can talk too, you know! Try `fortune | cowsay` to see a pipe at work.",
+  "You ran `make love`. make builds the targets of a Makefile, and there is no target called love, so it answers \"No rule to make target\": a joke as old as make.",
+  "You ran `man woman`. man opens the manual of a command, and there is no command called woman: \"No manual entry for woman\" is a very old Unix joke.",
+  "You ran `sudo make me a sandwich`, from xkcd comic 149. sudo runs a command as the administrator, so this time nobody can say no.",
+  "You read the help! Almost nobody reads the help.",
+  "You typed `:wq` in the shell. That's how vim saves and quits, and you were already out of vim! bash doesn't know `:wq`, so it said \"command not found\".",
+  "You went through the repo! Real explorers read the code.",
   "You're in a sandbox folder with a real bash. Commands:",
+  "You're not in vim anymore! A pony who knows the feeling peeks in. To welcome it: `bashou pony {word}`",
   "You're on the first step already.",
   "Your Honey badger got bored and went to fight the {threat}! The arena opens after your next command.",
   "Your card needs a nickname: it shows on the image instead of your real name.",
@@ -9121,6 +9744,13 @@
   "Your terminal is too small: {cols}×{rows}. `bashou {name}` needs at least {need_cols}×{need_rows}, or its screen would come out broken. Make the window bigger (or the font smaller), then try again.",
   "[ ] is a command too, made to test things: -f name is a file, -d name is a folder, \"$a\" = \"$b\" compares two texts. Keep a space after [ and before ], or bash can't read it.",
   "`!$` is the last argument of the previous command.",
+  "`--help` after almost any command prints a summary of its options: the fastest way to remember how it works.",
+  "`:wq` saves and quits in vim. Typed in the shell, bash doesn't know it: you were already out of vim!",
+  "`apt changelog <package>` shows what an update of a Debian package brings, before you install it.",
+  "`apt moo` is an old Debian joke built into apt: it draws a cow and asks if you have mooed today.",
+  "`apt search word` (or `dnf search word`) looks for packages whose name or description contains that word.",
+  "`apt show bashou` prints everything about one package: its version, size, dependencies and description.",
+  "`apt` installs, updates and removes packages on Debian and Ubuntu. Changing the system needs `sudo`.",
   "`bash -x script.sh` shows each line as it runs.",
   "`bashou learn awk`: awk cuts each line into fields, $1 is the first word, $2 the second. Print the column, then read the line you need.",
   "`bashou learn cut` explains it: -d says what separates the columns, -f which one to keep. Print the column, then read the line you need.",
@@ -9140,9 +9770,12 @@
   "`chmod +x script.sh` makes it runnable.",
   "`chmod 644 file` : rw for you, read for others.",
   "`chmod u+x script.sh` is enough to run it. No need for 777.",
+  "`cowsay -l` lists the other animals it can draw, and `cowsay -f dragon hello` uses one of them.",
+  "`cowsay` draws a cow saying your text. Pipe another command into it: `fortune | cowsay`.",
   "`cp -r src dst` copies a folder and its content.",
   "`crontab -e` runs things on a schedule.",
   "`ctrl+L` clears the screen, like `clear`.",
+  "`curl -s https://example.com | less` reads a page's source from the terminal, without a browser.",
   "`df -h` : how full are your disks?",
   "`du -sh *` : how big is each folder?",
   "`fc` opens the last command in your editor.",
@@ -9150,6 +9783,7 @@
   "`find` can filter by modification time: -mmin -10 means \"less than 10 minutes ago\".",
   "`gcc hello.c -o hello && ./hello` builds a C program and runs it.",
   "`git add -p` picks changes piece by piece.",
+  "`git clone` copies a whole project to your computer, history included, so you can read every file.",
   "`git commit --amend` fixes the last commit.",
   "`git diff --staged` shows what you're about to commit.",
   "`git restore file` drops your changes.",
@@ -9160,12 +9794,17 @@
   "`jq .` pretty-prints JSON.",
   "`ln -s target link` makes a shortcut.",
   "`ln -s target name` makes a shortcut.",
+  "`ls -a` shows hidden files too: their names start with a dot, and they often hold settings.",
   "`ls -l` : the 10 letters are the rights.",
   "`ls -l` shows an s instead of x in the owner's permissions: -rwsr-xr-x.",
   "`ls -l` shows who can read, write and run each file.",
   "`ls -lah` shows hidden files with human sizes.",
   "`ls` doesn't show files whose name starts with a dot. `ls -a` does.",
+  "`make` builds the targets listed in a Makefile. `make love` fails: no target is called love.",
+  "`man -k word` (or `apropos word`) finds the manual pages that talk about a word.",
   "`man -k word` searches every manual.",
+  "`man ls` opens the full manual of `ls`. Press `/` to search inside it and `q` to leave.",
+  "`man` opens the manual of a command. `man woman` answers \"No manual entry for woman\": a very old Unix joke.",
   "`mkdir -p a/b/c` builds a whole path at once.",
   "`mv old new` renames; `mv file dir/` moves.",
   "`nmap -sV host` tells you what's listening, and what version.",
@@ -9184,10 +9823,13 @@
   "`sort file | uniq -c` counts how many times each line appears.",
   "`sqlite3 shop.db .tables` lists the tables of a database: SQLite keeps it all in one file.",
   "`sudo !!` reruns the last command with sudo.",
+  "`sudo` runs one command as root, the administrator. It asks your password: that command can change the whole system.",
   "`tail -f log` watches a file live.",
   "`time make` tells how long it took.",
+  "`tree -L 2` draws a folder and its subfolders, two levels deep: a quick map of a new project.",
   "`umask` : the rights new files get.",
   "`uniq -d` shows only the duplicates.",
+  "`vimtutor` is a 30-minute lesson that teaches vim inside vim. It is the best way to stop being afraid of it.",
   "`watch -n 5 df -h` reruns a command every 5 s.",
   "`{typo}` isn't a command… yet.",
   "`{typo}`? Never heard of it. Hehe.",
@@ -9416,6 +10058,11 @@
   "format output with `printf` in awk",
   "forward a local port to the other side: {value}",
   "forward a port with `ssh -L`, or jump with `ssh -J`",
+  "found in Bashou's repository",
+  "found in `apt search bashou`",
+  "found in `bashou --help`",
+  "found in the changelog",
+  "found in the source of Bashou's site",
   "free -h : memory at a glance.",
   "gcc -g adds line numbers to the program. In gdb, run starts it; when it crashes, gdb stops and shows where. bt (backtrace) lists the calls, the one that crashed first.",
   "gcc -g count.c -o count builds it with line numbers. In gdb: run, then bt.",
@@ -9635,6 +10282,11 @@
   "put your changes aside for later",
   "python3 -c runs one line of Python. json.load turns the file into dicts.",
   "r: restart · q: quit",
+  "ran `apt moo`",
+  "ran `cowsay`",
+  "ran `make love`",
+  "ran `man woman`",
+  "ran `sudo make me a sandwich`",
   "raw: strings without their quotes",
   "reach level 3 in a topic",
   "read 12 lessons to the end",
@@ -9878,6 +10530,7 @@
   "turn a weekly menu into a shopping list in Rust: `bashou project start rust menu`",
   "turns the lines that come in into arguments of a command",
   "type a new password in",
+  "typed `:wq` in the shell",
   "uniq only merges adjacent lines, so sort first. `uniq -c` counts them.",
   "uniq only merges identical lines that follow each other. Without sort, a city that appears on lines 1 and 3 is counted twice. So sort always comes before uniq.",
   "unlock: {how}",
@@ -9949,6 +10602,7 @@
   "{file} now loads the package (a copy of the old one: {backup}).",
   "{name} ({pet} family): {how}",
   "{name} already lives in this terminal.",
+  "{name} is already in your herd.",
   "{name} is now your pet.",
   "{name} is your pet.",
   "{name} is your starter! It levels up every 5 achievements.",

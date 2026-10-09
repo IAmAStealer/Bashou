@@ -1,0 +1,22 @@
+{
+ "name": "Chef pony",
+ "first": "pony_chef",
+ "order": 43,
+ "secret": true,
+ "herd": "pony",
+ "unlock": {
+  "pony": true,
+  "how": "ran `sudo make me a sandwich`"
+ },
+ "voice": "*neigh*",
+ "tips": [
+  "`sudo` runs one command as root, the administrator. It asks your password: that command can change the whole system.",
+  "This joke comes from xkcd comic 149: \"make me a sandwich\" fails, and \"sudo make me a sandwich\" works.",
+  "Only use `sudo` when a command really needs it. As root, small mistakes become big ones."
+ ],
+ "personal": [
+  "Okay. One sandwich. Because you said sudo.",
+  "A perfect sandwich takes the right ingredients, in the right order.",
+  "Don't touch my kitchen without sudo."
+ ]
+}

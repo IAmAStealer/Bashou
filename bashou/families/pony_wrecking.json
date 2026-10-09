@@ -1,0 +1,22 @@
+{
+ "name": "Wrecking pony",
+ "first": "pony_wrecking",
+ "order": 35,
+ "secret": true,
+ "herd": "pony",
+ "unlock": {
+  "pony": true,
+  "how": "found in the changelog"
+ },
+ "voice": "*neigh*",
+ "tips": [
+  "A changelog lists what changed in each version. Read it before updating to know what might break.",
+  "A \"breaking change\" stops an old habit from working: a renamed option, a removed command.",
+  "`apt changelog <package>` shows what an update of a Debian package brings, before you install it."
+ ],
+ "personal": [
+  "Breaking change! Ha, I broke out of the changelog.",
+  "Things break. Then we fix them, better.",
+  "Hard hat on. Who's next?"
+ ]
+}

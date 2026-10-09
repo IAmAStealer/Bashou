@@ -14,7 +14,7 @@ import threading
 import time
 from pathlib import Path
 
-from . import creatures, dialogue, fight, i18n, learn, progress, render, state, update
+from . import creatures, dialogue, fight, i18n, learn, pony, progress, render, state, update
 from .behavior import Behavior
 from .analyze import parse_log
 from .i18n import _
@@ -179,7 +179,10 @@ class Companion:
                 elif self.bubble:
                     self.bubble = (self.bubble[0], self.bubble[1] + 1, self.bubble[2])
                 self.notes += progress.record(s, status, command, now.date().isoformat(), now.hour)
-                if status == 127:
+                peek = pony.peek(s, command)            # cowsay, apt moo, :wq…: a hidden pony shows up
+                if peek:
+                    self.say_now(peek)
+                elif status == 127:
                     self.laugh_at_typo(s, command)
                 self.warn_risky(command)
 

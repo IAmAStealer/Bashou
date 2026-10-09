@@ -1,0 +1,22 @@
+{
+ "name": "Heart pony",
+ "first": "pony_heart",
+ "order": 41,
+ "secret": true,
+ "herd": "pony",
+ "unlock": {
+  "pony": true,
+  "how": "ran `make love`"
+ },
+ "voice": "*neigh*",
+ "tips": [
+  "`make` builds the targets listed in a Makefile. `make love` fails: no target is called love.",
+  "A Makefile target says what to build, from which files, and how. `make` only rebuilds what changed.",
+  "When a command fails, read its error message to the end: it usually says exactly what is missing."
+ ],
+ "personal": [
+  "Aww, you tried to make love. Here's a hug instead.",
+  "Be kind to your terminal, it works hard.",
+  "Everyone deserves a second try."
+ ]
+}

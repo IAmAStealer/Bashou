@@ -1,0 +1,22 @@
+{
+ "name": "Foal",
+ "first": "pony_foal",
+ "order": 34,
+ "secret": true,
+ "herd": "pony",
+ "unlock": {
+  "pony": true,
+  "how": "found in `bashou --help`"
+ },
+ "voice": "*neigh*",
+ "tips": [
+  "`--help` after almost any command prints a summary of its options: the fastest way to remember how it works.",
+  "`man ls` opens the full manual of `ls`. Press `/` to search inside it and `q` to leave.",
+  "Read the help of the tools you use every day: you'll find options you never knew about."
+ ],
+ "personal": [
+  "You read the help! Almost nobody reads the help.",
+  "I'm new here too. Shall we learn together?",
+  "What does this command do? And this one? And that one?"
+ ]
+}

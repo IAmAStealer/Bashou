@@ -133,7 +133,7 @@ def problems(path):
 # first form (the forms' "next" links do the rest), its place on the board, how it's unlocked and what it
 # says. doc/contributing/pixel-art.md lists the fields.
 FAMILY_DIR = ART.parent / "families"
-UNLOCKS = ("tools", "construct", "commands", "counter", "achievement", "family_achievement", "secret_found")
+UNLOCKS = ("tools", "construct", "commands", "counter", "achievement", "family_achievement", "secret_found", "pony")
 
 
 @dataclass
@@ -144,6 +144,7 @@ class Family:
     order: int = 0                  # place on the board (starters: in the starter choice)
     starter: bool = False
     secret: bool = False            # not on the board until you find it (secret achievements bring it)
+    herd: str = ""                  # pets listed together in `bashou pets` ("pony": the hidden ponies)
     needs: str = ""                 # the command it's about: hidden where that isn't installed
     unlock: dict = field(default_factory=dict)   # how a pet comes: progress.unlock_rule reads it
     achievement_needs: tuple = ()   # its achievements only count where these commands are installed

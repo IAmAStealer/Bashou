@@ -223,6 +223,7 @@ FIELDS = {
     "share_name": ("", kind(str)),                    # the nickname on `bashou share` cards
     "projects": (PROJECTS, projects_progress),        # `bashou project`: current one, steps done, days
     "spot": (SPOT, spot_progress),                    # `bashou spot`: best score, games, kinds recognised
+    "ponies": ([], list_of(kind(str))),               # hidden ponies claimed with `bashou pony <id>`
 }
 
 

@@ -24,7 +24,7 @@ PREFIX = "usr/share/bashou"
 SHIPPED = ("bashou/", "art/", "bashou.bash", "launch.py", "CHANGELOG.md", "LICENSE", "README.md")
 URL = "https://github.com/IAmAStealer/Bashou"
 PAGES = "https://iamastealer.github.io/Bashou"
-SUMMARY = "A pet in your terminal that grows as you learn bash"
+SUMMARY = "A pet in your terminal that grows as you learn bash (psst: bashou pony hay)"   # a hidden pony
 DESCRIPTION = ("Bashou lives in the corner of your terminal and evolves as you use bash: fights, a quiz\n"
                "adventure and hints teach the command line, offline. It's on for every user; bashou off hides it.")
 

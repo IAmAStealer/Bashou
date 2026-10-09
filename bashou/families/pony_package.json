@@ -1,0 +1,22 @@
+{
+ "name": "Package pony",
+ "first": "pony_package",
+ "order": 37,
+ "secret": true,
+ "herd": "pony",
+ "unlock": {
+  "pony": true,
+  "how": "found in `apt search bashou`"
+ },
+ "voice": "*neigh*",
+ "tips": [
+  "`apt search word` (or `dnf search word`) looks for packages whose name or description contains that word.",
+  "`apt show bashou` prints everything about one package: its version, size, dependencies and description.",
+  "A package is a program wrapped with what the system needs to install, update and remove it cleanly."
+ ],
+ "personal": [
+  "I brought you something! It's a package.",
+  "Sharing is the best part of free software.",
+  "Read the description: there's always a surprise inside."
+ ]
+}

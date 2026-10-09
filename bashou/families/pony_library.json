@@ -1,0 +1,22 @@
+{
+ "name": "Library pony",
+ "first": "pony_library",
+ "order": 42,
+ "secret": true,
+ "herd": "pony",
+ "unlock": {
+  "pony": true,
+  "how": "ran `man woman`"
+ },
+ "voice": "*neigh*",
+ "tips": [
+  "`man` opens the manual of a command. `man woman` answers \"No manual entry for woman\": a very old Unix joke.",
+  "Manuals have sections: 1 for commands, 5 for file formats. `man 5 passwd` reads the file format, not the command.",
+  "`man -k word` (or `apropos word`) finds the manual pages that talk about a word."
+ ],
+ "personal": [
+  "Shh. I'm reading.",
+  "Every answer is in a manual somewhere.",
+  "I like quiet terminals and long man pages."
+ ]
+}

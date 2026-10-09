@@ -63,13 +63,24 @@ def pets():
     s = state.load()
     active = " ← " + _("active") if s["active"] == "starter" else ""
     print(f"  {BOLD}{_('Starter')}{RESET} {starter_line(s)}{DIM}{active}{RESET}\n")
+    herd = []
     for pet, rule in roster(s):
-        if pet in s["pets"]:
-            active = " ← " + _("active") if pet == s["active"] else ""
-            name = progress.sprite_of(s, pet, progress.reached(s, pet))[1]
-            print(f"  {stars(s, pet)} {name}{DIM}{active}{RESET}")
+        if creatures.FAMILIES[pet].herd:
+            herd.append(pet)                    # the hidden ponies: together at the end
+        elif pet in s["pets"]:
+            print(f"  {stars(s, pet)} {pet_line(s, pet)}")
         else:
             print(f"  {DIM}☆☆☆ ???  ({hint(s, pet)}){RESET}")
+    if herd:
+        from .pony import herd as ponies
+        print(f"\n  🐴 {BOLD}" + _("Ponies") + f"{RESET} {DIM}{len(herd)}/{len(ponies())}{RESET}")
+        for pet in herd:
+            print(f"    {pet_line(s, pet)}")
+
+
+def pet_line(s, pet):
+    active = " ← " + _("active") if pet == s["active"] else ""
+    return f"{progress.sprite_of(s, pet, progress.reached(s, pet))[1]}{DIM}{active}{RESET}"
 
 
 def achievements_list():
@@ -87,6 +98,8 @@ def achievements_list():
         print()
     for pet, rule in roster(s):
         fam = achievements.family(pet)
+        if not fam:                             # the hidden ponies: no achievements
+            continue
         got = sum(a.id in earned for a in fam)
         title = progress.sprite_of(s, pet, progress.reached(s, pet))[1] if pet in s["pets"] else "???"
         print(f"  {BOLD}{title}{RESET} {DIM}{got}/{len(fam)}{RESET}")
@@ -459,6 +472,7 @@ COMMANDS = [
     Command("setup", run("setup", "run"), hidden=True),                         # now bashou on
     Command("security", run("arena", "main", lambda a: "security", "which"), args=[("which", dict(nargs="?"))],
             hidden=True),                                                       # now bashou arena security
+    Command("pony", run("pony", "main", "word"), args=[("word", dict(nargs="?"))], hidden=True),   # only in --help
     Command("dev", run_dev, args=[                                              # testing helpers
         ("action", dict(choices=["unlock-all", "stage", "stage-all", "level", "threat", "restore"])),
         ("pet", dict(nargs="?", help="pet (stage), level 1-9 (level) or challenge id (threat)")),
@@ -466,7 +480,8 @@ COMMANDS = [
 ]
 
 
-def print_help():
+def print_help(pony=False):
+    """`pony`: `bashou --help` (and -h) also shows the way to the hidden Foal; `bashou help` doesn't."""
     rows = [c.row for c in COMMANDS if c.row]
     width = max(len(usage) for usage, _t, _s in rows)
     print(f"\n  {BOLD}Bashou{RESET} · " + _("a pet that grows as you learn bash.") + "\n")
@@ -476,6 +491,8 @@ def print_help():
             if where == section:
                 print(f"    {CYAN}{usage:<{width}}{RESET}  {_(text)}")
         print()
+    if pony:
+        print(f"  {DIM}🐴 psst… bashou pony{RESET}\n")
 
 
 def too_small(command):
@@ -498,7 +515,7 @@ def too_small(command):
 class Parser(argparse.ArgumentParser):
     def print_help(self, file=None):
         if self.prog == "bashou":
-            print_help()
+            print_help(pony=True)
         else:
             super().print_help(file)
 

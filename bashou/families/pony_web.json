@@ -1,0 +1,22 @@
+{
+ "name": "Web pony",
+ "first": "pony_web",
+ "order": 38,
+ "secret": true,
+ "herd": "pony",
+ "unlock": {
+  "pony": true,
+  "how": "found in the source of Bashou's site"
+ },
+ "voice": "*neigh*",
+ "tips": [
+  "Every web page is text: press Ctrl+U in your browser to read its HTML source.",
+  "`curl -s https://example.com | less` reads a page's source from the terminal, without a browser.",
+  "An HTML comment starts with `<!--` and ends with `-->`. The browser hides it, but the source shows it."
+ ],
+ "personal": [
+  "Of course I know HTML. I know everything about the web.",
+  "View source. Always view source.",
+  "My horn picks up Wi-Fi. Probably."
+ ]
+}

@@ -1,0 +1,22 @@
+{
+ "name": "Jealous pony",
+ "first": "pony_jealous",
+ "order": 39,
+ "secret": true,
+ "herd": "pony",
+ "unlock": {
+  "pony": true,
+  "how": "ran `cowsay`"
+ },
+ "voice": "*neigh*",
+ "tips": [
+  "`cowsay` draws a cow saying your text. Pipe another command into it: `fortune | cowsay`.",
+  "`cowsay -l` lists the other animals it can draw, and `cowsay -f dragon hello` uses one of them.",
+  "A pipe `|` sends the output of the command on its left to the input of the command on its right."
+ ],
+ "personal": [
+  "A cow? Why always the cow?",
+  "I can say things too, you know.",
+  "Fine. I'm not jealous. Much."
+ ]
+}

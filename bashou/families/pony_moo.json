@@ -1,0 +1,22 @@
+{
+ "name": "Moo pony",
+ "first": "pony_moo",
+ "order": 40,
+ "secret": true,
+ "herd": "pony",
+ "unlock": {
+  "pony": true,
+  "how": "ran `apt moo`"
+ },
+ "voice": "*neigh*",
+ "tips": [
+  "`apt moo` is an old Debian joke built into apt: it draws a cow and asks if you have mooed today.",
+  "Easter eggs are jokes hidden by developers. You find them by reading and trying: that's how you learn a tool.",
+  "`apt` installs, updates and removes packages on Debian and Ubuntu. Changing the system needs `sudo`."
+ ],
+ "personal": [
+  "Have you mooed today? I have.",
+  "Why did the pony moo? To confuse the cow!",
+  "Moo. Neigh. Moo-neigh."
+ ]
+}

@@ -1,0 +1,22 @@
+{
+ "name": "Vim pony",
+ "first": "pony_vim",
+ "order": 44,
+ "secret": true,
+ "herd": "pony",
+ "unlock": {
+  "pony": true,
+  "how": "typed `:wq` in the shell"
+ },
+ "voice": "*neigh*",
+ "tips": [
+  "`:wq` saves and quits in vim. Typed in the shell, bash doesn't know it: you were already out of vim!",
+  "Stuck in vim? Press Esc, then type `:q!` and Enter to leave without saving, or `:wq` to save and leave.",
+  "`vimtutor` is a 30-minute lesson that teaches vim inside vim. It is the best way to stop being afraid of it."
+ ],
+ "personal": [
+  "I've been in vim since 1998. Don't ask how to leave.",
+  "Esc. Colon. W. Q. Every time.",
+  "Real ponies use hjkl."
+ ]
+}

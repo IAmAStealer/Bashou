@@ -94,10 +94,12 @@ per starter (`star.json`):
 - **`unlock`**: how it comes. One of `{"tools": ["find"], "uses": 10}` (successful uses of those
   commands; `"label"` picks which ones the hint names), `{"construct": "pipe3", "count": 10}`,
   `{"commands": 10}`, or a rule with a `"how"` sentence for the board: `{"counter": "fights_won",
-  "count": 1}`, `{"achievement": "kindling"}`, `{"family_achievement": true}`, `{"secret_found": true}`.
+  "count": 1}`, `{"achievement": "kindling"}`, `{"family_achievement": true}`, `{"secret_found": true}`, `{"pony": true}`
+  (claimed with `bashou pony <id>`, see `bashou/pony.py`).
 - **`voice`**, **`tips`** (3 or more) and **`personal`**: what it says. A starter also has a **`blurb`**.
 - Optional: **`secret`** (not on the board until found), **`needs`** (hidden where that command isn't
-  installed), **`achievement_needs`** (its achievements only count where those commands exist).
+  installed), **`achievement_needs`** (its achievements only count where those commands exist), **`herd`**
+  (pets listed together under one line in `bashou pets`, like `"pony"`).
 
 `python3 -m bashou.creatures check` checks the family files too, and the tests walk every pet listed
 there: a new pet is a family file and its sprites, with no code to change.

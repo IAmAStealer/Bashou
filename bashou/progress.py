@@ -48,6 +48,8 @@ def unlock_rule(state, pet):
         met = counter(state, rule["counter"]) >= rule["count"]
     elif "achievement" in rule:
         met = rule["achievement"] in state["achievements"]
+    elif "pony" in rule:                                   # claimed with `bashou pony <id>` (pony.py)
+        met = pet in state["ponies"]
     elif "family_achievement" in rule:
         met = bool({a.id for a in achievements.family(pet)} & set(state["achievements"]))
     else:                                                  # "secret_found": one of its secrets finds you
