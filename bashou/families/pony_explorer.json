@@ -10,6 +10,9 @@
  },
  "voice": "*neigh*",
  "tips": [
+  "RTFM means \"Read The F*** Manual\": before asking, look in the docs. The answer is often already written there.",
+  "A project's docs start with its README, then its doc/ folder. Installed programs keep theirs in /usr/share/doc.",
+  "When you ask for help, say which docs you read: people help faster, and nobody needs to answer RTFM.",
   "`git clone` copies a whole project to your computer, history included, so you can read every file.",
   "`ls -a` shows hidden files too: their names start with a dot, and they often hold settings.",
   "`tree -L 2` draws a folder and its subfolders, two levels deep: a quick map of a new project."

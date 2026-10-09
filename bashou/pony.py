@@ -60,8 +60,9 @@ def where():
         "pony_wrecking": _("You found me in the changelog. Every Bashou release lists what changed, and a "
                            "\"breaking change\" is one that stops an old habit from working. Reading the "
                            "changelog before updating saves you surprises."),
-        "pony_explorer": _("You found me in doc/easter_egg, deep in Bashou's repository. Reading a project's "
-                           "files is how you learn how it really works, and nothing in there can break."),
+        "pony_explorer": _("You found me in doc/easter_egg, in the documentation of Bashou's repository. RTFM, "
+                           "\"Read The F*** Manual\", is the oldest advice in computing: most answers are already "
+                           "written in the docs, so read them before asking."),
         "pony_package": _("You found me in the package description that `apt search` and `dnf search` show. "
                           "Those searches read the name and short description of every package they know."),
         "pony_web": _("You found me in an HTML comment in the source of Bashou's site. Browsers hide comments, "
