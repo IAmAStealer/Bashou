@@ -55,6 +55,9 @@ Il te faut bash et python3. La plupart des Linux les ont déjà.
 
 ## Quoi de neuf
 
+**0.8.4**
+- **Des amis secrets** se cachent dans Bashou et autour. Les curieux les trouveront.
+
 **0.8.3**
 - **Bashou parle français** sur le web : un README en français, une page d'accueil en français, et des
   formulaires en français pour signaler un bug ou proposer une idée.

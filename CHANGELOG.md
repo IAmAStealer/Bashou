@@ -3,6 +3,16 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.8.4 — 2026-10-10
+
+### Changes
+
+- Curious players may meet new friends hiding in and around Bashou. We won't say where: look around.
+
+### Breaking changes
+
+- Breaking change: a pony kicked down its stable door and ran away. Catch it with `bashou pony hoof`.
+
 ## v0.8.3 — 2026-10-07
 
 - Bashou speaks French on the web too: there is a French README (`README.fr.md`) and a French home page at

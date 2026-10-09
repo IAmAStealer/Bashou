@@ -55,6 +55,9 @@ It shows every command it will run, asks you, then moves you over. Your pets and
 
 ## What's new
 
+**0.8.4**
+- **Secret friends** are hiding in and around Bashou. Curious players will find them.
+
 **0.8.3**
 - **Bashou speaks French** on the web: a French README, a French home page, and French forms to report a
   bug or suggest an idea.
