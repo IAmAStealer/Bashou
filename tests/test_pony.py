@@ -43,21 +43,32 @@ class HidingPlacesTest(unittest.TestCase):
         self.assertLessEqual(len(summary), 80)
 
     def test_every_pony_has_a_way_in(self):
-        reachable = {pony.FOAL, *pony.PONIES.values()}
-        self.assertEqual(reachable, set(pony.herd()))
+        jokes = {p for p, _rx in pony.JOKES}
+        self.assertEqual({pony.FOAL, *pony.PONIES.values()} | jokes, set(pony.herd()))
         self.assertEqual(len(pony.herd()), 11)
-        self.assertEqual({p for p, _, _ in pony.JOKES} - set(pony.PONIES.values()), set())
-        self.assertEqual(set(pony.where()), set(pony.herd()))
-        self.assertEqual(set(pony.peeks()), {p for p, _, _ in pony.JOKES})
+        self.assertFalse(jokes & set(pony.PONIES.values()), "a joke brings its pony by itself: no word")
+        self.assertEqual(set(pony.where()), {pony.FOAL, *pony.PONIES.values()})
+        self.assertEqual(set(pony.arrivals()), jokes)
+        self.assertEqual(set(pony.hints()), {*pony.PONIES.values(), "jokes"})
 
-    def test_no_word_in_plain_text_in_the_code(self):
-        """Reading bashou/ spoils nothing: the words are hashes, and rot13 for the jokes' hints."""
-        words = ["hoof", "trail", "hay", "mane", "envy", "cud", "hug", "shh", "crumb", "esc"]
+    def test_no_word_outside_its_hiding_place(self):
+        """Owner, 2026-10-10: only the hiding place gives the word. Not the code (hashes), not a hint,
+        not the pet's lines."""
+        from bashou import i18n
+        words = ["hoof", "trail", "hay", "mane"]
         for word in words:
             self.assertIn(pony.digest(word), pony.PONIES, word)
-        code = (ROOT / "bashou/pony.py").read_text()
+        texts = [(ROOT / "bashou/pony.py").read_text()]
+        for lang in ("en", "fr"):
+            i18n.use(lang)
+            texts += [*pony.hints().values(), *pony.arrivals().values(), *pony.where().values()]
+        i18n.use(None)
+        for f in creatures.FAMILIES.values():
+            if f.herd:
+                texts += f.tips + f.personal
         for word in words:
-            self.assertNotRegex(code, rf"\bbashou pony {word}\b|[\"']{word}[\"']", word)
+            for text in texts:
+                self.assertNotRegex(text, rf"bashou pony {word}\b|[\"']{word}[\"']", word)
 
 
 class HelpTest(unittest.TestCase):
@@ -108,9 +119,9 @@ class ClaimTest(unittest.TestCase):
         self.assertEqual(state.load()["pets"].count("pony_foal"), 1)
 
     def test_a_word_brings_its_pony_and_any_case_works(self):
-        _code, text = out(pony.main, "  CRUMB ")
-        self.assertIn("Chef pony", text)
-        self.assertIn("pony_chef", state.load()["pets"])
+        _code, text = out(pony.main, "  TRAIL ")
+        self.assertIn("Explorer pony", text)
+        self.assertIn("pony_explorer", state.load()["pets"])
 
     def test_an_unknown_word_brings_nothing(self):
         code, text = out(pony.main, "unicorn")
@@ -122,13 +133,13 @@ class ClaimTest(unittest.TestCase):
         s = state.load()
         shown = [pet for pet, _ in creatures.roster(s)]
         self.assertFalse(set(pony.herd()) & set(shown))
-        out(pony.main, "esc")
+        out(pony.main, "hay")
         shown = [pet for pet, _ in creatures.roster(state.load())]
-        self.assertEqual(set(pony.herd()) & set(shown), {"pony_vim"})
+        self.assertEqual(set(pony.herd()) & set(shown), {"pony_package"})
 
     def test_bashou_pets_lists_the_herd_together(self):
         out(pony.main, None)
-        out(pony.main, "hug")
+        out(pony.main, "mane")
         _code, text = out(cli.pets)
         self.assertIn("Ponies", text)
         self.assertIn("2/11", text)
@@ -142,54 +153,72 @@ class ClaimTest(unittest.TestCase):
         self.assertEqual(state.load()["ponies"], [])
 
 
-class PeekTest(unittest.TestCase):
-    def peek(self, line, ponies=()):
-        return pony.peek({"ponies": list(ponies)}, line)
+class JokeTest(unittest.TestCase):
+    def joke(self, line, ponies=()):
+        s = state.default()
+        s["starter"], s["ponies"] = "star", list(ponies)
+        return s, pony.joke(s, line)
 
-    def test_each_joke_shows_its_word(self):
-        for line, word in (("cowsay hello", "envy"), ("fortune | cowsay", "envy"), ("apt moo", "cud"),
-                           ("apt-get moo", "cud"), ("make love", "hug"), ("man woman", "shh"),
-                           ("sudo make me a sandwich", "crumb"), (":wq", "esc"), (":q!", "esc"), ("  :x ", "esc")):
+    def test_each_joke_brings_its_pony_at_once(self):
+        """Owner, 2026-10-10: the pet saw the joke, no word to type."""
+        for line, want in (("cowsay hello", "pony_jealous"), ("fortune | cowsay", "pony_jealous"),
+                           ("apt moo", "pony_moo"), ("apt-get moo", "pony_moo"), ("make love", "pony_heart"),
+                           ("man woman", "pony_library"), ("sudo make me a sandwich", "pony_chef"),
+                           (":wq", "pony_vim"), (":q!", "pony_vim"), ("  :x ", "pony_vim")):
             with self.subTest(line):
-                said = self.peek(line)
-                self.assertIsNotNone(said)
-                self.assertIn(f"bashou pony {word}", said)
-                self.assertEqual(pony.PONIES[pony.digest(word)], next(p for p, rx, _ in pony.JOKES if rx.search(line)))
+                s, said = self.joke(line)
+                self.assertEqual(s["ponies"], [want])
+                self.assertIn(want, s["pets"])
+                self.assertIn("joins your herd", said[0])
+                self.assertNotIn("bashou pony", said[0])
 
-    def test_near_misses_show_nothing(self):
+    def test_near_misses_bring_nothing(self):
         for line in ("make lovely", "make love-letter", "man women", "man woman-ish", "make me a sandwich",
                      "echo :wq", "vim :wq", "apt moon", "mycowsay", "git commit -m 'apt moo'"):
             with self.subTest(line):
-                self.assertIsNone(self.peek(line))
+                s, said = self.joke(line)
+                self.assertEqual((said, s["ponies"]), ([], []))
 
-    def test_a_claimed_pony_doesnt_peek_again(self):
-        self.assertIsNone(self.peek("cowsay hi", ["pony_jealous"]))
-        self.assertIsNotNone(self.peek("apt moo", ["pony_jealous"]))
-
-    def test_the_pet_sees_failed_and_unknown_commands(self):
-        """`:wq` is "command not found" (127) and `make love` fails: both must still reach the peek."""
-        s = state.default()
-        s["starter"] = "star"
-        for status, line in ((127, ":wq"), (2, "make love")):
-            progress.record(s, status, line, "2026-10-10", 12)
-            self.assertIsNotNone(pony.peek(s, line))
+    def test_a_pony_comes_once(self):
+        s, said = self.joke("cowsay hi", ["pony_jealous"])
+        self.assertEqual((said, s["ponies"]), ([], ["pony_jealous"]))
 
 
-class CompanionPeekTest(TempState):
-    """The pet itself sees the joke in the terminal and says the word, even for a failed command."""
+class HintTest(unittest.TestCase):
+    def test_hints_lead_through_the_hiding_places_then_the_jokes(self):
+        s = {"ponies": [pony.FOAL]}
+        seen = []
+        for p in [*(k for k in pony.hints() if k != "jokes"), *(p for p, _rx in pony.JOKES)]:
+            text = pony.hint(s)
+            if text not in seen:
+                seen.append(text)
+            s["ponies"].append(p)
+        self.assertEqual(seen, list(pony.hints().values()))
+        self.assertIsNone(pony.hint(s))
 
-    def test_a_joke_typed_in_the_terminal_brings_the_peek(self):
+    def test_bashou_pony_gives_a_hint_but_no_word(self):
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(state, "DATA", Path(tmp)), \
+                mock.patch.object(state, "STATE", Path(tmp) / "state.json"):
+            _code, text = out(pony.main, None)
+        self.assertIn(pony.hints()["pony_explorer"][:30], text)
+        self.assertNotIn("bashou pony trail", text)
+
+
+class CompanionJokeTest(TempState):
+    """The pet itself sees the joke in the terminal, even when the command failed."""
+
+    def test_a_joke_typed_in_the_terminal_brings_the_pony(self):
         import os
         from bashou.companion import Companion
         pet = Companion(os.getpid())
         pet.events = state.DATA / "events.test"
-        for n, (status, line, word) in enumerate(((127, ":wq", "esc"), (2, "make love", "hug"))):
+        for n, (status, line, want) in enumerate(((127, ":wq", "pony_vim"), (2, "make love", "pony_heart"))):
             pet.notes = []
             with open(pet.events, "a") as f:
                 f.write(f"{status}\t    {n}  {line}\n")
             pet.read_events()
-            self.assertIn(f"bashou pony {word}", pet.notes[0])
-
+            self.assertIn("joins your herd", pet.notes[0])
+            self.assertIn(want, state.load()["pets"])
 
 if __name__ == "__main__":
     unittest.main()

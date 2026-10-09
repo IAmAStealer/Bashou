@@ -179,9 +179,10 @@ class Companion:
                 elif self.bubble:
                     self.bubble = (self.bubble[0], self.bubble[1] + 1, self.bubble[2])
                 self.notes += progress.record(s, status, command, now.date().isoformat(), now.hour)
-                peek = pony.peek(s, command)            # cowsay, apt moo, :wq…: a hidden pony shows up
-                if peek:
-                    self.say_now(peek)
+                came = pony.joke(s, command)            # cowsay, apt moo, :wq…: a hidden pony comes
+                if came:
+                    self.say_now(came[0])
+                    self.notes += came[1:]
                 elif status == 127:
                     self.laugh_at_typo(s, command)
                 self.warn_risky(command)
