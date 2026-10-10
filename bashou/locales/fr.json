@@ -2381,5 +2381,6 @@
  "A closed issue isn't always fixed: read the last comments. Solved, refused, or a duplicate?": "Un ticket fermé n'est pas toujours corrigé : lis la fin. Résolu, refusé, ou en double ?",
  "A good bug report says what you did, what you expected, and what happened instead.": "Un bon rapport de bug dit ce que tu as fait, ce que tu attendais, et ce qui s'est passé.",
  "Write the steps to make the bug happen again. A bug the developer can repeat gets fixed.": "Écris les étapes pour refaire le bug. Un bug que le développeur peut refaire sera corrigé.",
- "Paste error messages in full, as text. The exact words help people search for the cause.": "Colle les messages d'erreur en entier, en texte. Les mots exacts aident à trouver la cause."
+ "Paste error messages in full, as text. The exact words help people search for the cause.": "Colle les messages d'erreur en entier, en texte. Les mots exacts aident à trouver la cause.",
+ "Two wins today… something wild is watching you. Will you win a third?": "Deux victoires aujourd'hui… quelque chose de sauvage t'observe. Tu en gagneras une troisième ?"
 }

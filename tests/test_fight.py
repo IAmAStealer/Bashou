@@ -1,4 +1,5 @@
 import contextlib
+import datetime
 import io
 import os
 import random
@@ -893,6 +894,23 @@ class HoneyBadgerTest(unittest.TestCase):
             s["threat"] = None                                           # fought
         self.assertFalse(fight.badger_fight(s, self.BORED, ThreatTest.Always(), self.NOW))
         self.assertTrue(fight.badger_fight(s, self.BORED, ThreatTest.Always(), self.NOW + 86_400))
+
+    def test_the_second_win_of_the_day_leaves_a_clue(self):
+        """Owner, 2026-10-10: Fearless stays hidden, but the game hints at it, until the badger is yours."""
+        today = datetime.date.today().isoformat()
+        ch = challenges.ALL[0]
+        for wins_before, pets, want in ((0, [], False), (1, [], True), (2, [], False), (1, ["honey_badger"], False)):
+            s = {**state.default(), "pets": pets, "wins_day": {"date": today, "count": wins_before}}
+            @contextlib.contextmanager
+            def locked():
+                yield s
+
+            out = io.StringIO()
+            with mock.patch.object(state, "load", return_value=s), mock.patch.object(state, "locked", locked), \
+                    mock.patch.object(fight, "arena", return_value=(fight.WIN, [])), \
+                    mock.patch.object(fight, "after_fight", return_value=None), contextlib.redirect_stdout(out):
+                fight.run(ch)
+            self.assertEqual("something wild is watching" in out.getvalue(), want, (wins_before, pets))
 
     def test_the_loader_says_nothing_when_its_fight_is_gone(self):
         out = io.StringIO()

@@ -9787,6 +9787,7 @@
   "Turtle",
   "Two steps. mkdir creates folders, and it takes several names at once. Then mv moves files into a folder: the last name is where they go. A * stands for any name, so *.jpg means every file ending in .jpg.",
   "Two things to fix. The first line, the shebang, says which program reads the script: #! then the path, #!/bin/bash. Here the ! is missing. And a file needs the x (execute) right to run as ./report.sh: ls -l shows rw-r--r--, no x.",
+  "Two wins today… something wild is watching you. Will you win a third?",
   "Type `reset` to confirm: ",
   "Typo Serpent",
   "Typo Troll",

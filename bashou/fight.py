@@ -450,6 +450,14 @@ def arena(ch, intro, rng=None, fight=False, help_first=False, limit=None):
     return code, notes
 
 
+def badger_clue(s):
+    """Owner, 2026-10-10: a secret needs something to look for. Fearless (3 wins in a day) brings the
+    Honey badger, so the second win of the day leaves a clue, until the badger is yours."""
+    if s["wins_day"]["count"] == 2 and BADGER not in s["pets"]:
+        return "🐾 " + _("Two wins today… something wild is watching you. Will you win a third?")
+    return None
+
+
 def run(ch=None, limit=None, badger=False):
     """`bashou fight`: the threat your pet announced. `bashou arena` passes its own fight and a time
     limit in seconds. Returns the arena's code, or None when there was nothing to fight. `badger`: the
@@ -482,6 +490,8 @@ def run(ch=None, limit=None, badger=False):
             if s["wins_day"]["date"] != today:
                 s["wins_day"] = {"date": today, "count": 0}
             s["wins_day"]["count"] += 1
+            clue = badger_clue(s)
+            notes += [clue] if clue else []
             if ch.id not in s["challenges"]:
                 s["challenges"].append(ch.id)
             if s.get("threat") and s["threat"]["challenge"] == ch.id:
