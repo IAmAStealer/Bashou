@@ -55,6 +55,9 @@ Il te faut bash et python3. La plupart des Linux les ont déjà.
 
 ## Quoi de neuf
 
+**0.8.5**
+- **Encore des secrets** : un nouveau compagnon secret, deux amis cachés de plus, et un indice pour le plus féroce.
+
 **0.8.4**
 - **Des amis secrets** se cachent dans Bashou et autour. Les curieux les trouveront.
 

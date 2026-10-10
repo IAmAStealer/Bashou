@@ -55,6 +55,9 @@ It shows every command it will run, asks you, then moves you over. Your pets and
 
 ## What's new
 
+**0.8.5**
+- **More secrets**: a new secret pet, two more hidden friends, and a clue for the fiercest one.
+
 **0.8.4**
 - **Secret friends** are hiding in and around Bashou. Curious players will find them.
 

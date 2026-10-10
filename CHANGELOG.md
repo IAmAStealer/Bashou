@@ -3,6 +3,18 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.8.5 — 2026-10-10
+
+### Changes
+
+- A new secret pet waits for players who know one of the oldest jokes in the terminal. Mistyping is not enough.
+- Two more friends from the herd hide where people report bugs. Look closely, and don't skip what's closed.
+- Win a few fights in one day and you may feel something wild watching you.
+
+### Breaking changes
+
+- Breaking change: a pony chewed through the release notes and escaped again. Bring it home with `bashou pony hoof`.
+
 ## v0.8.4 — 2026-10-10
 
 ### Changes
