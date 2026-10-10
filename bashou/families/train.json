@@ -9,10 +9,10 @@
  },
  "voice": "*choo choo*",
  "tips": [
-  "`sl` exists because people type `sl` when they mean `ls`. The joke is the lesson: slow down and read what you typed before you press Enter.",
-  "Press Tab while you type a command: the shell completes the name for you, so typos like `sl` never happen.",
-  "Ctrl+C stops almost every program, because it sends the SIGINT signal. The `sl` train ignores that signal on purpose, so you have to wait for it to pass.",
-  "`sl -l` draws a little train, `sl -a` adds passengers calling for help, `sl -F` makes it fly. Read `man sl` to see them all."
+  "`sl` exists because people type `sl` for `ls`. The lesson: read what you typed before you press Enter.",
+  "Press Tab while you type a command: the shell completes the name, so typos like `sl` can't happen.",
+  "Ctrl+C sends the SIGINT signal, which stops most programs. The `sl` train ignores it on purpose: just wait.",
+  "`sl -l` draws a little train, `sl -F` makes it fly. `man sl` lists every option."
  ],
  "personal": [
   "Choo choo! You typed `sl` and here I am.",

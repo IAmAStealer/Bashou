@@ -10,9 +10,9 @@
  },
  "voice": "*neigh*",
  "tips": [
-  "Before you report a bug, search the project's issues, the closed ones too: someone may have met the same problem, and the answer is often already there.",
-  "On GitHub, the search box of the Issues tab starts with `is:issue is:open`. Remove `is:open` to search the closed issues too.",
-  "A closed issue isn't always fixed: read the last comments to see if it was solved, refused, or a duplicate of another one."
+  "Before you report a bug, search the issues, closed ones too: the answer may already be there.",
+  "On GitHub, remove `is:open` from the Issues search box to search the closed issues too.",
+  "A closed issue isn't always fixed: read the last comments. Solved, refused, or a duplicate?"
  ],
  "personal": [
   "Elementary! The answer was in a closed issue all along.",
