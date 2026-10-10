@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bashou : un compagnon de terminal qui apprend les commandes Linux et les scripts bash, gratuit</title>
+<meta name="description" content="Apprends gratuitement les commandes Linux, les scripts bash et la ligne de commande avec un compagnon en pixel art qui vit dans ton terminal. Leçons, combats, quiz. Hors ligne, sans compte.">
+<link rel="canonical" href="https://iamastealer.github.io/Bashou/fr/">
+<link rel="alternate" hreflang="en" href="https://iamastealer.github.io/Bashou/">
+<link rel="alternate" hreflang="fr" href="https://iamastealer.github.io/Bashou/fr/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Bashou : un compagnon de terminal qui apprend les commandes Linux">
+<meta property="og:description" content="Un compagnon en pixel art, gratuit et hors ligne, qui t'apprend les commandes Linux et les scripts bash pendant que tu travailles.">
+<meta property="og:url" content="https://iamastealer.github.io/Bashou/fr/">
+<meta property="og:image" content="https://iamastealer.github.io/Bashou/img/share.png">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Bashou", "inLanguage": "fr",
+ "description": "Apprends les commandes Linux et les scripts bash dans ton terminal : un compagnon en pixel art qui t'apprend, hors ligne.",
+ "applicationCategory": "EducationalApplication", "operatingSystem": "Linux",
+ "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+ "license": "https://opensource.org/licenses/MIT", "url": "https://iamastealer.github.io/Bashou/fr/",
+ "codeRepository": "https://github.com/IAmAStealer/Bashou"}
+</script>
+<style>
+  :root { --bg: #fdfcf8; --fg: #1d1d1b; --muted: #5b5b55; --code: #f0eee6; --link: #1a5fb4; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #16161a; --fg: #e8e6e0; --muted: #a09e97; --code: #25252b; --link: #78aeed; }
+  }
+  body { background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, sans-serif; margin: 0 auto;
+         max-width: 46rem; padding: 2rem 16px; }
+  pre { background: var(--code); padding: .8rem 1rem; overflow-x: auto; border-radius: 6px; font-size: 14px; }
+  img { display: block; max-width: 100%; height: auto; margin: 1rem 0; border-radius: 8px; }
+  a { color: var(--link); }
+  p.note { color: var(--muted); }
+</style>
+</head>
+<body>
+<p class="note"><a href="../" hreflang="en" lang="en">English</a> · <strong>Français</strong></p>
+<h1>Bashou : un compagnon de terminal qui apprend les commandes Linux</h1>
+<p>Bashou est un moyen gratuit et open source d'apprendre la ligne de commande Linux et les scripts bash, pour
+les débutants et au-delà. C'est un compagnon de terminal : un petit animal en pixel art vit dans le coin de ton
+terminal et grandit quand tu utilises de vraies commandes, te donne des astuces et t'explique ce que fait chaque
+commande. Il marche hors ligne, sans compte et sans IA. Le jeu est en français : <code>bashou config language fr</code>.</p>
+<p>Code source et guide : <a href="https://github.com/IAmAStealer/Bashou/blob/main/README.fr.md">github.com/IAmAStealer/Bashou</a> (licence MIT).</p>
+
+<img src="../img/prompt.svg" width="856" height="436" alt="Un compagnon en pixel art dans le coin d'un terminal, avec une astuce dans sa bulle, au-dessus de l'explication d'une commande tar">
+
+<h2>Ce que tu apprends</h2>
+<ul>
+  <li><strong>Les commandes Linux</strong> : les fichiers, <code>grep</code>, <code>find</code>, les pipes, <code>awk</code> et <code>sed</code>,
+    les permissions, les processus, les disques, les archives, les paquets avec apt et dnf, les services systemd.</li>
+  <li><strong>Les scripts bash</strong> : les variables, les guillemets, <code>$( )</code>, les boucles, <code>set -euo pipefail</code>.</li>
+  <li>Et, si tu les choisis : les réseaux (IPv4, IPv6, DNS, TCP), git, gpg et pass, SQL, la CI/CD, Python, C et Rust.</li>
+</ul>
+
+<h2>Comment il t'apprend</h2>
+<ul>
+  <li><strong><code>bashou learn &lt;commande&gt;</code></strong> démonte n'importe quelle commande et explique chaque option.</li>
+  <li><strong>Des leçons</strong> avec des dessins, sur un parcours qui va de ta première commande aux scripts.</li>
+  <li><strong>Des combats</strong> dans un shell bac à sable : bats chaque menace avec le bon outil ; elle revient après 1, 7
+    et 30 jours pour que tu t'en souviennes.</li>
+  <li><strong>Des projets</strong> à construire en Python, Shell, C ou Rust, une petite étape à la fois.</li>
+  <li><strong>Une aventure</strong> avec des questions sur ce qui tourne mal et ce qu'il faut vérifier en premier, et un
+    jeu rapide, <code>bashou spot</code>, pour reconnaître d'un coup d'œil une adresse IPv6, un hachage ou du base64.</li>
+</ul>
+
+<img src="../img/duel.svg" width="856" height="436" alt="Un combat : le compagnon et ses cœurs face à l'Hydre des logs, avec la tâche dans une bulle et un shell en dessous">
+
+<h2>Installer sur Debian, Ubuntu</h2>
+<pre>sudo mkdir -p -m 755 /etc/apt/keyrings
+sudo curl -fsSLo /etc/apt/keyrings/bashou.asc https://iamastealer.github.io/Bashou/bashou.asc
+printf '%s\n' 'Types: deb' 'URIs: https://iamastealer.github.io/Bashou/deb/' 'Suites: ./' \
+  'Signed-By: /etc/apt/keyrings/bashou.asc' | sudo tee /etc/apt/sources.list.d/bashou.sources
+sudo apt update &amp;&amp; sudo apt install bashou</pre>
+
+<h2>Installer sur Rocky, Alma, RHEL, Fedora</h2>
+<pre>sudo curl -fsSLo /etc/yum.repos.d/bashou.repo https://iamastealer.github.io/Bashou/bashou.repo
+sudo dnf install bashou</pre>
+
+<h2>Puis ouvre un nouveau terminal</h2>
+<p>Ton compagnon est là. S'il n'y est pas (sur Debian et Ubuntu, certains terminaux ne lisent pas les réglages du système), lance :</p>
+<pre>bashou on</pre>
+<p class="note">Ça ajoute une ligne à ton <code>~/.bashrc</code>, et <code>bashou off</code> cache le compagnon. Les mises à jour
+arrivent avec le reste du système (<code>apt upgrade</code>, <code>dnf upgrade</code>). Les paquets et les données des dépôts
+sont signés avec la <a href="../bashou.asc">clé de Bashou</a> : apt et dnf refusent tout le reste. Un autre Linux :
+installe avec git, voir le <a href="https://github.com/IAmAStealer/Bashou/blob/main/README.fr.md#installer">README</a>.</p>
+
+<h2>Tes données restent sur ta machine</h2>
+<p>Bashou ne collecte rien : pas de compte, pas de télémétrie, pas de pub. Il compte les outils que tu utilises, garde
+ces compteurs dans ton dossier personnel et ne les envoie jamais nulle part.</p>
+<!-- 🐴 Tu lis le code source ! Un poney se cache ici : lance bashou pony mane -->
+</body>
+</html>

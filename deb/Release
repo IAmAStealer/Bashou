@@ -1,0 +1,19 @@
+Date: Sat, 10 Oct 2026 17:58:44 +0000
+Label: Bashou
+Origin: Bashou
+MD5Sum:
+ 0f3e2a3f7a5a114cc1d8fbeea7bad208              834 Packages
+ f55a214ae8493c9c3c38a49e9aeb1e16              581 Packages.gz
+ dd72075166e92506404e931f4a75f810               67 Release
+SHA1:
+ f98559da9d87c82a1b08670f9c6651e89dd1fad1              834 Packages
+ 5191ce4adb35c3061884b608568068a72ce5d45a              581 Packages.gz
+ 6906e9adfa4d0b9017ec16931dbf7d3a13e51656               67 Release
+SHA256:
+ 380b595b34b3a03b3ba2d46978c01a8ed05732374a8a44ac57127a240540c001              834 Packages
+ 6142b986f7b40b7445e39ab1b0544df7ec980f070617e306067af294f5d167fc              581 Packages.gz
+ 7568e4a6627e5534abe30fb85602da70d920d2696339218f42c498a6a72da1cc               67 Release
+SHA512:
+ 97398b02213c83609783f809d4b442a16564ef47a7def000bb46d8488c9592c9e13cc9e1133510b61b8075dd685e17814cb11828ce7dd1e4b435af25647fb725              834 Packages
+ 4cb1bfdc2907b84cda18f271436c4319dbe553834eafdea7e5ebdc8f21dc3b4f95642744959a27aeb20a419bbab2fa5b1ada532c8a57ca4ea59faed1f4c87d87              581 Packages.gz
+ bb9fa08cb1d8d33f83d699df5df297bbc53f96729f4c7d83d741855ca03f83aa4c30f44b533b93e4ada2a982fca9e26751c8ff5fdd9348db111a9541cf2d8329               67 Release
