@@ -1,0 +1,22 @@
+{
+ "name": "Train",
+ "first": "train",
+ "order": 45,
+ "secret": true,
+ "unlock": {
+  "achievement": "all_aboard",
+  "how": "???"
+ },
+ "voice": "*choo choo*",
+ "tips": [
+  "`sl` exists because people type `sl` when they mean `ls`. The joke is the lesson: slow down and read what you typed before you press Enter.",
+  "Press Tab while you type a command: the shell completes the name for you, so typos like `sl` never happen.",
+  "Ctrl+C stops almost every program, because it sends the SIGINT signal. The `sl` train ignores that signal on purpose, so you have to wait for it to pass.",
+  "`sl -l` draws a little train, `sl -a` adds passengers calling for help, `sl -F` makes it fly. Read `man sl` to see them all."
+ ],
+ "personal": [
+  "Choo choo! You typed `sl` and here I am.",
+  "All aboard! Next stop: your home folder.",
+  "I'm the oldest joke in the terminal, and I still run on time."
+ ]
+}

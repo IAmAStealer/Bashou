@@ -2350,5 +2350,16 @@
  "choose your starter (once)": "choisis ton starter (une fois)",
  "start over with a new starter": "recommence avec un nouveau starter",
  "get the new version": "installe la nouvelle version",
- "which version of Bashou this is": "quelle version de Bashou c'est"
+ "which version of Bashou this is": "quelle version de Bashou c'est",
+ "Train": "Train",
+ "*choo choo*": "*tchou tchou*",
+ "All aboard": "En voiture !",
+ "install or run `sl`, the steam train for people who mistype `ls`": "installe ou lance `sl`, le train à vapeur de ceux qui tapent mal `ls`",
+ "`sl` exists because people type `sl` when they mean `ls`. The joke is the lesson: slow down and read what you typed before you press Enter.": "`sl` existe parce qu'on tape souvent `sl` au lieu de `ls`. La blague est la leçon : prends ton temps et relis ce que tu as tapé avant d'appuyer sur Entrée.",
+ "Press Tab while you type a command: the shell completes the name for you, so typos like `sl` never happen.": "Appuie sur Tab pendant que tu tapes une commande : le shell complète le nom pour toi, et les fautes comme `sl` n'arrivent plus.",
+ "Ctrl+C stops almost every program, because it sends the SIGINT signal. The `sl` train ignores that signal on purpose, so you have to wait for it to pass.": "Ctrl+C arrête presque tous les programmes, parce qu'il envoie le signal SIGINT. Le train `sl` ignore ce signal exprès : il faut attendre qu'il soit passé.",
+ "`sl -l` draws a little train, `sl -a` adds passengers calling for help, `sl -F` makes it fly. Read `man sl` to see them all.": "`sl -l` dessine un petit train, `sl -a` ajoute des passagers qui appellent à l'aide, `sl -F` le fait voler. Lis `man sl` pour toutes les voir.",
+ "Choo choo! You typed `sl` and here I am.": "Tchou tchou ! Tu as tapé `sl`, et me voilà.",
+ "All aboard! Next stop: your home folder.": "En voiture ! Prochain arrêt : ton dossier personnel.",
+ "I'm the oldest joke in the terminal, and I still run on time.": "Je suis la plus vieille blague du terminal, et je suis toujours à l'heure."
 }

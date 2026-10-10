@@ -496,6 +496,11 @@ SECRET = [
     # Its own secret pet: the Honey badger comes to players who go looking for fights.
     A("fearless", "honey_badger", "Fearless", "win 3 fights in one day", hidden=True,
       state=lambda s: s["wins_day"]["date"] == date.today().isoformat() and s["wins_day"]["count"] >= 3),
+    # The Train (owner, 2026-10-10): `sl`, the steam locomotive for people who mistype `ls`. It comes when
+    # `sl` runs or gets installed; a failed `sl` (not installed: the typo itself) doesn't count.
+    A("all_aboard", "train", "All aboard", "install or run `sl`, the steam train for people who mistype `ls`", hidden=True,
+      cmd=lambda c: "sl" in c.analysis.tools or any(
+          "install" in args and "sl" in args for args in c.args("apt", "apt-get", "dnf", "yum"))),
 ]
 ALL += SECRET
 

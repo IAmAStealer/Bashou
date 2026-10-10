@@ -456,6 +456,30 @@ class DamagedSaveTest(unittest.TestCase):
         self.assertEqual(adv["levels"], {})
 
 
+class TrainSecretTest(unittest.TestCase):
+    """Owner, 2026-10-10: the Train comes when `sl` runs or gets installed. A failed `sl` (the `ls` typo
+    on a system without it) doesn't bring it, and neither do look-alike packages."""
+
+    def came(self, line, status=0):
+        s = state.default()
+        notes = progress.record(s, status, line, "2026-10-10", 10)
+        return "train" in s["pets"], notes
+
+    def test_running_or_installing_sl(self):
+        for line in ("sl", "sl -l", "/usr/games/sl -a", "sudo apt install -y sl", "apt-get install sl cowsay",
+                     "sudo dnf -y install sl"):
+            came, notes = self.came(line)
+            self.assertTrue(came, line)
+            self.assertTrue(any("All aboard" in n for n in notes), line)
+            self.assertFalse(any("train" in n.lower() and "🏆" in n and "steam train" not in n for n in notes))
+
+    def test_not_a_failed_sl_nor_other_packages(self):
+        self.assertFalse(self.came("sl", 127)[0])
+        self.assertFalse(self.came("sudo apt install sl", 100)[0])
+        for line in ("ls", "apt install slack", "apt remove sl", "dnf info sl", "echo sl"):
+            self.assertFalse(self.came(line)[0], line)
+
+
 class HoneyBadgerSecretTest(unittest.TestCase):
     """The Honey badger comes with 3 wins in one day; each secret pet comes with its own secrets only
     (any secret brought the Hacker cat, so Fearless would have too)."""

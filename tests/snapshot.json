@@ -1278,6 +1278,18 @@
     "★"
    ]
   ],
+  "train": [
+   [
+    1,
+    "Train",
+    "★"
+   ],
+   [
+    1,
+    "Train",
+    "★"
+   ]
+  ],
   "starter:star": [
    [
     1,
@@ -2844,7 +2856,8 @@
   "pony_heart": "ran `make love`",
   "pony_library": "ran `man woman`",
   "pony_chef": "ran `sudo make me a sandwich`",
-  "pony_vim": "typed `:wq` in the shell"
+  "pony_vim": "typed `:wq` in the shell",
+  "train": "???"
  },
  "share_page": {
   "families": {
@@ -3729,6 +3742,17 @@
     ],
     "fr": [
      "Poney Vim"
+    ]
+   },
+   "train": {
+    "forms": [
+     "train"
+    ],
+    "en": [
+     "Train"
+    ],
+    "fr": [
+     "Train"
     ]
    }
   },
@@ -8208,6 +8232,39 @@
      ".....bB....bB..M.",
      ".....oo....oo...."
     ]
+   },
+   "train": {
+    "palette": {
+     "d": "#1c1b22",
+     "D": "#34333e",
+     "y": "#ffe070",
+     "Y": "#f0a830",
+     "w": "#fffbe8",
+     "r": "#c8352c",
+     "R": "#862420",
+     "p": "#ee6e5a",
+     "g": "#e6e6ec",
+     "G": "#aaaab6",
+     "k": "#3a3946",
+     "K": "#5e5d6e",
+     "n": "#22212a",
+     "s": "#d0d4dc",
+     "S": "#888c96"
+    },
+    "base": [
+     ".......g.gg......",
+     "......gGgggG.....",
+     "......SsssS......",
+     "..nKKKKnknKKKKn..",
+     ".nKkkkKywyKkkkKn.",
+     ".nkkkknsssnkkkkn.",
+     ".nkkkSdDDDdSkkkn.",
+     ".nkkkSDdsdDSkkkn.",
+     ".nkkkSdDDDdSkkkn.",
+     ".nnkkknSSSnkkknn.",
+     "wSRrrprrrrrprrRSw",
+     "...SsSsSsSsSsS..."
+    ]
    }
   },
   "skills": {
@@ -8311,6 +8368,7 @@
   "(unknown version: not a git clone)",
   "*chitter*",
   "*chomp*",
+  "*choo choo*",
   "*clack*",
   "*click*",
   "*crackle*",
@@ -8446,6 +8504,8 @@
   "Adventure saved: chapter {n}, {m} m walked. Come back with: bashou adventure",
   "After you change a unit file, systemctl daemon-reload makes systemd read it again. enable starts it at every boot, --now also starts it right away.",
   "Alexandria",
+  "All aboard",
+  "All aboard! Next stop: your home folder.",
   "Amethyst golem",
   "An HTML comment starts with `<!--` and ends with `-->`. The browser hides it, but the source shows it.",
   "An array of count items goes from 0 to count - 1. Compare the two loops.",
@@ -8561,6 +8621,7 @@
   "Cheetah",
   "Chef pony",
   "Chipmunk",
+  "Choo choo! You typed `sl` and here I am.",
   "Choose your starter",
   "Cipher Crow",
   "City planner",
@@ -8593,6 +8654,7 @@
   "Cron backdoor",
   "Crystal golem",
   "Ctrl+A / Ctrl+E: start / end of the line.",
+  "Ctrl+C stops almost every program, because it sends the SIGINT signal. The `sl` train ignores that signal on purpose, so you have to wait for it to pass.",
   "Ctrl+O then Enter to save, Ctrl+X to quit",
   "Ctrl+R searches your history as you type.",
   "Ctrl+W deletes the word before the cursor.",
@@ -8852,6 +8914,7 @@
   "I'm made of stardust. And a bit of bash.",
   "I'm new here too. Shall we learn together?",
   "I'm only a few bytes, but I cross oceans.",
+  "I'm the oldest joke in the terminal, and I still run on time.",
   "I've been in vim since 1998. Don't ask how to leave.",
   "INSERT INTO adds a row: name the columns, then give the values in the same order. Text goes between single quotes: INSERT INTO products (name, price, stock) VALUES ('{item}', {price}, {stock});",
   "INSERT INTO stock (item, qty) VALUES ('{item}', {n}) ON CONFLICT(item) DO UPDATE SET qty = qty + excluded.qty;  Try it on a copy: cp stock.db test.db; sqlite3 test.db < {file}",
@@ -9144,6 +9207,7 @@
   "Port",
   "Poster",
   "Press Ctrl+R again for older matches.",
+  "Press Tab while you type a command: the shell completes the name for you, so typos like `sl` never happen.",
   "Printer",
   "Process Phantom",
   "Programs talk over the network through sockets. A server opens one and listens on a port; each client that connects gets a connection of its own. ss lists them all.",
@@ -9513,6 +9577,7 @@
   "Town",
   "Tracer",
   "Tracker",
+  "Train",
   "Tree frog",
   "Tree spirit",
   "Try `{example}` (achv: {name})",
@@ -9820,6 +9885,8 @@
   "`set -euo pipefail` stops a script on errors.",
   "`set -o pipefail`: a pipe fails if any part fails.",
   "`sha256sum file` shows a checksum: compare it with the one on the website.",
+  "`sl -l` draws a little train, `sl -a` adds passengers calling for help, `sl -F` makes it fly. Read `man sl` to see them all.",
+  "`sl` exists because people type `sl` when they mean `ls`. The joke is the lesson: slow down and read what you typed before you press Enter.",
   "`sleep 600 && echo done` waits 10 minutes.",
   "`sort -u` sorts and dedupes in one go.",
   "`sort file | uniq -c` counts how many times each line appears.",
@@ -10119,6 +10186,7 @@
   "ignore case: ERROR, error and Error all match",
   "in every namespace",
   "in place: change the file itself",
+  "install or run `sl`, the steam train for people who mistype `ls`",
   "interactive: keep the input open",
   "invert: keep the lines that don't match",
   "ip -br addr : your addresses, one line per interface.",
