@@ -1,0 +1,22 @@
+{
+ "name": "Detective pony",
+ "first": "pony_detective",
+ "order": 45,
+ "secret": true,
+ "herd": "pony",
+ "unlock": {
+  "pony": true,
+  "how": "found in a closed issue"
+ },
+ "voice": "*neigh*",
+ "tips": [
+  "Before you report a bug, search the project's issues, the closed ones too: someone may have met the same problem, and the answer is often already there.",
+  "On GitHub, the search box of the Issues tab starts with `is:issue is:open`. Remove `is:open` to search the closed issues too.",
+  "A closed issue isn't always fixed: read the last comments to see if it was solved, refused, or a duplicate of another one."
+ ],
+ "personal": [
+  "Elementary! The answer was in a closed issue all along.",
+  "Every clue counts. Even the old, closed ones.",
+  "I never open a case before I read the old ones."
+ ]
+}

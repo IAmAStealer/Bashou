@@ -33,6 +33,10 @@ class HidingPlacesTest(unittest.TestCase):
         }
         fr = re.search(r"<!--(.*?)-->", (ROOT / "doc/install.fr.html").read_text()).group(1)
         self.assertEqual(self.word(fr), self.word(places["pony_web"]))
+        forms = [re.search(r"<!--(.*?)-->", (ROOT / ".github/ISSUE_TEMPLATE" / name).read_text()).group(1)
+                 for name in ("1-bug.yml", "6-bug-fr.yml")]
+        self.assertEqual(self.word(forms[0]), self.word(forms[1]))
+        places["pony_form"] = forms[0]
         for want, text in places.items():
             with self.subTest(want):
                 self.assertEqual(pony.PONIES[pony.digest(self.word(text))], want)
@@ -45,7 +49,7 @@ class HidingPlacesTest(unittest.TestCase):
     def test_every_pony_has_a_way_in(self):
         jokes = {p for p, _rx in pony.JOKES}
         self.assertEqual({pony.FOAL, *pony.PONIES.values()} | jokes, set(pony.herd()))
-        self.assertEqual(len(pony.herd()), 11)
+        self.assertEqual(len(pony.herd()), 13)
         self.assertFalse(jokes & set(pony.PONIES.values()), "a joke brings its pony by itself: no word")
         self.assertEqual(set(pony.where()), {pony.FOAL, *pony.PONIES.values()})
         self.assertEqual(set(pony.arrivals()), jokes)
@@ -55,7 +59,7 @@ class HidingPlacesTest(unittest.TestCase):
         """Owner, 2026-10-10: only the hiding place gives the word. Not the code (hashes), not a hint,
         not the pet's lines."""
         from bashou import i18n
-        words = ["hoof", "trail", "hay", "mane"]
+        words = ["hoof", "trail", "hay", "mane", "sleuth", "quill"]
         for word in words:
             self.assertIn(pony.digest(word), pony.PONIES, word)
         texts = [(ROOT / "bashou/pony.py").read_text()]
@@ -142,7 +146,7 @@ class ClaimTest(unittest.TestCase):
         out(pony.main, "mane")
         _code, text = out(cli.pets)
         self.assertIn("Ponies", text)
-        self.assertIn("2/11", text)
+        self.assertIn("2/13", text)
         self.assertLess(text.index("Ponies"), text.index("Foal"))
 
     def test_a_save_without_ponies_loads(self):

@@ -1278,6 +1278,20 @@
     "★"
    ]
   ],
+  "pony_detective": [
+   [
+    1,
+    "Detective pony",
+    "★"
+   ]
+  ],
+  "pony_form": [
+   [
+    1,
+    "Form pony",
+    "★"
+   ]
+  ],
   "train": [
    [
     1,
@@ -2857,6 +2871,8 @@
   "pony_library": "ran `man woman`",
   "pony_chef": "ran `sudo make me a sandwich`",
   "pony_vim": "typed `:wq` in the shell",
+  "pony_detective": "found in a closed issue",
+  "pony_form": "found in the bug report form",
   "train": "???"
  },
  "share_page": {
@@ -3742,6 +3758,28 @@
     ],
     "fr": [
      "Poney Vim"
+    ]
+   },
+   "pony_detective": {
+    "forms": [
+     "pony_detective"
+    ],
+    "en": [
+     "Detective pony"
+    ],
+    "fr": [
+     "Poney détective"
+    ]
+   },
+   "pony_form": {
+    "forms": [
+     "pony_form"
+    ],
+    "en": [
+     "Form pony"
+    ],
+    "fr": [
+     "Poney formulaire"
     ]
    },
    "train": {
@@ -8233,6 +8271,69 @@
      ".....oo....oo...."
     ]
    },
+   "pony_detective": {
+    "palette": {
+     "k": "#9a7650",
+     "b": "#ecc89a",
+     "B": "#c99a64",
+     "n": "#b8875a",
+     "m": "#8e2a4c",
+     "M": "#4e1228",
+     "L": "#d0577e",
+     "i": "#1f8f8f",
+     "w": "#ffffff",
+     "o": "#5a4636",
+     "h": "#a9825a",
+     "H": "#6e4f30",
+     "q": "#bfe8ff",
+     "Q": "#5a3a1e"
+    },
+    "base": [
+     ".hHhHmm..........",
+     "HHHHHHLm.........",
+     ".bkkmLMLm........",
+     "bbiwbmLMLm.......",
+     "bbiibbbmLMm..mmm.",
+     "nbbbbbbbmLM.mLLMm",
+     "....bbbbbbqqbbLMm",
+     ".....bbbbbbbQbmLM",
+     ".....BbbbbbbbB.LM",
+     ".....bB....bB..mM",
+     ".....bB....bB..M.",
+     ".....oo....oo...."
+    ]
+   },
+   "pony_form": {
+    "palette": {
+     "k": "#a39a52",
+     "b": "#fff29a",
+     "B": "#e6cf5a",
+     "n": "#d9c050",
+     "m": "#2f7de1",
+     "M": "#1b4c9c",
+     "L": "#8ec5ff",
+     "i": "#c77a12",
+     "w": "#ffffff",
+     "o": "#5a4636",
+     "p": "#ff8fb1",
+     "P": "#f2a33a",
+     "s": "#e8326f"
+    },
+    "base": [
+     "p.b.mmm..........",
+     ".PbmmLLm.........",
+     ".bbbmLMLm........",
+     "bbiwbmLMLm.......",
+     "bbiibbbmLMm..mmm.",
+     "nbbbbbbbmLM.mLLMm",
+     "....bbbbbbbbsbLMm",
+     ".....bbbbsbsbbmLM",
+     ".....BbbbbsbbB.LM",
+     ".....bB....bB..mM",
+     ".....bB....bB..M.",
+     ".....oo....oo...."
+    ]
+   },
    "train": {
     "palette": {
      "d": "#1c1b22",
@@ -8426,6 +8527,7 @@
   "A broken unit file lies in this chest, {unit}. Put each line back in its section. Then: verify",
   "A card needs a nickname: bashou share --name NICK",
   "A changelog lists what changed in each version. Read it before updating to know what might break.",
+  "A closed issue isn't always fixed: read the last comments to see if it was solved, refused, or a duplicate of another one.",
   "A commit takes what is staged (added), not every change. git status shows three groups: staged, changed but not staged, untracked. git add picks the files one by one. Avoid git add . or git commit -a here: they take the whole crowd.",
   "A condition before the braces picks lines; END runs after the last one.",
   "A const always says its type after its name, like a function argument.",
@@ -8441,6 +8543,7 @@
   "A file in clear can be read by anyone who gets the disk, a backup or your repository. gpg (GnuPG) locks files. -c locks one with a passphrase, and the same passphrase opens it.",
   "A file needs the x permission to be run.",
   "A for loop runs the same commands once per item: $f holds one file name each turn. Put echo in front first to see what it would do, then remove it.",
+  "A good bug report says what you did, what you expected, and what happened instead. With those three, someone else can see the problem too.",
   "A guard listens on the IPv6 loopback, ::1, next to this chest, on a high port (20000 to 39999). Which one? Then: answer <port>",
   "A key pair has two halves: the public key you give to anyone, and the private key only you keep. What is encrypted for your public key opens only with your private key.",
   "A lab at home beats someone else's server.",
@@ -8468,6 +8571,8 @@
   "A pony hides on Bashou's home page, but not where the browser shows it. Look at the page's source.",
   "A pony hides where each new version of Bashou says what changed. Read it to the very end, where things break.",
   "A pony peeks in, a little jealous of the cow, and joins your herd. Meet it: bashou pets",
+  "A pony solved a case on Bashou's GitHub. Search the issues, and don't forget the closed ones.",
+  "A pony waits where you report a bug. Open Bashou's bug report form on GitHub and read it to the very last box.",
   "A processor (core) runs one program at a time; with several, several programs run at once. One short command, n for number and proc for processors, prints how many there are.",
   "A program has two outputs. stdout (number 1) gets the normal results, stderr (number 2) the error messages. Both show on the screen, so they look the same until you split them.",
   "A program has two outputs: stdout (1) for normal results, stderr (2) for errors. Both show on the screen, which is why they look the same. > sends stdout into a file; 2> sends stderr. Try ./check.sh > /dev/null: only the errors stay on the screen.",
@@ -8555,6 +8660,7 @@
   "Bee",
   "Before running a script from the web: download, read, then run.",
   "Before the file itself, a web server sends headers: a few lines about it, like Content-Type and Content-Length (its size in bytes). curl -I asks for the headers only.",
+  "Before you report a bug, search the project's issues, the closed ones too: someone may have met the same problem, and the answer is often already there.",
   "Behind the stub",
   "Best in bashou spot",
   "Best: {best}",
@@ -8668,6 +8774,7 @@
   "Describer",
   "Desert",
   "Desert of Dangling Pointers",
+  "Detective pony",
   "Diamond golem",
   "Dict Djinn",
   "Did you read that script first? Whoever controls the URL controls your shell.",
@@ -8698,6 +8805,7 @@
   "Echo Swarm",
   "Edited a unit file? `systemctl daemon-reload`.",
   "Eight arms, eight pipes.",
+  "Elementary! The answer was in a closed issue all along.",
   "Email",
   "Ember",
   "Enabled Ettin",
@@ -8719,6 +8827,7 @@
   "Established Ettin",
   "Every answer is in a manual somewhere.",
   "Every checkpoint is a small victory.",
+  "Every clue counts. Even the old, closed ones.",
   "Every command answers yes or no when it ends: its exit status. 0 means it worked (yes), anything else means it didn't (no). if runs its block only when the command after it says yes.",
   "Every folder is a new trail.",
   "Every hop, someone reads my address and points the way.",
@@ -8793,6 +8902,7 @@
   "Forest",
   "Forest of Forgotten Branches",
   "Forger Ferret",
+  "Form pony",
   "Foundations",
   "Fox",
   "Frog",
@@ -8902,6 +9012,8 @@
   "I like quiet terminals and long man pages.",
   "I like the terminal after dark.",
   "I like things counted and sorted.",
+  "I love a well-filled form.",
+  "I never open a case before I read the old ones.",
   "I pack everything for winter.",
   "I rewrite what I touch.",
   "I saw what you ran. Your secret is safe with me.",
@@ -9136,6 +9248,7 @@
   "Old oak",
   "Old reports fill this chest. Remove report-2025-*.csv and nothing else. Then: verify",
   "Old tools lie half-buried in the sand. Some still bite.",
+  "On GitHub, the search box of the Issues tab starts with `is:issue is:open`. Remove `is:open` to search the closed issues too.",
   "On a real system, a SUID program runs as its owner (often root), whoever starts it.\nOne program in bin/ has the SUID bit set. Which one?",
   "On the if line, replace || with &&: `if [ -f {file} ] && [ -d {folder} ]; then`. With {editor}: {editor} save.sh. Or in one command: sed -i 's/||/\\&\\&/' save.sh",
   "On the wire",
@@ -9170,6 +9283,7 @@
   "Parallel",
   "Password hash",
   "Passwords in scripts? Never in clear. `{cmd}` installs pass: scripts read `$(pass show db)`.",
+  "Paste error messages as text, in full, not just a summary. The exact words help people search for the cause.",
   "Pathfinder",
   "Paths are case-sensitive: open dl.rockylinux.org/pub/rocky/9/ in a browser and follow them. gpgcheck must stay 1, and the key must be Rocky 9's.",
   "Pattern Pixie",
@@ -9385,6 +9499,7 @@
   "Steady builder",
   "Step {n} done.",
   "Step {n}/{total}",
+  "Steps, expected, actual. Then the bug has nowhere to hide.",
   "Stone",
   "Stone Titan",
   "Stonemason",
@@ -9416,6 +9531,7 @@
   "Tarantula",
   "Tee time",
   "Ten fights won. The threats fear us now.",
+  "Thank you for reporting! Every bug report makes the game better.",
   "That command failed: stopped here. Nothing else was changed.",
   "That skipped the HTTPS check: anyone in the middle could swap the download.",
   "That's not {tool}: ♥ -1",
@@ -9767,6 +9883,7 @@
   "Wrecking pony",
   "Write if (score == 100), then: gcc -Wall grade.c -o grade && ./grade 100 {mark} 7",
   "Write in the journal: add the line rested at the end of journal.txt, without erasing it.",
+  "Write the steps to make the bug happen again, one command per line. A bug that the developer can repeat is a bug that gets fixed.",
   "Write: const MAX_POINTS: u32 = …;",
   "Write: let guess = \"  42  \"; then let guess: u32 = guess.trim().parse().unwrap();",
   "Write: let mut errors = 0;",
@@ -9782,8 +9899,10 @@
   "You beat the {threat}!",
   "You fled. The {threat} will be back.",
   "You found me in `bashou --help`. Most programs answer to `--help` with a summary of their options, so curious people try it first. Keep doing that with every new tool.",
+  "You found me in a closed issue on GitHub. Before you report a problem, search the issues, closed ones too: someone may already have asked, and the answer is waiting.",
   "You found me in an HTML comment in the source of Bashou's site. Browsers hide comments, but View source (Ctrl+U) shows everything a page is made of.",
   "You found me in doc/easter_egg, in the documentation of Bashou's repository. RTFM, \"Read The F*** Manual\", is the oldest advice in computing: most answers are already written in the docs, so read them before asking.",
+  "You found me in the bug report form. A form asks the right questions: what you did, what you expected and what happened. Answer them all, and your bug gets fixed faster.",
   "You found me in the changelog. Every Bashou release lists what changed, and a \"breaking change\" is one that stops an old habit from working. Reading the changelog before updating saves you surprises.",
   "You found me in the package description that `apt search` and `dnf search` show. Those searches read the name and short description of every package they know.",
   "You have {n} minutes. The time left shows in the prompt.",
@@ -10130,6 +10249,8 @@
   "found in Bashou's repository",
   "found in `apt search bashou`",
   "found in `bashou --help`",
+  "found in a closed issue",
+  "found in the bug report form",
   "found in the changelog",
   "found in the source of Bashou's site",
   "free -h : memory at a glance.",

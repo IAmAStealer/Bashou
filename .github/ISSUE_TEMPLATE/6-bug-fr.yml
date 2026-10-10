@@ -82,6 +82,13 @@ body:
       label: Sortie ou capture d'écran
       description: Une capture aide pour tout ce qui est dessiné (compagnons, combats, leçons). Le texte est collé tel quel.
       render: text
+  - type: textarea
+    id: notes
+    attributes:
+      label: Autre chose
+      description: "Facultatif : tout ce qui peut aider. Tu peux laisser la ligne ci-dessous ou l'effacer, elle ne s'affiche pas dans le ticket."
+      value: |
+        <!-- Psst… un poney qui adore les formulaires bien remplis se cache ici. Lance `bashou pony quill` pour le rencontrer. -->
   - type: checkboxes
     id: checks
     attributes:

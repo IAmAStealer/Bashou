@@ -1,0 +1,22 @@
+{
+ "name": "Form pony",
+ "first": "pony_form",
+ "order": 46,
+ "secret": true,
+ "herd": "pony",
+ "unlock": {
+  "pony": true,
+  "how": "found in the bug report form"
+ },
+ "voice": "*neigh*",
+ "tips": [
+  "A good bug report says what you did, what you expected, and what happened instead. With those three, someone else can see the problem too.",
+  "Write the steps to make the bug happen again, one command per line. A bug that the developer can repeat is a bug that gets fixed.",
+  "Paste error messages as text, in full, not just a summary. The exact words help people search for the cause."
+ ],
+ "personal": [
+  "Steps, expected, actual. Then the bug has nowhere to hide.",
+  "I love a well-filled form.",
+  "Thank you for reporting! Every bug report makes the game better."
+ ]
+}

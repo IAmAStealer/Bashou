@@ -82,6 +82,13 @@ body:
       label: Output or screenshot
       description: A screenshot helps for anything drawn (pets, fights, lessons). Text is pasted as is.
       render: text
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: "Optional: anything that may help. You can leave the line below or delete it, it doesn't show in the issue."
+      value: |
+        <!-- Psst… a pony who loves well-filled forms hides here. Run `bashou pony quill` to meet it. -->
   - type: checkboxes
     id: checks
     attributes:

@@ -1,8 +1,9 @@
 """The hidden ponies (owner, 2026-10-09): a herd of secret pets, each hiding somewhere real.
 
 `bashou pony` alone brings the Foal (only `bashou --help` mentions it), then hints at where the others
-hide, without ever giving their word. Four of them need a short word that only their hiding place shows:
-the changelog, doc/easter_egg in the repository, the apt/dnf description and the site's source. The words
+hide, without ever giving their word. Six of them need a short word that only their hiding place shows:
+the changelog, doc/easter_egg in the repository, the apt/dnf description, the site's source, a closed
+issue on GitHub and the bug report form (owner, 2026-10-10). The words
 are only stored as hashes, so reading the code spoils nothing. The others come by themselves when the pet
 sees you type a famous terminal joke (cowsay, apt moo, make love...).
 """
@@ -26,6 +27,8 @@ PONIES = {                       # digest of the word -> the pony it brings
     "897abbb178d59a98": "pony_explorer",      # doc/easter_egg
     "4e30ea25cda1c18c": "pony_package",       # tools/package.py: the packages' short description
     "0470cc4e7d943c45": "pony_web",           # doc/install.html and doc/install.fr.html: an HTML comment
+    "d3cb20eb37275c8c": "pony_detective",     # a closed issue on GitHub (not in the repository)
+    "c5924fae93560d14": "pony_form",          # .github/ISSUE_TEMPLATE bug forms: an HTML comment in "Anything else"
 }
 
 # Terminal jokes the pet notices: the pony comes right away. Failures count too: `make love` and `:wq`
@@ -67,6 +70,10 @@ def where():
                           "Those searches read the name and short description of every package they know."),
         "pony_web": _("You found me in an HTML comment in the source of Bashou's site. Browsers hide comments, "
                       "but View source (Ctrl+U) shows everything a page is made of."),
+        "pony_detective": _("You found me in a closed issue on GitHub. Before you report a problem, search the "
+                            "issues, closed ones too: someone may already have asked, and the answer is waiting."),
+        "pony_form": _("You found me in the bug report form. A form asks the right questions: what you did, what "
+                       "you expected and what happened. Answer them all, and your bug gets fixed faster."),
     }
 
 
@@ -81,6 +88,10 @@ def hints():
                       "page's source."),
         "pony_wrecking": _("A pony hides where each new version of Bashou says what changed. Read it to the "
                            "very end, where things break."),
+        "pony_detective": _("A pony solved a case on Bashou's GitHub. Search the issues, and don't forget the "
+                            "closed ones."),
+        "pony_form": _("A pony waits where you report a bug. Open Bashou's bug report form on GitHub and read it "
+                       "to the very last box."),
         "jokes": _("Some ponies love old terminal jokes: a talking cow, a mooing package manager, a manual "
                    "nobody wrote, a sandwich, vim… Try a few."),
     }
