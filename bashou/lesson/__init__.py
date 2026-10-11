@@ -156,6 +156,23 @@ def waiting_for(s, lesson):
             and (not skills_of(lessons[p]) or any(skills.wanted(s, k) for k in skills_of(lessons[p])))]
 
 
+def first_open(s, lesson):
+    """The open lesson to practice first so this one opens: up the `after` chain, the nearest lesson
+    that isn't locked itself. None if this one is open."""
+    if unlocked(s, lesson):
+        return None
+    todo, seen = waiting_for(s, lesson), set()
+    while todo:
+        le = todo.pop(0)
+        if le["id"] in seen:
+            continue
+        seen.add(le["id"])
+        if unlocked(s, le):
+            return le
+        todo += waiting_for(s, le)
+    return None
+
+
 def unlocked(s, lesson):
     """A lesson opens once the lessons before it (`after`) are passed: a real path, cross-theme too
     (Python waits for shell scripts and loops). A fight never waits for its lesson: meeting one of the

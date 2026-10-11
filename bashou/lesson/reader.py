@@ -12,7 +12,8 @@ import sys
 from .. import achievements, challenges, creatures, progress, render, skills, state, terminal
 from ..adventure import quiz
 from ..i18n import _
-from . import HERE, by_id, load, met, own, progress_of, read, shown, skills_of, status, to_pass, unlocked, waiting_for
+from . import (HERE, by_id, first_open, load, met, own, progress_of, read, shown, skills_of, status, to_pass,
+               unlocked, waiting_for)
 from ..render import ESC, BOLD, DIM, RESET, REV, GOOD, BAD
 
 ACCENT = f"{ESC}[38;2;240;200;110m"
@@ -222,8 +223,10 @@ class Library:
         out = [(1 + k, 2, TITLE + line) for k, line in enumerate(head)]
         top = len(head) - 1                                 # the keys took a line of their own (portrait)
         out.append((2 + top, 2, NEXT + "■ " + _("your next step") + f"{RESET}  ■ " + _("mastered") + f"  {DIM}🔒 "
-                    + _("locked") + RESET))
+                    + _("waits for another lesson") + RESET))
         rows, last = [], None
+        align = 2 + max((render.width(f" 🔒 {le['title']} ") for le in self.lessons), default=0)
+        avail = cols - 4 - 1
         for i, le in enumerate(self.lessons):
             if group(le) != last:
                 last = group(le)
@@ -232,27 +235,33 @@ class Library:
             mark = "🔒" if st == "locked" else "✔" if le["id"] in read(self.s) else "📖"
             style = {"locked": DIM, "next": NEXT, "mastered": ""}[st]
             new = f"  {ACCENT}" + _("new") + RESET if self.is_new(le) else ""
-            text = f"{mark} {le['title']}"
-            rows.append((i, (REV if i == self.pos else "") + style + f" {text} " + RESET + new))
-        room = max(3, lines - 11 - top)
+            text = f" {mark} {le['title']} "
+            if st == "locked":
+                new = tail(text, after(self.s, le), align, avail)
+            rows.append((i, (REV if i == self.pos else "") + style + text + RESET + new))
+        le = self.lessons[self.pos]
+        st = status(self.s, le)
+        width = min(cols - 4, 76)
+        if st == "locked":
+            info = unlock_lines(self.s, le, width)
+        elif st == "next":
+            info = [(part, "") for part in render.wrap(le["summary"], width, 3)] + [
+                (part, NEXT) for part in render.wrap(_("Your next step. To master it: {how}").format(
+                    how=missing(self.s, le["masters"])), width, 3)]
+        else:
+            info = [(part, "") for part in render.wrap(le["summary"], width, 3)] + [
+                (part, DIM) for part in render.wrap(
+                    _("Mastered: you already do what it teaches. Read it again any time."), width, 3)]
+        room = max(3, lines - 8 - top - (len(info) if st == "locked" else 3))   # a locked lesson's why takes room
         at = next(k for k, (i, _t) in enumerate(rows) if i == self.pos)
         start = max(0, min(at - room // 2, len(rows) - room))
         for k, (i, text) in enumerate(rows[start:start + room]):
             out.append((4 + top + k, 4 if i is not None else 2, text))
-        le = self.lessons[self.pos]
-        st = status(self.s, le)
-        if st == "locked":
-            info = [(_("To unlock: {how}").format(how=how_to_unlock(self.s, le)), ACCENT)]
-        elif st == "next":
-            info = [(le["summary"], ""), (_("Your next step. To master it: {how}").format(
-                how=missing(self.s, le["masters"])), NEXT)]
-        else:
-            info = [(le["summary"], ""), (_("Mastered: you already do what it teaches. Read it again any time."), DIM)]
         row = 4 + top + min(room, len(rows)) + 1
-        for text, color in info:
-            for part in render.wrap(text, min(cols - 4, 76), 3):
+        for part, color in info:
+            if row < lines - 3:
                 out.append((row, 2, color + part + RESET))
-                row += 1
+            row += 1
         if self.message:
             for k, part in enumerate(render.wrap(self.message, min(cols - 4, 76), 3)):
                 out.append((lines - 3 + k, 2, DIM + part + RESET))
@@ -261,7 +270,15 @@ class Library:
     def open(self):
         le = self.lessons[self.pos]
         if not unlocked(self.s, le):
-            self.message = _("Not yet. To unlock it: {how}").format(how=how_to_unlock(self.s, le))
+            start = first_open(self.s, le)
+            at = next((i for i, other in enumerate(self.lessons) if start and other["id"] == start["id"]), None)
+            if at is None:
+                self.message = _("Not yet. To unlock it: {how}").format(how=how_to_unlock(self.s, le))
+                return
+            self.pos = at
+            self.message = _("“{title}” isn't open yet: lessons follow each other. The cursor moved to "
+                             "“{start}”, the open lesson to practice first.").format(
+                title=short(le["title"]), start=short(self.lessons[at]["title"]))
             return
         if le["id"] not in progress_of(self.s)["opened"]:
             self.quiz, self.choice, self.chosen = warmup(self.s, le), 0, None
@@ -411,31 +428,107 @@ def missing(s, conds):
     return " · ".join(left)
 
 
+def short(title):
+    """A lesson's title without what follows its colon: "Files" for "Files: make, copy, move, delete"."""
+    return title.split(":")[0].strip()
+
+
+def titles():
+    return {le["id"]: le["title"] for le in load()}
+
+
+def after(s, lesson):
+    """What a locked row says on its right: "after Files" (the lessons it still waits for)."""
+    names = titles()
+    return _("after {lessons}").format(
+        lessons=", ".join(short(names.get(b["id"], b["title"])) for b in waiting_for(s, lesson)))
+
+
+def tail(text, note, align, avail):
+    """The dim note on the right of a list row: lined up with the others when there is room, right
+    after the title when there isn't, cut with … when even that is too long."""
+    used = render.width(text)
+    pad = align - used if align + render.width(note) <= avail else 1
+    if used + pad + render.width(note) > avail:
+        room = avail - used - pad
+        if room < 8:
+            return ""
+        note = render.wrap(note, room, 1)[0]
+    return f"{DIM}{LEADER}{'·' * (pad - 1)}{RESET}{DIM} {note}{RESET}"
+
+
+def ways_to_pass(s, before):
+    """The ways to get through a lesson, any one is enough: "win one of its fights", "earn “Builder”",
+    "use mkdir once (0/1)", "earn 6 achievements in all (2/6)"."""
+    ways = [_("win one of its fights")] if before.get("fights") else []
+    names = [_("“{name}”").format(name=_(a.name)) for cond in before.get("masters", [])
+             for c in cond.split("|") if c.split()[0] == "achievement"
+             for a in achievements.ALL if a.id == c.split()[1]]
+    if names:
+        ways.append(_("earn {achievements}").format(achievements=_(" or ").join(names)))
+    tools = own(before, "tool")
+    if tools:
+        ways.append(_(" or ").join(describe(" ".join(t), s) for t in tools))
+    n = to_pass(before)
+    ways.append(_("earn {n} achievements in all").format(n=n) + f" ({len(s['achievements'])}/{n})")
+    return ways
+
+
+def shortcut(lesson):
+    """The first fight of a lesson: meeting it opens the lesson at once."""
+    return next((challenges.BY_ID[f] for f in lesson.get("fights", []) if f in challenges.BY_ID), None)
+
+
 def how_to_unlock(s, lesson):
-    """The lessons still to pass before this one, and the ways to pass each: "pass “Paths”: win one of
-    its fights, earn “Builder” or earn 6 achievements (2/6)"."""
-    titles = {le["id"]: le["title"] for le in load()}
+    """The lessons still to practice before this one, and the ways to get through each, on one line:
+    "practice “Paths”: win one of its fights, earn “Builder”, or earn 6 achievements in all (2/6)"."""
+    names = titles()
     parts = []
     for before in waiting_for(s, lesson):
-        ways = [_("win one of its fights")] if before.get("fights") else []
-        names = [_("“{name}”").format(name=_(a.name)) for cond in before.get("masters", [])
-                 for c in cond.split("|") if c.split()[0] == "achievement"
-                 for a in achievements.ALL if a.id == c.split()[1]]
-        if names:
-            ways.append(_("earn {achievements}").format(achievements=_(" or ").join(names)))
-        tools = own(before, "tool")
-        if tools:
-            ways.append(_(" or ").join(describe(" ".join(t), s) for t in tools))
-        n = to_pass(before)
-        ways.append(_("earn {n} achievements").format(n=n) + f" ({len(s['achievements'])}/{n})")
-        parts.append(_("pass “{lesson}”: {ways}").format(lesson=titles.get(before["id"], before["title"]),
-                                                        ways=", ".join(ways[:-1]) + _(", or ") + ways[-1]
-                                                        if len(ways) > 1 else ways[0]))
+        ways = ways_to_pass(s, before)
+        parts.append(_("practice “{lesson}”: {ways}").format(lesson=names.get(before["id"], before["title"]),
+                                                            ways=", ".join(ways[:-1]) + _(", or ") + ways[-1]
+                                                            if len(ways) > 1 else ways[0]))
     text = " · ".join(parts)
-    first = next((challenges.BY_ID[f] for f in lesson.get("fights", []) if f in challenges.BY_ID), None)
+    first = shortcut(lesson)
     if first:
         text += " " + _("(or meet the {threat} in a fight)").format(threat=_(first.threat))
     return text
+
+
+def unlock_lines(s, lesson, width):
+    """Why a lesson is locked and how to open it, for the bottom of the list: (line, color) pairs.
+    Players saw padlocks without knowing why: say that lessons follow each other, what to practice,
+    and where to start when the lesson before is locked too."""
+    names = titles()
+    quoted = lambda le: _("“{name}”").format(name=short(names.get(le["id"], le["title"])))
+    befores = waiting_for(s, lesson)
+    lines = [(part, ACCENT) for part in render.wrap(
+        _("🔒 {title} builds on {lessons}. Lessons follow each other: this one opens once you have "
+          "practiced what comes before.").format(title=short(lesson["title"]),
+                                                  lessons=_(" and ").join(quoted(b) for b in befores)), width, 4)]
+    ways = []
+    for before in befores:
+        ways += [(part, "") for part in render.wrap(
+            _("To practice {lesson}, any one of these is enough:").format(lesson=quoted(before)), width, 2)]
+        ways += [(part, "") for part in text_lines(["- " + way for way in ways_to_pass(s, before)], width)]
+    locked = [b for b in befores if not unlocked(s, b)]
+    start = first_open(s, lesson)
+    if locked and start:
+        text = (_("{lesson} is locked too.") if len(locked) == 1 else _("{lesson} are locked too.")).format(
+            lesson=_(" and ").join(quoted(b) for b in locked))
+        text += " " + _("Start with {start}: it's open. Enter takes you there.").format(start=quoted(start))
+        lines += [(part, NEXT) for part in render.wrap(text, width, 3)]
+    elif start:
+        lines += [(part, NEXT) for part in render.wrap(
+            _("Enter takes you to {start}.").format(start=quoted(start)), width, 2)]
+    lines += ways                                     # after where to start: a short screen cuts these first
+    first = shortcut(lesson)
+    if first:
+        lines += [(part, DIM) for part in render.wrap(
+            _("Shortcut: meeting the {threat} in a fight opens this lesson at once.").format(
+                threat=_(first.threat)), width, 2)]
+    return lines
 
 
 # --- `bashou lesson` ------------------------------------------------------------------------
@@ -458,5 +551,5 @@ def print_list(s, lessons):
         elif st == "mastered":
             print(f"  {mark} {le['title']}")
         else:
-            print(f"  \x1b[2m🔒 {le['title']} · {how_to_unlock(s, le)}\x1b[0m")
+            print(f"  \x1b[2m🔒 {le['title']} · {after(s, le)} · {how_to_unlock(s, le)}\x1b[0m")
     return 0

@@ -135,7 +135,7 @@ class UnlockTest(unittest.TestCase):
         helper = BY_ID["help"]
         self.assertFalse(lesson.unlocked(s, helper))
         self.assertEqual(reader.how_to_unlock(s, helper),
-                         "pass “Reading a command line”: earn “Exit code”, or earn 3 achievements (0/3)"
+                         "practice “Reading a command line”: earn “Exit code”, or earn 3 achievements in all (0/3)"
                          " (or meet the Flag Phantom in a fight)")
         s["commands"] = 10 ** 6                                  # counters alone open nothing now
         self.assertFalse(lesson.unlocked(s, helper))
@@ -276,6 +276,51 @@ class ReaderTest(unittest.TestCase):
         self.assertIn("Now practice it", lib.message)
         self.assertFalse(lesson.unlocked(state.load(), BY_ID["paths"]))       # reading opens nothing
 
+    def test_a_locked_lesson_says_why_in_the_list(self):
+        """Bug report: players didn't understand why lessons were locked. Each locked row names the
+        lesson it waits for; the selected one explains, and points to an open lesson to start with."""
+        lib = reader.Library(LESSONS)
+        lib.pos = next(i for i, le in enumerate(lib.lessons) if le["id"] == "files")
+        text = [render.strip(t) for r, c, t in lib.list_screen(100, 50)]
+        self.assertTrue(any("🔒 Files: make, copy, move, delete" in t and t.rstrip().endswith("after The file tree and paths")
+                            for t in text))
+        info = " ".join(text)
+        self.assertIn("builds on “The file tree and paths”", info)
+        self.assertIn("Start with “Reading a command line”", info)
+        self.assertIn("• earn 9 achievements in all (0/9)", info)
+        self.assertIn("Shortcut: meeting the Clutter Critter", info)
+
+    def test_a_locked_row_fits_a_narrow_terminal(self):
+        lib = reader.Library(LESSONS)
+        for cols in (40, 60, 100):
+            for r, c, t in lib.list_screen(cols, 50):
+                if "after " in render.strip(t) and "🔒" in t:
+                    self.assertLessEqual(c + render.width(render.strip(t)), cols, (cols, render.strip(t)))
+
+    def test_enter_on_a_locked_lesson_goes_to_the_one_to_practice(self):
+        lib = reader.Library(LESSONS)
+        lib.pos = next(i for i, le in enumerate(lib.lessons) if le["id"] == "disk")
+        lib.key("enter")
+        self.assertIsNone(lib.lesson)
+        self.assertEqual(lib.lessons[lib.pos]["id"], "command_line")
+        self.assertIn("“Disk space” isn't open yet", lib.message)
+        with state.locked() as s:
+            s["achievements"] = ["exit_code", "shortcut"]                 # paths passed: files is open
+        lib = reader.Library(LESSONS)
+        lib.pos = next(i for i, le in enumerate(lib.lessons) if le["id"] == "disk")
+        self.assertEqual(lesson.first_open(state.load(), BY_ID["disk"])["id"], "files")
+        lib.key("enter")
+        self.assertEqual(lib.lessons[lib.pos]["id"], "files")
+        self.assertIsNone(lesson.first_open(state.load(), BY_ID["files"]))
+
+    def test_the_text_list_names_what_a_lesson_waits_for(self):
+        import contextlib
+        import io
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            reader.print_list(state.default(), LESSONS)
+        self.assertIn("🔒 The file tree and paths · after Help yourself · practice “Help yourself", out.getvalue())
+
     def test_the_cursor_starts_on_the_next_step(self):
         with state.locked() as s:
             s.update(commands=600, achievements=["exit_code"])            # command_line mastered
@@ -329,13 +374,6 @@ class ReaderTest(unittest.TestCase):
             ed = next(le for le in reader.Library(LESSONS).all if le["id"] == "editor")
             self.assertTrue(any(p.get("editor") == editor for p in ed["pages"]))
             self.assertFalse(any(p.get("editor") == other for p in ed["pages"]))
-
-    def test_a_locked_lesson_says_how_to_open_it(self):
-        lib = reader.Library(LESSONS)
-        lib.pos = next(i for i, le in enumerate(lib.lessons) if le["id"] == "paths")
-        lib.key("enter")
-        self.assertIsNone(lib.lesson)
-        self.assertIn("pass “", lib.message)
 
     def test_leaving_keeps_the_page(self):
         lib = reader.Library(LESSONS, "command_line")
