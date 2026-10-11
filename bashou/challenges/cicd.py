@@ -10,6 +10,7 @@ import re
 
 from . import Challenge
 from .repos import EDITORS
+from ..i18n import _
 
 # --- a small YAML reader --------------------------------------------------------------------------
 
@@ -17,10 +18,11 @@ KEY = re.compile(r"""^("[^"]*"|'[^']*'|[^\s"'#:][^:#]*?)\s*:(?:\s+(.*))?$""")
 
 
 def _lines(text):
-    if "\t" in text:
-        raise ValueError("a tab: YAML only allows spaces")
     out = []
     for n, raw in enumerate(text.splitlines(), 1):
+        if "\t" in raw:
+            raise ValueError(_("line {n} has a tab. YAML only allows spaces to indent: the Tab key of your "
+                               "editor may have typed one, so delete it and type spaces instead.").format(n=n))
         line = re.sub(r"\s+#.*$", "", raw) if "#" in raw and not re.search(r"""["'].*#.*["']""", raw) else raw
         if line.strip() and not line.lstrip().startswith("#"):
             out.append((len(line) - len(line.lstrip(" ")), line.strip(), n))
@@ -65,11 +67,11 @@ def _map(lines, i, indent):
         col, text, n = lines[i]
         m = KEY.match(text)
         if not m:
-            raise ValueError(f"line {n}: expected 'key: value'")
+            raise ValueError(_("line {n} should read key: value, with a space after the colon.").format(n=n))
         key = _scalar(m.group(1))
         out[key], i = _value(lines, i + 1, indent, (m.group(2) or "").strip())
     if i < len(lines) and lines[i][0] > indent:
-        raise ValueError(f"line {lines[i][2]}: indented more than the line before it expects")
+        raise ValueError(_("line {n} is pushed further right than the lines it belongs with.").format(n=lines[i][2]))
     return out, i
 
 
@@ -90,7 +92,7 @@ def _list(lines, i, indent):
             value, i = _scalar(item), i + 1
         out.append(value)
     if i < len(lines) and lines[i][0] > indent:
-        raise ValueError(f"line {lines[i][2]}: indented more than the line before it expects")
+        raise ValueError(_("line {n} is pushed further right than the lines it belongs with.").format(n=lines[i][2]))
     return out, i
 
 
@@ -107,7 +109,7 @@ def load(text):
         return {}
     value, i = _block(lines, 0, lines[0][0])
     if i < len(lines):
-        raise ValueError(f"line {lines[i][2]}: indented less than the start, or a stray line")
+        raise ValueError(_("line {n} starts further left than the first line of the file.").format(n=lines[i][2]))
     return value
 
 
@@ -117,6 +119,20 @@ def read(work, name):
     except (OSError, ValueError, UnicodeDecodeError):
         return None
     return data if isinstance(data, dict) else None
+
+
+def yaml_why(name):
+    """What `verify` says when the file can't even be read as YAML: the line, and what's wrong with it.
+    Without it, a player whose file looked right (a tab looks like spaces) only heard "not yet"."""
+    def why(work):
+        try:
+            load((work / name).read_text())
+        except (OSError, UnicodeDecodeError):
+            return None
+        except ValueError as e:
+            return _("{file} can't be read as YAML yet: {error}").format(file=name, error=e)
+        return None
+    return why
 
 
 def as_list(value):
@@ -344,13 +360,13 @@ YAML_NEIGHBOURS = ("Find the line that doesn't start where its neighbours do. ru
 CICD = dict(pet="beaver", tools=EDITORS, requires=["sed"], skill="cicd", fix=True)
 
 ALL = [
-    Challenge(level=1, id="indent_imp", threat="Indent Imp", **CICD,
+    Challenge(level=1, id="indent_imp", threat="Indent Imp", **CICD, why=yaml_why(WORKFLOW),
               task="The Indent Imp pushed one line of the GitHub workflow " + WORKFLOW + " out of line.\n"
                    "Put it back in line, so the job test has its two steps: checkout, then the tests. "
                    "Then: verify",
               hints=[YAML_OUTLINE, YAML_NEIGHBOURS],
               setup=indent_setup, verify=indent_verify),
-    Challenge(level=1, id="stage_specter", threat="Stage Specter", **CICD,
+    Challenge(level=1, id="stage_specter", threat="Stage Specter", **CICD, why=yaml_why(GITLAB),
               task="The Stage Specter renamed a stage in " + GITLAB + ": GitLab refuses the pipeline, "
                    "'unit job: chosen stage does not exist'.\nMake every job use a stage from the stages: list, "
                    "without renaming the stages. Then: verify",
@@ -359,7 +375,7 @@ ALL = [
                      "The unit job runs the tests, so its stage is test. Open the file ({editor} .gitlab-ci.yml) and "
                      "change the unit job's line to `  stage: test`, keeping its 2 spaces."],
               setup=stage_setup, verify=stage_verify),
-    Challenge(level=2, id="secret_sprite", threat="Secret Sprite", **CICD,
+    Challenge(level=2, id="secret_sprite", threat="Secret Sprite", **CICD, why=yaml_why(WORKFLOW),
               task="The Secret Sprite wrote an API token in clear in " + WORKFLOW + ": anyone who can read the "
                    "repository can steal it.\nMake the step read it from the repository's secrets instead "
                    "(the secret is called API_TOKEN). Then: verify",
@@ -368,7 +384,7 @@ ALL = [
                      "Replace the token with ${{ secrets.API_TOKEN }} on the API_TOKEN: line. In real life, "
                      "the leaked token must also be revoked: it stays in the git history."],
               setup=secret_setup, verify=secret_verify),
-    Challenge(level=2, id="needs_newt", threat="Needs Newt", **CICD,
+    Challenge(level=2, id="needs_newt", threat="Needs Newt", **CICD, why=yaml_why(WORKFLOW),
               task="The Needs Newt lets " + WORKFLOW + " deploy even when the tests fail, and from every branch.\n"
                    "Make the deploy job wait for the test job, and run only on the main branch. Then: verify",
               hints=["Jobs run side by side unless told otherwise. needs: test makes deploy wait for test, and "
@@ -376,7 +392,7 @@ ALL = [
                      "Under `deploy:`, at the level of runs-on, add two lines: `needs: test` and "
                      "`if: github.ref == 'refs/heads/main'`."],
               setup=needs_setup, verify=needs_verify),
-    Challenge(level=2, id="manual_mole", threat="Manual Mole", **CICD,
+    Challenge(level=2, id="manual_mole", threat="Manual Mole", **CICD, why=yaml_why(GITLAB),
               task="The Manual Mole makes " + GITLAB + " deploy to production on every push, on every branch.\n"
                    "Make the deploy job appear only on main, and wait for someone to click it (manual). "
                    "Then: verify",
@@ -393,5 +409,6 @@ from .trials import trial  # noqa: E402
 
 INDENT_CHEST = trial("trial_ci_indent", 2, "A pipeline file hides in this chest: " + WORKFLOW + ". One line is out "
                      "of line. Put it back, so the job test has its two steps. Then: verify",
-                     [YAML_OUTLINE, YAML_NEIGHBOURS], indent_setup, indent_verify, requires=["sed"], teaches=["yaml"])
+                     [YAML_OUTLINE, YAML_NEIGHBOURS], indent_setup, indent_verify, requires=["sed"], teaches=["yaml"],
+                     why=yaml_why(WORKFLOW))
 CHESTS = [INDENT_CHEST]                  # locked chests in `bashou adventure`

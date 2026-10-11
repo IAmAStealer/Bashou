@@ -297,6 +297,9 @@ def cmd_answer(base, value):
         if ch.fix:
             print(BAD + "✗ " + _("Not yet: Bashou checked your work and it isn't right yet. "
                                 "Look again, try it at the prompt, then verify.") + f"{RESET} {DIM}(hint · lesson · task · flee){RESET}")
+            why = ch.why and ch.why(Path(base) / "arena")
+            if why:
+                print(ACCENT + "  " + why + RESET)
         elif ch.kind == "trial":
             print(BAD + "✗ " + _("Not yet: the chest is still locked.") + f"{RESET} {DIM}(hint · lesson · task · flee){RESET}")
         elif ch.kind == "security":
@@ -505,7 +508,7 @@ def run(ch=None, limit=None, badger=False):
               + RESET)
     elif code == KO:
         print(f"\n{BAD}{BOLD}💫 " + _("Knocked out! The {threat} wins this time.").format(threat=_(ch.threat))
-              + f"{RESET}\n{DIM}" + _("Only `{tool}` hurts it; looking around (ls, cat…) is free. "
+              + f"{RESET}\n{DIM}" + _("Only `{tool}` hurts it; looking around (ls, cat, find…) and typos are free. "
                                        "It'll be back.").format(tool=ch.tool) + RESET)
     else:
         print(f"\n{DIM}" + _("You fled. The {threat} will be back.").format(threat=_(ch.threat)) + RESET)

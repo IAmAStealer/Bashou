@@ -53,6 +53,18 @@ class JudgeTest(unittest.TestCase):
             self.assertEqual(duel.judge(ch, 0, cmd), "hit", ch.id)
 
 
+    def test_typos_and_looking_around_a_fix_are_free(self):
+        """Bug report: players lost hearts while checking their work. A typo (command not found) never
+        costs a heart, nor does find; in a fight where Bashou checks the file, grep or diff are free too."""
+        hydra, imp = challenges.BY_ID["grep_hydra"], challenges.BY_ID["indent_imp"]
+        self.assertIsNone(duel.judge(hydra, 127, "gerp ERROR app.log"))
+        self.assertIsNone(duel.judge(hydra, 0, "find . -name '*.log'"))
+        self.assertEqual(duel.judge(hydra, 0, "awk '/ERROR/' app.log"), "hurt")       # still not the lesson
+        for cmd in ("grep -n steps .github/workflows/ci.yml", "cat -A .github/workflows/ci.yml | grep run",
+                    "diff ci.yml ci.yml.bak", "cp ci.yml ci.yml.bak"):
+            self.assertIsNone(duel.judge(imp, 0, cmd), cmd)
+        self.assertEqual(duel.judge(imp, 0, "nano .github/workflows/ci.yml"), "hit")
+
     def test_code_fights(self):
         """Fix fights: opening an editor is free, building or running your program hits."""
         leech, slug = challenges.BY_ID["list_leech"], challenges.BY_ID["semicolon_slug"]

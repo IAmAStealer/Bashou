@@ -1,8 +1,9 @@
 """The fight, drawn where your pet lives: the task, your pet and its hearts, the enemy and its health.
 
 In the arena, every command is judged (`judge`): a successful command with the fight's tool hits the
-enemy, looking around is free, anything else (or a failed command with the tool) hurts you. At 0
-hearts you're knocked out. `start()` runs `python3 launch.py bashou.duel <arena> <shell pid>`, which draws
+enemy, looking around is free, anything else (or a failed command with the tool) hurts you. A typo
+(command not found) is free, and so is any other command in a fight where you fix a file: `verify`
+checks the result there. At 0 hearts you're knocked out. `start()` runs `python3 launch.py bashou.duel <arena> <shell pid>`, which draws
 it at the top right, flashing whoever was hit; the arena's prompt runs `judge` after each command.
 """
 
@@ -25,9 +26,11 @@ HEARTS = 3
 ENEMY = 3                 # health pips; hits bring it to 1, `answer` lands the last blow
 KO = 4                    # exit code of the arena shell when you're knocked out
 FLASH = 0.6               # seconds a hit flashes
-FREE = {"ls", "cd", "pwd", "cat", "head", "tail", "less", "more", "file", "stat", "tree", "echo",
+FREE = {"ls", "cd", "pwd", "cat", "head", "tail", "less", "more", "file", "stat", "tree", "echo", "nl", "find",
+        "realpath", "readlink", "whoami", "id", "date",
         "clear", "man", "help", "history", "type", "which", "task", "hint", "lesson", "answer", "verify", "flee", "bashou",
         "nano", "vi", "vim", "nvim", "emacs", "micro", "ed", "code"}   # editing a file to fix is fine
+NOT_FOUND = 127                  # bash's status for a command that doesn't exist: a typo
 
 ENEMIES = Path(__file__).resolve().parent / "enemies"     # <challenge id>.json, the pet format, facing left
 PLACEHOLDER = ((150, 150, 160), (80, 80, 90))              # for a new fight still without its sprite
@@ -40,6 +43,8 @@ def judge(ch, status, command):
         return None                                       # reading the help is never a mistake
     if ch.used_by(found):
         return "hit" if status == 0 else "hurt"
+    if status == NOT_FOUND or ch.fix:      # a typo; or a fight where Bashou checks the file itself:
+        return None                        # looking around with grep or diff can't cheat, it helps
     return None if found.tools <= FREE else "hurt"
 
 

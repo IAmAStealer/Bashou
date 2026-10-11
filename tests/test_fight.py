@@ -461,6 +461,31 @@ class CicdFightTest(unittest.TestCase):
                 self.assertFalse(cicd.indent_verify(Path(tmp), {}, ""), wrong)
         self.assertRaises(ValueError, cicd.load, cicd.GH_OK.replace("    runs-on", "\trunt-on"))
 
+    def test_a_failed_verify_says_which_line_breaks_the_yaml(self):
+        """Bug report: a player's indent fix looked right but `verify` only said "not yet". The Tab key
+        had typed a tab, which YAML refuses: verify now names the line and the reason."""
+        base = Path(tempfile.mkdtemp())
+        self.addCleanup(__import__("shutil").rmtree, base)
+        (base / "arena").mkdir()
+        (base / "meta.json").write_text('{"challenge": "indent_imp"}')
+        cicd.write(base / "arena", cicd.WORKFLOW, cicd.GH_OK.replace("        run:", "\t  run:"))
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            self.assertEqual(fight.cmd_answer(str(base), "done"), 1)
+        self.assertIn("line 11 has a tab", out.getvalue())
+        cicd.write(base / "arena", cicd.WORKFLOW, cicd.GH_OK.replace("ubuntu-latest", "macos-latest"))
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            self.assertEqual(fight.cmd_answer(str(base), "done"), 1)
+        self.assertNotIn("YAML", out.getvalue())                         # valid YAML, just not the fix
+        for right, wrong in cicd.INDENT_MISTAKES:
+            with tempfile.TemporaryDirectory() as tmp:
+                cicd.write(Path(tmp), cicd.WORKFLOW, cicd.GH_OK.replace(right, wrong, 1))
+                why = cicd.yaml_why(cicd.WORKFLOW)(Path(tmp))
+                if why:
+                    self.assertRegex(why, r"line \d+", wrong)
+        self.assertTrue(all(ch.why for ch in cicd.ALL + cicd.CHESTS))
+
     def test_needs_and_if_in_other_forms(self):
         add = lambda extra: lambda text, meta: text.replace("  deploy:\n", "  deploy:\n" + extra)
         self.assertTrue(self.fixed("needs_newt", add("    needs: [test]\n    if: github.ref_name == 'main'\n")))

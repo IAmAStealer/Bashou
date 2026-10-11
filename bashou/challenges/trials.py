@@ -11,11 +11,11 @@ from . import Challenge
 NAMES = ["amber", "birch", "cobalt", "dune", "ember", "fern", "glade", "harbor", "iris", "juniper"]
 
 
-def trial(id, level, task, hints, setup, verify, requires=(), teaches=()):
+def trial(id, level, task, hints, setup, verify, requires=(), teaches=(), why=None):
     """`teaches`: the tool it practices; the chest right after that tool's lesson picks it."""
     return Challenge(id=id, pet="", tools=tuple(teaches), threat="Locked chest", task=task, hints=hints,
                      setup=setup, verify=verify, requires=list(requires) or ["ls"], level=level, kind="trial",
-                     fix="answer <" not in task)            # no question: you do the job, then `verify`
+                     fix="answer <" not in task, why=why)            # no question: you do the job, then `verify`
 
 
 # --- level 1 ------------------------------------------------------------------------------------

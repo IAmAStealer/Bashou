@@ -113,7 +113,8 @@ it never draws over your text.
   right tool: `grep` against the Log Hydra, `awk` against the Ledger Golem. They start with the first
   steps (an option to find in `--help`, a typo to fix in your editor, files to tidy) and go up to Linux
   rights, services and git merge conflicts. A successful command with
-  the right tool hits the enemy; other commands cost you a heart. Code fights hand you a small broken
+  the right tool hits the enemy; other commands cost you a heart (looking around with `ls`, `cat` or `find`,
+  or a typo, never does; in a fight where you fix a file, only a failed try with the tool does). Code fights hand you a small broken
   Python or C file to fix (a missing `;`, a loop that never ends, a memory leak, a shell injection);
   package fights ask your own machine with `apt`, `dpkg` or `rpm`, or have you fix a repository file;
   CI/CD fights hand you a GitHub Actions or GitLab CI file to fix (indentation, stages, a token in

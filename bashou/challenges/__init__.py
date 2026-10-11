@@ -52,6 +52,7 @@ class Challenge:
     help: str = ""            # what to look for in `tool --help`: beginners get that hint first
     fix: bool = False         # you fix a file (or run commands), then `verify`: Bashou checks the result
     works: Optional[Callable] = None    # () -> bool: something else this system must have (AddressSanitizer…)
+    why: Optional[Callable] = None      # (work_dir) -> str or None: what's wrong, said when `verify` fails
 
     @property
     def tool(self):
