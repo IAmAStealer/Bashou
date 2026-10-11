@@ -70,9 +70,7 @@ INVITES = {
 RUST_AT = 15                    # achievements before the pets suggest Rust (owner)
 SECRETS_AT = 5                  # … and gpg, then pass, when they're missing (owner: entice to install them)
 
-# Packages that bring a tool: (Debian/Ubuntu, Red Hat family).
-PACKAGES = {"rustc": ("rustc cargo", "rust cargo"), "gpg": ("gnupg", "gnupg2"), "pass": ("pass", "pass"),
-            "sqlite3": ("sqlite3", "sqlite")}
+PACKAGES, install = which.PACKAGES, which.install
 
 
 # A first look at a tool, before its fight can come (see fight.to_discover).
@@ -104,20 +102,6 @@ def discover(state, rng):
     tool = rng.choice(tools)
     taught = any(le["tool"] == tool for le in lessons.LESSONS)
     return _(rng.choice(DISCOVER[tool])) + (" " + _("(bashou adventure teaches it too)") if taught else "")
-
-
-def install(tool):
-    """How to install a tool here, with this system's package manager."""
-    debian, redhat = PACKAGES[tool]
-    if which.system() == "debian":
-        return f"sudo apt install {debian}"
-    if tool == "pass" and "rhel" in which.os_family():
-        return "sudo dnf install epel-release && sudo dnf install pass"     # pass lives in EPEL on RHEL, Rocky, Alma
-    if which.system() == "rocky":
-        return f"sudo dnf install {redhat}"
-    if tool == "rustc":
-        return "curl -sSf https://sh.rustup.rs -o rustup.sh && less rustup.sh && sh rustup.sh"
-    return _("your package manager (package {name})").format(name=debian)
 
 
 def rust_install():

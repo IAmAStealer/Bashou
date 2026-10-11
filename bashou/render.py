@@ -113,6 +113,14 @@ def columns():
         return 80
 
 
+def rows():
+    """The terminal's height (24 when it isn't a terminal)."""
+    try:
+        return os.get_terminal_size().lines
+    except OSError:
+        return 24
+
+
 def heading(title, keys, cols):
     """A screen's first lines: the title in bold and its keys dimmed after it, or below it when the
     terminal is too narrow for both (a portrait one): the keys (q: quit…) must never be cut off."""

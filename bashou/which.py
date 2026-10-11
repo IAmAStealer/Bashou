@@ -9,6 +9,8 @@ import shutil
 import time
 from pathlib import Path
 
+from .i18n import _
+
 TTL = 600
 _seen = {}
 
@@ -47,3 +49,24 @@ def system():
     the skill that teaches them. Package fights and Bashou's own apt/dnf repository follow it."""
     ids = os_family()
     return next((name for name, family in SYSTEMS.items() if family & ids), None)
+
+
+# Packages that bring a tool: (Debian/Ubuntu, Red Hat family).
+PACKAGES = {"rustc": ("rustc cargo", "rust cargo"), "gpg": ("gnupg", "gnupg2"), "pass": ("pass", "pass"),
+            "sqlite3": ("sqlite3", "sqlite"), "python3": ("python3", "python3"), "gcc": ("gcc", "gcc"),
+            "gdb": ("gdb", "gdb"), "git": ("git", "git"), "tcpdump": ("tcpdump", "tcpdump"),
+            "yamllint": ("yamllint", "yamllint")}
+
+
+def install(tool):
+    """How to install a tool here, with this system's package manager."""
+    debian, redhat = PACKAGES[tool]
+    if system() == "debian":
+        return f"sudo apt install {debian}"
+    if tool == "pass" and "rhel" in os_family():
+        return "sudo dnf install epel-release && sudo dnf install pass"     # pass lives in EPEL on RHEL, Rocky, Alma
+    if system() == "rocky":
+        return f"sudo dnf install {redhat}"
+    if tool == "rustc":
+        return "curl -sSf https://sh.rustup.rs -o rustup.sh && less rustup.sh && sh rustup.sh"
+    return _("your package manager (package {name})").format(name=debian)

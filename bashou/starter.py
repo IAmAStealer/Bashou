@@ -4,11 +4,11 @@ you pick again). The same pickers serve `bashou config language` and `bashou con
 import os
 import sys
 
-from . import creatures, render, skills, state, terminal
+from . import creatures, render, skills, state, terminal, which
 from . import i18n
 from .creatures import FAMILIES, PETS, STARTERS
 from .i18n import _
-from .render import ESC, BOLD, DIM, RESET, REV
+from .render import ESC, BOLD, DIM, RESET, REV, GOOD, BAD
 
 KEYS = {"\x1b[C": 1, "l": 1, "\x1b[D": -1, "h": -1}
 SLOT = 26
@@ -161,6 +161,8 @@ def draw_mode(pos, breath):
         _("What do you want to learn?"), _("↑/↓, Enter · `bashou config skills` to change it later"), render.columns())] + ["\n"]
     for i, label in enumerate((_("A bit of everything (all skills)"), _("Pick my skills"))):
         out.append(f"  {REV} {label} {RESET}\n" if i == pos else f"   {label}\n")
+    room = render.rows() - "".join(out).count("\n") - 1
+    out += [line + "\n" for line in missing_note(list(skills.SKILLS), render.columns())[:max(0, room)]]
     sys.stdout.write("".join(out))
     sys.stdout.flush()
 
@@ -176,11 +178,42 @@ def checklist_drawer(ticked):
             line = f"  {REV} {text} {RESET}" if i == pos else f"   {text} "
             why = skills.note(skill)
             out += [part + "\n" for part in render.beside(line, f"({why})" if why else "", width, 7)]
+        room = render.rows() - "".join(out).count("\n") - (3 if not ticked else 1)
+        out += [line + "\n" for line in uses_lines(list(skills.SKILLS)[pos], width)[:max(0, room)]]
         if not ticked:
             out.append(f"\n  {DIM}{_('Tick at least one.')}{RESET}\n")
         sys.stdout.write("".join(out))
         sys.stdout.flush()
     return draw
+
+
+def uses_lines(skill, width):
+    """Under the checklist: the programs the highlighted skill uses, what for, and how to get a missing
+    one. Players met "questions only" without knowing which program was missing or why it mattered."""
+    found = skills.programs(skill)
+    if not found:
+        return ["", f"  {DIM}" + _("Nothing to install: this skill uses the commands every Linux system has.") + RESET]
+    out = ["", "  " + _("What this skill uses on your computer:")]
+    for program, why, ok in found:
+        mark = f"{GOOD}✓{RESET}" if ok else f"{BAD}✗{RESET}"
+        text = f"{program}: {why}" + ("" if ok else " " + _("Not installed: {cmd}").format(cmd=which.install(program)))
+        parts = render.wrap(text, max(20, width - 7), 3)
+        out += [f"  {mark} {parts[0]}"] + [f"    {part}" for part in parts[1:]]
+    if any(not ok and program not in skills.OPTIONAL for program, _why, ok in found):
+        out += [f"  {DIM}" + part + RESET for part in render.wrap(
+            _("Without a program, its fights wait: you still get the questions and lessons, and the fights come "
+              "once it's installed."), max(20, width - 3), 3)]
+    return out
+
+
+def missing_note(keys, width):
+    """Under "what do you want to learn?": the programs some skills use that this computer lacks."""
+    found = skills.missing(keys)
+    if not found:
+        return []
+    text = _("Some skills use programs this computer doesn't have yet: {programs}. Pick my skills shows "
+             "what each one is for and how to install it.").format(programs=", ".join(found))
+    return [""] + [f"  {DIM}{part}{RESET}" for part in render.wrap(text, max(20, width - 3), 4)]
 
 
 def choose_skills(current="all"):
