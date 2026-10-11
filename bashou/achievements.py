@@ -5,11 +5,22 @@ A rule is either `cmd` (checked on each successful command, given a Ctx) or
 """
 
 import re
+import time
 from dataclasses import dataclass
 from datetime import date, timedelta
 from typing import Callable, Optional
 
 from . import challenges, creatures, lesson, safety, spot, which
+
+
+DAY = 24 * 3600
+
+
+def recent_wins(s, now=None):
+    """When the fights of the last 24 hours were won: a sliding day (owner, 2026-10-11), so three wins
+    across midnight count too."""
+    now = time.time() if now is None else now
+    return [t for t in s["win_times"] if now - t < DAY]
 
 
 @dataclass
@@ -494,8 +505,8 @@ SECRET = [
     A("forensic", "cat", "Forensic", "dig into a dump or a firmware", hidden=True,
       cmd=_uses("volatility", "volatility3", "vol.py", "binwalk", "autopsy", "foremost", "testdisk")),
     # Its own secret pet: the Honey badger comes to players who go looking for fights.
-    A("fearless", "honey_badger", "Fearless", "win 3 fights in one day", hidden=True,
-      state=lambda s: s["wins_day"]["date"] == date.today().isoformat() and s["wins_day"]["count"] >= 3),
+    A("fearless", "honey_badger", "Fearless", "win 3 fights in 24 hours", hidden=True,
+      state=lambda s: len(recent_wins(s)) >= 3),
     # The Train (owner, 2026-10-10): `sl`, the steam locomotive for people who mistype `ls`. It comes when
     # `sl` runs or gets installed; a failed `sl` (not installed: the typo itself) doesn't count.
     A("all_aboard", "train", "All aboard", "install or run `sl`, the steam train for people who mistype `ls`", hidden=True,

@@ -16,7 +16,7 @@ from . import achievements, creatures, i18n
 DATA = Path(os.environ.get("BASHOU_DATA", Path.home() / ".local/share/bashou"))
 CACHE = Path(os.environ.get("BASHOU_CACHE", Path.home() / ".cache/bashou"))
 STATE = DATA / "state.json"
-SAVE_VERSION = 4        # bump with a step in migrate() whenever the save's shape changes
+SAVE_VERSION = 5        # bump with a step in migrate() whenever the save's shape changes
 
 
 @dataclass(frozen=True)
@@ -200,7 +200,7 @@ FIELDS = {
     "active": ("starter", kind(str)),
     "achievements": ([], list_of(kind(str))),
     "fights_won": (0, kind(*NUMBER)),
-    "wins_day": (COUNT, record(date=str, count=NUMBER)),   # fights won today (the Honey badger's secret)
+    "win_times": ([], list_of(kind(*NUMBER))),        # when the fights of the last 24 h were won (the Honey badger's secret)
     "badger_day": (COUNT, record(date=str, count=NUMBER)), # fights the Honey badger picked today
     "fights_lost": (0, kind(*NUMBER)),                # knocked out or fled (the Living sofa comforts you)
     "ladder_best": ({}, dict_of(kind(str, int))),     # pet -> highest form (sprite id) reached on a command ladder
@@ -383,6 +383,14 @@ def migrate_form_ids(state):
                          for e in state["evolving"] if sprite(e["who"], e["from"]) and sprite(e["who"], e["to"])]
 
 
+def migrate_win_times(state):
+    """Version 5 (owner, 2026-10-11): Fearless counts wins over the last 24 hours, not since midnight.
+    Today's wins of the old counter keep counting, as if won just now."""
+    old = state.pop("wins_day", None)
+    if isinstance(old, dict) and old.get("date") == datetime.date.today().isoformat():
+        state["win_times"] = [time.time()] * min(int(old.get("count") or 0), 3)
+
+
 def version_of(saved):
     """The version a save was written with (the first ones had none; a damaged one counts as those)."""
     version = saved.get("version", 1)
@@ -396,6 +404,7 @@ MIGRATIONS = [
     (lambda saved: "ladder_best" in saved and version_of(saved) < 3, migrate_slime_ladder),
     (lambda saved: "reviews" not in saved, migrate_reviews),
     (lambda saved: True, migrate_form_ids),        # version 4; also a number written by hand since
+    (lambda saved: "win_times" not in saved, migrate_win_times),   # version 5
 ]
 # Numbers in looks, starter_best, ladder_best and evolving (int in FIELDS) are forms saved before
 # version 4, turned into sprite ids by migrate_form_ids.

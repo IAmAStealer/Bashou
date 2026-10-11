@@ -15,7 +15,7 @@ import tempfile
 import time
 from pathlib import Path
 
-from . import challenges, duel, lesson, progress, skills, state
+from . import achievements, challenges, duel, lesson, progress, skills, state
 from .analyze import analyze, parse_log
 from .lesson import reader
 from .i18n import _, cap
@@ -487,10 +487,10 @@ def arena(ch, intro, rng=None, fight=False, help_first=False, limit=None):
 
 
 def badger_clue(s):
-    """Owner, 2026-10-10: a secret needs something to look for. Fearless (3 wins in a day) brings the
-    Honey badger, so the second win of the day leaves a clue, until the badger is yours."""
-    if s["wins_day"]["count"] == 2 and BADGER not in s["pets"]:
-        return "🐾 " + _("Two wins today… something wild is watching you. Will you win a third?")
+    """Owner, 2026-10-10: a secret needs something to look for. Fearless (3 wins in 24 hours) brings the
+    Honey badger, so a second win within 24 hours leaves a clue, until the badger is yours."""
+    if len(achievements.recent_wins(s)) == 2 and BADGER not in s["pets"]:
+        return "🐾 " + _("Two wins in a day… something wild is watching you. Will you win a third?")
     return None
 
 
@@ -522,10 +522,7 @@ def run(ch=None, limit=None, badger=False):
             notes += progress.check(s)
         if won:
             s["fights_won"] += 1
-            today = datetime.date.today().isoformat()
-            if s["wins_day"]["date"] != today:
-                s["wins_day"] = {"date": today, "count": 0}
-            s["wins_day"]["count"] += 1
+            s["win_times"] = achievements.recent_wins(s) + [time.time()]
             clue = badger_clue(s)
             notes += [clue] if clue else []
             if ch.id not in s["challenges"]:

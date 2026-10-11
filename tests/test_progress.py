@@ -485,12 +485,12 @@ class HoneyBadgerSecretTest(unittest.TestCase):
     (any secret brought the Hacker cat, so Fearless would have too)."""
 
     def test_three_wins_in_a_day(self):
-        import datetime
+        import time
         s = state.default()
-        s["wins_day"] = {"date": datetime.date.today().isoformat(), "count": 2}
+        s["win_times"] = [time.time() - 3600] * 2
         progress.check(s)
         self.assertNotIn("honey_badger", s["pets"])
-        s["wins_day"]["count"] = 3
+        s["win_times"].append(time.time())
         notes = progress.check(s)
         self.assertIn("honey_badger", s["pets"])
         self.assertNotIn("cat", s["pets"])
@@ -499,9 +499,31 @@ class HoneyBadgerSecretTest(unittest.TestCase):
 
     def test_yesterdays_wins_dont_count(self):
         s = state.default()
-        s["wins_day"] = {"date": "2000-01-01", "count": 5}
+        s["win_times"] = [946_684_800] * 5                       # 2000-01-01
         progress.check(s)
         self.assertNotIn("honey_badger", s["pets"])
+
+    def test_the_day_slides_across_midnight(self):
+        """Owner, 2026-10-11: 24 hours that slide, not a calendar day. Two wins late in the evening and
+        one after midnight count; a win more than 24 hours old doesn't."""
+        import time
+        from bashou import achievements
+        now = time.time()
+        s = state.default()
+        s["win_times"] = [now - 25 * 3600, now - 23 * 3600, now - 2 * 3600]
+        self.assertEqual(len(achievements.recent_wins(s, now)), 2)
+        self.assertFalse(achievements.BY_ID["fearless"].state(s))
+        s["win_times"].append(now - 60)
+        self.assertTrue(achievements.BY_ID["fearless"].state(s))
+
+    def test_an_old_save_keeps_todays_wins(self):
+        import datetime
+        s = state.default()
+        s["wins_day"] = {"date": datetime.date.today().isoformat(), "count": 2}
+        del s["win_times"]
+        state.migrate(s, dict(s, version=4))
+        self.assertEqual(len(s["win_times"]), 2)
+        self.assertNotIn("wins_day", s)
 
     def test_a_security_tool_brings_the_cat_only(self):
         s = {**state.default(), "achievements": ["net_mapper"]}

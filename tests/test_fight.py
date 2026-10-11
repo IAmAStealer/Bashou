@@ -7,6 +7,7 @@ import re
 import shutil
 import subprocess
 import tempfile
+import time
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -967,11 +968,12 @@ class HoneyBadgerTest(unittest.TestCase):
         self.assertTrue(fight.badger_fight(s, self.BORED, ThreatTest.Always(), self.NOW + 86_400))
 
     def test_the_second_win_of_the_day_leaves_a_clue(self):
-        """Owner, 2026-10-10: Fearless stays hidden, but the game hints at it, until the badger is yours."""
-        today = datetime.date.today().isoformat()
+        """Owner, 2026-10-10: Fearless stays hidden, but the game hints at it, until the badger is yours.
+        2026-10-11: a day is the last 24 hours, so a win from yesterday evening counts."""
+        evening = time.time() - 20 * 3600
         ch = challenges.ALL[0]
         for wins_before, pets, want in ((0, [], False), (1, [], True), (2, [], False), (1, ["honey_badger"], False)):
-            s = {**state.default(), "pets": pets, "wins_day": {"date": today, "count": wins_before}}
+            s = {**state.default(), "pets": pets, "win_times": [evening] * wins_before}
             @contextlib.contextmanager
             def locked():
                 yield s
