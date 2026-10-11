@@ -37,11 +37,36 @@ fi
 """
 
 
+# A test to start from (owner): a case you know the answer to, run after every change. The player
+# adds the next case; verify runs its own cases anyway.
+DOOR_TEST = """#!/bin/bash
+# A small test for door.sh. Run it: bash test_door.sh
+# A test is a list of cases you already know the answer to. The test runs the script on each one and
+# compares what it prints with what it should print. Programmers keep tests next to their code and run
+# them after every change: a FAIL means the change broke something.
+
+check() {{   # check NAME EXPECTED
+  got=$(bash door.sh "$1")
+  if [ "$got" = "$2" ]; then
+    echo "ok    $1 -> $got"
+  else
+    echo "FAIL  $1 -> $got (expected $2)"
+  fi
+}}
+
+check {guest} open      # {guest} is in guests.txt: the door must open
+
+# Your turn: add a case for someone who is NOT on the list, like {stranger}. What must the door say?
+"""
+
+
 def door_setup(work, rng):
     guests = rng.sample(GUESTS, 4)
+    stranger = rng.choice(STRANGERS)
     (work / "guests.txt").write_text("\n".join(guests) + "\n")
     (work / "door.sh").write_text(DOOR)
-    return {"guests": guests, "args": {"guest": guests[0], "stranger": rng.choice(STRANGERS)}}
+    (work / "test_door.sh").write_text(DOOR_TEST.format(guest=guests[0], stranger=stranger))
+    return {"guests": guests, "args": {"guest": guests[0], "stranger": stranger}}
 
 
 def door_verify(work, meta, value):
@@ -71,9 +96,34 @@ fi
 """
 
 
+SAVE_TEST = """#!/bin/bash
+# A small test for save.sh. Run it: bash test_save.sh
+# save.sh must say "saved" only when BOTH the file and the folder are there. So the test tries each
+# case: it hides one of them, runs the script, then puts it back. A FAIL means the condition is wrong.
+
+check() {{   # check EXPECTED CASE
+  got=$(bash save.sh 2>/dev/null)
+  if [ "$got" = "$1" ]; then
+    echo "ok    $2 -> $got"
+  else
+    echo "FAIL  $2 -> $got (expected $1)"
+  fi
+}}
+
+check saved "file and folder both there"
+
+mv {folder} {folder}.hidden          # hide the folder...
+check missing "no folder"
+mv {folder}.hidden {folder}          # ...and put it back
+
+# Your turn: hide the file instead (mv {file} {file}.hidden), check, then put it back.
+"""
+
+
 def save_setup(work, rng):
     file, folder = rng.choice(FILES), rng.choice(FOLDERS)
     (work / "save.sh").write_text(SAVE.format(file=file, folder=folder))
+    (work / "test_save.sh").write_text(SAVE_TEST.format(file=file, folder=folder))
     (work / file).write_text("buy bread\n")
     (work / folder).mkdir()
     return {"args": {"file": file, "folder": folder}}
@@ -108,7 +158,8 @@ ALL = [
     Challenge(level=1, id="negation_gnome", threat="Negation Gnome", **LOGIC,
               task="The Negation Gnome added one character to the party door, door.sh: now {guest} is left "
                    "outside and {stranger} walks in.\nFix door.sh so the guests of guests.txt get open and "
-                   "everyone else gets closed. Try it with: bash door.sh {guest}. Then: verify",
+                   "everyone else gets closed. Try it with: bash door.sh {guest}. A small test is ready too: "
+                   "bash test_door.sh, add your own case to it. Then: verify",
               hints=["Read the if line aloud. grep -q finds the name quietly: it succeeds when the name is on "
                      "the list. The ! in front turns that answer around, so the if now means \"if the name is "
                      "NOT on the list, open\". Then run bash door.sh {guest} and bash door.sh {stranger} to "
@@ -120,7 +171,7 @@ ALL = [
     Challenge(level=1, id="coin_wraith", threat="Coin Wraith", after=("negation_gnome",), **LOGIC,
               task="The Coin Wraith flipped one word in save.sh: it should save {file} into {folder}/ only when both "
                    "are there, but now heads or tails, one of them is enough, and cp fails.\nFix the "
-                   "condition. Then: verify",
+                   "condition. A small test tries the cases for you: bash test_save.sh. Then: verify",
               hints=["|| means OR: the whole condition is true as soon as ONE side is true. && means AND: both "
                      "sides must be true. Here the script needs the file AND the folder. Try it: move the "
                      "folder away (mv {folder} gone), run bash save.sh, then put it back (mv gone {folder}).",
@@ -133,6 +184,7 @@ ALL = [
 from .trials import trial  # noqa: E402
 
 DOOR_CHEST = trial("trial_logic_door", 1, "A door script hides in this chest: door.sh. It lets strangers in and "
-                   "keeps the guests of guests.txt out. Fix its condition. Then: verify",
+                   "keeps the guests of guests.txt out. Fix its condition, and try it with the small test: "
+                   "bash test_door.sh. Then: verify",
                    ALL[0].hints, door_setup, door_verify, requires=["bash", "grep"], teaches=["if"])
 CHESTS = [DOOR_CHEST]                    # locked chests in `bashou adventure`

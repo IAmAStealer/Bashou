@@ -360,13 +360,13 @@ YAML_NEIGHBOURS = ("Find the line that doesn't start where its neighbours do. ru
 CICD = dict(pet="beaver", tools=EDITORS, requires=["sed"], skill="cicd", fix=True)
 
 ALL = [
-    Challenge(level=1, id="indent_imp", threat="Indent Imp", **CICD, why=yaml_why(WORKFLOW),
+    Challenge(level=1, id="indent_imp", threat="Indent Imp", **CICD, why=yaml_why(WORKFLOW), file=WORKFLOW,
               task="The Indent Imp pushed one line of the GitHub workflow " + WORKFLOW + " out of line.\n"
                    "Put it back in line, so the job test has its two steps: checkout, then the tests. "
                    "Then: verify",
               hints=[YAML_OUTLINE, YAML_NEIGHBOURS],
               setup=indent_setup, verify=indent_verify),
-    Challenge(level=1, id="stage_specter", threat="Stage Specter", **CICD, why=yaml_why(GITLAB),
+    Challenge(level=1, id="stage_specter", threat="Stage Specter", **CICD, why=yaml_why(GITLAB), file=GITLAB,
               task="The Stage Specter renamed a stage in " + GITLAB + ": GitLab refuses the pipeline, "
                    "'unit job: chosen stage does not exist'.\nMake every job use a stage from the stages: list, "
                    "without renaming the stages. Then: verify",
@@ -375,7 +375,7 @@ ALL = [
                      "The unit job runs the tests, so its stage is test. Open the file ({editor} .gitlab-ci.yml) and "
                      "change the unit job's line to `  stage: test`, keeping its 2 spaces."],
               setup=stage_setup, verify=stage_verify),
-    Challenge(level=2, id="secret_sprite", threat="Secret Sprite", **CICD, why=yaml_why(WORKFLOW),
+    Challenge(level=2, id="secret_sprite", threat="Secret Sprite", **CICD, why=yaml_why(WORKFLOW), file=WORKFLOW,
               task="The Secret Sprite wrote an API token in clear in " + WORKFLOW + ": anyone who can read the "
                    "repository can steal it.\nMake the step read it from the repository's secrets instead "
                    "(the secret is called API_TOKEN). Then: verify",
@@ -384,7 +384,7 @@ ALL = [
                      "Replace the token with ${{ secrets.API_TOKEN }} on the API_TOKEN: line. In real life, "
                      "the leaked token must also be revoked: it stays in the git history."],
               setup=secret_setup, verify=secret_verify),
-    Challenge(level=2, id="needs_newt", threat="Needs Newt", **CICD, why=yaml_why(WORKFLOW),
+    Challenge(level=2, id="needs_newt", threat="Needs Newt", **CICD, why=yaml_why(WORKFLOW), file=WORKFLOW,
               task="The Needs Newt lets " + WORKFLOW + " deploy even when the tests fail, and from every branch.\n"
                    "Make the deploy job wait for the test job, and run only on the main branch. Then: verify",
               hints=["Jobs run side by side unless told otherwise. needs: test makes deploy wait for test, and "
@@ -392,7 +392,7 @@ ALL = [
                      "Under `deploy:`, at the level of runs-on, add two lines: `needs: test` and "
                      "`if: github.ref == 'refs/heads/main'`."],
               setup=needs_setup, verify=needs_verify),
-    Challenge(level=2, id="manual_mole", threat="Manual Mole", **CICD, why=yaml_why(GITLAB),
+    Challenge(level=2, id="manual_mole", threat="Manual Mole", **CICD, why=yaml_why(GITLAB), file=GITLAB,
               task="The Manual Mole makes " + GITLAB + " deploy to production on every push, on every branch.\n"
                    "Make the deploy job appear only on main, and wait for someone to click it (manual). "
                    "Then: verify",
@@ -410,5 +410,5 @@ from .trials import trial  # noqa: E402
 INDENT_CHEST = trial("trial_ci_indent", 2, "A pipeline file hides in this chest: " + WORKFLOW + ". One line is out "
                      "of line. Put it back, so the job test has its two steps. Then: verify",
                      [YAML_OUTLINE, YAML_NEIGHBOURS], indent_setup, indent_verify, requires=["sed"], teaches=["yaml"],
-                     why=yaml_why(WORKFLOW))
+                     why=yaml_why(WORKFLOW), file=WORKFLOW)
 CHESTS = [INDENT_CHEST]                  # locked chests in `bashou adventure`

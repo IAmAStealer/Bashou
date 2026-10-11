@@ -53,6 +53,7 @@ class Challenge:
     fix: bool = False         # you fix a file (or run commands), then `verify`: Bashou checks the result
     works: Optional[Callable] = None    # () -> bool: something else this system must have (AddressSanitizer…)
     why: Optional[Callable] = None      # (work_dir) -> str or None: what's wrong, said when `verify` fails
+    file: str = ""            # the file you fix, when Bashou can read it for you before verify (`check`)
 
     @property
     def tool(self):

@@ -28,7 +28,7 @@ KO = 4                    # exit code of the arena shell when you're knocked out
 FLASH = 0.6               # seconds a hit flashes
 FREE = {"ls", "cd", "pwd", "cat", "head", "tail", "less", "more", "file", "stat", "tree", "echo", "nl", "find",
         "realpath", "readlink", "whoami", "id", "date",
-        "clear", "man", "help", "history", "type", "which", "task", "hint", "lesson", "answer", "verify", "flee", "bashou",
+        "clear", "man", "help", "history", "type", "which", "task", "hint", "lesson", "answer", "verify", "check", "flee", "bashou",
         "nano", "vi", "vim", "nvim", "emacs", "micro", "ed", "code"}   # editing a file to fix is fine
 NOT_FOUND = 127                  # bash's status for a command that doesn't exist: a typo
 

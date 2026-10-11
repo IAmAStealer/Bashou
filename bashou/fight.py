@@ -69,6 +69,7 @@ _arena() { python3 "$BASHOU_SRC/launch.py" bashou.fight "$@" "$BASHOU_ARENA"; }
 answer() { _arena answer "$*" && exit 42; }
 verify() { _arena verify && exit 42; }
 hint() { _arena hint; }
+check() { _arena check; }
 lesson() { _arena lesson; }
 task() { _arena task; }
 flee() { exit 3; }
@@ -349,6 +350,36 @@ def cmd_lesson(base):
     return reader.main([found[0]["id"]])
 
 
+YAMLLINT = ["yamllint", "-d", "relaxed"]      # relaxed: real mistakes, not the style of a long line
+
+
+def cmd_check(base):
+    """`check`: read the file the way verify will, without striking. Pipelines can't be tried at the
+    prompt like a script, so this is how you test one before sending it; yamllint too when it's there."""
+    ch = challenges.BY_ID[load_meta(base)["challenge"]]
+    if not ch.file:
+        print(DIM + _("Nothing to check for you here: try your work at the prompt, then verify.") + RESET)
+        return 0
+    arena = Path(base) / "arena"
+    why = ch.why(arena) if ch.why else None
+    if why:
+        print(BAD + "✗ " + why + RESET)
+    else:
+        print(GOOD + "✓ " + _("{file} reads as valid YAML. That's the shape; verify then checks what it says "
+                             "(the jobs, the steps, the values).").format(file=ch.file) + RESET)
+    if shutil.which(YAMLLINT[0]):
+        done = subprocess.run(YAMLLINT + [ch.file], cwd=arena, capture_output=True, text=True)
+        print(DIM + "$ yamllint " + ch.file + RESET)
+        print(done.stdout.rstrip() or _("yamllint has nothing to say: no mistake found."))
+        print(DIM + _("yamllint is what real projects run before they push: errors break the file, "
+                      "warnings are about style.") + RESET)
+    else:
+        print(DIM + _("In real projects, a linter checks YAML before you push it: yamllint "
+                      "(sudo apt install yamllint, or sudo dnf install yamllint). Once it's installed, "
+                      "check runs it too, and you can run it yourself: yamllint {file}").format(file=ch.file) + RESET)
+    return 0
+
+
 def cmd_task(base):
     meta = load_meta(base)
     print(challenges.BY_ID[meta["challenge"]].task_text(meta))
@@ -375,7 +406,9 @@ def banner(ch, task, review=None):
 
 def strike_done(ch):
     """Fights where you fix a file: `answer` takes no value, Bashou checks the result itself."""
-    return "  verify           " + _("strike when it works: Bashou checks your work") + "\n"
+    check = ("  check            " + _("read your file the way verify will, without striking") + "\n"
+             if ch.file else "")
+    return check + "  verify           " + _("strike when it works: Bashou checks your work") + "\n"
 
 
 BEGINNER_WINS = 5          # until then, a fight's first hint teaches `tool --help` (owner)
@@ -530,6 +563,8 @@ def main():
         sys.exit(cmd_hint(sys.argv[2]))
     if cmd == "task":
         sys.exit(cmd_task(sys.argv[2]))
+    if cmd == "check":
+        sys.exit(cmd_check(sys.argv[2]))
     if cmd == "lesson":
         sys.exit(cmd_lesson(sys.argv[2]))
     run(badger=cmd == "badger")

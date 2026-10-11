@@ -11,7 +11,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from bashou import challenges, fight, state, which
+from bashou import challenges, duel, fight, state, which
 from bashou.challenges import cicd, repos, secrets, sql
 
 # Reference solutions, run with bash in the arena folder. {x} is filled from the task text.
@@ -485,6 +485,52 @@ class CicdFightTest(unittest.TestCase):
                 if why:
                     self.assertRegex(why, r"line \d+", wrong)
         self.assertTrue(all(ch.why for ch in cicd.ALL + cicd.CHESTS))
+
+    def test_check_reads_the_file_like_verify_and_teaches_yamllint(self):
+        """Owner: teach players to validate before they send. `check` says what verify will think of the
+        YAML, runs yamllint when it's installed, and names it when it isn't."""
+        base = Path(tempfile.mkdtemp())
+        self.addCleanup(__import__("shutil").rmtree, base)
+        (base / "arena").mkdir()
+        (base / "meta.json").write_text('{"challenge": "indent_imp"}')
+        cicd.write(base / "arena", cicd.WORKFLOW, cicd.GH_OK.replace("        run:", "\t  run:"))
+        def run():
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                fight.cmd_check(str(base))
+            return out.getvalue()
+
+        with mock.patch.object(fight.shutil, "which", return_value=None):
+            text = run()
+        self.assertIn("line 11 has a tab", text)
+        self.assertIn("sudo apt install yamllint", text)
+        cicd.write(base / "arena", cicd.WORKFLOW, cicd.GH_OK)
+        done = mock.Mock(stdout="  1:1  warning  missing document start\n")
+        with mock.patch.object(fight.shutil, "which", return_value="/usr/bin/yamllint"), \
+                mock.patch.object(fight.subprocess, "run", return_value=done) as ran:
+            text = run()
+        self.assertIn("reads as valid YAML", text)
+        self.assertIn("missing document start", text)
+        self.assertEqual(ran.call_args[0][0], fight.YAMLLINT + [cicd.WORKFLOW])
+        self.assertIn("check ", fight.banner(challenges.BY_ID["indent_imp"], "task"))
+        self.assertNotIn("check ", fight.banner(challenges.BY_ID["colon_cobra"], "task"))
+        self.assertIsNone(duel.judge(challenges.BY_ID["indent_imp"], 0, "check"))
+
+    def test_logic_fights_come_with_a_test_to_run_and_extend(self):
+        """Owner: players can test their own fix; one example case is given, they write the next."""
+        for fight_id, test, fix in (("negation_gnome", "test_door.sh", "s/if ! grep/if grep/"),
+                                    ("coin_wraith", "test_save.sh", "s/||/\\&\\&/")):
+            with tempfile.TemporaryDirectory() as tmp, self.subTest(fight_id):
+                work = Path(tmp)
+                ch = challenges.BY_ID[fight_id]
+                meta = ch.setup(work, random.Random(0))
+                self.assertIn(test, ch.task)
+                self.assertIn("Your turn", (work / test).read_text())
+                run = lambda: subprocess.run(["bash", test], cwd=work, capture_output=True, text=True).stdout
+                self.assertIn("FAIL", run())
+                subprocess.run(["sed", "-i", fix, test.replace("test_", "")], cwd=work)
+                self.assertNotIn("FAIL", run())
+                self.assertTrue(ch.check(work, meta, "done"))           # the test file doesn't get in the way
 
     def test_needs_and_if_in_other_forms(self):
         add = lambda extra: lambda text, meta: text.replace("  deploy:\n", "  deploy:\n" + extra)

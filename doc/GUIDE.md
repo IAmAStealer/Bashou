@@ -52,7 +52,9 @@ A pixel-art pet that lives in the top-right corner of your terminal and grows as
   tool, `answer` it, and the threat's pet joins you. `hint` helps, `flee` runs away. No threat, no
   fight: the arena only opens after your pet's warning. Code fights hand you a small broken Python
   or C file instead: its first lines say what goes in, what should come out and how to run it; fix
-  it and `verify`. Opening an editor is free. For your first 5 wins, the first `hint` teaches
+  it and `verify`. Opening an editor is free. Pipeline fights add `check`: it reads your YAML the way
+  `verify` will (and runs `yamllint` if you have it); logic fights come with a small test script to
+  run and extend. For your first 5 wins, the first `hint` teaches
   you to ask the tool itself: `wc --help`, how to read its Usage line (`[ ]` optional, `...` several)
   and its option list, and what to look for in it. Reading help (`--help`, `man`) never costs a heart.
 - **Reviews: beaten fights come back.** We remember what we practise again just as we start to
