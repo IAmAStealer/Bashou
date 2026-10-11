@@ -3,6 +3,21 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.8.6 — 2026-10-11
+
+### Changes
+
+- Locked lessons in the Sage Owl's library now say which lesson they wait for. Select one to see how to open it, and press Enter to jump to the lesson to practice first.
+- Fights are kinder: a typo or a `find` never costs a heart, and in fights where you fix a file, checking your work (with `grep`, `diff` or a backup copy) is free.
+- Pipeline fights have a new `check` command: it reads your YAML the way `verify` will, says which line is wrong (a tab, for example), and runs `yamllint` if you have it.
+- Logic fights come with a small test script: run it, then add your own cases.
+- When you pick your skills, each one shows the programs it uses, what they are for, and how to install a missing one.
+- Something wild that watches winners now counts the last 24 hours, not the calendar day: a late-night streak counts too.
+
+### Breaking changes
+
+- Breaking change: a pony read the new test scripts, added a case of its own and galloped off to run it. Fetch it with `bashou pony hoof`.
+
 ## v0.8.5 — 2026-10-10
 
 ### Changes

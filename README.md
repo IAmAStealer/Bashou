@@ -55,6 +55,9 @@ It shows every command it will run, asks you, then moves you over. Your pets and
 
 ## What's new
 
+**0.8.6**
+- **Kinder fights**: typos and checking your work are free, pipeline fights get `check`, logic fights a test to extend, and locked lessons say what they wait for.
+
 **0.8.5**
 - **More secrets**: a new secret pet, two more hidden friends, and a clue for the fiercest one.
 

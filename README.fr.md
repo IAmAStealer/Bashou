@@ -55,6 +55,9 @@ Il te faut bash et python3. La plupart des Linux les ont déjà.
 
 ## Quoi de neuf
 
+**0.8.6**
+- **Des combats plus doux** : les fautes de frappe et vérifier ton travail sont gratuits, les combats de pipeline ont `check`, les combats de logique un test à compléter, et les leçons verrouillées disent ce qu'elles attendent.
+
 **0.8.5**
 - **Encore des secrets** : un nouveau compagnon secret, deux amis cachés de plus, et un indice pour le plus féroce.
 
