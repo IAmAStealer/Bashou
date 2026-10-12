@@ -11,31 +11,38 @@ NAMES = ("ada", "bo", "casey", "dara", "eli", "fern", "gil", "hana", "ines", "jo
          "mira", "nils", "omar", "pia", "quinn", "remy", "sana", "tao")
 
 
-# --- Flag Phantom: sort puts capitals first, --help shows the option that ignores case ------------------
+# --- Flag Phantom: sizes with units, --help shows the option that reads them -----------------------------
 
-def names_setup(work, rng):
-    """The first name, case ignored, is written in small letters, and a capitalized name comes later in the
-    alphabet: a plain sort (capitals first in most systems) shows the wrong one on top."""
-    names = sorted(rng.sample(NAMES, 9))
-    first, rest = names[0], names[1:]
-    capitals = rng.sample(rest, 4)
-    shown = [first] + [n.capitalize() if n in capitals else n for n in rest]
-    rng.shuffle(shown)
-    (work / "names.txt").write_text("\n".join(shown) + "\n")
-    return {"answer": first}
+FOLDERS = ("photos", "music", "videos", "docs", "games", "backups", "mail", "notes", "downloads")
+
+
+def sizes_setup(work, rng):
+    """Folder sizes as du -h writes them. The biggest is in G with a small number: plain sort (text, so a 9
+    beats a 1) and sort -n (950K beats 1.5G) both put another folder last. Only sort -h reads the units.
+    It was sort -f before, but in a UTF-8 locale plain sort already ignores capitals (bug report)."""
+    names = rng.sample(FOLDERS, 8)
+    sizes = [f"{rng.randint(1, 2)}.{rng.randint(1, 9)}G"]
+    sizes += [f"{rng.randint(300, 990)}M" for _ in range(2)] + [f"{rng.randint(2, 90)}M" for _ in range(2)]
+    sizes += [f"{rng.randint(300, 990)}K" for _ in range(3)]
+    lines = [f"{size}\t{name}" for size, name in zip(sizes, names)]
+    rng.shuffle(lines)
+    (work / "sizes.txt").write_text("\n".join(lines) + "\n")
+    return {"answer": names[0]}
 
 
 FLAG_PHANTOM = Challenge(
     level=1, id="flag_phantom", pet="sofa", tools=("sort",), threat="Flag Phantom", requires=["sort"],
-    task="The Flag Phantom wrote some of the names in names.txt with a capital letter, and sort may put every capital "
-         "first.\nWhich name comes first in alphabetical order when you ignore capitals?",
-    help="Here, find the option that ignores the case (capital or small letters).",
-    hints=["Every tool explains its options: sort --help. Look for the word case: one option folds small "
-           "letters and capitals together, so Mira and mira count as the same letters.",
-           "Try: sort -f names.txt (-f is short for --ignore-case). The first line is the answer, "
-           "written as in the file."],
-    setup=names_setup,
-    verify=lambda w, m, v: v.strip().lower() == m["answer"],
+    task="The Flag Phantom listed the size of each folder in sizes.txt, with a unit: K (kilobytes), M "
+         "(megabytes, a thousand K) or G (gigabytes, a thousand M). A plain sort compares text, and sort -n "
+         "only looks at the number, so neither knows that 1.5G is bigger than 900M.\n"
+         "Which folder is the biggest?",
+    help="Here, find the option that sorts sizes written with a unit (K, M, G).",
+    hints=["Every tool explains its options: sort --help. Look for the word human: sizes like 2K or 1G are "
+           "\"human readable\" numbers, and one option compares them by their real size.",
+           "Try: sort -h sizes.txt (-h is short for --human-numeric-sort). The last line is the biggest "
+           "folder: give its name."],
+    setup=sizes_setup,
+    verify=lambda w, m, v: bool(v.split()) and v.split()[-1].lower() == m["answer"],
 )
 
 

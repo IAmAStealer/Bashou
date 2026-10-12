@@ -82,7 +82,7 @@ SOLUTIONS = {
     "trial_gdb_line": ("gcc -g count.c -o count && gdb -q -batch -ex run -ex bt ./count 2>&1"
                        " | grep -o 'count.c:[0-9]*' | head -1 | cut -d: -f2", None),
     # everyday fights: read --help, edit, tidy, wildcards, nproc
-    "flag_phantom": ("sort -f names.txt | head -1", None),
+    "flag_phantom": ("sort -h sizes.txt | tail -1", None),
     "typo_troll": ("sed -i 's/flower/flour/; s/egss/eggs/; s/mlik/milk/; s/slat/salt/; s/suger/sugar/' recipe.txt", None),
     "clutter_critter": ("mkdir photos docs && mv *.jpg photos/ && mv *.txt docs/", None),
     "glob_goblin": ("rm report-2025-*.csv", None),
@@ -275,8 +275,9 @@ class ChallengeTest(unittest.TestCase):
                     self.assertFalse(ch.check(Path(tmp), meta, "done"))
 
     def test_everyday_fights_refuse_the_easy_wrong_move(self):
-        """A plain sort puts a capital on top, a too wide pattern removes files that stay, a loose file fails."""
-        cases = [("flag_phantom", "LC_ALL=C sort names.txt | head -1"), ("glob_goblin", "rm *.csv"),
+        """A plain sort or sort -n misreads sizes, a too wide pattern removes files that stay, a loose file fails."""
+        cases = [("flag_phantom", "sort sizes.txt | tail -1"), ("flag_phantom", "sort -n sizes.txt | tail -1"),
+                 ("flag_phantom", "sort -f sizes.txt | tail -1"), ("glob_goblin", "rm *.csv"),
                  ("clutter_critter", "mkdir photos docs && mv *.jpg photos/"), ("typo_troll", "true"),
                  ("stderr_stalker", "./check.sh > errors.txt 2>&1"), ("pattern_pixie", "grep -cE '[A-Z]{2}-[0-9]{4}' codes.txt"),
                  ("space_sprite", "n=$(ls | grep ' '); cp $n backup/"),

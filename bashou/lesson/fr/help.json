@@ -23,21 +23,21 @@
   },
   {
    "scheme": [
-    " $ sort --help | grep -i case",
-    "  -f, --ignore-case  fold lower case to upper…",
-    "  ▔▔  ▔▔▔▔▔▔▔▔▔▔▔▔▔  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔",
-    "  court longue       ce qu'elle fait"
+    " $ sort --help | grep -i human",
+    "  -h, --human-numeric-sort  compare human…",
+    "  ▔▔  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔",
+    "  court longue              ce qu'elle fait"
    ],
    "point": 1,
    "mark": [
-    "-f",
-    "--ignore-case"
+    "-h",
+    "--human-numeric-sort"
    ],
    "text": [
     "Sous la ligne Usage, une ligne par option : une forme courte, une forme longue, et ce qu'elle fait. Les deux formes font la même chose.",
     "",
     "- La liste est longue ? Cherche dedans : grep -i trouve un mot sans tenir compte des majuscules.",
-    "- « fold lower case to upper » veut dire : trier comme si toutes les lettres étaient en majuscules.",
+    "- « compare human readable numbers » veut dire : comparer des tailles écrites avec une unité. 2K est plus petit que 1G, même si 2 est plus grand que 1.",
     "- Ou fais-la défiler : sort --help | less, q pour quitter."
    ]
   },

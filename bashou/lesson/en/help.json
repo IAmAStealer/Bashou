@@ -37,21 +37,21 @@
   },
   {
    "scheme": [
-    " $ sort --help | grep -i case",
-    "  -f, --ignore-case  fold lower case to upper…",
-    "  ▔▔  ▔▔▔▔▔▔▔▔▔▔▔▔▔  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔",
-    "  short long form    what it does"
+    " $ sort --help | grep -i human",
+    "  -h, --human-numeric-sort  compare human…",
+    "  ▔▔  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔",
+    "  short long form           what it does"
    ],
    "point": 1,
    "mark": [
-    "-f",
-    "--ignore-case"
+    "-h",
+    "--human-numeric-sort"
    ],
    "text": [
     "Below the Usage line, one line per option: a short form, a long form, and what it does. Both forms do the same thing.",
     "",
     "- The list is long? Search it: grep -i finds a word whatever its case.",
-    "- \"fold lower case to upper\" means: sort as if every letter were uppercase.",
+    "- \"compare human readable numbers\" means sizes written with a unit: 2K is smaller than 1G, even though 2 is bigger than 1.",
     "- Or page through it: sort --help | less, q quits."
    ]
   },
