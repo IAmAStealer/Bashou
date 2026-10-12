@@ -626,6 +626,22 @@ class ShellTest(unittest.TestCase):
                 os.close(sh.fd)
                 self.assertEqual(os.waitstatus_to_exitcode(status), code, last)
 
+    def test_bashou_on_and_off_always_answer(self):
+        """Owner, 2026-10-12: `bashou on` didn't reply. On and off now say what happened, every time."""
+        pet = int(self.sh.value("BASHOU_PID"))
+        start = len(self.sh.out)
+        self.sh.send("bashou on\n", 0)
+        self.assertTrue(self.sh.expect(b"is already here", start))
+        self.assertEqual(int(self.sh.value("BASHOU_PID")), pet)                 # the same pet
+        start = len(self.sh.out)
+        self.sh.send("bashou off\n", 0)
+        self.assertTrue(self.sh.expect(b"is hidden in this terminal", start))
+        self.assertEqual(self.sh.value("BASHOU_PID"), "")
+        start = len(self.sh.out)
+        self.sh.send("bashou on\n", 0)
+        self.assertTrue(self.sh.expect(b"is back", start))
+        self.assertTrue(self.sh.value("BASHOU_PID"))
+
     def test_what_you_type_is_private(self):
         """The events file holds every command: 600 in a 700 folder, whatever the umask."""
         events = self.sh.data / f"events.{self.sh.value('$')}"
@@ -732,6 +748,18 @@ class OnePetTest(unittest.TestCase):
         after = second.out[second.out.index(b"\x1b[H\x1b[2J", start) + 7:]
         self.assertNotRegex(after, rb"\x1b\[\d+B")
         self.assertIn(b"$ ", after)
+
+    def test_bashou_on_in_a_guest_points_to_bashou_here(self):
+        """The pet lives in the first terminal: `bashou on` in another one says where, and doesn't take it."""
+        first = self.open()
+        self.assertTrue(first.expect(b"38;2;216;200;160"))
+        pet = int(first.value("BASHOU_PID"))
+        second = self.open()
+        start = len(second.out)
+        second.send("bashou on\n", 0)
+        self.assertTrue(second.expect(b"lives in another terminal", start))
+        self.assertEqual(second.value("BASHOU_PID"), "")
+        self.assertTrue(alive(pet))
 
     def test_bashou_off_in_a_guest_keeps_it_without_pet(self):
         first = self.open()

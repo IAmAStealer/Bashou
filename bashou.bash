@@ -144,19 +144,30 @@ bashou() {
       _bashou_off
       if [[ -n $_bashou_auto && ! -e $_bashou_off ]] && : > "$_bashou_off" 2>/dev/null; then
         python3 "$BASHOU_DIR/launch.py" bashou off saved
+      else
+        python3 "$BASHOU_DIR/launch.py" bashou off hidden
       fi
       ;;
     on)
+      # Always say what happened (owner: `bashou on` didn't reply when the pet was already there).
       rm -f "$_bashou_off"
-      _bashou_ready || bashou start || return 1
-      _bashou_on
+      if [[ -n $BASHOU_PID ]]; then
+        python3 "$BASHOU_DIR/launch.py" bashou on already
+      elif [[ -n $_bashou_guest ]] && _bashou_elsewhere; then
+        python3 "$BASHOU_DIR/launch.py" bashou on guest
+      else
+        _bashou_ready || bashou start || return 1
+        _bashou_on
+        python3 "$BASHOU_DIR/launch.py" bashou on back
+      fi
       ;;
     here)
       # Move the pet to this terminal. The old one sees it at its next prompt and becomes a guest.
       if [[ -n $BASHOU_PID ]]; then
         python3 "$BASHOU_DIR/launch.py" bashou here already
       else
-        bashou on && python3 "$BASHOU_DIR/launch.py" bashou here moved
+        rm -f "$_bashou_off"
+        { _bashou_ready || bashou start; } && _bashou_on && python3 "$BASHOU_DIR/launch.py" bashou here moved
       fi
       ;;
     *) python3 "$BASHOU_DIR/launch.py" bashou "$@" ;;

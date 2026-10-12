@@ -376,10 +376,26 @@ def here(args):
         print("  " + _("Bashou isn't running in this terminal."))
 
 
+def on(args):
+    """The loaders start the pet, then say how it went (owner: `bashou on` didn't reply). Without a loader
+    (no `how`), `bashou on` adds the line to ~/.bashrc or ~/.zshrc."""
+    if not args.how:
+        from . import setup
+        return setup.run()
+    name = progress.current(state.load())[2]
+    print("  " + {"back": _("{name} is back."),
+                  "already": _("{name} is already here. `bashou off` hides it."),
+                  "guest": _("{name} lives in another terminal. `bashou here` brings it to this one.")}
+          .get(args.how, _("{name} is back.")).format(name=name))
+
+
 def off(args):
     """bashou.bash stops the pet; `saved` when the package's automatic loading will skip new terminals too."""
     if args.how == "saved":
         print("  " + _("Bashou is off, in new terminals too. `bashou on` brings your pet back."))
+    elif args.how == "hidden":
+        name = progress.current(state.load())[2]
+        print("  " + _("{name} is hidden in this terminal. `bashou on` brings it back.").format(name=name))
     else:
         print("  " + _("Bashou isn't running in this terminal."))
 
@@ -451,7 +467,8 @@ COMMANDS = [
             size=(80, 14)),                          # a 40-character string with an answer on each side
     Command("adventure", run("adventure.game"), ("bashou adventure", "walk into the world with your starter", PLAY),
             size=(50, 20)),
-    Command("on", run("setup", "run"), ("bashou on / off", "show or hide the pet (the first `on` adds Bashou to ~/.bashrc, or ~/.zshrc in zsh)", SETTINGS)),
+    Command("on", on, ("bashou on / off", "show or hide the pet (the first `on` adds Bashou to ~/.bashrc, or ~/.zshrc in zsh)", SETTINGS),
+            args=[("how", dict(nargs="?", help=argparse.SUPPRESS))]),
     Command("off", off, args=[("how", dict(nargs="?", help=argparse.SUPPRESS))]),         # bashou.bash stops it first
     Command("here", here, ("bashou here", "move your pet to this terminal (it lives in one terminal at a time)", SETTINGS),
             [("how", dict(nargs="?", help=argparse.SUPPRESS))]),                # bashou.bash moves it first
