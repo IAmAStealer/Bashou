@@ -1047,6 +1047,24 @@ class ZshCompletionTest(unittest.TestCase):
             finally:
                 sh.close()
 
+    def test_tab_completes_without_compinit_too(self):
+        """Owner, 2026-10-12: Tab did nothing in a bare ~/.zshrc (zsh's first-run one: no compinit)."""
+        with tempfile.TemporaryDirectory() as tmp:
+            sh = Shell(tmp, shell="zsh")
+            try:
+                self.assertTrue(sh.expect(b"38;2;216;200;160"))
+                for typed, want in (("bashou swa\t", b"bashou swap "), ("fr\t", b"bashou swap frog "),
+                                    ("\x15bashou config la\t", b"bashou config language ")):
+                    start = len(sh.out)
+                    sh.send(typed, 1)
+                    plain = lambda: re.sub(rb"\x1b\[[0-9;?]*[A-Za-z]|\x1b[78=>]|\x08", b"", sh.out[start:])
+                    end = time.time() + TIMEOUT
+                    while want.split(b" ")[-2] not in plain() and time.time() < end:
+                        sh.read(0.2)
+                    self.assertTrue(want.split(b" ")[-2] + b" " in plain(), typed)
+            finally:
+                sh.close()
+
     def test_no_compinit_no_error(self):
         """Without compinit (a bare .zshrc), Bashou loads without a compdef error."""
         with tempfile.TemporaryDirectory() as tmp:

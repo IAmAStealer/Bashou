@@ -229,6 +229,18 @@ _bashou() {
   compadd -a reply
 }
 
+# Without compinit (a bare ~/.zshrc, like the one zsh writes at first start), zsh's older completion,
+# compctl, still works: it asks this function for the words, zsh keeps those that fit what's typed.
+_bashou_compctl() {
+  local -a args
+  local n
+  read -cA args
+  read -cn n
+  (( n > $#args )) && args+=("")
+  _bashou_words "${(@)args[1,n]}"
+}
+compctl -K _bashou_compctl bashou
+
 precmd_functions=(_bashou_precmd ${precmd_functions:#_bashou_precmd})
 preexec_functions=(_bashou_preexec ${preexec_functions:#_bashou_preexec})
 _bashou_exit() {
