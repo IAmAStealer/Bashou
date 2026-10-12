@@ -1,7 +1,7 @@
-"""End-to-end tests in a real interactive bash on a pseudo-terminal.
+"""End-to-end tests in a real interactive bash, and zsh (0.9.0), on a pseudo-terminal.
 
 These guard the bugs that only show up with job control, a terminal and a live pet.
-They take a few seconds each.
+They take a few seconds each. Each class runs in bash; its Zsh… subclass at the end runs it again in zsh.
 """
 
 import contextlib
@@ -9,6 +9,7 @@ import json
 import os
 import pty
 import select
+import shutil
 import signal
 import tempfile
 import time
@@ -20,10 +21,19 @@ TIMEOUT = 10
 ARENA_PROMPT = b"arena # " if os.geteuid() == 0 else b"arena $"     # bash's \$: # for root (a container)
 
 
-class Shell:
-    """An interactive bash that sources bashou.bash, with its own data folders."""
+def need(shell):
+    """Owner, 0.9.0: the zsh tests are required everywhere, never skipped."""
+    if not shutil.which(shell):
+        raise AssertionError(f"these tests need {shell}: sudo apt install {shell} (or sudo dnf install {shell})")
 
-    def __init__(self, tmp, cmd=None, state=None, cursor=True, env=None, bashrc=None):
+
+class Shell:
+    """An interactive bash (or zsh) that sources bashou.bash (bashou.zsh), with its own data folders.
+    For zsh, `bashrc` is the text of the .zshrc (in its own ZDOTDIR)."""
+
+    def __init__(self, tmp, cmd=None, state=None, cursor=True, env=None, bashrc=None, shell="bash"):
+        need(cmd[0] if cmd and cmd[0] in ("bash", "zsh") else shell)
+        self.shell = shell
         self.tmp = Path(tmp)
         self.data, self.cache = self.tmp / "data", self.tmp / "cache"
         self.data.mkdir(exist_ok=True)
@@ -32,12 +42,21 @@ class Shell:
                     "settings": {"updates": "off"}, **(state or {})}
             (self.data / "state.json").write_text(json.dumps(base))
         rc = self.tmp / "rc"
-        rc.write_text(f"PS1='$ '\nHISTFILE={self.tmp}/hist\nHISTCONTROL=ignoreboth\n"
-                      + (bashrc or f"source {ROOT}/bashou.bash\n"))
+        zdot = self.tmp / "zdot"
+        if shell == "zsh":
+            zdot.mkdir(exist_ok=True)
+            (zdot / ".zshrc").write_text(f"PS1='$ '\nHISTFILE={self.tmp}/hist\nSAVEHIST=100\nHISTSIZE=100\n"
+                                         "setopt HIST_IGNORE_SPACE HIST_IGNORE_DUPS\n"
+                                         + (bashrc or f"source {ROOT}/bashou.zsh\n"))
+        else:
+            rc.write_text(f"PS1='$ '\nHISTFILE={self.tmp}/hist\nHISTCONTROL=ignoreboth\n"
+                          + (bashrc or f"source {ROOT}/bashou.bash\n"))
         env = {**os.environ, "BASHOU_DATA": str(self.data), "BASHOU_CACHE": str(self.cache),
                "PYTHONPATH": str(ROOT), "TERM": "xterm-256color",
                "BASHOU_PACKAGE_LOADER": str(self.tmp / "no-package"), **(env or {})}   # a real one isn't used
-        argv = cmd or ["bash", "--rcfile", str(rc), "-i"]
+        if shell == "zsh":
+            env.setdefault("ZDOTDIR", str(zdot))
+        argv = cmd or (["zsh", "-i"] if shell == "zsh" else ["bash", "--rcfile", str(rc), "-i"])
         self.pid, self.fd = pty.fork()
         if self.pid == 0:
             os.execvpe(argv[0], argv, env)
@@ -94,6 +113,10 @@ class Shell:
             raise AssertionError(f"no value for {name}")
         rest = self.out[self.out.index(b"@@V=", start) + 4:]
         return rest[:rest.index(b"@@")].decode()
+
+    def hooks(self):
+        """What runs at each prompt: PROMPT_COMMAND in bash, the precmd functions in zsh."""
+        return self.value("precmd_functions[*]" if self.shell == "zsh" else "PROMPT_COMMAND")
 
     def state(self):
         return json.loads((self.data / "state.json").read_text())
@@ -167,12 +190,13 @@ class PackageHandoverTest(unittest.TestCase):
     """User report (0.6.2 rpm installed, no `bashou share`): ~/.bashrc still loaded an old git copy, which
     dnf never updates. A git copy's loader now hands over to the package, and the package's profile.d
     script moves shells whose ~/.bashrc loads an older copy, at the first prompt."""
+    SHELL = "bash"
 
     def test_a_clone_loader_sources_the_package(self):
         with tempfile.TemporaryDirectory() as tmp:
-            package = Path(tmp) / "package.bash"
+            package = Path(tmp) / f"package.{self.SHELL}"
             package.write_text("PACKAGE_LOADED=yes\n")
-            sh = Shell(tmp, env={"BASHOU_PACKAGE_LOADER": str(package)})
+            sh = Shell(tmp, env={"BASHOU_PACKAGE_LOADER": str(package)}, shell=self.SHELL)
             try:
                 self.assertTrue(sh.expect(b"$ "))
                 self.assertEqual(sh.value("PACKAGE_LOADED"), "yes")
@@ -184,14 +208,15 @@ class PackageHandoverTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             old = Path(tmp) / "old"
             old.mkdir()
-            (old / "bashou.bash").write_text(f"BASHOU_DIR={old}\nbashou() {{ [[ $1 == off ]] && OLD_OFF=yes; }}\n")
-            rc = f"source {ROOT}/bashou/handover.bash\nsource {old}/bashou.bash\n"   # profile.d, then ~/.bashrc
-            sh = Shell(tmp, bashrc=rc, env={"BASHOU_PACKAGE_DIR": str(ROOT)})
+            ext = self.SHELL
+            (old / f"bashou.{ext}").write_text(f"BASHOU_DIR={old}\nbashou() {{ [[ $1 == off ]] && OLD_OFF=yes; }}\n")
+            rc = f"source {ROOT}/bashou/handover.{ext}\nsource {old}/bashou.{ext}\n"   # profile.d, then ~/.bashrc
+            sh = Shell(tmp, bashrc=rc, env={"BASHOU_PACKAGE_DIR": str(ROOT)}, shell=self.SHELL)
             try:
                 self.assertTrue(sh.expect(b"$ "))
                 self.assertEqual(sh.value("BASHOU_DIR"), str(ROOT))
                 self.assertEqual(sh.value("OLD_OFF"), "yes")                # the old pet was stopped
-                self.assertNotIn("_bashou_handover", sh.value("PROMPT_COMMAND"))
+                self.assertNotIn("_bashou_handover", sh.hooks())
                 self.assertTrue(sh.value("BASHOU_PID"))                     # the package's pet runs
             finally:
                 sh.close()
@@ -199,12 +224,13 @@ class PackageHandoverTest(unittest.TestCase):
     def test_the_package_leaves_its_own_loader_and_kept_clones_alone(self):
         for env in ({"BASHOU_PACKAGE_DIR": str(ROOT)}, {"BASHOU_PACKAGE_DIR": "/elsewhere", "BASHOU_KEEP_CLONE": "1"}):
             with tempfile.TemporaryDirectory() as tmp:
-                rc = f"source {ROOT}/bashou/handover.bash\nsource {ROOT}/bashou.bash\nLOADS=1\n"
-                sh = Shell(tmp, bashrc=rc, env=env)
+                ext = self.SHELL
+                rc = f"source {ROOT}/bashou/handover.{ext}\nsource {ROOT}/bashou.{ext}\nLOADS=1\n"
+                sh = Shell(tmp, bashrc=rc, env=env, shell=self.SHELL)
                 try:
                     self.assertTrue(sh.expect(b"$ "))
                     self.assertEqual(sh.value("BASHOU_DIR"), str(ROOT), env)
-                    self.assertNotIn("_bashou_handover", sh.value("PROMPT_COMMAND"))
+                    self.assertNotIn("_bashou_handover", sh.hooks())
                 finally:
                     sh.close()
 
@@ -214,10 +240,11 @@ class PackageOnByDefaultTest(unittest.TestCase):
     """Owner, 2026-10-05: Bashou wasn't on after installing the package; each user had to find `bashou on`.
     The package's profile.d script now starts the pet in every user's bash (not root's), and `bashou off`
     keeps it off in new terminals until `bashou on`."""
+    SHELL = "bash"
 
     def shell(self, tmp, state=None):
-        rc = f"source {ROOT}/bashou/handover.bash\n"                    # profile.d, and a ~/.bashrc without Bashou
-        return Shell(tmp, bashrc=rc, state=state, env={"BASHOU_PACKAGE_DIR": str(ROOT)})
+        rc = f"source {ROOT}/bashou/handover.{self.SHELL}\n"           # profile.d, and a ~/.bashrc without Bashou
+        return Shell(tmp, bashrc=rc, state=state, env={"BASHOU_PACKAGE_DIR": str(ROOT)}, shell=self.SHELL)
 
     @unittest.skipIf(os.geteuid() == 0, "root gets no pet by default")
     def test_the_pet_starts_without_bashou_on_and_off_holds_for_new_terminals(self):
@@ -310,10 +337,11 @@ class RoomTest(unittest.TestCase):
     """Owner, 2026-09-26: scrolling up, lines of `--help` had holes where the pet and its bubble were
     drawn. The top rows are now emptied before the pet is drawn (their lines go up into the
     scrollback), and the empty rows are deleted when the next command starts."""
+    SHELL = "bash"
 
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
-        self.sh = Shell(self.tmp.name)
+        self.sh = Shell(self.tmp.name, shell=self.SHELL)
         self.assertTrue(self.sh.expect(b"$ "))
 
     def tearDown(self):
@@ -368,20 +396,21 @@ class RoomTest(unittest.TestCase):
 
     def test_keys_waiting_mean_no_question_and_no_pet(self):
         """Asking the terminal would eat keys typed ahead: then the pet skips this prompt."""
-        script = (f"source <(sed -n '/^_bashou_dsr=/,/^_bashou_make_room()/p' {ROOT}/bashou/room.bash | head -n -1)\n"
+        script = (f"source <(sed -n '/^_bashou_dsr=/,/^_bashou_make_room()/p' {ROOT}/bashou/room.{self.SHELL} | head -n -1)\n"
                   "_bashou_where && echo asked || echo skipped\n")
         import subprocess
-        out = subprocess.run(["bash", "-c", script], input="typed ahead\n", capture_output=True, text=True)
+        out = subprocess.run([self.SHELL, "-c", script], input="typed ahead\n", capture_output=True, text=True)
         self.assertEqual(out.stdout.strip(), "skipped")
 
     def test_a_late_answer_is_still_read(self):
         """Owner: ^[[30;120R showed up on the screen. A busy terminal (WSL) answered after the 2 s wait:
         the answer came when nobody read it any more. A terminal that answered once is waited for."""
-        script = (f"source <(sed -n '/^_bashou_dsr=/,/^_bashou_make_room()/p' {ROOT}/bashou/room.bash | head -n -1)\n"
+        script = (f"source <(sed -n '/^_bashou_dsr=/,/^_bashou_make_room()/p' {ROOT}/bashou/room.{self.SHELL} | head -n -1)\n"
                   "_bashou_where; _bashou_where && echo \"@@$_bashou_at@@\" || echo @@skipped@@\n")
+        need(self.SHELL)
         pid, fd = pty.fork()
         if pid == 0:
-            os.execvp("bash", ["bash", "-c", script])
+            os.execvp(self.SHELL, [self.SHELL, "-c", script])
         out, asked, end = b"", 0, time.time() + 20
         try:
             while out.count(b"@@") < 2 and time.time() < end:
@@ -405,6 +434,7 @@ class RoomTest(unittest.TestCase):
 class ArenaRoomTest(unittest.TestCase):
     """Owner, 2026-09-26: the arena's fight panel still hid lines (drawn over the text, then blanked):
     the arena's prompt now makes the same room as your shell's."""
+    SHELL = "bash"
 
     def setUp(self):
         from unittest import mock
@@ -412,12 +442,12 @@ class ArenaRoomTest(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.base = Path(self.tmp.name) / "arena-base"
         (self.base / "arena").mkdir(parents=True)
-        (self.base / "arena.rc").write_text(fight.RC)
         (self.base / "meta.json").write_text(json.dumps({"challenge": "grep_hydra"}))
         (self.base / "height").write_text("9\n")
-        with mock.patch.dict(os.environ, {"BASHOU_ARENA": str(self.base), "BASHOU_SRC": str(ROOT),
-                                          "BASHOU_DUEL": "1"}):
-            self.sh = Shell(self.tmp.name, ["bash", "--rcfile", str(self.base / "arena.rc"), "-i"])
+        env = {"BASHOU_ARENA": str(self.base), "BASHOU_SRC": str(ROOT), "BASHOU_DUEL": "1"}
+        argv, extra = fight.arena_shell(self.base, self.SHELL)   # writes the arena's rc file for that shell
+        with mock.patch.dict(os.environ, {**env, **extra}):
+            self.sh = Shell(self.tmp.name, argv, shell=self.SHELL)
         self.assertTrue(self.sh.expect(b"arena"))
 
     def tearDown(self):
@@ -441,11 +471,13 @@ class ArenaRoomTest(unittest.TestCase):
 class HoneyBadgerShellTest(unittest.TestCase):
     """The Honey badger picked a fight (fight.<shell pid> in the cache): the arena opens right after
     the next command, without typing `bashou fight`."""
+    SHELL = "bash"
 
     def test_the_arena_opens_after_the_next_command(self):
         with tempfile.TemporaryDirectory() as tmp:
             threat = {"challenge": "grep_hydra", "until": time.time() + 3600, "badger": True}
-            sh = Shell(tmp, state={"pets": ["honey_badger"], "active": "honey_badger", "threat": threat})
+            sh = Shell(tmp, state={"pets": ["honey_badger"], "active": "honey_badger", "threat": threat},
+                       shell=self.SHELL)
             try:
                 sh.read(1)
                 sh.send("true\n", 1)
@@ -467,10 +499,11 @@ class HoneyBadgerShellTest(unittest.TestCase):
 
 class NoCursorReportTest(unittest.TestCase):
     """A terminal that never says where the cursor is: Bashou draws the pet as it always did."""
+    SHELL = "bash"
 
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
-        self.sh = Shell(self.tmp.name, cursor=False)
+        self.sh = Shell(self.tmp.name, cursor=False, shell=self.SHELL)
         self.sh.read(1)
         self.sh.expect(b"38;2;216;200;160", timeout=15)   # after the 2 s wait for an answer
 
@@ -502,9 +535,11 @@ class NoCursorReportTest(unittest.TestCase):
 
 
 class ShellTest(unittest.TestCase):
+    SHELL = "bash"
+
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
-        self.sh = Shell(self.tmp.name)
+        self.sh = Shell(self.tmp.name, shell=self.SHELL)
         self.sh.read(1)
         self.sh.expect(b"38;2;216;200;160")              # the pet is drawn: rc read, pet started
 
@@ -577,7 +612,7 @@ class ShellTest(unittest.TestCase):
         (its exit trap, its prompt hook) must not change it."""
         for last, code in (("true", 0), ("ls /nope", 2)):
             with tempfile.TemporaryDirectory() as tmp:
-                sh = Shell(tmp)
+                sh = Shell(tmp, shell=self.SHELL)
                 sh.read(1)
                 sh.expect(b"38;2;216;200;160")
                 sh.send(last + "\n", 0.5)
@@ -612,6 +647,7 @@ class ShellTest(unittest.TestCase):
 class OnePetTest(unittest.TestCase):
     """Owner: with several terminals open, each ran its own pet (drawn everywhere, one Python process
     each). Now the first terminal has the pet; the others count their commands for it."""
+    SHELL = "bash"
 
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -625,7 +661,7 @@ class OnePetTest(unittest.TestCase):
 
     def open(self):
         # Only the first terminal writes the save: another one would reset what the pet already counted.
-        sh = Shell(self.tmp.name, state=False if self.shells else None)
+        sh = Shell(self.tmp.name, state=False if self.shells else None, shell=self.SHELL)
         self.shells.append(sh)
         sh.read(1)
         return sh
@@ -707,10 +743,12 @@ class OnePetTest(unittest.TestCase):
 
 
 class FirstLaunchTest(unittest.TestCase):
+    SHELL = "bash"
+
     def test_first_launch_asks_for_a_starter(self):
         """No save yet: language, skills, editor, then starter, then the pet appears."""
         with tempfile.TemporaryDirectory() as tmp:
-            sh = Shell(tmp, state=False)
+            sh = Shell(tmp, state=False, shell=self.SHELL)
             try:
                 self.assertTrue(sh.expect(b"Language"))
                 sh.send("\r", 0)                         # English
@@ -739,7 +777,7 @@ class FirstLaunchTest(unittest.TestCase):
     def test_old_save_is_asked_the_language_once(self):
         """Saves from before languages keep their starter and only get the language screen."""
         with tempfile.TemporaryDirectory() as tmp:
-            sh = Shell(tmp, state={"language": None})
+            sh = Shell(tmp, state={"language": None}, shell=self.SHELL)
             try:
                 self.assertTrue(sh.expect(b"Language"))
                 sh.send("\x1b[B", 0.3)                   # ↓ Français
@@ -781,6 +819,8 @@ class QuitTest(unittest.TestCase):
 
 
 class AdventureShellTest(unittest.TestCase):
+    SHELL = "bash"
+
     def test_walk_then_save_and_quit(self):
         with tempfile.TemporaryDirectory() as tmp:
             sh = Shell(tmp, ["python3", "-m", "bashou", "adventure"], state={"starter": "pebble"})
@@ -803,11 +843,13 @@ class AdventureShellTest(unittest.TestCase):
         adv = {"chapter": 1, "leg": 0, "topic": "bash", "segment": 1, "distance": 80.0, "leg_start": 0.0,
                "phase": "chest", "walked": 80.0}
         with tempfile.TemporaryDirectory() as tmp:
-            sh = Shell(tmp, ["python3", "-m", "bashou", "adventure"], state={"starter": "pebble", "adventure": adv})
+            sh = Shell(tmp, ["python3", "-m", "bashou", "adventure"], state={"starter": "pebble", "adventure": adv},
+                       env={"BASHOU_SHELL": self.SHELL}, shell=self.SHELL)
             try:
                 self.assertTrue(sh.expect(b"shell trick"))
                 sh.send("\r", 0)
                 self.assertTrue(sh.expect(ARENA_PROMPT))              # a real shell in the sandbox
+                self.assertEqual(sh.value("BASHOU_ARENA_SHELL"), self.SHELL)   # the player's shell
                 sh.send("flee\n", 0)
                 self.assertTrue(sh.expect(b"stays shut"))           # back in the game
                 sh.send("\r", 0.3)
@@ -820,12 +862,17 @@ class AdventureShellTest(unittest.TestCase):
 
 
 class SecurityShellTest(unittest.TestCase):
+    SHELL = "bash"
+
     def test_solve_a_security_challenge(self):
         with tempfile.TemporaryDirectory() as tmp:
-            sh = Shell(tmp, ["python3", "-m", "bashou", "security", "2"])
+            sh = Shell(tmp, ["python3", "-m", "bashou", "security", "2"], env={"BASHOU_SHELL": self.SHELL},
+                       shell=self.SHELL)
             try:
                 self.assertTrue(sh.expect(ARENA_PROMPT))           # the sandbox prompt
                 self.assertIn(b"Encoded note", sh.out)
+                self.assertNotIn(b"real bash", sh.out)             # zsh players get a zsh sandbox
+                self.assertEqual(sh.value("BASHOU_ARENA_SHELL"), self.SHELL)
                 sh.send('answer "$(base64 -d note.txt | cut -d\' \' -f2)"\n', 0)
                 self.assertTrue(sh.expect(b"Solved"))
                 self.assertTrue(sh.wait_state(lambda s: s["security"] == ["encoded_note"]))
@@ -834,6 +881,8 @@ class SecurityShellTest(unittest.TestCase):
 
 
 class ArenaShellTest(unittest.TestCase):
+    SHELL = "bash"
+
     def test_no_fight_without_a_threat(self):
         """`bashou fight` only works once the pet announced a threat."""
         with tempfile.TemporaryDirectory() as tmp:
@@ -847,7 +896,8 @@ class ArenaShellTest(unittest.TestCase):
         """Ctrl-D after a successful command used to exit with 0 and count as a win."""
         threat = {"threat": {"challenge": "grep_hydra", "until": time.time() + 600}}
         with tempfile.TemporaryDirectory() as tmp:
-            sh = Shell(tmp, ["python3", "-m", "bashou", "fight"], state=threat)
+            sh = Shell(tmp, ["python3", "-m", "bashou", "fight"], state=threat, env={"BASHOU_SHELL": self.SHELL},
+                       shell=self.SHELL)
             try:
                 self.assertTrue(sh.expect(ARENA_PROMPT))
                 start = len(sh.out)
@@ -858,6 +908,147 @@ class ArenaShellTest(unittest.TestCase):
                 self.assertEqual(sh.state()["fights_won"], 0)
             finally:
                 sh.close()
+
+    def test_the_arena_is_the_players_shell_and_its_commands_count(self):
+        """0.9.0: a zsh player fights in zsh. The arena's commands are logged like the shell's and count."""
+        threat = {"threat": {"challenge": "grep_hydra", "until": time.time() + 600}}
+        with tempfile.TemporaryDirectory() as tmp:
+            sh = Shell(tmp, ["python3", "-m", "bashou", "fight"], state={**threat, "commands": 0},
+                       env={"BASHOU_SHELL": self.SHELL}, shell=self.SHELL)
+            try:
+                self.assertTrue(sh.expect(ARENA_PROMPT))
+                version = sh.value("ZSH_VERSION" if self.SHELL == "zsh" else "BASH_VERSION")
+                self.assertRegex(version, r"^\d")
+                other = sh.value("BASH_VERSION" if self.SHELL == "zsh" else "ZSH_VERSION")
+                self.assertEqual(other, "")
+                start = len(sh.out)
+                sh.send("task\n", 0)
+                self.assertTrue(sh.expect(b"app.log", start))              # the arena's own commands work
+                sh.send("printf '%s\\n' one \\\n two\n", 0.5)            # a command on two lines
+                sh.send("flee\n", 0)
+                self.assertTrue(sh.expect(b"You fled"))
+                self.assertTrue(sh.wait_state(lambda s: s["commands"] >= 4))
+            finally:
+                sh.close()
+
+
+class LoaderTest(unittest.TestCase):
+    """What both loaders (bashou.bash, bashou.zsh) must do the same way, for the pet and the Python side."""
+    SHELL = "bash"
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.sh = Shell(self.tmp.name, shell=self.SHELL)
+        self.assertTrue(self.sh.expect(b"38;2;216;200;160"))
+
+    def tearDown(self):
+        self.sh.close()
+        self.tmp.cleanup()
+
+    def events(self):
+        from bashou.analyze import parse_log
+        return parse_log((self.sh.data / f"events.{self.sh.pid}").read_text())
+
+    def test_the_loader_says_which_shell_it_runs_in(self):
+        """The arena, `bashou on` and the lessons for zsh players ask BASHOU_SHELL."""
+        self.assertEqual(self.sh.value("BASHOU_SHELL"), self.SHELL)
+
+    def test_each_command_is_logged_whole_with_its_status(self):
+        self.sh.send("ls /nope\n", 0.5)
+        self.sh.send("for i in 1 2; do\n  echo $i\ndone\n", 0.5)
+        self.sh.send("true\n", 0.5)
+        end = time.time() + TIMEOUT
+        while len(self.events()) < 3 and time.time() < end:
+            self.sh.read(0.2)
+        events = self.events()
+        self.assertIn((2, "ls /nope"), events)
+        loop = [(s, c) for s, c in events if c.startswith("for i")]      # bash joins its lines with "; "
+        self.assertEqual(len(loop), 1, events)
+        self.assertEqual(loop[0][0], 0)
+        self.assertRegex(loop[0][1], r"^for i in 1 2; do[\s;]+echo \$i[\s;]+done$")
+        self.assertEqual(events[-1], (0, "true"))
+
+
+class ZshCompletionTest(unittest.TestCase):
+    """`bashou <Tab>` in zsh, where the player's .zshrc turned completion on (compinit)."""
+
+    def test_tab_completes_bashou_commands(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            rc = f"autoload -Uz compinit && compinit -u\nsource {ROOT}/bashou.zsh\n"
+            sh = Shell(tmp, bashrc=rc, shell="zsh")
+            try:
+                self.assertTrue(sh.expect(b"38;2;216;200;160"))
+                self.assertEqual(sh.value("_comps[bashou]"), "_bashou")
+                start = len(sh.out)
+                sh.send("bashou swa\t", 1)
+                self.assertTrue(sh.expect(b"swap ", start))
+            finally:
+                sh.close()
+
+    def test_no_compinit_no_error(self):
+        """Without compinit (a bare .zshrc), Bashou loads without a compdef error."""
+        with tempfile.TemporaryDirectory() as tmp:
+            sh = Shell(tmp, shell="zsh")
+            try:
+                self.assertTrue(sh.expect(b"38;2;216;200;160"))
+                self.assertNotIn(b"command not found", sh.out)
+                self.assertNotIn(b"compdef", sh.out)
+            finally:
+                sh.close()
+
+
+# --- the same tests in zsh (0.9.0) ------------------------------------------------------------------
+
+class ZshPackageHandoverTest(PackageHandoverTest):
+    SHELL = "zsh"
+
+
+class ZshPackageOnByDefaultTest(PackageOnByDefaultTest):
+    SHELL = "zsh"
+
+
+class ZshRoomTest(RoomTest):
+    SHELL = "zsh"
+
+
+class ZshArenaRoomTest(ArenaRoomTest):
+    SHELL = "zsh"
+
+
+class ZshHoneyBadgerShellTest(HoneyBadgerShellTest):
+    SHELL = "zsh"
+
+
+class ZshNoCursorReportTest(NoCursorReportTest):
+    SHELL = "zsh"
+
+
+class ZshShellTest(ShellTest):
+    SHELL = "zsh"
+
+
+class ZshOnePetTest(OnePetTest):
+    SHELL = "zsh"
+
+
+class ZshFirstLaunchTest(FirstLaunchTest):
+    SHELL = "zsh"
+
+
+class ZshAdventureShellTest(AdventureShellTest):
+    SHELL = "zsh"
+
+
+class ZshSecurityShellTest(SecurityShellTest):
+    SHELL = "zsh"
+
+
+class ZshArenaShellTest(ArenaShellTest):
+    SHELL = "zsh"
+
+
+class ZshLoaderTest(LoaderTest):
+    SHELL = "zsh"
 
 
 if __name__ == "__main__":

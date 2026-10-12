@@ -1,6 +1,7 @@
 import contextlib
 import datetime
 import io
+import json
 import os
 import random
 import re
@@ -234,6 +235,36 @@ class SanitizerHangTest(unittest.TestCase):
         self.assertEqual((bool(flags), launcher), (True, []))
 
 
+# The easy wrong moves of the everyday fights: each must lose.
+WRONG_MOVES = [("flag_phantom", "sort sizes.txt | tail -1"), ("flag_phantom", "sort -n sizes.txt | tail -1"),
+         ("flag_phantom", "sort -f sizes.txt | tail -1"), ("glob_goblin", "rm *.csv"),
+         ("clutter_critter", "mkdir photos docs && mv *.jpg photos/"), ("typo_troll", "true"),
+         ("stderr_stalker", "./check.sh > errors.txt 2>&1"), ("pattern_pixie", "grep -cE '[A-Z]{2}-[0-9]{4}' codes.txt"),
+         ("space_sprite", "n=$(ls | grep ' '); cp $n backup/"),
+         ("shebang_shade", "chmod +x report.sh"), ("rename_rat", "for f in *.JPG; do cp \"$f\" \"${f%.JPG}.jpg\"; done"),
+         ("padlock_pest", "chmod 700 diary.txt; chmod +x backup.sh"), ("tar_tortoise", "tar -xzf backup.tar.gz"),
+         ("bloat_blob", "for d in */; do echo $(ls $d | wc -l) ${d%/}; done | sort -n | tail -1 | cut -d' ' -f2"),
+         ("commit_crowd", "git add . && git commit -qm all"), ("unit_imp", "true"),
+         ("branch_bramble", "git add idea.txt && git commit -qm idea"),
+         ("conflict_chimera", "git add menu.txt && git commit -q --no-edit")]
+
+# 0.9.0, zsh players fight in zsh. A fight whose reference solution needs another command there gets it
+# here, and a wrong move that zsh gets right (it doesn't split $var into words…) is listed below: both
+# kinds of fight carry a zsh note (Challenge.zsh), the last hint of zsh players.
+ZSH_SOLUTIONS = {}
+ZSH_RIGHT_MOVES = set()
+
+
+def run_solution(ch, meta, work, shell="bash"):
+    """Run the reference solution of `ch` in `work` with `shell`; (output, status)."""
+    cmd, pattern = ZSH_SOLUTIONS.get(ch.id, SOLUTIONS[ch.id]) if shell == "zsh" else SOLUTIONS[ch.id]
+    cmd = cmd.format(x=re.search(pattern, ch.task_text(meta)).group(1)) if pattern else cmd.format()
+    done = subprocess.run([shell, "-c", cmd], cwd=work, capture_output=True, text=True,
+                          env={**os.environ, **meta.get("env", {})})
+    (work.parent / "log").write_text(f"{done.returncode}\t    1  {cmd}\n")   # as the arena logs it
+    return done.stdout.strip(), done.returncode
+
+
 class ChallengeTest(unittest.TestCase):
     def test_every_challenge_has_a_solution(self):
         self.assertEqual(set(SOLUTIONS), set(challenges.BY_ID))
@@ -266,6 +297,53 @@ class ChallengeTest(unittest.TestCase):
                             ch.cleanup(meta)
                         secrets.stop_agent(gnupg)
 
+    def test_reference_solutions_in_zsh(self):
+        from tests.test_shell import need
+        need("zsh")
+        for ch in challenges.ALL + challenges.SECURITY + challenges.TRIALS:
+            if not ch.available():
+                continue
+            for seed in range(2):
+                with self.subTest(ch.id, seed=seed), tempfile.TemporaryDirectory() as tmp, \
+                        tempfile.TemporaryDirectory() as gnupg:
+                    work = Path(tmp) / "arena"
+                    work.mkdir()
+                    meta = ch.setup(work, random.Random(seed))
+                    meta.setdefault("env", {})["GNUPGHOME"] = meta.get("env", {}).get("GNUPGHOME", gnupg)
+                    try:
+                        out, _status = run_solution(ch, meta, work, "zsh")
+                        self.assertTrue(ch.check(work, meta, out or "done"), f"{ch.id} in zsh: {out!r}")
+                    finally:
+                        if ch.cleanup:
+                            ch.cleanup(meta)
+                        secrets.stop_agent(gnupg)
+
+    def test_zsh_differences_come_with_a_zsh_note(self):
+        for cid in set(ZSH_SOLUTIONS) | ZSH_RIGHT_MOVES:
+            self.assertTrue(challenges.BY_ID[cid].zsh, f"{cid} needs a zsh note")
+        self.assertLessEqual(set(ZSH_SOLUTIONS), set(SOLUTIONS))
+
+    def test_the_zsh_note_is_the_last_hint_of_zsh_players(self):
+        import dataclasses
+        ch = dataclasses.replace(challenges.BY_ID["glob_goblin"], zsh="In zsh, a pattern that matches nothing is an error.")
+        meta = ch.setup(Path(tempfile.mkdtemp()), random.Random(0))
+        self.assertEqual(ch.hint_list({**meta, "shell": "zsh"})[-1], ch.zsh)
+        self.assertNotIn(ch.zsh, ch.hint_list({**meta, "shell": "bash"}))
+        self.assertNotIn(ch.zsh, ch.hint_list(meta))
+
+    def test_the_arena_remembers_the_players_shell(self):
+        seen = {}
+        def popen(argv, env=None, **kw):
+            seen["argv"], seen["meta"] = argv, json.loads((Path(env["BASHOU_ARENA"]) / "meta.json").read_text())
+            return mock.Mock(pid=0, wait=mock.Mock(return_value=fight.FLEE))
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(state, "DATA", Path(tmp)), \
+                mock.patch.object(state, "STATE", Path(tmp) / "state.json"), \
+                mock.patch.dict(os.environ, {"BASHOU_SHELL": "zsh"}), \
+                mock.patch.object(fight.subprocess, "Popen", side_effect=popen):
+            fight.arena(challenges.BY_ID["grep_hydra"], lambda task: "")
+        self.assertEqual(seen["argv"][0], "zsh")
+        self.assertEqual(seen["meta"]["shell"], "zsh")
+
     def test_code_fights_start_broken(self):
         """The file as handed out must fail its own tests (else there is nothing to fix)."""
         for ch in challenges.code.ALL + challenges.debug.ALL + challenges.rust.ALL:
@@ -276,23 +354,26 @@ class ChallengeTest(unittest.TestCase):
 
     def test_everyday_fights_refuse_the_easy_wrong_move(self):
         """A plain sort or sort -n misreads sizes, a too wide pattern removes files that stay, a loose file fails."""
-        cases = [("flag_phantom", "sort sizes.txt | tail -1"), ("flag_phantom", "sort -n sizes.txt | tail -1"),
-                 ("flag_phantom", "sort -f sizes.txt | tail -1"), ("glob_goblin", "rm *.csv"),
-                 ("clutter_critter", "mkdir photos docs && mv *.jpg photos/"), ("typo_troll", "true"),
-                 ("stderr_stalker", "./check.sh > errors.txt 2>&1"), ("pattern_pixie", "grep -cE '[A-Z]{2}-[0-9]{4}' codes.txt"),
-                 ("space_sprite", "n=$(ls | grep ' '); cp $n backup/"),
-                 ("shebang_shade", "chmod +x report.sh"), ("rename_rat", "for f in *.JPG; do cp \"$f\" \"${f%.JPG}.jpg\"; done"),
-                 ("padlock_pest", "chmod 700 diary.txt; chmod +x backup.sh"), ("tar_tortoise", "tar -xzf backup.tar.gz"),
-                 ("bloat_blob", "for d in */; do echo $(ls $d | wc -l) ${d%/}; done | sort -n | tail -1 | cut -d' ' -f2"),
-                 ("commit_crowd", "git add . && git commit -qm all"), ("unit_imp", "true"),
-                 ("branch_bramble", "git add idea.txt && git commit -qm idea"),
-                 ("conflict_chimera", "git add menu.txt && git commit -q --no-edit")]
+        cases = WRONG_MOVES
         for cid, cmd in cases:
             ch = challenges.BY_ID[cid]
             for seed in range(3):
                 with self.subTest(cid, seed=seed), tempfile.TemporaryDirectory() as tmp:
                     meta = ch.setup(Path(tmp), random.Random(seed))
                     out = subprocess.run(["bash", "-c", cmd], cwd=tmp, capture_output=True, text=True).stdout.strip()
+                    self.assertFalse(ch.check(Path(tmp), meta, out or "done"))
+
+    def test_everyday_wrong_moves_lose_in_zsh_too(self):
+        from tests.test_shell import need
+        need("zsh")
+        for cid, cmd in WRONG_MOVES:
+            if cid in ZSH_RIGHT_MOVES:
+                continue
+            ch = challenges.BY_ID[cid]
+            for seed in range(2):
+                with self.subTest(cid, seed=seed), tempfile.TemporaryDirectory() as tmp:
+                    meta = ch.setup(Path(tmp), random.Random(seed))
+                    out = subprocess.run(["zsh", "-c", cmd], cwd=tmp, capture_output=True, text=True).stdout.strip()
                     self.assertFalse(ch.check(Path(tmp), meta, out or "done"))
 
     def test_the_pipe_eel_needs_a_real_pipeline(self):

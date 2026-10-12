@@ -391,6 +391,21 @@ class ReaderTest(unittest.TestCase):
             self.assertTrue(any(p.get("editor") == editor for p in ed["pages"]))
             self.assertFalse(any(p.get("editor") == other for p in ed["pages"]))
 
+    def test_zsh_pages_are_for_zsh_players(self):
+        """0.9.0: a page may say "shell": "zsh" (what zsh does differently): only zsh players see it."""
+        import os
+        from unittest import mock
+        for lid in ("variables", "wildcards", "loops"):
+            for lang in ("en", "fr"):
+                pages = {le["id"]: le for le in lesson.load(lang)}[lid]["pages"]
+                self.assertTrue(any(p.get("shell") == "zsh" for p in pages), (lid, lang))
+        for shell, shown in (("zsh", True), ("bash", False)):
+            with mock.patch.dict(os.environ, {"BASHOU_SHELL": shell}):
+                le = next(le for le in reader.Library(LESSONS).all if le["id"] == "wildcards")
+            self.assertEqual(any(p.get("shell") == "zsh" for p in le["pages"]), shown, shell)
+        self.assertEqual(reader.for_shell([BY_ID["loops"]], "bash")[0]["pages"],
+                         [p for p in BY_ID["loops"]["pages"] if p.get("shell", "bash") == "bash"])
+
     def test_leaving_keeps_the_page(self):
         lib = reader.Library(LESSONS, "command_line")
         lib.key("right")
@@ -424,6 +439,38 @@ class ReaderTest(unittest.TestCase):
         text = "".join(t for r, c, t in lib.list_screen(80, 24))
         self.assertIn("Reading a command line", text)
         self.assertIn("🔒", text)
+
+
+
+class BashZshLessonTest(unittest.TestCase):
+    """0.9.0 (owner): a lesson on where zsh and bash differ, with its fights, an owl lesson and its chest,
+    and questions (fight-comes-with-lesson)."""
+
+    def test_the_library_lesson(self):
+        le = BY_ID["bash_zsh"]
+        self.assertTrue({"variables", "wildcards"} <= set(le["after"]))
+        self.assertIn("bash_zsh", {x["id"] for x in lesson.load("fr")})
+        self.assertTrue(le["fights"])
+        for fid in le["fights"]:
+            ch = challenges.BY_ID[fid]
+            self.assertEqual(ch.skill, "bash")
+            self.assertGreaterEqual(len(ch.hints), 2)
+        self.assertTrue(le["recall"])
+        text = " ".join(" ".join(p.get("text", [])) for p in le["pages"])
+        for word in ("zsh", "split", "#!/bin/bash", "[1]"):
+            self.assertIn(word, text)
+
+    def test_the_owl_lesson_and_its_chest(self):
+        from bashou.adventure import lessons as owl
+        le = owl.BY_ID["bash_zsh"]
+        self.assertIn("bash", le["topics"])
+        self.assertTrue([t for t in challenges.TRIALS if le["tool"] in t.tools and t.available()])
+
+    def test_adventure_questions(self):
+        from bashou.adventure import quiz
+        for lang in ("en", "fr"):
+            about = [q for q in quiz.bank("bash", lang) if "zsh" in json.dumps(q, ensure_ascii=False)]
+            self.assertGreaterEqual(len(about), 3, lang)
 
 
 if __name__ == "__main__":

@@ -113,6 +113,50 @@ class ClockTest(unittest.TestCase):
                              capture_output=True, text=True, env=env, timeout=20)
         self.assertRegex(out.stderr, r"⏱ 2:0[0-5]")
 
+    def test_the_zsh_arena_shows_the_time_left_too(self):
+        from tests.test_shell import Shell
+        base = Path(tempfile.mkdtemp())
+        self.addCleanup(__import__("shutil").rmtree, base)
+        (base / "arena").mkdir()
+        argv, extra = fight.arena_shell(base, "zsh")
+        env = {"BASHOU_ARENA": str(base), "BASHOU_SRC": str(Path(fight.__file__).parent.parent),
+               "BASHOU_DEADLINE": str(int(time.time()) + 125), **extra}
+        with mock.patch.dict(os.environ, env):
+            os.environ.pop("BASHOU_DUEL", None)
+            sh = Shell(base, argv, shell="zsh")
+        try:
+            self.assertTrue(sh.expect("⏱ 2:0".encode()))
+        finally:
+            sh.close()
+
+
+class ArenaShellChoiceTest(unittest.TestCase):
+    """0.9.0: the arena runs in the player's shell (BASHOU_SHELL, set by the loader), bash otherwise."""
+
+    def test_the_players_shell(self):
+        for env, shell in (({"BASHOU_SHELL": "zsh"}, "zsh"), ({"BASHOU_SHELL": "bash"}, "bash"),
+                           ({"BASHOU_SHELL": "fish"}, "bash"), ({}, "bash")):
+            with mock.patch.dict(os.environ, env, clear=False):
+                if not env:
+                    os.environ.pop("BASHOU_SHELL", None)
+                self.assertEqual(fight.player_shell(), shell, env)
+
+    def test_each_shell_gets_its_rc_file(self):
+        base = Path(tempfile.mkdtemp())
+        self.addCleanup(__import__("shutil").rmtree, base)
+        argv, extra = fight.arena_shell(base, "bash")
+        self.assertEqual(argv, ["bash", "--rcfile", str(base / "arena.rc"), "-i"])
+        self.assertEqual(extra, {})
+        self.assertEqual((base / "arena.rc").read_text(), fight.RC)
+        argv, extra = fight.arena_shell(base, "zsh")
+        self.assertEqual(argv, ["zsh", "-i"])
+        self.assertEqual(extra, {"ZDOTDIR": str(base)})
+        self.assertEqual((base / ".zshrc").read_text(), fight.ZSH_RC)
+        for word in ("answer()", "verify()", "hint()", "check()", "lesson()", "task()", "flee()",
+                     "BASHOU_ARENA_SHELL=zsh", "precmd", "preexec"):
+            self.assertIn(word, fight.ZSH_RC)
+        self.assertIn("BASHOU_ARENA_SHELL=bash", fight.RC)
+
 
 if __name__ == "__main__":
     unittest.main()

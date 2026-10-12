@@ -48,6 +48,18 @@ class RepoSetupTest(unittest.TestCase):
         self.assertIn("alias ll", self.bashrc.read_text())
         self.assertIn("source ~/.bashou/bashou.bash", (self.bashrc.parent / ".bashrc.bashou-backup").read_text())
 
+    def test_a_zshrc_that_loads_the_copy_moves_too(self):
+        """0.9.0: zsh players load bashou.zsh from ~/.zshrc: it moves to the package's zsh loader as well."""
+        zshrc = self.bashrc.parent / ".zshrc"
+        zshrc.write_text("setopt autocd\nsource ~/.bashou/bashou.zsh\n")
+        code, ran, out = self.offer({"debian"})
+        self.assertEqual(code, 0)
+        self.assertIn("source /usr/share/bashou/bashou.zsh", zshrc.read_text())
+        self.assertNotIn(".bashou/bashou.zsh", zshrc.read_text())
+        self.assertIn("setopt autocd", zshrc.read_text())
+        self.assertIn("source ~/.bashou/bashou.zsh", (zshrc.parent / ".zshrc.bashou-backup").read_text())
+        self.assertIn("source /usr/share/bashou/bashou.bash", self.bashrc.read_text())
+
     def test_red_hat_uses_dnf(self):
         code, ran, out = self.offer({"rocky", "rhel", "centos", "fedora"})
         self.assertEqual(ran[-1], ["sudo", "dnf", "install", "bashou"])

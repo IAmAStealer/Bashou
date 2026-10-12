@@ -7,10 +7,11 @@ from bashou import challenges
 from bashou.creatures import FAMILIES, NAMES
 
 LOADER = Path(__file__).resolve().parent.parent / "bashou.bash"
+ZSH_LOADER = LOADER.with_suffix(".zsh")
 
 
-def words(name):
-    return re.search(rf'^{name}="([^"]*)"', LOADER.read_text(), re.M).group(1).split()
+def words(name, loader=LOADER):
+    return re.search(rf'^{name}="([^"]*)"', loader.read_text(), re.M).group(1).split()
 
 
 def complete(line):
@@ -23,6 +24,19 @@ _bashou_complete
 echo "${{COMPREPLY[*]}}"
 """
     return subprocess.run(["bash", "-c", script], capture_output=True, text=True).stdout.split()
+
+
+def complete_zsh(line):
+    """The same in zsh: _bashou_words gets the words up to the cursor (the last may be empty) and sets
+    reply to the candidates that start with the last one. compadd (the real Tab) only shows them."""
+    from tests.test_shell import need
+    need("zsh")
+    script = f"""
+source <(sed -n '/^_bashou_commands=/,/^_bashou_words_end/p' {ZSH_LOADER})
+_bashou_words {line}{' ""' if line.endswith(' ') else ''}
+print -r -- "${{reply[*]}}"
+"""
+    return subprocess.run(["zsh", "-c", script], capture_output=True, text=True).stdout.split()
 
 
 class CompletionTest(unittest.TestCase):
@@ -51,6 +65,17 @@ class CompletionTest(unittest.TestCase):
         self.assertEqual(complete("bashou arena s"), ["security"])
         self.assertEqual(complete("bashou arena security "), words("_bashou_security"))
         self.assertEqual(complete("bashou config language f"), ["fr"])
+
+    def test_zsh_has_the_same_lists(self):
+        for name in ("_bashou_commands", "_bashou_pets", "_bashou_languages", "_bashou_dev", "_bashou_challenges",
+                     "_bashou_security", "_bashou_projects", "_bashou_lessons"):
+            self.assertEqual(words(name, ZSH_LOADER), words(name), name)
+
+    def test_zsh_completes_like_bash(self):
+        for line in ("bashou s", "bashou swap st", "bashou swap f", "bashou dev st", "bashou dev threat aw",
+                     "bashou dev stage fox ", "bashou level ", "bashou config la", "bashou arena s",
+                     "bashou arena security ", "bashou config language f", "bashou lesson pa", "bashou project start "):
+            self.assertEqual(complete_zsh(line), complete(line), line)
 
 
 if __name__ == "__main__":

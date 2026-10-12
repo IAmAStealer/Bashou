@@ -57,5 +57,49 @@ class InstalledTest(unittest.TestCase):
         self.handover(["bash", "-i"])
 
 
+def zsh_reads_profile_d():
+    """Does this system's zsh read /etc/profile (and so profile.d) in a login shell?"""
+    for name in ("/etc/zsh/zprofile", "/etc/zprofile"):
+        try:
+            if "/etc/profile" in Path(name).read_text():
+                return True
+        except OSError:
+            pass
+    return False
+
+
+@unittest.skipUnless(os.environ.get("BASHOU_INSTALLED") == "1", "CI only, once the package is installed")
+class InstalledZshTest(unittest.TestCase):
+    """0.9.0: a zsh player with the package installed."""
+
+    def zsh(self, argv, zshrc, before=None):
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp) / "home"
+            home.mkdir()
+            (home / ".zshrc").write_text(f"PS1='$ '\n{zshrc}")
+            env = {"HOME": str(home), "ZDOTDIR": str(home), "PYTHONPATH": "", "BASHOU_PACKAGE_LOADER": "",
+                   "BASHOU_KEEP_CLONE": "", "BASHOU_SHELL": ""}
+            if before:
+                subprocess.run(["zsh", "-c", before], env={**os.environ, **env}, capture_output=True, text=True)
+            sh = Shell(tmp, argv, env=env, shell="zsh")
+            try:
+                self.assertTrue(sh.expect(b"$ "), sh.out[-500:])
+                return sh.value("BASHOU_DIR"), sh.value("BASHOU_SHELL"), sh.value("BASHOU_PID")
+            finally:
+                sh.close()
+
+    @unittest.skipUnless(zsh_reads_profile_d(), "this system's zsh doesn't read profile.d")
+    def test_a_login_zsh_loads_the_package(self):
+        found, shell, pid = self.zsh(["zsh", "-il"], "")
+        self.assertEqual((found, shell), (str(PACKAGE), "zsh"))
+        self.assertTrue(pid)
+
+    def test_bashou_on_in_zsh_loads_it_in_new_terminals(self):
+        """Where zsh skips profile.d (non-login terminals, Debian), `bashou on` adds the line to ~/.zshrc."""
+        found, shell, pid = self.zsh(["zsh", "-i"], "", before="/usr/bin/bashou on")
+        self.assertEqual((found, shell), (str(PACKAGE), "zsh"))
+        self.assertTrue(pid)
+
+
 if __name__ == "__main__":
     unittest.main()

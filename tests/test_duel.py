@@ -130,16 +130,19 @@ class ScoreTest(TempState):
 
 
 class ArenaShellTest(TempState):
-    """The real arena bash: wrong commands end it with a knockout."""
+    """The real arena bash (and zsh, below): wrong commands end it with a knockout."""
+    SHELL = "bash"
 
     def run_arena(self, commands, duel_on=True):
+        from tests.test_shell import need
+        need(self.SHELL)
         base, _meta = arena("grep_hydra")
-        (base / "arena.rc").write_text(fight.RC)
+        argv, extra = fight.arena_shell(base, self.SHELL)
         env = {**os.environ, "BASHOU_ARENA": str(base), "HOME": str(base),
-               "BASHOU_SRC": str(Path(fight.__file__).resolve().parent.parent)}
+               "BASHOU_SRC": str(Path(fight.__file__).resolve().parent.parent), **extra}
         if duel_on:
             env["BASHOU_DUEL"] = "1"
-        return subprocess.run(["bash", "--rcfile", str(base / "arena.rc"), "-i"], input="\n".join(commands) + "\n",
+        return subprocess.run(argv, input="\n".join(commands) + "\n",
                               env=env, capture_output=True, text=True, timeout=30).returncode
 
     def test_knocked_out(self):
@@ -159,6 +162,11 @@ class ArenaShellTest(TempState):
         self.assertIn("Knocked out", " ".join(str(c) for c in out.call_args_list))
         self.assertEqual(state.load()["fights_won"], 0)
         self.assertIsNotNone(state.load()["threat"])
+
+
+
+class ZshArenaShellTest(ArenaShellTest):
+    SHELL = "zsh"
 
 
 if __name__ == "__main__":

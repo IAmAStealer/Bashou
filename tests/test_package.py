@@ -3,6 +3,7 @@
 import contextlib
 import importlib.util
 import io
+import os
 import re
 import shutil
 import subprocess
@@ -46,6 +47,35 @@ class StageTest(unittest.TestCase):
                 self.assertEqual((out.returncode, out.stderr), (0, ""), shell)
         self.assertIn("/etc/profile.d/bashou.sh", package.SPEC)
 
+    def test_profile_hands_zsh_over_too(self):
+        """0.9.0: zsh reads profile.d through its zprofile (`emulate sh`): the package loads there too."""
+        profile = (self.tree / "etc/profile.d/bashou.sh").read_text()
+        self.assertIn("ZSH_VERSION", profile)
+        self.assertIn(f"/{package.PREFIX}/bashou/handover.zsh", profile)
+        for name in ("bashou.zsh", "bashou/handover.zsh", "bashou/room.zsh"):
+            self.assertTrue((self.share / name).is_file(), name)
+        from tests.test_shell import need
+        need("zsh")
+        out = subprocess.run(["zsh", "-c", f"emulate sh -c '. /dev/stdin'"], input=profile,
+                             capture_output=True, text=True)                 # not interactive: nothing
+        self.assertEqual((out.returncode, out.stderr), (0, ""))
+
+    @unittest.skipIf(os.geteuid() == 0, "root gets no pet by default")
+    def test_an_interactive_zsh_gets_the_pet_from_profile_d(self):
+        from tests.test_shell import Shell
+        profile = (self.tree / "etc/profile.d/bashou.sh").read_text().replace(f"/{package.PREFIX}", str(ROOT))
+        path = Path(self.tmp.name) / "profile.sh"
+        path.write_text(profile)
+        sh = Shell(self.tmp.name, bashrc=f"emulate sh -c '. {path}'\n", shell="zsh",
+                   env={"BASHOU_PACKAGE_DIR": str(ROOT)})
+        try:
+            self.assertTrue(sh.expect(b"$ "))
+            self.assertEqual(sh.value("BASHOU_DIR"), str(ROOT))
+            self.assertEqual(sh.value("BASHOU_SHELL"), "zsh")
+            self.assertTrue(sh.value("BASHOU_PID"))
+        finally:
+            sh.close()
+
     def test_permissions(self):
         self.assertEqual((self.tree / "usr/bin/bashou").stat().st_mode & 0o777, 0o755)
         self.assertEqual((self.share / "bashou/cli.py").stat().st_mode & 0o777, 0o644)
@@ -57,10 +87,11 @@ class StageTest(unittest.TestCase):
 
     def test_every_game_file_is_shipped(self):
         """A user on 0.6.2 reported no `bashou share`: every tracked file of the game must be in the package."""
-        tracked = subprocess.run(["git", "ls-files", "bashou", "art", "bashou.bash", "launch.py"], cwd=ROOT,
-                                 capture_output=True, text=True).stdout.split()
+        tracked = subprocess.run(["git", "ls-files", "bashou", "art", "bashou.bash", "bashou.zsh", "launch.py"],
+                                 cwd=ROOT, capture_output=True, text=True).stdout.split()
         if not tracked:
             self.skipTest("not a git clone")
+        self.assertTrue("bashou.zsh" in tracked, "bashou.zsh isn't tracked by git")
         missing = [f for f in tracked if not (self.share / f).is_file()]
         self.assertEqual(missing, [])
 
@@ -84,6 +115,9 @@ class StageTest(unittest.TestCase):
                               capture_output=True, text=True).stdout
         self.assertIn("Version: 1.2.3", info)
         self.assertIn("python3 (>= 3.9)", info)
+        suggests = subprocess.run(["dpkg-deb", "-f", str(deb), "Suggests"], capture_output=True, text=True).stdout
+        self.assertIn("zsh", suggests)                               # works with it, doesn't need it
+        self.assertNotIn("zsh", info)
         files = subprocess.run(["dpkg-deb", "-c", str(deb)], capture_output=True, text=True).stdout
         self.assertIn("./usr/share/bashou/VERSION", files)
         self.assertIn("root/root", files)
@@ -164,6 +198,59 @@ class SetupTest(unittest.TestCase):
     def test_new_bashrc_and_odd_paths(self):
         self.run_setup("/home/me/my games/bashou.bash")
         self.assertEqual(self.bashrc.read_text(), "source '/home/me/my games/bashou.bash'\n")
+
+    def test_the_rpm_suggests_zsh(self):
+        self.assertIn("Suggests: zsh", package.SPEC)
+
+
+class ZshSetupTest(unittest.TestCase):
+    """0.9.0: `bashou on` in zsh writes ~/.zshrc (and the zsh loader), never ~/.bashrc."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.home = Path(self.tmp.name)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_each_shell_has_its_file_and_loader(self):
+        with mock.patch.object(Path, "home", return_value=self.home):
+            self.assertEqual(setup.target("zsh"), (self.home / ".zshrc", ROOT / "bashou.zsh"))
+            self.assertEqual(setup.target("bash"), (self.home / ".bashrc", ROOT / "bashou.bash"))
+
+    def test_a_zsh_loader_counts_as_loaded(self):
+        self.assertTrue(setup.loaded("source ~/.bashou/bashou.zsh\n"))
+        self.assertFalse(setup.loaded("# source ~/.bashou/bashou.zsh\n"))
+
+    def test_run_for_zsh(self):
+        with mock.patch.object(Path, "home", return_value=self.home), \
+                contextlib.redirect_stdout(io.StringIO()) as out:
+            setup.run(shell="zsh", off=self.home / "off")
+        self.assertEqual((self.home / ".zshrc").read_text(), f"source {ROOT / 'bashou.zsh'}\n")
+        self.assertFalse((self.home / ".bashrc").exists())
+        self.assertIn("source ~/.zshrc", out.getvalue())
+
+    def test_the_current_shell(self):
+        with mock.patch.dict(os.environ, {"BASHOU_SHELL": "zsh"}):
+            self.assertEqual(setup.current_shell(), "zsh")
+        from tests.test_shell import need
+        need("zsh")
+        code = "from bashou import setup; print(setup.current_shell())"
+        env = {k: v for k, v in os.environ.items() if k != "BASHOU_SHELL"}
+        env.update(PYTHONPATH=str(ROOT), SHELL="/bin/bash")          # the login shell isn't the one you type in
+        for shell in ("zsh", "bash"):
+            out = subprocess.run([shell, "-c", f"python3 -c '{code}'; true"], capture_output=True, text=True, env=env)
+            self.assertEqual(out.stdout.strip(), shell)
+
+    def test_bashou_on_typed_in_zsh_without_bashou(self):
+        """No loader yet: `bashou on` is the Python command, run from zsh. It writes ~/.zshrc."""
+        from tests.test_shell import need
+        need("zsh")
+        env = {k: v for k, v in os.environ.items() if k != "BASHOU_SHELL"}
+        env.update(HOME=str(self.home), PYTHONPATH=str(ROOT), BASHOU_DATA=str(self.home / "data"))
+        subprocess.run(["zsh", "-c", "python3 -m bashou on; true"], capture_output=True, text=True, env=env)
+        self.assertIn("bashou.zsh", (self.home / ".zshrc").read_text())
+        self.assertFalse((self.home / ".bashrc").exists())
 
 
 if __name__ == "__main__":
