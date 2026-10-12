@@ -53,7 +53,8 @@ git clone https://github.com/IAmAStealer/Bashou.git ~/.bashou && echo 'source ~/
 
 Il te faut bash et python3. La plupart des Linux les ont déjà.
 Ton terminal tourne avec zsh ? Bashou y marche aussi : les combats se passent alors dans zsh, et les leçons
-disent où zsh lit une ligne autrement. Charge `bashou.zsh` depuis ton `~/.zshrc` :
+disent où zsh lit une ligne autrement. Bashou s'ajoute à `~/.zshrc` la première fois qu'il démarre dans bash,
+et le dit. Seulement zsh sur cette machine ? Charge `bashou.zsh` depuis ton `~/.zshrc` :
 
 ```bash
 echo 'source ~/.bashou/bashou.zsh' >> ~/.zshrc && source ~/.zshrc

@@ -204,7 +204,7 @@ class SetupTest(unittest.TestCase):
 
 
 class ZshSetupTest(unittest.TestCase):
-    """0.9.0: `bashou on` in zsh writes ~/.zshrc (and the zsh loader), never ~/.bashrc."""
+    """0.9.0: `bashou on` in zsh writes ~/.zshrc (and the zsh loader); ~/.bashrc gets its own line too."""
 
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -227,7 +227,7 @@ class ZshSetupTest(unittest.TestCase):
                 contextlib.redirect_stdout(io.StringIO()) as out:
             setup.run(shell="zsh", off=self.home / "off")
         self.assertEqual((self.home / ".zshrc").read_text(), f"source {ROOT / 'bashou.zsh'}\n")
-        self.assertFalse((self.home / ".bashrc").exists())
+        self.assertEqual((self.home / ".bashrc").read_text(), f"source {ROOT / 'bashou.bash'}\n")  # bash too
         self.assertIn("source ~/.zshrc", out.getvalue())
 
     def test_the_current_shell(self):
@@ -242,6 +242,46 @@ class ZshSetupTest(unittest.TestCase):
             out = subprocess.run([shell, "-c", f"python3 -c '{code}'; true"], capture_output=True, text=True, env=env)
             self.assertEqual(out.stdout.strip(), shell)
 
+    def test_install_covers_every_shell_you_have(self):
+        """Owner, 2026-10-12: installed from bash, zsh had no pet and no `bashou` command. Setting up writes
+        the line of each installed shell: ~/.bashrc, and ~/.zshrc when zsh is there."""
+        with mock.patch.object(Path, "home", return_value=self.home), \
+                contextlib.redirect_stdout(io.StringIO()) as out:
+            setup.run(shell="bash", off=self.home / "off")
+        self.assertEqual((self.home / ".bashrc").read_text(), f"source {ROOT / 'bashou.bash'}\n")
+        self.assertEqual((self.home / ".zshrc").read_text(), f"source {ROOT / 'bashou.zsh'}\n")
+        self.assertIn(".zshrc", out.getvalue())
+
+    def test_no_zshrc_without_zsh(self):
+        real = shutil.which
+        with mock.patch.object(Path, "home", return_value=self.home), \
+                mock.patch("shutil.which", side_effect=lambda name: None if name == "zsh" else real(name)), \
+                contextlib.redirect_stdout(io.StringIO()):
+            setup.run(shell="bash", off=self.home / "off")
+        self.assertTrue((self.home / ".bashrc").exists())
+        self.assertFalse((self.home / ".zshrc").exists())
+
+    def test_the_other_shell_gets_its_line_once(self):
+        """Bash already loads Bashou: at its next start, zsh (when installed) gets its line, once. If you remove
+        it later, it stays removed."""
+        done = self.home / "data"
+        with mock.patch.object(Path, "home", return_value=self.home), \
+                contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertTrue(setup.add_other("zsh", done))
+            self.assertIn("zsh", out.getvalue())
+            self.assertFalse(setup.add_other("zsh", done))
+            (self.home / ".zshrc").write_text("# mine\n")
+            self.assertFalse(setup.add_other("zsh", done))
+        self.assertEqual((self.home / ".zshrc").read_text(), "# mine\n")
+
+    def test_a_zshrc_that_already_loads_bashou_is_left_alone(self):
+        (self.home / ".zshrc").write_text("source ~/.bashou/bashou.zsh\n")
+        with mock.patch.object(Path, "home", return_value=self.home), \
+                contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertFalse(setup.add_other("zsh", self.home / "data"))
+        self.assertEqual((self.home / ".zshrc").read_text(), "source ~/.bashou/bashou.zsh\n")
+        self.assertEqual(out.getvalue(), "")
+
     def test_bashou_on_typed_in_zsh_without_bashou(self):
         """No loader yet: `bashou on` is the Python command, run from zsh. It writes ~/.zshrc."""
         from tests.test_shell import need
@@ -250,7 +290,7 @@ class ZshSetupTest(unittest.TestCase):
         env.update(HOME=str(self.home), PYTHONPATH=str(ROOT), BASHOU_DATA=str(self.home / "data"))
         subprocess.run(["zsh", "-c", "python3 -m bashou on; true"], capture_output=True, text=True, env=env)
         self.assertIn("bashou.zsh", (self.home / ".zshrc").read_text())
-        self.assertFalse((self.home / ".bashrc").exists())
+        self.assertIn("bashou.bash", (self.home / ".bashrc").read_text())
 
 
 if __name__ == "__main__":

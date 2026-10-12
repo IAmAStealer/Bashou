@@ -1925,6 +1925,8 @@
  "{name} is already here. `bashou off` hides it.": "{name} est déjà là. `bashou off` le cache.",
  "{name} lives in another terminal. `bashou here` brings it to this one.": "{name} vit dans un autre terminal. `bashou here` l'amène dans celui-ci.",
  "{name} is hidden in this terminal. `bashou on` brings it back.": "{name} est caché dans ce terminal. `bashou on` le fait revenir.",
+ "Added to {file} too, for {shell}: {line}": "Ajouté aussi à {file}, pour {shell} : {line}",
+ "You also have {shell}: Bashou is now in {file} too, so your pet comes along there.": "Tu as aussi {shell} : Bashou est maintenant dans {file} aussi, ton compagnon t'y suit.",
  "Flag Phantom": "Fantôme des options",
  "The Flag Phantom listed the size of each folder in sizes.txt, with a unit: K (kilobytes), M (megabytes, a thousand K) or G (gigabytes, a thousand M). A plain sort compares text, and sort -n only looks at the number, so neither knows that 1.5G is bigger than 900M.\nWhich folder is the biggest?": "Le Fantôme des options a noté la taille de chaque dossier dans sizes.txt, avec une unité : K (kilooctets), M (mégaoctets, mille K) ou G (gigaoctets, mille M). Un sort tout simple compare du texte, et sort -n ne regarde que le nombre : aucun des deux ne sait que 1.5G est plus grand que 900M.\nQuel dossier est le plus gros ?",
  "Here, find the option that sorts sizes written with a unit (K, M, G).": "Ici, trouve l'option qui trie des tailles écrites avec une unité (K, M, G).",

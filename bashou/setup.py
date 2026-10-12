@@ -9,6 +9,7 @@ and Ubuntu, login shells only. This line covers the other terminals, and turns t
 import os
 import re
 import shlex
+import shutil
 from pathlib import Path
 
 from . import state
@@ -53,19 +54,54 @@ def loaded(text):
     return bool(re.search(r"^\s*(source|\.)\s+\S*bashou\.(bash|zsh)\b", text, re.M))
 
 
-def run(bashrc=None, loader=None, off=None, shell=None):
-    rc, default = target(shell or current_shell())
-    bashrc, loader = Path(bashrc or rc), loader or default
-    Path(off or state.DATA / "off").unlink(missing_ok=True)     # `bashou off` is over
+def append(rc, loader):
+    """Add the line that loads `loader` to `rc`, unless it already loads Bashou. True when added."""
     try:
-        text = bashrc.read_text()
+        text = rc.read_text()
     except FileNotFoundError:
         text = ""
     if line(loader) in text.splitlines() or loaded(text):
-        print("  " + _("Bashou is already in {file}.").format(file=bashrc))
-        return 0
-    with bashrc.open("a") as fh:
+        return False
+    with rc.open("a") as fh:
         fh.write(("" if not text or text.endswith("\n") else "\n") + line(loader) + "\n")
-    print("  " + _("Added to {file}: {line}").format(file=bashrc, line=line(loader)))
-    print("  " + _("Open a new terminal (or: source ~/{file}) to meet your pet.").format(file=bashrc.name))
+    return True
+
+
+def run(bashrc=None, loader=None, off=None, shell=None):
+    """The line for the shell you typed in, and for the other one when it's installed (owner, 2026-10-12:
+    installed from bash, zsh had no pet and no `bashou` command to fix it)."""
+    current = shell or current_shell()
+    rc, default = target(current)
+    bashrc, loader = Path(bashrc or rc), loader or default
+    Path(off or state.DATA / "off").unlink(missing_ok=True)     # `bashou off` is over
+    if not append(bashrc, loader):
+        print("  " + _("Bashou is already in {file}.").format(file=bashrc))
+    else:
+        print("  " + _("Added to {file}: {line}").format(file=bashrc, line=line(loader)))
+        print("  " + _("Open a new terminal (or: source ~/{file}) to meet your pet.").format(file=bashrc.name))
+    if bashrc == rc:                                           # not a file given by a test or a caller
+        for other in SHELLS:
+            if other != current and shutil.which(other):
+                other_rc, other_loader = target(other)
+                if append(other_rc, other_loader):
+                    print("  " + _("Added to {file} too, for {shell}: {line}").format(
+                        file=other_rc, shell=other, line=line(other_loader)))
     return 0
+
+
+def add_other(shell, data=None):
+    """At a start in the other shell: add Bashou to `shell`'s startup file too, once (a file in `data`
+    remembers it, so a line you remove stays removed). True when added."""
+    done = Path(data or state.DATA) / f"setup.{shell}"
+    if done.exists():
+        return False
+    done.parent.mkdir(parents=True, exist_ok=True)
+    done.touch()
+    if not shutil.which(shell):
+        return False
+    rc, loader = target(shell)
+    if not append(rc, loader):
+        return False
+    print("  " + _("You also have {shell}: Bashou is now in {file} too, so your pet comes along there.").format(
+        shell=shell, file=rc))
+    return True

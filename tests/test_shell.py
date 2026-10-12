@@ -38,6 +38,8 @@ class Shell:
         self.tmp = Path(tmp)
         self.data, self.cache = self.tmp / "data", self.tmp / "cache"
         self.data.mkdir(exist_ok=True)
+        self.home = self.tmp / "home"
+        self.home.mkdir(exist_ok=True)
         if state is not False:                           # False: first launch, no save yet
             base = {"language": "en", "starter": "star", "active": "starter",
                     "settings": {"updates": "off"}, **(state or {})}
@@ -54,7 +56,8 @@ class Shell:
                           + (bashrc or f"source {ROOT}/bashou.bash\n"))
         env = {**os.environ, "BASHOU_DATA": str(self.data), "BASHOU_CACHE": str(self.cache),
                "PYTHONPATH": str(ROOT), "TERM": "xterm-256color",
-               "BASHOU_PACKAGE_LOADER": str(self.tmp / "no-package"), **(env or {})}   # a real one isn't used
+               "BASHOU_PACKAGE_LOADER": str(self.tmp / "no-package"),            # a real one isn't used
+               "HOME": str(self.home), **(env or {})}     # setting up the other shell writes there, not in yours
         if shell == "zsh":
             env.setdefault("ZDOTDIR", str(zdot))
         argv = cmd or (["zsh", "-i"] if shell == "zsh" else ["bash", "--rcfile", str(rc), "-i"])
@@ -162,16 +165,19 @@ class Shell:
     def stop_leftovers(self, timeout=3):
         """The release of v0.7.0 failed on a slow CI machine: the pet still wrote in cache/ while the
         test deleted its folder ("Directory not empty"). Stop them and wait until they are gone."""
+        seen = set()                  # an exiting process can't be read any more: wait for those found before
+        gone = lambda: not self.leftovers() and not any(alive(pid) for pid in seen)
         for sig in (signal.SIGTERM, signal.SIGKILL):
             for pid in self.leftovers():
+                seen.add(pid)
                 try:
                     os.kill(pid, sig)
                 except OSError:
                     pass
             end = time.time() + timeout
-            while self.leftovers() and time.time() < end:
+            while not gone() and time.time() < end:
                 time.sleep(0.05)
-            if not self.leftovers():
+            if gone():
                 return
 
 
@@ -996,6 +1002,29 @@ class LoaderTest(unittest.TestCase):
         self.assertEqual(loop[0][0], 0)
         self.assertRegex(loop[0][1], r"^for i in 1 2; do[\s;]+echo \$i[\s;]+done$")
         self.assertEqual(events[-1], (0, "true"))
+
+
+class OtherShellTest(unittest.TestCase):
+    """Owner, 2026-10-12: installed in bash, zsh had no pet. Bash adds Bashou to ~/.zshrc at its next start
+    (zsh adds it to ~/.bashrc), once, and says so."""
+
+    def test_the_first_start_sets_up_the_other_shell(self):
+        for shell, other, line in (("bash", ".zshrc", "bashou.zsh"), ("zsh", ".bashrc", "bashou.bash")):
+            with self.subTest(shell), tempfile.TemporaryDirectory() as tmp:
+                sh = Shell(tmp, shell=shell)
+                try:
+                    self.assertTrue(sh.expect(other.encode()))
+                    self.assertIn(line, (sh.home / other).read_text())
+                finally:
+                    sh.close()
+                sh = Shell(tmp, shell=shell)                     # once: not again, even once removed
+                try:
+                    (sh.home / other).write_text("# mine\n")
+                    self.assertTrue(sh.expect(b"38;2;216;200;160"))
+                    sh.read(1)
+                    self.assertEqual((sh.home / other).read_text(), "# mine\n")
+                finally:
+                    sh.close()
 
 
 class ZshCompletionTest(unittest.TestCase):

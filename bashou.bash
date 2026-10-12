@@ -228,6 +228,8 @@ _bashou_ready() {
   [[ $s == *'"language": "'* ]] && [[ $s == *'"starter": "'* || $s == *'"cat"'* ]]
 }
 if _bashou_ready || BASHOU_AUTO=$_bashou_auto bashou start; then
+  # zsh installed too: it gets its line in ~/.zshrc, once (owner: installed from bash, zsh had no pet).
+  [[ -e $_bashou_data/setup.zsh ]] || ! type -P zsh >/dev/null || python3 "$BASHOU_DIR/launch.py" bashou on zsh
   if _bashou_claim; then
     _bashou_on                                       # the first prompt makes room for it
   else

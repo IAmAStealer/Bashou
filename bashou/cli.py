@@ -379,9 +379,12 @@ def here(args):
 def on(args):
     """The loaders start the pet, then say how it went (owner: `bashou on` didn't reply). Without a loader
     (no `how`), `bashou on` adds the line to ~/.bashrc or ~/.zshrc."""
+    from . import setup
     if not args.how:
-        from . import setup
         return setup.run()
+    if args.how in setup.SHELLS:                     # the loader of the other shell, at its first start
+        setup.add_other(args.how)
+        return 0
     name = progress.current(state.load())[2]
     print("  " + {"back": _("{name} is back."),
                   "already": _("{name} is already here. `bashou off` hides it."),

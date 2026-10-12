@@ -244,6 +244,8 @@ _bashou_ready() {
   [[ $s == *'"language": "'* ]] && [[ $s == *'"starter": "'* || $s == *'"cat"'* ]]
 }
 if _bashou_ready || BASHOU_AUTO=$_bashou_auto bashou start; then
+  # bash gets its line in ~/.bashrc too, once.
+  [[ -e $_bashou_data/setup.bash ]] || (( ! $+commands[bash] )) || python3 "$BASHOU_DIR/launch.py" bashou on bash
   if _bashou_claim; then
     _bashou_on
   else
