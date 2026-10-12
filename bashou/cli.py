@@ -451,7 +451,7 @@ COMMANDS = [
             size=(80, 14)),                          # a 40-character string with an answer on each side
     Command("adventure", run("adventure.game"), ("bashou adventure", "walk into the world with your starter", PLAY),
             size=(50, 20)),
-    Command("on", run("setup", "run"), ("bashou on / off", "show or hide the pet (the first `on` adds Bashou to ~/.bashrc)", SETTINGS)),
+    Command("on", run("setup", "run"), ("bashou on / off", "show or hide the pet (the first `on` adds Bashou to ~/.bashrc, or ~/.zshrc in zsh)", SETTINGS)),
     Command("off", off, args=[("how", dict(nargs="?", help=argparse.SUPPRESS))]),         # bashou.bash stops it first
     Command("here", here, ("bashou here", "move your pet to this terminal (it lives in one terminal at a time)", SETTINGS),
             [("how", dict(nargs="?", help=argparse.SUPPRESS))]),                # bashou.bash moves it first

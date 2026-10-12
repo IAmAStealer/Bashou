@@ -42,7 +42,7 @@ sudo dnf install bashou
 
 Ouvre un nouveau terminal : ton compagnon est là. Chaque utilisateur a le sien, sauf root.
 `bashou off` le cache, aussi dans les nouveaux terminaux. `bashou on` le fait revenir.
-Pas de compagnon sur Debian ou Ubuntu ? Lance `bashou on` une fois : ça ajoute une ligne à ton `~/.bashrc`.
+Pas de compagnon sur Debian ou Ubuntu ? Lance `bashou on` une fois : ça ajoute une ligne à ton `~/.bashrc` (à ton `~/.zshrc` si tu le tapes dans zsh).
 Les mises à jour arrivent avec `apt upgrade` ou `dnf upgrade`.
 
 **Tout autre Linux**, ou pour suivre le code au fur et à mesure, avec git :
@@ -52,6 +52,12 @@ git clone https://github.com/IAmAStealer/Bashou.git ~/.bashou && echo 'source ~/
 ```
 
 Il te faut bash et python3. La plupart des Linux les ont déjà.
+Ton terminal tourne avec zsh ? Bashou y marche aussi : les combats se passent alors dans zsh, et les leçons
+disent où zsh lit une ligne autrement. Charge `bashou.zsh` depuis ton `~/.zshrc` :
+
+```bash
+echo 'source ~/.bashou/bashou.zsh' >> ~/.zshrc && source ~/.zshrc
+```
 
 ## Quoi de neuf
 
@@ -132,7 +138,7 @@ compagnon pour tous tes terminaux, et il ne dessine jamais par-dessus ton texte.
 - **`bashou arena`** : viens te battre quand tu veux. Un combat chronométré, ou une enquête de sécurité sans
   chrono (un fichier caché, une porte dérobée dans cron, un binaire SUID).
 - **`bashou adventure`** : une balade à travers 12 thèmes (logique de code, bash, Linux, systemd, Python, Rust,
-  C, Debian, Rocky Linux, CI/CD, SQL, réseaux) avec 379 questions sur ce qui tourne mal et ce qu'il faut
+  C, Debian, Rocky Linux, CI/CD, SQL, réseaux) avec 382 questions sur ce qui tourne mal et ce qu'il faut
   vérifier en premier, des boss, et des coffres qui s'ouvrent avec de vraies commandes.
 
 ![bashou fight : une Planète et ses cœurs face à l'Hydre des logs, la tâche dans une bulle, et le shell de
@@ -185,12 +191,12 @@ bashou update                # prendre la nouvelle version (apt ou dnf pour les 
 ## Désinstaller
 
 Installé en paquet : `sudo apt remove bashou` ou `sudo dnf remove bashou`, puis enlève la ligne
-`source /usr/share/bashou/bashou.bash` de `~/.bashrc` si tu l'avais ajoutée.
+`source /usr/share/bashou/bashou.bash` de `~/.bashrc` si tu l'avais ajoutée (et la ligne `bashou.zsh` de `~/.zshrc`).
 
 Installé avec git :
 
 ```bash
-sed -i '/\.bashou\/bashou\.bash/d' ~/.bashrc && rm -rf ~/.bashou
+sed -i '/\.bashou\/bashou\.bash/d' ~/.bashrc; sed -i '/\.bashou\/bashou\.zsh/d' ~/.zshrc 2>/dev/null; rm -rf ~/.bashou
 ```
 
 Ta progression reste dans `~/.local/share/bashou` (supprime-le aussi pour tout oublier).

@@ -661,5 +661,44 @@
   ],
   "answer": 0,
   "explain": "x=$(cmd) keeps cmd's exit code, so set -e, if and || see the failure. In the other lines $( ) is only an argument: the exit code that counts is echo's or logger's, and they succeed, so the failure is lost. Store the output first, check it, then use it: if out=$(backup_db); then ..."
+ },
+ {
+  "id": "bash-2-21",
+  "level": 2,
+  "q": "In zsh, you run ./backup.sh. Its first line is #!/bin/bash. Which shell reads the rest of the script?",
+  "choices": [
+   "bash",
+   "zsh, the shell you typed in",
+   "sh, the system's basic shell",
+   "Whichever shell runs fastest"
+  ],
+  "answer": 0,
+  "explain": "The first line, #!/bin/bash, tells the system which program reads the script. Whatever shell you type in, bash runs it. That's why a script behaves the same on every machine: it doesn't depend on the shell of the person who starts it."
+ },
+ {
+  "id": "bash-2-22",
+  "level": 2,
+  "q": "f=\"my notes.txt\", then cat $f without quotes. What does cat get, in bash and in zsh?",
+  "choices": [
+   "bash: two names (my, notes.txt). zsh: one name",
+   "One name in both shells",
+   "Two names in both shells",
+   "bash: one name. zsh: two names"
+  ],
+  "answer": 0,
+  "explain": "bash splits the value of an unquoted variable at its spaces, so cat looks for a file called my and another called notes.txt. zsh keeps the value as one word. Writing \"$f\" with quotes gives one name in both shells: it's the habit that works everywhere."
+ },
+ {
+  "id": "bash-2-23",
+  "level": 2,
+  "q": "colors=(red green blue), then echo ${colors[1]}. What do bash and zsh print?",
+  "choices": [
+   "bash: green. zsh: red",
+   "red in both shells",
+   "green in both shells",
+   "bash: red. zsh: green"
+  ],
+  "answer": 0,
+  "explain": "bash numbers the items of an array from 0, so [1] is the second item, green. zsh numbers them from 1, so [1] is the first item, red. In a script that starts with #!/bin/bash, count from 0, because bash runs it."
  }
 ]

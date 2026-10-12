@@ -19,6 +19,7 @@ from .i18n import _
 
 SITE = "https://iamastealer.github.io/Bashou"
 PACKAGE_LOADER = Path("/usr/share/bashou/bashou.bash")
+PACKAGE_ZSH_LOADER = PACKAGE_LOADER.with_suffix(".zsh")
 DEBIAN_SOURCES = f"""Types: deb
 URIs: {SITE}/deb/
 Suites: ./
@@ -123,16 +124,19 @@ def offer(old_loader, bashrc=None, run=subprocess.run, asked=True):
             print("  " + _("The key is downloaded with curl or wget, and neither is installed."))
             return 1
         bashrc = Path(bashrc or Path.home() / ".bashrc")
+        rcs = [(bashrc, old_loader, PACKAGE_LOADER),                   # zsh players load bashou.zsh (0.9.0)
+               (Path.home() / ".zshrc", old_loader.with_suffix(".zsh"), PACKAGE_ZSH_LOADER)]
         print("  " + _("These commands will run, in this order (sudo asks for your password):"))
         for cmd in steps:
             print(f"    $ {shown(cmd)}")
-        try:
-            loads_it = bool(loader_lines(bashrc.read_text(), old_loader))
-        except OSError:
-            loads_it = False
-        if loads_it:
-            print("  " + _("Then in {file}, the line that loads {old} becomes: {new}").format(
-                file=bashrc, old=old_loader, new=setup.line(PACKAGE_LOADER)))
+        for rc, old, new in rcs:
+            try:
+                loads_it = bool(loader_lines(rc.read_text(), old))
+            except OSError:
+                loads_it = False
+            if loads_it:
+                print("  " + _("Then in {file}, the line that loads {old} becomes: {new}").format(
+                    file=rc, old=old, new=setup.line(new)))
         if asked and not ask(_("Go ahead?")):
             print("  " + _("Nothing changed. Later: bashou update --packages"))
             return 2
@@ -141,10 +145,11 @@ def offer(old_loader, bashrc=None, run=subprocess.run, asked=True):
             if run(cmd).returncode != 0:
                 print("  " + _("That command failed: stopped here. Nothing else was changed."))
                 return 1
-    if switch_bashrc(bashrc, old_loader):
+    switched = [rc for rc, old, new in rcs if switch_bashrc(rc, old, new)]
+    for rc in switched:
         print("  " + _("{file} now loads the package (a copy of the old one: {backup}).").format(
-            file=bashrc, backup=bashrc.name + ".bashou-backup"))
-    else:
+            file=rc, backup=rc.name + ".bashou-backup"))
+    if not switched:
         print("  " + _("Load the package from your shell startup file instead of the old copy: {line}").format(
             line=setup.line(PACKAGE_LOADER)))
     print("  " + _("Done! New terminals use the package. Once the old ones are closed, the git copy can go: "

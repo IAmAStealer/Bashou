@@ -63,7 +63,7 @@ def messages():
     found += [m for subs in learn.SUBCOMMANDS.values() for m in subs.values()]
     found += [m for roles in learn.ARGS.values() for m in roles]
     for ch in challenges.ALL + challenges.SECURITY + challenges.TRIALS:
-        found += [ch.threat, ch.task, *ch.hints] + ([ch.help] if ch.help else [])
+        found += [ch.threat, ch.task, *ch.hints] + ([ch.help] if ch.help else []) + ([ch.zsh] if ch.zsh else [])
     found.append(challenges.HELP_HINT)
     found += [cli.PET, cli.LEARN, cli.PLAY, cli.SETTINGS] + [c.row[1] for c in cli.COMMANDS if c.row]
     return list(dict.fromkeys(found))

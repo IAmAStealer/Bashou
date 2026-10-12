@@ -65,6 +65,22 @@
     "- Quotes stop the expansion: '*.tmp' stays plain text.",
     "- If nothing matches, the pattern is left as it is: echo *.xyz prints *.xyz."
    ]
+  },
+  {
+   "shell": "zsh",
+   "scheme": [
+    " $ ls *.pdf          (no .pdf here)",
+    "   zsh: no matches found: *.pdf"
+   ],
+   "point": 0,
+   "mark": [
+    "*.pdf"
+   ],
+   "text": [
+    "You type in zsh: when no file matches a pattern, zsh stops the line with \"no matches found\", and the command doesn't run at all. bash would run it with the pattern as it is.",
+    "",
+    "- Either way, look with ls before you rm."
+   ]
   }
  ]
 }

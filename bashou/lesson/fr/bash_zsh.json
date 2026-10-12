@@ -1,0 +1,79 @@
+{
+ "title": "bash et zsh : deux shells, une langue",
+ "summary": "zsh lit presque chaque ligne bash de la même façon. Apprends les rares endroits où ce n'est pas le cas, et pourquoi les scripts nomment leur shell.",
+ "pages": [
+  {
+   "scheme": [
+    " $ echo $0",
+    "   zsh            le shell où tu tapes",
+    "",
+    " #!/bin/bash     1re ligne d'un script :",
+    "                 bash le lance, depuis tout shell"
+   ],
+   "point": 3,
+   "mark": [
+    "#!/bin/bash"
+   ],
+   "text": [
+    "Ton terminal fait tourner un shell : souvent bash sous Linux, zsh sur Mac et chez beaucoup de développeurs. Les deux lisent les mêmes commandes, tubes, guillemets et boucles : ce que Bashou enseigne marche dans les deux.",
+    "",
+    "- Un script nomme son shell sur sa première ligne : #!/bin/bash. Il tourne alors avec bash où qu'on le lance, même depuis zsh, et se comporte pareil pour tout le monde.",
+    "- echo $0 montre le shell dans lequel tu tapes en ce moment."
+   ]
+  },
+  {
+   "scheme": [
+    " $ f=\"my notes.txt\"",
+    " $ ls $f",
+    "   bash : ls reçoit \"my\" et \"notes.txt\"",
+    "   zsh :  ls reçoit \"my notes.txt\"",
+    " $ ls \"$f\"        un seul nom, partout"
+   ],
+   "point": 1,
+   "mark": [
+    "$f",
+    "\"$f\""
+   ],
+   "text": [
+    "bash découpe (split) la valeur d'une variable à ses espaces : $f devient deux mots, et ls cherche deux fichiers. zsh ne la découpe pas, donc la même ligne y marche.",
+    "",
+    "- Écris \"$f\" avec des guillemets : c'est un seul mot dans les deux shells, et ça marche encore quand ton script tourne avec bash."
+   ]
+  },
+  {
+   "scheme": [
+    " $ ls *.pdf          (pas de .pdf ici)",
+    "   bash : ls reçoit *.pdf tel quel",
+    "          ls: cannot access '*.pdf'",
+    "   zsh :  no matches found: *.pdf"
+   ],
+   "point": 0,
+   "mark": [
+    "*.pdf"
+   ],
+   "text": [
+    "Quand aucun fichier ne correspond à un motif, bash donne le motif lui-même à la commande, et zsh arrête la ligne avec une erreur. Dans les deux cas, rien ne correspondait.",
+    "",
+    "- Regarde d'abord avec ls, comme le dit la leçon sur les jokers : le même motif donne la même liste."
+   ]
+  },
+  {
+   "scheme": [
+    " $ colors=(red green blue)",
+    " $ echo ${colors[1]}",
+    "   bash : green     compte depuis 0",
+    "   zsh :  red       compte depuis 1"
+   ],
+   "point": 1,
+   "mark": [
+    "${colors[1]}"
+   ],
+   "text": [
+    "Une liste (un tableau) garde plusieurs valeurs dans une seule variable. bash numérote ses éléments à partir de 0, zsh à partir de 1 : ${colors[1]} est la deuxième couleur en bash et la première en zsh.",
+    "",
+    "- Dans un script qui commence par #!/bin/bash, compte depuis 0 : c'est bash qui le lance.",
+    "- ${colors[@]} donne tous les éléments, pareil dans les deux shells."
+   ]
+  }
+ ]
+}

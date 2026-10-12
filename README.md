@@ -40,7 +40,7 @@ sudo dnf install bashou
 
 Open a new terminal: your pet is there. Every user gets one, except root.
 `bashou off` hides it, in new terminals too. `bashou on` brings it back.
-No pet on Debian or Ubuntu? Run `bashou on` once: it adds one line to your `~/.bashrc`.
+No pet on Debian or Ubuntu? Run `bashou on` once: it adds one line to your `~/.bashrc` (to your `~/.zshrc` if you type it in zsh).
 Updates come with `apt upgrade` or `dnf upgrade`.
 
 **Any other Linux**, or to follow the code as it's written, with git:
@@ -50,6 +50,13 @@ git clone https://github.com/IAmAStealer/Bashou.git ~/.bashou && echo 'source ~/
 ```
 
 You need bash and python3. Most Linux systems already have them.
+Your terminal runs zsh? Bashou works there too: fights then happen in zsh, and the lessons say where zsh
+reads a line differently. Load `bashou.zsh` from your `~/.zshrc`:
+
+```bash
+echo 'source ~/.bashou/bashou.zsh' >> ~/.zshrc && source ~/.zshrc
+```
+
 Installed with git on Debian or Red Hat, and want the repository instead? Run `bashou update --packages`.
 It shows every command it will run, asks you, then moves you over. Your pets and progress are kept.
 
@@ -144,7 +151,7 @@ it never draws over your text.
   investigation with no clock (a hidden file, a cron backdoor, a SUID binary). Lose, and the arena
   closes for an hour.
 - **`bashou adventure`**: a walk through 12 topics (coding logic, bash, Linux, systemd, Python, Rust,
-  C, Debian, Rocky Linux, CI/CD, SQL, networks) with 379 questions about what goes wrong and what to check first, bosses, and
+  C, Debian, Rocky Linux, CI/CD, SQL, networks) with 382 questions about what goes wrong and what to check first, bosses, and
   chests that open with real commands.
 
 ![bashou fight: a Planet and its hearts face the Log Hydra, the task in a bubble, and the arena
@@ -202,12 +209,12 @@ bashou update   # get the new version (your pet tells you when there is one; apt
 ## Uninstall
 
 Installed as a package: `sudo apt remove bashou` or `sudo dnf remove bashou`, then remove the
-`source /usr/share/bashou/bashou.bash` line from `~/.bashrc`.
+`source /usr/share/bashou/bashou.bash` line from `~/.bashrc` (and the `bashou.zsh` one from `~/.zshrc`).
 
 Installed with git:
 
 ```bash
-sed -i '/\.bashou\/bashou\.bash/d' ~/.bashrc && rm -rf ~/.bashou
+sed -i '/\.bashou\/bashou\.bash/d' ~/.bashrc; sed -i '/\.bashou\/bashou\.zsh/d' ~/.zshrc 2>/dev/null; rm -rf ~/.bashou
 ```
 
 Your progress stays in `~/.local/share/bashou` (delete it too to forget everything).

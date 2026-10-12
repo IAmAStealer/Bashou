@@ -27,6 +27,7 @@ THREAT_MINUTES = 30
 
 RC = r"""
 [[ -f ~/.bash_aliases ]] && source ~/.bash_aliases
+export BASHOU_ARENA_SHELL=bash
 PS1='\[\e[38;2;240;110;110m\]⚔ arena\[\e[0m\] \W \$ '
 export GPG_TTY=$(tty)                              # gpg asks for passphrases in this terminal
 HISTFILE=$BASHOU_ARENA/history
@@ -86,6 +87,84 @@ if [[ -n $BASHOU_DUEL ]]; then
 fi
 cd "$BASHOU_ARENA/arena"
 """
+
+# The arena for zsh players (0.9.0): the same commands and logs as RC, with zsh's hooks. preexec gets the
+# command line as typed (no preexec for an empty line), precmd logs it in the layout of bash's `history 1`.
+ZSH_RC = r"""
+export BASHOU_ARENA_SHELL=zsh
+PS1=$'%{\e[38;2;240;110;110m%}\u2694 arena%{\e[0m%} %1~ %(!.#.$) '
+export GPG_TTY=$(tty)                              # gpg asks for passphrases in this terminal
+HISTFILE=$BASHOU_ARENA/history
+_arena_cmd=
+_arena_preexec() {
+  _arena_cmd=$1
+  [[ -n $BASHOU_DUEL ]] && _arena_ps0
+}
+_arena_log() {
+  local s=$? cmd=$_arena_cmd
+  _arena_cmd=
+  if [[ -n $cmd ]]; then
+    printf '%s\t    1  %s\n' "$s" "$cmd" >> "$BASHOU_ARENA/log"
+    if [[ -n $BASHOU_DUEL ]]; then
+      python3 "$BASHOU_SRC/launch.py" bashou.duel judge "$BASHOU_ARENA"
+      (( $? == 4 )) && exit 4
+    fi
+    _arena_tip "$cmd"
+  fi
+  [[ -n $BASHOU_DUEL ]] && _bashou_make_room       # empty top rows for the fight panel
+  return $s
+}
+_arena_tip() {
+  if [[ $1 == *uniq* && $1 != *sort*uniq* && -r $BASHOU_ARENA/tip_uniq ]]; then
+    printf '%s\n' "$(<"$BASHOU_ARENA/tip_uniq")"
+    rm -f "$BASHOU_ARENA/tip_uniq"
+  fi
+}
+precmd_functions=(_arena_log)
+preexec_functions=(_arena_preexec)
+if [[ -n $BASHOU_DEADLINE ]]; then                 # `bashou arena`: the time left, in the prompt
+  zmodload zsh/datetime
+  _arena_clock() {
+    local left=$(( BASHOU_DEADLINE - EPOCHSECONDS ))
+    (( left < 0 )) && left=0
+    printf -v _arena_left '\u23f1 %d:%02d' $(( left / 60 )) $(( left % 60 ))
+  }
+  precmd_functions+=(_arena_clock)
+  setopt prompt_subst
+  PS1=$'%{\e[38;2;240;200;100m%}${_arena_left}%{\e[0m%} '$PS1
+fi
+_arena() { python3 "$BASHOU_SRC/launch.py" bashou.fight "$@" "$BASHOU_ARENA"; }
+answer() { _arena answer "$*" && exit 42; }
+verify() { _arena verify && exit 42; }
+hint() { _arena hint; }
+check() { _arena check; }
+lesson() { _arena lesson; }
+task() { _arena task; }
+flee() { exit 3; }
+_bashou_height=$BASHOU_ARENA/height _bashou_room=$BASHOU_ARENA/room _bashou_erase=$BASHOU_ARENA/erase
+_arena_ps0() {
+  rm -f "$_bashou_room"
+  _bashou_close_room && return
+  [[ -r $_bashou_erase ]] && printf '%s' "$(<"$_bashou_erase")"
+}
+[[ -n $BASHOU_DUEL ]] && source "$BASHOU_SRC/bashou/room.zsh"
+cd "$BASHOU_ARENA/arena"
+"""
+
+
+def player_shell():
+    """The shell the player types in (the loaders export BASHOU_SHELL): the arena runs in it. bash otherwise."""
+    shell = os.environ.get("BASHOU_SHELL", "")
+    return shell if shell in ("bash", "zsh") and shutil.which(shell) else "bash"
+
+
+def arena_shell(base, shell):
+    """Write the arena's rc file for `shell` into `base`: (argv, extra environment) to start it."""
+    if shell == "zsh":
+        (base / ".zshrc").write_text(ZSH_RC)
+        return ["zsh", "-i"], {"ZDOTDIR": str(base)}
+    (base / "arena.rc").write_text(RC)
+    return ["bash", "--rcfile", str(base / "arena.rc"), "-i"], {}
 
 
 # --- threats ---------------------------------------------------------------
@@ -395,7 +474,7 @@ def banner(ch, task, review=None):
             n=review["step"] + 1, total=len(INTERVALS), tool=ch.tool) + f"{RESET}\n"
     return (f"\n{BAD}{BOLD}⚔ " + cap(_("The {threat} attacks!").format(threat=_(ch.threat))) + f"{RESET}  "
             + _("Use {tool} to fight it.").format(tool=f"{BOLD}{ch.tool}{RESET}") + f"\n{back}\n{task}\n\n"
-            f"{DIM}" + _("You're in a sandbox folder with a real bash. Commands:") + f"{RESET}\n"
+            f"{DIM}" + _("You're in a sandbox folder with a real shell, your own ({shell}). Commands:").format(shell=player_shell()) + f"{RESET}\n"
             + (strike_done(ch) if ch.fix else "  answer <value>   " + _("strike") + f"   {DIM}("
                + _("needs a successful {tool} command first").format(tool=ch.tool) + f"){RESET}\n")
             + "  hint             " + _("get a hint") + "\n"
@@ -439,12 +518,12 @@ def arena(ch, intro, rng=None, fight=False, help_first=False, limit=None):
     base = Path(tempfile.mkdtemp(prefix="bashou-arena-"))
     work = base / "arena"
     work.mkdir()
-    meta = {"challenge": ch.id, "hints": 0, "help_first": help_first}
+    meta = {"challenge": ch.id, "hints": 0, "help_first": help_first, "shell": player_shell()}
     try:
         meta.update(ch.setup(work, rng or random.Random()))
         challenges.with_editor(meta, state.setting(state.load(), "editor"))
         (base / "meta.json").write_text(json.dumps(meta))
-        (base / "arena.rc").write_text(RC)
+        argv, extra = arena_shell(base, meta["shell"])
         (base / "tip_uniq").write_text(ACCENT + "💡 " + _(                # shown once, on uniq without sort
             "Tip: uniq only merges identical lines that are next to each other. "
             "Sort first: … | sort | uniq -c (or sort -u to keep one of each).") + RESET)
@@ -455,13 +534,14 @@ def arena(ch, intro, rng=None, fight=False, help_first=False, limit=None):
         env = {**os.environ, "BASHOU_ARENA": str(base),
                "BASHOU_SRC": str(Path(__file__).resolve().parent.parent)}
         env.update(meta.get("env", {}))                   # a fight's own practice folders (GNUPGHOME…)
+        env.update(extra)
         env.pop("BASHOU_DUEL", None)
         if top:
             env["BASHOU_DUEL"] = "1"
         env.pop("BASHOU_DEADLINE", None)
         if limit:
             env["BASHOU_DEADLINE"] = str(int(time.time() + limit))
-        shell = subprocess.Popen(["bash", "--rcfile", str(base / "arena.rc"), "-i"], env=env)
+        shell = subprocess.Popen(argv, env=env)
         scene = duel.start(base, shell.pid) if top else None
         try:
             code = shell.wait(timeout=limit)

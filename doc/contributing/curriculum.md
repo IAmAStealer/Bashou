@@ -39,7 +39,7 @@ A topic is complete when it has all four: questions, a lesson, one or more fight
 `A → B`: B comes after A. `A + B → C`: C needs both.
 
 - First steps: command_line → computer; command_line → help → paths → files → editor → reading →
-  wildcards → variables
+  wildcards → variables; variables + wildcards → bash_zsh
 - Bash: reading → streams; reading → grep → regex; streams + grep → pipes → text_tools;
   regex + text_tools → awk_sed; wildcards → find; variables → logic; logic + streams → quotes →
   scripts → loops; scripts → substitution; scripts → git
@@ -78,6 +78,8 @@ paths above.
 5. `reading` — cat, less, head, tail · First-line Imp, Last-word Wisp
 6. `wildcards` — * and ? · Glob Goblin
 7. `variables` — shell variables, $( ), export
+7. `bash_zsh` — where zsh reads a line differently: word splitting, patterns that match nothing, arrays
+   from 1, and the first line of a script that picks its shell (0.9.0) · Index Imp
 8. `git` — commits and branches · Commit Crowd, Branch Bramble, Conflict Chimera
 
 ### Bash (text tools)

@@ -54,6 +54,7 @@ class Challenge:
     works: Optional[Callable] = None    # () -> bool: something else this system must have (AddressSanitizer…)
     why: Optional[Callable] = None      # (work_dir) -> str or None: what's wrong, said when `verify` fails
     file: str = ""            # the file you fix, when Bashou can read it for you before verify (`check`)
+    zsh: str = ""             # what zsh does differently here: the last hint of zsh players (meta["shell"])
 
     @property
     def tool(self):
@@ -67,6 +68,8 @@ class Challenge:
         hints = [fill(_(h), meta) for h in self.hints]
         if meta.get("help_first") and self.help:
             hints.insert(0, _(HELP_HINT).format(tool=self.tool) + " " + fill(_(self.help), meta))
+        if meta.get("shell") == "zsh" and self.zsh:
+            hints.append(fill(_(self.zsh), meta))
         return hints
 
     def hint_text(self, i, meta):

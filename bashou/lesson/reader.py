@@ -116,6 +116,12 @@ def group(lesson):
     return _(skills.SKILLS[skill].text).split(":")[0] if skill else _("First steps")
 
 
+def for_shell(lessons, shell):
+    """The lessons with only the pages for your shell: a page that says "shell": "zsh" tells what zsh does
+    differently, for zsh players only (0.9.0)."""
+    return [dict(le, pages=[p for p in le["pages"] if p.get("shell", shell) == shell]) for le in lessons]
+
+
 def for_editor(lessons, editor):
     """The lessons with only the pages of your editor (`bashou config editor`): a page may say
     "editor": "nano" or "vi"."""
@@ -190,7 +196,8 @@ def warmup_screen(lesson, questions, total, pos, chosen, cols, lines):
 class Library:
     def __init__(self, lessons, open_id=None):
         self.s = state.load()
-        self.all = lessons = for_editor(lessons, state.setting(self.s, "editor"))
+        shell = "zsh" if os.environ.get("BASHOU_SHELL") == "zsh" else "bash"     # the loaders export it
+        self.all = lessons = for_shell(for_editor(lessons, state.setting(self.s, "editor")), shell)
         self.quiz, self.choice, self.chosen = [], 0, None     # the warm-up, while it's on
         self.lessons = shown(self.s, lessons)
         self.pos = 0

@@ -51,6 +51,22 @@
     "- Les guillemets empêchent le développement : '*.tmp' reste du texte.",
     "- Si rien ne correspond, le motif reste tel quel : echo *.xyz affiche *.xyz."
    ]
+  },
+  {
+   "shell": "zsh",
+   "scheme": [
+    " $ ls *.pdf          (pas de .pdf ici)",
+    "   zsh : no matches found: *.pdf"
+   ],
+   "point": 0,
+   "mark": [
+    "*.pdf"
+   ],
+   "text": [
+    "Tu tapes dans zsh : quand aucun fichier ne correspond à un motif, zsh arrête la ligne avec « no matches found », et la commande ne tourne pas du tout. bash la lancerait avec le motif tel quel.",
+    "",
+    "- Dans les deux cas, regarde avec ls avant de faire rm."
+   ]
   }
  ]
 }

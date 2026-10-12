@@ -1,0 +1,94 @@
+{
+ "id": "bash_zsh",
+ "order": 95,
+ "after": [
+  "variables",
+  "wildcards"
+ ],
+ "masters": [
+  "won index_imp"
+ ],
+ "recall": [
+  "bash-2-21"
+ ],
+ "fights": [
+  "index_imp"
+ ],
+ "title": "bash and zsh: two shells, one language",
+ "summary": "zsh reads almost every bash line the same way. Learn the few places where it doesn't, and why scripts name their shell.",
+ "pages": [
+  {
+   "scheme": [
+    " $ echo $0",
+    "   zsh            the shell you type in",
+    "",
+    " #!/bin/bash     first line of a script:",
+    "                 bash runs it, from any shell"
+   ],
+   "point": 3,
+   "mark": [
+    "#!/bin/bash"
+   ],
+   "text": [
+    "Your terminal runs a shell: often bash on Linux, zsh on a Mac and for many developers. Both read the same commands, pipes, quotes and loops, so what Bashou teaches works in both.",
+    "",
+    "- A script names its shell on its first line: #!/bin/bash. Then it runs in bash wherever it's started, even from zsh, and behaves the same for everyone.",
+    "- echo $0 shows the shell you're typing in right now."
+   ]
+  },
+  {
+   "scheme": [
+    " $ f=\"my notes.txt\"",
+    " $ ls $f",
+    "   bash: ls gets \"my\" and \"notes.txt\"",
+    "   zsh:  ls gets \"my notes.txt\"",
+    " $ ls \"$f\"        one name, in both"
+   ],
+   "point": 1,
+   "mark": [
+    "$f",
+    "\"$f\""
+   ],
+   "text": [
+    "bash splits the value of a variable at its spaces: $f becomes two words, and ls looks for two files. zsh doesn't split it, so the same line works there.",
+    "",
+    "- Write \"$f\" with quotes: it is one word in both shells, and it keeps working when your script runs in bash."
+   ]
+  },
+  {
+   "scheme": [
+    " $ ls *.pdf          (no .pdf here)",
+    "   bash: ls gets *.pdf as it is",
+    "         ls: cannot access '*.pdf'",
+    "   zsh:  no matches found: *.pdf"
+   ],
+   "point": 0,
+   "mark": [
+    "*.pdf"
+   ],
+   "text": [
+    "When no file matches a pattern, bash gives the pattern itself to the command, and zsh stops the line with an error. Either way, nothing matched.",
+    "",
+    "- Look with ls first, like the wildcards lesson says: the same pattern gives the same list."
+   ]
+  },
+  {
+   "scheme": [
+    " $ colors=(red green blue)",
+    " $ echo ${colors[1]}",
+    "   bash: green      counts from 0",
+    "   zsh:  red        counts from 1"
+   ],
+   "point": 1,
+   "mark": [
+    "${colors[1]}"
+   ],
+   "text": [
+    "A list (an array) keeps several values in one variable. bash numbers its items from 0, zsh from 1: ${colors[1]} is the second color in bash and the first one in zsh.",
+    "",
+    "- In a script that starts with #!/bin/bash, count from 0: bash runs it.",
+    "- ${colors[@]} gives all the items, the same way in both shells."
+   ]
+  }
+ ]
+}

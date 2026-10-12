@@ -50,6 +50,23 @@
     "- $HOME, $PATH et $USER sont aussi des variables d'environnement.",
     "$ env | head"
    ]
+  },
+  {
+   "shell": "zsh",
+   "scheme": [
+    " $ f=\"my notes.txt\"",
+    " $ ls $f          zsh : un seul nom",
+    " $ ls \"$f\"        un seul nom, partout"
+   ],
+   "point": 1,
+   "mark": [
+    "$f"
+   ],
+   "text": [
+    "Tu tapes dans zsh. Là, $f reste un seul mot même avec une espace dedans, donc ls $f trouve le fichier. bash le couperait en deux noms (la leçon bash et zsh le montre).",
+    "",
+    "- Garde quand même les guillemets : les scripts tournent en général avec bash."
+   ]
   }
  ]
 }

@@ -1,0 +1,55 @@
+{
+ "name": "Index Imp",
+ "palette": {
+  "h": "#f0d8a0",
+  "H": "#b89860",
+  "b": "#d0604c",
+  "B": "#8a3030",
+  "d": "#a84438",
+  "e": "#fff4e0",
+  "k": "#201010",
+  "s": "#ece4cc",
+  "S": "#b8ac90",
+  "n": "#304070",
+  "p": "#8a6a40"
+ },
+ "base": [
+  "..h.....h........",
+  "..Hb...bH..sssss.",
+  "..BbbbbbB..sSnSs.",
+  ".Bbbbbbbbd.snnSs.",
+  ".Bbekbbekd.sSnSs.",
+  ".Bbbbbbbbd.sSnSs.",
+  ".Bbbbkkbbd.snnns.",
+  "..Bbbbbbd..SSSSS.",
+  "..BbbbbbdbbbpS...",
+  "..Bb.bbd....p....",
+  "..BB.B.B....p....",
+  "...B..B.....p...."
+ ],
+ "poses": {
+  "inhale": {
+   "2": "..BbbbbbbB.sSnSs."
+  },
+  "closed": {
+   "4": "---bkkbbkk-------"
+  },
+  "left": {
+   "4": "---kebbked-------"
+  },
+  "right": {
+   "4": "---ekbbekd-------"
+  },
+  "fidget": {
+   "2": "-----------snnns.",
+   "3": "-----------snSns.",
+   "4": "-----------snSns.",
+   "5": "-----------snSns.",
+   "6": "-----------snnns."
+  }
+ },
+ "particles": [
+  0,
+  4
+ ]
+}

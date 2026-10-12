@@ -62,6 +62,23 @@
     "- $HOME, $PATH and $USER are environment variables too.",
     "$ env | head"
    ]
+  },
+  {
+   "shell": "zsh",
+   "scheme": [
+    " $ f=\"my notes.txt\"",
+    " $ ls $f          zsh: one name",
+    " $ ls \"$f\"        one name, in every shell"
+   ],
+   "point": 1,
+   "mark": [
+    "$f"
+   ],
+   "text": [
+    "You type in zsh. There, $f stays one word even with a space inside, so ls $f finds the file. bash would split it into two names (the lesson bash and zsh shows it).",
+    "",
+    "- Keep the quotes anyway: scripts usually run in bash."
+   ]
   }
  ]
 }

@@ -85,6 +85,9 @@ SPACE_SPRITE = Challenge(
            "copies two other files. ls -l shows them all. Quotes keep the words together as one name.",
            "Try: cp \"{name}\" backup/ (or a backslash before the space). If a wrong file got in, rm it from "
            "backup/ first."],
+    zsh="In zsh, a name kept in a variable stays one word: n=\"{name}\"; cp $n backup/ works there, but not in "
+        "bash, which splits $n at the space. Typed straight on the line, the space splits in both shells, so "
+        "the quotes are a good habit: scripts usually run in bash.",
     setup=spaced_setup, verify=spaced_verify,
 )
 
@@ -195,7 +198,40 @@ PATTERN_PIXIE = Challenge(
     setup=codes_setup,
 )
 
-ALL = [STDERR_STALKER, SPACE_SPRITE, SHEBANG_SHADE, RENAME_RAT, PATTERN_PIXIE]
+
+# --- Index Imp: the first line of a script picks its shell, and bash counts from 0 (0.9.0, lesson bash_zsh) --
+
+COLORS = ("red", "green", "blue", "yellow", "purple", "orange", "pink", "brown", "grey", "white")
+
+
+def index_setup(work, rng):
+    """pick.sh prints ${colors[1]}: the second color in bash (which runs it), the first one in zsh."""
+    colors = rng.sample(COLORS, 5)
+    script = work / "pick.sh"
+    script.write_text("#!/bin/bash\n# The Index Imp's pick of the day.\ncolors=(" + " ".join(colors) + ")\n"
+                      'echo "${colors[1]}"\n')
+    script.chmod(0o755)
+    return {"answer": colors[1], "args": {"first": colors[0]}}
+
+
+INDEX_IMP = Challenge(
+    level=1, id="index_imp", pet="slime", tools=("bash",), threat="Index Imp", requires=["bash"],
+    uses=lambda a: any("pick.sh" in name or any("pick.sh" in w for w in args) for name, args in a.commands),
+    task="The Index Imp wrote pick.sh: it keeps five colors in a list and prints one of them with ${colors[1]}. "
+         "Bash numbers the items of a list from 0, zsh from 1, so the same line can pick two different colors.\n"
+         "Which color does pick.sh print? Then: answer <color>",
+    help="Here, --help won't help: read the first line of pick.sh (head -1 pick.sh). It names the shell that "
+         "runs the script.",
+    hints=["Read the script before you guess: cat pick.sh. Its first line, #!/bin/bash, says that bash runs it, "
+           "whatever shell you type in. Bash counts the items of a list from 0, so [1] is the second color.",
+           "Try: ./pick.sh (or bash pick.sh). The script answers for itself."],
+    zsh="You type in zsh, where ${colors[1]} is the first item ({first}). pick.sh still runs in bash, because "
+        "its first line says so: it prints the second one. That's why scripts name their shell: they then "
+        "behave the same in every terminal.",
+    setup=index_setup,
+)
+
+ALL = [STDERR_STALKER, SPACE_SPRITE, SHEBANG_SHADE, RENAME_RAT, PATTERN_PIXIE, INDEX_IMP]
 
 
 # --- the chest after the road lesson "Streams and scripts" ---------------------------------------------
@@ -203,4 +239,28 @@ ALL = [STDERR_STALKER, SPACE_SPRITE, SHEBANG_SHADE, RENAME_RAT, PATTERN_PIXIE]
 STREAMS_CHEST = trial("trial_errors_only", 1, "A noisy script, check.sh, hides in this chest. Run it and save only "
                       "its error lines into errors.txt. Then: verify", STDERR_STALKER.hints, noisy_setup,
                       noisy_verify, requires=["bash"], teaches=["2>"])
-CHESTS = [STREAMS_CHEST]
+
+
+# --- the chest after the road lesson "bash and zsh" ------------------------------------------------------
+
+def unmatched_setup(work, rng):
+    """No file matches the pattern: bash hands it to echo as it is, zsh would stop with an error."""
+    ext = rng.choice(("pdf", "mp3", "odt", "iso", "csv"))
+    for name in rng.sample(("notes.txt", "todo.txt", "photo.jpg", "song.ogg", "plan.md"), 3):
+        (work / name).write_text("")
+    script = work / "nothing.sh"
+    script.write_text(f"#!/bin/bash\n# Lists the .{ext} files here.\necho *.{ext}\n")
+    script.chmod(0o755)
+    return {"answer": f"*.{ext}", "args": {"ext": ext}}
+
+
+UNMATCHED_CHEST = trial(
+    "trial_unmatched_pattern", 1, "nothing.sh lists the .{ext} files of this folder with echo *.{ext}, and there "
+    "are none. Run it: what does it print? Then: answer <what it printed>",
+    ["When no file matches a pattern, bash leaves the pattern as it is and gives it to the command: echo then "
+     "prints the pattern itself. zsh would stop instead, with \"no matches found\". The script's first line "
+     "says which of the two runs it.",
+     "Try: ./nothing.sh (or bash nothing.sh), then answer exactly what it printed."],
+    unmatched_setup, lambda w, m, v: v.strip() == m["answer"], requires=["bash"], teaches=["bash"])
+
+CHESTS = [STREAMS_CHEST, UNMATCHED_CHEST]

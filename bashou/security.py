@@ -30,7 +30,7 @@ def find(key):
 def intro(ch, task):
     return (f"\n{BOLD}🔍 " + _("Security challenge: {title}").format(title=_(ch.threat)) + f"{RESET} "
             f"{DIM}({_(LEVELS[ch.level])}){RESET}\n\n{task}\n\n"
-            f"{DIM}" + _("You're in a sandbox folder with a real bash. Commands:") + f"{RESET}\n"
+            f"{DIM}" + _("You're in a sandbox folder with a real shell, your own ({shell}). Commands:").format(shell=fight.player_shell()) + f"{RESET}\n"
             "  answer <value>   " + _("check your answer") + "\n"
             "  hint             " + _("get a hint") + "\n"
             "  task             " + _("show the task again") + "\n"

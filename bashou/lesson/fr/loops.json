@@ -53,6 +53,24 @@
     "- -r garde les antislashs tels quels.",
     "- N'utilise pas for line in $(cat file) : ça coupe à chaque espace, pas seulement en fin de ligne."
    ]
+  },
+  {
+   "shell": "zsh",
+   "scheme": [
+    " $ words=\"a b c\"",
+    " $ for w in $words; do echo $w; done",
+    "   zsh :  a b c       un tour",
+    "   bash : a, b, c     trois tours"
+   ],
+   "point": 1,
+   "mark": [
+    "$words"
+   ],
+   "text": [
+    "Tu tapes dans zsh, où une variable n'est pas découpée en mots : cette boucle fait un seul tour, avec tout le texte. bash ferait trois tours.",
+    "",
+    "- Pour boucler sur plusieurs éléments dans les deux shells, écris-les (for w in a b c) ou utilise un tableau : for w in \"${words[@]}\"."
+   ]
   }
  ]
 }

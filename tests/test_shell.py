@@ -8,6 +8,7 @@ import contextlib
 import json
 import os
 import pty
+import re
 import select
 import shutil
 import signal
@@ -981,7 +982,11 @@ class ZshCompletionTest(unittest.TestCase):
                 self.assertEqual(sh.value("_comps[bashou]"), "_bashou")
                 start = len(sh.out)
                 sh.send("bashou swa\t", 1)
-                self.assertTrue(sh.expect(b"swap ", start))
+                end = time.time() + TIMEOUT                    # zle redraws with cursor moves between letters
+                plain = lambda: re.sub(rb"\x1b\[[0-9;?]*[A-Za-z]|\x1b[78]", b"", sh.out[start:])
+                while b"bashou swap " not in plain() and time.time() < end:
+                    sh.read(0.2)
+                self.assertIn(b"bashou swap ", plain())
             finally:
                 sh.close()
 

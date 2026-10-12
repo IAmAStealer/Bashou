@@ -661,5 +661,44 @@
   ],
   "answer": 0,
   "explain": "x=$(cmd) garde le code de retour de cmd : set -e, if et || voient l'échec. Dans les autres lignes, $( ) n'est qu'un argument : le code qui compte est celui d'echo ou de logger, qui réussissent, et l'échec est perdu. Range d'abord la sortie, vérifie-la, puis utilise-la : if out=$(backup_db); then ..."
+ },
+ {
+  "id": "bash-2-21",
+  "level": 2,
+  "q": "Dans zsh, tu lances ./backup.sh. Sa première ligne est #!/bin/bash. Quel shell lit la suite du script ?",
+  "choices": [
+   "bash",
+   "zsh, le shell où tu as tapé",
+   "sh, le shell de base du système",
+   "Le shell le plus rapide"
+  ],
+  "answer": 0,
+  "explain": "La première ligne, #!/bin/bash, dit au système quel programme lit le script. Quel que soit le shell où tu tapes, c'est bash qui le lance. C'est pour ça qu'un script se comporte pareil sur chaque machine : il ne dépend pas du shell de la personne qui le lance."
+ },
+ {
+  "id": "bash-2-22",
+  "level": 2,
+  "q": "f=\"my notes.txt\", puis cat $f sans guillemets. Que reçoit cat, en bash et en zsh ?",
+  "choices": [
+   "bash : deux noms (my, notes.txt). zsh : un seul",
+   "Un seul nom dans les deux shells",
+   "Deux noms dans les deux shells",
+   "bash : un seul nom. zsh : deux noms"
+  ],
+  "answer": 0,
+  "explain": "bash découpe la valeur d'une variable sans guillemets à ses espaces : cat cherche un fichier my et un autre notes.txt. zsh garde la valeur en un seul mot. Écrire \"$f\" avec des guillemets donne un seul nom dans les deux shells : c'est l'habitude qui marche partout."
+ },
+ {
+  "id": "bash-2-23",
+  "level": 2,
+  "q": "colors=(red green blue), puis echo ${colors[1]}. Qu'affichent bash et zsh ?",
+  "choices": [
+   "bash : green. zsh : red",
+   "red dans les deux shells",
+   "green dans les deux shells",
+   "bash : red. zsh : green"
+  ],
+  "answer": 0,
+  "explain": "bash numérote les éléments d'un tableau à partir de 0 : [1] est le deuxième, green. zsh les numérote à partir de 1 : [1] est le premier, red. Dans un script qui commence par #!/bin/bash, compte depuis 0, car c'est bash qui le lance."
  }
 ]

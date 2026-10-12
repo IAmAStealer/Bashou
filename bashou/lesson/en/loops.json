@@ -70,6 +70,24 @@
     "- -r keeps backslashes as they are.",
     "- Don't use for line in $(cat file): it cuts at every space, not only at line ends."
    ]
+  },
+  {
+   "shell": "zsh",
+   "scheme": [
+    " $ words=\"a b c\"",
+    " $ for w in $words; do echo $w; done",
+    "   zsh:  a b c       one turn",
+    "   bash: a, b, c     three turns"
+   ],
+   "point": 1,
+   "mark": [
+    "$words"
+   ],
+   "text": [
+    "You type in zsh, where a variable isn't split into words: this loop turns once, with the whole text. bash would turn three times.",
+    "",
+    "- To loop over several items in both shells, write them out (for w in a b c) or use an array: for w in \"${words[@]}\"."
+   ]
   }
  ]
 }

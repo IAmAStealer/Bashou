@@ -93,6 +93,8 @@ SOLUTIONS = {
     # shell fights: streams, quotes, shebang, loops, regex
     "stderr_stalker": ("./check.sh 2> errors.txt", None),
     "trial_errors_only": ("./check.sh 2> errors.txt", None),
+    "index_imp": ("./pick.sh", None),
+    "trial_unmatched_pattern": ("./nothing.sh", None),
     "space_sprite": ("cp \"{x}\" backup/", r'name: "([^"]+)"'),
     "shebang_shade": ("sed -i '1s/.*/#!\\/bin\\/bash/' report.sh && chmod +x report.sh", None),
     "rename_rat": ("for f in *.JPG; do mv \"$f\" \"${{f%.JPG}}.jpg\"; done", None),
@@ -236,7 +238,7 @@ class SanitizerHangTest(unittest.TestCase):
 
 
 # The easy wrong moves of the everyday fights: each must lose.
-WRONG_MOVES = [("flag_phantom", "sort sizes.txt | tail -1"), ("flag_phantom", "sort -n sizes.txt | tail -1"),
+WRONG_MOVES = [("index_imp", "zsh pick.sh"), ("flag_phantom", "sort sizes.txt | tail -1"), ("flag_phantom", "sort -n sizes.txt | tail -1"),
          ("flag_phantom", "sort -f sizes.txt | tail -1"), ("glob_goblin", "rm *.csv"),
          ("clutter_critter", "mkdir photos docs && mv *.jpg photos/"), ("typo_troll", "true"),
          ("stderr_stalker", "./check.sh > errors.txt 2>&1"), ("pattern_pixie", "grep -cE '[A-Z]{2}-[0-9]{4}' codes.txt"),
@@ -252,7 +254,7 @@ WRONG_MOVES = [("flag_phantom", "sort sizes.txt | tail -1"), ("flag_phantom", "s
 # here, and a wrong move that zsh gets right (it doesn't split $var into words…) is listed below: both
 # kinds of fight carry a zsh note (Challenge.zsh), the last hint of zsh players.
 ZSH_SOLUTIONS = {}
-ZSH_RIGHT_MOVES = set()
+ZSH_RIGHT_MOVES = {"space_sprite"}      # zsh keeps $n as one word
 
 
 def run_solution(ch, meta, work, shell="bash"):
