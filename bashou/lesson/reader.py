@@ -12,7 +12,7 @@ import sys
 from .. import achievements, challenges, creatures, progress, render, skills, state, terminal
 from ..adventure import quiz
 from ..i18n import _
-from . import (HERE, by_id, first_open, load, met, own, progress_of, read, shown, skills_of, status, to_pass,
+from . import (HERE, by_id, first_open, load, met, own, passed, progress_of, read, shown, skills_of, status, to_pass,
                unlocked, waiting_for)
 from ..render import ESC, BOLD, DIM, RESET, REV, GOOD, BAD
 
@@ -252,19 +252,20 @@ class Library:
             info = [(part, "") for part in render.wrap(le["summary"], width, 3)] + [
                 (part, DIM) for part in render.wrap(
                     _("Mastered: you already do what it teaches. Read it again any time."), width, 3)]
-        room = max(3, lines - 8 - top - (len(info) if st == "locked" else 3))   # a locked lesson's why takes room
+        note = render.wrap(self.message, width, 5) if self.message else []
+        room = max(3, lines - 8 - top - (len(info) if st == "locked" else 3)    # a locked lesson's why takes room
+                   - max(0, len(note) - 3))
         at = next(k for k, (i, _t) in enumerate(rows) if i == self.pos)
         start = max(0, min(at - room // 2, len(rows) - room))
         for k, (i, text) in enumerate(rows[start:start + room]):
             out.append((4 + top + k, 4 if i is not None else 2, text))
         row = 4 + top + min(room, len(rows)) + 1
         for part, color in info:
-            if row < lines - 3:
+            if row < lines - max(3, len(note)):
                 out.append((row, 2, color + part + RESET))
             row += 1
-        if self.message:
-            for k, part in enumerate(render.wrap(self.message, min(cols - 4, 76), 3)):
-                out.append((lines - 3 + k, 2, DIM + part + RESET))
+        for k, part in enumerate(note):
+            out.append((lines - max(3, len(note)) + k, 2, DIM + part + RESET))
         return out
 
     def open(self):
@@ -308,7 +309,14 @@ class Library:
         self.lesson = None
         if finished:
             self.message = _("Lesson done: “{title}”.").format(title=le["title"])
-            if status(self.s, le) == "next":
+            waiting = [w for w in self.lessons if le["id"] in w.get("after", []) and not unlocked(self.s, w)]
+            if waiting and not passed(self.s, le):     # bug report: players thought reading opens the next one
+                ways = ways_to_pass(self.s, le)
+                self.message += " " + _("Reading isn't enough to open {lessons}: practice this one first. "
+                                        "Any one is enough: {ways}.").format(
+                    lessons=_(" and ").join(_("“{name}”").format(name=short(w["title"])) for w in waiting),
+                    ways=", ".join(ways[:-1]) + _(", or ") + ways[-1] if len(ways) > 1 else ways[0])
+            elif status(self.s, le) == "next":
                 self.message += " " + _("Now practice it: fights and achievements make it mastered.")
             if notes:
                 self.message += " " + " ".join(notes)

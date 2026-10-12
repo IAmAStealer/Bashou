@@ -273,8 +273,24 @@ class ReaderTest(unittest.TestCase):
             lib.key("enter")
         self.assertIsNone(lib.lesson)
         self.assertEqual(state.load()["lessons"]["read"], ["command_line"])
-        self.assertIn("Now practice it", lib.message)
         self.assertFalse(lesson.unlocked(state.load(), BY_ID["paths"]))       # reading opens nothing
+        # bug report: "I finished the lesson but the next one still said after it". Say so when it's done.
+        self.assertIn("Reading isn't enough to open “Help yourself”", lib.message)
+        self.assertIn("practice this one first", lib.message)
+        self.assertIn("earn 3 achievements in all", lib.message)
+        screen = " ".join(render.strip(t) for r, c, t in lib.list_screen(100, 40))
+        self.assertIn("Sparklings", screen)                         # the long message isn't cut
+        self.assertIn("practice this one first", screen)
+
+    def test_a_lesson_already_practiced_says_practice_to_master(self):
+        s = state.load()
+        s["achievements"] = ["a", "b", "c", "d", "e", "f"]               # enough to pass Command line
+        state.save(s)
+        lib = reader.Library(LESSONS)
+        lib.key("enter")
+        for _ in BY_ID["command_line"]["pages"]:
+            lib.key("enter")
+        self.assertNotIn("Reading isn't enough", lib.message)
 
     def test_a_locked_lesson_says_why_in_the_list(self):
         """Bug report: players didn't understand why lessons were locked. Each locked row names the
