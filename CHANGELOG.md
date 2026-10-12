@@ -3,6 +3,20 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.9.0 — 2026-10-12
+
+### Changes
+
+- Bashou now works in zsh: your pet, Tab completion, `bashou on` and `bashou off`, and fights that happen in your own shell. Installing Bashou in bash sets it up in zsh too.
+- A new lesson, "bash and zsh", shows where the two shells read the same line differently, with a new fight, the Index Imp, a chest on the adventure road and new questions. If you use zsh, a few lessons get an extra page about what changes for you.
+- `bashou on` and `bashou off` always say what happened, even when your pet is already there.
+- Finishing a lesson now tells you that reading it isn't enough to open the next one, and how to practice it.
+- The Flag Phantom now asks for `sort -h` on folder sizes: plain `sort` already ignores capitals on most systems, so `-f` taught nothing.
+
+### Breaking changes
+
+- Breaking change: a pony switched to zsh, started counting its hooves from 1, and wandered off looking for the missing one. Bring it home with `bashou pony hoof`.
+
 ## v0.8.6 — 2026-10-11
 
 ### Changes

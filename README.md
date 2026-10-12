@@ -63,6 +63,9 @@ It shows every command it will run, asks you, then moves you over. Your pets and
 
 ## What's new
 
+**0.9.0**
+- **zsh support**: your pet, completion and fights in zsh, plus a new lesson on where zsh and bash differ.
+
 **0.8.6**
 - **Kinder fights**: typos and checking your work are free, pipeline fights get `check`, logic fights a test to extend, and locked lessons say what they wait for.
 

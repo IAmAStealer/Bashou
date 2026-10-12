@@ -62,6 +62,9 @@ echo 'source ~/.bashou/bashou.zsh' >> ~/.zshrc && source ~/.zshrc
 
 ## Quoi de neuf
 
+**0.9.0**
+- **zsh pris en charge** : ton compagnon, la complétion et les combats dans zsh, plus une nouvelle leçon sur ce qui change entre zsh et bash.
+
 **0.8.6**
 - **Des combats plus doux** : les fautes de frappe et vérifier ton travail sont gratuits, les combats de pipeline ont `check`, les combats de logique un test à compléter, et les leçons verrouillées disent ce qu'elles attendent.
 
