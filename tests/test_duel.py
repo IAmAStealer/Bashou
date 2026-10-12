@@ -139,7 +139,7 @@ class ArenaShellTest(TempState):
         base, _meta = arena("grep_hydra")
         argv, extra = fight.arena_shell(base, self.SHELL)
         env = {**os.environ, "BASHOU_ARENA": str(base), "HOME": str(base),
-               "BASHOU_SRC": str(Path(fight.__file__).resolve().parent.parent), **extra}
+               "BASHOU_SRC": str(Path(fight.__file__).resolve().parent.parent), "skip_global_compinit": "1", **extra}
         if duel_on:
             env["BASHOU_DUEL"] = "1"
         return subprocess.run(argv, input="\n".join(commands) + "\n",

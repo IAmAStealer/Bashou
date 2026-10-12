@@ -57,7 +57,10 @@ class Shell:
         env = {**os.environ, "BASHOU_DATA": str(self.data), "BASHOU_CACHE": str(self.cache),
                "PYTHONPATH": str(ROOT), "TERM": "xterm-256color",
                "BASHOU_PACKAGE_LOADER": str(self.tmp / "no-package"),            # a real one isn't used
-               "HOME": str(self.home), **(env or {})}     # setting up the other shell writes there, not in yours
+               "HOME": str(self.home),                    # setting up the other shell writes there, not in yours
+               # Ubuntu's /etc/zsh/zshrc runs compinit, which stops to ask about the CI runner's group-writable
+               # folders ("insecure directories ... [y] or abort compinit [n]?"): every zsh test waited there.
+               "skip_global_compinit": "1", **(env or {})}
         if shell == "zsh":
             env.setdefault("ZDOTDIR", str(zdot))
         argv = cmd or (["zsh", "-i"] if shell == "zsh" else ["bash", "--rcfile", str(rc), "-i"])
