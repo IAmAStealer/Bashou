@@ -287,3 +287,15 @@ class ReadmeCountsTest(unittest.TestCase):
         for pattern, real in zip((r"\((\d+) commandes, de", r"\*\*(\d+) succès\*\*", r"travers (\d+) thèmes",
                                   r"avec (\d+) questions", r"(\d+) autres compagnons se cachent"), counts.values()):
             self.assertEqual(int(re.search(pattern, text).group(1)), real, pattern)
+
+
+class BanditTest(unittest.TestCase):
+    """The 0.9.0 release stopped in CI: bandit (-ll) reads any call with a shell= keyword, even
+    _("…{shell}…").format(shell=…), as shell=True (B604). No call in the game passes shell=."""
+
+    def test_no_call_passes_shell(self):
+        root = Path(__file__).resolve().parent.parent / "bashou"
+        found = [f"{path.relative_to(root)}:{node.lineno}" for path in root.rglob("*.py")
+                 for node in ast.walk(ast.parse(path.read_text()))
+                 if isinstance(node, ast.Call) and any(k.arg == "shell" for k in node.keywords)]
+        self.assertEqual(found, [])

@@ -84,8 +84,8 @@ def run(bashrc=None, loader=None, off=None, shell=None):
             if other != current and shutil.which(other):
                 other_rc, other_loader = target(other)
                 if append(other_rc, other_loader):
-                    print("  " + _("Added to {file} too, for {shell}: {line}").format(
-                        file=other_rc, shell=other, line=line(other_loader)))
+                    print("  " + _("Added to {file} too, for {program}: {line}").format(
+                        file=other_rc, program=other, line=line(other_loader)))
     return 0
 
 
@@ -102,6 +102,6 @@ def add_other(shell, data=None):
     rc, loader = target(shell)
     if not append(rc, loader):
         return False
-    print("  " + _("You also have {shell}: Bashou is now in {file} too, so your pet comes along there.").format(
-        shell=shell, file=rc))
+    print("  " + _("You also have {program}: Bashou is now in {file} too, so your pet comes along there.").format(
+        program=shell, file=rc))
     return True

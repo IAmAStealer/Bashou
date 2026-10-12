@@ -474,7 +474,7 @@ def banner(ch, task, review=None):
             n=review["step"] + 1, total=len(INTERVALS), tool=ch.tool) + f"{RESET}\n"
     return (f"\n{BAD}{BOLD}⚔ " + cap(_("The {threat} attacks!").format(threat=_(ch.threat))) + f"{RESET}  "
             + _("Use {tool} to fight it.").format(tool=f"{BOLD}{ch.tool}{RESET}") + f"\n{back}\n{task}\n\n"
-            f"{DIM}" + _("You're in a sandbox folder with a real shell, your own ({shell}). Commands:").format(shell=player_shell()) + f"{RESET}\n"
+            f"{DIM}" + _("You're in a sandbox folder with a real shell, your own ({program}). Commands:").format(program=player_shell()) + f"{RESET}\n"
             + (strike_done(ch) if ch.fix else "  answer <value>   " + _("strike") + f"   {DIM}("
                + _("needs a successful {tool} command first").format(tool=ch.tool) + f"){RESET}\n")
             + "  hint             " + _("get a hint") + "\n"
