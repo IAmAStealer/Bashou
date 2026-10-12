@@ -63,7 +63,7 @@
     "$f"
    ],
    "text": [
-    "Tu tapes dans zsh. Là, $f reste un seul mot même avec une espace dedans, donc ls $f trouve le fichier. bash le couperait en deux noms (la leçon bash et zsh le montre).",
+    "Tu tapes dans zsh. Là, $f reste un seul mot même avec une espace dedans, donc ls $f trouve le fichier. bash le couperait en deux noms (voir la leçon « bash et zsh »).",
     "",
     "- Garde quand même les guillemets : les scripts tournent en général avec bash."
    ]

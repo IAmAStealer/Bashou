@@ -60,7 +60,9 @@
     " $ words=\"a b c\"",
     " $ for w in $words; do echo $w; done",
     "   zsh :  a b c       un tour",
-    "   bash : a, b, c     trois tours"
+    "   bash : a           trois tours",
+    "          b",
+    "          c"
    ],
    "point": 1,
    "mark": [
@@ -69,7 +71,7 @@
    "text": [
     "Tu tapes dans zsh, où une variable n'est pas découpée en mots : cette boucle fait un seul tour, avec tout le texte. bash ferait trois tours.",
     "",
-    "- Pour boucler sur plusieurs éléments dans les deux shells, écris-les (for w in a b c) ou utilise un tableau : for w in \"${words[@]}\"."
+    "- Pour boucler sur plusieurs éléments dans les deux shells, écris-les (for w in a b c) ou fais un tableau : words=(a b c), puis for w in \"${words[@]}\"."
    ]
   }
  ]

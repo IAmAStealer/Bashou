@@ -192,7 +192,7 @@ LESSONS = [
     {"id": "bash_zsh", "tool": "bash", "topics": ("bash",), "title": "bash and zsh", "pages": [
         ("Your terminal runs a shell: bash on most Linux systems, zsh on a Mac and for many developers. They read almost every line the same way. echo $0 tells you which one you're typing in.",
          "echo $0"),
-        ("A script names its shell on its first line, #!/bin/bash. Then bash reads it wherever it's started, even from zsh, so it behaves the same for everyone. bash script.sh does the same by hand.",
+        ("A script names its shell on its first line, #!/bin/bash. Run it as ./script.sh and bash reads it, even from zsh, so it behaves the same for everyone. bash script.sh does the same by hand.",
          "bash nothing.sh"),
         ("Where they differ: bash splits an unquoted $var at its spaces, zsh doesn't. Quotes, \"$var\", give one word in both, so they're the habit to keep.",
          "ls \"$f\""),

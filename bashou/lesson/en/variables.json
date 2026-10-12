@@ -75,7 +75,7 @@
     "$f"
    ],
    "text": [
-    "You type in zsh. There, $f stays one word even with a space inside, so ls $f finds the file. bash would split it into two names (the lesson bash and zsh shows it).",
+    "You type in zsh. There, $f stays one word even with a space inside, so ls $f finds the file. bash would split it into two names (see the lesson “bash and zsh”).",
     "",
     "- Keep the quotes anyway: scripts usually run in bash."
    ]

@@ -56,7 +56,7 @@
    "shell": "zsh",
    "scheme": [
     " $ ls *.pdf          (pas de .pdf ici)",
-    "   zsh : no matches found: *.pdf"
+    "   zsh: no matches found: *.pdf"
    ],
    "point": 0,
    "mark": [

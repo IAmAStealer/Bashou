@@ -8,7 +8,7 @@
     "   zsh            le shell où tu tapes",
     "",
     " #!/bin/bash     1re ligne d'un script :",
-    "                 bash le lance, depuis tout shell"
+    "                 ./script.sh le lance avec bash"
    ],
    "point": 3,
    "mark": [
@@ -17,8 +17,8 @@
    "text": [
     "Ton terminal fait tourner un shell : souvent bash sous Linux, zsh sur Mac et chez beaucoup de développeurs. Les deux lisent les mêmes commandes, tubes, guillemets et boucles : ce que Bashou enseigne marche dans les deux.",
     "",
-    "- Un script nomme son shell sur sa première ligne : #!/bin/bash. Il tourne alors avec bash où qu'on le lance, même depuis zsh, et se comporte pareil pour tout le monde.",
-    "- echo $0 montre le shell dans lequel tu tapes en ce moment."
+    "- Un script nomme son shell sur sa première ligne : #!/bin/bash. Quand tu le lances avec ./script.sh, c'est bash qui le lit, même depuis zsh : il se comporte pareil pour tout le monde.",
+    "- echo $0 montre le shell dans lequel tu tapes en ce moment (un - devant veut juste dire un shell de connexion)."
    ]
   },
   {
@@ -54,7 +54,7 @@
    "text": [
     "Quand aucun fichier ne correspond à un motif, bash donne le motif lui-même à la commande, et zsh arrête la ligne avec une erreur. Dans les deux cas, rien ne correspondait.",
     "",
-    "- Regarde d'abord avec ls, comme le dit la leçon sur les jokers : le même motif donne la même liste."
+    "- zsh et bash comprennent * et ? de la même façon : regarde d'abord avec ls, la liste que tu vois est celle que rm recevrait."
    ]
   },
   {

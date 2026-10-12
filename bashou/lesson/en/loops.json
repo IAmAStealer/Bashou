@@ -77,7 +77,9 @@
     " $ words=\"a b c\"",
     " $ for w in $words; do echo $w; done",
     "   zsh:  a b c       one turn",
-    "   bash: a, b, c     three turns"
+    "   bash: a           three turns",
+    "         b",
+    "         c"
    ],
    "point": 1,
    "mark": [
@@ -86,7 +88,7 @@
    "text": [
     "You type in zsh, where a variable isn't split into words: this loop turns once, with the whole text. bash would turn three times.",
     "",
-    "- To loop over several items in both shells, write them out (for w in a b c) or use an array: for w in \"${words[@]}\"."
+    "- To loop over several items in both shells, write them out (for w in a b c) or make an array: words=(a b c), then for w in \"${words[@]}\"."
    ]
   }
  ]

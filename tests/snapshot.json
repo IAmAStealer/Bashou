@@ -8580,7 +8580,7 @@
   "A real shell, in a sandbox folder. Commands:",
   "A refused connection is a SYN answered by a RST: tcpdump shows [R.]. Silence is different: that's a firewall dropping, or a machine that's down.",
   "A script is a file of commands. Its first line, the shebang, names the program that reads it: #!/bin/bash. chmod +x gives the right to run it, then ./ runs it from here.",
-  "A script names its shell on its first line, #!/bin/bash. Then bash reads it wherever it's started, even from zsh, so it behaves the same for everyone. bash script.sh does the same by hand.",
+  "A script names its shell on its first line, #!/bin/bash. Run it as ./script.sh and bash reads it, even from zsh, so it behaves the same for everyone. bash script.sh does the same by hand.",
   "A script should never hold a password: it ends up in backups, screenshots and git history. $( ) lets it fetch the password when it runs, so the file stays safe to share.",
   "A security investigation: you pick it from a list, and there's no clock.",
   "A service is a program that runs in the background, started by systemd. systemctl status NAME says if it runs, since when, and its last log lines.",

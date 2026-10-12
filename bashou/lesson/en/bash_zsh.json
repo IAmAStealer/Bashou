@@ -23,7 +23,7 @@
     "   zsh            the shell you type in",
     "",
     " #!/bin/bash     first line of a script:",
-    "                 bash runs it, from any shell"
+    "                 ./script.sh runs it in bash"
    ],
    "point": 3,
    "mark": [
@@ -32,8 +32,8 @@
    "text": [
     "Your terminal runs a shell: often bash on Linux, zsh on a Mac and for many developers. Both read the same commands, pipes, quotes and loops, so what Bashou teaches works in both.",
     "",
-    "- A script names its shell on its first line: #!/bin/bash. Then it runs in bash wherever it's started, even from zsh, and behaves the same for everyone.",
-    "- echo $0 shows the shell you're typing in right now."
+    "- A script names its shell on its first line: #!/bin/bash. When you run it as ./script.sh, bash runs it, even from zsh, so it behaves the same for everyone.",
+    "- echo $0 shows the shell you're typing in right now (a leading - just means a login shell)."
    ]
   },
   {
@@ -69,7 +69,7 @@
    "text": [
     "When no file matches a pattern, bash gives the pattern itself to the command, and zsh stops the line with an error. Either way, nothing matched.",
     "",
-    "- Look with ls first, like the wildcards lesson says: the same pattern gives the same list."
+    "- zsh and bash match * and ? the same way, so look with ls first: the list you see is what rm would get."
    ]
   },
   {
