@@ -15,6 +15,7 @@
  {
   "id": "linux-1-02",
   "level": 1,
+  "os": "linux",
   "q": "Une appli de ton serveur se met à planter et tu ne sais pas pourquoi. Où regardes-tu d'abord ?",
   "choices": [
    "Ses logs : journalctl -u appli ou /var/log",
@@ -80,6 +81,7 @@
  {
   "id": "linux-1-07",
   "level": 1,
+  "os": "linux",
   "q": "free -h montre peu de mémoire 'free' mais beaucoup 'available'. Manque-t-on de RAM ?",
   "choices": [
    "Non : la RAM libre sert de cache et se rend",
@@ -171,6 +173,7 @@
  {
   "id": "linux-2-02",
   "level": 2,
+  "os": "linux",
   "q": "Quelqu'un essaie peut-être de deviner les mots de passe de ton serveur. Où vois-tu les connexions SSH ratées ?",
   "choices": [
    "journalctl -u ssh, ou le journal auth dans /var/log",
@@ -197,6 +200,7 @@
  {
   "id": "linux-2-04",
   "level": 2,
+  "os": "linux",
   "q": "Tu as ajouté un disque dans /etc/fstab. Comment tester avant de redémarrer ?",
   "choices": [
    "mount -a",
@@ -210,6 +214,7 @@
  {
   "id": "linux-2-05",
   "level": 2,
+  "os": "linux",
   "q": "`ss -tlnp` montre 0.0.0.0:5432 pour postgres. Qu'est-ce que ça veut dire ?",
   "choices": [
    "Il écoute partout, joignable de l'extérieur",
@@ -496,6 +501,7 @@
  {
   "id": "linux-1-16",
   "level": 1,
+  "os": "linux",
   "q": "Qu'affiche `nproc` ?",
   "choices": [
    "Combien de cœurs les programmes peuvent utiliser",

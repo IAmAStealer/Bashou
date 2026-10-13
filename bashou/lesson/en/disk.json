@@ -54,6 +54,7 @@
    ]
   },
   {
+   "os": "linux",
    "scheme": [
     " /",
     " ├── var/log/      old logs",

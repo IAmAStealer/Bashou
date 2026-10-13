@@ -60,6 +60,7 @@
    ]
   },
   {
+   "os": "linux",
    "scheme": [
     " $ ss -tln",
     " Local Address:Port",

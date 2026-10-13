@@ -160,7 +160,7 @@ def cores():
 
 CORE_COUNTER = Challenge(
     level=1, id="core_counter", pet="meerkat", tools=("nproc",), threat="Core Counter", requires=["nproc"],
-    skill="linux",
+    skill="linux", os="linux",
     task="The Core Counter wants to know who it's up against.\nHow many processors (cores) can programs use on "
          "this computer?",
     help="Here, the Usage line is enough: the command takes no file.",

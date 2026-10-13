@@ -71,6 +71,7 @@
    ]
   },
   {
+   "os": "linux",
    "scheme": [
     " $ ip -br addr",
     " lo      UNKNOWN  127.0.0.1/8 ::1/128",

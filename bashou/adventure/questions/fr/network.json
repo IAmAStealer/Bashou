@@ -41,6 +41,7 @@
  {
   "id": "network-1-04",
   "level": 1,
+  "os": "linux",
   "q": "ss -tln montre une base de données sur 0.0.0.0:5432. Qu'est-ce que ça veut dire ?",
   "choices": [
    "Elle accepte les connexions de tous les réseaux",
@@ -106,6 +107,7 @@
  {
   "id": "network-1-09",
   "level": 1,
+  "os": "linux",
   "q": "Quelle commande montre les adresses IP de ta machine ?",
   "choices": [
    "ip addr (ou ip -br addr, une ligne chacune)",
@@ -119,6 +121,7 @@
  {
   "id": "network-1-10",
   "level": 1,
+  "os": "linux",
   "q": "Que veut dire l'interface « lo » dans ip addr ?",
   "choices": [
    "loopback : la machine qui se parle à elle-même",
@@ -145,6 +148,7 @@
  {
   "id": "network-1-12",
   "level": 1,
+  "os": "linux",
   "q": "Quelle commande liste les ports sur lesquels des programmes écoutent, sur ta machine ?",
   "choices": [
    "ss -tln (ajoute -p pour voir le programme)",
@@ -184,6 +188,7 @@
  {
   "id": "network-2-03",
   "level": 2,
+  "os": "linux",
   "q": "ip route affiche « default via 192.168.1.1 dev wlan0 ». Qu'est-ce que 192.168.1.1 ?",
   "choices": [
    "La passerelle : là où vont les paquets sans autre route",
@@ -314,6 +319,7 @@
  {
   "id": "network-2-13",
   "level": 2,
+  "os": "linux",
   "q": "ss -tn montre des centaines de connexions en TIME-WAIT. Qu'est-ce que c'est ?",
   "choices": [
    "Des connexions fermées, gardées un moment avant l'oubli",
@@ -366,6 +372,7 @@
  {
   "id": "network-3-04",
   "level": 3,
+  "os": "linux",
   "q": "Dans ss -tn, le côté client montre 192.168.1.34:51522. D'où vient 51522 ?",
   "choices": [
    "Le noyau a pris un port éphémère libre pour cette connexion",
@@ -379,6 +386,7 @@
  {
   "id": "network-3-05",
   "level": 3,
+  "os": "linux",
   "q": "Sur un serveur chargé, ss -tln montre Recv-Q qui atteint Send-Q sur le port en écoute. Ça veut dire quoi ?",
   "choices": [
    "La file d'accept est pleine : les connexions attendent",
@@ -431,6 +439,7 @@
  {
   "id": "network-3-09",
   "level": 3,
+  "os": "linux",
   "q": "ip route get 8.8.8.8 répond « via 10.8.0.1 dev tun0 ». Qu'est-ce que ça t'apprend ?",
   "choices": [
    "Le trafic vers cette adresse passe par le tunnel du VPN",

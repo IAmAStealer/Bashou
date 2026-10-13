@@ -37,6 +37,7 @@
    ]
   },
   {
+   "os": "linux",
    "scheme": [
     " /",
     " ├── var/log/      vieux journaux",

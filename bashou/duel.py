@@ -16,7 +16,7 @@ import sys
 import time
 from pathlib import Path
 
-from . import challenges, creatures, progress, render, state
+from . import challenges, creatures, procs, progress, render, state
 from .adventure import sprites
 from .analyze import analyze, parse_log
 from .i18n import _, cap
@@ -159,12 +159,7 @@ class Scene:
             return None
 
     def at_prompt(self):
-        try:
-            with open(f"/proc/{self.shell}/stat") as f:
-                fields = f.read().rsplit(")", 1)[1].split()
-        except OSError:
-            return False
-        return fields[2] == fields[5]
+        return procs.at_prompt(self.shell)
 
     def run(self):
         erase_file = self.base / "erase"

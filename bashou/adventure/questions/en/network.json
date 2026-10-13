@@ -41,6 +41,7 @@
  {
   "id": "network-1-04",
   "level": 1,
+  "os": "linux",
   "q": "ss -tln shows a database on 0.0.0.0:5432. What does that mean?",
   "choices": [
    "It accepts connections from any network the machine is on",
@@ -106,6 +107,7 @@
  {
   "id": "network-1-09",
   "level": 1,
+  "os": "linux",
   "q": "Which command shows your machine's IP addresses?",
   "choices": [
    "ip addr (or ip -br addr for one line each)",
@@ -119,6 +121,7 @@
  {
   "id": "network-1-10",
   "level": 1,
+  "os": "linux",
   "q": "What does the \"lo\" interface in ip addr stand for?",
   "choices": [
    "loopback: the machine talking to itself",
@@ -145,6 +148,7 @@
  {
   "id": "network-1-12",
   "level": 1,
+  "os": "linux",
   "q": "Which command lists the ports programs are listening on, on your machine?",
   "choices": [
    "ss -tln (add -p to see which program)",
@@ -184,6 +188,7 @@
  {
   "id": "network-2-03",
   "level": 2,
+  "os": "linux",
   "q": "ip route shows \"default via 192.168.1.1 dev wlan0\". What is 192.168.1.1?",
   "choices": [
    "The gateway: where packets go when no other route fits",
@@ -314,6 +319,7 @@
  {
   "id": "network-2-13",
   "level": 2,
+  "os": "linux",
   "q": "ss -tn shows hundreds of connections in TIME-WAIT. What are they?",
   "choices": [
    "Closed connections, kept a moment before being forgotten",
@@ -366,6 +372,7 @@
  {
   "id": "network-3-04",
   "level": 3,
+  "os": "linux",
   "q": "In ss -tn, a client's side shows 192.168.1.34:51522. Where does 51522 come from?",
   "choices": [
    "The kernel picked a free ephemeral port for this connection",
@@ -379,6 +386,7 @@
  {
   "id": "network-3-05",
   "level": 3,
+  "os": "linux",
   "q": "On a busy server, ss -tln shows Recv-Q reaching Send-Q on the listening port. What does it mean?",
   "choices": [
    "The accept queue is full: new connections wait or drop",
@@ -431,6 +439,7 @@
  {
   "id": "network-3-09",
   "level": 3,
+  "os": "linux",
   "q": "ip route get 8.8.8.8 answers \"via 10.8.0.1 dev tun0\". What does it tell you?",
   "choices": [
    "Traffic to that address goes through the VPN tunnel",

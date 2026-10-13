@@ -3,6 +3,12 @@
 
 [[ $- == *i* && -t 1 ]] || return 0
 
+# macOS's own bash is 3.2, too old: Bashou needs 4.4 (PS0). zsh, the Mac's default shell, loads bashou.zsh.
+if (( BASH_VERSINFO[0] * 100 + BASH_VERSINFO[1] < 404 )); then
+  echo "Bashou needs bash 4.4 or newer (this is $BASH_VERSION): use zsh and bashou.zsh, or a newer bash (brew install bash)." >&2
+  return 0
+fi
+
 # A git copy hands over to the apt or dnf package once it's installed. Otherwise a ~/.bashrc line that
 # `bashou update` couldn't rewrite keeps loading this copy, which dnf never updates (user report, 0.6.2).
 _bashou_pkg=${BASHOU_PACKAGE_LOADER:-/usr/share/bashou/bashou.bash}
@@ -189,10 +195,11 @@ _bashou_complete() {
   case "$COMP_CWORD:${COMP_WORDS[1]}:${COMP_WORDS[2]}" in
     1:*)              words=$_bashou_commands ;;
     2:swap:*)         words="starter $_bashou_pets" ;;
-    2:config:*)       words="list bubble updates size talk quiet editor language skills" ;;
+    2:config:*)       words="list bubble updates size talk quiet editor os language skills" ;;
     2:update:*)       words="--version" ;;
     3:config:size)    words="small large default" ;;
     3:config:editor)  words="nano vi default" ;;
+    3:config:os)      words="linux macos both default" ;;
     2:arena:*)        words="fight security" ;;
     3:arena:security) words=$_bashou_security ;;
     2:lesson:*)       words=$_bashou_lessons ;;

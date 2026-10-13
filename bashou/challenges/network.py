@@ -356,7 +356,7 @@ def port_answer(work, meta, value):
 # --- the fights -------------------------------------------------------------------------------------
 
 ALL = [
-    Challenge(level=1, id="loopback_lurker", tools=("ss", "netstat", "lsof"), threat="Loopback Lurker",
+    Challenge(level=1, id="loopback_lurker", os="linux", tools=("ss", "netstat", "lsof"), threat="Loopback Lurker",
               task="A Loopback Lurker (process {pid}) listens on this machine, on 127.0.0.1 only.\n"
                    "On which port? Answer with: answer <port>",
               help="Here, find how to list the ports programs listen on, with the process behind each.",
@@ -364,7 +364,7 @@ ALL = [
                      "127.0.0.1 means only this machine can connect.",
                      "Try: ss -tlnp | grep 'pid={pid},'"],
               setup=lurker_setup, cleanup=stop, requires=["ss"], works=loopback_works, **NET),
-    Challenge(level=1, id="address_adder", tools=("ip", "ifconfig"), threat="Address Adder",
+    Challenge(level=1, id="address_adder", os="linux", tools=("ip", "ifconfig"), threat="Address Adder",
               task="The Address Adder counts on you not knowing your own address.\n"
                    "What is this machine's IPv4 address on {dev}? Answer with: answer <address>",
               help="Here, find how to show the addresses of each network interface.",
@@ -382,14 +382,14 @@ ALL = [
                      "Try: python3 -c \"import ipaddress as i; n = i.ip_network('{net}'); "
                      "print(sum(i.ip_address(l.strip()) in n for l in open('hosts.txt')))\""],
               setup=sprite_setup, requires=["python3"], **NET),
-    Challenge(level=2, id="route_raven", tools=("ip",), threat="Route Raven",
+    Challenge(level=2, id="route_raven", os="linux", tools=("ip",), threat="Route Raven",
               task="The Route Raven asks: a packet for {target} leaves this machine through a gateway.\n"
                    "What is the gateway's address? Answer with: answer <address>",
               hints=["ip route get asks the kernel which route an address would take, without sending anything: "
                      "the word after via is the gateway.",
                      "Try: ip route get {target}"],
               setup=raven_setup, requires=["ip"], works=gateway_works, after=("address_adder",), **NET),
-    Challenge(level=2, id="resolver_rook", tools=("getent",), threat="Resolver Rook",
+    Challenge(level=2, id="resolver_rook", os="linux", tools=("getent",), threat="Resolver Rook",
               task="The Resolver Rook asks what programs get for this machine's own name, {name}.\n"
                    "dig only asks DNS; programs read /etc/hosts first. Which address? Answer with: answer <address>",
               hints=["getent hosts asks the way programs do, following /etc/nsswitch.conf: /etc/hosts first, then "
@@ -427,7 +427,7 @@ ALL = [
                      "Try: id=$(tcpdump -nnr dns.pcap 2>/dev/null | awk '/NXDomain/ {{print $6}}'); "
                      "tcpdump -nnr dns.pcap 2>/dev/null | grep \" $id+ \""],
               setup=dns_setup, verify=same_name, after=("refused_revenant",), **TCPDUMP, **NET),
-    Challenge(level=3, id="established_ettin", tools=("ss", "netstat"), threat="Established Ettin",
+    Challenge(level=3, id="established_ettin", os="linux", tools=("ss", "netstat"), threat="Established Ettin",
               task="The Established Ettin holds connections open to 127.0.0.1:{port}.\n"
                    "How many clients are connected to that port? Answer with: answer <number>",
               hints=["ss shows both ends of each connection on this machine: the clients' side has the port on "
@@ -455,7 +455,7 @@ def trial():
                   "machine, like 127.0.0.1.",
                   "The guard is process {pid}. Try: ss -6tlnp | grep 'pid={pid},'"],
                  chest_setup, lambda w, m, v: v.strip() == str(m["answer"]), requires=["ss"], teaches=["ss"])
-    chest.cleanup, chest.works = stop, v6_loopback
+    chest.cleanup, chest.works, chest.os = stop, v6_loopback, "linux"
     return chest
 
 

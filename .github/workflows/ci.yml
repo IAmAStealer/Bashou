@@ -3,7 +3,7 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, macos]
   pull_request:
   workflow_call:
 
@@ -112,6 +112,23 @@ jobs:
           su - tester -c "cd ~/bashou && BASHOU_INSTALLED=1 python3 -m unittest -v tests.test_installed"
           apt-get remove -y -qq bashou
           test ! -e /etc/profile.d/bashou.sh
+
+  # macOS (2026-10-13): the Mac's own python3 (Xcode's, 3.9) and zsh, as testers have them. Fights and pets
+  # run without /proc there. Bash tests use Homebrew's bash (macOS's own is 3.2, too old for Bashou).
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - name: A recent bash, and qrencode, the reference for our QR codes
+        run: brew install --quiet bash qrencode
+      - name: Unit and shell tests
+        run: |
+          /usr/bin/python3 --version
+          bash --version | head -1
+          /usr/bin/python3 -m unittest -v 2> tests.log && exit 0
+          cat tests.log
+          /usr/bin/python3 -c "import sys; t = open('tests.log').read(); t = t[t.find('====='):][:6000] or t[-6000:]; print('::error title=Tests failed on macOS::' + t.replace('%', '%25').replace('\r', '').replace('\n', '%0A'))"
+          exit 1
 
   # A commit on main with a line "release: v1.2.3" becomes that release once every check passed.
   release:

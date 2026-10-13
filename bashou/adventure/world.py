@@ -69,15 +69,17 @@ def level(adv, topic):
     return adv["levels"].get(topic, 0) + 1
 
 
-def fork_options(adv, topics=None):
+def fork_options(adv, topics=None, pool=None):
     """The paths offered at this fork: 2 in the first chapter, 3 later. Same fork, same choice.
-    Your skills first (`topics`); others only fill the fork when you picked fewer."""
+    Your skills first (`topics`); others of `pool` (the topics of your systems) only fill the fork when you
+    picked fewer."""
     rng = random.Random(f"fork:{adv['chapter']}:{adv['leg']}")
     n = 2 if adv["chapter"] == 1 else 3
     mine = sorted(t for t in (topics or TOPICS) if t in TOPICS)
     if len(mine) >= n:
         return rng.sample(mine, n)
-    return mine + rng.sample(sorted(set(TOPICS) - set(mine)), n - len(mine))
+    others = sorted(set(pool or TOPICS) & set(TOPICS) - set(mine))
+    return mine + rng.sample(others, min(n - len(mine), len(others)))
 
 
 def events(adv):

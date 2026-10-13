@@ -128,6 +128,13 @@ def for_editor(lessons, editor):
     return [dict(le, pages=[p for p in le["pages"] if p.get("editor", editor) == editor]) for le in lessons]
 
 
+def for_os(lessons, systems):
+    """The lessons and pages about the systems you learn (`bashou config os`): a lesson or a page may say
+    "os": "linux" or "macos" (macOS, 2026-10-13)."""
+    return [dict(le, pages=[p for p in le["pages"] if skills.shows(p, systems)])
+            for le in lessons if skills.shows(le, systems)]
+
+
 # --- warm-up: a few questions on the lessons before, the first time a lesson opens (owner) ------------
 
 WARMUP = 2
@@ -146,14 +153,17 @@ def recall_ids(s, lesson):
 def warmup(s, lesson, rng=None):
     """Up to WARMUP questions, their choices shuffled like in the adventure (quiz.pick)."""
     rng = rng or random.Random()
-    ids = recall_ids(s, lesson)
-    found = []
-    for qid in rng.sample(ids, min(WARMUP, len(ids))):
+    systems = skills.oses(s)
+    pool = []
+    for qid in recall_ids(s, lesson):
         q = next((q for q in quiz.bank(qid.rsplit("-", 2)[0]) if q["id"] == qid), None)
-        if q:
-            order = list(range(len(q["choices"])))
-            rng.shuffle(order)
-            found.append({**q, "choices": [q["choices"][i] for i in order], "answer": order.index(q["answer"])})
+        if q and skills.shows(q, systems):                  # not a Linux question on a Mac
+            pool.append(q)
+    found = []
+    for q in rng.sample(pool, min(WARMUP, len(pool))):
+        order = list(range(len(q["choices"])))
+        rng.shuffle(order)
+        found.append({**q, "choices": [q["choices"][i] for i in order], "answer": order.index(q["answer"])})
     return found
 
 
@@ -197,7 +207,8 @@ class Library:
     def __init__(self, lessons, open_id=None):
         self.s = state.load()
         shell = "zsh" if os.environ.get("BASHOU_SHELL") == "zsh" else "bash"     # the loaders export it
-        self.all = lessons = for_shell(for_editor(lessons, state.setting(self.s, "editor")), shell)
+        self.all = lessons = for_os(for_shell(for_editor(lessons, state.setting(self.s, "editor")), shell),
+                                    skills.oses(self.s))
         self.quiz, self.choice, self.chosen = [], 0, None     # the warm-up, while it's on
         self.lessons = shown(self.s, lessons)
         self.pos = 0

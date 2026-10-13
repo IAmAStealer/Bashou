@@ -7,6 +7,7 @@ import time
 from pathlib import Path
 
 from . import Challenge
+from .. import procs
 
 
 def setup(work, rng):
@@ -18,11 +19,8 @@ def setup(work, rng):
     pid = int(out.stdout)
     # `$!` comes back before the subshell has exec'd: wait until the process shows its name.
     for _ in range(100):
-        try:
-            if Path(f"/proc/{pid}/cmdline").read_bytes().startswith(name.encode()):
-                break
-        except OSError:
-            pass
+        if procs.command(pid).startswith(name):
+            break
         time.sleep(0.02)
     return {"args": {"name": name}, "answer": pid, "pid": pid}
 

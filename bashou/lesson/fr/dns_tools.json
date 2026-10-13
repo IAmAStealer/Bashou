@@ -61,6 +61,7 @@
    ]
   },
   {
+   "os": "linux",
    "scheme": [
     " /etc/resolv.conf",
     " nameserver 127.0.0.53     ◀ un relais local",

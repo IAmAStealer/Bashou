@@ -168,6 +168,8 @@ def draw_mode(pos, breath):
 
 
 def checklist_drawer(ticked):
+    s = state.load()
+
     def draw(pos, breath):
         width = render.columns()
         out = [f"{ESC}[H{ESC}[2J"] + [line + "\n" for line in render.heading(
@@ -176,7 +178,7 @@ def checklist_drawer(ticked):
             box = "[x]" if skill in ticked else "[ ]"
             text = f"{box} {_(skills.SKILLS[skill].text)}"
             line = f"  {REV} {text} {RESET}" if i == pos else f"   {text} "
-            why = skills.note(skill)
+            why = skills.note(skill, s)
             out += [part + "\n" for part in render.beside(line, f"({why})" if why else "", width, 7)]
         room = render.rows() - "".join(out).count("\n") - (3 if not ticked else 1)
         out += [line + "\n" for line in uses_lines(list(skills.SKILLS)[pos], width)[:max(0, room)]]

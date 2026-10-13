@@ -14,7 +14,7 @@ import threading
 import time
 from pathlib import Path
 
-from . import creatures, dialogue, fight, i18n, learn, pony, progress, render, state, update
+from . import creatures, dialogue, fight, i18n, learn, pony, procs, progress, render, state, update
 from .behavior import Behavior
 from .analyze import parse_log
 from .i18n import _
@@ -103,12 +103,7 @@ class Companion:
 
     def at_prompt(self):
         """True when the shell itself owns the terminal (no command running)."""
-        try:
-            with open(f"/proc/{self.shell}/stat") as f:
-                fields = f.read().rsplit(")", 1)[1].split()
-        except OSError:
-            return False
-        return fields[2] == fields[5]   # pgrp == tpgid
+        return procs.at_prompt(self.shell)
 
     # --- events -----------------------------------------------------------
 

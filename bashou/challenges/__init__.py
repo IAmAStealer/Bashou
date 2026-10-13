@@ -55,6 +55,7 @@ class Challenge:
     why: Optional[Callable] = None      # (work_dir) -> str or None: what's wrong, said when `verify` fails
     file: str = ""            # the file you fix, when Bashou can read it for you before verify (`check`)
     zsh: str = ""             # what zsh does differently here: the last hint of zsh players (meta["shell"])
+    os: str = ""              # "linux": only on Linux (it needs ip, ss, /proc…); fights follow the machine itself
 
     @property
     def tool(self):
@@ -70,6 +71,10 @@ class Challenge:
             hints.insert(0, _(HELP_HINT).format(tool=self.tool) + " " + fill(_(self.help), meta))
         if meta.get("shell") == "zsh" and self.zsh:
             hints.append(fill(_(self.zsh), meta))
+        if meta.get("platform") == "macos" and "sed -i" in " ".join([self.task] + self.hints):
+            hints.append(_("On macOS, sed -i wants a word for a backup copy right after it: give it an empty one, "
+                           "sed -i '' 's/old/new/' file. Without it, macOS's sed takes your s/old/new/ for that "
+                           "word and then can't read the rest."))
         return hints
 
     def hint_text(self, i, meta):
@@ -84,6 +89,8 @@ class Challenge:
         return value.strip() == str(meta["answer"])
 
     def available(self):
+        if self.os and self.os != which.platform():
+            return False
         if self.skill in which.SYSTEMS and self.skill != which.system():
             return False
         return all(which.installed(t) for t in (self.requires or [self.tool])) and (self.works is None or self.works())

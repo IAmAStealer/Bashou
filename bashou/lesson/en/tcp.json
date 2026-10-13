@@ -63,6 +63,7 @@
    ]
   },
   {
+   "os": "linux",
    "scheme": [
     " $ ss -tan",
     " State      Local Address:Port  Peer Address:Port",

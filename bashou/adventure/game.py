@@ -60,6 +60,7 @@ class Game:
         self.rng = rng
         s = state.load()
         self.topics = skills.picked(s)
+        self.pool, self.systems = skills.topics(s), skills.oses(s)       # macOS: no Linux-only path or question
         self.frames, self.palette = sprites.hero(progress.current(s, "starter")[0])
         self.quit = False
         self.choice = 0                 # highlighted fork path or answer
@@ -144,7 +145,7 @@ class Game:
 
     def ask(self, boss=False, now=0.0):
         adv = self.adv
-        q = quiz.pick(adv["topic"], world.level(adv, adv["topic"]), adv["seen"], self.rng)
+        q = quiz.pick(adv["topic"], world.level(adv, adv["topic"]), adv["seen"], self.rng, self.systems)
         adv["seen"] = (adv["seen"] + [q["id"]])[-400:]
         if boss:
             self.boss["deadline"] = now + BOSS_SECONDS
@@ -215,7 +216,7 @@ class Game:
         if phase == "intro" and (k in ENTER or k == " "):
             adv["phase"] = "fork"
         elif phase == "fork":
-            options = world.fork_options(adv, self.topics)
+            options = world.fork_options(adv, self.topics, self.pool)
             if k in (LEFT, UP, "h"):
                 self.choice = (self.choice - 1) % len(options)
             elif k in (RIGHT, DOWN, "l"):
@@ -301,7 +302,7 @@ class Game:
         if adv["phase"] == "walk":
             fork = (1, None, 12 * self.scale)                 # between forks: one road ahead
         elif adv["phase"] in ("intro", "fork") and not self.result:
-            options = world.fork_options(adv, self.topics)
+            options = world.fork_options(adv, self.topics, self.pool)
             picked = self.choice if adv["phase"] == "fork" else None
             fork = (len(options), picked, 12 * self.scale)
         spots = scene.draw(self.canvas, world.biome(adv), adv["distance"], t, 17 * self.scale, fork)

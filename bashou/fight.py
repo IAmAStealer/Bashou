@@ -15,7 +15,7 @@ import tempfile
 import time
 from pathlib import Path
 
-from . import achievements, challenges, duel, lesson, progress, skills, state
+from . import achievements, challenges, duel, lesson, progress, skills, state, which
 from .analyze import analyze, parse_log
 from .lesson import reader
 from .i18n import _, cap
@@ -518,7 +518,8 @@ def arena(ch, intro, rng=None, fight=False, help_first=False, limit=None):
     base = Path(tempfile.mkdtemp(prefix="bashou-arena-"))
     work = base / "arena"
     work.mkdir()
-    meta = {"challenge": ch.id, "hints": 0, "help_first": help_first, "shell": player_shell()}
+    meta = {"challenge": ch.id, "hints": 0, "help_first": help_first, "shell": player_shell(),
+            "platform": which.platform()}
     try:
         meta.update(ch.setup(work, rng or random.Random()))
         challenges.with_editor(meta, state.setting(state.load(), "editor"))

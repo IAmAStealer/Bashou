@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 
-from .. import i18n
+from .. import i18n, skills
 
 HERE = Path(__file__).resolve().parent / "questions"
 
@@ -17,15 +17,22 @@ def bank(topic, lang=None):
     return []
 
 
-def max_level(topic):
-    return max((q["level"] for q in bank(topic, "en")), default=1)
+def for_os(questions, systems):
+    """The questions for everyone, and those of the systems you learn about (a question may say "os")."""
+    return [q for q in questions if skills.shows(q, systems)]
 
 
-def pick(topic, level, seen, rng):
-    """A question at `level` (the highest available if above), one you haven't seen while there are
-    any left, with its choices shuffled (so positions can't be memorized)."""
-    level = min(level, max_level(topic))
-    pool = [q for q in bank(topic) if q["level"] == level]
+def max_level(topic, systems=None):
+    return max((q["level"] for q in for_os(bank(topic, "en"), systems or skills.OSES["both"])), default=1)
+
+
+def pick(topic, level, seen, rng, systems=None):
+    """A question at `level` (the highest available if above) about the systems you learn (`systems`, all
+    when None), one you haven't seen while there are any left, with its choices shuffled (so positions
+    can't be memorized)."""
+    systems = systems or skills.OSES["both"]
+    level = min(level, max_level(topic, systems))
+    pool = [q for q in for_os(bank(topic), systems) if q["level"] == level]
     q = rng.choice([q for q in pool if q["id"] not in seen] or pool)
     order = list(range(len(q["choices"])))
     rng.shuffle(order)
@@ -46,6 +53,8 @@ def problems(items):
             found.append(f"{where}: 4 different choices")
         if q.get("answer") not in range(4):
             found.append(f"{where}: answer is the index (0-3) of the right choice")
+        if q.get("os") not in (None, *skills.OS_NAMES):
+            found.append(f"{where}: os is linux or macos (or no os: for everyone)")
         if not q.get("q") or not q.get("explain"):
             found.append(f"{where}: needs q and explain")
         if len(q.get("q", "")) > 150 or any(len(c) > 60 for c in q.get("choices", [])) \

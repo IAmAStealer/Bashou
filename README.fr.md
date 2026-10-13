@@ -60,6 +60,20 @@ et le dit. Seulement zsh sur cette machine ? Charge `bashou.zsh` depuis ton `~/.
 echo 'source ~/.bashou/bashou.zsh' >> ~/.zshrc && source ~/.zshrc
 ```
 
+**macOS** (version de test, sur la branche `macos`) : Bashou tourne dans zsh, le shell du Mac.
+
+```bash
+xcode-select --install
+git clone -b macos https://github.com/IAmAStealer/Bashou.git ~/.bashou && echo 'source ~/.bashou/bashou.zsh' >> ~/.zshrc && source ~/.zshrc
+```
+
+La première ligne installe les outils en ligne de commande d'Apple, qui apportent git et python3 (passe-la si
+`git --version` marche déjà). La deuxième télécharge Bashou et le charge depuis ton `~/.zshrc`.
+Sur un Mac, les questions et les leçons parlent de macOS : celles propres à Linux (systemd, apt, dnf, `ip`,
+`ss`) sont mises de côté. Tu travailles aussi sur des serveurs Linux ? `bashou config os both` les ramène.
+Le bash fourni avec macOS est trop vieux pour Bashou (il faut la 4.4) : utilise zsh, ou un bash récent
+(`brew install bash`). Pour avoir la dernière version de test : `git -C ~/.bashou pull`.
+
 ## Quoi de neuf
 
 **0.9.0**

@@ -15,6 +15,7 @@
  {
   "id": "linux-1-02",
   "level": 1,
+  "os": "linux",
   "q": "An app on your server starts failing and you don't know why. Where do you look first?",
   "choices": [
    "Its logs: journalctl -u app or /var/log",
@@ -80,6 +81,7 @@
  {
   "id": "linux-1-07",
   "level": 1,
+  "os": "linux",
   "q": "free -h shows little 'free' memory but a lot 'available'. Is RAM short?",
   "choices": [
    "No: spare RAM serves as cache and is given back",
@@ -171,6 +173,7 @@
  {
   "id": "linux-2-02",
   "level": 2,
+  "os": "linux",
   "q": "Someone may be trying to guess passwords on your server. Where do you see failed SSH logins?",
   "choices": [
    "journalctl -u ssh, or the auth log in /var/log",
@@ -197,6 +200,7 @@
  {
   "id": "linux-2-04",
   "level": 2,
+  "os": "linux",
   "q": "You added a disk to /etc/fstab. How do you test it before rebooting?",
   "choices": [
    "mount -a",
@@ -210,6 +214,7 @@
  {
   "id": "linux-2-05",
   "level": 2,
+  "os": "linux",
   "q": "`ss -tlnp` shows 0.0.0.0:5432 for postgres. What does it mean?",
   "choices": [
    "It listens on every interface, reachable from outside",
@@ -496,6 +501,7 @@
  {
   "id": "linux-1-16",
   "level": 1,
+  "os": "linux",
   "q": "What does `nproc` print?",
   "choices": [
    "How many processors (cores) programs can use",

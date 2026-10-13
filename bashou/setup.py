@@ -10,9 +10,10 @@ import os
 import re
 import shlex
 import shutil
+import subprocess
 from pathlib import Path
 
-from . import state
+from . import procs, state
 from .i18n import _
 
 LOADER = Path(__file__).resolve().parent.parent / "bashou.bash"
@@ -33,15 +34,33 @@ def current_shell():
         return shell
     pid = os.getppid()
     while pid > 1:
-        try:
-            name = Path(f"/proc/{pid}/comm").read_text().strip()
-            if name in SHELLS:
-                return name
-            pid = int(Path(f"/proc/{pid}/stat").read_text().rsplit(")", 1)[1].split()[1])
-        except (OSError, ValueError, IndexError):
+        found = procs.parent(pid)
+        if found is None:
             break
+        if found[1] in SHELLS:
+            return found[1]
+        pid = found[0]
     shell = Path(os.environ.get("SHELL", "")).name
     return shell if shell in SHELLS else "bash"
+
+
+def bash_version():
+    """(major, minor) of the bash on PATH, (0, 0) when there's none or it doesn't say."""
+    try:
+        out = subprocess.run(["bash", "-c", 'echo "${BASH_VERSINFO[0]} ${BASH_VERSINFO[1]}"'],
+                             capture_output=True, text=True, timeout=5).stdout.split()
+        return int(out[0]), int(out[1])
+    except (OSError, subprocess.SubprocessError, ValueError, IndexError):
+        return (0, 0)
+
+
+def bash_ok():
+    """Is this bash recent enough for Bashou (4.4: PS0)? macOS's own is 3.2: there, only zsh gets the line."""
+    return bash_version() >= (4, 4)
+
+
+def usable(shell):
+    return bool(shutil.which(shell)) and (shell != "bash" or bash_ok())
 
 
 def line(loader=LOADER):
@@ -81,7 +100,7 @@ def run(bashrc=None, loader=None, off=None, shell=None):
         print("  " + _("Open a new terminal (or: source ~/{file}) to meet your pet.").format(file=bashrc.name))
     if bashrc == rc:                                           # not a file given by a test or a caller
         for other in SHELLS:
-            if other != current and shutil.which(other):
+            if other != current and usable(other):
                 other_rc, other_loader = target(other)
                 if append(other_rc, other_loader):
                     print("  " + _("Added to {file} too, for {program}: {line}").format(
@@ -97,7 +116,7 @@ def add_other(shell, data=None):
         return False
     done.parent.mkdir(parents=True, exist_ok=True)
     done.touch()
-    if not shutil.which(shell):
+    if not usable(shell):
         return False
     rc, loader = target(shell)
     if not append(rc, loader):

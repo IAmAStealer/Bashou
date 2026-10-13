@@ -6,6 +6,7 @@ Remembered for 10 minutes: a lookup for a missing command walks the whole PATH, 
 
 import functools
 import shutil
+import sys
 import time
 from pathlib import Path
 
@@ -24,6 +25,12 @@ def installed(name):
 
 
 installed.cache_clear = _seen.clear          # tests
+
+
+def platform():
+    """"macos" or "linux": the OS Bashou runs on, read each time (never saved at install). Fights follow it;
+    what you learn follows `bashou config os` (skills.oses)."""
+    return "macos" if sys.platform == "darwin" else "linux"
 
 
 @functools.lru_cache(maxsize=None)

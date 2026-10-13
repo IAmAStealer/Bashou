@@ -16,6 +16,7 @@ class Skill:
     needs: str = ""             # the program its fights need; without it, the skill has questions only
     uses: tuple = ()            # (program, what it's for): the programs beyond the usual commands, shown
                                 # when you pick your skills, so you know what to install and why
+    os: str = ""                # "linux": a Linux topic, learned on a Mac only after `bashou config os linux`
 
 
 # In the order of the list (the adventure's topics, world.TOPICS). Debian and Rocky fights also need
@@ -26,9 +27,9 @@ SKILLS = {
     "linux": Skill("Linux: files, users, permissions, processes", uses=(
         ("gpg", "the key fights: lock a file with a passphrase, sign it, check a signature"),
         ("pass", "the password store fights: keep secrets out of your scripts"))),
-    "systemd": Skill("systemd: services, timers, logs"),
-    "debian": Skill("Debian and Ubuntu: apt, dpkg, repositories"),
-    "rocky": Skill("Rocky and Red Hat: dnf, rpm, repositories"),
+    "systemd": Skill("systemd: services, timers, logs", os="linux"),
+    "debian": Skill("Debian and Ubuntu: apt, dpkg, repositories", os="linux"),
+    "rocky": Skill("Rocky and Red Hat: dnf, rpm, repositories", os="linux"),
     "python": Skill("Python: small scripts to fix", needs="python3", uses=(
         ("python3", "runs the small scripts you fix: every Python fight needs it"),)),
     "c": Skill("C: compiling, memory, pointers", needs="gcc", uses=(
@@ -46,13 +47,36 @@ SKILLS = {
 }
 
 
+OSES = {"linux": {"linux"}, "macos": {"macos"}, "both": {"linux", "macos"}}
+OS_NAMES = {"linux": "Linux", "macos": "macOS"}
+
+
+def oses(s):
+    """The systems what you learn is about: the one Bashou runs on, unless `bashou config os` says otherwise
+    (owner, 2026-10-13: a Mac user who runs Linux servers turns Linux on)."""
+    return set(OSES.get((s.get("settings") or {}).get("os"), {which.platform()}))
+
+
+def shows(item, systems):
+    """A question, page, lesson or skill for everyone (no "os"), or for one of `systems`."""
+    os_ = item.get("os") if isinstance(item, dict) else item.os
+    return not os_ or os_ in systems
+
+
+def topics(s):
+    """The skills whose system you learn about: what an adventure fork may offer."""
+    systems = oses(s)
+    return [k for k in SKILLS if shows(SKILLS[k], systems)]
+
+
 def picked(s):
-    """The skills you learn: every one, or those you ticked."""
-    return list(SKILLS) if s.get("skills", "all") == "all" else [k for k in SKILLS if k in s["skills"]]
+    """The skills you learn: every one, or those you ticked, of the systems you learn about."""
+    return [k for k in topics(s) if s.get("skills", "all") == "all" or k in s["skills"]]
 
 
 def wanted(s, skill):
-    return s.get("skills", "all") == "all" or skill in s["skills"]
+    return (s.get("skills", "all") == "all" or skill in s["skills"]) and (
+        skill not in SKILLS or shows(SKILLS[skill], oses(s)))
 
 
 OPTIONAL = {"yamllint"}          # nice to have: no fight waits for it
@@ -71,8 +95,11 @@ def missing(skills):
     return found
 
 
-def note(skill):
-    """Why this skill has no fights here, or ""."""
+def note(skill, s):
+    """Why this skill has no fights here (or isn't learned on this system, `s` the save), or ""."""
+    if not shows(SKILLS[skill], oses(s)):
+        return _("{name} only: bashou config os {system} to learn it").format(
+            name=OS_NAMES[SKILLS[skill].os], system=SKILLS[skill].os)
     needs = SKILLS[skill].needs
     if needs and not which.installed(needs):
         return _("no {program} here: questions only").format(program=needs)

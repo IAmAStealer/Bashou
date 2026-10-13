@@ -197,10 +197,11 @@ _bashou_words() {
   case "$cword:$2:$3" in
     1:*)              words=$_bashou_commands ;;
     2:swap:*)         words="starter $_bashou_pets" ;;
-    2:config:*)       words="list bubble updates size talk quiet editor language skills" ;;
+    2:config:*)       words="list bubble updates size talk quiet editor os language skills" ;;
     2:update:*)       words="--version" ;;
     3:config:size)    words="small large default" ;;
     3:config:editor)  words="nano vi default" ;;
+    3:config:os)      words="linux macos both default" ;;
     2:arena:*)        words="fight security" ;;
     3:arena:security) words=$_bashou_security ;;
     2:lesson:*)       words=$_bashou_lessons ;;
