@@ -188,7 +188,7 @@ SOLUTIONS = {
     "enabled_ettin": ("dnf --disablerepo='*' --enablerepo={x} repolist", r"only the (\S+) repository"),
     # security
     "hidden_file": ("cat .[!.]*", None),
-    "encoded_note": ("base64 -d note.txt | cut -d' ' -f2", None),
+    "encoded_note": ("base64 -d < note.txt | cut -d' ' -f2", None),
     "failed_logins": ("grep 'Failed password' auth.log | awk '{{print $(NF-3)}}' | sort | uniq -c | sort -rn"
                       " | head -1 | awk '{{print $2}}'", None),
     "recent_change": ("find site -type f -mmin -10", None),

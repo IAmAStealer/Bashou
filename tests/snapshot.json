@@ -9725,7 +9725,7 @@
   "Try: awk '{print $3}' people.txt | sort -u | wc -l",
   "Try: awk '{s += $2} END {print s}' prices.txt",
   "Try: awk -F, '$2 == \"ITEM\" { s += $3 } END { print s }' sales.csv",
-  "Try: base64 -d note.txt",
+  "Try: base64 -d < note.txt (the < hands the file to base64 as its input, which works on Linux and on a Mac)",
   "Try: chmod 600 diary.txt",
   "Try: chmod 600 diary.txt and chmod 755 backup.sh, then ls -l to check.",
   "Try: chmod u+x spell.sh && ./spell.sh",

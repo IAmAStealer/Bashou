@@ -49,7 +49,7 @@ ENCODED = Challenge(
     task="note.txt looks like gibberish, but it's only encoded, not encrypted.\n"
          "Decode it: what is the password?",
     hints=["Letters, digits, + and /, sometimes = at the end: that's base64.",
-           "Try: base64 -d note.txt"],
+           "Try: base64 -d < note.txt (the < hands the file to base64 as its input, which works on Linux and on a Mac)"],
     setup=encoded_setup, requires=["base64"],
 )
 

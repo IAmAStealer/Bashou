@@ -2316,7 +2316,7 @@
  "Encoded note": "Note encodée",
  "note.txt looks like gibberish, but it's only encoded, not encrypted.\nDecode it: what is the password?": "note.txt ressemble à du charabia, mais il est seulement encodé, pas chiffré.\nDécode-le : quel est le mot de passe ?",
  "Letters, digits, + and /, sometimes = at the end: that's base64.": "Des lettres, des chiffres, + et /, parfois = à la fin : c'est du base64.",
- "Try: base64 -d note.txt": "Essaie : base64 -d note.txt",
+ "Try: base64 -d < note.txt (the < hands the file to base64 as its input, which works on Linux and on a Mac)": "Essaie : base64 -d < note.txt (le < donne le fichier à base64 comme entrée, ce qui marche sous Linux comme sur un Mac)",
  "Brute force": "Force brute",
  "Someone is trying passwords on this server's SSH.\nIn auth.log, which IP address has the most failed logins?": "Quelqu'un essaie des mots de passe sur le SSH de ce serveur.\nDans auth.log, quelle adresse IP a le plus de connexions échouées ?",
  "Keep only the \"Failed password\" lines first: grep. Then keep the IP, count, sort.": "Garde d'abord seulement les lignes \"Failed password\" : grep. Puis garde l'IP, compte, trie.",
