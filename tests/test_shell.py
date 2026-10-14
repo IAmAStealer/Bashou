@@ -12,6 +12,7 @@ import re
 import select
 import shutil
 import signal
+import subprocess
 import tempfile
 import time
 import unittest
@@ -156,6 +157,13 @@ class Shell:
         """Processes started by this shell that outlived it (the pet): they carry its BASHOU_CACHE."""
         mark = f"BASHOU_CACHE={self.cache}".encode()
         found = []
+        if not os.path.isdir("/proc"):                   # macOS: ps -E prints each process's environment
+            out = subprocess.run(["ps", "-Ewwax", "-o", "pid=,command="], capture_output=True).stdout
+            for line in out.splitlines():
+                pid, _, rest = line.strip().partition(b" ")
+                if pid.isdigit() and int(pid) != os.getpid() and mark in rest.split() and alive(int(pid)):
+                    found.append(int(pid))
+            return found
         for entry in os.listdir("/proc"):
             if entry.isdigit() and entry != str(os.getpid()):
                 try:
@@ -190,6 +198,9 @@ def alive(pid):
         os.kill(pid, 0)
     except ProcessLookupError:
         return False
+    if not os.path.isdir("/proc"):                       # macOS
+        state = subprocess.run(["ps", "-o", "stat=", "-p", str(pid)], capture_output=True, text=True).stdout
+        return bool(state.strip()) and not state.strip().startswith("Z")
     try:
         return Path(f"/proc/{pid}/stat").read_text().rsplit(")", 1)[1].split()[0] != "Z"
     except (OSError, IndexError):
