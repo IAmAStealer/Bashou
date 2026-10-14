@@ -7,6 +7,7 @@ import random
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 import time
 import unittest
@@ -15,6 +16,20 @@ from unittest import mock
 
 from bashou import challenges, duel, fight, state, which
 from bashou.challenges import cicd, repos, secrets, sql
+
+def setUpModule():
+    """The reference solutions are written for GNU sed (sed -i without a suffix, \\n in a replacement). macOS has
+    BSD sed (players there get a hint for it): with Homebrew's gnu-sed, `sed` is gsed for these tests."""
+    gsed = shutil.which("gsed")
+    if sys.platform != "darwin" or not gsed:
+        return
+    shim = tempfile.mkdtemp()
+    os.symlink(gsed, os.path.join(shim, "sed"))
+    path = mock.patch.dict(os.environ, {"PATH": shim + os.pathsep + os.environ["PATH"]})
+    path.start()
+    unittest.addModuleCleanup(path.stop)
+    unittest.addModuleCleanup(shutil.rmtree, shim)
+
 
 # Reference solutions, run with bash in the arena folder. {x} is filled from the task text.
 UNIT_FIX = "f=$(ls *.service); e=$(grep ^ExecStart $f); sed -i \"s|^WantedBy=.*|$e|; \\$s|^ExecStart=.*|WantedBy=multi-user.target|\" $f"
@@ -291,7 +306,7 @@ class ChallengeTest(unittest.TestCase):
                         done = subprocess.run(["bash", "-c", cmd], cwd=work, capture_output=True, text=True, env=env)
                         out = done.stdout.strip()
                         (work.parent / "log").write_text(f"{done.returncode}\t    1  {cmd}\n")   # as the arena logs it
-                        self.assertTrue(ch.check(work, meta, out or "done"), f"{ch.id}: {out!r}")
+                        self.assertTrue(ch.check(work, meta, out or "done"), f"{ch.id}: {out!r} {done.stderr!r}")
                         self.assertFalse(ch.check(work, {**meta, "expected": "nope"}, "wrong")
                                          and ch.verify is None)
                     finally:
