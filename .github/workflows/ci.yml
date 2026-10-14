@@ -117,6 +117,8 @@ jobs:
   # run without /proc there. Bash tests use Homebrew's bash (macOS's own is 3.2, too old for Bashou).
   macos:
     runs-on: macos-latest
+    # A hung test shows in minutes, not after GitHub's 6 hours.
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
       - name: A recent bash, and qrencode, the reference for our QR codes
@@ -125,8 +127,9 @@ jobs:
         run: |
           /usr/bin/python3 --version
           bash --version | head -1
-          /usr/bin/python3 -m unittest -v 2> tests.log && exit 0
-          cat tests.log
+          # Each test's name shows as it starts, so a hang names its test.
+          set -o pipefail
+          /usr/bin/python3 -X faulthandler -m unittest -v 2>&1 | tee tests.log && exit 0
           /usr/bin/python3 -c "import sys; t = open('tests.log').read(); t = t[t.find('====='):][:6000] or t[-6000:]; print('::error title=Tests failed on macOS::' + t.replace('%', '%25').replace('\r', '').replace('\n', '%0A'))"
           exit 1
 

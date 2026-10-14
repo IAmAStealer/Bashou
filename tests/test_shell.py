@@ -955,8 +955,11 @@ class ArenaShellTest(unittest.TestCase):
                        env={"BASHOU_SHELL": self.SHELL}, shell=self.SHELL)
             try:
                 self.assertTrue(sh.expect(ARENA_PROMPT))
+                start = len(sh.out)
                 version = sh.value("ZSH_VERSION" if self.SHELL == "zsh" else "BASH_VERSION")
                 self.assertRegex(version, r"^\d")
+                # Typed before the next prompt, a line can be lost (zsh drops typeahead): wait for it.
+                self.assertTrue(sh.expect(ARENA_PROMPT, sh.out.index(b"@@V=", start)))
                 other = sh.value("BASH_VERSION" if self.SHELL == "zsh" else "ZSH_VERSION")
                 self.assertEqual(other, "")
                 start = len(sh.out)
