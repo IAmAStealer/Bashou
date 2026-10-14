@@ -123,7 +123,10 @@ class HintTest(unittest.TestCase):
         s = state.default()
         for pet in list(creatures.NAMES) + ["pebble"]:
             a = dialogue.next_step(s, pet)
-            self.assertEqual(a.depth, 1, (pet, a.id))                   # where a chain starts
+            prev = achievements.PREV.get(a.id)                          # where a chain starts on this system:
+            while prev:                                                 # macOS has no getent, so the network
+                self.assertFalse(prev.available(), (pet, a.id, prev.id))  # pet starts at dig
+                prev = achievements.PREV.get(prev.id)
 
     def test_the_hint_follows_its_chain(self):
         """Owner: the pet points at the next achievement of its chain until you earn it, then moves on."""

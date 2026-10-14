@@ -207,8 +207,8 @@ class ProcessesTest(unittest.TestCase):
         with mock.patch.object(procs, "PROC", False):
             ppid, name = procs.parent(os.getpid())
             self.assertEqual(ppid, os.getppid())
-            self.assertIn("python", name)
-            self.assertIn("python", procs.command(os.getpid()))
+            self.assertIn("python", name.lower())                    # macOS: "Python"
+            self.assertIn("python", procs.command(os.getpid()).lower())
             self.assertIsNone(procs.parent(2 ** 22 + 7))
 
     def test_parent_and_command_agree_with_proc(self):

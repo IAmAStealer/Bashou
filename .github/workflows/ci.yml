@@ -127,9 +127,12 @@ jobs:
         run: |
           /usr/bin/python3 --version
           bash --version | head -1
-          # Each test's name shows as it starts, so a hang names its test.
+          # Each test's name shows as it starts; a test stuck for 3 minutes prints where it waits.
+          # The terminal tests run last, so a hang there doesn't hide the other failures.
           set -o pipefail
-          /usr/bin/python3 -X faulthandler -m unittest -v 2>&1 | tee tests.log && exit 0
+          others=()
+          for f in tests/test_*.py; do [ "$f" = tests/test_shell.py ] || { f=${f%.py}; others+=("${f//\//.}"); }; done
+          { /usr/bin/python3 -m tests.watchdog "${others[@]}" && /usr/bin/python3 -m tests.watchdog tests.test_shell; } 2>&1 | tee tests.log && exit 0
           /usr/bin/python3 -c "import sys; t = open('tests.log').read(); t = t[t.find('====='):][:6000] or t[-6000:]; print('::error title=Tests failed on macOS::' + t.replace('%', '%25').replace('\r', '').replace('\n', '%0A'))"
           exit 1
 

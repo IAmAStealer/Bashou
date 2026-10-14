@@ -90,7 +90,7 @@ class GameTest(unittest.TestCase):
         self.go("\r")
         self.assertEqual(g.adv["phase"], "fork")
         self.go("\x1b[C", "\r")                          # second path
-        self.assertEqual(g.adv["topic"], world.fork_options(g.adv | {"leg": 0})[1])
+        self.assertEqual(g.adv["topic"], world.fork_options(g.adv | {"leg": 0}, g.topics, g.pool)[1])
         self.assertEqual(self.walk_to_event(), "monster")  # every path starts with a monster
         self.assertTrue(g.draw(1.0, 0))
 
@@ -130,7 +130,7 @@ class GameTest(unittest.TestCase):
         self.assertEqual(g.signs, [])                          # the start: the road, no names yet
         self.go("\r")
         frame = g.draw(0.0, 0)
-        options = world.fork_options(g.adv)
+        options = world.fork_options(g.adv, g.topics, g.pool)
         self.assertEqual(len(g.signs), len(options))
         for (line, col, text, picked), topic in zip(g.signs, options):
             self.assertIn(topic_name(topic), text)
