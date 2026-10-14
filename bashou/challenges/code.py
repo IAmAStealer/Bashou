@@ -104,6 +104,21 @@ def sanitized():
         return [], []
 
 
+@functools.lru_cache(maxsize=None)
+def leaks():
+    """True when AddressSanitizer here also finds memory leaks. Apple's clang (gcc on macOS) has no leak
+    detector, and asking for one (detect_leaks=1) stops every program."""
+    flags, launcher = sanitized()
+    if not flags:
+        return False
+    with tempfile.TemporaryDirectory() as tmp:
+        (Path(tmp) / "t.c").write_text("int main(void) { return 0; }\n")
+        built = run(["gcc", *flags, "t.c", "-o", "t"], tmp)
+        r = built and built.returncode == 0 and run([*launcher, "./t"], tmp, timeout=3,
+                                                    env={**os.environ, "ASAN_OPTIONS": "detect_leaks=1"})
+        return bool(r) and r.returncode == 0
+
+
 def sanitizer():
     """The -fsanitize flags this gcc can build and run, or [] (no AddressSanitizer here)."""
     return sanitized()[0]
@@ -117,7 +132,8 @@ def c_tests(name):
             built = run(["gcc", "-g", *flags, str(work / name), "-o", "prog"], tmp)
             if not built or built.returncode != 0:
                 return False
-            env = {**os.environ, "ASAN_OPTIONS": "detect_leaks=1", "UBSAN_OPTIONS": "halt_on_error=1"}
+            env = {**os.environ, "UBSAN_OPTIONS": "halt_on_error=1",
+                   **({"ASAN_OPTIONS": "detect_leaks=1"} if leaks() else {})}
             for args, stdin, expected in meta["runs"]:
                 r = run([*launcher, "./prog", *args], tmp, stdin, env=env)
                 if not r or r.returncode != 0 or r.stdout != expected:
@@ -643,7 +659,7 @@ ALL = [
                      "Try: python3 -c \"import base64; p = open('token.txt').read().split('.')[1]; "
                      "print(base64.urlsafe_b64decode(p + '=='))\""],
               setup=jwt_setup),
-    Challenge(level=2, id="leak_lurker", fix=True, works=lambda: bool(sanitizer()), pet="beaver", threat="Leak Lurker", **C,
+    Challenge(level=2, id="leak_lurker", fix=True, works=lambda: bool(sanitizer()) and leaks(), pet="beaver", threat="Leak Lurker", **C,
               task="The Leak Lurker feeds on memory nobody frees in shout.c.\n"
                    "Fix shout.c (its first lines say what it must do). "
                    "Run it: gcc -g -fsanitize=address shout.c -o shout && ./shout < names.txt\n"

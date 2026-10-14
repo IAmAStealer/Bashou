@@ -295,6 +295,47 @@ class ProcessesTest(unittest.TestCase):
                 self.assertNotIn("f\"/proc", path.read_text())
 
 
+class CompilerTest(unittest.TestCase):
+    def test_c_fights_without_a_leak_detector(self):
+        """CI on macOS: every C fight refused correct fixes. Their programs ran with ASAN_OPTIONS=detect_leaks=1,
+        and Apple's clang (gcc on a Mac) has no leak detector: AddressSanitizer stopped every run. Leaks are
+        checked only where they can be; the Leak Lurker, which is all about one, waits for such a system."""
+        from subprocess import CompletedProcess
+        from bashou.challenges import code
+        seen = []
+
+        def run(cmd, cwd, stdin="", timeout=10, env=None):
+            seen.append(dict(env or {}))
+            if (env or {}).get("ASAN_OPTIONS", "").startswith("detect_leaks=1"):
+                return CompletedProcess(cmd, 1, "", "detect_leaks is not supported on this platform.")
+            return CompletedProcess(cmd, 0, "ok\n" if cmd[0] == "./prog" else "", "")
+        code.leaks.cache_clear()
+        try:
+            with mock.patch.object(code, "run", side_effect=run), \
+                    mock.patch.object(code, "sanitized", return_value=(["-fsanitize=address,undefined"], [])):
+                self.assertFalse(code.leaks())
+                self.assertFalse(challenges.BY_ID["leak_lurker"].works())
+                self.assertTrue(challenges.BY_ID["fencepost_fiend"].works())
+                self.assertTrue(code.c_tests("x.c")(Path("."), {"runs": [[[], "", "ok\n"]]}, "done"))
+                self.assertNotIn("detect_leaks=1", seen[-1].get("ASAN_OPTIONS", ""))
+                from bashou import fight                     # the Overflow Ogre comes after it: not blocked
+                ogre = challenges.BY_ID["overflow_ogre"]
+                self.assertEqual(ogre.after, ("leak_lurker",))
+                s = {**state.default(), "tools": {"gcc": 3}}
+                self.assertTrue(fight.ready(s, ogre))
+        finally:
+            code.leaks.cache_clear()
+
+
+class Base64Test(unittest.TestCase):
+    def test_the_encoded_note_hint_works_on_a_mac(self):
+        """CI on macOS: "base64 -d note.txt" printed "invalid argument note.txt": macOS's base64 reads a file
+        only with -i or on its input. With <, GNU's and macOS's base64 both read it."""
+        hints = challenges.BY_ID["encoded_note"].hints
+        self.assertIn("base64 -d < note.txt", hints[-1])
+        self.assertFalse(re.search(r"base64 -d \w", " ".join(hints)))
+
+
 class SetupTest(unittest.TestCase):
     def test_an_old_bash_gets_no_line(self):
         """macOS's own bash is 3.2: too old for Bashou (PS0 came in 4.4). Its ~/.bashrc stays untouched."""

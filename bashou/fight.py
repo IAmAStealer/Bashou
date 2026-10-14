@@ -190,10 +190,16 @@ def learned(s, tool):
     return s["tools"].get(tool, 0) > 0 or tool in lessons or library
 
 
+def built_on(s, ch):
+    """The fights `ch` builds on are beaten, or can't come on this machine (no leak detector on a Mac: no Leak
+    Lurker, and the Overflow Ogre after it still comes)."""
+    return all(a in s["challenges"] or not challenges.BY_ID[a].available() for a in ch.after)
+
+
 def ready(s, ch):
     """Beginners first: level 1 fights come anytime; harder ones once you've met their tool and
     beaten the fights they build on (the Knot Eel needed pipes and uniq nobody had shown you)."""
-    if not all(a in s["challenges"] for a in ch.after):
+    if not built_on(s, ch):
         return False
     return ch.level == 1 or any(learned(s, t) for t in ch.tools)
 
@@ -201,7 +207,7 @@ def ready(s, ch):
 def to_discover(s):
     """Tools of the next fights you can't get yet only because you haven't met them."""
     return list(dict.fromkeys(ch.tool for ch in remaining(s)       # once each: the pets pick one at random
-                              if not ready(s, ch) and all(a in s["challenges"] for a in ch.after)))
+                              if not ready(s, ch) and built_on(s, ch)))
 
 
 def threats_per_day(s, today=None):
