@@ -119,6 +119,35 @@ class SkillsTest(unittest.TestCase):
             self.assertTrue(skills.wanted(MAC, "systemd"))
             self.assertFalse(skills.wanted({"settings": {"os": "macos"}}, "rocky"))
 
+    def test_the_skills_checklist_of_a_mac_has_no_linux_skill(self):
+        """CI on macOS: the Linux skills' notes ("Linux only: bashou config os linux to learn it") wrapped and
+        pushed the checklist off a 60x16 terminal, for skills a Mac doesn't learn anyway. A Mac lists its own
+        skills; one line below says how to learn the Linux ones. A Linux skill ticked before stays ticked."""
+        import contextlib
+        import io
+        from bashou import starter
+        with on("macos"), mock.patch("os.get_terminal_size", return_value=os.terminal_size((60, 16))), \
+                mock.patch.object(state, "load", return_value=state.default()), \
+                mock.patch("bashou.which.installed", return_value=True):
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                starter.checklist_drawer({"bash"})(0, False)
+            text = re.sub(r"\x1b\[[0-9;?]*[A-Za-z]", "", out.getvalue())
+            self.assertLessEqual(text.count("\n"), 16, text)
+            self.assertNotIn("] systemd", text)
+            self.assertIn("bashou config os linux", text)
+            keys = list(skills.topics(MAC))
+            ticks = iter([keys.index("python"), None])
+            with mock.patch.object(starter, "pick", side_effect=lambda draw, n, *a, toggle=None, **k: (
+                    1 if n == 2 else (toggle(next(ticks)) or 0) if n == len(keys) else None)):
+                self.assertEqual(starter.choose_skills(["bash", "debian"]), ["bash", "debian", "python"])
+        with on("linux"), mock.patch.object(state, "load", return_value=state.default()):
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                starter.checklist_drawer({"bash"})(0, False)
+            self.assertIn("systemd", out.getvalue())
+            self.assertNotIn("bashou config os", out.getvalue())
+
     def test_the_forks_of_a_mac_offer_no_linux_path(self):
         with on("macos"):
             for chapter in range(1, 6):

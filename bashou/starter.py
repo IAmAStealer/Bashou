@@ -168,21 +168,25 @@ def draw_mode(pos, breath):
 
 
 def checklist_drawer(ticked):
+    """The skills of the systems you learn about (a Mac lists no Linux skill: one line below says how)."""
     s = state.load()
+    keys = skills.topics(s)
 
     def draw(pos, breath):
         width = render.columns()
         out = [f"{ESC}[H{ESC}[2J"] + [line + "\n" for line in render.heading(
             _("Pick your skills"), _("↑/↓ to move, Space to tick, Enter when done"), width)] + ["\n"]
-        for i, skill in enumerate(skills.SKILLS):
+        for i, skill in enumerate(keys):
             box = "[x]" if skill in ticked else "[ ]"
             text = f"{box} {_(skills.SKILLS[skill].text)}"
             line = f"  {REV} {text} {RESET}" if i == pos else f"   {text} "
             why = skills.note(skill, s)
             out += [part + "\n" for part in render.beside(line, f"({why})" if why else "", width, 7)]
-        room = render.rows() - "".join(out).count("\n") - (3 if not ticked else 1)
-        out += [line + "\n" for line in uses_lines(list(skills.SKILLS)[pos], width)[:max(0, room)]]
-        if not ticked:
+        room = render.rows() - "".join(out).count("\n") - (3 if not ticked & set(keys) else 1)
+        other = skills.other_os(s)
+        below = ["", *(f"  {DIM}{part}{RESET}" for part in render.wrap(other, max(20, width - 3), 2))] if other else []
+        out += [line + "\n" for line in (below + uses_lines(keys[pos], width))[:max(0, room)]]
+        if not ticked & set(keys):
             out.append(f"\n  {DIM}{_('Tick at least one.')}{RESET}\n")
         sys.stdout.write("".join(out))
         sys.stdout.flush()
@@ -226,14 +230,14 @@ def choose_skills(current="all"):
     if mode == 0:
         return "all"
     ticked = set(skills.SKILLS if current == "all" else current)
-    keys = list(skills.SKILLS)
+    keys = skills.topics(state.load())          # the others (another system's) keep their tick
     while True:
         pos = pick(checklist_drawer(ticked), len(keys), LANG_KEYS,
                    toggle=lambda p: ticked.symmetric_difference_update({keys[p]}))
         if pos is None:
             return None
-        if ticked:
-            return "all" if len(ticked) == len(keys) else [k for k in keys if k in ticked]
+        if ticked & set(keys):
+            return "all" if ticked >= set(skills.SKILLS) else [k for k in skills.SKILLS if k in ticked]
 
 
 def ask_skills(current="all"):

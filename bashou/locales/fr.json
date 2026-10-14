@@ -410,6 +410,7 @@
  "No commands, files, machine names or dates. Change the nickname with bashou share --name NICK.": "Aucune commande, aucun fichier, nom de machine ni date. Change le pseudo avec bashou share --name PSEUDO.",
  "Nickname (1 to 12 letters, digits, - or _): ": "Pseudo (1 à 12 lettres, chiffres, - ou _) : ",
  "another system: questions only": "autre système : questions seulement",
+ "{name} skills ({skills}): bashou config os {system}": "Compétences {name} ({skills}) : bashou config os {system}",
  "{name} only: bashou config os {system} to learn it": "{name} seulement : bashou config os {system} pour l'apprendre",
  "no {program} here: questions only": "pas de {program} ici : questions seulement",
  "r: restart · q: quit": "r : recommencer · q : quitter",

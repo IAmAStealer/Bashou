@@ -10857,6 +10857,7 @@
   "{name} moved to this terminal. Your commands in the other terminals still count.",
   "{name} only: bashou config os {system} to learn it",
   "{name} reached level {level}!",
+  "{name} skills ({skills}): bashou config os {system}",
   "{name} · level {level} (max)",
   "{name} · level {level} {bar} {done}/{per} achievements to level {next}",
   "{name}: form {n}/{total}",

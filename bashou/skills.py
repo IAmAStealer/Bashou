@@ -79,6 +79,16 @@ def wanted(s, skill):
         skill not in SKILLS or shows(SKILLS[skill], oses(s)))
 
 
+def other_os(s):
+    """Under the skills checklist: how to learn the skills of another system (`s` the save), or ""."""
+    hidden = [k for k in SKILLS if k not in topics(s)]
+    if not hidden:
+        return ""
+    system = SKILLS[hidden[0]].os
+    return _("{name} skills ({skills}): bashou config os {system}").format(
+        name=OS_NAMES[system], skills=", ".join(_(SKILLS[k].text).split(":")[0] for k in hidden), system=system)
+
+
 OPTIONAL = {"yamllint"}          # nice to have: no fight waits for it
 
 
