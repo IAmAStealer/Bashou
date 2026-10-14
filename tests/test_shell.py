@@ -146,9 +146,13 @@ class Shell:
         return False
 
     def close(self):
+        """Kill the shell. macOS: an exiting process waits until its terminal's output is read, so read on
+        until it's gone (CI hung here with a plain waitpid)."""
         try:
             os.kill(self.pid, signal.SIGKILL)
-            os.waitpid(self.pid, 0)
+            end = time.time() + TIMEOUT
+            while os.waitpid(self.pid, os.WNOHANG) == (0, 0) and time.time() < end:
+                self.read(0.05)
         except OSError:
             pass
         try:
