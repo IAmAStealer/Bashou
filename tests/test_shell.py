@@ -113,11 +113,15 @@ class Shell:
         return pattern in self.out[start:]
 
     def value(self, name):
-        """Print a shell variable through a marker and read it back."""
+        """Print a shell variable through a marker and read it back. Typed while a program still holds the
+        terminal, the line can be lost (restoring the terminal flushes what was typed): it's typed again."""
         start = len(self.out)
-        # "@@V""=" on the command line, "@@V=" only in the printed output.
-        os.write(self.fd, f'echo "@@V""=${name}@@"\n'.encode())
-        if not self.expect(b"@@V=", start) or not self.expect(b"@@", self.out.index(b"@@V=", start) + 4):
+        for _ in range(3):
+            # "@@V""=" on the command line, "@@V=" only in the printed output.
+            os.write(self.fd, f'echo "@@V""=${name}@@"\n'.encode())
+            if self.expect(b"@@V=", start, TIMEOUT / 2):
+                break
+        if not self.expect(b"@@V=", start, 0) or not self.expect(b"@@", self.out.index(b"@@V=", start) + 4):
             raise AssertionError(f"no value for {name}")
         rest = self.out[self.out.index(b"@@V=", start) + 4:]
         return rest[:rest.index(b"@@")].decode()
