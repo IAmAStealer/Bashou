@@ -644,14 +644,19 @@ class ShellTest(unittest.TestCase):
                 sh = Shell(tmp, shell=self.SHELL)
                 sh.read(1)
                 sh.expect(b"38;2;216;200;160")
-                sh.send(last + "\n", 0.5)
-                sh.send("\x04", 0)                              # Ctrl+D: logout
-                for _ in range(TIMEOUT * 10):
+                start = len(sh.out)
+                sh.send(last + "\n", 0)
+                sh.expect(b"$ ", start)                         # the prompt hook has run
+                done = 0
+                for i in range(TIMEOUT * 10):
+                    if i % 20 == 0:                             # Ctrl+D: logout; again if the hook's terminal
+                        sh.send("\x04", 0)                      # question took it (macOS, slower)
                     done, status = os.waitpid(sh.pid, os.WNOHANG)
                     if done:
                         break
-                    time.sleep(0.1)
+                    sh.read(0.1)
                 os.close(sh.fd)
+                self.assertTrue(done, f"{last}: the shell didn't exit")
                 self.assertEqual(os.waitstatus_to_exitcode(status), code, last)
 
     def test_bashou_on_and_off_always_answer(self):
