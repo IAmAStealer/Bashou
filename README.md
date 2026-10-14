@@ -58,19 +58,23 @@ Only zsh on this machine? Load `bashou.zsh` from your `~/.zshrc`:
 echo 'source ~/.bashou/bashou.zsh' >> ~/.zshrc && source ~/.zshrc
 ```
 
-**macOS** (test version, on the `macos` branch): Bashou runs in zsh, the Mac's own shell.
+**macOS** (test version, `macos-v0.9.1`): Bashou runs in zsh, the Mac's own shell.
 
 ```bash
-xcode-select --install
-git clone -b macos https://github.com/IAmAStealer/Bashou.git ~/.bashou && echo 'source ~/.bashou/bashou.zsh' >> ~/.zshrc && source ~/.zshrc
+curl -fsSLO https://github.com/IAmAStealer/Bashou/releases/download/macos-v0.9.1/install-macos.sh
+less install-macos.sh
+sh install-macos.sh
 ```
 
-The first line installs Apple's command line tools, which bring git and python3 (skip it if `git --version`
-already works). The second one downloads Bashou and loads it from your `~/.zshrc`.
+The first line downloads the installer, the second one shows it to you (press q to leave): it's short, and
+reading a script before running it is a good habit. The third one runs it. It checks that git and python3 are
+there (they come with Apple's command line tools; if they're missing, it opens the window that installs them,
+then you run it again), downloads Bashou into `~/.bashou` and loads it from your `~/.zshrc`. Run it again to
+update to the version it names.
 On a Mac, the questions and lessons are about macOS: Linux-only ones (systemd, apt, dnf, `ip`, `ss`) are left
 out. Do you also work on Linux servers? `bashou config os both` brings them back.
 macOS's own bash is too old for Bashou (it needs 4.4): use zsh, or a newer bash (`brew install bash`).
-To get the latest test version: `git -C ~/.bashou pull`.
+For now `bashou update` doesn't offer macOS versions: a new one comes with its own installer.
 
 Installed with git on Debian or Red Hat, and want the repository instead? Run `bashou update --packages`.
 It shows every command it will run, asks you, then moves you over. Your pets and progress are kept.

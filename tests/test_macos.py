@@ -336,6 +336,19 @@ class Base64Test(unittest.TestCase):
         self.assertFalse(re.search(r"base64 -d \w", " ".join(hints)))
 
 
+class InstallerTest(unittest.TestCase):
+    def test_the_macos_release_stays_out_of_bashou_update(self):
+        """Owner, 2026-10-14: a macOS test release with its own installer, not offered by `bashou update`, which
+        takes the newest tag of `git tag --list v*.*.*`: a tag like v0.9.1-macos would reach every Linux player."""
+        import fnmatch
+        script = (ROOT / "tools/install-macos.sh").read_text()
+        tag = re.search(r"^TAG=(\S+)$", script, re.M).group(1)
+        self.assertFalse(fnmatch.fnmatch(tag, "v*.*.*"), tag)
+        for readme in ("README.md", "README.fr.md"):
+            self.assertIn(f"releases/download/{tag}/install-macos.sh", (ROOT / readme).read_text(), readme)
+        self.assertIn(f"releases/download/{tag}/install-macos.sh", script)
+
+
 class SetupTest(unittest.TestCase):
     def test_an_old_bash_gets_no_line(self):
         """macOS's own bash is 3.2: too old for Bashou (PS0 came in 4.4). Its ~/.bashrc stays untouched."""
@@ -368,9 +381,11 @@ class DocsTest(unittest.TestCase):
             text = (ROOT / name).read_text()
             with self.subTest(name):
                 self.assertIn("macOS", text)
-                self.assertIn("xcode-select --install", text)
-                self.assertIn("git clone -b macos https://github.com/IAmAStealer/Bashou.git ~/.bashou", text)
-                self.assertIn("source ~/.bashou/bashou.zsh' >> ~/.zshrc", text)
+                self.assertIn("less install-macos.sh\nsh install-macos.sh", text)     # read it, then run it
+        script = (ROOT / "tools/install-macos.sh").read_text()
+        self.assertIn("xcode-select --install", script)
+        self.assertIn('clone --quiet --branch "$TAG" "$REPO" "$DIR"', script)
+        self.assertIn("BASHOU_SHELL=zsh python3 -m bashou setup", script)
 
     def test_ci_runs_the_tests_on_a_mac(self):
         text = (ROOT / ".github/workflows/ci.yml").read_text()
