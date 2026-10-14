@@ -425,7 +425,7 @@ class RoomTest(unittest.TestCase):
 
     def test_keys_waiting_mean_no_question_and_no_pet(self):
         """Asking the terminal would eat keys typed ahead: then the pet skips this prompt."""
-        script = (f"source <(sed -n '/^_bashou_dsr=/,/^_bashou_make_room()/p' {ROOT}/bashou/room.{self.SHELL} | head -n -1)\n"
+        script = (f"source <(sed -n '/^_bashou_dsr=/,/^_bashou_make_room()/p' {ROOT}/bashou/room.{self.SHELL} | sed '$d')\n"
                   "_bashou_where && echo asked || echo skipped\n")
         import subprocess
         out = subprocess.run([self.SHELL, "-c", script], input="typed ahead\n", capture_output=True, text=True)
@@ -434,7 +434,7 @@ class RoomTest(unittest.TestCase):
     def test_a_late_answer_is_still_read(self):
         """Owner: ^[[30;120R showed up on the screen. A busy terminal (WSL) answered after the 2 s wait:
         the answer came when nobody read it any more. A terminal that answered once is waited for."""
-        script = (f"source <(sed -n '/^_bashou_dsr=/,/^_bashou_make_room()/p' {ROOT}/bashou/room.{self.SHELL} | head -n -1)\n"
+        script = (f"source <(sed -n '/^_bashou_dsr=/,/^_bashou_make_room()/p' {ROOT}/bashou/room.{self.SHELL} | sed '$d')\n"
                   "_bashou_where; _bashou_where && echo \"@@$_bashou_at@@\" || echo @@skipped@@\n")
         need(self.SHELL)
         pid, fd = pty.fork()
@@ -639,7 +639,7 @@ class ShellTest(unittest.TestCase):
     def test_quitting_keeps_bashs_exit_status(self):
         """The terminal said "exited with code 2": bash exits with the last command's status, Bashou
         (its exit trap, its prompt hook) must not change it."""
-        for last, code in (("true", 0), ("ls /nope", 2)):
+        for last, code in (("true", 0), ("(exit 2)", 2)):
             with tempfile.TemporaryDirectory() as tmp:
                 sh = Shell(tmp, shell=self.SHELL)
                 sh.read(1)
@@ -930,7 +930,7 @@ class SecurityShellTest(unittest.TestCase):
                 self.assertIn(b"Encoded note", sh.out)
                 self.assertNotIn(b"real bash", sh.out)             # zsh players get a zsh sandbox
                 self.assertEqual(sh.value("BASHOU_ARENA_SHELL"), self.SHELL)
-                sh.send('answer "$(base64 -d note.txt | cut -d\' \' -f2)"\n', 0)
+                sh.send('answer "$(base64 -d < note.txt | cut -d\' \' -f2)"\n', 0)
                 self.assertTrue(sh.expect(b"Solved"))
                 self.assertTrue(sh.wait_state(lambda s: s["security"] == ["encoded_note"]))
             finally:
@@ -1014,14 +1014,14 @@ class LoaderTest(unittest.TestCase):
         self.assertEqual(self.sh.value("BASHOU_SHELL"), self.SHELL)
 
     def test_each_command_is_logged_whole_with_its_status(self):
-        self.sh.send("ls /nope\n", 0.5)
+        self.sh.send("(exit 2)\n", 0.5)          # GNU ls /nope says 2, macOS's says 1
         self.sh.send("for i in 1 2; do\n  echo $i\ndone\n", 0.5)
         self.sh.send("true\n", 0.5)
         end = time.time() + TIMEOUT
         while len(self.events()) < 3 and time.time() < end:
             self.sh.read(0.2)
         events = self.events()
-        self.assertIn((2, "ls /nope"), events)
+        self.assertIn((2, "(exit 2)"), events)
         loop = [(s, c) for s, c in events if c.startswith("for i")]      # bash joins its lines with "; "
         self.assertEqual(len(loop), 1, events)
         self.assertEqual(loop[0][0], 0)
