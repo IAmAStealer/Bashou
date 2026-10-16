@@ -160,6 +160,8 @@ RENAME_RAT = Challenge(
     level=2, id="rename_rat", pet="ant", tools=("mv",), threat="Rename Rat", requires=["mv"], fix=True,
     uses=lambda a: "loop" in a.constructs or "rename" in a.tools,
     after=("clutter_critter",),
+    needs="Only a loop that runs mv once per photo can hurt the Rename Rat. Write a for loop around your mv "
+          "(or use rename), then answer again.",
     task="The Rename Rat shouted every photo's extension: .JPG. Rename each one to .jpg (beach.JPG becomes "
          "beach.jpg), with a loop. Then: verify",
     help="Here, mv renames one file at a time: the loop is the shell's job (lesson Loops).",

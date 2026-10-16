@@ -26,6 +26,8 @@ CHALLENGE = Challenge(
            "Try: grep ' 404$' access.log | cut -d' ' -f1 | sort -u | wc -l"],
     setup=setup,
     uses=lambda analysis: analysis.pipes >= 3,
+    needs="Only one pipeline of at least 3 commands, joined with |, can hurt the Knot Eel. Write it as a single "
+          "line, then answer again.",
     requires=["grep", "cut", "sort", "wc"],
 )
 ALL = [CHALLENGE]

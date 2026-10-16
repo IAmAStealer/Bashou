@@ -55,6 +55,7 @@ class Challenge:
     why: Optional[Callable] = None      # (work_dir) -> str or None: what's wrong, said when `verify` fails
     file: str = ""            # the file you fix, when Bashou can read it for you before verify (`check`)
     zsh: str = ""             # what zsh does differently here: the last hint of zsh players (meta["shell"])
+    needs: str = ""           # what hurts it when that's more than one of `tools` (a loop, a pipeline…)
     os: str = ""              # "linux": only on Linux (it needs ip, ss, /proc…); fights follow the machine itself
 
     @property

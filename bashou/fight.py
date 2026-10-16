@@ -394,6 +394,9 @@ def cmd_answer(base, value):
             print(BAD + "✗ " + _("Not quite. The {threat} shrugs it off.").format(threat=_(ch.threat))
                   + f"{RESET} {DIM}(hint · lesson · task · flee){RESET}")
         return 1
+    if ch.kind == "fight" and not used_tool(base, ch) and ch.needs:
+        print(ACCENT + "✓ " + _("Right answer.") + " " + _(ch.needs) + RESET)
+        return 1
     if ch.kind == "fight" and not used_tool(base, ch):   # investigations: any way you like
         print(ACCENT + "✓ " + _("Right answer, but only `{tool}` can hurt the {threat}. "
                                 "Solve it with {tool} (a successful command), then answer again.")

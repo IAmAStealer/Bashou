@@ -402,6 +402,24 @@ class ChallengeTest(unittest.TestCase):
             log.write_text(log.read_text() + "0\t    2  grep ' 404$' access.log | cut -d' ' -f1 | sort -u\n")
             self.assertTrue(fight.used_tool(base, ch))
 
+    def test_clutter_critter_takes_the_hints_separate_commands(self):
+        # owner bug 2026-10-16: mkdir then mv on separate lines was refused ("only mv hurts")
+        with tempfile.TemporaryDirectory() as base:
+            ch = challenges.BY_ID["clutter_critter"]
+            log = Path(base) / "log"
+            log.write_text("0\t    1  mkdir photos docs\n0\t    2  mv *.jpg photos/\n0\t    3  mv *.txt docs/\n")
+            self.assertTrue(fight.used_tool(base, ch))
+
+    def test_the_refusal_says_what_really_hurts(self):
+        out = io.StringIO()
+        with tempfile.TemporaryDirectory() as base, mock.patch("sys.stdout", out), \
+                mock.patch.object(fight, "used_tool", return_value=False), \
+                mock.patch.object(challenges.Challenge, "check", return_value=True):
+            (Path(base) / "meta.json").write_text(json.dumps({"challenge": "rename_rat", "args": {}}))
+            fight.cmd_answer(base, "done")
+        self.assertIn("loop", out.getvalue())
+        self.assertNotIn("only `mv`", out.getvalue())
+
     def test_the_tool_is_required(self):
         with tempfile.TemporaryDirectory() as base:
             ch = challenges.BY_ID["grep_hydra"]

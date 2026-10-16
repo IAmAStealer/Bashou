@@ -107,7 +107,7 @@ def clutter_verify(work, meta, value):
 
 CLUTTER_CRITTER = Challenge(
     level=1, id="clutter_critter", pet="squirrel", tools=("mv",), threat="Clutter Critter", requires=["mkdir", "mv"],
-    fix=True, uses=lambda a: {"mkdir", "mv"} <= a.tools,
+    fix=True,
     help="Here, the Usage lines show that mv takes several files (SOURCE...) and one DIRECTORY at the end.",
     task="The Clutter Critter threw photos and documents all over the folder.\nCreate the folders photos and "
          "docs, put every .jpg into photos/ and every .txt into docs/. Then: verify",
