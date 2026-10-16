@@ -5,6 +5,7 @@ import json
 import random
 import re
 import unittest
+import unittest.mock
 import urllib.parse
 
 from bashou import creatures, progress, spot, state
@@ -180,6 +181,41 @@ class GameTest(unittest.TestCase):
             g.answer(self.right(g))
         self.assertEqual(g.score, 2 * len(spot.KINDS))
         self.assertTrue(g.over())
+
+    def test_spamming_one_arrow_never_wins(self):
+        """Owner bug 2026-10-16: holding one key won every star (any arrow is right 1 time in 4)."""
+        g = self.game()
+        for _ in range(700):                                                  # a held key for 25 seconds
+            g.answer("up")
+        self.assertTrue(g.over())
+        self.assertEqual(g.mistakes, spot.MAX_MISTAKES)
+        self.assertEqual(spot.tier(g.score), "")
+
+    def test_too_many_mistakes_ends_the_game_and_says_why(self):
+        g = self.game()
+        for _ in range(spot.MAX_MISTAKES - 1):
+            g.answer(self.wrong(g))
+        self.assertFalse(g.over())
+        g.answer(self.wrong(g))
+        self.assertTrue(g.over())
+        self.assertIn("Too many mistakes!", screen.end_screen(g, 0, 80, 20))
+
+    def test_one_answer_per_key_burst(self):
+        """Keys read together (a held key's repeats) answer once."""
+        import contextlib
+        import io
+
+        class Keys:
+            def __init__(self):
+                self.calls = 0
+
+            def keys(self, timeout):
+                self.calls += 1
+                return ["\x1b[A"] * 30 if self.calls == 1 else ["q"]
+
+        with contextlib.redirect_stdout(io.StringIO()), unittest.mock.patch.object(spot.Game, "answer") as answer:
+            screen.play(Keys(), 80, 14)
+        self.assertEqual(answer.call_count, 1)
 
     def test_other_keys_do_nothing(self):
         g = self.game()

@@ -1,7 +1,7 @@
 """`bashou spot`: what is this string? (owner, 2026-10-02/03)
 
 An IPv6, a hash, base64, a regex, a line of Rust… A string in the center, 4 answers on the arrow keys, 20
-seconds for the whole game. The bag holds every kind twice; a good answer takes the string out, a
+seconds for the whole game, 5 mistakes at most. The bag holds every kind twice; a good answer takes the string out, a
 wrong one puts its kind back in the bag. No explanation: you go fast and learn from your mistakes, like
 when you skim real logs and configs.
 """
@@ -15,6 +15,7 @@ import uuid
 
 
 GAME_SECONDS = 25                # owner: 20 good answers is the last star, 5 more seconds for it
+MAX_MISTAKES = 5                 # owner bug 2026-10-16: holding one arrow won every star (1 in 4 is right)
 COPIES = 2                       # each kind twice in the bag: it can come back
 LONGEST, LABEL = 40, 14           # string and answer lengths: all on one line of 80 columns
 GAP = 5                          # columns between the string and the answers on its sides
@@ -230,7 +231,7 @@ class Game:
         return max(0.0, GAME_SECONDS - (self.clock() - self.start))
 
     def over(self):
-        return self.left() <= 0 or not self.bag and self.kind is None
+        return self.left() <= 0 or self.mistakes >= MAX_MISTAKES or not self.bag and self.kind is None
 
     def next(self):
         if not self.bag:

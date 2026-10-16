@@ -8,7 +8,7 @@ import time
 from .. import progress, state, terminal
 from ..i18n import _
 from ..render import BOLD, DIM, ESC, RESET
-from . import ARROWS, GAP, GAME_SECONDS, KINDS, TIERS, Game, tier
+from . import ARROWS, GAP, GAME_SECONDS, KINDS, MAX_MISTAKES, TIERS, Game, tier
 
 GOOD, BAD, GOLD = "\033[38;2;120;200;120m", "\033[38;2;230;110;100m", "\033[38;2;240;200;90m"
 
@@ -62,8 +62,13 @@ def save(game):
 
 
 def end_screen(game, best_before, cols, rows, notes=()):
-    lines = [_("Time's up!") if game.left() <= 0 else _("The bag is empty!"), "",
-             f"{BOLD}{_('Score')} {game.score}{RESET}  ·  " + _("{n} mistakes").format(n=game.mistakes)]
+    if game.mistakes >= MAX_MISTAKES:
+        lines = [_("Too many mistakes!"),
+                 DIM + _("{n} wrong answers end the game: guessing doesn't pay, read each string first.")
+                 .format(n=MAX_MISTAKES)[:cols - 4] + RESET, ""]
+    else:
+        lines = [_("Time's up!") if game.left() <= 0 else _("The bag is empty!"), ""]
+    lines += [f"{BOLD}{_('Score')} {game.score}{RESET}  ·  " + _("{n} mistakes").format(n=game.mistakes)]
     if game.score > best_before:
         lines.append(GOLD + _("New best score!") + RESET)
     else:
@@ -94,13 +99,16 @@ def play(screen, cols, rows):
     while not game.over():
         sys.stdout.write(draw(game, cols, rows))
         sys.stdout.flush()
+        answered = False
         for key in screen.keys(0.1):
             k = terminal.name(key, KEYS)
             if k == "quit":
                 return None
             if k == "restart":
                 return k
-            game.answer(k)
+            if k in ARROWS and not answered:      # keys read together (a held key): one answer
+                game.answer(k)
+                answered = True
     return game
 
 

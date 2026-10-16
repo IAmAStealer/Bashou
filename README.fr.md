@@ -157,7 +157,7 @@ compagnon pour tous tes terminaux, et il ne dessine jamais par-dessus ton texte.
   quand c'est fini, jamais comment, avec un indice si tu bloques.
 - **`bashou spot`** : un jeu rapide. Une chaîne apparaît : une adresse IPv6, une MAC, un hachage, du base64, un
   JWT, une regex, une ligne de Python ou de SQL… Dis ce que c'est avec les flèches, de plus en plus vite, en
-  25 secondes.
+  25 secondes ; 5 erreurs terminent la partie.
 - **`bashou arena`** : viens te battre quand tu veux. Un combat chronométré, ou une enquête de sécurité sans
   chrono (un fichier caché, une porte dérobée dans cron, un binaire SUID).
 - **`bashou adventure`** : une balade à travers 12 thèmes (logique de code, bash, Linux, systemd, Python, Rust,

@@ -418,6 +418,8 @@
  "no {program} here: questions only": "pas de {program} ici : questions seulement",
  "r: restart · q: quit": "r : recommencer · q : quitter",
  "Time's up!": "Temps écoulé !",
+ "Too many mistakes!": "Trop d'erreurs !",
+ "{n} wrong answers end the game: guessing doesn't pay, read each string first.": "{n} mauvaises réponses terminent la partie : deviner ne paie pas, lis chaque chaîne d'abord.",
  "The bag is empty!": "Le sac est vide !",
  "Enter or r: play again · q: quit": "Entrée ou r : rejouer · q : quitter",
  "`bashou spot` is a game for your terminal: run it there.": "`bashou spot` est un jeu pour ton terminal : lance-le là.",
