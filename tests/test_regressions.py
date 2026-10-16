@@ -19,7 +19,7 @@ import unittest
 from unittest import mock
 from pathlib import Path
 
-from bashou import achievements, challenges, cli, creatures, fight, i18n, state
+from bashou import achievements, challenges, cli, creatures, fight, i18n, progress, state
 
 
 class TempState(unittest.TestCase):
@@ -136,7 +136,7 @@ class CliBugs(TempState):
                     board.draw()
                 rows = [int(r) for r, c in re.findall(r"\x1b\[(\d+);(\d+)H", out.getvalue())]
                 self.assertLessEqual(max(rows), lines)
-        self.assertIn("terminal.Screen()", inspect.getsource(board_mod.Board.run))
+        self.assertIn("terminal.Screen(mouse=True)", inspect.getsource(board_mod.Board.run))   # wrap stays off
         from bashou import terminal
         self.assertFalse(terminal.Screen().wrap)               # no autowrap while the board is open…
         self.assertIn("?7h", inspect.getsource(terminal.Screen.__exit__))   # …and it comes back on the way out
@@ -483,6 +483,45 @@ class BoardTest(TempState):
         board = Board()
         self.assertEqual((board.ids[board.pos], board.pony), ("ponies", "pony_vim"))
         self.assertIn("●", "".join(board.tile(board.pos)))
+
+    @mock.patch("bashou.which.installed", return_value=True)
+    def test_click_and_hover_the_tiles(self, _):
+        """Owner, 2026-10-16: the mouse in bashou swap. A click selects a tile, a second click picks it."""
+        from bashou.board import Board
+        with state.locked() as s:
+            s["pets"] += ["bat", "frog"]
+        board = Board()
+        board.layout(120, 40)
+        x, y = board.where("frog")
+        board.mouse(("move", x, y))
+        self.assertEqual(board.ids[board.hover], "frog")
+        self.assertNotEqual(board.tile(board.hover), Board().tile(board.ids.index("frog")))   # highlighted
+        self.assertTrue(board.mouse(("click", x, y)))
+        self.assertEqual(board.ids[board.pos], "frog")
+        self.assertFalse(board.mouse(("click", x, y)))                                         # picked: done
+        self.assertEqual(state.load()["active"], "frog")
+
+    @mock.patch("bashou.which.installed", return_value=True)
+    def test_the_forms_beside_the_preview(self, _):
+        """Owner: see which form is 1, 2 or 3 stars, and pick one with a click."""
+        from bashou import render
+        from bashou.board import Board
+        with state.locked() as s:
+            s["pets"].append("frog")
+            s["achievements"] += ["sprinter", "historian", "thousand"]            # 3: the Frog's 2nd form
+        board = Board()
+        board.pos = board.ids.index("frog")
+        board.layout(120, 40)
+        text = render.strip("\n".join(board.preview()))
+        self.assertIn("★ 1. Tadpole", text)
+        self.assertIn("★★ 2. Tree frog", text)
+        self.assertIn("☆☆☆ 3. ???", text)
+        x, y = board.where("form", 1)
+        board.mouse(("click", x, y))
+        self.assertIn("Tadpole", progress.current(state.load(), "frog")[2])
+        x, y = board.where("form", 3)
+        board.mouse(("click", x, y))
+        self.assertIn("5 achievements", board.message)                            # not reached: what it needs
 
     @mock.patch("bashou.which.installed", return_value=True)
     def test_no_ponies_no_tile(self, _):

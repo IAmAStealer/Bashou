@@ -42,6 +42,25 @@ class ScreenTest(unittest.TestCase):
         self.assertEqual([terminal.name(k) for k in keys], ["up", "quit"])
         self.assertEqual(terminal.name("f", {"f": "form"}), "form")
 
+    def test_mouse_reports_are_one_key_each(self):
+        """Owner, 2026-10-16: click and hover in bashou swap. SGR reports (ESC [ < b ; x ; y M) stay whole."""
+        keys = terminal.split_keys("\x1b[<0;10;5M\x1b[<0;10;5m\x1b[<35;11;6M\x1b[<64;1;1M\x1b[<65;1;1Mq\x1b[<3")
+        self.assertEqual([terminal.mouse(k) for k in keys],
+                         [("click", 10, 5), None, ("move", 11, 6), ("wheel_up", 1, 1), ("wheel_down", 1, 1), None])
+        self.assertEqual(terminal.name(keys[-1]), "quit")                         # a cut report is dropped
+        self.assertIsNone(terminal.mouse("\x1b[A"))
+
+    def test_the_mouse_is_only_asked_for_by_screens_that_use_it(self):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out), terminal.Screen(fd=self.slave):
+            pass
+        self.assertNotIn("?1000h", out.getvalue())
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out), terminal.Screen(fd=self.slave, mouse=True):
+            pass
+        self.assertIn("?1006h", out.getvalue())
+        self.assertIn("?1000l", out.getvalue())                                   # given back on the way out
+
     def test_paused_gives_the_terminal_back(self):
         before = modes(self.slave)
         with contextlib.redirect_stdout(io.StringIO()), terminal.Screen(fd=self.slave) as screen:

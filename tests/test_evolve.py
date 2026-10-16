@@ -180,12 +180,15 @@ class NoSpoilerTest(unittest.TestCase):
     """Forms are to discover (owner): only the ones reached are named, then "?" and its level."""
 
     def test_the_board_names_only_reached_forms(self):
-        from bashou.board import ladder_line
-        s = state.default()
-        s["starter"], s["achievements"] = "star", [f"a{i}" for i in range(15)]
-        self.assertEqual(ladder_line(s), "Stardust → Meteor → Comet → ? (level 6)")
-        s["achievements"] = [f"a{i}" for i in range(99)]
-        self.assertEqual(ladder_line(s), "Stardust → Meteor → Comet → Moon → Planet → Star → Red giant → Nebula → Black hole → Galaxy → Universe")
+        from bashou.board import Board
+        board = Board.__new__(Board)
+        board.s = state.default()
+        board.s["starter"], board.s["achievements"] = "star", [f"a{i}" for i in range(15)]
+        names = [text.split(". ", 1)[1] for k, text in board.forms("starter")]
+        self.assertEqual(names[:5], ["Stardust", "Meteor", "Comet ◀", "??? (level 6)", "???"])
+        board.s["achievements"] = [f"a{i}" for i in range(99)]
+        names = [text.split(". ", 1)[1] for k, text in board.forms("starter")]
+        self.assertNotIn("???", " ".join(names))
 
     def test_the_starter_choice_names_only_the_first_form(self):
         from bashou import starter

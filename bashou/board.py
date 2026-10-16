@@ -11,6 +11,7 @@ from .render import ESC, BOLD, DIM, RESET, REV, ACCENT
 
 COLS = 4
 TILE_W, TILE_H = 18, 2          # 16-character names (Golem de cristal) fit; 4 × 18 fits 80 columns
+HOVER = f"{ESC}[48;2;55;60;82m"   # the tile under the mouse
 PREVIEW_SHORT = 9                  # sprite, blank line, name and next stage
 KEYS = {"f": "form"}             # besides terminal.NAMES
 
@@ -22,16 +23,6 @@ def hint(s, pet):
 def silhouette(pet):
     return creatures.Pet(pet.id, pet.name, pet.base, {k: (70, 72, 86) for k in pet.palette},
                          stages=pet.stages)
-
-
-def ladder_line(s):
-    """The forms reached so far, then a mystery: what comes next is for you to discover."""
-    forms = progress.chain(s, "starter")
-    top = progress.reached(s, "starter")
-    shown = [_(creatures.PETS[f].name) for f in forms[:top]]
-    if top < len(forms):
-        shown.append("? " + _("(level {level})").format(level=creatures.PETS[forms[top - 1]].next_at["level"]))
-    return " → ".join(shown)
 
 
 class Board:
@@ -55,6 +46,9 @@ class Board:
         self.message = ""
         self.top = 0                      # first pet row shown when the grid scrolls
         self.cols = COLS                  # tiles per row: fewer on a narrow (portrait) terminal
+        self.hover = None                 # the tile under the mouse
+        self.hits = []                    # (row, first column, last column, ("tile", i) or ("form", k)): what a click hits
+        self.form_lines = {}              # preview line -> (form number, column in the line) of the forms list
 
     def rows(self):
         return -(-(len(self.ids) - 1) // self.cols)     # the last row may be partly empty
@@ -78,23 +72,80 @@ class Board:
         else:
             name, top = "???", "☆☆☆"
         name = name[:TILE_W - 2]
-        style = REV if i == self.pos else ("" if unlocked else DIM)
+        style = REV if i == self.pos else (HOVER if i == self.hover else "") + ("" if unlocked else DIM)
         return [f"{style} {top:<{TILE_W - 2}} {RESET}",
                 f"{style} {name:<{TILE_W - 2}} {RESET}"]
 
-    def starter_preview(self):
+    def forms(self, who):
+        """The forms list next to the sprite: "★★ 2. Tree frog ◀" (the one shown), "☆☆☆ 3. ??? (5 achievements)"
+        for the next one, "???" after it: forms are to discover (owner), only the reached ones are named."""
+        chain, top, shown = progress.chain(self.s, who), progress.reached(self.s, who), progress.look(self.s, who)
+        out = []
+        for k, sprite in enumerate(chain, 1):
+            if k <= top:
+                name = _(creatures.PETS[sprite].name) + (" ◀" if k == shown and top > 1 else "")
+            else:
+                name = "???" + (f" ({self.needs(chain, k)})" if k == top + 1 else "")
+            out.append((k, ("★" if k <= top else "☆") * k + f" {k}. {name}"))
+        return out
+
+    def needs(self, chain, k):
+        """What form k waits for: "level 6", "5 achievements"."""
+        need = creatures.PETS[chain[k - 2]].next_at
+        return (_("level {level}").format(level=need["level"]) if "level" in need
+                else _("{count} achievements").format(count=need["achievements"]))
+
+    def with_forms(self, sprite_lines, who, width):
+        """The sprite, and its forms beside it when there's room (else under it). Remembers where each form is."""
+        forms = self.forms(who)
+        self.form_lines = {}
+        wide = max(render.width(text) for k, text in forms)
+        if width >= 17 + 3 + wide:
+            out = []
+            for i in range(max(len(sprite_lines), len(forms))):
+                left = sprite_lines[i] if i < len(sprite_lines) else ""
+                pad = " " * (17 + 3 - render.width(render.strip(left)))
+                if i < len(forms):
+                    k, text = forms[i]
+                    self.form_lines[i] = (k, 20)
+                    out.append(left + pad + (DIM if not text.startswith("★") or "???" in text else "") + text + RESET)
+                else:
+                    out.append(left)
+            return out
+        out = list(sprite_lines) + [""]
+        for k, text in forms:
+            self.form_lines[len(out)] = (k, 0)
+            out.append(text)
+        return out
+
+    def pick_form(self, k):
+        """A click on a form: show it, or say what it waits for."""
+        who = self.ids[self.pos]
+        chain, top = progress.chain(self.s, who), progress.reached(self.s, who)
+        if k <= top:
+            with state.locked() as s:
+                progress.set_look(s, who, k)
+            self.s = state.load()
+            self.message = _("{name}: form {n}/{total}").format(name=progress.current(self.s, who)[2], n=k, total=top)
+            return
+        need = creatures.PETS[chain[k - 2]].next_at
+        self.message = DIM + (_("Form {n} comes at level {level}.").format(n=k, level=need["level"]) if "level" in need
+                              else _("Form {n} comes with {count} achievements of this family.").format(
+                                  n=k, count=need["achievements"])) + RESET
+
+    def starter_preview(self, width=60):
         s = self.s
         sprite, form, name, voice = progress.current(s, "starter")
         pet = creatures.get(sprite)
         cells = [[True] * pet.width for _ in range(len(pet.base) // 2)]
-        out = render.lines(pet, ["inhale"] if self.breath else [], cells, progress.look(s, "starter")) + [""]
+        out = self.with_forms(render.lines(pet, ["inhale"] if self.breath else [], cells, progress.look(s, "starter")),
+                              "starter", width) + [""]
         lvl = progress.starter_level(s)
         out.append(f"{BOLD}{name}{RESET}  " + _("level {level}").format(level=f"{lvl}/{progress.MAX_LEVEL}"))
         if lvl < progress.MAX_LEVEL:
             per = progress.ACHIEVEMENTS_PER_LEVEL
             out.append(DIM + _("{n} achievement(s) to level {level}").format(
                 n=per - len(s["achievements"]) % per, level=lvl + 1) + RESET)
-        out.append(DIM + ladder_line(s) + RESET)
         return out
 
     def pony_preview(self):
@@ -109,10 +160,11 @@ class Board:
         out += [""] + [DIM + line + RESET for line in render.wrap(pony.where().get(self.pony) or _(creatures.FAMILIES[self.pony].tips[0]), 50, 4)]
         return out
 
-    def preview(self):
+    def preview(self, width=60):
         pet_id = self.ids[self.pos]
+        self.form_lines = {}
         if pet_id == "starter":
-            return self.starter_preview()
+            return self.starter_preview(width)
         if pet_id == "ponies":
             return self.pony_preview()
         unlocked = pet_id in self.s["pets"]
@@ -124,7 +176,8 @@ class Board:
             shown = pet if unlocked else silhouette(pet)
             cells = [[True] * pet.width for _ in range(len(pet.base) // 2)]
             poses = ["inhale"] if self.breath else []
-            out += render.lines(shown, poses, cells, stage)
+            drawn_lines = render.lines(shown, poses, cells, stage)
+            out += self.with_forms(drawn_lines, pet_id, width) if unlocked else drawn_lines
         else:
             out += ["", "", f"{DIM}   " + _("(art coming soon)") + RESET, "", "", ""]
         out.append("")
@@ -152,11 +205,11 @@ class Board:
         """(grid lines, preview lines, preview on the side?) fitting a cols × lines terminal.
         When it's too short, the preview keeps its sprite and name, and the grid scrolls."""
         self.cols = max(1, min(COLS, (cols - 1) // TILE_W))
-        head = render.heading("Bashou", _("{n} pets · arrows/hjkl · Enter: pick · f: form · q: quit").format(
+        head = render.heading("Bashou", _("{n} pets · arrows/hjkl or mouse · Enter: pick · f: form · q: quit").format(
             n=f"{sum(p in self.s['pets'] for p in self.ids) + bool(self.ponies)}/{len(self.ids) - 1}"), cols) + [""] + self.tile(0)
         side = cols >= self.cols * TILE_W + 40
         width = max(20, (cols - self.cols * TILE_W - 6) if side else cols - 3)
-        preview = [part for line in self.preview() for part in render.fit(line, width)]
+        preview = [part for line in self.preview(width) for part in render.fit(line, width)]
         dim = self.message.startswith(DIM)
         text = self.message.replace(DIM, "").replace(RESET, "")
         message = [(DIM if dim else "") + part + (RESET if dim else "")
@@ -174,12 +227,19 @@ class Board:
             self.top = min(max(self.top, row - shown + 1), row)
         self.top = max(0, min(self.top, self.rows() - shown))
         grid = list(head)
+        self.hits = [(len(head) - TILE_H + 1 + line, 1, TILE_W, ("tile", 0)) for line in range(TILE_H)]
         for row in range(self.top, self.top + shown):
             tiles = [self.tile(1 + row * self.cols + c) for c in range(self.cols)]
             for line in range(TILE_H):
+                self.hits += [(len(grid) + 1, 1 + c * TILE_W, (c + 1) * TILE_W, ("tile", 1 + row * self.cols + c))
+                              for c in range(self.cols) if 1 + row * self.cols + c < len(self.ids)]
                 grid.append("".join(t[line] if t[line] else " " * TILE_W for t in tiles))
         more = shown < self.rows()
         grid += message if text else [DIM + _("↑↓ more pets") + RESET if more else ""]
+        left = self.cols * TILE_W + 4 if side else 2
+        for i, (k, col) in self.form_lines.items():
+            row = i + 3 if side else len(grid) + i + 2
+            self.hits.append((row, left + col, left + col + 24, ("form", k)))
         return grid, preview, side
 
     def draw(self):
@@ -247,8 +307,37 @@ class Board:
         self.message = ""
         return True
 
+    def hit(self, x, y):
+        return next((target for row, x0, x1, target in self.hits if row == y and x0 <= x <= x1), None)
+
+    def where(self, target, k=None):
+        """(column, row) on screen of a pet's tile, or of form k in the list: for tests."""
+        want = ("form", k) if target == "form" else ("tile", self.ids.index(target))
+        row, x0, x1, _t = next(h for h in self.hits if h[3] == want)
+        return x0 + 1, row
+
+    def mouse(self, event):
+        """A mouse event (terminal.mouse): hover lights a tile, a click selects it, a second click picks it;
+        a click on a form shows it. False when the board is done."""
+        kind, x, y = event
+        if kind in ("wheel_up", "wheel_down"):
+            return self.key("up" if kind == "wheel_up" else "down")
+        target = self.hit(x, y)
+        if kind == "move":
+            self.hover = target[1] if target and target[0] == "tile" else None
+            return True
+        if not target:
+            return True
+        if target[0] == "form":
+            self.pick_form(target[1])
+            return True
+        if target[1] == self.pos:
+            return self.key("enter")
+        self.pos, self.message = target[1], ""
+        return True
+
     def run(self):
-        with terminal.Screen() as screen:
+        with terminal.Screen(mouse=True) as screen:
             running = True
             while running:
                 self.draw()
@@ -256,7 +345,8 @@ class Board:
                 if not keys:
                     self.breath = not self.breath
                 for k in keys:
-                    running = running and self.key(terminal.name(k, KEYS))
+                    event = terminal.mouse(k)
+                    running = running and (self.mouse(event) if event else self.key(terminal.name(k, KEYS)))
         print("  " + _("{name} is your pet.").format(name=progress.current(self.s)[2]))
 
 
