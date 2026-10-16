@@ -1,9 +1,7 @@
 {
  "name": "Mill",
  "next": "mountains",
- "next_at": {
-  "achievements": 8
- },
+ "next_at": {"achievements": 19},
  "palette": {
   "g": "#5fa040",
   "G": "#3e7a30",

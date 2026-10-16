@@ -1,5 +1,7 @@
 {
  "name": "Mountain ghost",
+ "next": "yeti",
+ "next_at": {"achievements": 8},
  "lone_pixels": true,
  "palette": {
   "a": "#4f5d7e",

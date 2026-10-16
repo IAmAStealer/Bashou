@@ -3,7 +3,7 @@
  "first": "chameleon",
  "order": 32,
  "unlock": {
-  "achievement": "first_glance",
+  "family_achievement": true,
   "how": "play a game of bashou spot"
  },
  "voice": "*flick*",

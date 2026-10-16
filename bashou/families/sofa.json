@@ -3,8 +3,7 @@
  "first": "beanbag",
  "order": 6,
  "unlock": {
-  "counter": "fights_lost",
-  "count": 1,
+  "family_achievement": true,
   "how": "lose (or flee) a fight: take a seat"
  },
  "voice": "*creak*",

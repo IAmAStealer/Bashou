@@ -1,9 +1,7 @@
 {
  "name": "Mantis",
  "next": "cheetah",
- "next_at": {
-  "achievements": 4
- },
+ "next_at": {"achievements": 5},
  "palette": {
   "k": "#3f7a26",
   "g": "#5aa02c",

@@ -1,7 +1,7 @@
 {
  "name": "Snake",
  "next": "basilisk",
- "next_at": {"achievements": "all"},
+ "next_at": {"achievements": 5},
  "palette": {
   "a": "#326e32",
   "o": "#78be50",

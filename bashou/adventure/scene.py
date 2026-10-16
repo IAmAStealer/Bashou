@@ -50,7 +50,10 @@ FAR = 70.0
 
 
 def blit(canvas, rows, palette, cx, bottom, scale):
-    """Draw a sprite scaled by any factor (nearest pixel), anchored at its bottom center."""
+    """Draw a sprite scaled by any factor (nearest pixel), anchored at its bottom center. From x1 up, a whole
+    factor: at x2.5 some pixels came out 2 wide and others 3, and thin lines looked broken (owner, 2026-10-16)."""
+    if scale >= 1:
+        scale = int(scale)
     sw, sh = len(rows[0]), len(rows)
     tw, th = max(1, round(sw * scale)), max(1, round(sh * scale))
     x0, y0 = int(cx - tw / 2), int(bottom - th)

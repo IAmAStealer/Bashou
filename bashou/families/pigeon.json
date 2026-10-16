@@ -3,22 +3,7 @@
  "first": "squab",
  "order": 21,
  "unlock": {
-  "tools": [
-   "curl",
-   "dig",
-   "host",
-   "nslookup",
-   "rsync",
-   "scp",
-   "ssh",
-   "wget"
-  ],
-  "uses": 10,
-  "label": [
-   "curl",
-   "ssh",
-   "dig"
-  ]
+  "family_achievement": true
  },
  "voice": "Coo.",
  "tips": [

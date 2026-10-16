@@ -3,12 +3,7 @@
  "first": "pygmy_owl",
  "order": 10,
  "unlock": {
-  "tools": [
-   "awk",
-   "gawk",
-   "mawk"
-  ],
-  "uses": 10
+  "family_achievement": true
  },
  "voice": "Hoo.",
  "tips": [

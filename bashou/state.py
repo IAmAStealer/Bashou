@@ -16,7 +16,7 @@ from . import achievements, creatures, i18n
 DATA = Path(os.environ.get("BASHOU_DATA", Path.home() / ".local/share/bashou"))
 CACHE = Path(os.environ.get("BASHOU_CACHE", Path.home() / ".cache/bashou"))
 STATE = DATA / "state.json"
-SAVE_VERSION = 5        # bump with a step in migrate() whenever the save's shape changes
+SAVE_VERSION = 6        # bump with a step in migrate() whenever the save's shape changes
 
 
 @dataclass(frozen=True)
@@ -393,6 +393,54 @@ def migrate_win_times(state):
         state["win_times"] = [time.time()] * min(int(old.get("count") or 0), 3)
 
 
+# Version 6 (owner, 2026-10-16): forms need T(k) achievements of a family that grew. The old rules, to keep
+# the forms reached with them: each family's achievements then, and what each form needed (default 2, then all).
+OLD_FAMILIES = {
+    "bat": "night_owl streak7 explorer", "frog": "sprinter historian thousand", "turtle": "week month year",
+    "mushroom": "loop reader ranges capture nested substitute here", "sofa": "tally ranking unique",
+    "octopus": "plumber pipeline tee_time merge",
+    "gremlin": "inspector checksum save_first tight first_flag investigator",
+    "snail": "builder copycat shortcut first_steps checkpoint polyglot scholar flawless locksmith questmaster",
+    "dragon": "warrior veteran legend", "fox": "time_traveller executor pruner tracker",
+    "owl": "field_reader accountant scribe sage", "mole": "digger regex context miner", "snake": "in_place global printer",
+    "ghost": "census seeker signal", "spider": "filter follow summary", "ant": "placeholder parallel null",
+    "beaver": "brancher stasher grapher bisector", "squirrel": "packer peeker unpacker squeezer",
+    "pigeon": "headers poster tunneler mirror resolver tracer",
+    "packet": "interfaces six_sense pathfinder listener established nsswitch reverse stub hops knocker capture_reader "
+              "net_fighter",
+    "hedgehog": "octal symbolic owner mode_reader", "bee": "status logbook enabler reload",
+    "whale": "pods describer tailer diver", "meerkat": "disk sizer memory watcher",
+    "duck": "quack xray dry_run exit_code linter", "leopard": "sealed keymaker vault generator keeper",
+    "spark": "kindling page_turner mastery bookworm polymath librarian lesson_scholar torchbearer well_read alexandria",
+    "axolotl": "raw selector mapper",
+    "chameleon": "first_glance quick_eye sharp_eyes hawk_eyes eagle_eyes field_guide spot_regular clean_sweep",
+}
+OLD_STEPS = {"duck": (2, 3, "all"), "spark": (2, 3, 4, 5, 6, 7, 8, 9, "all"), "packet": (2, 3, 4, 5, 6, 7, 8, 9, "all"),
+             "chameleon": (2, 4, 6, "all"), "landscape": (2, 3, 4, 5, 6, 8, 9, 10, 12)}
+NEW_LANDSCAPE = {"craftsman", "guild_master", "all_trades"}
+
+
+def migrate_families(state):
+    """Keep the form each pet had under the old rules (the Slime already kept its own)."""
+    best = state.setdefault("ladder_best", {})
+    have = set(state.get("achievements", []))
+    old = dict(OLD_FAMILIES, landscape=" ".join(a.id for a in achievements.ALL
+                                                if a.pet == "landscape" and a.id not in NEW_LANDSCAPE))
+    for pet, ids in old.items():
+        if pet not in state.get("pets", []) or pet not in creatures.FORMS:
+            continue
+        family = [a for a in ids.split() if a not in achievements.BY_ID or achievements.BY_ID[a].available()]
+        earned = sum(a in have for a in family)
+        form = 1
+        for need in OLD_STEPS.get(pet, (2, "all")):
+            if earned < len(family) and (need == "all" or earned < need):
+                break
+            form += 1
+        forms = creatures.forms(pet)
+        saved = forms.index(best[pet]) + 1 if best.get(pet) in forms else 1
+        best[pet] = forms[min(len(forms), max(form, saved)) - 1]
+
+
 def version_of(saved):
     """The version a save was written with (the first ones had none; a damaged one counts as those)."""
     version = saved.get("version", 1)
@@ -407,6 +455,7 @@ MIGRATIONS = [
     (lambda saved: "reviews" not in saved, migrate_reviews),
     (lambda saved: True, migrate_form_ids),        # version 4; also a number written by hand since
     (lambda saved: "win_times" not in saved, migrate_win_times),   # version 5
+    (lambda saved: version_of(saved) < 6, migrate_families),       # version 6
 ]
 # Numbers in looks, starter_best, ladder_best and evolving (int in FIELDS) are forms saved before
 # version 4, turned into sprite ids by migrate_form_ids.

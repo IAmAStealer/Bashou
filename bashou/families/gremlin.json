@@ -3,8 +3,7 @@
  "first": "gremlin",
  "order": 17,
  "unlock": {
-  "construct": "risky",
-  "count": 5
+  "family_achievement": true
  },
  "voice": "Hehehe.",
  "tips": [

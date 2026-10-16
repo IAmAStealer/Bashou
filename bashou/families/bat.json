@@ -3,33 +3,7 @@
  "first": "mouseling",
  "order": 1,
  "unlock": {
-  "tools": [
-   "cargo",
-   "clang",
-   "cmake",
-   "g++",
-   "gcc",
-   "go",
-   "java",
-   "javac",
-   "make",
-   "node",
-   "npm",
-   "perl",
-   "php",
-   "python",
-   "python3",
-   "ruby",
-   "rustc"
-  ],
-  "uses": 10,
-  "label": [
-   "python3",
-   "cargo",
-   "gcc",
-   "make",
-   "node"
-  ]
+  "family_achievement": true
  },
  "voice": "*flap*",
  "tips": [

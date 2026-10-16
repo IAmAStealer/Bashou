@@ -4,10 +4,7 @@
  "order": 24,
  "needs": "kubectl",
  "unlock": {
-  "tools": [
-   "kubectl"
-  ],
-  "uses": 10
+  "family_achievement": true
  },
  "achievement_needs": [
   "kubectl"

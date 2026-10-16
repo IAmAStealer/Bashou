@@ -3,10 +3,7 @@
  "first": "snakelet",
  "order": 12,
  "unlock": {
-  "tools": [
-   "sed"
-  ],
-  "uses": 10
+  "family_achievement": true
  },
  "voice": "Sss…",
  "tips": [

@@ -54,7 +54,6 @@ def messages():
         found += [ch["title"], ch["intro"]]
     for lesson in lessons.LESSONS:
         found += [lesson["title"]] + [text for text, example in lesson["pages"]]
-    found += list(progress.CONSTRUCT_NAMES.values())
     found += [setting.help for setting in state.SETTINGS.values()]
     found += [skill.text for skill in skills.SKILLS.values()]
     found += [why for skill in skills.SKILLS.values() for _program, why in skill.uses]

@@ -1,7 +1,7 @@
 {
  "name": "Red squirrel",
  "next": "chipmunk",
- "next_at": {"achievements": 2},
+ "next_at": {"achievements": 3},
  "palette": {
   "a": "#6e3719",
   "o": "#cd6e32",

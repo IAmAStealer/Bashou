@@ -3,18 +3,7 @@
  "first": "spirit",
  "order": 13,
  "unlock": {
-  "tools": [
-   "kill",
-   "killall",
-   "pgrep",
-   "pkill",
-   "ps"
-  ],
-  "uses": 10,
-  "label": [
-   "ps",
-   "kill"
-  ]
+  "family_achievement": true
  },
  "voice": "Boo~",
  "tips": [

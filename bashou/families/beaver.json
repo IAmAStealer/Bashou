@@ -3,10 +3,7 @@
  "first": "kit",
  "order": 19,
  "unlock": {
-  "tools": [
-   "git"
-  ],
-  "uses": 10
+  "family_achievement": true
  },
  "achievement_needs": [
   "git"

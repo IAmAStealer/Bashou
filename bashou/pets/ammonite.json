@@ -1,0 +1,49 @@
+{
+ "name": "Ammonite",
+ "lone_pixels": true,
+ "particles": [
+  0,
+  13
+ ],
+ "palette": {
+  "a": "#6a4428",
+  "S": "#e8d2a6",
+  "s": "#b88a5a",
+  "g": "#8a5a34",
+  "t": "#d07a5a",
+  "T": "#a0503a",
+  "m": "#191919",
+  "w": "#ffffff"
+ },
+ "base": [
+  "....aaaaaa.......",
+  "..aaSgSSgSaa.....",
+  ".aSgSSSSSSgSa....",
+  ".aSSaaaaaSSSa....",
+  "aSgasssssaSgSa...",
+  "aSSasaaasaSSSa...",
+  "aSSasaSasaSSStwm.",
+  "aSgSasssaSgSttttt",
+  ".aSSSaaaSSSattTtT",
+  ".aSgSSgSSgSattTt.",
+  "..aaSSSSSaa.t.t.t",
+  "....aaaaa........"
+ ],
+ "poses": {
+  "inhale": {
+   "7": "aSgSasssaSgSttttT"
+  },
+  "closed": {
+   "6": "--------------tt-"
+  },
+  "left": {
+   "6": "--------------mw-"
+  },
+  "right": {
+   "6": "--------------wm-"
+  },
+  "fidget": {
+   "10": "------------.t.t."
+  }
+ }
+}

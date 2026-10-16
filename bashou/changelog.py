@@ -59,7 +59,7 @@ def text(root, version=None):
 def main(version=None):
     """`bashou changelog [vX.Y.Z]`: through `less` in a terminal (q quits), printed otherwise."""
     from .i18n import _
-    from .update import ROOT
+    ROOT = Path(__file__).resolve().parent.parent
     shown = text(ROOT, version)
     if not shown:
         print("  " + (_("No release {version} in the changelog.").format(version=version) if version

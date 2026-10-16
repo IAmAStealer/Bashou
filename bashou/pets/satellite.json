@@ -1,7 +1,7 @@
 {
  "name": "Satellite",
  "next": "constellation",
- "next_at": {"achievements": "all"},
+ "next_at": {"achievements": 35},
  "symmetric": true,
  "palette": {
   "n": "#1c2a4a",

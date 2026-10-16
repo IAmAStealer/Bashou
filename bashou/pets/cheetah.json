@@ -1,9 +1,7 @@
 {
  "name": "Cheetah",
  "next": "falcon",
- "next_at": {
-  "achievements": 6
- },
+ "next_at": {"achievements": 8},
  "palette": {
   "k": "#3a2214",
   "o": "#e8a050",

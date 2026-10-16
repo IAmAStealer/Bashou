@@ -1,9 +1,7 @@
 {
  "name": "Garden",
  "next": "river",
- "next_at": {
-  "achievements": 4
- },
+ "next_at": {"achievements": 8},
  "palette": {
   "g": "#5fa040",
   "G": "#3e7a30",

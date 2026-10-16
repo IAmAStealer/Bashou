@@ -3,22 +3,7 @@
  "first": "pup",
  "order": 25,
  "unlock": {
-  "tools": [
-   "btop",
-   "df",
-   "du",
-   "free",
-   "htop",
-   "top",
-   "vmstat",
-   "watch"
-  ],
-  "uses": 10,
-  "label": [
-   "df",
-   "du",
-   "top"
-  ]
+  "family_achievement": true
  },
  "voice": "*peek*",
  "tips": [

@@ -1,7 +1,7 @@
 {
  "name": "Armchair",
  "next": "throne",
- "next_at": {"achievements": "all"},
+ "next_at": {"achievements": 5},
  "palette": {
   "a": "#8c323c",
   "o": "#cd555f",

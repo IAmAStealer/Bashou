@@ -3,7 +3,6 @@
 import re
 
 from . import achievements, safety
-from . import which
 from .achievements import Ctx
 from .analyze import analyze
 from .behavior import ACTIONS
@@ -11,47 +10,26 @@ from . import creatures
 from .creatures import STARTERS
 from .i18n import _
 
-CONSTRUCT_NAMES = {"pipe3": "3-command pipes", "risky": "risky commands", "script": "scripts of your own run"}
-
-
-def tool_label(pet):
-    """How the unlock hint names a tool pet's tools ("label" in its file, or the first in alphabetical
-    order). Only the installed ones are named: no `dig` in the hint when dig is missing."""
-    rule = creatures.FAMILIES[pet].unlock
-    names = rule.get("label") or [min(rule["tools"])]
-    return "/".join([n for n in names if which.installed(n)] or names[:1])
-
-
-def counter(state, path):
-    """A number in the save, by its path: "fights_won", "adventure.walked"."""
-    value = state
-    for key in path.split("."):
-        value = (value or {}).get(key, 0) if isinstance(value, dict) else 0
-    return value or 0
-
 
 def unlock_rule(state, pet):
     """(met, reason, hint) of a pet's "unlock" rule: whether it comes now, what the 🎉 line says, and what
     the board shows while it's locked (with where you stand)."""
     rule = creatures.FAMILIES[pet].unlock
-    if "tools" in rule:
-        now, n = tool_uses(state, rule["tools"]), rule["uses"]
-        return now >= n, f"{n} × {tool_label(pet)}", f"{now}/{n} × {tool_label(pet)}"
-    if "construct" in rule:
-        now, n, what = state["constructs"].get(rule["construct"], 0), rule["count"], _(CONSTRUCT_NAMES[rule["construct"]])
-        return now >= n, f"{n} × " + what, f"{now}/{n} × " + what
-    if "commands" in rule:
-        n = rule["commands"]
-        return (state["commands"] >= n, _("{count} commands").format(count=f"{n:,}"),
-                _("{count} commands").format(count=f"{state['commands']:,}/{n:,}"))
-    if "counter" in rule:
-        met = counter(state, rule["counter"]) >= rule["count"]
-    elif "achievement" in rule:
+    if "achievement" in rule:
         met = rule["achievement"] in state["achievements"]
     elif "pony" in rule:                                   # claimed with `bashou pony <id>` (pony.py)
         met = pet in state["ponies"]
-    elif "family_achievement" in rule:
-        met = bool({a.id for a in achievements.family(pet)} & set(state["achievements"]))
+    elif "family_achievement" in rule:                   # owner, 2026-10-16: a family's 1st achievement brings it
+        family = achievements.family(pet)
+        got = [a for a in family if a.id in state["achievements"]]
+        if got:
+            return True, _(got[0].name), _(got[0].name)
+        if "how" in rule:
+            return False, _(rule["how"]), _(rule["how"])
+        family = family or [a for a in achievements.ALL if a.pet == pet]     # its commands aren't here: still say how
+        a = next((a for a in family if a.progress), family[0] if family else None)
+        hint = f"{_(a.how)} ({a.where(state)})" if a and a.progress else _(a.how) if a else ""
+        return False, hint, hint
     else:                                                  # "secret_found": one of its secrets finds you
         met = any(a.pet == pet for a in achievements.secrets(state))
     return met, _(rule["how"]), _(rule["how"])
@@ -76,10 +54,6 @@ def unlock(state, pet, reason):
         name=sprite_of(state, pet, reached(state, pet))[1], reason=reason)]
 
 
-def tool_uses(state, tools):
-    return sum(state["tools"].get(t, 0) for t in tools)
-
-
 ACHIEVEMENTS_PER_LEVEL = 5
 MAX_LEVEL = 20
 
@@ -100,7 +74,7 @@ def met(state, who, need):
         return state["commands"] >= n
     if kind == "level":
         return starter_level(state) >= n
-    family = achievements.family(who)
+    family = achievements.family_of(state, who)
     earned = sum(a.id in state["achievements"] for a in family)
     done = bool(family) and earned == len(family)
     return done if n == "all" else earned >= n or done
@@ -245,6 +219,8 @@ def record(state, status, line, today, hour):
             state["constructs"]["pipe3"] = state["constructs"].get("pipe3", 0) + 1
         if runs_a_script(analysis, line):
             state["constructs"]["script"] = state["constructs"].get("script", 0) + 1
+        if analysis.help_only:                              # `ls --help`, `man ls`, `help cd`
+            state["constructs"]["help"] = state["constructs"].get("help", 0) + 1
     return check(state, earned)
 
 
@@ -275,6 +251,7 @@ def check(state, earned=()):
     for pet in creatures.NAMES:
         if counted(state, pet):                             # its count went up before check(): compare
             before[pet] = best(state, pet)                  # with the form it had
+        if pet in state["pets"]:                            # a form reached stays, even when a family grows
             keep_best(state, pet, reached(state, pet))
     for pet in creatures.NAMES:
         now = reached(state, pet)
@@ -284,15 +261,8 @@ def check(state, earned=()):
 
 
 def next_milestone(state):
-    """(commands, what comes): the pet your command count brings (the Slime), then its next form (a surprise)."""
-    for pet in creatures.NAMES:
-        count = creatures.FAMILIES[pet].unlock.get("commands")
-        if not count:
-            continue
-        if state["commands"] < count:
-            return count, sprite_of(state, pet, 1)[1]
-        for sprite in chain(state, pet):
-            need = creatures.PETS[sprite].next_at.get("commands")
-            if need and state["commands"] < need:
-                return need, "?"
+    """(commands, what comes): the next command count that is an achievement (the Slime's), and its name."""
+    for goal, aid, name in achievements.COMMAND_TIERS:
+        if aid not in state["achievements"]:
+            return goal, "🏆 " + _(name)
     return None

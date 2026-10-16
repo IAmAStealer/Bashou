@@ -1,7 +1,7 @@
 {
  "name": "Wisp",
  "next": "ghost",
- "next_at": {"achievements": "all"},
+ "next_at": {"achievements": 5},
  "palette": {
   "a": "#1e4a8a",
   "b": "#3aa0f0",

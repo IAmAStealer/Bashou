@@ -3,17 +3,7 @@
  "first": "hoglet",
  "order": 22,
  "unlock": {
-  "tools": [
-   "chgrp",
-   "chmod",
-   "chown",
-   "umask"
-  ],
-  "uses": 10,
-  "label": [
-   "chmod",
-   "chown"
-  ]
+  "family_achievement": true
  },
  "achievement_needs": [
   "chmod"

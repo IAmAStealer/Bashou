@@ -3,7 +3,7 @@
  "first": "droplet",
  "order": 5,
  "unlock": {
-  "commands": 10
+  "family_achievement": true
  },
  "voice": "Blub.",
  "tips": [

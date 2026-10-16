@@ -1,9 +1,7 @@
 {
  "name": "Mountains",
  "next": "village",
- "next_at": {
-  "achievements": 9
- },
+ "next_at": {"achievements": 24},
  "palette": {
   "g": "#5fa040",
   "G": "#3e7a30",

@@ -1,7 +1,7 @@
 {
  "name": "Barn owl",
  "next": "owl",
- "next_at": {"achievements": "all"},
+ "next_at": {"achievements": 5},
  "symmetric": true,
  "palette": {
   "a": "#7a5634",

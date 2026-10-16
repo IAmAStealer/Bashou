@@ -3,8 +3,7 @@
  "first": "dragon_egg",
  "order": 8,
  "unlock": {
-  "counter": "fights_won",
-  "count": 1,
+  "family_achievement": true,
   "how": "win a fight: bashou fight"
  },
  "voice": "Rawr!",

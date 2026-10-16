@@ -1,5 +1,7 @@
 {
  "name": "Messenger",
+ "next": "albatross",
+ "next_at": {"achievements": 8},
  "palette": {
   "a": "#464b5f",
   "o": "#9196aa",

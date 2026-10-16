@@ -1,9 +1,7 @@
 {
  "name": "Waterfall",
  "next": "mill",
- "next_at": {
-  "achievements": 6
- },
+ "next_at": {"achievements": 15},
  "palette": {
   "g": "#5fa040",
   "G": "#3e7a30",

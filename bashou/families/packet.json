@@ -3,25 +3,7 @@
  "first": "bit",
  "order": 29,
  "unlock": {
-  "tools": [
-   "getent",
-   "ip",
-   "mtr",
-   "nc",
-   "ncat",
-   "ping",
-   "resolvectl",
-   "ss",
-   "tcpdump",
-   "tracepath",
-   "traceroute"
-  ],
-  "uses": 10,
-  "label": [
-   "ip",
-   "ss",
-   "ping"
-  ]
+  "family_achievement": true
  },
  "voice": "*ping*",
  "tips": [

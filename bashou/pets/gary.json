@@ -1,5 +1,7 @@
 {
  "name": "Gary",
+ "next": "knight_snail",
+ "next_at": {"achievements": 8},
  "palette": {
   "a": "#a03050",
   "S": "#f080a0",

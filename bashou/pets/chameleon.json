@@ -1,9 +1,7 @@
 {
  "name": "Chameleon",
  "next": "mantis",
- "next_at": {
-  "achievements": 2
- },
+ "next_at": {"achievements": 3},
  "palette": {
   "k": "#1f5848",
   "g": "#4f9e5a",

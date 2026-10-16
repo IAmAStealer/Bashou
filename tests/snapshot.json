@@ -12,6 +12,16 @@
     "★☆☆"
    ],
    [
+    1,
+    "Mouseling",
+    "★☆☆"
+   ],
+   [
+    2,
+    "Bat",
+    "★★☆"
+   ],
+   [
     2,
     "Bat",
     "★★☆"
@@ -32,6 +42,16 @@
     1,
     "Tadpole",
     "★☆☆"
+   ],
+   [
+    1,
+    "Tadpole",
+    "★☆☆"
+   ],
+   [
+    2,
+    "Tree frog",
+    "★★☆"
    ],
    [
     2,
@@ -56,6 +76,16 @@
     "★☆☆"
    ],
    [
+    1,
+    "Hatchling",
+    "★☆☆"
+   ],
+   [
+    2,
+    "Turtle",
+    "★★☆"
+   ],
+   [
     2,
     "Turtle",
     "★★☆"
@@ -78,19 +108,9 @@
     "★☆☆"
    ],
    [
-    2,
-    "Mushroom",
-    "★★☆"
-   ],
-   [
-    2,
-    "Mushroom",
-    "★★☆"
-   ],
-   [
-    2,
-    "Mushroom",
-    "★★☆"
+    1,
+    "Spore",
+    "★☆☆"
    ],
    [
     2,
@@ -125,6 +145,16 @@
     "★★☆☆☆☆☆☆☆"
    ],
    [
+    2,
+    "Slime",
+    "★★☆☆☆☆☆☆☆"
+   ],
+   [
+    3,
+    "Leaf slime",
+    "★★★☆☆☆☆☆☆"
+   ],
+   [
     3,
     "Leaf slime",
     "★★★☆☆☆☆☆☆"
@@ -135,32 +165,27 @@
     "★★★★☆☆☆☆☆"
    ],
    [
+    4,
+    "Fire slime",
+    "★★★★☆☆☆☆☆"
+   ],
+   [
+    4,
+    "Fire slime",
+    "★★★★☆☆☆☆☆"
+   ],
+   [
     5,
     "Rock slime",
     "★★★★★☆☆☆☆"
-   ],
-   [
-    6,
-    "Ice slime",
-    "★★★★★★☆☆☆"
-   ],
-   [
-    7,
-    "Cat slime",
-    "★★★★★★★☆☆"
-   ],
-   [
-    8,
-    "Thunder slime",
-    "★★★★★★★★☆"
-   ],
-   [
-    9,
-    "King slime",
-    "★★★★★★★★★"
    ]
   ],
   "sofa": [
+   [
+    1,
+    "Beanbag",
+    "★☆☆"
+   ],
    [
     1,
     "Beanbag",
@@ -177,12 +202,22 @@
     "★★☆"
    ],
    [
+    2,
+    "Armchair",
+    "★★☆"
+   ],
+   [
     3,
     "Throne",
     "★★★"
    ]
   ],
   "octopus": [
+   [
+    1,
+    "Octopito",
+    "★☆☆"
+   ],
    [
     1,
     "Octopito",
@@ -221,6 +256,16 @@
     "★☆☆"
    ],
    [
+    1,
+    "Dragon egg",
+    "★☆☆"
+   ],
+   [
+    2,
+    "Dragonet",
+    "★★☆"
+   ],
+   [
     2,
     "Dragonet",
     "★★☆"
@@ -232,6 +277,11 @@
    ]
   ],
   "fox": [
+   [
+    1,
+    "Fennec",
+    "★☆☆"
+   ],
    [
     1,
     "Fennec",
@@ -270,6 +320,11 @@
     "★☆☆"
    ],
    [
+    1,
+    "Pygmy owl",
+    "★☆☆"
+   ],
+   [
     2,
     "Barn owl",
     "★★☆"
@@ -286,6 +341,11 @@
    ]
   ],
   "mole": [
+   [
+    1,
+    "Molekin",
+    "★☆☆"
+   ],
    [
     1,
     "Molekin",
@@ -324,6 +384,16 @@
     "★☆☆"
    ],
    [
+    1,
+    "Snakelet",
+    "★☆☆"
+   ],
+   [
+    2,
+    "Snake",
+    "★★☆"
+   ],
+   [
     2,
     "Snake",
     "★★☆"
@@ -344,6 +414,16 @@
     1,
     "Spirit",
     "★☆☆"
+   ],
+   [
+    1,
+    "Spirit",
+    "★☆☆"
+   ],
+   [
+    2,
+    "Wisp",
+    "★★☆"
    ],
    [
     2,
@@ -368,6 +448,16 @@
     "★☆☆"
    ],
    [
+    1,
+    "Spiderling",
+    "★☆☆"
+   ],
+   [
+    2,
+    "Spider",
+    "★★☆"
+   ],
+   [
     2,
     "Spider",
     "★★☆"
@@ -388,6 +478,16 @@
     1,
     "Worker ant",
     "★☆☆"
+   ],
+   [
+    1,
+    "Worker ant",
+    "★☆☆"
+   ],
+   [
+    2,
+    "Soldier ant",
+    "★★☆"
    ],
    [
     2,
@@ -412,6 +512,16 @@
     "★☆☆"
    ],
    [
+    1,
+    "Larva",
+    "★☆☆"
+   ],
+   [
+    2,
+    "Axolotl",
+    "★★☆"
+   ],
+   [
     2,
     "Axolotl",
     "★★☆"
@@ -426,97 +536,117 @@
    [
     1,
     "Gremlin",
-    "★☆☆"
+    "★☆☆☆"
    ],
    [
     1,
     "Gremlin",
-    "★☆☆"
+    "★☆☆☆"
+   ],
+   [
+    1,
+    "Gremlin",
+    "★☆☆☆"
    ],
    [
     2,
     "Goblin",
-    "★★☆"
+    "★★☆☆"
    ],
    [
     2,
     "Goblin",
-    "★★☆"
-   ],
-   [
-    2,
-    "Goblin",
-    "★★☆"
-   ],
-   [
-    2,
-    "Goblin",
-    "★★☆"
+    "★★☆☆"
    ],
    [
     3,
     "Orc",
-    "★★★"
+    "★★★☆"
+   ],
+   [
+    3,
+    "Orc",
+    "★★★☆"
+   ],
+   [
+    3,
+    "Orc",
+    "★★★☆"
+   ],
+   [
+    4,
+    "Troll",
+    "★★★★"
    ]
   ],
   "snail": [
    [
     1,
     "Slug",
-    "★☆☆"
+    "★☆☆☆☆"
    ],
    [
     1,
     "Slug",
-    "★☆☆"
+    "★☆☆☆☆"
+   ],
+   [
+    1,
+    "Slug",
+    "★☆☆☆☆"
    ],
    [
     2,
     "Snail",
-    "★★☆"
+    "★★☆☆☆"
    ],
    [
     2,
     "Snail",
-    "★★☆"
-   ],
-   [
-    2,
-    "Snail",
-    "★★☆"
-   ],
-   [
-    2,
-    "Snail",
-    "★★☆"
-   ],
-   [
-    2,
-    "Snail",
-    "★★☆"
-   ],
-   [
-    2,
-    "Snail",
-    "★★☆"
-   ],
-   [
-    2,
-    "Snail",
-    "★★☆"
-   ],
-   [
-    2,
-    "Snail",
-    "★★☆"
+    "★★☆☆☆"
    ],
    [
     3,
     "Gary",
-    "★★★"
+    "★★★☆☆"
+   ],
+   [
+    3,
+    "Gary",
+    "★★★☆☆"
+   ],
+   [
+    3,
+    "Gary",
+    "★★★☆☆"
+   ],
+   [
+    4,
+    "Knight snail",
+    "★★★★☆"
+   ],
+   [
+    4,
+    "Knight snail",
+    "★★★★☆"
+   ],
+   [
+    4,
+    "Knight snail",
+    "★★★★☆"
+   ],
+   [
+    5,
+    "Ammonite",
+    "★★★★★"
    ]
   ],
   "beaver": [
+   [
+    1,
+    "Kit",
+    "★☆☆"
+   ],
    [
     1,
     "Kit",
@@ -555,6 +685,11 @@
     "★☆☆"
    ],
    [
+    1,
+    "Red squirrel",
+    "★☆☆"
+   ],
+   [
     2,
     "Chipmunk",
     "★★☆"
@@ -574,40 +709,55 @@
    [
     1,
     "Squab",
-    "★☆☆"
+    "★☆☆☆"
    ],
    [
     1,
     "Squab",
-    "★☆☆"
+    "★☆☆☆"
+   ],
+   [
+    1,
+    "Squab",
+    "★☆☆☆"
    ],
    [
     2,
     "Pigeon",
-    "★★☆"
+    "★★☆☆"
    ],
    [
     2,
     "Pigeon",
-    "★★☆"
-   ],
-   [
-    2,
-    "Pigeon",
-    "★★☆"
-   ],
-   [
-    2,
-    "Pigeon",
-    "★★☆"
+    "★★☆☆"
    ],
    [
     3,
     "Messenger",
-    "★★★"
+    "★★★☆"
+   ],
+   [
+    3,
+    "Messenger",
+    "★★★☆"
+   ],
+   [
+    3,
+    "Messenger",
+    "★★★☆"
+   ],
+   [
+    4,
+    "Albatross",
+    "★★★★"
    ]
   ],
   "hedgehog": [
+   [
+    1,
+    "Hoglet",
+    "★☆☆"
+   ],
    [
     1,
     "Hoglet",
@@ -646,6 +796,11 @@
     "★☆☆"
    ],
    [
+    1,
+    "Brood",
+    "★☆☆"
+   ],
+   [
     2,
     "Bee",
     "★★☆"
@@ -662,6 +817,11 @@
    ]
   ],
   "whale": [
+   [
+    1,
+    "Calf",
+    "★☆☆"
+   ],
    [
     1,
     "Calf",
@@ -700,6 +860,11 @@
     "★☆☆"
    ],
    [
+    1,
+    "Pup",
+    "★☆☆"
+   ],
+   [
     2,
     "Meerkat",
     "★★☆"
@@ -719,32 +884,47 @@
    [
     1,
     "Snow cub",
-    "★☆☆"
+    "★☆☆☆"
    ],
    [
     1,
     "Snow cub",
-    "★☆☆"
+    "★☆☆☆"
+   ],
+   [
+    1,
+    "Snow cub",
+    "★☆☆☆"
    ],
    [
     2,
     "Snow leopard",
-    "★★☆"
+    "★★☆☆"
    ],
    [
     2,
     "Snow leopard",
-    "★★☆"
-   ],
-   [
-    2,
-    "Snow leopard",
-    "★★☆"
+    "★★☆☆"
    ],
    [
     3,
     "Mountain ghost",
-    "★★★"
+    "★★★☆"
+   ],
+   [
+    3,
+    "Mountain ghost",
+    "★★★☆"
+   ],
+   [
+    3,
+    "Mountain ghost",
+    "★★★☆"
+   ],
+   [
+    4,
+    "Yeti",
+    "★★★★"
    ]
   ],
   "duck": [
@@ -759,9 +939,24 @@
     "★☆☆☆"
    ],
    [
+    1,
+    "Duckling",
+    "★☆☆☆"
+   ],
+   [
     2,
     "Duck",
     "★★☆☆"
+   ],
+   [
+    2,
+    "Duck",
+    "★★☆☆"
+   ],
+   [
+    3,
+    "White duck",
+    "★★★☆"
    ],
    [
     3,
@@ -791,9 +986,29 @@
     "★☆☆☆☆☆☆☆☆☆"
    ],
    [
+    1,
+    "Sparklings",
+    "★☆☆☆☆☆☆☆☆☆"
+   ],
+   [
     2,
     "Spark",
     "★★☆☆☆☆☆☆☆☆"
+   ],
+   [
+    2,
+    "Spark",
+    "★★☆☆☆☆☆☆☆☆"
+   ],
+   [
+    3,
+    "Ember",
+    "★★★☆☆☆☆☆☆☆"
+   ],
+   [
+    3,
+    "Ember",
+    "★★★☆☆☆☆☆☆☆"
    ],
    [
     3,
@@ -806,9 +1021,49 @@
     "★★★★☆☆☆☆☆☆"
    ],
    [
+    4,
+    "Candle",
+    "★★★★☆☆☆☆☆☆"
+   ],
+   [
+    4,
+    "Candle",
+    "★★★★☆☆☆☆☆☆"
+   ],
+   [
     5,
     "Lantern",
     "★★★★★☆☆☆☆☆"
+   ],
+   [
+    5,
+    "Lantern",
+    "★★★★★☆☆☆☆☆"
+   ],
+   [
+    5,
+    "Lantern",
+    "★★★★★☆☆☆☆☆"
+   ],
+   [
+    5,
+    "Lantern",
+    "★★★★★☆☆☆☆☆"
+   ],
+   [
+    6,
+    "Torch",
+    "★★★★★★☆☆☆☆"
+   ],
+   [
+    6,
+    "Torch",
+    "★★★★★★☆☆☆☆"
+   ],
+   [
+    6,
+    "Torch",
+    "★★★★★★☆☆☆☆"
    ],
    [
     6,
@@ -821,9 +1076,74 @@
     "★★★★★★★☆☆☆"
    ],
    [
+    7,
+    "Campfire",
+    "★★★★★★★☆☆☆"
+   ],
+   [
+    7,
+    "Campfire",
+    "★★★★★★★☆☆☆"
+   ],
+   [
+    7,
+    "Campfire",
+    "★★★★★★★☆☆☆"
+   ],
+   [
+    7,
+    "Campfire",
+    "★★★★★★★☆☆☆"
+   ],
+   [
     8,
     "Beacon",
     "★★★★★★★★☆☆"
+   ],
+   [
+    8,
+    "Beacon",
+    "★★★★★★★★☆☆"
+   ],
+   [
+    8,
+    "Beacon",
+    "★★★★★★★★☆☆"
+   ],
+   [
+    8,
+    "Beacon",
+    "★★★★★★★★☆☆"
+   ],
+   [
+    8,
+    "Beacon",
+    "★★★★★★★★☆☆"
+   ],
+   [
+    9,
+    "Blaze",
+    "★★★★★★★★★☆"
+   ],
+   [
+    9,
+    "Blaze",
+    "★★★★★★★★★☆"
+   ],
+   [
+    9,
+    "Blaze",
+    "★★★★★★★★★☆"
+   ],
+   [
+    9,
+    "Blaze",
+    "★★★★★★★★★☆"
+   ],
+   [
+    9,
+    "Blaze",
+    "★★★★★★★★★☆"
    ],
    [
     9,
@@ -848,9 +1168,29 @@
     "★☆☆☆☆☆☆☆☆☆"
    ],
    [
+    1,
+    "Bit",
+    "★☆☆☆☆☆☆☆☆☆"
+   ],
+   [
     2,
     "Byte",
     "★★☆☆☆☆☆☆☆☆"
+   ],
+   [
+    2,
+    "Byte",
+    "★★☆☆☆☆☆☆☆☆"
+   ],
+   [
+    3,
+    "Packet",
+    "★★★☆☆☆☆☆☆☆"
+   ],
+   [
+    3,
+    "Packet",
+    "★★★☆☆☆☆☆☆☆"
    ],
    [
     3,
@@ -863,9 +1203,49 @@
     "★★★★☆☆☆☆☆☆"
    ],
    [
+    4,
+    "Datagram",
+    "★★★★☆☆☆☆☆☆"
+   ],
+   [
+    4,
+    "Datagram",
+    "★★★★☆☆☆☆☆☆"
+   ],
+   [
     5,
     "Socket",
     "★★★★★☆☆☆☆☆"
+   ],
+   [
+    5,
+    "Socket",
+    "★★★★★☆☆☆☆☆"
+   ],
+   [
+    5,
+    "Socket",
+    "★★★★★☆☆☆☆☆"
+   ],
+   [
+    5,
+    "Socket",
+    "★★★★★☆☆☆☆☆"
+   ],
+   [
+    6,
+    "Relay",
+    "★★★★★★☆☆☆☆"
+   ],
+   [
+    6,
+    "Relay",
+    "★★★★★★☆☆☆☆"
+   ],
+   [
+    6,
+    "Relay",
+    "★★★★★★☆☆☆☆"
    ],
    [
     6,
@@ -878,9 +1258,64 @@
     "★★★★★★★☆☆☆"
    ],
    [
+    7,
+    "Router",
+    "★★★★★★★☆☆☆"
+   ],
+   [
+    7,
+    "Router",
+    "★★★★★★★☆☆☆"
+   ],
+   [
+    7,
+    "Router",
+    "★★★★★★★☆☆☆"
+   ],
+   [
+    7,
+    "Router",
+    "★★★★★★★☆☆☆"
+   ],
+   [
     8,
     "Uplink",
     "★★★★★★★★☆☆"
+   ],
+   [
+    8,
+    "Uplink",
+    "★★★★★★★★☆☆"
+   ],
+   [
+    8,
+    "Uplink",
+    "★★★★★★★★☆☆"
+   ],
+   [
+    8,
+    "Uplink",
+    "★★★★★★★★☆☆"
+   ],
+   [
+    8,
+    "Uplink",
+    "★★★★★★★★☆☆"
+   ],
+   [
+    9,
+    "Satellite",
+    "★★★★★★★★★☆"
+   ],
+   [
+    9,
+    "Satellite",
+    "★★★★★★★★★☆"
+   ],
+   [
+    9,
+    "Satellite",
+    "★★★★★★★★★☆"
    ],
    [
     9,
@@ -987,6 +1422,16 @@
     "★☆☆☆☆☆☆☆☆☆"
    ],
    [
+    1,
+    "Hillock",
+    "★☆☆☆☆☆☆☆☆☆"
+   ],
+   [
+    2,
+    "Cabin",
+    "★★☆☆☆☆☆☆☆☆"
+   ],
+   [
     2,
     "Cabin",
     "★★☆☆☆☆☆☆☆☆"
@@ -997,9 +1442,44 @@
     "★★★☆☆☆☆☆☆☆"
    ],
    [
+    3,
+    "Garden",
+    "★★★☆☆☆☆☆☆☆"
+   ],
+   [
+    3,
+    "Garden",
+    "★★★☆☆☆☆☆☆☆"
+   ],
+   [
     4,
     "River",
     "★★★★☆☆☆☆☆☆"
+   ],
+   [
+    4,
+    "River",
+    "★★★★☆☆☆☆☆☆"
+   ],
+   [
+    4,
+    "River",
+    "★★★★☆☆☆☆☆☆"
+   ],
+   [
+    5,
+    "Waterfall",
+    "★★★★★☆☆☆☆☆"
+   ],
+   [
+    5,
+    "Waterfall",
+    "★★★★★☆☆☆☆☆"
+   ],
+   [
+    5,
+    "Waterfall",
+    "★★★★★☆☆☆☆☆"
    ],
    [
     5,
@@ -1017,9 +1497,59 @@
     "★★★★★★☆☆☆☆"
    ],
    [
+    6,
+    "Mill",
+    "★★★★★★☆☆☆☆"
+   ],
+   [
+    6,
+    "Mill",
+    "★★★★★★☆☆☆☆"
+   ],
+   [
     7,
     "Mountains",
     "★★★★★★★☆☆☆"
+   ],
+   [
+    7,
+    "Mountains",
+    "★★★★★★★☆☆☆"
+   ],
+   [
+    7,
+    "Mountains",
+    "★★★★★★★☆☆☆"
+   ],
+   [
+    7,
+    "Mountains",
+    "★★★★★★★☆☆☆"
+   ],
+   [
+    7,
+    "Mountains",
+    "★★★★★★★☆☆☆"
+   ],
+   [
+    8,
+    "Village",
+    "★★★★★★★★☆☆"
+   ],
+   [
+    8,
+    "Village",
+    "★★★★★★★★☆☆"
+   ],
+   [
+    8,
+    "Village",
+    "★★★★★★★★☆☆"
+   ],
+   [
+    8,
+    "Village",
+    "★★★★★★★★☆☆"
    ],
    [
     8,
@@ -1037,104 +1567,24 @@
     "★★★★★★★★★☆"
    ],
    [
-    10,
-    "Town",
-    "★★★★★★★★★★"
+    9,
+    "Port",
+    "★★★★★★★★★☆"
    ],
    [
-    10,
-    "Town",
-    "★★★★★★★★★★"
+    9,
+    "Port",
+    "★★★★★★★★★☆"
    ],
    [
-    10,
-    "Town",
-    "★★★★★★★★★★"
+    9,
+    "Port",
+    "★★★★★★★★★☆"
    ],
    [
-    10,
-    "Town",
-    "★★★★★★★★★★"
-   ],
-   [
-    10,
-    "Town",
-    "★★★★★★★★★★"
-   ],
-   [
-    10,
-    "Town",
-    "★★★★★★★★★★"
-   ],
-   [
-    10,
-    "Town",
-    "★★★★★★★★★★"
-   ],
-   [
-    10,
-    "Town",
-    "★★★★★★★★★★"
-   ],
-   [
-    10,
-    "Town",
-    "★★★★★★★★★★"
-   ],
-   [
-    10,
-    "Town",
-    "★★★★★★★★★★"
-   ],
-   [
-    10,
-    "Town",
-    "★★★★★★★★★★"
-   ],
-   [
-    10,
-    "Town",
-    "★★★★★★★★★★"
-   ],
-   [
-    10,
-    "Town",
-    "★★★★★★★★★★"
-   ],
-   [
-    10,
-    "Town",
-    "★★★★★★★★★★"
-   ],
-   [
-    10,
-    "Town",
-    "★★★★★★★★★★"
-   ],
-   [
-    10,
-    "Town",
-    "★★★★★★★★★★"
-   ],
-   [
-    10,
-    "Town",
-    "★★★★★★★★★★"
-   ],
-   [
-    10,
-    "Town",
-    "★★★★★★★★★★"
-   ],
-   [
-    10,
-    "Town",
-    "★★★★★★★★★★"
-   ],
-   [
-    10,
-    "Town",
-    "★★★★★★★★★★"
+    9,
+    "Port",
+    "★★★★★★★★★☆"
    ],
    [
     10,
@@ -1154,6 +1604,11 @@
     "★☆☆☆☆"
    ],
    [
+    1,
+    "Chameleon",
+    "★☆☆☆☆"
+   ],
+   [
     2,
     "Mantis",
     "★★☆☆☆"
@@ -1172,6 +1627,16 @@
     3,
     "Cheetah",
     "★★★☆☆"
+   ],
+   [
+    3,
+    "Cheetah",
+    "★★★☆☆"
+   ],
+   [
+    4,
+    "Falcon",
+    "★★★★☆"
    ],
    [
     4,
@@ -2827,35 +3292,35 @@
   ]
  },
  "unlock_hints": {
-  "bat": "0/10 × python3/cargo/gcc/make/node",
-  "frog": "answer 20 questions right in bashou adventure",
-  "turtle": "walk 500 m in bashou adventure",
-  "mushroom": "0/5 × scripts of your own run",
-  "slime": "0/10 commands",
+  "bat": "run code 10 times: python3, gcc, node, cargo… (0/10)",
+  "frog": "give 20 right answers in `bashou adventure` (0/20)",
+  "turtle": "walk 500 m in `bashou adventure` (0/500)",
+  "mushroom": "run a script of your own 5 times: `./backup.sh` (0/5)",
+  "slime": "capture output with `$( )` 25 times (0/25)",
   "sofa": "lose (or flee) a fight: take a seat",
-  "octopus": "0/10 × 3-command pipes",
+  "octopus": "chain 3 commands with pipes, 10 times (0/10)",
   "dragon": "win a fight: bashou fight",
-  "fox": "0/10 × find",
-  "owl": "0/10 × awk",
-  "mole": "0/10 × egrep",
-  "snake": "0/10 × sed",
-  "ghost": "0/10 × ps/kill",
-  "spider": "0/3 × strace",
-  "ant": "0/10 × xargs",
-  "axolotl": "0/10 × jq",
-  "gremlin": "0/5 × risky commands",
+  "fox": "use find 10 times (0/10)",
+  "owl": "use awk 10 times (0/10)",
+  "mole": "use grep 10 times (0/10)",
+  "snake": "use sed 10 times (0/10)",
+  "ghost": "use ps, pgrep or kill 10 times (0/10)",
+  "spider": "trace a program with strace 3 times (0/3)",
+  "ant": "use xargs 10 times (0/10)",
+  "axolotl": "use jq 10 times (0/10)",
+  "gremlin": "run 5 risky commands: the Gremlin feeds on them (0/5)",
   "snail": "finish chapter 1 of bashou adventure",
-  "beaver": "0/10 × git",
-  "squirrel": "0/10 × tar/gzip",
-  "pigeon": "0/10 × curl/ssh/dig",
-  "hedgehog": "0/10 × chmod/chown",
-  "bee": "0/10 × systemctl",
-  "whale": "0/10 × kubectl",
-  "meerkat": "0/10 × df/du/top",
-  "leopard": "0/5 × gpg/pass",
+  "beaver": "use git 10 times (0/10)",
+  "squirrel": "use tar, gzip or zip 10 times (0/10)",
+  "pigeon": "use curl, ssh, rsync or dig 10 times (0/10)",
+  "hedgehog": "use chmod or chown 10 times (0/10)",
+  "bee": "use systemctl or journalctl 10 times (0/10)",
+  "whale": "use kubectl 10 times (0/10)",
+  "meerkat": "use df, du, top or free 10 times (0/10)",
+  "leopard": "use gpg or pass 5 times (0/5)",
   "duck": "debug like a rubber duck: bashou learn <command>, bash -x or echo $?",
   "spark": "read a lesson to the end: bashou lesson",
-  "packet": "0/10 × ip/ss/ping",
+  "packet": "win 3 network fights (0/3)",
   "cat": "???",
   "landscape": "finish the first step of a project: bashou project",
   "chameleon": "play a game of bashou spot",
@@ -3294,34 +3759,43 @@
     "forms": [
      "gremlin",
      "goblin",
-     "orc"
+     "orc",
+     "troll"
     ],
     "en": [
      "Gremlin",
      "Goblin",
-     "Orc"
+     "Orc",
+     "Troll"
     ],
     "fr": [
      "Gremlin",
      "Gobelin",
-     "Orc"
+     "Orc",
+     "Troll"
     ]
    },
    "snail": {
     "forms": [
      "slug",
      "snail",
-     "gary"
+     "gary",
+     "knight_snail",
+     "ammonite"
     ],
     "en": [
      "Slug",
      "Snail",
-     "Gary"
+     "Gary",
+     "Knight snail",
+     "Ammonite"
     ],
     "fr": [
      "Limace",
      "Escargot",
-     "Gary"
+     "Gary",
+     "Escargot preux",
+     "Ammonite"
     ]
    },
    "beaver": {
@@ -3362,17 +3836,20 @@
     "forms": [
      "squab",
      "pigeon",
-     "messenger"
+     "messenger",
+     "albatross"
     ],
     "en": [
      "Squab",
      "Pigeon",
-     "Messenger"
+     "Messenger",
+     "Albatross"
     ],
     "fr": [
      "Pigeonneau",
      "Pigeon",
-     "Messager"
+     "Messager",
+     "Albatros"
     ]
    },
    "hedgehog": {
@@ -3447,17 +3924,20 @@
     "forms": [
      "snow_cub",
      "snow_leopard",
-     "mountain_ghost"
+     "mountain_ghost",
+     "yeti"
     ],
     "en": [
      "Snow cub",
      "Snow leopard",
-     "Mountain ghost"
+     "Mountain ghost",
+     "Yeti"
     ],
     "fr": [
      "Petit irbis",
      "Irbis",
-     "Esprit des cimes"
+     "Esprit des cimes",
+     "Yéti"
     ]
    },
    "duck": {
@@ -5287,18 +5767,18 @@
      "q": "#50286e"
     },
     "base": [
-     ".....aaaaa.......",
-     "...aaoooooaa.....",
-     "..aoowwoooooa....",
-     ".aoowooooooooa...",
-     ".aoomooooomooa...",
-     ".aoomooooomooa...",
-     ".aopoooqooopoa...",
-     "..aoooooooooa....",
-     ".aoa.aoaoa.aoa...",
-     "ao...ao.oa...oa..",
-     ".a....a.a....a...",
-     "................."
+     "......aaaaa......",
+     "....aaowwooaa....",
+     "...aowwoooooqa...",
+     "...aowoooooooa...",
+     "..aoowmooowmoqa..",
+     "..aoommooommoqa..",
+     "..aoppooqooppqa..",
+     "...aoooooooooa...",
+     "..aoqa.aoa.aoqa..",
+     ".aoqa.aoooa.aoqa.",
+     "aoqa..ao.oa..aoqa",
+     ".aa...aa.aa...aa."
     ]
    },
    "kraken": {
@@ -6049,29 +6529,63 @@
    },
    "orc": {
     "palette": {
-     "o": "#5a7a4a",
-     "O": "#3e5a34",
-     "T": "#f0e8d0",
+     "k": "#24331f",
+     "o": "#6b9a4a",
+     "O": "#4a7034",
+     "h": "#9cc46e",
+     "H": "#2a2a2a",
      "r": "#e04030",
-     "m": "#191919",
-     "A": "#7a7a88",
-     "a": "#4a4a58",
-     "b": "#5a3a22",
-     "p": "#b03030"
+     "w": "#ffd0c0",
+     "n": "#3e6030",
+     "T": "#f0e8d0",
+     "m": "#3a1414",
+     "A": "#9a9aa8",
+     "a": "#5a5a68",
+     "b": "#6a4422"
     },
     "base": [
-     "....OOOOOOOOO....",
-     "...OoooooooooO...",
-     ".O.OOOoooooOOO.O.",
-     ".OOoorooooorooOO.",
-     "...ooooOOOoooo...",
-     "...oToooooooTo...",
-     "...OTmmmmmmmTO...",
-     "....OoooooooO....",
-     ".AAaAAAAAAAAAaAA.",
-     ".oAAAAAbbbAAAAAo.",
-     ".o.bbbbbbbbbbb.o.",
-     "...OOO.....OOO..."
+     "......kHHHk......",
+     "....kkoHHHokk....",
+     "...kohhhohhhok...",
+     "kk.koohooohook.kk",
+     "kokkoOOoooOOokkok",
+     ".kkoooOOoOOoookk.",
+     "..koowrooorwook..",
+     "..kOooonnnoooOk..",
+     "..kOoTmmmmmToOk..",
+     "...kOTOOOOOTOk...",
+     "AAAa.kkkkkkk.aAAA",
+     "aAAAabbbbbbbaAAAa"
+    ]
+   },
+   "troll": {
+    "palette": {
+     "k": "#161c24",
+     "o": "#7d98aa",
+     "O": "#4f6577",
+     "h": "#b8d0dc",
+     "M": "#6cc040",
+     "n": "#d9805e",
+     "Y": "#ffb020",
+     "w": "#fff4c8",
+     "m": "#22140e",
+     "T": "#f4ecd8",
+     "b": "#7a4f2a",
+     "B": "#4e3018"
+    },
+    "base": [
+     "....M.MMMMM.M....",
+     "...kkMkkkkkMkk...",
+     ".koohhhhhhhhhook.",
+     "kokoohhhhhhhookok",
+     "kookoOOoooOOokook",
+     ".kkowYOonoOYwokk.",
+     "..kooYonnnoYook..",
+     "..kOoonnnnnooOk..",
+     ".kOOTOOOOOOOTOOk.",
+     "kOOOTmmmmmmmTOOOk",
+     "kOOkOOOOOOOOOkOOk",
+     ".kkkbbBbBbBbbkkk."
     ]
    },
    "slug": {
@@ -6147,6 +6661,61 @@
      "..aaSSSaa.bbbbb..",
      "BBbbbbbbbbbbbbb..",
      ".BBbbbbbbbbbbb..."
+    ]
+   },
+   "knight_snail": {
+    "palette": {
+     "a": "#4a4a58",
+     "S": "#b8c0cc",
+     "s": "#7a8290",
+     "g": "#e0b040",
+     "b": "#8ab0d0",
+     "B": "#6a90b0",
+     "k": "#3a3a48",
+     "A": "#c8d0dc",
+     "v": "#191919",
+     "r": "#d03030",
+     "w": "#ffffff"
+    },
+    "base": [
+     "..........rrr....",
+     "..........kAAk...",
+     "....aaaaa.kAAAk..",
+     "..aaSSSSSaakvvvk.",
+     ".aSSsgggsSakAAAk.",
+     ".aSsgSSSgsSakAAk.",
+     ".aSsgSgSgsSabbbb.",
+     ".aSSgggSsSa.bbbb.",
+     ".aSSsssSSa..bbb..",
+     "..aaSSSaa.bbbbb..",
+     "BBbbbbbbbbbbbbb..",
+     ".BBbbbbbbbbbbb..."
+    ]
+   },
+   "ammonite": {
+    "palette": {
+     "a": "#6a4428",
+     "S": "#e8d2a6",
+     "s": "#b88a5a",
+     "g": "#8a5a34",
+     "t": "#d07a5a",
+     "T": "#a0503a",
+     "m": "#191919",
+     "w": "#ffffff"
+    },
+    "base": [
+     "....aaaaaa.......",
+     "..aaSgSSgSaa.....",
+     ".aSgSSSSSSgSa....",
+     ".aSSaaaaaSSSa....",
+     "aSgasssssaSgSa...",
+     "aSSasaaasaSSSa...",
+     "aSSasaSasaSSStwm.",
+     "aSgSasssaSgSttttt",
+     ".aSSSaaaSSSattTtT",
+     ".aSgSSgSSgSattTt.",
+     "..aaSSSSSaa.t.t.t",
+     "....aaaaa........"
     ]
    },
    "kit": {
@@ -6385,6 +6954,33 @@
      "..aoooooobboooa..",
      "...aaooooooaass..",
      ".....y....yss...."
+    ]
+   },
+   "albatross": {
+    "palette": {
+     "k": "#3a3f4f",
+     "w": "#f4f4f0",
+     "W": "#d0d4dc",
+     "d": "#4a4a58",
+     "D": "#2e2e3a",
+     "y": "#f0c060",
+     "Y": "#d08a40",
+     "m": "#191919",
+     "r": "#c83a3a"
+    },
+    "base": [
+     "......kkkkk......",
+     ".....kwwwwwk.....",
+     "....kwmwwwmwk....",
+     "....kwwyyywwk....",
+     "dd...kwwYwwk...dd",
+     "dDdd.kwwwwwk.ddDd",
+     ".dDddkwwwwwkddDd.",
+     "..dDdkwrrrwkdDd..",
+     "...dDkWwwwWkDd...",
+     "....dkWWwWWkd....",
+     "......kWWWk......",
+     ".....yy...yy....."
     ]
    },
    "hoglet": {
@@ -6759,6 +7355,33 @@
      "aoossoooossoasoa.",
      "aowwsoosoowwaooa.",
      ".aaaaaaaaaaaaaaa."
+    ]
+   },
+   "yeti": {
+    "palette": {
+     "a": "#4f5d7e",
+     "o": "#dde7f6",
+     "w": "#f7f8fb",
+     "s": "#7488b5",
+     "f": "#8fa8d8",
+     "e": "#7ff0ff",
+     "m": "#1e1e24",
+     "t": "#ffffff",
+     "x": "#bfe9ff"
+    },
+    "base": [
+     ".....aaaaaaa.....",
+     "...aaowwwwwoaa...",
+     "..aowwoooooowoa..",
+     ".aoofffffffffooa.",
+     ".aoffemfffmeffoa.",
+     "aaoffffaaaffffoaa",
+     "aosofmtttttmfosoa",
+     "aosoosooooosoosoa",
+     "aowwooooooooowwoa",
+     ".aoxoooooooooxoa.",
+     ".aoooa.....aoooa.",
+     ".aaaaa.....aaaaa."
     ]
    },
    "duckling": {
@@ -8502,7 +9125,6 @@
   "-t keeps TCP, -l only the listening ones, -n prints numbers instead of names. The Local Address column says where it listens: 127.0.0.1 or ::1 is this machine only, 0.0.0.0 or * is every network.",
   "2>&1 merges",
   "3+ stage pipes",
-  "3-command pipes",
   "30 active days",
   "365 active days",
   "7 active days",
@@ -8607,13 +9229,17 @@
   "Address Adder",
   "Address book",
   "AddressSanitizer names the line where the leaked memory was allocated. Who should free it once it's printed?",
+  "Adept",
   "Adventure",
   "Adventure saved: chapter {n}, {m} m walked. Come back with: bashou adventure",
   "After you change a unit file, systemctl daemon-reload makes systemd read it again. enable starts it at every boot, --now also starts it right away.",
+  "Albatross",
   "Alexandria",
   "All aboard",
   "All aboard! Next stop: your home folder.",
+  "All trades",
   "Amethyst golem",
+  "Ammonite",
   "An HTML comment starts with `<!--` and ends with `-->`. The browser hides it, but the source shows it.",
   "An array of count items goes from 0 to count - 1. Compare the two loops.",
   "An intruder changed one file of the website in site/ a few minutes ago.\nEvery other file is weeks old. Which file was changed?",
@@ -8621,17 +9247,23 @@
   "Another one? bashou project",
   "Ant",
   "Any threats around? I'm ready.",
+  "Apprentice",
   "Architect",
+  "Archivist",
   "Armchair",
+  "Array",
   "Ask {tool} itself: `{tool} --help` (-h works for many tools, not all: `ls -h` means human sizes). The Usage line shows how to write it: [ ] is optional, ... means you can give several. Below, one line per option: short form (-x), long form (--xxx), what it does. Too long? `{tool} --help | less`, q quits.",
   "Auditor",
+  "Automator",
   "Autoremove Adder",
+  "Avid reader",
   "Aww, you tried to make love. Here's a hug instead.",
   "Axolotl",
   "Back one step: it's not done yet.",
   "Back to the last checkpoint. Bosses are there to make it stick!",
   "Back to the last checkpoint: you can pick another path.",
   "Back to the newest: bashou update",
+  "Backbone",
   "Barn owl",
   "Base64",
   "Base64 Banshee",
@@ -8666,6 +9298,7 @@
   "Behind the stub",
   "Best in bashou spot",
   "Best: {best}",
+  "Bestiary",
   "Bisector",
   "Bit",
   "Black hole",
@@ -8683,6 +9316,7 @@
   "Breakpoint Beetle",
   "Bright and curious. A speck of dust with big dreams.",
   "Brood",
+  "Brook",
   "Brute force",
   "Bruteforcer",
   "Budget keeper",
@@ -8690,8 +9324,12 @@
   "Build it with warnings on: gcc -Wall grade.c -o grade. Read the warning, fix that line.",
   "Build the camp: create the folders {path} (all of them, in one command).",
   "Builder",
+  "Built-in",
+  "Burrower",
   "Bush",
   "Buster",
+  "Busy beaver",
+  "Busy bee",
   "Byte",
   "Byte Basilisk",
   "Bzz.",
@@ -8703,14 +9341,18 @@
   "CREATE TABLE makes a table and gives each column a type: TEXT for words, INTEGER for whole numbers. INSERT INTO adds a row: the columns, then the values in the same order.",
   "CSRF token",
   "Cabin",
+  "Calculator",
   "Calf",
   "Calm and patient. Grows scripts from tiny seeds.",
   "Campfire",
   "Candidate Crow",
   "Candle",
+  "Captain",
   "Capture",
   "Capture reader",
+  "Capturer",
   "Careful! That ran a script from the internet unread. Download it, read it, then run it.",
+  "Carrier",
   "Cat slime",
   "Caves of Core Dumps",
   "Census",
@@ -8720,9 +9362,12 @@
   "Change the language? (y/N) ",
   "Change the line to DB_PASSWORD=\"$(pass show db/prod)\" and try bash deploy.sh. In real life, also change a password that was ever committed: it stays in the git history.",
   "Change what you learn? (y/N) ",
+  "Chapter and verse",
+  "Chapter one",
   "Chapter {n}",
   "Chapter {n} complete!",
   "Chapter {n}: {title}",
+  "Cheat sheet",
   "Checkpoint",
   "Checkpoint saved. {topic} is now level {level}.",
   "Checksum",
@@ -8737,9 +9382,13 @@
   "Cleartext Cricket",
   "Climber",
   "Clutter Critter",
+  "Code marathon",
+  "Coder",
   "Coil Serpent",
   "Coin Wraith",
+  "Collector",
   "Colon Cobra",
+  "Colony",
   "Column Crab",
   "Comet",
   "Commands",
@@ -8747,10 +9396,12 @@
   "Commit often. A dam is built stick by stick.",
   "Compare with /etc/yum.repos.d/rocky.repo on a Rocky 9 machine: baseurl=https://dl.rockylinux.org/pub/rocky/$releasever/BaseOS/$basearch/os/",
   "Compare: diff debian.sources /etc/apt/sources.list.d/debian.sources (if you run trixie).",
+  "Comparer",
   "Conditions decide when a job runs: if: on GitHub, rules: on GitLab. when: manual makes GitLab wait for someone to click, handy for a production deploy.",
   "Conditions: if, !, && and ||",
   "Configure Bashou",
   "Conflict Chimera",
+  "Connected",
   "Const Condor",
   "Constellation",
   "Constructs",
@@ -8758,7 +9409,9 @@
   "Coo.",
   "Copycat",
   "Core Counter",
+  "Counters",
   "Cracker",
+  "Craftsman",
   "Cron backdoor",
   "Crystal golem",
   "Ctrl+A / Ctrl+E: start / end of the line.",
@@ -8767,11 +9420,17 @@
   "Ctrl+R searches your history as you type.",
   "Ctrl+W deletes the word before the cursor.",
   "Ctrl+Z then `bg`: resume a job in background.",
+  "Curator",
   "Curiosity, with permission.",
+  "Curious",
+  "Daredevil",
   "Datagram",
+  "Datagrams",
   "Deadlock Wyvern",
   "Debian and Ubuntu: apt, dpkg, repositories",
   "Deep below, processes that never die guard the way.",
+  "Deep reader",
+  "Deep trace",
   "Defaced site",
   "Describer",
   "Desert",
@@ -8783,6 +9442,7 @@
   "Digger",
   "Disk",
   "Diver",
+  "Docs explorer",
   "Don't touch my kitchen without sudo.",
   "Done when gcc -Wall says nothing and ./grade 100 {mark} 7 prints perfect, pass, fail.",
   "Done when: {done}",
@@ -8805,6 +9465,7 @@
   "Eagle eyes",
   "Easter eggs are jokes hidden by developers. You find them by reading and trying: that's how you learn a tool.",
   "Echo Swarm",
+  "Echo six",
   "Edited a unit file? `systemctl daemon-reload`.",
   "Eight arms, eight pipes.",
   "Elementary! The answer was in a closed issue all along.",
@@ -8814,6 +9475,7 @@
   "Enabler",
   "Encoded note",
   "Encrypted",
+  "Encyclopedia",
   "Engineer",
   "Enter keeps the value in [brackets], `default` resets it, Ctrl+C leaves without saving.",
   "Enter or r: play again · q: quit",
@@ -8847,11 +9509,14 @@
   "ExecStart=... belongs under [Service], WantedBy=multi-user.target under [Install]. Open {editor} {unit}, swap the two lines, {save_keys}.",
   "Executor",
   "Exit code",
+  "Expert",
   "Explain it to me. Out loud. I'll wait.",
   "Exploiter",
   "Explorer",
   "Explorer pony",
   "Falcon",
+  "Fallback",
+  "Fan",
   "Fast tongue, sharp eyes. Every hunter in my family has one or the other.",
   "Fat paws again? `{typo}` → `{fix}`",
   "Fearless",
@@ -8884,10 +9549,12 @@
   "Fights won",
   "Files and editing",
   "Filter",
+  "Find and replace",
   "Find the line that doesn't start where its neighbours do. runs-on: and steps: both belong to the job, so they line up; name: and run: both belong to the same step, so they line up too.",
   "Fine. I'm not jealous. Much.",
   "Fire slime",
   "First brick",
+  "First drop",
   "First flag",
   "First glance",
   "First steps",
@@ -8920,10 +9587,12 @@
   "GitHub keeps secrets outside the code (Settings > Secrets). A workflow reads one with ${{ secrets.NAME }}: the value never appears in the file, and it's hidden in the logs.",
   "Glob Goblin",
   "Global",
+  "Globetrotter",
   "Glub!",
   "GnuPG: encrypts, decrypts and signs files, and checks signatures",
   "Go ahead?",
   "Goblin",
+  "Grandmaster",
   "Grapher",
   "Grass",
   "Grass, hills, dungeons… `bashou adventure` is waiting for us.",
@@ -8932,6 +9601,7 @@
   "Group Gremlin",
   "Group identical names with sort, count each group with uniq -c, then sort those counts with sort -rn: the biggest comes first.",
   "Groups of 8-4-4-4-12 hex digits, and the third starts with 4? A UUID, version 4.",
+  "Guild master",
   "Hacker cat",
   "Handshake Heron",
   "Hard hat on. Who's next?",
@@ -8948,6 +9618,7 @@
   "Help: gcc's message names the line; the fix goes at the end of the line before.",
   "Help: type lesson in the arena, the Sage Owl explains it with a drawing.",
   "Here",
+  "Here string",
   "Here, --help won't help: read the first line of pick.sh (head -1 pick.sh). It names the shell that runs the script.",
   "Here, --help won't help: the answer is in bash itself. Look at the lesson Streams (bashou lesson).",
   "Here, --help won't help: the shell splits the line before cp even starts. Look at the lesson Quotes.",
@@ -8993,15 +9664,19 @@
   "Historian",
   "Hit! {n} to go.",
   "Hitchhiker Hare",
+  "Hoarder",
   "Hoglet",
+  "Homing",
   "Honey badger",
   "Honey badger doesn't wait for threats. Honey badger goes and finds them.",
   "Hoo.",
   "Hop hop. What's next?",
+  "Hop report",
   "Hops",
   "Horned owl",
   "How many .gem files are hidden in cave/, at any depth? Then: answer <number>",
   "How many different cities are in people.txt (3rd column)? Then: answer <number>",
+  "Hunter",
   "I always find my way home. Even through a tunnel.",
   "I always say what I see: that file needs a README.",
   "I brought you something! It's a package.",
@@ -9046,7 +9721,9 @@
   "In the second loop, write i < count instead of i <= count.",
   "In zsh, a name kept in a variable stays one word: n=\"{name}\"; cp $n backup/ works there, but not in bash, which splits $n at the space. Typed straight on the line, the space splits in both shells, so the quotes are a good habit: scripts usually run in bash.",
   "Indent Imp",
+  "Index",
   "Index Imp",
+  "Info",
   "Injection Imp",
   "Injector",
   "Input: a list of host names, some repeated.",
@@ -9071,6 +9748,7 @@
   "JOIN puts two tables side by side: ON says which rows go together. Here an order goes with the customer whose id is its customer_id. SUM(total) adds up a column.",
   "JSON Jinn",
   "JSON is my favourite pond.",
+  "JSON reader",
   "JWT token",
   "Jade golem",
   "Jealous pony",
@@ -9078,6 +9756,7 @@
   "Jobs run side by side unless you set an order: needs: on GitHub, stages: on GitLab. A deploy should wait for the tests, and be skipped when they fail.",
   "Join Jackal",
   "Jumble Sprite",
+  "Just the answer",
   "Keep only the \"Failed password\" lines first: grep. Then keep the IP, count, sort.",
   "Keep your notes: half of security is notes.",
   "Keeper",
@@ -9087,6 +9766,7 @@
   "King slime",
   "Kit",
   "Kitsune",
+  "Knight snail",
   "Knocked out! The {threat} wins this time.",
   "Knocker",
   "Knot Eel",
@@ -9138,6 +9818,7 @@
   "Look for how to open a database file, and how to pass SQL on the command line.",
   "Look for the option that decrypts.",
   "Look for the option that encrypts with a passphrase only (symmetric).",
+  "Lookout",
   "Loop",
   "Loop Lich",
   "Loopback Lurker",
@@ -9153,6 +9834,7 @@
   "Make the terminal a bit bigger for the adventure (50×20 at least).",
   "Mandarin duck",
   "Mantis",
+  "Manual",
   "Manual Mole",
   "Manuals have sections: 1 for commands, 5 for file formats. `man 5 passwd` reads the file format, not the command.",
   "Many small jobs make one big job.",
@@ -9164,6 +9846,7 @@
   "Maze Wraith",
   "Meadow",
   "Meanwhile, a threat your pet announces can still be fought: bashou fight",
+  "Measure",
   "Meerkat",
   "Meet awk: `awk '{print $1}' file` prints the first word of each line.",
   "Memory",
@@ -9191,16 +9874,22 @@
   "Mouseling",
   "Mushroom",
   "Mut Marmot",
+  "My addresses",
   "My eyes move one by one. Yours can learn to spot a hash in a log at a glance.",
   "My horn picks up Wi-Fi. Probably.",
   "NXDomain Nixie",
   "Name",
   "Nebula",
+  "Needle",
   "Needle Gnat",
   "Needs Newt",
   "Negation Gnome",
+  "Neighbours",
   "Nested",
+  "Netadmin",
+  "Network engineer",
   "Network: IPv4, IPv6, DNS, TCP",
+  "Networker",
   "Never write a password or a token in the file: everyone who reads the repository gets it. The CI keeps secrets for you: ${{ secrets.NAME }} on GitHub, a CI/CD variable on GitLab.",
   "New best score!",
   "New pet: {name}! ({reason}) · bashou swap",
@@ -9249,6 +9938,7 @@
   "Null",
   "Numbers sorted as text go wrong: 10 comes before 9, because the character 1 comes before 9. -n compares them as numbers.",
   "OAuth2",
+  "Ocean",
   "Octal",
   "Octopito",
   "Octopus",
@@ -9268,6 +9958,7 @@
   "One of the scheduled jobs in etc/cron.d is a backdoor: it downloads a script and runs it.\nWhat domain does it download from?",
   "One scroll in library/ talks about the treasure. Which file? Then: answer <file name>",
   "One small step per command, joined with |: keep the 404 lines, keep the IP, drop duplicates, count.",
+  "One-liner",
   "Only `{tool}` hurts it; looking around (ls, cat, find…) and typos are free. It'll be back.",
   "Only a loop that runs mv once per photo can hurt the Rename Rat. Write a for loop around your mv (or use rename), then answer again.",
   "Only one form so far: it evolves with achievements.",
@@ -9276,8 +9967,10 @@
   "Only use `sudo` when a command really needs it. As root, small mistakes become big ones.",
   "Onward! `bashou adventure` has more roads to walk.",
   "Open a new terminal (or: source ~/{file}) to meet your pet.",
+  "Open ear",
   "Open the file in an editor: {editor} recipe.txt. Move with the arrow keys to line {n}, fix the word, then save and quit ({save_keys}). cat recipe.txt shows the result.",
   "Open {editor} menu.txt, keep the two Dessert lines and delete the <<<<<<<, ======= and >>>>>>> lines ({save_keys}). Then: git add menu.txt and git commit (the message is ready, or add -m 'Merge chef').",
+  "Operator",
   "Orc",
   "Ouroboros",
   "Overflow Ogre",
@@ -9308,11 +10001,14 @@
   "Pet",
   "Pet rock",
   "Pets",
+  "Phantom",
   "Phoenix",
   "Photo sorter",
   "Pick my skills",
   "Pick your skills",
   "Pigeon",
+  "Ping",
+  "Pipe fitter",
   "Pipeline",
   "Pipeline Hydra",
   "Pipeline files",
@@ -9327,19 +10023,27 @@
   "Plumber",
   "Pods",
   "Polish the sword: rename rusty_sword.txt to shiny_sword.txt.",
+  "Poltergeist",
   "Polyglot",
   "Polymath",
+  "Pond",
   "Ponies",
   "Ponies found: {n}/{total}.",
   "Porcupine",
   "Port",
+  "Port filter",
+  "Port names",
+  "Port sniffer",
   "Poster",
+  "Practitioner",
   "Press Ctrl+R again for older matches.",
   "Press Tab while you type a command: the shell completes the name, so typos like `sl` can't happen.",
+  "Prickles",
   "Printer",
   "Process Phantom",
   "Programs talk over the network through sockets. A server opens one and listens on a port; each client that connects gets a connection of its own. ss lists them all.",
   "Pruner",
+  "Puddle",
   "Pup",
   "Put the key (key.txt) into the chest/ folder.",
   "Pygmy owl",
@@ -9354,6 +10058,10 @@
   "Query Quokka",
   "Questmaster",
   "Quick eye",
+  "Quick lookup",
+  "Quick study",
+  "Quiz master",
+  "Quiz whiz",
   "RTFM means \"Read The F*** Manual\": before asking, look in the docs. The answer is often already written there.",
   "Ranges",
   "Ranking",
@@ -9373,17 +10081,20 @@
   "Reading isn't enough to open {lessons}: practice this one first. Any one is enough: {ways}.",
   "Real ponies use hjkl.",
   "Real programs to build, one small step at a time. Each step says what to do and when it's done, not how: searching is part of learning. Pick one that you would really use.",
+  "Record types",
   "Red giant",
   "Red squirrel",
   "Refused Revenant",
   "Refused? The machine answered: nothing listens there. Timed out? Nothing answered at all.",
   "Regex",
   "Regular",
+  "Regular reader",
   "Relay",
   "Release Raven",
   "Reload",
   "Remove the ! (and its space) from the if line: `if grep -qx \"$1\" guests.txt; then`. Open it with {editor} door.sh, fix the line ({save_keys}). Or in one command: sed -i 's/if ! grep/if grep/' door.sh",
   "Removing items from a list while a for loop walks over it makes the loop skip some. Build a new list instead.",
+  "Renaissance",
   "Rename Rat",
   "Replace the token with ${{ secrets.API_TOKEN }} on the API_TOKEN: line. In real life, the leaked token must also be revoked: it stays in the git history.",
   "Repo Revenant",
@@ -9401,6 +10112,7 @@
   "Right! The monster runs away.",
   "Rights, disk and archives",
   "River",
+  "Road map",
   "Rock golem",
   "Rock slime",
   "Rocky and Red Hat: dnf, rpm, repositories",
@@ -9435,24 +10147,32 @@
   "Scan it with your phone: the page draws your banner, then Share sends it to Signal, WhatsApp or any app.",
   "Scholar",
   "Score",
+  "Scout",
   "Scribe",
+  "Scripter",
+  "Scroll keeper",
+  "Sea",
   "Sea turtle",
   "Sealed",
   "Secret Sprite",
+  "Secret keeper",
   "Secrets",
   "Security",
   "Security challenge: {title}",
   "Security challenges",
+  "Sed master",
   "Seedling",
   "Seeker",
   "Segfault Golem",
   "Segfault Salamander",
   "Selector",
+  "Self-taught",
   "Semicolon Slug",
   "Sentinel",
   "Services and unit files",
   "Settings",
   "Shadow Shade",
+  "Shape shifter",
   "Sharing is the best part of free software.",
   "Sharp eyes",
   "Shebang Shade",
@@ -9461,7 +10181,9 @@
   "Shopping planner",
   "Shortcut",
   "Shortcut: meeting the {threat} in a fight opens this lesson at once.",
+  "Shout",
   "Signal",
+  "Signer",
   "Simplest: printf(\"Hello, %s!\\n\", argv[1]); or malloc(strlen(argv[1]) + 1) and free it.",
   "Sit down. Relax. Run a command.",
   "Six Serpent",
@@ -9469,6 +10191,8 @@
   "Sizer",
   "Skills",
   "Skills are picked on a screen: bashou config skills",
+  "Sleuth",
+  "Slice",
   "Slime",
   "Slow and steady. No rush.",
   "Slowly but surely, hero.",
@@ -9484,6 +10208,8 @@
   "So many containers on my back.",
   "So many tools already. What's next, `man -k`?",
   "Socket",
+  "Socket census",
+  "Soft landing",
   "Soldier ant",
   "Solid and loyal. Knows the filesystem rock by rock.",
   "Solved: {title}!",
@@ -9491,13 +10217,19 @@
   "Some skills use programs this computer doesn't have yet: {programs}. Pick my skills shows what each one is for and how to install it.",
   "Someone is trying passwords on this server's SSH.\nIn auth.log, which IP address has the most failed logins?",
   "Someone left a hidden file in this folder. What is the word inside it?",
+  "Sorter",
   "Space Sprite",
   "Spark",
   "Sparklings",
   "Spider",
   "Spiderling",
+  "Spinner",
   "Spirit",
+  "Splash",
+  "Splitter",
   "Spore",
+  "Spot the difference",
+  "Spotless",
   "Sprinter",
   "Sprout",
   "Squab",
@@ -9525,8 +10257,12 @@
   "Stonemason",
   "Stop it there with a breakpoint, then print the variable.",
   "Stop only at the right call with a condition: break month_end if month == {month}. Then run, then print balance.",
+  "Stopwatch",
+  "Storyteller",
   "Stowaway Stoat",
   "Streak",
+  "Stream",
+  "Stream editor",
   "Streams and scripts",
   "Stuck in the arena? Type `hint`.",
   "Stuck in vim? Press Esc, then type `:q!` and Enter to leave without saving, or `:wq` to save and leave.",
@@ -9697,6 +10433,8 @@
   "Throne",
   "Thunder slime",
   "Tick at least one.",
+  "Tidal wave",
+  "Tide",
   "Tight",
   "Time keeper",
   "Time traveller",
@@ -9719,6 +10457,8 @@
   "Train",
   "Tree frog",
   "Tree spirit",
+  "Trimmer",
+  "Troll",
   "Try `{example}` (achv: {name})",
   "Try: ./check.sh 2> errors.txt (the ok lines still show, the errors go into the file). cat errors.txt to check.",
   "Try: ./nothing.sh (or bash nothing.sh), then answer exactly what it printed.",
@@ -9844,12 +10584,16 @@
   "Vault Vole",
   "Verse Viper",
   "Version Vole",
+  "Versioned vault",
   "Veteran",
   "Victory! The {boss} is defeated.",
   "View source. Always view source.",
   "Village",
   "Vim pony",
+  "Virtuoso",
+  "Walking manual",
   "Walls up",
+  "Wanderer",
   "Want to learn SQL? `{cmd}` installs SQLite: a whole database in one file. SQL fights will come.",
   "Want to play detective? `bashou arena security` has small investigations.",
   "Wanted: 'checking <line>' for each line, exactly as written, and nothing else run.",
@@ -9900,8 +10644,10 @@
   "Which one? (number, Enter leaves): ",
   "Which project? For example: bashou project start python photos",
   "White duck",
+  "Who's there?",
   "Why did the pony moo? To confuse the cow!",
   "Win and it's like any fight. Lose, and the gates close for an hour.",
+  "Wired",
   "Wisp",
   "With {editor}: {editor} recipe.txt, fix {bad} into {good}, {save_keys}. Or in one command, without opening the file: sed -i 's/{bad}/{good}/' recipe.txt",
   "Without -l, ss shows connections: ESTAB is open, TIME-WAIT just closed. -6 keeps IPv6 only, and filters pick a port: state established '( dport = :443 )'.",
@@ -9909,6 +10655,7 @@
   "Without host key checks, you won't notice if someone swaps the server.",
   "Wonder of the world",
   "Words that start with a dot are sqlite3's own commands: .tables lists the tables, .schema shows how one is built (its columns and their types), .quit leaves. You can also give them right after the file.",
+  "Worker",
   "Worker ant",
   "World tree",
   "Wrecking pony",
@@ -9926,6 +10673,7 @@
   "Xolotl",
   "YAML is written like an outline: a line pushed further right belongs to the line above it. Each level is 2 spaces further right, and lines that belong together start at the same place.",
   "Year",
+  "Yeti",
   "You already finished {title}. Its steps stay here to read again:",
   "You also have {program}: Bashou is now in {file} too, so your pet comes along there.",
   "You beat the {threat}!",
@@ -10075,13 +10823,14 @@
   "an option of {cmd}: `man {cmd}` explains it",
   "and start it right away",
   "another system: questions only",
-  "answer 20 questions right in bashou adventure",
   "apt list --installed shows what is on the machine, with versions; add a name to see only that one. dpkg -l does it too.",
   "apt search name lists matching packages with the version apt would install; apt policy name shows Installed and Candidate.",
   "apt-mark keeps the list: showmanual for what you asked for, showauto for dependencies.",
   "archive: keep permissions, dates, links, and go into folders",
   "as text instead of binary",
+  "ask DNS for another kind of record: `dig MX example.com`",
   "ask DNS with `dig +short`",
+  "ask bash about its own commands: `help cd`",
   "ask for the IPv4 address (the default)",
   "ask for the IPv6 addresses",
   "ask for the mail servers",
@@ -10108,7 +10857,10 @@
   "base64 is an encoding, anyone can undo it.",
   "bash -x script.sh : every command, printed as it runs.",
   "bash and zsh",
+  "bash's help about its own commands (cd, read, for…), which have no man page of their own",
   "bashou project [start <language> <project> | next | hint | back]",
+  "beat 15 different threats",
+  "beat 5 different threats",
   "beat a boss in `bashou adventure`",
   "beat a boss without losing a heart on the way",
   "beat bosses of 3 different topics",
@@ -10118,6 +10870,7 @@
   "break sets a stop: break main, or break loan.c:12. next runs one line, step goes into a call, print x shows a variable, continue goes on to the next stop.",
   "breathe, blink, fidget, look around, sleep",
   "brief: one short line per interface",
+  "browse a GNU manual with `info`",
   "bt (backtrace) lists the calls that led there, the one that crashed first, each with its file and line. That's where to look.",
   "build a Pomodoro timer in C: `bashou project start c pomodoro`",
   "build a contact book in C: `bashou project start c contacts`",
@@ -10127,11 +10880,15 @@
   "builds the C programs you fix: every C fight needs it",
   "builds the Rust programs you fix: every Rust fight needs it",
   "capture output with `$( )`",
+  "capture output with `$( )` 100 times",
+  "capture output with `$( )` 25 times",
   "cat <<EOF > file writes several lines at once.",
   "cat menu.txt: between <<<<<<< and ======= is your side (main), between ======= and >>>>>>> the other branch's. Git can't choose for you. Edit the file so it reads the way you want, without the three marker lines, then tell git it's settled: git add menu.txt.",
   "chain 3 commands with pipes",
+  "chain 3 commands with pipes, 10 times",
   "chain 5 commands with pipes",
   "change a password",
+  "change a value's case with `${name^^}`",
   "change the owner with `chown user:group`",
   "change your active pet",
   "changes the current folder",
@@ -10157,6 +10914,7 @@
   "cmd |& grep x also pipes stderr.",
   "commands a speech bubble stays on screen (e.g. 5-10, or 3)",
   "compare as numbers",
+  "compare two files line by line with `diff -u`",
   "compress harder with `xz` or `zstd`",
   "compressed with gzip",
   "compresses a file (very small, a bit slow)",
@@ -10166,8 +10924,10 @@
   "copies files",
   "copies only what changed, locally or to another machine",
   "copy a folder with `cp -r`",
+  "count a value's characters: `${#name}`",
   "count duplicates with `uniq -c`",
   "count how many times each line repeats",
+  "count sockets by type with `ss -s`",
   "count syscalls with `strace -c`",
   "count the calls instead of printing them",
   "count with `seq` or `{1..10}`",
@@ -10186,6 +10946,7 @@
   "curl -I url : just the headers.",
   "curl -s url | jq '.items[0]'",
   "curl -sS url : quiet, but still shows errors.",
+  "cut the end off a value: `${file%.txt}`",
   "dance, sparkle",
   "debug like a rubber duck: bashou learn <command>, bash -x or echo $?",
   "decrypt",
@@ -10197,6 +10958,7 @@
   "diff <(ls a) <(ls b) compares two outputs.",
   "dig into a dump or a firmware",
   "dnf takes --disablerepo and --enablerepo on the command line: disable them all, then enable the one you need. Quote the * so bash leaves it alone.",
+  "do maths in the shell: `echo $((6 * 7))`",
   "don't go into it",
   "download to a file with `curl -o` or `wget`, not into a shell",
   "dpkg knows which package installed each file: dpkg -S path searches it.",
@@ -10220,6 +10982,7 @@
   "enter the arena",
   "errors (2) go where the output (1) goes",
   "every address of a name, IPv4 and IPv6, the way programs see them",
+  "every address of this machine, on one line",
   "every file here",
   "every {value} seconds",
   "explain a command to your duck: `bashou learn <command>`",
@@ -10229,8 +10992,10 @@
   "extract into this folder: {value}",
   "fail on HTTP errors instead of saving the error page",
   "feed a heredoc `<<EOF`",
+  "feed a word to a command with `<<<`",
   "fight the threat your pet announced",
   "fight when you want: a timed fight, or a security investigation",
+  "filter sockets by port: `ss -tn 'dport = :443'`",
   "filter with `select()`",
   "find . -name '*.bak' | xargs rm",
   "find . -name '*.log' -mtime +7 : week-old logs.",
@@ -10242,29 +11007,35 @@
   "find bugs before they bite with `shellcheck`",
   "find by date: `-mtime`, `-mmin` or `-newer`",
   "find duplicates and sort your papers in Rust: `bashou project start rust papers`",
+  "find out what a name really runs: `type ls`",
   "find searches every folder below; wc -l counts lines.",
   "find the commit that broke something, by halves",
   "find the name of an address with `dig -x 1.1.1.1`",
   "find walks every subdirectory; -type f keeps only files, -name matches a pattern.",
+  "find which port a service uses: `getent services ssh`",
   "finds processes by their name",
   "finish 10 steps of projects",
   "finish 100 steps of projects",
   "finish 15 steps of projects",
   "finish 150 steps of projects",
   "finish 20 steps of projects",
+  "finish 3 projects",
   "finish 3 steps of projects",
   "finish 30 steps of projects",
   "finish 40 steps of projects",
   "finish 5 steps of projects",
   "finish 50 steps of projects",
   "finish 75 steps of projects",
+  "finish 8 projects",
   "finish a C project",
   "finish a Python project",
   "finish a Rust project",
   "finish a Shell project",
   "finish a hard project",
   "finish a medium project",
+  "finish a project in each language: Python, Shell, C and Rust",
   "finish a step of a project: `bashou project`",
+  "finish chapter 1 of `bashou adventure`",
   "finish chapter 1 of bashou adventure",
   "finish chapter 3",
   "finish project steps 7 days in a row",
@@ -10300,6 +11071,7 @@
   "gdb pauses a program wherever you want: `break main`, `run`, `next`, `print x`. `bashou lesson` has a lesson on it.",
   "gdb, the debugger",
   "get a hint",
+  "get a one-line summary of a command with `whatis`",
   "get the new version",
   "getent hosts asks the way programs do, following /etc/nsswitch.conf: /etc/hosts first, then DNS. Any address it prints for the name is right.",
   "getent hosts name : what programs really get. dig only asks DNS.",
@@ -10309,13 +11081,19 @@
   "git: commits, branches, merges",
   "give 10 good answers in one game of `bashou spot`",
   "give 10 good answers without a mistake in one game of `bashou spot`",
+  "give 100 right answers in `bashou adventure`",
   "give 15 good answers in one game of `bashou spot`",
+  "give 15 good answers without a mistake in one game of `bashou spot`",
   "give 20 good answers in one game of `bashou spot`",
+  "give 20 right answers in `bashou adventure`",
   "give 5 good answers in one game of `bashou spot`",
+  "give a variable a default value: `${name:-world}`",
   "give it a terminal",
   "give up (try again any time)",
   "give up after {value} seconds",
   "give your answer",
+  "gives the one-line description of a command, from its man page",
+  "go through every item of an array: `\"${files[@]}\"`",
   "go to a branch",
   "gpg -c (symmetric) locks a file with a passphrase: the same passphrase opens it. It writes secrets.txt.gpg next to the file and keeps the original, so you remove that one yourself.",
   "gpg -c notes.txt : locks the file with a passphrase.",
@@ -10339,6 +11117,8 @@
   "hard",
   "heredoc: the next lines, up to the end word, are the input",
   "heredocs",
+  "hide every part of the answer…",
+  "how many rounds: {value}",
   "human sizes (G, M)",
   "hunt the commit that broke it with `git bisect`",
   "i to type, Esc when done, then :wq and Enter to save and quit",
@@ -10358,7 +11138,9 @@
   "jq 'map(select(.age > 30))' filters a list.",
   "jq -r '.[].name' : raw names, no quotes.",
   "keep backslashes as they are",
+  "keep only one port in a capture: `tcpdump -nn -r f.pcap port 53`",
   "keep the original file",
+  "keep your password store in git: `pass git init`",
   "keeps only the last part of a path",
   "kill -TERM first; -KILL only as a last resort.",
   "knock on every door",
@@ -10375,6 +11157,7 @@
   "line {n} should read key: value, with a space after the colon.",
   "line {n} starts further left than the first line of the file.",
   "lines separated by a null byte (safe with any name)",
+  "list UDP sockets with `ss -u`",
   "list every pod with `kubectl get pods -A`",
   "list every process: `ps aux` or `ps -ef`",
   "list objects",
@@ -10383,6 +11166,7 @@
   "list the stored names",
   "list what's inside",
   "list your addresses with `ip -br addr`",
+  "listen on a port yourself with `nc -l 9000`",
   "listen on this interface: {value}",
   "listen to Wi-Fi with the aircrack suite",
   "listen: wait for a connection instead of making one",
@@ -10395,10 +11179,12 @@
   "ln makes links; one option makes a symbolic (soft) link.",
   "lock with a passphrase (symmetric: the same one opens it)",
   "log your internet outages in Rust: `bashou project start rust netwatch`",
+  "look a name up with `host` or `nslookup`",
   "look back with `history`",
   "look for a new version once a day (on/off)",
   "look for hidden paths",
   "look inside an archive with `tar -tf`",
+  "look into /usr/share/doc, where packages keep their docs",
   "look up a name the way programs do: /etc/hosts first, then DNS",
   "look up a name the way programs do: `getent hosts example.org`",
   "look up a name through systemd-resolved",
@@ -10407,6 +11193,7 @@
   "loop: for each value…",
   "loops",
   "lose (or flee) a fight: take a seat",
+  "lose or flee a fight: it happens, and the Living sofa catches you",
   "ls *.txt | xargs -I{} cp {} {}.bak",
   "ls -l diary.txt shows rw-r--r--: everyone may read it. 6 = rw for you, 0 for the group, 0 for others.",
   "ls -l shows each file's rights in three groups: you (user), your group, everyone else (others). r reads, w writes, x runs. id tells you who you are and which groups you belong to.",
@@ -10416,10 +11203,17 @@
   "make a symbolic link with `ln -s`",
   "make your own key pair with `gpg --full-generate-key`",
   "master 10 lessons you read",
+  "master 15 lessons you read",
+  "master 20 lessons you read",
+  "master 25 lessons you read",
+  "master 3 lessons you read",
+  "master 30 lessons you read",
   "master 5 lessons you read",
   "master a lesson you read: do the fights and achievements it prepares",
   "mastered",
   "mean() is written in stats.c. The linker needs every file that holds a piece of the program.",
+  "measure every router on the way with `mtr -r`",
+  "measure how long a command takes: `time sleep 1`",
   "measures how much space files and folders take",
   "medium",
   "merge and split PDFs in Python: `bashou project start python pdf`",
@@ -10466,14 +11260,20 @@
   "only the listening sockets (servers waiting)",
   "only the logs of this service: {value}",
   "only the names of the files that match, not the lines",
+  "only the number of bytes",
   "only the number of lines",
   "only the sockets in this state",
   "only these calls: {value}",
   "only this kind: {value} (f = file, d = folder)",
+  "open 100 manual pages with `man`",
+  "open 25 manual pages with `man`",
   "open 5 chests",
+  "open a manual section: `man 5 crontab` is the file, not the command",
   "open a shell in a pod with `kubectl exec -it`",
+  "opens a command's manual: what it does, every option, examples. q quits, / searches",
   "opens a shell on another machine, encrypted",
   "opens an SQLite database (the whole database is one file) and runs SQL on it",
+  "opens the GNU manuals: longer than man pages, with chapters and links",
   "optional: `check` runs it on your pipeline files, as real projects do before a push",
   "or",
   "os.system hands the whole string to a shell, so ; $( ) | in the data become commands.",
@@ -10488,15 +11288,19 @@
   "people.txt has a name, an age and a city per line. Make names.txt with only the names, one per line.",
   "pet size: small, or large for pets that have big pixel art (small/large)",
   "pgrep -a python lists python processes.",
+  "ping and traceroute in one: every router on the way, with its losses and delays",
+  "ping over IPv6: `ping -6 ::1`",
   "pipe: the output of the left command goes into the next one",
   "place arguments with `xargs -I{}`",
   "play 10 games of `bashou spot`",
+  "play 50 games of `bashou spot`",
   "play a game of `bashou spot`",
   "play a game of bashou spot",
   "practice “{lesson}”: {ways}",
   "prices.txt has an item and a price per line. What's the total? Then: answer <number>",
   "print a password",
   "print chosen lines with `sed -n …p`",
+  "print just your addresses with `hostname -I`",
   "print nothing unless asked (p)",
   "print only the matching part, not the whole line",
   "print raw strings with `jq -r`",
@@ -10510,6 +11314,7 @@
   "prints the first lines",
   "prints the last lines",
   "prints the lines that match a pattern",
+  "prints this machine's name, or its addresses",
   "ps aux --sort=-%mem | head : memory hogs.",
   "put the real {what} here",
   "put work aside with `git stash`",
@@ -10524,9 +11329,18 @@
   "raw: strings without their quotes",
   "reach level 3 in a topic",
   "read 12 lessons to the end",
+  "read 15 lessons to the end",
   "read 20 lessons to the end",
+  "read 25 lessons to the end",
   "read 3 lessons to the end",
+  "read 30 lessons to the end",
+  "read 40 lessons to the end",
   "read 6 lessons to the end",
+  "read 9 lessons to the end",
+  "read a command's help 10 times: `--help`, `man` or `help`",
+  "read a command's help 200 times",
+  "read a command's help 50 times",
+  "read a command's manual page with `man`",
   "read a file's mode with `stat -c %a`",
   "read a lesson to the end: `bashou lesson`",
   "read a lesson to the end: bashou lesson",
@@ -10535,24 +11349,30 @@
   "read a service's logs with `journalctl -u`",
   "read every lesson of the skills you learn",
   "read lessons of 3 different skills",
+  "read lessons of 5 different skills",
   "read lines with `while read`",
   "read the Sage Owl's lesson about it",
   "read the packets from this capture file instead of the network: {value}",
   "read the script and check its syntax, without running anything",
+  "read the short examples of `tldr`",
   "read your file the way verify will, without striking",
+  "read your interfaces' counters with `ip -s link`",
   "reads a shell script and points out bugs and risky lines, with a fix for each",
   "reads and reshapes JSON",
   "reads one line into a variable",
   "reads text line by line and splits each line into columns ($1, $2…)",
   "reads the input from this file",
   "reads the system logs",
+  "recognise 12 kinds of string in `bashou spot`",
   "recognise every kind of string at least once in `bashou spot`",
   "recursive: copy the folder and everything in it",
   "recursive: every file in every folder",
   "reload the unit files after you edited one",
   "remove a password",
   "replace every match: `s/…/…/g`",
+  "replace inside a value: `${path//\\//-}`",
   "replaces or deletes characters",
+  "report: run a few rounds, then print a table instead of the live screen",
   "rerun a command every few seconds with `watch -n`",
   "reverse lookup: the name that belongs to this address",
   "reverse order",
@@ -10566,19 +11386,36 @@
   "rsync -av src/ dst/ : copies only what changed.",
   "rules: is a list of conditions, read in order; the first that matches decides. Each can say when: manual, so the job waits for a click in the pipeline page. A branch that matches no rule gets no deploy job at all.",
   "run 1,000 commands",
+  "run 1,500 commands",
+  "run 10 commands",
+  "run 10,000 commands",
+  "run 100 commands",
   "run 100 commands in one day",
+  "run 2,500 commands",
+  "run 250 commands",
+  "run 5 risky commands: the Gremlin feeds on them",
+  "run 5,000 commands",
+  "run 50 commands",
+  "run 500 commands",
+  "run 7,500 commands",
+  "run 750 commands",
   "run Metasploit",
   "run a command between midnight and 5 am",
   "run a command inside a pod",
+  "run a script of your own 5 times: `./backup.sh`",
   "run away (the threat will come back)",
+  "run code 10 times: python3, gcc, node, cargo…",
+  "run code 100 times: python3, gcc, node, cargo…",
   "run jobs in parallel with `xargs -P`",
   "run the command once with many files",
   "run this text as a command: {value}",
+  "run your own scripts 50 times",
   "run {n} commands",
   "run {value} at a time, in parallel",
   "runs a command again every few seconds",
   "runs a command and hands its output over like a file",
   "runs a command on each result; {{}} is the file",
+  "runs the command after it, then says how long it took",
   "runs the command inside and puts its output here",
   "runs the rest of the line as the administrator (root)",
   "runs the small scripts you fix: every Python fight needs it",
@@ -10587,11 +11424,14 @@
   "s: skip",
   "save the packets to this file: {value}",
   "save to this file: {value}",
+  "says what a name really runs: a program on disk, a shell builtin, an alias or a function",
   "scan a network with `nmap`",
   "scan a site with `nikto`",
   "scores.txt has one score per line. Sort it to find the highest one. Then: answer <number>",
-  "scripts of your own run",
+  "search a help text instead of scrolling: `ls --help | grep sort`",
   "search a tree with `grep -r`",
+  "search every manual by keyword: `man -k` or `apropos`",
+  "search the one-line descriptions of every manual for this word (like apropos)",
   "seconds without typing before it says one (it waits for a pause in your work)",
   "sed '/^$/d' removes empty lines.",
   "sed 's/[[:space:]]*$//' trims trailing spaces.",
@@ -10602,11 +11442,14 @@
   "sed replaces text: `sed 's/old/new/g' file` (add -i to edit the file).",
   "see free space with `df -h`",
   "see only the headers with `curl -I`",
+  "see the machines next to you with `ip neigh`",
   "see who waits for connections with `ss -tlnp`",
   "see why a pod is stuck with `kubectl describe`",
   "see your real DNS servers with `resolvectl status`",
   "send a named signal: `kill -TERM`, `-HUP`…",
   "send data with `curl -d`",
+  "send exactly 3 pings with `ping -c 3`",
+  "send output into a command with `>( )`",
   "send stderr into the pipe with `2>&1`",
   "send this data (a POST): {value}",
   "sends a signal to a process (by default: stop)",
@@ -10620,10 +11463,13 @@
   "show lines around matches with `-A`, `-B` or `-C`",
   "show only your IPv6 addresses with `ip -6 addr`",
   "show or hide the pet (the first `on` adds Bashou to ~/.bashrc, or ~/.zshrc in zsh)",
+  "show the command's help: what it does, its options and how to write it",
   "show the details and events of an object",
   "show the full command line too",
   "show the history",
+  "show the routing table with `ip route`",
   "show the task again",
+  "shows a few common examples of a command, shorter than its man page",
   "shows a file one screen at a time (q quits)",
   "shows a file's details",
   "shows and changes the network: interfaces, addresses, routes",
@@ -10632,12 +11478,15 @@
   "shows the lines that differ between two files",
   "shows the memory in use and free",
   "shows the system calls a program makes",
+  "sign a file with `gpg --detach-sign`, so others can check it came from you",
+  "sign into a separate .sig file, next to the file itself",
   "silent: no progress bar",
   "sit in the middle of the traffic",
   "size a folder with `du -sh`",
   "skip a directory with `-prune`",
-  "solve 6 security challenges",
+  "solve 3 security challenges",
   "solve a security challenge: `bashou arena security`",
+  "solve every security challenge: `bashou arena security`",
   "sort -t, -k3 -n sorts a CSV by its 3rd column.",
   "sort alone compares text: 95 comes after 120, because the character 9 comes after 1. -n compares numbers.",
   "sort compares as text unless you pass -n, which compares as numbers. The last line of the sorted file is the biggest one: `tail -1`.",
@@ -10678,6 +11527,7 @@
   "strike when it works: Bashou checks your work",
   "sudo pip can break the system's Python. Use a venv, or pip install --user.",
   "sum a column and print it in `END`",
+  "summary: how many sockets of each kind",
   "symbolic: a shortcut to the path",
   "sync folders with `rsync -a`",
   "systemctl list-units --failed : what broke.",
@@ -10686,6 +11536,7 @@
   "take a binary apart",
   "take a command apart and explain each piece",
   "take a command apart, piece by piece (alone: your pet's last tip)",
+  "take part of a value: `${name:0:3}`",
   "talks to a web server: downloads, sends, shows headers",
   "talks to systemd-resolved: which DNS servers each interface uses, and lookups through them",
   "tar -czf backup.tgz dir/ packs a folder.",
@@ -10764,16 +11615,19 @@
   "then run the next command",
   "today=$(date +%F) stores a command's output.",
   "total(item) is called for each subfolder, but where does its result go?",
+  "trace a program with strace 3 times",
   "trace only some calls with `strace -e`",
   "trace: print each command before running it",
   "track your electricity or fuel in C: `bashou project start c energy`",
   "transform arrays with `map()`",
+  "trim dig's output with `+noall +answer`",
   "try passwords with John or hashcat",
   "turn a log into a daily report: `bashou project start shell logs`",
   "turn a weekly menu into a shopping list in Rust: `bashou project start rust menu`",
   "turns the lines that come in into arguments of a command",
   "type a new password in",
   "typed `:wq` in the shell",
+  "unified format: a few lines of context, - for removed lines, + for added ones",
   "uniq only merges adjacent lines, so sort first. `uniq -c` counts them.",
   "uniq only merges identical lines that follow each other. Without sort, a city that appears on lines 1 and 3 is counted twice. So sort always comes before uniq.",
   "unlock: {how}",
@@ -10781,11 +11635,39 @@
   "urllib.parse.unquote turns the %XX codes back into characters: %2e%2e%2f becomes ../",
   "use 20 different tools",
   "use a process substitution `<( )`",
+  "use a process substitution `<( )` 10 times",
+  "use awk 10 times",
   "use awk 100 times",
+  "use chmod or chown 10 times",
+  "use curl, ssh, rsync or dig 10 times",
+  "use curl, ssh, rsync or dig 100 times",
+  "use df, du, top or free 10 times",
   "use extended regexes: `grep -E`",
+  "use find 10 times",
   "use find 100 times",
+  "use git 10 times",
+  "use gpg or pass 5 times",
+  "use grep 10 times",
   "use grep 250 times",
+  "use ip, ss or ping 10 times",
+  "use ip, ss or ping 100 times",
+  "use ip, ss or ping 250 times",
+  "use ip, ss or ping 50 times",
+  "use ip, ss or ping 500 times",
+  "use jq 10 times",
+  "use jq 100 times",
+  "use kubectl 10 times",
+  "use ps, pgrep or kill 10 times",
+  "use ps, pgrep or kill 100 times",
+  "use sed 10 times",
+  "use sed 100 times",
+  "use sort 50 times",
+  "use strace 30 times",
+  "use systemctl or journalctl 10 times",
+  "use tar, gzip or zip 10 times",
   "use the terminal 7 days in a row",
+  "use xargs 10 times",
+  "use xargs 100 times",
   "use {tool} once",
   "use {tool} {n} times",
   "verbose: list the files",
@@ -10795,8 +11677,10 @@
   "vi: two modes, on every system, even the smallest",
   "visitors.txt has one name per visit. Who came most often? Then: answer <name>",
   "waits for another lesson",
+  "waits for this many seconds, then ends",
   "walk 100 m in `bashou adventure`",
-  "walk 500 m in bashou adventure",
+  "walk 5 km in `bashou adventure`",
+  "walk 500 m in `bashou adventure`",
   "walk into the world with your starter",
   "wash, hum, flick its tail",
   "watch -n 2 cmd : rerun it every 2 s.",
@@ -10819,13 +11703,16 @@
   "whole words only",
   "win 10 fights",
   "win 3 fights in 24 hours",
+  "win 3 network fights",
   "win 30 fights",
+  "win 6 network fights",
   "win a fight",
   "win a fight: bashou fight",
   "win a network fight: `bashou fight`",
   "win one of its fights",
   "win {n} fights",
   "with counters: packets, errors, drops",
+  "write 10 heredocs",
   "write a `for` loop",
   "write a backup script: `bashou project start shell backup`",
   "write the result to this file",
@@ -10845,7 +11732,6 @@
   "your terminal stats: commands, tools, streaks",
   "zero data: only check that the port answers, then close",
   "{boss} · {n}/{total}",
-  "{count} commands",
   "{file} can't be read as YAML yet: {error}",
   "{file} now loads the package (a copy of the old one: {backup}).",
   "{file} reads as valid YAML. That's the shape; verify then checks what it says (the jobs, the steps, the values).",
@@ -10894,6 +11780,7 @@
   "…",
   "…and with sudo, it could change anything on your machine.",
   "…taken from this list",
+  "…then show only the answer section",
   "←/→ choose · Enter: go · s: save & quit",
   "←/→ to look, Enter to choose, q to decide later",
   "←/→: pages · Enter: finish the lesson · q: library",

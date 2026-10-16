@@ -3,17 +3,7 @@
  "first": "snow_cub",
  "order": 26,
  "unlock": {
-  "tools": [
-   "gpg",
-   "gpg2",
-   "gpgv",
-   "pass"
-  ],
-  "uses": 5,
-  "label": [
-   "gpg",
-   "pass"
-  ]
+  "family_achievement": true
  },
  "voice": "*soft paws*",
  "tips": [

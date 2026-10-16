@@ -3,20 +3,7 @@
  "first": "squirrel",
  "order": 20,
  "unlock": {
-  "tools": [
-   "gunzip",
-   "gzip",
-   "tar",
-   "unzip",
-   "xz",
-   "zip",
-   "zstd"
-  ],
-  "uses": 10,
-  "label": [
-   "tar",
-   "gzip"
-  ]
+  "family_achievement": true
  },
  "voice": "*chitter*",
  "tips": [

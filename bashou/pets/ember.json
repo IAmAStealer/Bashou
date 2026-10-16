@@ -1,7 +1,7 @@
 {
  "name": "Ember",
  "next": "candle",
- "next_at": {"achievements": 4},
+ "next_at": {"achievements": 8},
  "symmetric": true,
  "palette": {
   "a": "#8a2a14",

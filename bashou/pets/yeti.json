@@ -1,0 +1,50 @@
+{
+ "name": "Yeti",
+ "symmetric": true,
+ "particles": [
+  0,
+  14
+ ],
+ "palette": {
+  "a": "#4f5d7e",
+  "o": "#dde7f6",
+  "w": "#f7f8fb",
+  "s": "#7488b5",
+  "f": "#8fa8d8",
+  "e": "#7ff0ff",
+  "m": "#1e1e24",
+  "t": "#ffffff",
+  "x": "#bfe9ff"
+ },
+ "base": [
+  ".....aaaaaaa.....",
+  "...aaowwwwwoaa...",
+  "..aowwoooooowoa..",
+  ".aoofffffffffooa.",
+  ".aoffemfffmeffoa.",
+  "aaoffffaaaffffoaa",
+  "aosofmtttttmfosoa",
+  "aosoosooooosoosoa",
+  "aowwooooooooowwoa",
+  ".aoxoooooooooxoa.",
+  ".aoooa.....aoooa.",
+  ".aaaaa.....aaaaa."
+ ],
+ "poses": {
+  "inhale": {
+   "9": "aaoxoooooooooxoaa"
+  },
+  "closed": {
+   "4": "-----aa---aa-----"
+  },
+  "left": {
+   "4": "-----me---me-----"
+  },
+  "right": {
+   "4": "-----em---em-----"
+  },
+  "fidget": {
+   "6": "------ttttt------"
+  }
+ }
+}

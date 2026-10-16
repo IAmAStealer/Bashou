@@ -3,9 +3,7 @@
  "first": "hatchling",
  "order": 3,
  "unlock": {
-  "counter": "adventure.walked",
-  "count": 500,
-  "how": "walk 500 m in bashou adventure"
+  "family_achievement": true
  },
  "voice": "…",
  "tips": [

@@ -1,7 +1,9 @@
 {
  "name": "Octopus",
  "next": "kraken",
- "next_at": {"achievements": "all"},
+ "next_at": {
+  "achievements": 5
+ },
  "palette": {
   "a": "#6e4196",
   "o": "#b47ddc",
@@ -11,44 +13,44 @@
   "q": "#50286e"
  },
  "base": [
-  ".....aaaaa.......",
-  "...aaoooooaa.....",
-  "..aoowwoooooa....",
-  ".aoowooooooooa...",
-  ".aoomooooomooa...",
-  ".aoomooooomooa...",
-  ".aopoooqooopoa...",
-  "..aoooooooooa....",
-  ".aoa.aoaoa.aoa...",
-  "ao...ao.oa...oa..",
-  ".a....a.a....a...",
-  "................."
+  "......aaaaa......",
+  "....aaowwooaa....",
+  "...aowwoooooqa...",
+  "...aowoooooooa...",
+  "..aoowmooowmoqa..",
+  "..aoommooommoqa..",
+  "..aoppooqooppqa..",
+  "...aoooooooooa...",
+  "..aoqa.aoa.aoqa..",
+  ".aoqa.aoooa.aoqa.",
+  "aoqa..ao.oa..aoqa",
+  ".aa...aa.aa...aa."
  ],
  "poses": {
   "fidget": {
-   "7": "-a---------------",
-   "8": "a----------------",
-   "9": ".----------------",
-   "10": "-.---------------"
+   "9": "aoqa.------------",
+   "10": ".aoqa------------",
+   "11": "..aa.------------"
   },
   "inhale": {
-   "7": "-ao---------oa---"
+   "7": "..aoooooooooooa.."
   },
   "closed": {
-   "4": "----o-----o------",
-   "5": "---qq-----qq-----"
+   "4": "-----oo---oo-----",
+   "5": "-----qq---qq-----"
   },
   "left": {
-   "4": "---mo----mo------",
-   "5": "---mo----mo------"
+   "4": "----wmo---wmo----",
+   "5": "----mmo---mmo----"
   },
   "right": {
-   "4": "----om----om-----",
-   "5": "----om----om-----"
+   "4": "-----owm---owm---",
+   "5": "-----omm---omm---"
   }
  },
  "particles": [
   0,
   13
- ]
+ ],
+ "symmetric": true
 }

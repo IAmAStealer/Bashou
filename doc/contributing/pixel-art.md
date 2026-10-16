@@ -44,9 +44,11 @@ number of rows (the pets are 17 × 12).
   (a scarf, a crown…).
 - **`particles`**: the terminal line and column of a 3-cell empty spot where `z`, `♪` and `✦` show up.
 - **`name`**: the form's name, as players see it (and translated in `bashou/locales/fr.json`).
-- **`next`** and **`next_at`**: the form it evolves into, and what it takes: `{"achievements": 2}` (that
-  many of the pet's family, or all of them if the family is smaller), `{"achievements": "all"}`,
-  `{"commands": 100}` (the Slime) or `{"level": 3}` (the starters). A pet's forms are the chain of these
+- **`next`** and **`next_at`**: the form it evolves into, and what it takes: `{"achievements": N}` (that
+  many of the pet's family, or all of them once the player has every one they can earn) or `{"level": 3}`
+  (the starters). Form k of a pet needs T(k) = (k + 2)² // 4 − 1 achievements: 1, 3, 5, 8, 11, 15, 19, 24,
+  29, 35, and a family has exactly T(its forms) achievements (tests/test_families.py): more achievements
+  means a new form to draw, fewer means achievements to add. A pet's forms are the chain of these
   links, from its first form (`"first"` in the pet's family file, below) to its last, which has neither.
   A new form is one new file and one link: the board shows one more star, and the tests walk every pet
   through it.
@@ -91,10 +93,9 @@ per starter (`star.json`):
 
 - **`name`**, and **`order`**: its place on the board (starters: in the starter choice).
 - **`first`**: the sprite of its first form; each form's `next` leads to the others.
-- **`unlock`**: how it comes. One of `{"tools": ["find"], "uses": 10}` (successful uses of those
-  commands; `"label"` picks which ones the hint names), `{"construct": "pipe3", "count": 10}`,
-  `{"commands": 10}`, or a rule with a `"how"` sentence for the board: `{"counter": "fights_won",
-  "count": 1}`, `{"achievement": "kindling"}`, `{"family_achievement": true}`, `{"secret_found": true}`, `{"pony": true}`
+- **`unlock`**: how it comes. `{"family_achievement": true}`: the family's first achievement brings it
+  (the board shows its first count to reach, like "use find 10 times (3/10)", or the `"how"` sentence when
+  there is one). The secret ones: `{"achievement": "fearless"}`, `{"secret_found": true}`, `{"pony": true}`
   (claimed with `bashou pony <id>`, see `bashou/pony.py`).
 - **`voice`**, **`tips`** (3 or more) and **`personal`**: what it says. A starter also has a **`blurb`**.
 - Optional: **`secret`** (not on the board until found), **`needs`** (hidden where that command isn't

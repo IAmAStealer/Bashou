@@ -4,14 +4,7 @@
  "order": 23,
  "needs": "systemctl",
  "unlock": {
-  "tools": [
-   "journalctl",
-   "systemctl"
-  ],
-  "uses": 10,
-  "label": [
-   "systemctl"
-  ]
+  "family_achievement": true
  },
  "achievement_needs": [
   "systemctl"

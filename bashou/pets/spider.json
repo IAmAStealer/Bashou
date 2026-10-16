@@ -1,7 +1,7 @@
 {
  "name": "Spider",
  "next": "tarantula",
- "next_at": {"achievements": "all"},
+ "next_at": {"achievements": 5},
  "symmetric": true,
  "palette": {
   "a": "#8c73b9",

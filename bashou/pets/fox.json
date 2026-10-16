@@ -1,7 +1,7 @@
 {
  "name": "Fox",
  "next": "kitsune",
- "next_at": {"achievements": "all"},
+ "next_at": {"achievements": 5},
  "palette": {
   "k": "#3c2823",
   "a": "#c85f23",

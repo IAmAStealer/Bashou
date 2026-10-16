@@ -1,9 +1,7 @@
 {
  "name": "Port",
  "next": "town",
- "next_at": {
-  "achievements": 12
- },
+ "next_at": {"achievements": 35},
  "palette": {
   "g": "#5fa040",
   "G": "#3e7a30",

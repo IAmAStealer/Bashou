@@ -3,9 +3,7 @@
  "first": "tadpole",
  "order": 2,
  "unlock": {
-  "counter": "adventure.correct",
-  "count": 20,
-  "how": "answer 20 questions right in bashou adventure"
+  "family_achievement": true
  },
  "voice": "Ribbit.",
  "tips": [

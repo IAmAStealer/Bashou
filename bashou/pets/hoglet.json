@@ -1,7 +1,7 @@
 {
  "name": "Hoglet",
  "next": "hedgehog",
- "next_at": {"achievements": 2},
+ "next_at": {"achievements": 3},
  "palette": {
   "s": "#8a7868",
   "S": "#b8a898",

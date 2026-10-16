@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from datetime import date, timedelta
 from typing import Callable, Optional
 
-from . import challenges, creatures, lesson, safety, spot, which
+from . import challenges, creatures, lesson, safety, skills, spot, which
 
 
 DAY = 24 * 3600
@@ -81,6 +81,15 @@ class Achievement:
     example: str = ""           # a command that earns it: the pet's hint shows it
     next: str = ""              # the achievement it leads to (grep -r -> grep -E -> grep -C): a chain, like pet forms
     depth: int = 1              # its place in its chain (1 = where you start): how hard it is. Set below, from `next`
+    progress: Optional[Callable] = None   # (state) -> (now, goal): where you stand, for a count to reach
+    wanted: Optional[Callable] = None     # (state) -> bool: does it count for this player (the skills they learn)
+
+    def where(self, s):
+        """"3/10" for a count to reach, else ""."""
+        if not self.progress:
+            return ""
+        now, goal = self.progress(s)
+        return f"{min(now, goal):,}/{goal:,}"
 
     def available(self):
         return not self.needs or any(map(which.installed, self.needs))
@@ -90,8 +99,57 @@ def won_network(s):
     return any(ch.id in s["challenges"] for ch in challenges.network.ALL)
 
 
+def network_wins(s):
+    return sum(ch.id in s["challenges"] for ch in challenges.network.ALL)
+
+
 def tool(s, *names):
     return sum(s["tools"].get(n, 0) for n in names)
+
+
+def counter(s, path):
+    """A number in the save, by its path: "fights_won", "adventure.walked"."""
+    value = s
+    for key in path.split("."):
+        value = (value or {}).get(key, 0) if isinstance(value, dict) else 0
+    return value or 0
+
+
+def count(pet, aid, name, how, value, goal, next="", needs=(), wanted=None):
+    """An achievement for reaching a count (owner, 2026-10-16: "use X N times" is one, the next N another)."""
+    return Achievement(aid, pet, name, how, state=lambda s: value(s) >= goal, needs=needs, next=next,
+                       progress=lambda s: (value(s), goal), wanted=wanted)
+
+
+def uses(pet, aid, name, how, tools, goal, next=""):
+    """Use one of `tools` `goal` times (successful commands)."""
+    return count(pet, aid, name, how, lambda s: tool(s, *tools), goal, next=next, needs=tuple(tools))
+
+
+def made(construct, goal):
+    return lambda s: s["constructs"].get(construct, 0) >= goal
+
+
+def constructs(name):
+    return lambda s: s["constructs"].get(name, 0)
+
+
+def at(path):
+    return lambda s: counter(s, path)
+
+
+CODE = ("cargo", "clang", "cmake", "g++", "gcc", "go", "java", "javac", "make", "node", "npm", "perl", "php",
+        "python", "python3", "ruby", "rustc")
+GREP = ("grep", "egrep", "fgrep", "rg")
+AWK = ("awk", "gawk", "mawk")
+PROCS = ("ps", "pgrep", "pkill", "kill", "killall")
+ARCHIVES = ("tar", "gzip", "gunzip", "zip", "unzip", "xz", "zstd")
+REMOTE = ("curl", "wget", "ssh", "scp", "rsync", "dig", "host", "nslookup")
+RIGHTS = ("chmod", "chown", "chgrp", "umask")
+SYSTEMD = ("systemctl", "journalctl")
+WATCH = ("df", "du", "top", "htop", "btop", "free", "vmstat", "watch")
+SECRETS = ("gpg", "gpg2", "gpgv", "pass")
+NET = ("ip", "ss", "ping", "getent", "mtr", "nc", "ncat", "resolvectl", "tcpdump", "tracepath", "traceroute")
 
 
 def lessons_read(s):
@@ -210,36 +268,77 @@ ALL = [
     A("night_owl", "bat", "Night shift", "run a command between midnight and 5 am", cmd=lambda c: c.hour < 5),
     A("streak7", "bat", "Streak", "use the terminal 7 days in a row", state=lambda s: streak(s["days"]) >= 7),
     A("explorer", "bat", "Explorer", "use 20 different tools", state=lambda s: len(s["tools"]) >= 20),
+    uses("bat", "coder", "Coder", "run code 10 times: python3, gcc, node, cargo…", CODE, 10, next="code_marathon"),
+    uses("bat", "code_marathon", "Code marathon", "run code 100 times: python3, gcc, node, cargo…", CODE, 100),
 
     # Frog: volume
     A("sprinter", "frog", "Sprinter", "run 100 commands in one day", state=lambda s: s["today"]["count"] >= 100, next="thousand"),
     A("historian", "frog", "Historian", "look back with `history`", cmd=lambda c: bool(c.args("history")), example='history | tail'),
     A("thousand", "frog", "Thousand", "run 1,000 commands", state=lambda s: s["commands"] >= 1000),
+    count("frog", "quiz_whiz", "Quiz whiz", "give 20 right answers in `bashou adventure`", at("adventure.correct"), 20,
+          next="quiz_master"),
+    count("frog", "quiz_master", "Quiz master", "give 100 right answers in `bashou adventure`", at("adventure.correct"), 100),
 
     # Turtle: regularity
     A("week", "turtle", "Week", "7 active days", state=lambda s: len(s["days"]) >= 7, next="month"),
     A("month", "turtle", "Month", "30 active days", state=lambda s: len(s["days"]) >= 30, next="year"),
     A("year", "turtle", "Year", "365 active days", state=lambda s: len(s["days"]) >= 365),
+    count("turtle", "wanderer", "Wanderer", "walk 500 m in `bashou adventure`", at("adventure.walked"), 500,
+          next="globetrotter"),
+    count("turtle", "globetrotter", "Globetrotter", "walk 5 km in `bashou adventure`", at("adventure.walked"), 5000),
 
     # Mushroom: loops
     A("loop", "mushroom", "Loop", "write a `for` loop", cmd=lambda c: bool(re.search(r"(^|[;&|(\s])for\s", c.line)), next="reader", example='for f in *; do echo $f; done'),
     A("reader", "mushroom", "Reader", "read lines with `while read`", cmd=lambda c: bool(re.search(r"while\s+(IFS=\S*\s+)?read\b", c.line)), example='while read -r l; do echo $l; done < file'),
     A("ranges", "mushroom", "Ranges", "count with `seq` or `{1..10}`", cmd=lambda c: bool(c.args("seq")) or bool(re.search(r"\{\d+\.\.\d+", c.line)), next="loop", example='for i in {1..3}; do echo $i; done'),
 
-    # Slime: substitutions
-    A("capture", "mushroom", "Capture", "capture output with `$( )`", cmd=lambda c: "subst" in c.analysis.constructs, next="nested", example='echo "today: $(date +%A)"'),
-    A("nested", "mushroom", "Nested", "nest `$( $( ) )`", cmd=lambda c: nested_subst(c.line), next="substitute", example='echo $(basename $(pwd))'),
-    A("substitute", "mushroom", "Substitute", "use a process substitution `<( )`", cmd=lambda c: "procsub" in c.analysis.constructs, example='diff <(ls /bin) <(ls /usr/bin)'),
-    A("here", "mushroom", "Here", "feed a heredoc `<<EOF`", cmd=lambda c: "heredoc" in c.analysis.constructs, example='cat <<EOF > note.txt\nhello\nEOF'),
+    count("mushroom", "scripter", "Scripter", "run a script of your own 5 times: `./backup.sh`", constructs("script"), 5,
+          next="automator"),
+    count("mushroom", "automator", "Automator", "run your own scripts 50 times", constructs("script"), 50),
+
+    # Slime: substitutions, and every command you run
+    A("capture", "slime", "Capture", "capture output with `$( )`", cmd=lambda c: "subst" in c.analysis.constructs, next="nested", example='echo "today: $(date +%A)"'),
+    A("nested", "slime", "Nested", "nest `$( $( ) )`", cmd=lambda c: nested_subst(c.line), next="substitute", example='echo $(basename $(pwd))'),
+    A("substitute", "slime", "Substitute", "use a process substitution `<( )`", cmd=lambda c: "procsub" in c.analysis.constructs, example='diff <(ls /bin) <(ls /usr/bin)'),
+    A("here", "slime", "Here", "feed a heredoc `<<EOF`", cmd=lambda c: "heredoc" in c.analysis.constructs, example='cat <<EOF > note.txt\nhello\nEOF'),
+    A("calculator", "slime", "Calculator", "do maths in the shell: `echo $((6 * 7))`", cmd=lambda c: "$((" in c.line,
+      example='echo $((6 * 7))'),
+    A("fallback", "slime", "Fallback", "give a variable a default value: `${name:-world}`",
+      cmd=lambda c: bool(re.search(r"\$\{\w+:?[-=]", c.line)), example='echo "hello ${name:-world}"'),
+    A("trimmer", "slime", "Trimmer", "cut the end off a value: `${file%.txt}`",
+      cmd=lambda c: bool(re.search(r"\$\{\w+(%|#)", c.line)), example='f=notes.txt; echo "${f%.txt}"'),
+    A("measure", "slime", "Measure", "count a value's characters: `${#name}`",
+      cmd=lambda c: bool(re.search(r"\$\{#\w+\}", c.line)), example='name=Bashou; echo ${#name}'),
+    A("find_replace", "slime", "Find and replace", "replace inside a value: `${path//\\//-}`",
+      cmd=lambda c: bool(re.search(r"\$\{\w+//?[^}]*/", c.line)), example='p=a/b/c; echo "${p//\\//-}"'),
+    A("slice", "slime", "Slice", "take part of a value: `${name:0:3}`",
+      cmd=lambda c: bool(re.search(r"\$\{\w+:\d+(:\d+)?\}", c.line)), example='name=Bashou; echo ${name:0:3}'),
+    A("shout", "slime", "Shout", "change a value's case with `${name^^}`",
+      cmd=lambda c: bool(re.search(r"\$\{\w+(\^\^?|,,?)\}", c.line)), example='name=bashou; echo ${name^^}'),
+    A("array", "slime", "Array", "go through every item of an array: `\"${files[@]}\"`",
+      cmd=lambda c: bool(re.search(r"\$\{\w+\[@\]\}", c.line)), example='echo "${BASH_VERSINFO[@]}"'),
+    A("here_string", "slime", "Here string", "feed a word to a command with `<<<`", cmd=lambda c: "<<<" in c.line,
+      example='wc -c <<< "hello"'),
+    A("splitter", "slime", "Splitter", "send output into a command with `>( )`", cmd=lambda c: ">(" in c.line,
+      example='ls | tee >(cat) > list.txt'),
+    count("slime", "capturer", "Capturer", "capture output with `$( )` 25 times", constructs("subst"), 25, next="collector"),
+    count("slime", "collector", "Collector", "capture output with `$( )` 100 times", constructs("subst"), 100),
+    count("slime", "comparer", "Comparer", "use a process substitution `<( )` 10 times", constructs("procsub"), 10),
+    count("slime", "storyteller", "Storyteller", "write 10 heredocs", constructs("heredoc"), 10),
 
     # Living sofa: sort and uniq
     A("tally", "sofa", "Tally", "count duplicates with `uniq -c`", cmd=lambda c: c.flag("uniq", "c", ("--count",)), next="ranking", example='sort file | uniq -c'),
     A("ranking", "sofa", "Ranking", "sort numbers in reverse with `sort -rn`", cmd=lambda c: c.flag("sort", "n") and c.flag("sort", "r"), example='du -s * | sort -rn'),
+    count("sofa", "cushion", "Soft landing", "lose or flee a fight: it happens, and the Living sofa catches you",
+          at("fights_lost"), 1),
+    uses("sofa", "sorter", "Sorter", "use sort 50 times", ("sort",), 50),
     A("unique", "sofa", "Unique", "deduplicate with `sort -u`", cmd=lambda c: c.flag("sort", "u", ("--unique",)), next="tally", example='sort -u file'),
 
     # Octopus: pipes
-    A("plumber", "octopus", "Plumber", "chain 3 commands with pipes", cmd=lambda c: c.analysis.pipes >= 3, next="pipeline", example='ps aux | grep bash | wc -l'),
+    A("plumber", "octopus", "Plumber", "chain 3 commands with pipes", cmd=lambda c: c.analysis.pipes >= 3, next="pipe_fitter", example='ps aux | grep bash | wc -l'),
     A("pipeline", "octopus", "Pipeline", "chain 5 commands with pipes", cmd=lambda c: c.analysis.pipes >= 5, example='cat f | tr A-Z a-z | sort | uniq -c | sort -rn'),
+    count("octopus", "pipe_fitter", "Pipe fitter", "chain 3 commands with pipes, 10 times", constructs("pipe3"), 10,
+          next="pipeline"),
     A("tee_time", "octopus", "Tee time", "split a stream with `tee`", cmd=lambda c: "tee" in c.analysis.constructs, example='ls | tee list.txt'),
     A("merge", "octopus", "Merge", "send stderr into the pipe with `2>&1`", cmd=lambda c: "stderr" in c.analysis.constructs, example='make 2>&1 | less'),
 
@@ -255,8 +354,11 @@ ALL = [
       cmd=lambda c: c.arg("chmod", r"^(0?[67][0-5][0-5]|u\+r?w?x|go?-r?w?x?|o-r?w?x?)$"), example='chmod u+x install.sh'),
     A("first_flag", "gremlin", "First flag", "solve a security challenge: `bashou arena security`",
       state=lambda s: len(s.get("security", [])) >= 1, next="investigator"),
-    A("investigator", "gremlin", "Investigator", "solve 6 security challenges",
-      state=lambda s: len(s.get("security", [])) >= 6),
+    A("investigator", "gremlin", "Investigator", "solve 3 security challenges",
+      state=lambda s: len(s.get("security", [])) >= 3, next="sleuth"),
+    A("sleuth", "gremlin", "Sleuth", "solve every security challenge: `bashou arena security`",
+      state=lambda s: len(set(s.get("security", [])) & {ch.id for ch in challenges.SECURITY}) >= len(challenges.SECURITY)),
+    count("gremlin", "daredevil", "Daredevil", "run 5 risky commands: the Gremlin feeds on them", constructs("risky"), 5),
 
     # Snail: bashou adventure (and the file basics its chests teach)
     A("builder", "snail", "Builder", "create nested folders with `mkdir -p`", cmd=lambda c: c.flag("mkdir", "p", ("--parents",)), next="copycat", example='mkdir -p camp/tent/bed'),
@@ -272,48 +374,62 @@ ALL = [
       state=lambda s: any(b.get("flawless") for b in adv(s).get("bosses", []))),
     A("locksmith", "snail", "Locksmith", "open 5 chests", state=lambda s: len(adv(s).get("trials", [])) >= 5),
     A("questmaster", "snail", "Questmaster", "finish chapter 3", state=lambda s: adv(s).get("chapters_done", 0) >= 3),
+    count("snail", "chapter_one", "Chapter one", "finish chapter 1 of `bashou adventure`", at("adventure.chapters_done"), 1),
 
     # Dragon: fights
     A("warrior", "dragon", "Warrior", "win a fight", state=lambda s: s["fights_won"] >= 1, next="veteran", example='bashou fight'),
     A("veteran", "dragon", "Veteran", "win 10 fights", state=lambda s: s["fights_won"] >= 10, next="legend"),
     A("legend", "dragon", "Legend", "win 30 fights", state=lambda s: s["fights_won"] >= 30),
+    count("dragon", "hunter", "Hunter", "beat 5 different threats", lambda s: len(s["challenges"]), 5, next="bestiary"),
+    count("dragon", "bestiary", "Bestiary", "beat 15 different threats", lambda s: len(s["challenges"]), 15),
 
     # Fox: find
     A("time_traveller", "fox", "Time traveller", "find by date: `-mtime`, `-mmin` or `-newer`", cmd=lambda c: c.arg("find", r"^-(mtime|mmin|newer|atime|ctime)$"), next="executor", example='find . -mtime -1'),
     A("executor", "fox", "Executor", "act on results with `find -exec`", cmd=lambda c: c.arg("find", r"^-(exec|execdir|ok)$"), next="pruner", example="find . -name '*.tmp' -exec rm {} +"),
     A("pruner", "fox", "Pruner", "skip a directory with `-prune`", cmd=lambda c: c.arg("find", r"^-prune$"), example='find . -name .git -prune -o -type f -print'),
-    A("tracker", "fox", "Tracker", "use find 100 times", state=lambda s: tool(s, "find") >= 100),
+    uses("fox", "fox_scout", "Scout", "use find 10 times", ("find",), 10, next="tracker"),
+    uses("fox", "tracker", "Tracker", "use find 100 times", ("find",), 100),
 
     # Owl: awk
     A("field_reader", "owl", "Field reader", "set a separator with `awk -F`", cmd=lambda c: c.arg(("awk", "gawk", "mawk"), r"^-F"), next="accountant", example="awk -F: '{print $1}' /etc/passwd"),
     A("accountant", "owl", "Accountant", "sum a column and print it in `END`", cmd=lambda c: c.arg(("awk", "gawk", "mawk"), r"\+=.*END|END.*\+=|\+=[\s\S]*END"), next="scribe", example="awk '{s+=$1} END {print s}' f"),
     A("scribe", "owl", "Scribe", "format output with `printf` in awk", cmd=lambda c: c.arg(("awk", "gawk", "mawk"), r"printf"), example='awk \'{printf "%-10s %s\\n", $1, $2}\' f'),
-    A("sage", "owl", "Sage", "use awk 100 times", state=lambda s: tool(s, "awk", "gawk", "mawk") >= 100),
+    uses("owl", "awk_apprentice", "Apprentice", "use awk 10 times", AWK, 10, next="sage"),
+    uses("owl", "sage", "Sage", "use awk 100 times", AWK, 100),
 
     # Mole: grep
     A("digger", "mole", "Digger", "search a tree with `grep -r`", cmd=lambda c: c.flag(("grep",), "rR", ("--recursive",)), next="regex", example='grep -rn TODO .'),
     A("regex", "mole", "Regex", "use extended regexes: `grep -E`", cmd=lambda c: c.flag(("grep",), "EP", ("--extended-regexp", "--perl-regexp")) or bool(c.args("egrep")), next="context", example="grep -E 'cat|dog' f"),
     A("context", "mole", "Context", "show lines around matches with `-A`, `-B` or `-C`", cmd=lambda c: c.flag(("grep",), "ABC", ("--context", "--after-context", "--before-context")), example='grep -C2 error log'),
-    A("miner", "mole", "Miner", "use grep 250 times", state=lambda s: tool(s, "grep", "egrep", "fgrep", "rg") >= 250),
+    uses("mole", "burrower", "Burrower", "use grep 10 times", GREP, 10, next="miner"),
+    uses("mole", "miner", "Miner", "use grep 250 times", GREP, 250),
 
     # Snake: sed
     A("in_place", "snake", "In place", "edit a file with `sed -i`", cmd=lambda c: c.flag("sed", "i", ("--in-place",)), next="printer", example="sed -i 's/old/new/' f"),
     A("global", "snake", "Global", "replace every match: `s/…/…/g`", cmd=lambda c: c.arg("sed", r"s(.).*\1.*\1[a-zA-Z]*g"), next="in_place", example="sed 's/a/b/g' f"),
+    uses("snake", "stream_editor", "Stream editor", "use sed 10 times", ("sed",), 10, next="sed_master"),
+    uses("snake", "sed_master", "Sed master", "use sed 100 times", ("sed",), 100),
     A("printer", "snake", "Printer", "print chosen lines with `sed -n …p`", cmd=lambda c: c.flag("sed", "n") and c.arg("sed", r"p$"), example="sed -n '1,5p' f"),
 
     # Ghost: processes
     A("census", "ghost", "Census", "list every process: `ps aux` or `ps -ef`", cmd=lambda c: c.arg("ps", r"^(aux|-ef|-e|ax|-A)$"), next="seeker", example='ps aux'),
     A("seeker", "ghost", "Seeker", "find a process by name with `pgrep`", cmd=lambda c: bool(c.args("pgrep")), next="signal", example='pgrep -a bash'),
+    uses("ghost", "phantom", "Phantom", "use ps, pgrep or kill 10 times", PROCS, 10, next="poltergeist"),
+    uses("ghost", "poltergeist", "Poltergeist", "use ps, pgrep or kill 100 times", PROCS, 100),
     A("signal", "ghost", "Signal", "send a named signal: `kill -TERM`, `-HUP`…", cmd=lambda c: c.arg(("kill", "pkill", "killall"), r"^-(s$|[A-Z]{3,}|SIG)"), example='kill -TERM <pid>'),
 
     # Spider: strace
     A("filter", "spider", "Filter", "trace only some calls with `strace -e`", cmd=lambda c: c.flag("strace", "e"), next="follow", example='strace -e trace=openat ls'),
     A("follow", "spider", "Follow", "follow child processes with `strace -f`", cmd=lambda c: c.flag("strace", "f"), example='strace -f bash -c ls'),
+    uses("spider", "web_spinner", "Spinner", "trace a program with strace 3 times", ("strace",), 3, next="deep_trace"),
+    uses("spider", "deep_trace", "Deep trace", "use strace 30 times", ("strace",), 30),
     A("summary", "spider", "Summary", "count syscalls with `strace -c`", cmd=lambda c: c.flag("strace", "c"), next="filter", example='strace -c ls'),
 
     # Ant: xargs
     A("placeholder", "ant", "Placeholder", "place arguments with `xargs -I{}`", cmd=lambda c: c.arg("xargs", r"^-I"), next="null", example='ls | xargs -I{} echo {}'),
     A("parallel", "ant", "Parallel", "run jobs in parallel with `xargs -P`", cmd=lambda c: c.arg("xargs", r"^-P"), example='ls | xargs -P4 -n1 echo'),
+    uses("ant", "worker", "Worker", "use xargs 10 times", ("xargs",), 10, next="colony"),
+    uses("ant", "colony", "Colony", "use xargs 100 times", ("xargs",), 100),
     A("null", "ant", "Null", "handle odd file names: `-print0 | xargs -0`", cmd=lambda c: c.flag("xargs", "0", ("--null",)), next="parallel", example='find . -print0 | xargs -0 ls'),
 
     # Axolotl: jq
@@ -322,10 +438,12 @@ ALL = [
       cmd=lambda c: c.sub("git", "switch", "-c", "-C", "--create") or c.sub("git", "checkout", "-b", "-B"), next="grapher", example='git switch -c try-it'),
     A("stasher", "beaver", "Stasher", "put work aside with `git stash`", cmd=lambda c: c.sub("git", "stash"), next="brancher", example='git stash'),
     A("grapher", "beaver", "Grapher", "draw the history with `git log --graph`", cmd=lambda c: c.sub("git", "log", "--graph"), next="bisector", example='git log --oneline --graph'),
+    uses("beaver", "busy_beaver", "Busy beaver", "use git 10 times", ("git",), 10),
     A("bisector", "beaver", "Bisector", "hunt the commit that broke it with `git bisect`", cmd=lambda c: c.sub("git", "bisect"), example='git bisect start'),
 
     # Squirrel: archives
     A("packer", "squirrel", "Packer", "pack a folder with `tar -czf`", cmd=lambda c: c.tar("c", "z") or c.tar("c", "J"), next="unpacker", example='tar -czf notes.tgz notes'),
+    uses("squirrel", "hoarder", "Hoarder", "use tar, gzip or zip 10 times", ARCHIVES, 10),
     A("peeker", "squirrel", "Peeker", "look inside an archive with `tar -tf`", cmd=lambda c: c.tar("t"), next="packer", example='tar -tf notes.tgz'),
     A("unpacker", "squirrel", "Unpacker", "extract into a folder with `tar -xf … -C dir`",
       cmd=lambda c: c.tar("x") and c.arg("tar", r"^(-C|--directory)"), next="squeezer", example='tar -xf notes.tgz -C /tmp'),
@@ -343,6 +461,8 @@ ALL = [
       needs=("rsync",), next="tunneler", example='rsync -av notes/ backup/'),
     A("resolver", "pigeon", "Resolver", "ask DNS with `dig +short`", cmd=lambda c: c.arg("dig", r"^(\+short|@.)"),
       needs=("dig",), next="tracer", example='dig +short example.com'),
+    uses("pigeon", "carrier", "Carrier", "use curl, ssh, rsync or dig 10 times", REMOTE, 10, next="homing"),
+    uses("pigeon", "homing", "Homing", "use curl, ssh, rsync or dig 100 times", REMOTE, 100),
     A("tracer", "pigeon", "Tracer", "follow a name from the root with `dig +trace`", cmd=lambda c: c.arg("dig", r"^\+trace$"),
       needs=("dig",), example='dig +trace example.com'),
 
@@ -369,11 +489,53 @@ ALL = [
       cmd=lambda c: c.flag(("nc", "ncat", "netcat"), "z"), needs=("nc", "ncat", "netcat"), next="capture_reader", example='nc -zv localhost 22'),
     A("capture_reader", "packet", "Capture reader", "read a saved capture with `tcpdump -nn -r file.pcap`",
       cmd=lambda c: c.flag("tcpdump", "r"), needs=("tcpdump",), example='tcpdump -nn -r capture.pcap'),
-    A("net_fighter", "packet", "On the wire", "win a network fight: `bashou fight`", state=lambda s: won_network(s)),
+    A("net_fighter", "packet", "On the wire", "win a network fight: `bashou fight`", state=lambda s: won_network(s),
+      next="wired"),
+    count("packet", "wired", "Wired", "win 3 network fights", network_wins, 3, next="network_engineer", needs=("ip", "ss")),
+    count("packet", "network_engineer", "Network engineer", "win 6 network fights", network_wins, 6, needs=("ip", "ss")),
+    uses("packet", "connected", "Connected", "use ip, ss or ping 10 times", NET, 10, next="networker"),
+    uses("packet", "networker", "Networker", "use ip, ss or ping 50 times", NET, 50, next="operator"),
+    uses("packet", "operator", "Operator", "use ip, ss or ping 100 times", NET, 100, next="netadmin"),
+    uses("packet", "netadmin", "Netadmin", "use ip, ss or ping 250 times", NET, 250, next="backbone"),
+    uses("packet", "backbone", "Backbone", "use ip, ss or ping 500 times", NET, 500),
+    A("neighbours", "packet", "Neighbours", "see the machines next to you with `ip neigh`",
+      cmd=lambda c: c.sub("ip", "neigh") or c.sub("ip", "neighbour") or c.sub("ip", "n"), needs=("ip",), example='ip neigh'),
+    A("counters", "packet", "Counters", "read your interfaces' counters with `ip -s link`",
+      cmd=lambda c: c.flag("ip", "s") and (c.sub("ip", "link") or c.sub("ip", "l")), needs=("ip",), example='ip -s link'),
+    A("road_map", "packet", "Road map", "show the routing table with `ip route`",
+      cmd=lambda c: c.sub("ip", "route") or c.sub("ip", "r"), needs=("ip",), example='ip route'),
+    A("pinger", "packet", "Ping", "send exactly 3 pings with `ping -c 3`", cmd=lambda c: c.flag("ping", "c"),
+      needs=("ping",), next="echo_six", example='ping -c 3 1.1.1.1'),
+    A("echo_six", "packet", "Echo six", "ping over IPv6: `ping -6 ::1`", cmd=lambda c: c.flag("ping", "6") or bool(c.args("ping6")),
+      needs=("ping", "ping6"), example='ping -6 -c 1 ::1'),
+    A("datagrams", "packet", "Datagrams", "list UDP sockets with `ss -u`", cmd=lambda c: c.flag("ss", "u", ("--udp",)),
+      needs=("ss",), example='ss -ulnp'),
+    A("socket_census", "packet", "Socket census", "count sockets by type with `ss -s`", cmd=lambda c: c.flag("ss", "s", ("--summary",)),
+      needs=("ss",), example='ss -s'),
+    A("port_filter", "packet", "Port filter", "filter sockets by port: `ss -tn 'dport = :443'`",
+      cmd=lambda c: c.arg("ss", r"(dport|sport)"), needs=("ss",), example="ss -tn 'dport = :443'"),
+    A("record_types", "packet", "Record types", "ask DNS for another kind of record: `dig MX example.com`",
+      cmd=lambda c: c.arg("dig", r"^(?i:mx|txt|ns|aaaa|soa|cname|srv|caa)$"), needs=("dig",), next="just_the_answer",
+      example='dig MX example.com'),
+    A("just_the_answer", "packet", "Just the answer", "trim dig's output with `+noall +answer`",
+      cmd=lambda c: c.arg("dig", r"^\+noall$"), needs=("dig",), example='dig +noall +answer example.com'),
+    A("quick_lookup", "packet", "Quick lookup", "look a name up with `host` or `nslookup`",
+      cmd=lambda c: bool(c.args("host", "nslookup")), needs=("host", "nslookup"), example='host example.com'),
+    A("hop_report", "packet", "Hop report", "measure every router on the way with `mtr -r`",
+      cmd=lambda c: c.flag("mtr", "r", ("--report",)), needs=("mtr",), example='mtr -r -c 5 1.1.1.1'),
+    A("port_sniffer", "packet", "Port sniffer", "keep only one port in a capture: `tcpdump -nn -r f.pcap port 53`",
+      cmd=lambda c: c.arg("tcpdump", r"^port$"), needs=("tcpdump",), example='tcpdump -nn -r capture.pcap port 53'),
+    A("open_ear", "packet", "Open ear", "listen on a port yourself with `nc -l 9000`",
+      cmd=lambda c: c.flag(("nc", "ncat", "netcat"), "l", ("--listen",)), needs=("nc", "ncat", "netcat"), example='nc -l 9000'),
+    A("my_addresses", "packet", "My addresses", "print just your addresses with `hostname -I`",
+      cmd=lambda c: c.flag("hostname", "I", ("--all-ip-addresses",)), needs=("ip",), example='hostname -I'),
+    A("port_names", "packet", "Port names", "find which port a service uses: `getent services ssh`",
+      cmd=lambda c: c.sub("getent", "services"), needs=("getent",), example='getent services ssh'),
 
     # Hedgehog: permissions
     A("octal", "hedgehog", "Octal", "set a mode in numbers: `chmod 644`", cmd=lambda c: c.arg("chmod", r"^0?[0-7]{3}$"), next="mode_reader", example='chmod 644 notes.txt'),
     A("symbolic", "hedgehog", "Symbolic", "add or remove a right: `chmod g+w`", cmd=lambda c: c.arg("chmod", r"^[ugoa]+[-+=][rwxXst]+$"), next="owner", example='chmod g+w notes.txt'),
+    uses("hedgehog", "prickles", "Prickles", "use chmod or chown 10 times", RIGHTS, 10),
     A("owner", "hedgehog", "Owner", "change the owner with `chown user:group`", cmd=lambda c: c.arg("chown", r"^[\w.$-]+:[\w.$-]*$"), example='sudo chown $USER:$USER f'),
     A("mode_reader", "hedgehog", "Mode reader", "read a file's mode with `stat -c %a`", cmd=lambda c: c.arg("stat", r"%a"), next="symbolic", example='stat -c %a notes.txt'),
 
@@ -383,6 +545,7 @@ ALL = [
       cmd=lambda c: c.flag("journalctl", "u", ("--unit",)), needs=("journalctl",), next="enabler", example='journalctl -u cron'),
     A("enabler", "bee", "Enabler", "start a service now and at boot: `systemctl enable --now`",
       cmd=lambda c: c.sub("systemctl", "enable", "--now"), next="reload", example='sudo systemctl enable --now cron'),
+    uses("bee", "busy_bee", "Busy bee", "use systemctl or journalctl 10 times", SYSTEMD, 10),
     A("reload", "bee", "Reload", "after editing a unit file: `systemctl daemon-reload`", cmd=lambda c: c.sub("systemctl", "daemon-reload"), example='sudo systemctl daemon-reload'),
 
     # Whale: kubectl
@@ -390,10 +553,12 @@ ALL = [
     A("describer", "whale", "Describer", "see why a pod is stuck with `kubectl describe`", cmd=lambda c: c.sub("kubectl", "describe"), next="tailer", example='kubectl describe pod <name>'),
     A("tailer", "whale", "Tailer", "follow a pod's logs with `kubectl logs -f`",
       cmd=lambda c: c.sub("kubectl", "logs") and c.flag("kubectl", "f", ("--follow",)), next="diver", example='kubectl logs -f <pod>'),
+    uses("whale", "captain", "Captain", "use kubectl 10 times", ("kubectl",), 10),
     A("diver", "whale", "Diver", "open a shell in a pod with `kubectl exec -it`",
       cmd=lambda c: c.sub("kubectl", "exec") and c.flag("kubectl", "i") and c.flag("kubectl", "t"), example='kubectl exec -it <pod> -- sh'),
 
     # Meerkat: watching the system
+    uses("meerkat", "lookout", "Lookout", "use df, du, top or free 10 times", WATCH, 10),
     A("disk", "meerkat", "Disk", "see free space with `df -h`", cmd=lambda c: c.flag("df", "h", ("--human-readable",)), next="sizer", example='df -h'),
     A("sizer", "meerkat", "Sizer", "size a folder with `du -sh`", cmd=lambda c: c.flag("du", "s") and c.flag("du", "h"), next="memory", example='du -sh *'),
     A("memory", "meerkat", "Memory", "check the memory with `free -h`", cmd=lambda c: c.flag("free", "h"), needs=("free",), next="watcher", example='free -h'),
@@ -408,6 +573,12 @@ ALL = [
       cmd=lambda c: "$?" in c.line and bool(c.args("echo", "printf")), next="dry_run", example='ls /nope; echo $?'),
     A("linter", "duck", "Linter", "find bugs before they bite with `shellcheck`", cmd=lambda c: bool(c.args("shellcheck")),
       needs=("shellcheck",), example='shellcheck deploy.sh'),
+    A("whos_there", "duck", "Who's there?", "find out what a name really runs: `type ls`",
+      cmd=lambda c: bool(c.args("type")), example='type ls'),
+    A("stopwatch", "duck", "Stopwatch", "measure how long a command takes: `time sleep 1`",
+      cmd=lambda c: bool(re.search(r"(^|[;&|(]\s*)time\s+\S", c.line)), example='time sleep 1'),
+    A("differ", "duck", "Spot the difference", "compare two files line by line with `diff -u`",
+      cmd=lambda c: c.flag("diff", "u", ("--unified",)), example='diff -u old.conf new.conf'),
 
     # Snow leopard: secrets (gpg, pass). Never hidden when gpg or pass is missing: the pets invite you to install them.
     A("sealed", "leopard", "Sealed", "encrypt a file with `gpg -c` (a passphrase) or `gpg -e` (a key)",
@@ -418,6 +589,12 @@ ALL = [
     A("generator", "leopard", "Generator", "let `pass generate` make a strong password", cmd=lambda c: c.sub("pass", "generate"), next="keeper", example='pass generate web/forum 24'),
     A("keeper", "leopard", "Keeper", "hand a password to a command with `$(pass show …)`, never in clear",
       cmd=lambda c: c.sub("pass", "show") and "subst" in c.analysis.constructs, example='export API_TOKEN="$(pass show web/token)"'),  # gitleaks:allow (reads it from pass)
+    uses("leopard", "secret_keeper", "Secret keeper", "use gpg or pass 5 times", SECRETS, 5),
+    A("signer", "leopard", "Signer", "sign a file with `gpg --detach-sign`, so others can check it came from you",
+      cmd=lambda c: c.flag(("gpg", "gpg2"), "sb", ("--sign", "--clearsign", "--clear-sign", "--detach-sign")),
+      example='gpg --detach-sign notes.txt'),
+    A("versioned_vault", "leopard", "Versioned vault", "keep your password store in git: `pass git init`",
+      cmd=lambda c: c.sub("pass", "git"), example='pass git init'),
 
     # Spark: the Sage Owl's library. Owner: fire, for the Library of Alexandria that burned, and for the books
     # still destroyed today; what you learn, nobody can burn. Ten forms, the Phoenix when the family is complete.
@@ -425,35 +602,114 @@ ALL = [
     A("kindling", "spark", "Kindling", "read a lesson to the end: `bashou lesson`", state=lambda s: read_at_least(s, 1), next="page_turner"),
     A("page_turner", "spark", "Page turner", "read 3 lessons to the end", state=lambda s: read_at_least(s, 3), next="bookworm"),
     A("mastery", "spark", "Mastery", "master a lesson you read: do the fights and achievements it prepares",
-      state=lambda s: mastered_at_least(s, 1), next="librarian"),
-    A("bookworm", "spark", "Bookworm", "read 6 lessons to the end", state=lambda s: read_at_least(s, 6), next="lesson_scholar"),
+      state=lambda s: mastered_at_least(s, 1), next="practitioner"),
+    A("bookworm", "spark", "Bookworm", "read 6 lessons to the end", state=lambda s: read_at_least(s, 6), next="avid_reader"),
     A("polymath", "spark", "Polymath", "read lessons of 3 different skills",
-      state=lambda s: len({first_skill(le) for le in lessons_read(s)}) >= min(3, len(skills_offered(s)))),
+      state=lambda s: len({first_skill(le) for le in lessons_read(s)}) >= min(3, len(skills_offered(s))), next="renaissance"),
     A("librarian", "spark", "Librarian", "master 5 lessons you read", state=lambda s: mastered_at_least(s, 5), next="torchbearer"),
-    A("lesson_scholar", "spark", "Scholar", "read 12 lessons to the end", state=lambda s: read_at_least(s, 12), next="well_read"),
-    A("torchbearer", "spark", "Torchbearer", "master 10 lessons you read", state=lambda s: mastered_at_least(s, 10)),
-    A("well_read", "spark", "Well read", "read 20 lessons to the end", state=lambda s: read_at_least(s, 20), next="alexandria"),
+    A("lesson_scholar", "spark", "Scholar", "read 12 lessons to the end", state=lambda s: read_at_least(s, 12), next="deep_reader"),
+    A("torchbearer", "spark", "Torchbearer", "master 10 lessons you read", state=lambda s: mastered_at_least(s, 10), next="adept"),
+    A("well_read", "spark", "Well read", "read 20 lessons to the end", state=lambda s: read_at_least(s, 20), next="scroll_keeper"),
     A("alexandria", "spark", "Alexandria", "read every lesson of the skills you learn",
       state=lambda s: all_lessons_read(s)),
+    A("avid_reader", "spark", "Avid reader", "read 9 lessons to the end", state=lambda s: read_at_least(s, 9), next="lesson_scholar"),
+    A("deep_reader", "spark", "Deep reader", "read 15 lessons to the end", state=lambda s: read_at_least(s, 15), next="well_read"),
+    A("scroll_keeper", "spark", "Scroll keeper", "read 25 lessons to the end", state=lambda s: read_at_least(s, 25), next="archivist"),
+    A("archivist", "spark", "Archivist", "read 30 lessons to the end", state=lambda s: read_at_least(s, 30), next="curator"),
+    A("curator", "spark", "Curator", "read 40 lessons to the end", state=lambda s: read_at_least(s, 40), next="alexandria"),
+    A("practitioner", "spark", "Practitioner", "master 3 lessons you read", state=lambda s: mastered_at_least(s, 3), next="librarian"),
+    A("adept", "spark", "Adept", "master 15 lessons you read", state=lambda s: mastered_at_least(s, 15), next="expert"),
+    A("expert", "spark", "Expert", "master 20 lessons you read", state=lambda s: mastered_at_least(s, 20), next="virtuoso"),
+    A("virtuoso", "spark", "Virtuoso", "master 25 lessons you read", state=lambda s: mastered_at_least(s, 25), next="grandmaster"),
+    A("grandmaster", "spark", "Grandmaster", "master 30 lessons you read", state=lambda s: mastered_at_least(s, 30)),
+    A("renaissance", "spark", "Renaissance", "read lessons of 5 different skills",
+      state=lambda s: len({first_skill(le) for le in lessons_read(s)}) >= min(5, len(skills_offered(s)))),
+    # Spark also burns for every manual you open: most answers are already written down
+    A("manual", "spark", "Manual", "read a command's manual page with `man`", cmd=lambda c: bool(c.args("man")),
+      needs=("man",), next="man_regular", example='man ls'),
+    uses("spark", "man_regular", "Regular reader", "open 25 manual pages with `man`", ("man",), 25, next="encyclopedia"),
+    uses("spark", "encyclopedia", "Encyclopedia", "open 100 manual pages with `man`", ("man",), 100),
+    A("index", "spark", "Index", "search every manual by keyword: `man -k` or `apropos`",
+      cmd=lambda c: bool(c.args("apropos")) or c.flag("man", "k"), needs=("man", "apropos"), example='man -k compress'),
+    A("chapter_verse", "spark", "Chapter and verse", "open a manual section: `man 5 crontab` is the file, not the command",
+      cmd=lambda c: c.arg("man", r"^[1-9]$"), needs=("man",), example='man 5 crontab'),
+    A("one_liner", "spark", "One-liner", "get a one-line summary of a command with `whatis`",
+      cmd=lambda c: bool(c.args("whatis")) or c.flag("man", "f"), needs=("man", "whatis"), example='whatis tar'),
+    A("built_in", "spark", "Built-in", "ask bash about its own commands: `help cd`", cmd=lambda c: bool(c.args("help")),
+      example='help cd'),
+    count("spark", "curious", "Curious", "read a command's help 10 times: `--help`, `man` or `help`", constructs("help"), 10,
+          next="self_taught"),
+    count("spark", "self_taught", "Self-taught", "read a command's help 50 times", constructs("help"), 50,
+          next="walking_manual"),
+    count("spark", "walking_manual", "Walking manual", "read a command's help 200 times", constructs("help"), 200),
+    A("needle", "spark", "Needle", "search a help text instead of scrolling: `ls --help | grep sort`",
+      cmd=lambda c: bool(re.search(r"(--help\b|\bman\s+\S+).*\|\s*grep\b", c.line)), example='ls --help | grep sort'),
+    A("cheat_sheet", "spark", "Cheat sheet", "read the short examples of `tldr`", cmd=lambda c: bool(c.args("tldr", "tealdeer")),
+      needs=("tldr", "tealdeer"), example='tldr tar'),
+    A("info_reader", "spark", "Info", "browse a GNU manual with `info`", cmd=lambda c: bool(c.args("info")),
+      needs=("info",), example='info coreutils'),
+    A("docs_explorer", "spark", "Docs explorer", "look into /usr/share/doc, where packages keep their docs",
+      cmd=lambda c: "/usr/share/doc" in c.line, example='ls /usr/share/doc'),
 
     A("raw", "axolotl", "Raw", "print raw strings with `jq -r`", cmd=lambda c: c.flag("jq", "r", ("--raw-output",)), next="selector", example="jq -r '.name' f.json"),
     A("selector", "axolotl", "Selector", "filter with `select()`", cmd=lambda c: c.arg("jq", r"select\("), next="mapper", example="jq '.[] | select(.ok)' f.json"),
     A("mapper", "axolotl", "Mapper", "transform arrays with `map()`", cmd=lambda c: c.arg("jq", r"map\("), example="jq 'map(.id)' f.json"),
+    uses("axolotl", "json_reader", "JSON reader", "use jq 10 times", ("jq",), 10, next="shape_shifter"),
+    uses("axolotl", "shape_shifter", "Shape shifter", "use jq 100 times", ("jq",), 100),
 ]
 
+# Slime: every command you run (it had a command ladder until 0.9: now each count is an achievement)
+COMMAND_TIERS = [(10, "first_drop", "First drop"), (50, "puddle", "Puddle"), (100, "splash", "Splash"),
+                 (250, "pond", "Pond"), (500, "stream", "Stream"), (750, "brook", "Brook"), (1500, "lake", "Lake"),
+                 (2500, "sea", "Sea"), (5000, "ocean", "Ocean"), (7500, "tide", "Tide"), (10000, "tidal_wave", "Tidal wave")]
+for _i, (_n, _id, _name) in enumerate(COMMAND_TIERS):
+    ALL.append(count("slime", _id, _name, "run {n} commands".replace("{n}", f"{_n:,}"), lambda s: s["commands"], _n,
+                     next=COMMAND_TIERS[_i + 1][1] if _i + 1 < len(COMMAND_TIERS) else ""))
 for _i, (_n, _id, _name) in enumerate(STEP_MILESTONES):
     ALL.append(A(_id, "landscape", _name, ("finish a step of a project: `bashou project`" if _n == 1 else
                                            "finish {n} steps of projects".replace("{n}", str(_n))),
-                 state=lambda s, n=_n: steps_done(s) >= n,
+                 state=lambda s, n=_n: steps_done(s) >= n, wanted=lambda s, n=_n: n <= steps_offered(s),
                  next=STEP_MILESTONES[_i + 1][1] if _i + 1 < len(STEP_MILESTONES) else ""))
+def learns(lang):
+    """A project language counts for players who learn it, or who finished one of its projects anyway."""
+    return lambda s: skills.wanted(s, _projects().LANGUAGES[lang][1]) or bool(projects_done(s, lang))
+
+
+def languages(s):
+    return [lang for lang in _projects().LANGUAGES if learns(lang)(s)]
+
+
+def projects_offered(s):
+    return [p for p in _projects().english() if p["language"] in languages(s)]
+
+
+def steps_offered(s):
+    return sum(len(p["steps"]) for p in projects_offered(s))
+
+
+def offers(difficulty):
+    return lambda s: any(p["difficulty"] == difficulty for p in projects_offered(s))
+
+
 for _pid, _id, _name, _how in PROJECT_ACHIEVEMENTS:
-    ALL.append(A(_id, "landscape", _name, _how, state=lambda s, pid=_pid: project_done(s, pid)))
+    ALL.append(A(_id, "landscape", _name, _how, state=lambda s, pid=_pid: project_done(s, pid),
+                 wanted=learns(_pid.split("_")[0])))
 for _lang, _id, _name, _how in LANGUAGE_ACHIEVEMENTS:
-    ALL.append(A(_id, "landscape", _name, _how, state=lambda s, lang=_lang: bool(projects_done(s, lang))))
-ALL += [A("climber", "landscape", "Climber", "finish a medium project", state=lambda s: bool(projects_done(s, difficulty="medium"))),
-        A("summit", "landscape", "Summit", "finish a hard project", state=lambda s: bool(projects_done(s, difficulty="hard"))),
+    ALL.append(A(_id, "landscape", _name, _how, state=lambda s, lang=_lang: bool(projects_done(s, lang)),
+                 wanted=learns(_lang)))
+ALL += [A("climber", "landscape", "Climber", "finish a medium project", state=lambda s: bool(projects_done(s, difficulty="medium")),
+          wanted=offers("medium")),
+        A("summit", "landscape", "Summit", "finish a hard project", state=lambda s: bool(projects_done(s, difficulty="hard")),
+          wanted=offers("hard")),
         A("steady_builder", "landscape", "Steady builder", "finish project steps 7 days in a row",
-          state=lambda s: project_streak(s) >= 7)]
+          state=lambda s: project_streak(s) >= 7),
+        count("landscape", "craftsman", "Craftsman", "finish 3 projects", lambda s: len(projects_done(s)), 3, next="guild_master",
+              wanted=lambda s: len(projects_offered(s)) >= 3),          # when your languages have that many
+        count("landscape", "guild_master", "Guild master", "finish 8 projects", lambda s: len(projects_done(s)), 8,
+              wanted=lambda s: len(projects_offered(s)) >= 8),
+        A("all_trades", "landscape", "All trades", "finish a project in each language: Python, Shell, C and Rust",
+          state=lambda s: all(projects_done(s, lang) for lang in _projects().LANGUAGES),
+          wanted=lambda s: len(languages(s)) == len(_projects().LANGUAGES))]
 
 # Chameleon: `bashou spot`, say what a string is (owner, 2026-10-03). Animals with sharp eyes or speed:
 # Chameleon, Mantis, Cheetah, Falcon, Eagle. The scores are the game's stars (spot.TIERS).
@@ -469,9 +725,15 @@ for _i, (_n, _name) in enumerate(spot.TIERS):
                  next=spot.TIERS[_i + 1][1].lower().replace(" ", "_") if _i + 1 < len(spot.TIERS) else ""))
 ALL += [A("field_guide", "chameleon", "Field guide", "recognise every kind of string at least once in `bashou spot`",
           state=lambda s: set(spot.KINDS) <= set(_spot(s).get("kinds", []))),
-        A("spot_regular", "chameleon", "Regular", "play 10 games of `bashou spot`", state=lambda s: _spot(s).get("games", 0) >= 10),
+        A("spot_regular", "chameleon", "Regular", "play 10 games of `bashou spot`", state=lambda s: _spot(s).get("games", 0) >= 10,
+          next="spot_fan"),
         A("clean_sweep", "chameleon", "Clean sweep", "give 10 good answers without a mistake in one game of `bashou spot`",
-          state=lambda s: _spot(s).get("clean", 0) >= 10)]
+          state=lambda s: _spot(s).get("clean", 0) >= 10, next="spotless"),
+        count("chameleon", "spot_fan", "Fan", "play 50 games of `bashou spot`", lambda s: _spot(s).get("games", 0), 50),
+        A("spotless", "chameleon", "Spotless", "give 15 good answers without a mistake in one game of `bashou spot`",
+          state=lambda s: _spot(s).get("clean", 0) >= 15),
+        count("chameleon", "quick_study", "Quick study", "recognise 12 kinds of string in `bashou spot`",
+              lambda s: len(_spot(s).get("kinds", [])), 12, next="field_guide")]
 
 # Secret achievements: security tools. Nothing announces them; they just pop up, and the first one
 # brings a pet that isn't on the board ("secret" in its family file).
@@ -564,6 +826,11 @@ def adv(state):
 def family(pet):
     """The pet's achievements this system can earn."""
     return [a for a in ALL if a.pet == pet and a.available()]
+
+
+def family_of(s, pet):
+    """The pet's achievements this player can earn: this system's, minus those of skills they don't learn."""
+    return [a for a in family(pet) if not a.wanted or a.wanted(s)]
 
 
 def usable():

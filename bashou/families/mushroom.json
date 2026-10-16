@@ -3,8 +3,7 @@
  "first": "spore",
  "order": 4,
  "unlock": {
-  "construct": "script",
-  "count": 5
+  "family_achievement": true
  },
  "voice": "*puff*",
  "tips": [

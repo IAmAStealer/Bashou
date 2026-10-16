@@ -290,7 +290,7 @@ class RewardTest(unittest.TestCase):
 
     def test_the_eagle_needs_every_achievement(self):
         s = state.default()
-        s["spot"] = {"best": 20, "games": 10, "kinds": list(spot.KINDS), "clean": 10}
+        s["spot"] = {"best": 20, "games": 50, "kinds": list(spot.KINDS), "clean": 15}
         progress.check(s)
         self.assertEqual(creatures.form("chameleon", progress.reached(s, "chameleon")), "eagle")
         self.assertEqual(len(creatures.FORMS["chameleon"]), 5)

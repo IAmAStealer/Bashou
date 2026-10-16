@@ -3,7 +3,7 @@
  "first": "sparklings",
  "order": 28,
  "unlock": {
-  "achievement": "kindling",
+  "family_achievement": true,
   "how": "read a lesson to the end: bashou lesson"
  },
  "voice": "*crackle*",

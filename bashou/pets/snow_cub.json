@@ -1,7 +1,7 @@
 {
  "name": "Snow cub",
  "next": "snow_leopard",
- "next_at": {"achievements": 2},
+ "next_at": {"achievements": 3},
  "palette": {
   "a": "#5b6070",
   "o": "#d7dbe3",

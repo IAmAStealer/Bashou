@@ -3,10 +3,7 @@
  "first": "ant",
  "order": 15,
  "unlock": {
-  "tools": [
-   "xargs"
-  ],
-  "uses": 10
+  "family_achievement": true
  },
  "voice": "*click*",
  "tips": [

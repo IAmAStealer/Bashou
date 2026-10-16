@@ -1,7 +1,7 @@
 {
  "name": "Leaf slime",
  "next": "fire_slime",
- "next_at": {"commands": 500},
+ "next_at": {"achievements": 8},
  "palette": {
   "a": "#2f6e2a",
   "o": "#7ccc5a",

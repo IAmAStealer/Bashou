@@ -1,7 +1,7 @@
 {
  "name": "Beacon",
  "next": "blaze",
- "next_at": {"achievements": 9},
+ "next_at": {"achievements": 29},
  "symmetric": true,
  "palette": {
   "o": "#f08030",

@@ -249,12 +249,20 @@ BOSSES = {
     ]), {"g": (50, 110, 160), "G": (110, 170, 215), "W": (80, 90, 150), "y": (230, 190, 70), "k": (60, 45, 30),
          "w": (255, 255, 255), "m": (25, 25, 25)}),
     "network": (half([                         # the Latency Kraken: its arms are cables, with plugs at the tips
-        "......kkkk", "....kkKKKK", "...kKKKKKK", "..kKKKKKKK", "..kKwwKKKK", "..kKwmKKKK",
-        "..kKKKKKKK", "...kKKKKKK", "....kKkKkK", "...kK.kK.k", "..kK..kK.k", ".kK..kK..k",
-        ".k..kK...k", "yk..k....k", "y...y....y", "..........",
-    ]), {"k": (25, 110, 110), "K": (70, 200, 190), "y": (230, 200, 80), "w": (255, 255, 255), "m": (25, 25, 25)}),
+        "......kkkk", "....kkKKKK", "...kKhhKKK", "..kKhKKKKK", "..kKkKKKKK", "..kKwkKKKK",
+        "..kKwmKKKK", "..kKKKKKKK", "..kKsKKmmm", "...ksssKKK", "...cC..cC.", "..cC..cC..",
+        ".cC...cC..", ".cC....cC.", "yyy...yyy.", "Y.Y...Y.Y.",
+    ]), {"k": (20, 80, 85), "K": (70, 200, 190), "h": (170, 240, 230), "s": (40, 150, 145), "c": (35, 55, 70),
+         "C": (80, 110, 130), "y": (230, 200, 80), "Y": (190, 190, 200), "w": (255, 255, 255), "m": (25, 25, 25)}),
 }
 
+
+# The first Latency Kraken (cable arms one pixel wide): replaced in 0.9.1, kept for later (owner liked both).
+KRAKEN_V1 = (half([
+    "......kkkk", "....kkKKKK", "...kKKKKKK", "..kKKKKKKK", "..kKwwKKKK", "..kKwmKKKK",
+    "..kKKKKKKK", "...kKKKKKK", "....kKkKkK", "...kK.kK.k", "..kK..kK.k", ".kK..kK..k",
+    ".k..kK...k", "yk..k....k", "y...y....y", "..........",
+]), {"k": (25, 110, 110), "K": (70, 200, 190), "y": (230, 200, 80), "w": (255, 255, 255), "m": (25, 25, 25)})
 
 def boss(topic):
     return BOSSES.get(topic, BOSSES["bash"])

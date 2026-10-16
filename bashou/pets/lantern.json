@@ -1,7 +1,7 @@
 {
  "name": "Lantern",
  "next": "torch",
- "next_at": {"achievements": 6},
+ "next_at": {"achievements": 15},
  "symmetric": true,
  "palette": {
   "o": "#f08030",

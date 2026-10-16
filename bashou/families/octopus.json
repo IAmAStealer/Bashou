@@ -3,8 +3,7 @@
  "first": "octopito",
  "order": 7,
  "unlock": {
-  "construct": "pipe3",
-  "count": 10
+  "family_achievement": true
  },
  "voice": "Glub!",
  "tips": [

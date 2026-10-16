@@ -1,0 +1,53 @@
+{
+ "name": "Knight snail",
+ "next": "ammonite",
+ "next_at": {"achievements": 11},
+ "particles": [
+  0,
+  14
+ ],
+ "palette": {
+  "a": "#4a4a58",
+  "S": "#b8c0cc",
+  "s": "#7a8290",
+  "g": "#e0b040",
+  "b": "#8ab0d0",
+  "B": "#6a90b0",
+  "k": "#3a3a48",
+  "A": "#c8d0dc",
+  "v": "#191919",
+  "r": "#d03030",
+  "w": "#ffffff"
+ },
+ "base": [
+  "..........rrr....",
+  "..........kAAk...",
+  "....aaaaa.kAAAk..",
+  "..aaSSSSSaakvvvk.",
+  ".aSSsgggsSakAAAk.",
+  ".aSsgSSSgsSakAAk.",
+  ".aSsgSgSgsSabbbb.",
+  ".aSSgggSsSa.bbbb.",
+  ".aSSsssSSa..bbb..",
+  "..aaSSSaa.bbbbb..",
+  "BBbbbbbbbbbbbbb..",
+  ".BBbbbbbbbbbbb..."
+ ],
+ "poses": {
+  "inhale": {
+   "10": "BBbbbbbbbbbbbbbb."
+  },
+  "closed": {
+   "3": "------------AAA--"
+  },
+  "left": {
+   "3": "------------wvv--"
+  },
+  "right": {
+   "3": "------------vvw--"
+  },
+  "fidget": {
+   "0": "...........rrr..."
+  }
+ }
+}

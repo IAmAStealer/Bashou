@@ -128,11 +128,11 @@ de modèle d'IA, pas de jetons dépensés pour savoir ce que fait une commande. 
 compagnon pour tous tes terminaux, et il ne dessine jamais par-dessus ton texte.
 
 - **`bashou learn <commande>`** démonte une commande et explique chaque morceau : la commande, chaque option,
-  les arguments, les pipes et les redirections (71 commandes, de `ls` à `tar`, `awk`, `gpg` et `kubectl`).
+  les arguments, les pipes et les redirections (81 commandes, de `ls` à `tar`, `awk`, `gpg` et `kubectl`).
   Sans commande, il explique la dernière que ton compagnon t'a suggérée.
 - **Ton compagnon donne des astuces** en chemin (Ctrl+R, `cd -`, `du -sh *`…) et repère les outils que tu
   n'as pas encore essayés.
-- **171 succès** récompensent de vraies compétences : un pipe de 3 commandes, `find -exec`, `sed -i`,
+- **293 succès** récompensent de vraies compétences : un pipe de 3 commandes, `find -exec`, `sed -i`,
   `git bisect`, `tar -tf`…
 - **Des menaces** apparaissent de temps en temps. `bashou fight` ouvre un shell bac à sable où tu les bats avec
   le bon outil : `grep` contre l'Hydre des logs, `awk` contre le Golem comptable. Ça commence par les premiers

@@ -3,7 +3,7 @@
  "first": "hillock",
  "order": 31,
  "unlock": {
-  "achievement": "first_brick",
+  "family_achievement": true,
   "how": "finish the first step of a project: bashou project"
  },
  "voice": "*rustle*",

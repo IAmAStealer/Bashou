@@ -1,9 +1,7 @@
 {
  "name": "Falcon",
  "next": "eagle",
- "next_at": {
-  "achievements": "all"
- },
+ "next_at": {"achievements": 11},
  "palette": {
   "a": "#3c4454",
   "o": "#808a9a",

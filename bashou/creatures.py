@@ -133,7 +133,7 @@ def problems(path):
 # first form (the forms' "next" links do the rest), its place on the board, how it's unlocked and what it
 # says. doc/contributing/pixel-art.md lists the fields.
 FAMILY_DIR = ART.parent / "families"
-UNLOCKS = ("tools", "construct", "commands", "counter", "achievement", "family_achievement", "secret_found", "pony")
+UNLOCKS = ("achievement", "family_achievement", "secret_found", "pony")
 
 
 @dataclass

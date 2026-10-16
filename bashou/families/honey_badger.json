@@ -4,7 +4,7 @@
  "order": 33,
  "secret": true,
  "unlock": {
-  "achievement": "fearless",
+  "family_achievement": true,
   "how": "???"
  },
  "voice": "*grr*",

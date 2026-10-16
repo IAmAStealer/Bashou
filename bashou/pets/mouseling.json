@@ -1,7 +1,7 @@
 {
  "name": "Mouseling",
  "next": "bat",
- "next_at": {"achievements": 2},
+ "next_at": {"achievements": 3},
  "palette": {
   "a": "#5a4b78",
   "o": "#8c78b4",

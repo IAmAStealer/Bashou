@@ -28,6 +28,16 @@ COMMANDS = {
     "date": "prints the date and time",
     "df": "shows how full the disks are",
     "diff": "shows the lines that differ between two files",
+    "help": "bash's help about its own commands (cd, read, for…), which have no man page of their own",
+    "hostname": "prints this machine's name, or its addresses",
+    "info": "opens the GNU manuals: longer than man pages, with chapters and links",
+    "man": "opens a command's manual: what it does, every option, examples. q quits, / searches",
+    "mtr": "ping and traceroute in one: every router on the way, with its losses and delays",
+    "sleep": "waits for this many seconds, then ends",
+    "time": "runs the command after it, then says how long it took",
+    "tldr": "shows a few common examples of a command, shorter than its man page",
+    "type": "says what a name really runs: a program on disk, a shell builtin, an alias or a function",
+    "whatis": "gives the one-line description of a command, from its man page",
     "dig": "asks the DNS where a name points",
     "du": "measures how much space files and folders take",
     "echo": "prints its arguments",
@@ -99,7 +109,13 @@ FLAGS = {
              "-I": "only the headers of the answer", "-d": "send this data (a POST): {value}"},
     "date": {"+%A": "the format: %A is the day of the week"},
     "dig": {"+short": "only the answer", "+trace": "follow the question from the root servers down",
-            "-x": "reverse lookup: the name that belongs to this address"},
+            "-x": "reverse lookup: the name that belongs to this address",
+            "+noall": "hide every part of the answer…", "+answer": "…then show only the answer section"},
+    "diff": {"-u": "unified format: a few lines of context, - for removed lines, + for added ones"},
+    "hostname": {"-I": "every address of this machine, on one line"},
+    "man": {"-k": "search the one-line descriptions of every manual for this word (like apropos)"},
+    "mtr": {"-r": "report: run a few rounds, then print a table instead of the live screen",
+            "-c": "how many rounds: {value}"},
     "df": {"-h": "human sizes (G, M)"},
     "du": {"-s": "one total per argument", "-h": "human sizes (G, M)"},
     "find": {"-mtime": "modified days ago: {value} (-1 = less than a day)", "-name": "the name matches {value}",
@@ -110,6 +126,7 @@ FLAGS = {
     "gpg": {"-c": "lock with a passphrase (symmetric: the same one opens it)", "-d": "decrypt",
             "-e": "encrypt for someone's public key (only their private key opens it)", "-r": "for this person's key",
             "-o": "write the result to this file", "--verify": "check a signature: who signed, and nothing changed since",
+            "--detach-sign": "sign into a separate .sig file, next to the file itself",
             "--full-generate-key": "create your key pair, answering a few questions", "--armor": "as text instead of binary",
             "--list-keys": "the public keys you have", "--list-secret-keys": "your own private keys"},
     "git": {"-c": "create the branch", "--oneline": "one line per commit", "--graph": "draw the branches"},
@@ -141,6 +158,7 @@ FLAGS = {
     "sort": {"-r": "reverse order", "-n": "compare as numbers", "-u": "only one of each line"},
     "ss": {"-t": "TCP", "-u": "UDP", "-l": "only the listening sockets (servers waiting)",
            "-a": "all: listening and connected", "-n": "numbers: don't turn ports into names",
+           "-s": "summary: how many sockets of each kind",
            "-p": "the program behind each socket (sudo to see other users')", "-H": "no header line",
            "-4": "only IPv4", "-6": "only IPv6"},
     "ssh": {"-L": "forward a local port to the other side: {value}"},
@@ -159,13 +177,13 @@ FLAGS = {
     "uniq": {"-c": "count how many times each line repeats",
              "-u": "only the lines that never repeat (sort first, it only sees neighbours)",
              "-d": "only the lines that do repeat"},
-    "wc": {"-l": "only the number of lines"},
+    "wc": {"-l": "only the number of lines", "-c": "only the number of bytes"},
     "watch": {"-n": "every {value} seconds"},
     "xargs": {"-I": "{value} stands for each line in the command", "-P": "run {value} at a time, in parallel",
               "-n": "{value} argument per run", "-0": "lines separated by a null byte (safe with any name)"},
     "xz": {"-k": "keep the original file"},
 }
-FLAG_VALUE = {"awk": {"F"}, "bash": {"c"}, "curl": {"o", "d"}, "dig": {"x"}, "find": {"mtime", "name", "type"},
+FLAG_VALUE = {"awk": {"F"}, "mtr": {"c"}, "bash": {"c"}, "curl": {"o", "d"}, "dig": {"x"}, "find": {"mtime", "name", "type"},
               "grep": {"C"}, "journalctl": {"u"}, "nc": {"w"}, "ping": {"c"}, "ssh": {"L"}, "stat": {"c"},
               "strace": {"e"}, "tar": {"f", "C"}, "tcpdump": {"r", "i", "c", "w"},
               "watch": {"n"}, "xargs": {"I", "P", "n"}}
@@ -212,7 +230,7 @@ ARGS = {
     "gpg": ["the file"], "sqlite3": ["the database file", "the SQL to run"], "dig": ["the name to look up"], "host": ["the name or address to look up"],
     "getent": ["the name to look up"], "ip": ["the address"], "ping": ["the machine to reach"],
     "nc": ["the machine", "the port"], "resolvectl": ["the name to look up"],
-    "tracepath": ["the machine to reach"], "traceroute": ["the machine to reach"], "git": ["the name"], "less": ["the file"],
+    "tracepath": ["the machine to reach"], "traceroute": ["the machine to reach"], "mtr": ["the machine to reach"], "git": ["the name"], "less": ["the file"],
     "ls": ["the folder to list"], "mkdir": ["the folder to create"], "pgrep": ["the name to look for"],
     "sha256sum": ["the file"], "sort": ["the file"], "stat": ["the file"], "systemctl": ["the service"],
     "tar": ["what goes into the archive"], "tee": ["the file"], "xz": ["the file"],
@@ -382,6 +400,8 @@ def option(cmd, word, nxt):
     """((piece, meaning), 1 if it took the next word as its value else 0)."""
     flags, takes = FLAGS.get(cmd, {}), FLAG_VALUE.get(cmd, set())
     unknown = ((word, _("an option of {cmd}: `man {cmd}` explains it").format(cmd=cmd)), 0)
+    if word == "--help" and word not in flags:
+        return (word, _("show the command's help: what it does, its options and how to write it")), 0
     if word in flags:
         if word.lstrip("-+") in takes and nxt:
             return (f"{word} {nxt}", _(flags[word]).format(value=nxt)), 1

@@ -3,13 +3,7 @@
  "first": "molekin",
  "order": 11,
  "unlock": {
-  "tools": [
-   "egrep",
-   "fgrep",
-   "grep",
-   "rg"
-  ],
-  "uses": 10
+  "family_achievement": true
  },
  "voice": "*dig dig*",
  "tips": [

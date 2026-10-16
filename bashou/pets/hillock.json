@@ -1,9 +1,7 @@
 {
  "name": "Hillock",
  "next": "cabin",
- "next_at": {
-  "achievements": 2
- },
+ "next_at": {"achievements": 3},
  "palette": {
   "g": "#5fa040",
   "G": "#3e7a30",

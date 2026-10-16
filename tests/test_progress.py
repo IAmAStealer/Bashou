@@ -18,16 +18,16 @@ class ProgressTest(unittest.TestCase):
         return notes
 
     def test_command_milestone(self):
-        """Commands grow the Slime (owner): a Droplet at 10, a new form at each count of its ladder."""
+        """Commands grow the Slime (owner): 10 commands is its first achievement, each count the next one
+        (owner, 2026-10-16), and its forms come with T(k) of its achievements."""
         self.assertEqual(self.run_cmd("ls", times=9), [])
-        self.assertIn("Droplet", self.run_cmd("ls")[0])
+        self.assertIn("Droplet", " ".join(self.run_cmd("ls")))
         self.assertEqual(self.run_cmd("ls", times=39), [])
-        notes = self.run_cmd("ls")
-        self.assertEqual(notes, [])
-        notes = self.run_cmd("ls", times=50)                                       # 100 commands
+        self.assertIn("Puddle", " ".join(self.run_cmd("ls")))                    # 50
+        notes = self.run_cmd("ls", times=50)                                       # 100: 3 achievements
         self.assertIn("Droplet is evolving", " ".join(notes))
         self.assertEqual(progress.reached(self.s, "slime"), 2)
-        self.assertEqual(progress.next_milestone(self.s), (200, "?"))             # no spoiler
+        self.assertEqual(progress.next_milestone(self.s), (250, "🏆 Pond"))
 
     def test_themed_unlocks(self):
         """Milestone pets now come from what they stand for (owner)."""
@@ -54,10 +54,6 @@ class ProgressTest(unittest.TestCase):
         for best, form in ((5, "rock_slime"), (6, "cat_slime"), (7, "king_slime")):
             old = {**state.default(), "version": 2, "commands": 20, "ladder_best": {"slime": best}}
             self.assertEqual(progress.current(state.migrate(old), "slime")[0], form)
-        s = {**state.default(), "commands": 3500}
-        self.assertEqual(progress.current(s, "slime")[0], "ice_slime")
-        s["commands"] = 7500
-        self.assertEqual(progress.current(s, "slime")[0], "thunder_slime")
 
     def test_tool_pet_needs_successes(self):
         self.run_cmd("find . -name x", status=1, times=20)
@@ -66,7 +62,8 @@ class ProgressTest(unittest.TestCase):
         self.assertIn("fox", self.s["pets"])
         self.assertEqual(self.s["tools"]["find"], 10)
 
-    def test_unlock_once(self):
+    @mock.patch("bashou.which.installed", return_value=True)
+    def test_unlock_once(self, _):
         self.run_cmd("strace ls", times=3)
         self.assertEqual(self.s["pets"].count("spider"), 1)
         self.assertEqual(self.run_cmd("strace ls"), [])
@@ -109,7 +106,7 @@ class ProgressTest(unittest.TestCase):
         self.assertIn("beaver", self.s["pets"])
         notes = self.run_cmd("tar -tzf a.tgz", times=10)
         self.assertIn("squirrel", self.s["pets"])
-        self.assertTrue(any("tar/gzip" in n for n in notes), notes)     # a readable tool name, not "gunzip"
+        self.assertTrue(any("Hoarder" in n for n in notes), notes)      # the achievement that brought it
         self.run_cmd("watch -n 2 df -h", times=10)                     # a wrapper and its command both count
         self.assertIn("meerkat", self.s["pets"])
 
@@ -134,58 +131,42 @@ class ProgressTest(unittest.TestCase):
         self.assertIn("exit_code", self.s["achievements"])
 
     def test_the_duck_takes_a_form_per_achievement(self):
-        """Four forms (owner: a White duck, then a Mandarin duck): one per achievement, the last when all are done."""
+        """Four forms (owner: a White duck, then a Mandarin duck) at 1, 3, 5 achievements, the last when all
+        this system can earn are done (no shellcheck here)."""
         from bashou import creatures
         with mock.patch("bashou.which.installed", side_effect=lambda name: name != "shellcheck"):
             seen = []
-            for line in ("bashou learn", "bash -x a.sh", "bash -n a.sh", "ls; echo $?"):
+            for line in ("bashou learn", "bash -x a.sh", "bash -n a.sh", "ls; echo $?", "type ls", "time sleep 1",
+                         "diff -u a b"):
                 self.run_cmd(line)
                 seen.append(creatures.form("duck", progress.reached(self.s, "duck")))
-        self.assertEqual(seen, ["duckling", "duck", "white_duck", "mandarin_duck"])
+        self.assertEqual(seen, ["duckling", "duckling", "duck", "duck", "white_duck", "white_duck", "mandarin_duck"])
 
     def test_lessons_bring_the_spark_up_to_the_phoenix(self):
         """Owner: the lesson achievements belong to a fire pet (the Library of Alexandria burned; what you
         learn, nobody can burn). Sparklings first, the Phoenix is the endgame, ten forms in all."""
-        from bashou import challenges, creatures, lesson
-        every = [le["id"] for le in lesson.english()]
-        seen = []
-
-        def read(*ids):
-            self.s["lessons"]["read"] += [i for i in ids if i not in self.s["lessons"]["read"]]
-            notes = progress.check(self.s)
-            seen.append(creatures.form("spark", progress.reached(self.s, "spark")))
-            return notes
-
+        from bashou import creatures
         self.assertNotIn("spark", self.s["pets"])
-        notes = read("command_line")
+        self.s["lessons"]["read"].append("command_line")
+        notes = progress.check(self.s)
         self.assertIn("spark", self.s["pets"])
         self.assertTrue(any("Sparklings" in n for n in notes), notes)
-        read("paths", "streams")                                          # 3 read: Page turner
-        self.s["challenges"] += ["semicolon_slug", "leak_lurker", "stack_specter"]
-        read("stack_heap")                                                # mastered, and a 3rd skill
-        read("pipes", "permissions")                                      # 6: Bookworm
-        self.s["challenges"] += [c.id for c in challenges.ALL if c.id not in self.s["challenges"]]
-        read("pointers", "py_names", "sql_join", "pipeline", "rust_vars")  # 5 mastered: Librarian
-        first = ['command_line', 'computer', 'paths', 'files', 'reading', 'wildcards', 'variables', 'streams', 'quotes', 'grep', 'text_tools', 'pipes', 'awk_sed', 'find', 'users', 'permissions', 'disk', 'archives', 'processes', 'scripts']
-        read(*first[:12])                                                 # 12: Scholar, 10 mastered: Torchbearer
-        read(*first)                                                      # 20: Well read
-        read(*every)                                                      # every one: Alexandria
-        self.assertEqual(seen, ["sparklings", "spark", "candle", "lantern", "torch", "campfire",
-                                "blaze", "phoenix"])                     # 2 at once skip the Ember and the Beacon
+        with mock.patch("bashou.which.installed", return_value=True):
+            self.s["achievements"] += [a.id for a in achievements.ALL if a.pet == "spark"]
+            progress.check(self.s)
+            self.assertEqual(creatures.form("spark", progress.reached(self.s, "spark")), "phoenix")
         self.assertEqual(len(creatures.FORMS["spark"]), 10)
 
     @mock.patch("bashou.which.installed", return_value=True)
     def test_network_commands_bring_the_packet_up_to_the_constellation(self, _):
         lines = ["ip -br addr", "ss -tlnp", "ip -6 addr", "ip route get 1.1.1.1", "ss -tn state established",
                  "getent hosts example.org", "dig -x 1.1.1.1", "resolvectl status", "tracepath -n 1.1.1.1",
-                 "nc -zv localhost 22", "tcpdump -nn -r capture.pcap", "ip -br addr", "ss -tlnp"]
-        seen = []
+                 "nc -zv localhost 22", "tcpdump -nn -r capture.pcap"]
         for line in lines:
             progress.record(self.s, 0, line, "2026-09-25", 14)
-            if "packet" in self.s["pets"]:
-                seen.append(creatures.form("packet", progress.reached(self.s, "packet")))
-        self.assertEqual(seen[-1], "satellite")
-        self.s["challenges"].append("loopback_lurker")
+        self.assertIn("packet", self.s["pets"])
+        self.assertEqual(creatures.form("packet", progress.reached(self.s, "packet")), "socket")     # 12: T(5) is 11
+        self.s["achievements"] += [a.id for a in achievements.ALL if a.pet == "packet"]
         progress.check(self.s)
         self.assertEqual(creatures.form("packet", progress.reached(self.s, "packet")), "constellation")
 
@@ -197,10 +178,16 @@ class ProgressTest(unittest.TestCase):
         self.s["achievements"] += [a.id for a in achievements.ALL if a.pet != "spark"]
         self.s.update(commands=500, fights_won=4)
         self.s["tools"].update(less=3, tail=3, ls=50, man=1, nano=3)
-        self.s["challenges"] += ["mut_marmot", "const_condor", "shadow_shade", "byte_basilisk"]
+        self.s["challenges"] += ["mut_marmot", "const_condor", "shadow_shade", "byte_basilisk", "index_imp"]
         self.s["lessons"]["read"] = [le["id"] for le in lesson.shown(self.s, lesson.english())]
+        lessons = {"kindling", "page_turner", "mastery", "bookworm", "polymath", "librarian", "lesson_scholar",
+                   "torchbearer", "well_read", "alexandria", "avid_reader", "deep_reader", "scroll_keeper", "archivist",
+                   "curator", "practitioner", "adept", "expert", "virtuoso", "grandmaster", "renaissance"}
+        self.s["achievements"] += [a.id for a in achievements.ALL if a.pet == "spark" and a.id not in lessons]
         progress.check(self.s)
-        self.assertEqual(creatures.form("spark", progress.reached(self.s, "spark")), "phoenix")
+        self.assertLessEqual(lessons, set(self.s["achievements"]))               # every lesson count stops at Rust's
+        with mock.patch("bashou.which.installed", return_value=True):
+            self.assertEqual(creatures.form("spark", progress.reached(self.s, "spark")), "phoenix")
 
     def test_new_rules_need_the_right_arguments(self):
         for line in ("git log --oneline", "git checkout main", "tar -xf a.tgz", "tar -cf a.tar d",
@@ -216,7 +203,7 @@ class ProgressTest(unittest.TestCase):
 
     def test_pets_and_hints_need_their_command(self):
         with mock.patch("bashou.which.installed", return_value=True):     # CI runners have kubectl, this machine doesn't
-            self.assertEqual(len(achievements.family("whale")), 4)
+            self.assertEqual(len(achievements.family("whale")), 5)
         with mock.patch("bashou.which.installed", side_effect=lambda name: name != "kubectl"):
             self.assertNotIn("whale", dict(creatures.roster()))
             self.s["pets"] = ["whale", "fox"]                             # unlocked before kubectl was removed
@@ -227,7 +214,6 @@ class ProgressTest(unittest.TestCase):
                     import random
                     self.assertNotIn("kubectl", dialogue.hint(self.s, pet, random.Random(seed)) or "")
         with mock.patch("bashou.which.installed", side_effect=lambda name: name != "dig"):
-            self.assertEqual(progress.tool_label("pigeon"), "curl/ssh")        # the unlock hint named dig
             for seed in range(50):
                 import random
                 self.assertNotIn("dig ", dialogue.hint(self.s, "pigeon", random.Random(seed)) or "")
@@ -236,13 +222,16 @@ class ProgressTest(unittest.TestCase):
             self.assertNotIn("resolver", ids)
             self.assertIn("headers", ids)
             self.s["achievements"] += list(ids)                          # legendary without the dig ones
-            self.assertEqual(progress.reached(self.s, "pigeon"), 3)
+            self.assertEqual(progress.reached(self.s, "pigeon"), len(creatures.FORMS["pigeon"]))
 
     def test_legendary_stage(self):
         for line in ("uniq -c f", "sort -rn f", "sort -u f"):
             self.run_cmd(line)
-        self.assertEqual(progress.reached(self.s, "sofa"), 3)
-
+        self.assertEqual(progress.reached(self.s, "sofa"), 2)                       # 3: T(2)
+        self.run_cmd("sort f", times=48)                                            # 50 sorts: Sorter
+        self.s["fights_lost"] = 1
+        progress.check(self.s)
+        self.assertEqual(progress.reached(self.s, "sofa"), 3)                       # all 5
 
 if __name__ == "__main__":
     unittest.main()

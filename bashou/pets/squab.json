@@ -1,7 +1,7 @@
 {
  "name": "Squab",
  "next": "pigeon",
- "next_at": {"achievements": 2},
+ "next_at": {"achievements": 3},
  "palette": {
   "a": "#8a7a50",
   "o": "#e8d890",

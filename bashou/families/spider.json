@@ -3,10 +3,7 @@
  "first": "spiderling",
  "order": 14,
  "unlock": {
-  "tools": [
-   "strace"
-  ],
-  "uses": 3
+  "family_achievement": true
  },
  "achievement_needs": [
   "strace"

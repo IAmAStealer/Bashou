@@ -1,4 +1,5 @@
 import random
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -27,6 +28,16 @@ class SceneTest(unittest.TestCase):
             scene.draw(a, biome, 42.0, 1.0)
             scene.draw(b, biome, 42.0, 1.0)
             self.assertEqual(a.px, b.px)
+
+    def test_a_sprite_grows_with_square_pixels(self):
+        """Owner bug 2026-10-16: bosses looked distorted. At x2.5 some pixels came out 2 wide, others 3."""
+        rows = ["a.a.a.a.", ".a.a.a.a"] * 4
+        for scale in (1.4, 2.5, 3.7):
+            c = canvas.Canvas(60, 40)
+            scene.blit(c, rows, {"a": (255, 0, 0)}, 30, 39, scale)
+            lines = ["".join("a" if px == (255, 0, 0) else "." for px in row) for row in c.px]
+            runs = {len(m.group()) for line in lines for m in re.finditer(r"a+|(?<=a)\.+(?=a)", line)}
+            self.assertEqual(len(runs), 1, f"x{scale}: pixels of {sorted(runs)} screen pixels")
 
     def test_grass_sways(self):
         a, b = canvas.Canvas(60, 30), canvas.Canvas(60, 30)
@@ -271,7 +282,7 @@ class GameTest(unittest.TestCase):
                 g.close_result(0) if g.adv["phase"] == "boss" else None
         text = " ".join(g.result[1])
         self.assertEqual(g.adv["phase"], "chapter_end")
-        self.assertIn("New pet: Snail", text)                  # 3 achievements already: stage 2
+        self.assertIn("Chapter one", text)                     # the Snail came with First steps, on the way
         s = state.load()
         self.assertIn("snail", s["pets"])
         for aid in ("first_steps", "checkpoint", "flawless"):

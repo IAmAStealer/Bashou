@@ -1,7 +1,7 @@
 {
  "name": "Slug",
  "next": "snail",
- "next_at": {"achievements": 2},
+ "next_at": {"achievements": 3},
  "palette": {
   "o": "#3f4424",
   "g": "#8f9c4e",

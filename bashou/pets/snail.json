@@ -1,7 +1,7 @@
 {
  "name": "Snail",
  "next": "gary",
- "next_at": {"achievements": "all"},
+ "next_at": {"achievements": 5},
  "palette": {
   "a": "#784628",
   "S": "#c88c50",

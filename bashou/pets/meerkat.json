@@ -1,7 +1,7 @@
 {
  "name": "Meerkat",
  "next": "sentinel",
- "next_at": {"achievements": "all"},
+ "next_at": {"achievements": 5},
  "palette": {
   "a": "#6e5032",
   "o": "#c8a06e",

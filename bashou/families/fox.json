@@ -3,10 +3,7 @@
  "first": "fennec",
  "order": 9,
  "unlock": {
-  "tools": [
-   "find"
-  ],
-  "uses": 10
+  "family_achievement": true
  },
  "voice": "*sniff*",
  "tips": [

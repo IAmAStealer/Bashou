@@ -128,8 +128,6 @@ class TablesTest(unittest.TestCase):
         roster = set(creatures.NAMES)
         for pet in roster:
             rule = creatures.FAMILIES[pet].unlock
-            self.assertIn_all([rule["construct"]] if "construct" in rule else [], progress.CONSTRUCT_NAMES, pet)
-            self.assertIn_all(rule.get("label", []), rule.get("tools", []), pet)     # the hint names its tools
             self.assertEqual(len(progress.unlock_rule(state.default(), pet)), 3, pet)
         by_fight = {ch.pet for ch in challenges.ALL}                         # every pet comes some way
         self.assertEqual([p for p in roster if p not in by_fight and not progress.how_to_unlock(state.default(), p)], [])

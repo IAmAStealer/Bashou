@@ -3,8 +3,7 @@
  "first": "slug",
  "order": 18,
  "unlock": {
-  "counter": "adventure.chapters_done",
-  "count": 1,
+  "family_achievement": true,
   "how": "finish chapter 1 of bashou adventure"
  },
  "voice": "*slow bow*",

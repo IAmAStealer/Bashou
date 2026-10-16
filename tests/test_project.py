@@ -271,11 +271,15 @@ class LandscapeTest(unittest.TestCase):
         """A player who only learns Python (or only Shell, the smallest set) still reaches the Town."""
         for lang in project.LANGUAGES:
             self.s = state.default()
+            self.s["skills"] = [project.LANGUAGES[lang][1]]
             seen = []
-            for p in [p for p in project.english() if p["language"] == lang]:
-                for i in range(len(p["steps"])):
-                    self.finish_steps(p["id"], 1, f"2026-10-{1 + (i % 7):02d}")
-                    seen.append(creatures.form("landscape", progress.reached(self.s, "landscape")))
+            with unittest.mock.patch("bashou.achievements.date") as d:          # 7 days in a row: Steady builder
+                from datetime import date
+                d.today.return_value = date(2026, 10, 7)
+                for p in [p for p in project.english() if p["language"] == lang]:
+                    for i in range(len(p["steps"])):
+                        self.finish_steps(p["id"], 1, f"2026-10-{1 + (i % 7):02d}")
+                        seen.append(creatures.form("landscape", progress.reached(self.s, "landscape")))
             self.assertEqual(seen[-1], "town", lang)
             self.assertEqual(seen[0], "hillock", lang)
 
@@ -285,14 +289,12 @@ class LandscapeTest(unittest.TestCase):
             self.finish_steps("python_photos", 1)
             seen.append(creatures.form("landscape", progress.reached(self.s, "landscape")))
         self.assertEqual(seen[0], "hillock")
-        self.assertEqual(seen[2], "cabin")                             # 3 steps
-        self.assertEqual(seen[4], "garden")                            # 5 steps
-        self.assertEqual(seen[9], "river")                             # 10 steps
+        self.assertEqual(seen[4], "cabin")                             # 5 steps: 3 achievements, T(2)
         self.assertEqual(len(creatures.FORMS["landscape"]), 10)
 
     def test_every_project_and_language_has_an_achievement(self):
         ids = {a.id for a in achievements.family("landscape")}
-        self.assertEqual(len(ids), 32)
+        self.assertEqual(len(ids), 35)
         for p in project.english():
             self.finish_steps(p["id"], len(p["steps"]))
         self.assertLessEqual(ids - {"steady_builder"}, set(self.s["achievements"]))

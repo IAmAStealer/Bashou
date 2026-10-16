@@ -1,7 +1,7 @@
 {
  "name": "Cat slime",
  "next": "thunder_slime",
- "next_at": {"commands": 7500},
+ "next_at": {"achievements": 24},
  "palette": {
   "a": "#8a5a2a",
   "o": "#f0b060",
