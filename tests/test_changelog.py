@@ -41,3 +41,35 @@ class ChangelogTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CommandTest(unittest.TestCase):
+    """`bashou changelog` (owner, 2026-10-16): every release, the breaking changes (and their pony) too."""
+
+    def output(self, *args):
+        import contextlib, io
+        from bashou import changelog as notes
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            code = notes.main(*args)
+        return code, out.getvalue()
+
+    def test_shows_every_release_with_its_breaking_changes(self):
+        code, text = self.output()
+        self.assertEqual(code, 0)
+        for version in ("v0.9.0", "v0.2.0"):
+            self.assertIn(version, text)
+        self.assertLess(text.index("v0.9.0"), text.index("v0.2.0"))                  # newest first
+        self.assertRegex(text, r"Breaking change.*bashou pony \w+")
+        self.assertNotIn("CI refuses", text)                                        # the maintainers' note
+
+    def test_one_release(self):
+        code, text = self.output("v0.9.0")
+        self.assertEqual(code, 0)
+        self.assertIn("v0.9.0", text)
+        self.assertNotIn("v0.8.6", text)
+        self.assertEqual(self.output("v99.0.0")[0], 1)
+
+    def test_its_pony_hint_names_the_command(self):
+        from bashou import pony
+        self.assertIn("bashou changelog", pony.hints()["pony_wrecking"])

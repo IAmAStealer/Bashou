@@ -86,8 +86,8 @@ def hints():
                           "for Bashou."),
         "pony_web": _("A pony hides on Bashou's home page, but not where the browser shows it. Look at the "
                       "page's source."),
-        "pony_wrecking": _("A pony hides where each new version of Bashou says what changed. Read it to the "
-                           "very end, where things break."),
+        "pony_wrecking": _("A pony hides where each new version of Bashou says what changed: `bashou changelog`. "
+                           "Read a release to the very end, where things break."),
         "pony_detective": _("A pony solved a case on Bashou's GitHub. Search the issues, and don't forget the "
                             "closed ones."),
         "pony_form": _("A pony waits where you report a bug. Open Bashou's bug report form on GitHub and read it "

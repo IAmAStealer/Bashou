@@ -33,7 +33,7 @@ RUNS = {"level": [], "pets": ["pets"], "achievements": ["achievements"], "evolve
         "stats": ["stats"], "share": ["share", "--name", "Tester"], "lesson": ["lesson"], "project": ["project"], "spot": ["spot"],
         "learn": ["learn", "grep", "-rn", "TODO", "."], "talk": ["talk"], "fight": ["fight"], "arena": ["arena"],
         "adventure": ["adventure"], "on": ["on"], "off": ["off"], "here": ["here"], "config": ["config", "list"], "start": ["start"],
-        "reset": ["reset"], "version": ["version"], "help": ["help"]}
+        "reset": ["reset"], "version": ["version"], "changelog": ["changelog", "v0.9.0"], "help": ["help"]}
 NOT_RUN = {"update"}                                             # git or apt/dnf: not in a test
 DRAWN = "▀▄█░▌▐"                                                 # sprites, bars, QR codes
 

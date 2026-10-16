@@ -1,6 +1,9 @@
-"""CHANGELOG.md sections: the release notes CI publishes and `bashou update` shows."""
+"""CHANGELOG.md sections: the release notes CI publishes, `bashou update` shows and `bashou changelog` lists."""
 
 import re
+import shutil
+import subprocess
+import sys
 from pathlib import Path
 
 HEADER = re.compile(r"^## (v\d+\.\d+\.\d+) — \d{4}-\d{2}-\d{2}$", re.M)
@@ -35,3 +38,35 @@ def notes(root, version):
         return sections((Path(root) / "CHANGELOG.md").read_text()).get(version, "")
     except OSError:
         return ""
+
+
+def text(root, version=None):
+    """Every release (or one), newest first, for players: the maintainers' note at the top left out."""
+    try:
+        found = sections((Path(root) / "CHANGELOG.md").read_text())
+    except OSError:
+        return None
+    if version:
+        found = {version: found[version]} if version in found else {}
+    from .render import BOLD, RESET
+    out = []
+    for v, notes in found.items():
+        out.append(f"{BOLD}{v}{RESET}")
+        out += ["  " + line for line in items(notes)] + [""]
+    return "\n".join(out)
+
+
+def main(version=None):
+    """`bashou changelog [vX.Y.Z]`: through `less` in a terminal (q quits), printed otherwise."""
+    from .i18n import _
+    from .update import ROOT
+    shown = text(ROOT, version)
+    if not shown:
+        print("  " + (_("No release {version} in the changelog.").format(version=version) if version
+                      else _("The changelog isn't installed with this copy of Bashou.")))
+        return 1
+    if sys.stdout.isatty() and shutil.which("less"):
+        subprocess.run(["less", "-R"], input=shown, text=True)
+    else:
+        print(shown)
+    return 0

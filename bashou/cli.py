@@ -483,6 +483,8 @@ COMMANDS = [
             [("--version", dict(help="install this release instead, even an older one (e.g. v0.2.0)")),
              ("--packages", dict(action="store_true", help="move to Bashou's apt or dnf repository (shows every command first)"))]),
     Command("version", version, ("bashou version", "which version of Bashou this is", SETTINGS)),
+    Command("changelog", run("changelog", "main", "version"), ("bashou changelog [version]", "what changed in each release (q quits)", SETTINGS),
+            [("version", dict(nargs="?", help="one release only (e.g. v0.9.0)"))]),
     Command("help", lambda a: print_help()),
     # other names, still working
     Command("achv", lambda a: achievements_list(), hidden=True),                # short names of bashou achievements
