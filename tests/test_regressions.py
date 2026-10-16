@@ -449,6 +449,46 @@ class ConfigTest(TempState):
 
 
 class BoardTest(TempState):
+    def with_ponies(self, *ponies, active=None):
+        with state.locked() as s:
+            s["ponies"] = list(ponies)
+            s["pets"] += list(ponies)
+            if active:
+                s["active"] = active
+
+    @mock.patch("bashou.which.installed", return_value=True)
+    def test_the_ponies_share_one_tile(self, _):
+        """Owner, 2026-10-16: the ponies are one family on the board, not one tile per pony."""
+        from bashou.board import Board
+        self.with_ponies("pony_foal", "pony_moo", "pony_vim")
+        board = Board()
+        self.assertEqual(board.ids.count("ponies"), 1)
+        self.assertFalse([i for i in board.ids if i.startswith("pony_")])
+        board.pos = board.ids.index("ponies")
+        self.assertIn("3/", "".join(board.tile(board.pos)))                       # ponies found
+        shown = [board.pony]
+        for _i in range(3):
+            board.key("form")                                                     # f: the next pony found
+            shown.append(board.pony)
+        self.assertEqual(shown, ["pony_foal", "pony_moo", "pony_vim", "pony_foal"])
+        board.key("form")
+        self.assertIn("Moo pony", " ".join(board.preview()))                     # the pony shown
+        board.key("enter")
+        self.assertEqual(state.load()["active"], "pony_moo")
+
+    @mock.patch("bashou.which.installed", return_value=True)
+    def test_an_active_pony_is_selected_on_its_tile(self, _):
+        from bashou.board import Board
+        self.with_ponies("pony_foal", "pony_vim", active="pony_vim")
+        board = Board()
+        self.assertEqual((board.ids[board.pos], board.pony), ("ponies", "pony_vim"))
+        self.assertIn("●", "".join(board.tile(board.pos)))
+
+    @mock.patch("bashou.which.installed", return_value=True)
+    def test_no_ponies_no_tile(self, _):
+        from bashou.board import Board
+        self.assertNotIn("ponies", Board().ids)
+
     @mock.patch("bashou.which.installed", return_value=True)       # every pet, so the grid is fixed
     def test_starter_row_navigation(self, _):
         from bashou.board import Board

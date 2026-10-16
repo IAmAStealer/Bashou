@@ -1,5 +1,6 @@
 """CHANGELOG.md sections: the release notes CI publishes, `bashou update` shows and `bashou changelog` lists."""
 
+import os
 import re
 import shutil
 import subprocess
@@ -65,7 +66,11 @@ def main(version=None):
         print("  " + (_("No release {version} in the changelog.").format(version=version) if version
                       else _("The changelog isn't installed with this copy of Bashou.")))
         return 1
-    if sys.stdout.isatty() and shutil.which("less"):
+    try:
+        terminal = os.isatty(sys.stdout.fileno())              # a real one: tests replace stdout
+    except (AttributeError, OSError, ValueError):
+        terminal = False
+    if terminal and shutil.which("less"):
         subprocess.run(["less", "-R"], input=shown, text=True)
     else:
         print(shown)

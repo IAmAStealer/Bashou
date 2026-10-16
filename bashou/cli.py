@@ -86,7 +86,7 @@ def pet_line(s, pet):
 def achievements_list():
     s = state.load()
     earned = set(s["achievements"])
-    print("  " + _("{n} achievements · 2 evolve a pet, all of its family make it legendary").format(
+    print("  " + _("{n} achievements · a family's first brings its pet, the next ones evolve it").format(
         n=f"{len(achievements.earned(s))}/{len(achievements.usable())}"))
     print(f"  {DIM}" + _("Every {n} achievements also level up your starter.").format(
         n=progress.ACHIEVEMENTS_PER_LEVEL) + f"{RESET}\n")

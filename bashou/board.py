@@ -37,9 +37,20 @@ def ladder_line(s):
 class Board:
     def __init__(self):
         self.s = state.load()
-        ids = ["starter"] + [pet for pet, rule in roster(self.s)]   # starter on its own row, then the 4×4 grid
+        ids = ["starter"]                 # starter on its own row, then the 4×4 grid
+        self.ponies = []                  # the ponies found: one tile for them all (owner, 2026-10-16)
+        for pet, rule in roster(self.s):
+            if creatures.FAMILIES[pet].herd:
+                if not self.ponies:
+                    ids.append("ponies")
+                self.ponies.append(pet)
+            else:
+                ids.append(pet)
         self.ids = ids
-        self.pos = ids.index(self.s["active"]) if self.s["active"] in ids else 0
+        active = self.s["active"]
+        self.pony = active if active in self.ponies else (self.ponies[0] if self.ponies else None)
+        active = "ponies" if active in self.ponies else active
+        self.pos = ids.index(active) if active in ids else 0
         self.breath = False
         self.message = ""
         self.top = 0                      # first pet row shown when the grid scrolls
@@ -52,8 +63,12 @@ class Board:
         if i >= len(self.ids):
             return ["", ""]
         pet = self.ids[i]
-        unlocked = pet in self.s["pets"] or pet == "starter"
-        if pet == "starter":
+        unlocked = pet in self.s["pets"] or pet in ("starter", "ponies")
+        if pet == "ponies":
+            from .pony import herd
+            name = _("Ponies")
+            top = f"🐴 {len(self.ponies)}/{len(herd())}" + ("  ●" if self.s["active"] in self.ponies else "")
+        elif pet == "starter":
             lvl = progress.starter_level(self.s)
             name = progress.current(self.s, "starter")[2]
             top = _("Lv {level}").format(level=lvl) + ("  ●" if self.s["active"] == "starter" else "")
@@ -82,10 +97,24 @@ class Board:
         out.append(DIM + ladder_line(s) + RESET)
         return out
 
+    def pony_preview(self):
+        from . import pony
+        pet = creatures.get(creatures.FAMILIES[self.pony].first)
+        cells = [[True] * pet.width for _ in range(len(pet.base) // 2)]
+        out = render.lines(pet, ["inhale"] if self.breath else [], cells) + [""]
+        out.append(f"{BOLD}{_(creatures.NAMES[self.pony])}{RESET}  " + DIM + _("pony {n}/{total} found").format(
+            n=self.ponies.index(self.pony) + 1, total=len(self.ponies)) + RESET)
+        if len(self.ponies) > 1:
+            out.append(DIM + _("f: the next pony") + RESET)
+        out += [""] + [DIM + line + RESET for line in render.wrap(pony.where().get(self.pony) or _(creatures.FAMILIES[self.pony].tips[0]), 50, 4)]
+        return out
+
     def preview(self):
         pet_id = self.ids[self.pos]
         if pet_id == "starter":
             return self.starter_preview()
+        if pet_id == "ponies":
+            return self.pony_preview()
         unlocked = pet_id in self.s["pets"]
         drawn = creatures.form(pet_id, 1) in creatures.PETS     # the pet id isn't always a sprite (cat: hacker_cat)
         out = []
@@ -124,7 +153,7 @@ class Board:
         When it's too short, the preview keeps its sprite and name, and the grid scrolls."""
         self.cols = max(1, min(COLS, (cols - 1) // TILE_W))
         head = render.heading("Bashou", _("{n} pets · arrows/hjkl · Enter: pick · f: form · q: quit").format(
-            n=f"{len(creatures.owned(self.s))}/{len(self.ids) - 1}"), cols) + [""] + self.tile(0)
+            n=f"{sum(p in self.s['pets'] for p in self.ids) + bool(self.ponies)}/{len(self.ids) - 1}"), cols) + [""] + self.tile(0)
         side = cols >= self.cols * TILE_W + 40
         width = max(20, (cols - self.cols * TILE_W - 6) if side else cols - 3)
         preview = [part for line in self.preview() for part in render.fit(line, width)]
@@ -198,7 +227,7 @@ class Board:
         elif k == "right":
             self.pos = (n + 1) % size
         elif k == "enter":
-            pet = self.ids[n]
+            pet = self.pony if self.ids[n] == "ponies" else self.ids[n]
             if pet != "starter" and pet not in self.s["pets"]:
                 self.message = DIM + _("Not unlocked yet: {how}").format(how=hint(self.s, pet)) + RESET
                 return True
@@ -206,6 +235,10 @@ class Board:
                 s["active"] = pet
             self.s = state.load()
             return False
+        elif k == "form" and self.ids[n] == "ponies":
+            self.pony = self.ponies[(self.ponies.index(self.pony) + 1) % len(self.ponies)]
+            self.message = ""
+            return True
         elif k == "form":
             self.switch_form(self.ids[n])
             return True

@@ -155,6 +155,8 @@ class StarsTest(TempState):
     def test_the_tile_and_the_pet_screen_agree_on_every_pet(self, _):
         from bashou.board import Board
         for pet in creatures.NAMES:
+            if creatures.FAMILIES[pet].herd:                                       # the ponies: one tile, no stars
+                continue
             forms = creatures.forms(pet)
             with self.subTest(pet=pet), state.locked() as s:
                 s["starter"], s["pets"], s["active"] = "star", [pet], pet
