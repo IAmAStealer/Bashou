@@ -11,6 +11,8 @@ from .render import ESC, BOLD, DIM, RESET, REV, ACCENT
 
 COLS = 4
 TILE_W, TILE_H = 18, 2          # 16-character names (Golem de cristal) fit; 4 × 18 fits 80 columns
+SHOWN = f"{ESC}[38;2;245;200;70m"  # gold: the stars of the form shown
+SPRITE_W = 19                     # the sprite and a gap: the forms list starts after it
 HOVER = f"{ESC}[48;2;55;60;82m"   # the tile under the mouse
 PREVIEW_SHORT = 9                  # sprite, blank line, name and next stage
 KEYS = {"f": "form"}             # besides terminal.NAMES
@@ -47,6 +49,7 @@ class Board:
         self.top = 0                      # first pet row shown when the grid scrolls
         self.cols = COLS                  # tiles per row: fewer on a narrow (portrait) terminal
         self.hover = None                 # the tile under the mouse
+        self.last_frame = ""              # what's on screen: an unchanged frame isn't sent again
         self.hits = []                    # (row, first column, last column, ("tile", i) or ("form", k)): what a click hits
         self.form_lines = {}              # preview line -> (form number, column in the line) of the forms list
 
@@ -83,7 +86,7 @@ class Board:
         out = []
         for k, sprite in enumerate(chain, 1):
             if k <= top:
-                name = _(creatures.PETS[sprite].name) + (" ◀" if k == shown and top > 1 else "")
+                name = _(creatures.PETS[sprite].name) + (" ◀" if k == shown else "")
             else:
                 name = "???" + (f" ({self.needs(chain, k)})" if k == top + 1 else "")
             out.append((k, ("★" if k <= top else "☆") * k + f" {k}. {name}"))
@@ -93,30 +96,46 @@ class Board:
         """What form k waits for: "level 6", "5 achievements"."""
         need = creatures.PETS[chain[k - 2]].next_at
         return (_("level {level}").format(level=need["level"]) if "level" in need
-                else _("{count} achievements").format(count=need["achievements"]))
+                else f"{need['achievements']} 🏆")
 
     def with_forms(self, sprite_lines, who, width):
-        """The sprite, and its forms beside it when there's room (else under it). Remembers where each form is."""
+        """The sprite, and its forms on its right (owner), cut to the room left; under it only when there's
+        almost no room. Remembers where each form is, for a click."""
         forms = self.forms(who)
         self.form_lines = {}
-        wide = max(render.width(text) for k, text in forms)
-        if width >= 17 + 3 + wide:
+        more = progress.reached(self.s, who) > 1                 # another form to show: say how
+        if width >= SPRITE_W + 12:
             out = []
             for i in range(max(len(sprite_lines), len(forms))):
                 left = sprite_lines[i] if i < len(sprite_lines) else ""
-                pad = " " * (17 + 3 - render.width(render.strip(left)))
+                pad = " " * (SPRITE_W - render.width(render.strip(left)))
                 if i < len(forms):
                     k, text = forms[i]
-                    self.form_lines[i] = (k, 20)
-                    out.append(left + pad + (DIM if not text.startswith("★") or "???" in text else "") + text + RESET)
+                    self.form_lines[i] = (k, SPRITE_W)
+                    text = render.fit(text, width - SPRITE_W)[0]
+                    out.append(left + pad + self.colored(text) + RESET)
+                elif i == len(forms) and more:
+                    out.append(left + pad + ACCENT + _("f: change form") + RESET)
                 else:
                     out.append(left)
+            if len(forms) >= len(sprite_lines) and more:
+                out.append(" " * SPRITE_W + ACCENT + _("f: change form") + RESET)
             return out
         out = list(sprite_lines) + [""]
         for k, text in forms:
             self.form_lines[len(out)] = (k, 0)
-            out.append(text)
+            out.append(self.colored(text) + RESET)
+        if more:
+            out.append(ACCENT + _("f: change form") + RESET)
         return out
+
+    @staticmethod
+    def colored(text):
+        """The form shown: its stars in gold. Forms not reached: dim."""
+        if text.endswith("◀"):
+            stars, rest = text.split(" ", 1)
+            return SHOWN + stars + RESET + " " + rest
+        return (DIM if not text.startswith("★") or "???" in text else "") + text
 
     def pick_form(self, k):
         """A click on a form: show it, or say what it waits for."""
@@ -156,7 +175,7 @@ class Board:
         out.append(f"{BOLD}{_(creatures.NAMES[self.pony])}{RESET}  " + DIM + _("pony {n}/{total} found").format(
             n=self.ponies.index(self.pony) + 1, total=len(self.ponies)) + RESET)
         if len(self.ponies) > 1:
-            out.append(DIM + _("f: the next pony") + RESET)
+            out.append(ACCENT + _("f: the next pony") + RESET)
         out += [""] + [DIM + line + RESET for line in render.wrap(pony.where().get(self.pony) or _(creatures.FAMILIES[self.pony].tips[0]), 50, 4)]
         return out
 
@@ -243,18 +262,25 @@ class Board:
         return grid, preview, side
 
     def draw(self):
+        """One frame, written over the last one: no clear screen, and nothing sent when nothing changed.
+        Clearing on every redraw made the board flicker when the mouse moved (owner: it can hurt people)."""
         size = os.get_terminal_size()
         grid, preview, side = self.layout(size.columns, size.lines)
-        out = [f"{ESC}[H{ESC}[2J"]
-        for i, line in enumerate(grid):
-            if i < size.lines:
-                out.append(f"{ESC}[{i + 1};1H{line}")
+        rows = {i + 1: [(1, line)] for i, line in enumerate(grid)}
+        left = self.cols * TILE_W + 4 if side else 2
         for i, line in enumerate(preview):
-            row = i + 3 if side else len(grid) + i + 2
-            if row <= size.lines:                          # below the last line the terminal would scroll
-                out.append(f"{ESC}[{row};{self.cols * TILE_W + 4 if side else 2}H{line}")
-        sys.stdout.write("".join(out))
-        sys.stdout.flush()
+            rows.setdefault(i + 3 if side else len(grid) + i + 2, []).append((left, line))
+        out = [f"{ESC}[?2026h"]                            # terminals that know it show the frame at once
+        for row in range(1, size.lines + 1):               # below the last line the terminal would scroll
+            out.append(f"{ESC}[{row};1H{ESC}[K")
+            for col, line in rows.get(row, []):
+                out.append(f"{ESC}[{row};{col}H{line}{ESC}[K")
+        out.append(f"{ESC}[?2026l")
+        frame = "".join(out)
+        if frame != self.last_frame:
+            self.last_frame = frame
+            sys.stdout.write(frame)
+            sys.stdout.flush()
 
     def switch_form(self, pet):
         """Show the next form this pet has reached (looks only: it keeps every action)."""

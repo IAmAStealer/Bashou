@@ -516,12 +516,53 @@ class BoardTest(TempState):
         self.assertIn("★ 1. Tadpole", text)
         self.assertIn("★★ 2. Tree frog", text)
         self.assertIn("☆☆☆ 3. ???", text)
+        for cols, lines in ((120, 40), (80, 24), (60, 20)):                    # owner: on the right of the pet
+            grid, preview, side = board.layout(cols, lines)
+            self.assertIn("★ 1. Tadpole", render.strip(preview[0]), (cols, lines))
+            width = cols - board.cols * 18 - 6 if side else cols - 3
+            self.assertLessEqual(max(render.width(render.strip(line)) for line in preview[:3]), width, (cols, lines))
+        board.layout(120, 40)
         x, y = board.where("form", 1)
         board.mouse(("click", x, y))
         self.assertIn("Tadpole", progress.current(state.load(), "frog")[2])
         x, y = board.where("form", 3)
         board.mouse(("click", x, y))
         self.assertIn("5 achievements", board.message)                            # not reached: what it needs
+
+    @mock.patch("bashou.which.installed", return_value=True)
+    def test_the_board_never_flickers(self, _):
+        """Owner, 2026-10-16: moving the mouse made bashou swap flicker (the screen was cleared on every
+        redraw), which can hurt people. Lines are written over the old ones, and an unchanged frame isn't sent."""
+        from bashou.board import Board
+        board = Board()
+        size = os.terminal_size((120, 40))
+
+        def frame():
+            out = io.StringIO()
+            with mock.patch("bashou.board.os.get_terminal_size", return_value=size), contextlib.redirect_stdout(out):
+                board.draw()
+            return out.getvalue()
+
+        first = frame()
+        self.assertNotIn("\x1b[2J", first)
+        self.assertIn("\x1b[K", first)                                           # each line clears its old end
+        self.assertEqual(frame(), "")                                             # nothing changed: nothing sent
+        board.key("right")
+        self.assertNotEqual(frame(), "")
+
+    @mock.patch("bashou.which.installed", return_value=True)
+    def test_the_form_shown_has_colored_stars_and_f_is_said(self, _):
+        from bashou import render
+        from bashou.board import Board, SHOWN
+        with state.locked() as s:
+            s["pets"].append("frog")
+            s["achievements"] += ["sprinter", "historian", "thousand"]
+        board = Board()
+        board.pos = board.ids.index("frog")
+        preview = board.preview(60)
+        line = next(l for l in preview if "Tree frog ◀" in render.strip(l))
+        self.assertIn(SHOWN + "★★", line)
+        self.assertIn("f: change form", render.strip("\n".join(preview)))
 
     @mock.patch("bashou.which.installed", return_value=True)
     def test_no_ponies_no_tile(self, _):
