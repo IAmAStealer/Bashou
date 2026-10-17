@@ -1,0 +1,159 @@
+{
+ "id": "ai_context",
+ "order": 530,
+ "skill": "ai",
+ "after": [
+  "command_line"
+ ],
+ "masters": [
+  "answered ai_context 3"
+ ],
+ "questions": [
+  "ai-1-01",
+  "ai-1-02",
+  "ai-1-03",
+  "ai-2-01",
+  "ai-2-02",
+  "ai-3-01"
+ ],
+ "recall": [
+  "ai-1-01",
+  "ai-1-03"
+ ],
+ "title": "AI tools: context and memory",
+ "summary": "What an AI coding tool really sees, why long chats go wrong, and what to write in CLAUDE.md or AGENTS.md.",
+ "pages": [
+  {
+   "scheme": [
+    " ┌─ context window ─────────────────────┐",
+    " │ instructions  (CLAUDE.md, AGENTS.md) │",
+    " │ your messages                        │",
+    " │ its answers                          │",
+    " │ files it read, command outputs       │",
+    " └──────────────────────────────────────┘",
+    " outside: yesterday's chat, unopened files"
+   ],
+   "point": 0,
+   "mark": [
+    "context window"
+   ],
+   "text": [
+    "An AI model doesn't remember you. Each time it answers, it reads one block of text: its context window.",
+    "",
+    "- Everything in that block counts: instructions, your messages, its answers, the files it read, the outputs of the commands it ran.",
+    "- Anything outside it doesn't exist for the model: yesterday's chat, a file it didn't open.",
+    "",
+    "A new session starts empty, except for what the tool loads at the start."
+   ]
+  },
+  {
+   "scheme": [
+    " ┌─ context window ─────────────────────┐",
+    " │ instructions  (CLAUDE.md, AGENTS.md) │",
+    " │ your messages                        │",
+    " │ its answers                          │",
+    " │ files it read, command outputs       │",
+    " └──────────────────────────────────────┘",
+    " [███████████████░░░░░] 75% full",
+    " of, for example, 200 000 tokens"
+   ],
+   "point": 6,
+   "mark": [
+    "75% full"
+   ],
+   "text": [
+    "The window has a size, counted in tokens: pieces of text, often a short word or part of a longer one.",
+    "",
+    "- Every message, file and output uses tokens. One big log can fill a good part of it at once.",
+    "- When it gets close to full, the tool summarizes or drops the oldest parts, and details get lost: an exact rule, a decision. A very long chat slowly gets worse."
+   ]
+  },
+  {
+   "scheme": [
+    " hour 1   goal, a rule, first try     ✘",
+    " hour 2   second try ✘, third try ✘",
+    " hour 3   the rule, summarized away…",
+    "          the AI tries the first fix again",
+    "",
+    " /clear     start again, empty",
+    " /compact   keep a summary, free room"
+   ],
+   "point": 3,
+   "mark": [
+    "summarized away",
+    "first fix again"
+   ],
+   "text": [
+    "In a long chat, failed attempts stay in view and pull the model back, while the first rules fade into a summary.",
+    "",
+    "- One task per session: when you change task, start fresh.",
+    "- Stuck after several tries? Start again with a short summary: the goal, what failed, what you decided.",
+    "- Claude Code calls it /clear (start empty) and /compact (keep a summary). Other tools have a \"new chat\" button."
+   ]
+  },
+  {
+   "scheme": [
+    " my-project/",
+    " ├── AGENTS.md     read by many AI tools",
+    " ├── CLAUDE.md     Claude Code (else AGENTS.md)",
+    " ├── src/",
+    " └── tests/",
+    "",
+    " new session ─▶ files loaded ─▶ context"
+   ],
+   "point": 6,
+   "mark": [
+    "AGENTS.md",
+    "CLAUDE.md"
+   ],
+   "text": [
+    "To give the AI the same knowledge every time, write it in a file the tool loads at the start of each session, like notes for a new teammate.",
+    "",
+    "- AGENTS.md is shared by many tools (Codex, Cursor, GitHub Copilot, Zed…). Claude Code reads CLAUDE.md, or AGENTS.md when there is no CLAUDE.md.",
+    "- Some tools also write notes of their own: a memory. Read them now and then: a wrong note comes back in every session."
+   ]
+  },
+  {
+   "scheme": [
+    " CLAUDE.md",
+    " ✔ Tests: python3 -m unittest -q",
+    " ✔ Commit messages: one short sentence",
+    " ✔ Never edit generated/: it's rebuilt",
+    " ✘ DB_PASSWORD=hunter2",
+    " ✘ the whole history of the project"
+   ],
+   "point": 4,
+   "mark": [
+    "✘ DB_PASSWORD=hunter2"
+   ],
+   "text": [
+    "Keep the file short and specific: it's loaded every time, each line costs room, and a long file buries the rules that matter.",
+    "",
+    "- Yes: how to build and test, conventions, what not to touch, the why of an unusual choice.",
+    "- No secrets: the file is usually committed, and all of it is sent to the model.",
+    "- No copy of the code: the AI opens the code when it needs it. Claude Code's docs advise under 200 lines."
+   ]
+  },
+  {
+   "scheme": [
+    " CLAUDE.md:  \"never run deploy.sh\"",
+    "      │  advice: read, usually followed",
+    "",
+    " permission deny or PreToolUse hook",
+    "      │  checked by the tool, every time",
+    "      ▼",
+    " deploy.sh  ✘ blocked"
+   ],
+   "point": 6,
+   "mark": [
+    "✘ blocked"
+   ],
+   "text": [
+    "An instruction file is advice, not a lock. The model reads it and usually follows it, but nothing forces it to.",
+    "",
+    "- A rule that must always hold (never deploy, never delete data) goes where the tool enforces it: permission settings, or a hook that refuses the command.",
+    "- Safest of all: don't give the AI the keys it must never use."
+   ]
+  }
+ ]
+}

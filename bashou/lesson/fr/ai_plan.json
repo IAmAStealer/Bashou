@@ -1,0 +1,139 @@
+{
+ "title": "Outils d'IA : un plan avant le code",
+ "summary": "Demande un plan, relis-le comme la proposition d'un collègue, avance étape par étape, et vérifie toi-même le résultat.",
+ "pages": [
+  {
+   "scheme": [
+    " toi : « ajoute une connexion à l'appli »",
+    "        │",
+    "        ▼",
+    " IA : 14 fichiers, 600 lignes modifiées",
+    "        │",
+    "        ▼",
+    " toi : …c'est bien ce que je voulais ?"
+   ],
+   "point": 3,
+   "mark": [
+    "600 lignes modifiées"
+   ],
+   "text": [
+    "Un outil d'IA écrit du code bien plus vite que tu ne peux le lire. S'il a mal compris le but, tu le découvres après 600 lignes modifiées.",
+    "",
+    "- Un plan est court : les étapes, les fichiers, l'approche. Il se lit en une minute.",
+    "- Corriger un mauvais plan coûte une phrase. Corriger du mauvais code coûte un après-midi."
+   ]
+  },
+  {
+   "scheme": [
+    " toi : « connexion. Plan d'abord, pas de code »",
+    "        │",
+    "        ▼",
+    " l'IA lit le code, puis propose :",
+    "  1. ajouter une table users",
+    "  2. ajouter les pages /login et /logout",
+    "  3. supprimer l'ancienne table sessions",
+    "  4. des tests pour les deux pages"
+   ],
+   "point": 0,
+   "mark": [
+    "Plan d'abord"
+   ],
+   "text": [
+    "Demande donc le plan avant le code : dis-le dans ta demande, ou utilise un mode plan si l'outil en a un.",
+    "",
+    "- En mode plan, l'IA lit les fichiers et propose, mais ne change rien tant que tu n'as pas dit oui.",
+    "- Claude Code : appuie sur Maj+Tab jusqu'à voir plan mode, ou lance-le avec claude --permission-mode plan.",
+    "- D'autres outils l'appellent mode plan ou mode ask."
+   ]
+  },
+  {
+   "scheme": [
+    "  1. ajouter une table users",
+    "  2. ajouter les pages /login et /logout",
+    "  3. supprimer la table sessions   ← pourquoi ?",
+    "  4. des tests pour les deux pages",
+    "",
+    " oubli : comment sont gardés les mots de passe ?"
+   ],
+   "point": 2,
+   "mark": [
+    "← pourquoi ?",
+    "oubli :"
+   ],
+   "text": [
+    "Relis le plan comme la proposition d'un collègue. Tu sais ce que l'IA ignore : le but, les utilisateurs, ce qui ne doit pas casser.",
+    "",
+    "- Une étape que tu n'as pas demandée (effacer des données, une nouvelle dépendance) : demande pourquoi.",
+    "- Un oubli (comment sont gardés les mots de passe, que se passe-t-il en cas d'erreur) : dis-le.",
+    "- Une mauvaise idée du but : corrige-la maintenant, en une phrase.",
+    "",
+    "Puis demande le plan corrigé, et décide."
+   ]
+  },
+  {
+   "scheme": [
+    " étape 1 ─▶ diff ─▶ tests ✔ ─▶ commit",
+    " étape 2 ─▶ diff ─▶ tests ✔ ─▶ commit",
+    " étape 3 ─▶ diff ─▶ tests ✘",
+    "                         └─▶ corriger la 3 seule",
+    "",
+    " git : l'étape 2 est à l'abri, quoi qu'il arrive"
+   ],
+   "point": 2,
+   "mark": [
+    "tests ✘"
+   ],
+   "text": [
+    "Mène le plan par petites étapes, et vérifie chacune avant la suivante.",
+    "",
+    "- Après chaque étape : lis le diff, lance les tests, commite.",
+    "- Quand une étape casse quelque chose, tu sais laquelle, et les précédentes sont à l'abri dans git.",
+    "- Un gros changement vérifié seulement à la fin mélange toutes les erreurs."
+   ]
+  },
+  {
+   "scheme": [
+    " IA : « C'est fait, tous les tests passent ! »",
+    "",
+    " $ git diff --stat",
+    "  src/login.py        | 42 ++++++++",
+    "  tests/test_login.py |  3 ---",
+    " $ python3 -m unittest",
+    "  OK   ← mais que testaient ces 3 lignes ?"
+   ],
+   "point": 4,
+   "mark": [
+    "3 ---",
+    "OK"
+   ],
+   "text": [
+    "« C'est fait » est une affirmation, pas une preuve : une IA peut être sûre d'elle et se tromper.",
+    "",
+    "- git diff montre chaque ligne modifiée. Lis-le : c'est toi qui gardes le changement.",
+    "- Lance les tests toi-même. Des lignes retirées d'un test méritent une question : le test avait-il tort, ou l'a-t-on fait passer ?",
+    "- Un changement que tu ne sais pas expliquer : demande, ou ne le garde pas."
+   ]
+  },
+  {
+   "scheme": [
+    " PLAN.md",
+    " but :      se connecter avec un e-mail",
+    " décidé :   hacher les mots de passe (bcrypt),",
+    "            jamais en clair : moins grave si fuite",
+    " fait :     étapes 1, 2",
+    " suite :    étape 3"
+   ],
+   "point": 2,
+   "mark": [
+    "décidé :"
+   ],
+   "text": [
+    "Écris le plan et ses décisions dans un fichier (ou dans la pull request) avant que le code commence.",
+    "",
+    "- La discussion finit résumée ou effacée ; un fichier reste.",
+    "- Une nouvelle session, ou un collègue la semaine suivante, a le pourquoi et pas seulement le quoi.",
+    "- Fais court : le but, les choix et leurs raisons, les étapes restantes."
+   ]
+  }
+ ]
+}

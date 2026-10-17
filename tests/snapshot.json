@@ -9038,6 +9038,10 @@
    "network": {
     "en": "Network",
     "fr": "Réseau"
+   },
+   "ai": {
+    "en": "AI tools",
+    "fr": "Outils d'IA"
    }
   },
   "starters": [
@@ -9214,6 +9218,7 @@
   "A wild {topic} monster asks:",
   "A wildcard pattern becomes a list of names before the command runs: * stands for any characters. rm has no undo, so first look at what the pattern catches with ls report-2025-*.csv. The pattern starts with report, so old-report-... isn't caught.",
   "A {threat} is coming! Use `{tool}` to fight it → bashou fight",
+  "AI tools: context, memory, planning",
   "Accountant",
   "Achievements",
   "Active days",
@@ -9484,6 +9489,7 @@
   "Enter or r: play again · q: quit",
   "Enter takes you to {start}.",
   "Enter: accept · s: save & quit",
+  "Enter: close the lesson",
   "Enter: continue",
   "Enter: next",
   "Enter: next question",
@@ -9861,6 +9867,7 @@
   "Meter reader",
   "Mill",
   "Miner",
+  "Mirage Djinn",
   "Mirror",
   "Mirror Mimic",
   "Miss the old look? `bashou swap`, then f switches between the forms you reached.",
@@ -10071,6 +10078,7 @@
   "Quick study",
   "Quiz master",
   "Quiz whiz",
+  "Quiz: “{title}”",
   "RTFM means \"Read The F*** Manual\": before asking, look in the docs. The answer is often already written there.",
   "Ranges",
   "Ranking",
@@ -10191,6 +10199,7 @@
   "Shortcut",
   "Shortcut: meeting the {threat} in a fight opens this lesson at once.",
   "Shout",
+  "Show what you understood: {n} right answers to this lesson's questions pass it, here or in the adventure.",
   "Signal",
   "Signer",
   "Simplest: printf(\"Hello, %s!\\n\", argv[1]); or malloc(strlen(argv[1]) + 1) and free it.",
@@ -10843,6 +10852,7 @@
   "an option of {cmd}: `man {cmd}` explains it",
   "and start it right away",
   "another system: questions only",
+  "answer {n} of its questions right",
   "apt list --installed shows what is on the machine, with versions; add a name to see only that one. dpkg -l does it too.",
   "apt search name lists matching packages with the version apt would install; apt policy name shows Installed and Candidate.",
   "apt-mark keeps the list: showmanual for what you asked for, showauto for dependencies.",
@@ -11819,6 +11829,7 @@
   "↑/↓ to move, Space to tick, Enter when done",
   "↑/↓, Enter · `bashou config editor` to change it later",
   "↑/↓, Enter · `bashou config skills` to change it later",
+  "↑/↓, Enter: answer · q: skip the quiz",
   "↑/↓, Enter: answer · q: skip the warm-up",
   "↑↓ more pets",
   "🔒 {title} builds on {lessons}. Lessons follow each other: this one opens once you have practiced what comes before.",

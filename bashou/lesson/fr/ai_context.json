@@ -1,0 +1,138 @@
+{
+ "title": "Outils d'IA : contexte et mémoire",
+ "summary": "Ce qu'un outil d'IA pour coder voit vraiment, pourquoi les longues discussions dérapent, et quoi écrire dans CLAUDE.md ou AGENTS.md.",
+ "pages": [
+  {
+   "scheme": [
+    " ┌─ fenêtre de contexte ────────────────┐",
+    " │ instructions  (CLAUDE.md, AGENTS.md) │",
+    " │ tes messages                         │",
+    " │ ses réponses                         │",
+    " │ fichiers lus, sorties de commandes   │",
+    " └──────────────────────────────────────┘",
+    " dehors : la discussion d'hier, tout fichier fermé"
+   ],
+   "point": 0,
+   "mark": [
+    "fenêtre de contexte"
+   ],
+   "text": [
+    "Un modèle d'IA ne se souvient pas de toi. À chaque réponse, il lit un seul bloc de texte : sa fenêtre de contexte.",
+    "",
+    "- Tout ce qui est dans ce bloc compte : les instructions, tes messages, ses réponses, les fichiers lus, les sorties des commandes lancées.",
+    "- Ce qui est dehors n'existe pas pour lui : la discussion d'hier, un fichier qu'il n'a pas ouvert.",
+    "",
+    "Une nouvelle session part de zéro, sauf ce que l'outil charge au début."
+   ]
+  },
+  {
+   "scheme": [
+    " ┌─ fenêtre de contexte ────────────────┐",
+    " │ instructions  (CLAUDE.md, AGENTS.md) │",
+    " │ tes messages                         │",
+    " │ ses réponses                         │",
+    " │ fichiers lus, sorties de commandes   │",
+    " └──────────────────────────────────────┘",
+    " [███████████████░░░░░] plein à 75 %",
+    " sur, par exemple, 200 000 tokens"
+   ],
+   "point": 6,
+   "mark": [
+    "plein à 75 %"
+   ],
+   "text": [
+    "La fenêtre a une taille, comptée en tokens : des morceaux de texte, souvent un mot court ou une partie d'un mot plus long.",
+    "",
+    "- Chaque message, fichier et sortie use des tokens. Un gros log peut en remplir une bonne part d'un coup.",
+    "- Presque plein, l'outil résume ou retire le plus ancien, et des détails se perdent : une règle exacte, une décision. Une très longue discussion se dégrade peu à peu."
+   ]
+  },
+  {
+   "scheme": [
+    " heure 1   but, une règle, 1er essai   ✘",
+    " heure 2   2e essai ✘, 3e essai ✘",
+    " heure 3   la règle, résumée et perdue…",
+    "           l'IA retente le premier essai",
+    "",
+    " /clear     repartir de zéro",
+    " /compact   garder un résumé, faire de la place"
+   ],
+   "point": 3,
+   "mark": [
+    "résumée et perdue",
+    "premier essai"
+   ],
+   "text": [
+    "Dans une longue discussion, les essais ratés restent sous ses yeux et le ramènent en arrière, pendant que les premières règles se perdent dans un résumé.",
+    "",
+    "- Une tâche par session : quand tu changes de tâche, repars à neuf.",
+    "- Bloqué après plusieurs essais ? Repars avec un court résumé : le but, ce qui a échoué, ce que tu as décidé.",
+    "- Claude Code les appelle /clear (repartir à vide) et /compact (garder un résumé). D'autres outils ont un bouton « nouvelle discussion »."
+   ]
+  },
+  {
+   "scheme": [
+    " mon-projet/",
+    " ├── AGENTS.md     lu par beaucoup d'outils",
+    " ├── CLAUDE.md     Claude Code (sinon AGENTS.md)",
+    " ├── src/",
+    " └── tests/",
+    "",
+    " nouvelle session ─▶ fichiers chargés ─▶ contexte"
+   ],
+   "point": 6,
+   "mark": [
+    "AGENTS.md",
+    "CLAUDE.md"
+   ],
+   "text": [
+    "Pour donner à l'IA le même savoir à chaque fois, écris-le dans un fichier chargé au début de chaque session, comme des notes pour un nouveau collègue.",
+    "",
+    "- AGENTS.md sert à beaucoup d'outils (Codex, Cursor, GitHub Copilot, Zed…). Claude Code lit CLAUDE.md, ou AGENTS.md à défaut.",
+    "- Certains outils écrivent aussi leurs notes : une mémoire. Relis-les parfois : une note fausse revient à chaque session."
+   ]
+  },
+  {
+   "scheme": [
+    " CLAUDE.md",
+    " ✔ Tests : python3 -m unittest -q",
+    " ✔ Messages de commit : une phrase courte",
+    " ✔ Ne pas modifier generated/ : regénéré",
+    " ✘ DB_PASSWORD=hunter2",
+    " ✘ tout l'historique du projet"
+   ],
+   "point": 4,
+   "mark": [
+    "✘ DB_PASSWORD=hunter2"
+   ],
+   "text": [
+    "Garde le fichier court et précis : il est chargé à chaque fois, chaque ligne coûte de la place, et un long fichier noie les règles importantes.",
+    "",
+    "- Oui : comment construire et tester, les conventions, ce qu'il ne faut pas toucher, le pourquoi d'un choix inhabituel.",
+    "- Pas de secrets : le fichier est souvent commité, et tout son contenu est envoyé au modèle.",
+    "- Pas de copie du code : l'IA l'ouvre au besoin. La doc de Claude Code conseille moins de 200 lignes."
+   ]
+  },
+  {
+   "scheme": [
+    " CLAUDE.md : « ne lance jamais deploy.sh »",
+    "      │  un conseil : lu, en général suivi",
+    "",
+    " permission deny ou hook PreToolUse",
+    "      │  vérifié par l'outil, à chaque fois",
+    "      ▼",
+    " deploy.sh  ✘ bloqué"
+   ],
+   "point": 6,
+   "mark": [
+    "✘ bloqué"
+   ],
+   "text": [
+    "Un fichier d'instructions est un conseil, pas un verrou. Le modèle le lit et le suit en général, mais rien ne l'y oblige.",
+    "",
+    "- Une règle qui doit toujours tenir (ne jamais déployer, ne jamais effacer de données) va là où l'outil l'impose : les réglages de permissions, ou un hook qui refuse la commande.",
+    "- Le plus sûr : ne pas donner à l'IA les clés dont elle ne doit jamais se servir."
+   ]
+  }
+ ]
+}

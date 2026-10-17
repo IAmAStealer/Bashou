@@ -44,6 +44,7 @@ SKILLS = {
         ("sqlite3", "runs your SQL on a small database file: every SQL fight needs it"),)),
     "network": Skill("Network: IPv4, IPv6, DNS, TCP", uses=(
         ("tcpdump", "the packet fights: watch a TCP connection open, packet by packet"),)),
+    "ai": Skill("AI tools: context, memory, planning"),      # lessons and questions, no fights (owner)
 }
 
 

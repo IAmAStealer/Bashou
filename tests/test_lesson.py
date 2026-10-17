@@ -250,7 +250,7 @@ class UnlockTest(unittest.TestCase):
 
     def test_an_old_save_gets_the_missing_fields(self):
         s = {"lessons": {"read": ["paths"]}}
-        self.assertEqual(lesson.progress_of(s), {"read": ["paths"], "opened": [], "page": {}, "met": []})
+        self.assertEqual(lesson.progress_of(s), {"read": ["paths"], "opened": [], "page": {}, "met": [], "right": []})
 
 
 class ReaderTest(unittest.TestCase):

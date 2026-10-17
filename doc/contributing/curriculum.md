@@ -164,6 +164,15 @@ paths above.
 1. `pipeline` — stages, needs, rules, secrets · Indent Imp, Stage Specter, Needs Newt, Secret Sprite,
    Manual Mole
 
+### AI tools
+
+No fights (owner): these lessons pass with right answers to their own questions (`answered ID N`), in
+the adventure or in the quiz at the end of the lesson.
+
+1. `ai_context` — what the model sees, tokens, long chats, CLAUDE.md and AGENTS.md, advice versus
+   enforced rules
+2. `ai_plan` — ask for a plan, review it, step by step, check the diff and the tests
+
 ## Known gaps
 
 - **systemd** and **Rust** stop after one lesson: next steps would be timers and journalctl filters,

@@ -76,9 +76,8 @@ def payload(s, mode="minimal"):
             "ladder_best": dict(s["ladder_best"]), "starter_best": s["starter_best"],   # forms kept from older rules
             "challenges": list(s["challenges"]),
             "lessons": {"read": list(lesson.read(s)), "met": list((s.get("lessons") or {}).get("met", [])),
-                        "passed": passed(s)},
-            "adventure": {"levels": dict(adv.get("levels", {})), "chapters_done": adv.get("chapters_done", 0),
-                          "right": list(adv.get("right", []))}}
+                        "passed": passed(s), "right": list(lesson.right(s))},
+            "adventure": {"levels": dict(adv.get("levels", {})), "chapters_done": adv.get("chapters_done", 0)}}
 
 
 def sign(version, mode, raw):
@@ -109,11 +108,11 @@ def fits_minimal(data):
               "starter": lambda v: v is None or isinstance(v, str),
               "starter_best": lambda v: v is None or isinstance(v, str),
               "ladder_best": lambda v: isinstance(v, dict) and all(isinstance(x, str) for x in v.values()),
-              "lessons": lambda v: isinstance(v, dict) and set(v) <= {"read", "met", "passed"}
+              "lessons": lambda v: isinstance(v, dict) and set(v) <= {"read", "met", "passed", "right"}
               and all(map(strings, v.values())),
-              "adventure": lambda v: isinstance(v, dict) and set(v) <= {"levels", "chapters_done", "right"}
+              "adventure": lambda v: isinstance(v, dict) and set(v) <= {"levels", "chapters_done"}
               and isinstance(v.get("levels", {}), dict) and all(map(number, v.get("levels", {}).values()))
-              and number(v.get("chapters_done", 0)) and strings(v.get("right", []))}
+              and number(v.get("chapters_done", 0))}
     return set(data) <= set(shapes) and all(shapes[k](v) for k, v in data.items())
 
 
@@ -247,8 +246,6 @@ def merge_road(adv, theirs, full):
                    phase="intro", leg_start=adv["distance"], flawless=True)
     adv["chapters_done"] = max(adv["chapters_done"], theirs.get("chapters_done", 0))
     adv["levels"] = best_per_key(adv.get("levels", {}), theirs.get("levels", {}))
-    if theirs.get("right"):
-        adv["right"] = union(adv.get("right", []), theirs["right"])
 
 
 def merge(local, data, mode):
@@ -262,7 +259,7 @@ def merge(local, data, mode):
     s["pets"] = union(s["pets"], [p for p in data.get("pets", []) if p in creatures.FAMILIES])
     theirs = data.get("lessons", {})
     mine = lesson.progress_of(s)
-    for key in ("read", "met"):
+    for key in ("read", "met", "right"):
         mine[key] = union(mine[key], theirs.get(key, []))
     mine["opened"] = union(mine["opened"], theirs.get("opened", []) + theirs.get("read", []))
     if data.get("adventure") or s["adventure"]:

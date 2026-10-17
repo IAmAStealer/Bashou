@@ -12,6 +12,7 @@ from pathlib import Path
 
 from .. import challenges, fight, progress, render, skills, state, terminal
 from ..i18n import _, cap
+from ..lesson import record_right
 from . import canvas, lessons, quiz, scene, sprites, world
 from ..render import ESC
 
@@ -156,6 +157,8 @@ class Game:
         right = i == q["answer"]
         if right:
             adv["correct"] = adv.get("correct", 0) + 1         # 20 bring the Frog
+            with state.locked() as s:                           # some lessons pass with right answers
+                record_right(s, q["id"])
         explain = solution(q)
         if adv["phase"] == "monster":
             if right:

@@ -44,7 +44,7 @@ def english():
 def progress_of(s):
     """s["lessons"], with every field (a save from an older version may lack some)."""
     p = s.setdefault("lessons", {})
-    for key, empty in (("read", []), ("opened", []), ("page", {}), ("met", [])):
+    for key, empty in (("read", []), ("opened", []), ("page", {}), ("met", []), ("right", [])):
         p.setdefault(key, empty)
     return p
 
@@ -53,8 +53,25 @@ def read(s):
     return (s.get("lessons") or {}).get("read", [])
 
 
+def right(s):
+    """Ids of the questions you answered right: in the adventure, a warm-up or a lesson's quiz."""
+    return (s.get("lessons") or {}).get("right", [])
+
+
+def record_right(s, qid):
+    p = progress_of(s)
+    if qid not in p["right"]:
+        p["right"].append(qid)
+
+
+def answered(s, lesson_id):
+    """How many of a lesson's own questions (its "questions") you answered right."""
+    return len(set(right(s)) & set(by_id()[lesson_id].get("questions", [])))
+
+
 def met(s, cond):
-    """Is one condition true? "commands N", "tool NAME N", "won ID", "fights N", "achievement ID"."""
+    """Is one condition true? "commands N", "tool NAME N", "won ID", "fights N", "achievement ID",
+    "answered LESSON N" (N of the lesson's own questions answered right)."""
     kind, *args = cond.split()
     if kind == "commands":
         return s["commands"] >= int(args[0])
@@ -66,6 +83,8 @@ def met(s, cond):
         return s["fights_won"] >= int(args[0])
     if kind == "achievement":
         return args[0] in s["achievements"]
+    if kind == "answered":
+        return answered(s, args[0]) >= int(args[1])
     raise ValueError(cond)
 
 
@@ -139,12 +158,12 @@ def own(lesson, kind):
 
 def passed(s, lesson):
     """You're through this lesson, and the ones after it may open: one of its fights won, one of the
-    achievements it prepares for earned, one of its commands used with success (see tool_uses), or
-    enough achievements in all (3 per step of depth)."""
+    achievements it prepares for earned, one of its commands used with success (see tool_uses), enough
+    of its questions answered right, or enough achievements in all (3 per step of depth)."""
     earned = s["achievements"]
     return (bool(set(lesson.get("fights", [])) & set(s["challenges"]))
             or any(a in earned for _, a in own(lesson, "achievement"))
-            or any(met(s, " ".join(t)) for t in own(lesson, "tool"))
+            or any(met(s, " ".join(t)) for t in own(lesson, "tool") + own(lesson, "answered"))
             or len(earned) >= to_pass(lesson))
 
 

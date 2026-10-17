@@ -27,6 +27,7 @@ TOPICS = {
     "logic": ("Logic", "meadow", "Paradox Sphinx"),
     "sql": ("SQL", "forest", "Deadlock Wyvern"),
     "network": ("Network", "water", "Latency Kraken"),
+    "ai": ("AI tools", "sand", "Mirage Djinn"),
 }
 
 CHAPTERS = [

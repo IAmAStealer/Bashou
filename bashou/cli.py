@@ -477,7 +477,7 @@ COMMANDS = [
             [("how", dict(nargs="?", help=argparse.SUPPRESS))]),                # bashou.bash moves it first
     Command("config", lambda a: config(a.name, a.value), ("bashou config", "settings, language and skills (bashou config list shows them)", SETTINGS),
             [("name", dict(nargs="?")), ("value", dict(nargs="?"))]),
-    Command("start", run("starter"), ("bashou start", "choose your starter (once)", SETTINGS), size=(60, 16)),
+    Command("start", run("starter"), ("bashou start", "choose your starter (once)", SETTINGS), size=(60, 18)),
     Command("export", run("transfer", "export", "full"),
             ("bashou export [--full]", "save your progress in a file, to carry it to another computer", SETTINGS),
             [("--full", dict(action="store_true", help="everything, counters included (default: achievements, pets, lessons, adventure)"))]),

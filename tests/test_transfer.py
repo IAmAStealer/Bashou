@@ -91,8 +91,8 @@ class BlockTest(unittest.TestCase):
         data = transfer.payload(played(), "minimal")
         self.assertEqual(set(data), {"achievements", "starter", "pets", "ponies", "lessons", "challenges", "adventure",
                                      "ladder_best", "starter_best"})
-        self.assertEqual(set(data["lessons"]), {"read", "met", "passed"})
-        self.assertLessEqual(set(data["adventure"]), {"levels", "chapters_done", "right"})
+        self.assertEqual(set(data["lessons"]), {"read", "met", "passed", "right"})
+        self.assertLessEqual(set(data["adventure"]), {"levels", "chapters_done"})
         text = json.dumps(data)
         for private in ("2026", "grep -r", "pet_size", "1760000000"):    # no dates, commands or settings
             self.assertNotIn(private, text)

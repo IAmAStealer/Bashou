@@ -144,7 +144,7 @@ def skills_choice(value):
 
 def lessons_progress(value):
     value = {**LESSONS, **kind(dict)(value)}
-    return {**value, **{k: list_of(kind(str))(value[k]) if isinstance(value[k], list) else [] for k in ("read", "opened", "met")},
+    return {**value, **{k: list_of(kind(str))(value[k]) if isinstance(value[k], list) else [] for k in ("read", "opened", "met", "right")},
             "page": value["page"] if isinstance(value["page"], dict) else {}}
 
 
@@ -169,7 +169,7 @@ def settings_of(value):
     return {k: v for k, v in kind(dict)(value).items() if k in SETTINGS and SETTINGS[k].fits(v)}
 
 
-LESSONS = {"read": [], "opened": [], "page": {}, "met": []}
+LESSONS = {"read": [], "opened": [], "page": {}, "met": [], "right": []}
 PROJECTS = {"current": "", "done": {}, "days": []}
 SPOT = {"best": 0, "games": 0, "kinds": [], "clean": 0}
 

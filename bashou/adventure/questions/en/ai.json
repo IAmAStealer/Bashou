@@ -1,0 +1,158 @@
+[
+ {
+  "id": "ai-1-01",
+  "level": 1,
+  "q": "You start a new chat with an AI coding tool. What does it know about yesterday's chat?",
+  "choices": [
+   "Nothing, unless a file or a memory brings it back",
+   "Everything you said yesterday",
+   "Only the last answer it gave",
+   "What your shell history holds"
+  ],
+  "answer": 0,
+  "explain": "A model only sees what is in its context window right now: the chat, the files it read, the instructions loaded at the start. A new chat starts empty. To carry knowledge over, tools load instruction files (CLAUDE.md, AGENTS.md) or notes they keep, at the start of every session."
+ },
+ {
+  "id": "ai-1-02",
+  "level": 1,
+  "q": "An AI tool says its context is 80% full. What is filling up?",
+  "choices": [
+   "Everything it sees now: chat, files read, outputs",
+   "Your hard disk",
+   "The list of models you may use",
+   "Your monthly bill"
+  ],
+  "answer": 0,
+  "explain": "The context window is the text the model sees at once, counted in tokens (pieces of words). Your messages, its answers, every file it read and every command output take room. Close to full, old parts are summarized or dropped, and details get lost: an exact rule, a file name."
+ },
+ {
+  "id": "ai-1-03",
+  "level": 1,
+  "q": "Which of these belongs in a project's CLAUDE.md or AGENTS.md?",
+  "choices": [
+   "How to run the tests: python3 -m unittest",
+   "The database password",
+   "Yesterday's whole chat",
+   "A copy of every source file"
+  ],
+  "answer": 0,
+  "explain": "The instruction file is read at the start of every session: keep it short and useful (test commands, conventions, what not to touch). Never a password or a key: the file is usually committed, and all of it is sent to the model. The code itself, the AI can open when it needs it."
+ },
+ {
+  "id": "ai-1-04",
+  "level": 1,
+  "q": "You ask an AI tool for a big change across many files. What do you ask for first?",
+  "choices": [
+   "A plan: the steps and the files it will change",
+   "All the code at once, to save time",
+   "Only the tests, never the code",
+   "Nothing: let it guess"
+  ],
+  "answer": 0,
+  "explain": "A plan is quick to read and quick to fix; 600 changed lines are not. Ask for the steps, the files and the approach, correct what's wrong, then let it write. Many tools have a plan mode for this: in Claude Code, Shift+Tab switches to it, and it reads and proposes without editing anything."
+ },
+ {
+  "id": "ai-1-05",
+  "level": 1,
+  "q": "The AI says \"Done, all fixed!\". What do you check before trusting it?",
+  "choices": [
+   "The diff and the test results",
+   "Nothing: it said done",
+   "How long it took",
+   "That the answer is polite"
+  ],
+  "answer": 0,
+  "explain": "An AI can be sure of itself and wrong: it may say done while a test still fails. Read what changed (git diff shows every line added or removed) and run the tests yourself. You are the one who keeps the change, so you are the one who checks it."
+ },
+ {
+  "id": "ai-1-06",
+  "level": 1,
+  "q": "The AI's plan says \"step 4: delete the old users table\". You never asked for that. What do you do?",
+  "choices": [
+   "Ask why, and drop the step if it isn't needed",
+   "Approve: the AI knows best",
+   "Approve, and make a backup later",
+   "Close the terminal"
+  ],
+  "answer": 0,
+  "explain": "Reviewing the plan is where you catch surprises before they happen. A step you didn't ask for often comes from a wrong guess about your goal. Ask why; if it isn't needed, say so and get a new plan. Deleting data is the kind of step that never goes ahead without your clear yes."
+ },
+ {
+  "id": "ai-2-01",
+  "level": 2,
+  "q": "After two hours of chat, the AI forgets a rule you gave at the start and repeats an old mistake. What helps most?",
+  "choices": [
+   "A fresh session with a short summary",
+   "Repeating the rule in capitals ten times",
+   "Going on: it will remember in the end",
+   "Asking it to try harder"
+  ],
+  "answer": 0,
+  "explain": "A long chat fills the context: early messages get summarized away, and failed attempts stay in view and pull the model back. Start fresh (/clear in Claude Code) with what matters: the goal, what failed, what you decided. A rule needed every time goes in the instruction file."
+ },
+ {
+  "id": "ai-2-02",
+  "level": 2,
+  "q": "Your AGENTS.md has grown to 900 lines. What is the likely effect?",
+  "choices": [
+   "It costs context, and its rules get followed less",
+   "The tool refuses to start",
+   "Nothing: longer is always better",
+   "The model learns it forever"
+  ],
+  "answer": 0,
+  "explain": "The file is loaded into every session, so every line takes room in the context, and a long file buries the rules that matter: short, specific instructions are followed more reliably. Keep what applies everywhere; move details to files read only when needed. Claude Code's docs advise under 200 lines."
+ },
+ {
+  "id": "ai-2-03",
+  "level": 2,
+  "q": "The plan has 12 steps. How do you carry it out safely?",
+  "choices": [
+   "Step by step, checking each (diff, tests)",
+   "All 12 at once, then read the result",
+   "Skipping the tests to go faster",
+   "Letting it push each step unread"
+  ],
+  "answer": 0,
+  "explain": "Small steps keep mistakes small: after each one, read the diff, run the tests, commit. If step 7 breaks something, you know it was step 7, and step 6 is safe in git. A big change checked only at the end mixes every mistake together."
+ },
+ {
+  "id": "ai-2-04",
+  "level": 2,
+  "q": "Tests fail after the AI's change, and it offers to edit the tests so they pass. What do you check?",
+  "choices": [
+   "Whether the test or the code is wrong",
+   "Nothing: green tests mean it works",
+   "That the tests run faster",
+   "That the test file got shorter"
+  ],
+  "answer": 0,
+  "explain": "A test says what the code must do. Changing it to match broken code hides the bug instead of fixing it. Sometimes the test really is out of date (the behavior changed on purpose): that's your decision. Ask why it fails, and read a test change as carefully as any other."
+ },
+ {
+  "id": "ai-3-01",
+  "level": 3,
+  "q": "CLAUDE.md says \"never run deploy.sh\". Does that make sure it never runs?",
+  "choices": [
+   "No: it's advice; block it with permissions or a hook",
+   "Yes: the model always obeys it",
+   "Yes, if it's written in capitals",
+   "No: the file is ignored by default"
+  ],
+  "answer": 0,
+  "explain": "Instruction files are context: the model reads them and usually follows them, but nothing enforces them. A rule that must always hold (never deploy, never delete data) belongs where the tool enforces it: permission settings, a hook that refuses the command, or no access to the credentials at all."
+ },
+ {
+  "id": "ai-3-02",
+  "level": 3,
+  "q": "Why write the plan's decisions down (a plan file, the pull request) before the AI codes?",
+  "choices": [
+   "A new session or a teammate gets the why too",
+   "The AI types faster with a file",
+   "Git refuses commits without a plan",
+   "It hides the plan from the AI"
+  ],
+  "answer": 0,
+  "explain": "The chat gets summarized or cleared; a file stays. When the context is reset, or someone reviews the change next week, the decisions and their reasons are still there. Keep it short: the goal, the choices made and why, the steps left."
+ }
+]

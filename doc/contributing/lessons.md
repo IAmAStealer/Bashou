@@ -46,7 +46,11 @@ No code needed: a lesson is one JSON file.
   fights or earn 6 achievements (2/6)").
 - `masters`: what shows the player knows it now (usually the fights it prepares). All must hold;
   `a | b` holds when one side does. Conditions: `commands N`, `tool NAME N` (used N times),
-  `won FIGHT_ID`, `fights N` (won), `achievement ID`.
+  `won FIGHT_ID`, `fights N` (won), `achievement ID`, `answered LESSON_ID N` (N of the lesson's
+  `questions` answered right).
+- `questions` (optional): ids of adventure questions that belong to this lesson. With an `answered`
+  condition, the lesson ends on a quiz of those not answered right yet, and right answers in the
+  adventure count too: the way to pass a lesson with no fights (AI tools).
 - `recall`: ids of adventure questions about this lesson (`bashou/adventure/questions`). The first
   time a lesson opens, the library asks 2 of the `recall` questions of the lessons before it: a
   warm-up on the bricks it builds on.

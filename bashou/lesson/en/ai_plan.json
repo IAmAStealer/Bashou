@@ -1,0 +1,160 @@
+{
+ "id": "ai_plan",
+ "order": 540,
+ "skill": "ai",
+ "after": [
+  "ai_context"
+ ],
+ "masters": [
+  "answered ai_plan 3"
+ ],
+ "questions": [
+  "ai-1-04",
+  "ai-1-05",
+  "ai-1-06",
+  "ai-2-03",
+  "ai-2-04",
+  "ai-3-02"
+ ],
+ "recall": [
+  "ai-1-04",
+  "ai-1-05"
+ ],
+ "title": "AI tools: plan before code",
+ "summary": "Ask for a plan, review it like a colleague's proposal, go step by step, and check the result yourself.",
+ "pages": [
+  {
+   "scheme": [
+    " you: \"add a login to the app\"",
+    "        │",
+    "        ▼",
+    " AI: 14 files, 600 lines changed",
+    "        │",
+    "        ▼",
+    " you: …is that what I meant?"
+   ],
+   "point": 3,
+   "mark": [
+    "600 lines changed"
+   ],
+   "text": [
+    "An AI tool writes code much faster than you can read it. If it misunderstood the goal, you find out after 600 changed lines.",
+    "",
+    "- A plan is short: the steps, the files, the approach. It takes a minute to read.",
+    "- Fixing a wrong plan costs one sentence. Fixing wrong code costs an afternoon."
+   ]
+  },
+  {
+   "scheme": [
+    " you: \"add a login. Plan first, no code\"",
+    "        │",
+    "        ▼",
+    " AI reads the code, then proposes:",
+    "  1. add a users table",
+    "  2. add /login and /logout pages",
+    "  3. drop the old sessions table",
+    "  4. tests for both pages"
+   ],
+   "point": 0,
+   "mark": [
+    "Plan first, no code"
+   ],
+   "text": [
+    "So ask for the plan before the code: say it in your request, or use a plan mode when the tool has one.",
+    "",
+    "- In plan mode the AI reads files and proposes, but changes nothing until you agree.",
+    "- Claude Code: press Shift+Tab until it shows plan mode, or start it with claude --permission-mode plan.",
+    "- Other tools call it plan mode or ask mode."
+   ]
+  },
+  {
+   "scheme": [
+    "  1. add a users table",
+    "  2. add /login and /logout pages",
+    "  3. drop the old sessions table   ← why?",
+    "  4. tests for both pages",
+    "",
+    " missing: how are passwords stored?"
+   ],
+   "point": 2,
+   "mark": [
+    "← why?",
+    "missing:"
+   ],
+   "text": [
+    "Read the plan like a colleague's proposal. You know what the AI doesn't: the goal, the users, what must not break.",
+    "",
+    "- A step you didn't ask for (deleting data, a new dependency): ask why.",
+    "- Something missing (how passwords are stored, what happens on an error): say so.",
+    "- A wrong guess about the goal: correct it now, in one sentence.",
+    "",
+    "Then ask for the corrected plan, and decide."
+   ]
+  },
+  {
+   "scheme": [
+    " step 1 ─▶ diff ─▶ tests ✔ ─▶ commit",
+    " step 2 ─▶ diff ─▶ tests ✔ ─▶ commit",
+    " step 3 ─▶ diff ─▶ tests ✘",
+    "                        └─▶ fix step 3 only",
+    "",
+    " git: step 2 is safe, whatever happens"
+   ],
+   "point": 2,
+   "mark": [
+    "tests ✘"
+   ],
+   "text": [
+    "Carry out the plan in small steps, and check each one before the next.",
+    "",
+    "- After each step: read the diff, run the tests, commit.",
+    "- When a step breaks something, you know which one, and the steps before it are safe in git.",
+    "- A big change checked only at the end mixes every mistake together."
+   ]
+  },
+  {
+   "scheme": [
+    " AI: \"Done, all tests pass!\"",
+    "",
+    " $ git diff --stat",
+    "  src/login.py        | 42 ++++++++",
+    "  tests/test_login.py |  3 ---",
+    " $ python3 -m unittest",
+    "  OK      ← but what did those 3 lines test?"
+   ],
+   "point": 4,
+   "mark": [
+    "3 ---",
+    "OK"
+   ],
+   "text": [
+    "\"Done\" is a claim, not a proof: an AI can be sure of itself and wrong.",
+    "",
+    "- git diff shows every line that changed. Read it: you're the one who keeps the change.",
+    "- Run the tests yourself. Lines removed from a test deserve a question: was the test wrong, or was it made to pass?",
+    "- A change you can't explain: ask, or don't keep it."
+   ]
+  },
+  {
+   "scheme": [
+    " PLAN.md",
+    " goal:     log in with an email",
+    " decided:  hash passwords (bcrypt), never",
+    "           store them plain: safer if leaked",
+    " done:     steps 1, 2",
+    " next:     step 3"
+   ],
+   "point": 2,
+   "mark": [
+    "decided:"
+   ],
+   "text": [
+    "Write the plan and its decisions in a file (or in the pull request) before the code starts.",
+    "",
+    "- The chat gets summarized or cleared; a file stays.",
+    "- A new session, or a teammate next week, gets the why and not only the what.",
+    "- Keep it short: the goal, the choices and their reasons, the steps left."
+   ]
+  }
+ ]
+}

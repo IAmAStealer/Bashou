@@ -12,8 +12,8 @@ import sys
 from .. import achievements, challenges, creatures, progress, render, skills, state, terminal
 from ..adventure import quiz
 from ..i18n import _
-from . import (HERE, by_id, first_open, load, met, own, passed, progress_of, read, shown, skills_of, status, to_pass,
-               unlocked, waiting_for)
+from . import (HERE, answered, by_id, first_open, load, met, own, passed, progress_of, read, record_right, right, shown,
+               skills_of, status, to_pass, unlocked, waiting_for)
 from ..render import ESC, BOLD, DIM, RESET, REV, GOOD, BAD
 
 ACCENT = f"{ESC}[38;2;240;200;110m"
@@ -150,31 +150,50 @@ def recall_ids(s, lesson):
     return ids
 
 
-def warmup(s, lesson, rng=None):
-    """Up to WARMUP questions, their choices shuffled like in the adventure (quiz.pick)."""
-    rng = rng or random.Random()
+END_QUIZ = 4         # questions at the end of a lesson that passes with right answers ("answered")
+
+
+def questions(s, ids, n, rng):
+    """Up to n of these questions (those of your systems), their choices shuffled like in the adventure."""
     systems = skills.oses(s)
     pool = []
-    for qid in recall_ids(s, lesson):
+    for qid in ids:
         q = next((q for q in quiz.bank(qid.rsplit("-", 2)[0]) if q["id"] == qid), None)
         if q and skills.shows(q, systems):                  # not a Linux question on a Mac
             pool.append(q)
     found = []
-    for q in rng.sample(pool, min(WARMUP, len(pool))):
+    for q in rng.sample(pool, min(n, len(pool))):
         order = list(range(len(q["choices"])))
         rng.shuffle(order)
         found.append({**q, "choices": [q["choices"][i] for i in order], "answer": order.index(q["answer"])})
     return found
 
 
-def warmup_screen(lesson, questions, total, pos, chosen, cols, lines):
-    """(row, col, text) pieces: the question, its choices, and once answered, the explanation."""
+def warmup(s, lesson, rng=None):
+    """Up to WARMUP questions on the lessons before this one."""
+    return questions(s, recall_ids(s, lesson), WARMUP, rng or random.Random())
+
+
+def end_quiz(s, lesson, rng=None):
+    """Up to END_QUIZ of the lesson's own questions you haven't answered right yet."""
+    done = set(right(s))
+    return questions(s, [q for q in lesson.get("questions", []) if q not in done], END_QUIZ, rng or random.Random())
+
+
+def warmup_screen(lesson, questions, total, pos, chosen, cols, lines, final=False):
+    """(row, col, text) pieces: the question, its choices, and once answered, the explanation. `final`:
+    the quiz at the end of the lesson instead of the warm-up."""
     q = questions[0]
     width = min(cols - 4, 76)
-    head = "🦉 " + _("Warm-up before “{title}”").format(title=lesson["title"]) + f" · {total - len(questions) + 1}/{total}"
+    head = "🦉 " + (_("Quiz: “{title}”") if final else _("Warm-up before “{title}”")).format(title=lesson["title"]) \
+        + f" · {total - len(questions) + 1}/{total}"
     out = [(1 + k, 2, part) for k, part in enumerate(render.fit(f"{TITLE}{BOLD}{head}", width))]
     row = len(out) + 2
-    for part in render.wrap(_("What you learned just before: does it still come back?"), width, 2):
+    why = _("Show what you understood: {n} right answers to this lesson's questions pass it, here or "
+            "in the adventure.").format(n=next((c.split()[2] for c in lesson.get("masters", [])
+                                               if c.startswith("answered ")), END_QUIZ)) if final \
+        else _("What you learned just before: does it still come back?")
+    for part in render.wrap(why, width, 2):
         out.append((row, 2, DIM + part + RESET))
         row += 1
     row += 1
@@ -196,9 +215,10 @@ def warmup_screen(lesson, questions, total, pos, chosen, cols, lines):
         for part in render.wrap(verdict + " " + q["explain"], width, 12):
             out.append((row, 2, part))
             row += 1
-        keys = _("Enter: next question") if len(questions) > 1 else _("Enter: open the lesson")
+        keys = _("Enter: next question") if len(questions) > 1 else \
+            _("Enter: close the lesson") if final else _("Enter: open the lesson")
     else:
-        keys = _("↑/↓, Enter: answer · q: skip the warm-up")
+        keys = _("↑/↓, Enter: answer · q: skip the quiz") if final else _("↑/↓, Enter: answer · q: skip the warm-up")
     out.append((lines, 2, DIM + keys + RESET))
     return out
 
@@ -209,7 +229,8 @@ class Library:
         shell = "zsh" if os.environ.get("BASHOU_SHELL") == "zsh" else "bash"     # the loaders export it
         self.all = lessons = for_os(for_shell(for_editor(lessons, state.setting(self.s, "editor")), shell),
                                     skills.oses(self.s))
-        self.quiz, self.choice, self.chosen = [], 0, None     # the warm-up, while it's on
+        self.quiz, self.choice, self.chosen = [], 0, None     # the warm-up or the end quiz, while it's on
+        self.final = False                                    # the quiz is the end quiz
         self.lessons = shown(self.s, lessons)
         self.pos = 0
         self.lesson = None             # the lesson being read, or None on the list
@@ -339,6 +360,13 @@ class Library:
             if notes:
                 self.message += " " + " ".join(notes)
 
+    def finish(self):
+        """The last page read: the end quiz if the lesson has one, then back to the list."""
+        self.quiz, self.choice, self.chosen = end_quiz(self.s, self.lesson), 0, None
+        self.quiz_total, self.final = len(self.quiz), bool(self.quiz)
+        if not self.quiz:
+            self.leave(finished=True)
+
     def warmup_key(self, k):
         if k == "quit":
             self.quiz = []
@@ -349,8 +377,15 @@ class Library:
                 self.choice = (self.choice + 1) % len(self.quiz[0]["choices"])
             elif k == "enter":
                 self.chosen = self.choice
+                if self.chosen == self.quiz[0]["answer"]:
+                    with state.locked() as s:
+                        record_right(s, self.quiz[0]["id"])
+                    self.s = state.load()
         elif k == "enter":
             self.quiz, self.choice, self.chosen = self.quiz[1:], 0, None
+        if not self.quiz and self.final:
+            self.final = False
+            self.leave(finished=True)
         return True
 
     def key(self, k):
@@ -364,7 +399,7 @@ class Library:
                 self.page = max(0, self.page - 1)
             elif k == "enter":
                 if self.page == last:
-                    self.leave(finished=True)
+                    self.finish()
                 else:
                     self.page += 1
             elif k == "quit":
@@ -384,7 +419,7 @@ class Library:
 
     def screen(self, cols, lines):
         if self.lesson and self.quiz:
-            return warmup_screen(self.lesson, self.quiz, self.quiz_total, self.choice, self.chosen, cols, lines)
+            return warmup_screen(self.lesson, self.quiz, self.quiz_total, self.choice, self.chosen, cols, lines, self.final)
         if self.lesson:
             return page_screen(self.lesson, self.page, cols, lines, self.breath, self.blink)
         return self.list_screen(cols, lines)
@@ -441,6 +476,9 @@ def describe(cond, s=None):
     if kind == "achievement":
         a = next((a for a in achievements.ALL if a.id == args[0]), None)
         return _("earn the achievement “{name}”").format(name=_(a.name) if a else args[0])
+    if kind == "answered":
+        text = _("answer {n} of its questions right").format(n=args[1])
+        return text + (f" ({min(answered(s, args[0]), int(args[1]))}/{args[1]})" if s else "")
     return cond
 
 
@@ -492,7 +530,7 @@ def ways_to_pass(s, before):
              for a in achievements.ALL if a.id == c.split()[1]]
     if names:
         ways.append(_("earn {achievements}").format(achievements=_(" or ").join(names)))
-    tools = own(before, "tool")
+    tools = own(before, "tool") + own(before, "answered")
     if tools:
         ways.append(_(" or ").join(describe(" ".join(t), s) for t in tools))
     n = to_pass(before)

@@ -160,8 +160,8 @@ compagnon pour tous tes terminaux, et il ne dessine jamais par-dessus ton texte.
   25 secondes ; 5 erreurs terminent la partie.
 - **`bashou arena`** : viens te battre quand tu veux. Un combat chronométré, ou une enquête de sécurité sans
   chrono (un fichier caché, une porte dérobée dans cron, un binaire SUID).
-- **`bashou adventure`** : une balade à travers 12 thèmes (logique de code, bash, Linux, systemd, Python, Rust,
-  C, Debian, Rocky Linux, CI/CD, SQL, réseaux) avec 382 questions sur ce qui tourne mal et ce qu'il faut
+- **`bashou adventure`** : une balade à travers 13 thèmes (logique de code, bash, Linux, systemd, Python, Rust,
+  C, Debian, Rocky Linux, CI/CD, SQL, réseaux, outils d'IA) avec 394 questions sur ce qui tourne mal et ce qu'il faut
   vérifier en premier, des boss, et des coffres qui s'ouvrent avec de vraies commandes.
 
 ![bashou fight : une Planète et ses cœurs face à l'Hydre des logs, la tâche dans une bulle, et le shell de
