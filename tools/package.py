@@ -3,19 +3,25 @@
     python3 tools/package.py build v0.4.1 dist/          # dist/bashou_0.4.1_all.deb, bashou-0.4.1-1.noarch.rpm
     python3 tools/package.py repo dist/ site/ KEYID      # site/deb, site/rpm, site/bashou.asc, signed with KEYID
     python3 tools/package.py site site/                  # only the share page, to try it: python3 -m http.server -d site
+    python3 tools/package.py formula v0.10.0 dist/bashou-0.10.0.tar.gz [URL]   # Homebrew's Formula/bashou.rb
 
 The code goes to /usr/share/bashou (the same tree as a clone, plus a VERSION file) and /usr/bin/bashou runs
 its commands, /etc/profile.d/bashou.sh turns the pet on in every user's interactive bash or zsh (not
 root's) and moves shells still loading a git copy to the package. `build` needs dpkg-deb for the
 .deb and rpmbuild for the .rpm (either is skipped when missing); `repo` needs apt-ftparchive, createrepo_c,
-rpmsign and gpg.
+rpmsign and gpg. `build` also writes bashou-X.Y.Z.tar.gz (the same tree, for Homebrew's formula: the tap
+repository IAmAStealer/homebrew-bashou, updated by packages.yml).
 """
 
+import gzip
+import hashlib
+import io
 import json
 import os
 import shutil
 import subprocess
 import sys
+import tarfile
 import tempfile
 from pathlib import Path
 
@@ -94,6 +100,39 @@ if [ "$1" -eq 0 ]; then {clean}; fi
 """
 
 
+# Homebrew (0.10.0): the tree in libexec, a wrapper like WRAPPER on opt/ (it stays across upgrades), the Mac's
+# own python3 (Homebrew needs Apple's command line tools, which bring it).
+FORMULA = """# Written by tools/package.py in IAmAStealer/Bashou at each release: changes here are overwritten.
+class Bashou < Formula
+  desc "{summary}"
+  homepage "{url}"
+  url "{tarball}"
+  sha256 "{sha256}"
+  license "MIT"
+
+  uses_from_macos "python"
+
+  def install
+    libexec.install Dir["*"]
+    (bin/"bashou").write <<~SH
+      #!/bin/sh
+      exec python3 "#{{opt_libexec}}/launch.py" bashou "$@"
+    SH
+  end
+
+  def caveats
+    <<~EOS
+      Meet your pet: run `bashou on`, then open a new terminal.
+      It adds one line to ~/.zshrc (and ~/.bashrc for a bash 4.4 or newer). `bashou off` hides the pet.
+    EOS
+  end
+
+  test do
+    assert_match "v#{{version}}", shell_output("#{{bin}}/bashou version")
+  end
+end
+"""
+
 DNF_REPO = f"""[bashou]
 name=Bashou
 baseurl={PAGES}/rpm/
@@ -127,6 +166,36 @@ def stage(dest, version):
     for path in [dest, *dest.rglob("*")]:
         path.chmod(0o755 if path.is_dir() or path.parent.name == "bin" else 0o644)
     return dest
+
+
+def tarball(version, out):
+    """bashou-VERSION.tar.gz: the /usr/share/bashou tree (with VERSION) in one folder, the same bytes each time
+    (brew checks the formula's sha256)."""
+    out = Path(out)
+    out.mkdir(parents=True, exist_ok=True)
+    path = out / f"bashou-{version}.tar.gz"
+    with tempfile.TemporaryDirectory() as tmp:
+        share = stage(Path(tmp) / "tree", version) / PREFIX
+        data = io.BytesIO()
+        with tarfile.open(fileobj=data, mode="w", format=tarfile.PAX_FORMAT) as tar:
+            for file in sorted([share, *share.rglob("*")]):
+                info = tar.gettarinfo(file, f"bashou-{version}/{file.relative_to(share)}".rstrip("/.").rstrip("/"))
+                info.uid = info.gid = info.mtime = 0
+                info.uname = info.gname = ""
+                if file.is_dir():
+                    tar.addfile(info)
+                else:
+                    with open(file, "rb") as fh:
+                        tar.addfile(info, fh)
+    with open(path, "wb") as raw, gzip.GzipFile(fileobj=raw, mode="wb", mtime=0, filename="") as fh:
+        fh.write(data.getvalue())
+    return path
+
+
+def formula(version, sha256, url=None):
+    """The tap's Formula/bashou.rb for this release."""
+    return FORMULA.format(summary=SUMMARY.removeprefix("A ").capitalize().replace('"', "'"), url=URL, sha256=sha256,
+                          tarball=url or f"{URL}/releases/download/v{version}/bashou-{version}.tar.gz")
 
 
 def build_deb(tree, version, out):
@@ -171,6 +240,7 @@ def build(tag, out):
             made.append(build_deb(tree, version, out))
         if shutil.which("rpmbuild"):
             made.append(build_rpm(tree, version, out, tmp))
+    made.append(tarball(version, out))
     for path in made:
         print(path)
     return 0 if made else 1
@@ -255,6 +325,10 @@ def main(argv):
     if len(argv) == 2 and argv[0] == "site":
         Path(argv[1]).mkdir(parents=True, exist_ok=True)
         site_pages(Path(argv[1]))
+        return 0
+    if len(argv) in (3, 4) and argv[0] == "formula":
+        sha256 = hashlib.sha256(Path(argv[2]).read_bytes()).hexdigest()
+        print(formula(argv[1].lstrip("v"), sha256, *argv[3:]), end="")
         return 0
     if len(argv) == 4 and argv[0] == "repo":
         return repo(*argv[1:])

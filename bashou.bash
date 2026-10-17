@@ -21,6 +21,8 @@ fi
 unset _bashou_pkg
 
 BASHOU_DIR=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
+# Homebrew: opt/ always points at the current version; the Cellar folder goes away at the next brew upgrade.
+[[ $BASHOU_DIR == */Cellar/bashou/*/libexec ]] && BASHOU_DIR=${BASHOU_DIR%/Cellar/bashou/*}/opt/bashou/libexec
 export BASHOU_SHELL=bash                             # the arena and `bashou on` follow your shell
 _bashou_data=${BASHOU_DATA:-$HOME/.local/share/bashou}
 _bashou_events=$_bashou_data/events.$$

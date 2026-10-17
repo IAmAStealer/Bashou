@@ -13,10 +13,10 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from . import procs, state
+from . import brew, procs, state
 from .i18n import _
 
-LOADER = Path(__file__).resolve().parent.parent / "bashou.bash"
+LOADER = brew.stable(Path(__file__).resolve().parent.parent) / "bashou.bash"   # brew: opt/, not Cellar/
 ZSH_LOADER = LOADER.with_suffix(".zsh")
 SHELLS = ("bash", "zsh")
 

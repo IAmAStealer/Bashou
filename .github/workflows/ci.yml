@@ -135,6 +135,20 @@ jobs:
           { /usr/bin/python3 -m tests.watchdog "${others[@]}" && /usr/bin/python3 -m tests.watchdog tests.test_shell; } 2>&1 | tee tests.log && exit 0
           /usr/bin/python3 -c "import sys; t = open('tests.log').read(); t = t[t.find('====='):][:6000] or t[-6000:]; print('::error title=Tests failed on macOS::' + t.replace('%', '%25').replace('\r', '').replace('\n', '%0A'))"
           exit 1
+      - name: The Homebrew formula installs and runs
+        run: |
+          # The formula the tap gets at a release, pointing at a tarball built here, in a local tap.
+          /usr/bin/python3 tools/package.py build v0.0.0 dist
+          brew tap-new --no-git bashou/local
+          tap=$(brew --repository bashou/local)
+          /usr/bin/python3 tools/package.py formula v0.0.0 dist/bashou-0.0.0.tar.gz "file://$PWD/dist/bashou-0.0.0.tar.gz" > "$tap/Formula/bashou.rb"
+          HOMEBREW_NO_INSTALL_FROM_API=1 brew install --quiet bashou/local/bashou
+          brew test bashou/local/bashou
+          bashou version | grep -q v0.0.0
+          export BASHOU_SHELL=zsh HOME="$RUNNER_TEMP/home" && mkdir -p "$HOME"
+          bashou on
+          grep -qx "source $(brew --prefix)/opt/bashou/libexec/bashou.zsh" "$HOME/.zshrc"
+          brew uninstall --quiet bashou
 
   # A commit on main with a line "release: v1.2.3" becomes that release once every check passed.
   release:

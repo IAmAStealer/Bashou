@@ -9277,6 +9277,7 @@
   "Bash cuts a command line at every space: cp {name} backup/ hands cp three names, not two, and copies two other files. ls -l shows them all. Quotes keep the words together as one name.",
   "Bash cuts every line at its spaces before running it. A name with a space becomes two names, unless quotes keep it together. Quote every \"$variable\" too, for the same reason.",
   "Bash: grep, sed, awk, find, pipes",
+  "Bashou came from Homebrew: brew updates it, with your other formulae.",
   "Bashou came from a package: {manager} updates it, with the rest of your system.",
   "Bashou can't read {file}: {error}",
   "Bashou couldn't write the save here ({error}). Go to a folder you can write in, like your home folder (cd ~), and run it again.",

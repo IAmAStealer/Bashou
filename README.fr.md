@@ -60,24 +60,23 @@ et le dit. Seulement zsh sur cette machine ? Charge `bashou.zsh` depuis ton `~/.
 echo 'source ~/.bashou/bashou.zsh' >> ~/.zshrc && source ~/.zshrc
 ```
 
-**macOS** (version de test, `macos-v0.9.1`) : Bashou tourne dans zsh, le shell du Mac.
+**macOS**, avec [Homebrew](https://brew.sh) : Bashou tourne dans zsh, le shell du Mac.
 
 ```bash
-curl -fsSLO https://github.com/IAmAStealer/Bashou/releases/download/macos-v0.9.1/install-macos.sh
-less install-macos.sh
-sh install-macos.sh
+brew install iamastealer/bashou/bashou
+bashou on
 ```
 
-La première ligne télécharge l'installeur, la deuxième te le montre (q pour sortir) : il est court, et lire un
-script avant de le lancer est une bonne habitude. La troisième le lance. Il vérifie que git et python3 sont là
-(ils viennent avec les outils en ligne de commande d'Apple ; s'ils manquent, il ouvre la fenêtre qui les
-installe, puis tu le relances), télécharge Bashou dans `~/.bashou` et le charge depuis ton `~/.zshrc`.
-Relance-le pour passer à la version qu'il indique.
+La première ligne ajoute le tap de Bashou (un petit dépôt avec la recette que suit brew) et l'installe. La
+deuxième ajoute une ligne à ton `~/.zshrc`, pour que ton compagnon vienne dans chaque nouveau terminal.
+`brew upgrade` le met à jour avec tes autres outils ; `bashou update` te le rappelle.
 Sur un Mac, les questions et les leçons parlent de macOS : celles propres à Linux (systemd, apt, dnf, `ip`,
 `ss`) sont mises de côté. Tu travailles aussi sur des serveurs Linux ? `bashou config os both` les ramène.
 Le bash fourni avec macOS est trop vieux pour Bashou (il faut la 4.4) : utilise zsh, ou un bash récent
-(`brew install bash`). Pour l'instant `bashou update` ne propose pas les versions macOS : une nouvelle version
-arrive avec son propre installeur.
+(`brew install bash`).
+Tu as utilisé l'installeur de test (`install-macos.sh`) ? Retire d'abord la ligne `source ~/.bashou/bashou.zsh`
+de ton `~/.zshrc` et le dossier `~/.bashou`. Tes compagnons et ta progression restent : ils sont dans
+`~/.local/share/bashou`.
 
 ## Quoi de neuf
 

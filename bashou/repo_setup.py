@@ -14,7 +14,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-from . import setup, state, which
+from . import brew, setup, state, which
 from .i18n import _
 
 SITE = "https://iamastealer.github.io/Bashou"
@@ -161,12 +161,20 @@ def offer(old_loader, bashrc=None, run=subprocess.run, asked=True):
 
 def upgrade(run=subprocess.run):
     """A package install: show the command that upgrades it, and run it if you say so."""
+    if brew.installed(setup.LOADER.parent):
+        print("  " + _("Bashou came from Homebrew: brew updates it, with your other formulae."))
+        return confirm(brew.UPGRADE, run)
     manager = "dnf" if system() == "rocky" else "apt"
     # --refresh: dnf re-reads a repository only every 48 hours, and Bashou knows about a release from GitHub
     # right away: without it, dnf said "Nothing to do" for two days after 0.5.0.
     text = ("sudo dnf upgrade --refresh bashou" if manager == "dnf"
             else "sudo apt update && sudo apt install --only-upgrade bashou")
     print("  " + _("Bashou came from a package: {manager} updates it, with the rest of your system.").format(manager=manager))
+    return confirm(text, run)
+
+
+def confirm(text, run):
+    """Show `text`, the command, and run it after a yes in a terminal."""
     print(f"    $ {text}")
     if not sys.stdin.isatty() or not ask(_("Run it now?")):
         return 0

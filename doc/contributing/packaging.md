@@ -12,6 +12,22 @@ Each release is also published as a `.deb` and a `.rpm` in two signed repositori
 - `.github/workflows/packages.yml` runs both after each release and force-pushes `site/` to the
   `gh-pages` branch. Only the newest version is kept.
 
+## Homebrew (macOS, 0.10.0)
+
+`tools/package.py build` also writes `bashou-X.Y.Z.tar.gz`: the same tree as the packages (with `VERSION`),
+the same bytes each time. The packages job attaches it to the release (in the signed `SHA256SUMS`), then the
+`tap` job writes `Formula/bashou.rb` (`tools/package.py formula`) with the tarball's sha256 and pushes it to
+the tap, `IAmAStealer/homebrew-bashou`. Users run `brew install iamastealer/bashou/bashou` then `bashou on`.
+
+brew keeps each version in `Cellar/bashou/VERSION/libexec` and deletes the old one after an upgrade, so the
+`~/.zshrc` line and the loaders use `opt/bashou/libexec` (`bashou/brew.py`). The formula uses the Mac's own
+python3 (`uses_from_macos "python"`: Homebrew needs Apple's command line tools, which bring it). The macOS
+CI job installs the formula from a local tap and checks `brew test`, `bashou version` and `bashou on`.
+
+The token: Settings > Developer settings > Fine-grained tokens, repository `IAmAStealer/homebrew-bashou` only,
+Contents read and write. Save it as the Actions secret `TAP_TOKEN` of this repository. Without it, the tap
+job warns and the formula stays as it was.
+
 ## One-time setup (owner)
 
 1. Create a signing key with no passphrase (the GitHub secret is what protects it), on a trusted machine:

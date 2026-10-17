@@ -46,20 +46,40 @@ td:first-child { white-space: nowrap; }
   border: 1px solid currentColor; margin-left: 4px; }
 .shell { color: var(--c-shell); } .run { color: var(--c-run); } .game { color: var(--c-game); }
 .data { color: var(--c-data); } .tool { color: var(--c-tool); }
-.flow { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
-.box { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--accent);
-  border-radius: 8px; padding: 10px 12px; }
-.box b { display: block; margin-bottom: 2px; }
-.box small { color: var(--muted); }
-.box.shell { border-left-color: var(--c-shell); } .box.run { border-left-color: var(--c-run); }
-.box.game { border-left-color: var(--c-game); } .box.data { border-left-color: var(--c-data); }
-.box.tool { border-left-color: var(--c-tool); }
-.box.shell b, .box.run b, .box.game b, .box.data b, .box.tool b { color: var(--text); }
-.arrow { color: var(--muted); font-size: 0.85rem; margin: 6px 0 14px; }
 pre { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px;
   overflow-x: auto; font: 0.85rem/1.5 ui-monospace, Menlo, Consolas, monospace; }
 .note { background: var(--accent-soft); border-radius: 8px; padding: 10px 14px; margin: 14px 0; }
 footer { color: var(--muted); font-size: 0.85rem; margin-top: 48px; }
+.diagram { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px;
+  overflow-x: auto; margin: 12px 0; }
+.diagram svg { display: block; width: 100%; min-width: 760px; height: auto; }
+.diagram figcaption { color: var(--muted); font-size: 0.85rem; margin-top: 6px; }
+svg text { fill: var(--text); font: 13px system-ui, -apple-system, "Segoe UI", sans-serif; }
+svg text.mono { font: 12px ui-monospace, Menlo, Consolas, monospace; }
+svg text.small { font-size: 11.5px; fill: var(--muted); }
+svg text.head { font-weight: 600; }
+svg .node { fill: var(--panel); stroke: var(--line); stroke-width: 1.5; }
+svg .life { stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 4 4; }
+svg .msg { stroke: var(--muted); stroke-width: 1.5; fill: none; }
+svg .bad { stroke: var(--c-game); }
+svg .good { stroke: var(--c-shell); }
+svg .k-shell { stroke: var(--c-shell); } svg .k-run { stroke: var(--c-run); }
+svg .k-game { stroke: var(--c-game); } svg .k-data { stroke: var(--c-data); } svg .k-tool { stroke: var(--c-tool); }
+svg .fill-shell { fill: var(--c-shell); } svg .fill-run { fill: var(--c-run); } svg .fill-data { fill: var(--c-data); }
+svg .fill-game { fill: var(--c-game); } svg .fill-muted { fill: var(--muted); }
+.layers { display: grid; grid-template-columns: 1fr 44px; gap: 0 10px; }
+.layers .bands { display: grid; gap: 8px; }
+.band { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--accent);
+  border-radius: 8px; padding: 8px 12px; }
+.band h4 { margin: 0 0 6px; font-size: 0.9rem; }
+.band h4 small { color: var(--muted); font-weight: 400; }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chips code { font-size: 0.8rem; }
+.down { display: flex; flex-direction: column; align-items: center; color: var(--muted); font-size: 0.8rem; }
+.down .bar { flex: 1; width: 2px; background: var(--muted); }
+.down .tip { width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent;
+  border-top: 10px solid var(--muted); }
+.down span { writing-mode: vertical-rl; transform: rotate(180deg); margin: 6px 0; }
 </style>
 </head>
 <body>
@@ -70,34 +90,131 @@ footer { color: var(--muted); font-size: 0.85rem; margin-top: 48px; }
 
 <nav>
   <a href="#runtime">Runtime</a><a href="#tree">Tree</a><a href="#core">Core</a><a href="#commands">Commands</a>
-  <a href="#games">Games</a><a href="#data">Data</a><a href="#save">Save</a><a href="#rules">Rules</a>
+  <a href="#games">Games</a><a href="#data">Data</a><a href="#save">Save</a><a href="#rules">Rules</a><a href="#transfer">Export</a>
   <a href="#tests">Tests &amp; CI</a><a href="#docs">Docs</a>
 </nav>
 
 <h2 id="runtime">1. How a command reaches the pet</h2>
-<div class="flow">
-  <div class="box shell"><b>bashou.bash / bashou.zsh</b><small>Sourced from <code>~/.bashrc</code>. After each prompt, appends
-    <code>status⇥history line</code> to the events file (builtins only, no fork) and sends <code>SIGUSR1</code>.</small></div>
-  <div class="box run"><b>companion.py</b><small>One background process per terminal, started with
-    <code>launch.py bashou.companion &lt;shell pid&gt;</code>. Animates the pet, reads new events, shows bubbles.</small></div>
-  <div class="box run"><b>analyze.py</b><small>Turns a command line into tools, pipes and constructs
-    (<code>parse_log</code>).</small></div>
-  <div class="box run"><b>progress.py + achievements.py</b><small>Counters, unlocked pets, evolutions, notifications.</small></div>
-  <div class="box data"><b>state.py → state.json</b><small>One save shared by every terminal, behind a file lock.</small></div>
-</div>
-<p class="arrow">→ in order, left to right. The companion also calls <code>dialogue</code> (what to say), <code>behavior</code>
-(what the pet does), <code>render</code> (half-block drawing), <code>safety</code> (risky commands), <code>fight</code>
-(threats) and <code>update</code> (the daily fetch).</p>
+<figure class="diagram">
+<svg viewBox="0 0 980 420" role="img" aria-label="Sequence: the shell hook logs the command, pokes the companion, which reads it, updates the save and redraws the pet">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" class="fill-muted"/></marker>
+  </defs>
+  <!-- lanes -->
+  <g>
+    <rect class="node k-shell" x="20" y="14" width="120" height="44" rx="6"/>
+    <text class="head" x="80" y="35" text-anchor="middle">Terminal</text>
+    <text class="small" x="80" y="50" text-anchor="middle">you type</text>
+    <rect class="node k-shell" x="180" y="14" width="140" height="44" rx="6"/>
+    <text class="head" x="250" y="35" text-anchor="middle">bashou.bash</text>
+    <text class="small" x="250" y="50" text-anchor="middle">prompt hook</text>
+    <rect class="node k-data" x="350" y="14" width="140" height="44" rx="6"/>
+    <text class="head" x="420" y="35" text-anchor="middle">events.&lt;pid&gt;</text>
+    <text class="small" x="420" y="50" text-anchor="middle">~/.local/share/bashou</text>
+    <rect class="node k-run" x="520" y="14" width="140" height="44" rx="6"/>
+    <text class="head" x="590" y="35" text-anchor="middle">companion.py</text>
+    <text class="small" x="590" y="50" text-anchor="middle">one per terminal</text>
+    <rect class="node k-run" x="690" y="14" width="140" height="44" rx="6"/>
+    <text class="head" x="760" y="35" text-anchor="middle">analyze · progress</text>
+    <text class="small" x="760" y="50" text-anchor="middle">achievements</text>
+    <rect class="node k-data" x="850" y="14" width="110" height="44" rx="6"/>
+    <text class="head" x="905" y="35" text-anchor="middle">state.json</text>
+    <text class="small" x="905" y="50" text-anchor="middle">flock .lock</text>
+  </g>
+  <g>
+    <line class="life" x1="80" y1="58" x2="80" y2="405"/>
+    <line class="life" x1="250" y1="58" x2="250" y2="405"/>
+    <line class="life" x1="420" y1="58" x2="420" y2="405"/>
+    <line class="life" x1="590" y1="58" x2="590" y2="405"/>
+    <line class="life" x1="760" y1="58" x2="760" y2="405"/>
+    <line class="life" x1="905" y1="58" x2="905" y2="405"/>
+  </g>
+  <!-- messages -->
+  <g>
+    <text class="small" x="20" y="88">1</text>
+    <text x="165" y="86" text-anchor="middle">Enter · PS0 erases the pet</text>
+    <line class="msg" x1="80" y1="96" x2="246" y2="96" marker-end="url(#ar)"/>
+    <text class="small" x="80" y="114" text-anchor="start" dx="6">command runs, prompt comes back</text>
 
-<div class="flow">
-  <div class="box shell"><b>bashou &lt;command&gt;</b><small>A shell function in bashou.bash; handles
-    <code>on/off/here</code> itself and passes everything else on.</small></div>
-  <div class="box tool"><b>launch.py</b><small>Small entry point: <code>python3 launch.py bashou [args]</code>.</small></div>
-  <div class="box run"><b>__main__.py → cli.py</b><small>argparse: help, completion, small commands. Larger commands
-    go to their own modules through <code>cli.run(module)</code>.</small></div>
-  <div class="box game"><b>Feature module</b><small><code>board</code>, <code>adventure</code>, <code>lesson</code>,
-    <code>arena</code>, <code>spot</code>, <code>transfer</code>…</small></div>
-</div>
+    <text class="small" x="20" y="148">2</text>
+    <text class="mono" x="335" y="146" text-anchor="middle">status⇥history 1</text>
+    <line class="msg" x1="250" y1="156" x2="416" y2="156" marker-end="url(#ar)"/>
+    <text class="small" x="335" y="172" text-anchor="middle">append, builtins only</text>
+
+    <text class="small" x="20" y="206">3</text>
+    <text class="mono" x="420" y="204" text-anchor="middle">kill -USR1 $BASHOU_PID</text>
+    <line class="msg" x1="250" y1="214" x2="586" y2="214" marker-end="url(#ar)"/>
+    <text class="small" x="420" y="230" text-anchor="middle">dead? restart it (3 tries)</text>
+
+    <text class="small" x="20" y="264">4</text>
+    <text x="505" y="262" text-anchor="middle">read bytes after offset</text>
+    <line class="msg" x1="590" y1="272" x2="424" y2="272" marker-end="url(#ar)"/>
+
+    <text class="small" x="20" y="306">5</text>
+    <text class="mono" x="675" y="304" text-anchor="middle">parse_log()</text>
+    <line class="msg" x1="590" y1="314" x2="756" y2="314" marker-end="url(#ar)"/>
+    <text class="small" x="675" y="330" text-anchor="middle">tools, pipes → counters, unlocks</text>
+
+    <text class="small" x="20" y="352">6</text>
+    <text class="mono" x="832" y="350" text-anchor="middle">state.locked()</text>
+    <line class="msg" x1="760" y1="360" x2="901" y2="360" marker-end="url(#ar)"/>
+
+    <text class="small" x="20" y="390">7</text>
+    <text x="335" y="384" text-anchor="middle">redraw pet + bubble (half blocks, render.py)</text>
+    <line class="msg" x1="590" y1="394" x2="84" y2="394" marker-end="url(#ar)"/>
+  </g>
+</svg>
+<figcaption>Between commands the companion ticks every 0.25 s to animate, talk (dialogue.py) and check threats and updates.</figcaption>
+</figure>
+<h3>A <code>bashou</code> command</h3>
+<figure class="diagram">
+<svg viewBox="0 0 980 250" role="img" aria-label="Dispatch: the bashou shell function handles on/off/here, the rest goes through launch.py and cli.py, which imports big commands only when they run">
+  <defs>
+    <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" class="fill-muted"/></marker>
+  </defs>
+  <rect class="node k-shell" x="10" y="95" width="150" height="56" rx="6"/>
+  <text class="head" x="85" y="118" text-anchor="middle">bashou &lt;cmd&gt;</text>
+  <text class="small" x="85" y="136" text-anchor="middle">function, bashou.bash</text>
+
+  <rect class="node k-shell" x="10" y="190" width="150" height="50" rx="6"/>
+  <text class="mono" x="85" y="212" text-anchor="middle">on · off · here</text>
+  <text class="small" x="85" y="228" text-anchor="middle">start/stop the companion</text>
+  <line class="msg" x1="85" y1="151" x2="85" y2="186" marker-end="url(#ar2)"/>
+
+  <rect class="node k-tool" x="200" y="95" width="130" height="56" rx="6"/>
+  <text class="head" x="265" y="118" text-anchor="middle">launch.py</text>
+  <text class="small" x="265" y="136" text-anchor="middle">python3 entry point</text>
+  <line class="msg" x1="160" y1="123" x2="196" y2="123" marker-end="url(#ar2)"/>
+
+  <rect class="node k-run" x="370" y="95" width="150" height="56" rx="6"/>
+  <text class="head" x="445" y="118" text-anchor="middle">__main__ → cli.py</text>
+  <text class="small" x="445" y="136" text-anchor="middle">argparse, Command table</text>
+  <line class="msg" x1="330" y1="123" x2="366" y2="123" marker-end="url(#ar2)"/>
+
+  <rect class="node k-run" x="580" y="20" width="180" height="56" rx="6"/>
+  <text class="head" x="670" y="43" text-anchor="middle">small commands</text>
+  <text class="small" x="670" y="61" text-anchor="middle">pets, stats, config, reset…</text>
+  <path class="msg" d="M520,110 C550,110 550,48 576,48" marker-end="url(#ar2)"/>
+
+  <rect class="node k-run" x="580" y="170" width="180" height="56" rx="6"/>
+  <text class="mono" x="670" y="193" text-anchor="middle">cli.run("board")</text>
+  <text class="small" x="670" y="211" text-anchor="middle">importlib, only when it runs</text>
+  <path class="msg" d="M520,136 C550,136 550,198 576,198" marker-end="url(#ar2)"/>
+
+  <rect class="node k-game" x="800" y="140" width="170" height="104" rx="6"/>
+  <text class="head" x="885" y="162" text-anchor="middle">feature module</text>
+  <text class="mono" x="885" y="182" text-anchor="middle">board · adventure</text>
+  <text class="mono" x="885" y="198" text-anchor="middle">lesson · arena</text>
+  <text class="mono" x="885" y="214" text-anchor="middle">spot · transfer</text>
+  <text class="mono" x="885" y="230" text-anchor="middle">share · project…</text>
+  <line class="msg" x1="760" y1="198" x2="796" y2="198" marker-end="url(#ar2)"/>
+
+  <text class="small" x="445" y="180" text-anchor="middle">lazy imports keep</text>
+  <text class="small" x="445" y="195" text-anchor="middle">`bashou` fast to start</text>
+</svg>
+</figure>
 
 <h2 id="tree">2. Repository tree</h2>
 <pre>Bashou/
@@ -204,6 +321,53 @@ security) plus <code>trials.py</code> for the adventure chests. <code>fight.py</
 <tr><td>events file</td><td>Per terminal, appended by the shell hook, read by the companion.</td></tr>
 </table></div>
 
+<h3>Saving: one lock, no lost save</h3>
+<figure class="diagram">
+<svg viewBox="0 0 980 300" role="img" aria-label="state.locked(): lock, back up an older format, load, migrate, recover a broken save from prev or bak copies, let the caller change it, write tmp then rename">
+  <defs>
+    <marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" class="fill-muted"/></marker>
+  </defs>
+  <rect class="node k-data" x="10" y="30" width="140" height="58" rx="6"/>
+  <text class="mono" x="80" y="53" text-anchor="middle">flock(.lock)</text>
+  <text class="small" x="80" y="72" text-anchor="middle">one terminal at a time</text>
+
+  <rect class="node k-data" x="180" y="30" width="150" height="58" rx="6"/>
+  <text class="mono" x="255" y="53" text-anchor="middle">keep_old_format</text>
+  <text class="small" x="255" y="72" text-anchor="middle">older version → bak-*-vN</text>
+
+  <rect class="node k-data" x="360" y="30" width="150" height="58" rx="6"/>
+  <text class="mono" x="435" y="53" text-anchor="middle">load → read</text>
+  <text class="small" x="435" y="72" text-anchor="middle">clean fields, migrate()</text>
+
+  <rect class="node k-run" x="540" y="30" width="150" height="58" rx="6"/>
+  <text class="mono" x="615" y="53" text-anchor="middle">yield state</text>
+  <text class="small" x="615" y="72" text-anchor="middle">the caller changes it</text>
+
+  <rect class="node k-data" x="720" y="30" width="250" height="58" rx="6"/>
+  <text class="mono" x="845" y="53" text-anchor="middle">save: write .tmp → os.replace</text>
+  <text class="small" x="845" y="72" text-anchor="middle">atomic; copy to .prev once a day</text>
+
+  <line class="msg" x1="150" y1="59" x2="176" y2="59" marker-end="url(#ar3)"/>
+  <line class="msg" x1="330" y1="59" x2="356" y2="59" marker-end="url(#ar3)"/>
+  <line class="msg good" x1="510" y1="59" x2="536" y2="59" marker-end="url(#ar3)"/>
+  <line class="msg" x1="690" y1="59" x2="716" y2="59" marker-end="url(#ar3)"/>
+
+  <path class="msg bad" d="M435,88 L435,150" marker-end="url(#ar3)"/>
+  <text class="small" x="443" y="124">unreadable</text>
+  <rect class="node k-game" x="300" y="154" width="270" height="58" rx="6"/>
+  <text class="mono" x="435" y="177" text-anchor="middle">recover: move to broken-*</text>
+  <text class="small" x="435" y="196" text-anchor="middle">another terminal saved meanwhile? read that</text>
+
+  <path class="msg" d="M435,212 L435,246" marker-end="url(#ar3)"/>
+  <rect class="node k-game" x="230" y="250" width="410" height="42" rx="6"/>
+  <text x="435" y="276" text-anchor="middle">try state.json.prev, then bak-* newest first, else a new save</text>
+  <path class="msg good" d="M640,271 C780,271 780,200 780,92" marker-end="url(#ar3)"/>
+  <text class="small" x="788" y="180">restored</text>
+</svg>
+<figcaption><code>state.locked()</code> in <code>bashou/state.py</code>. Files are in <code>~/.local/share/bashou</code> (mode 700).</figcaption>
+</figure>
+
 <h2 id="rules">8. Architecture rules</h2>
 <div class="table-wrap"><table>
 <tr><th>Rule</th><th>Enforced by</th></tr>
@@ -215,7 +379,71 @@ security) plus <code>trials.py</code> for the adventure chests. <code>fight.py</
 <tr><td>Fights never reach the network; hints only propose installed tools.</td><td><code>test_network.py</code>, <code>which.py</code></td></tr>
 </table></div>
 
-<h2 id="tests">9. Tests, tools and CI</h2>
+<h3>Module layers</h3>
+<p>Every arrow of the import graph points down (or sideways inside a band): a module never imports one from a band above it. Built from <code>tests/test_layers.py</code>'s graph.</p>
+<div class="layers"><div class="bands">
+<div class="band" style="border-left-color:var(--c-shell)"><h4>Entry points <small>started by the shell or by <code>cli.run</code></small></h4><div class="chips"><code>__main__</code><code>cli</code><code>companion</code><code>transfer</code><code>translations</code></div></div>
+<div class="band" style="border-left-color:var(--c-game)"><h4>Features <small>one per command or screen</small></h4><div class="chips"><code>adventure.game</code><code>arena</code><code>security</code><code>fight</code><code>duel</code><code>board</code><code>evolve</code><code>learn</code><code>lesson.reader</code><code>project.command</code><code>spot.screen</code><code>share</code><code>update</code><code>repo_setup</code><code>setup</code><code>starter</code><code>pony</code><code>dialogue</code></div></div>
+<div class="band" style="border-left-color:var(--c-data)"><h4>Save and progress <small>what you did, kept in state.json</small></h4><div class="chips"><code>state</code><code>progress</code><code>achievements</code></div></div>
+<div class="band" style="border-left-color:var(--c-run)"><h4>Content and catalogs <small>rules and data, no drawing</small></h4><div class="chips"><code>challenges.*</code><code>lesson</code><code>project</code><code>spot</code><code>adventure.world</code><code>adventure.quiz</code><code>adventure.lessons</code><code>adventure.sprites</code><code>creatures</code><code>skills</code></div></div>
+<div class="band" style="border-left-color:var(--c-tool)"><h4>Foundations <small>import nothing, or only each other</small></h4><div class="chips"><code>i18n</code><code>render</code><code>terminal</code><code>adventure.canvas</code><code>adventure.scene</code><code>analyze</code><code>behavior</code><code>which</code><code>procs</code><code>safety</code><code>qr</code><code>art</code><code>changelog</code></div></div>
+</div><div class="down"><span>imports go down</span><div class="bar"></div><div class="tip"></div></div></div>
+
+<h2 id="transfer">9. Export and import</h2>
+<figure class="diagram">
+<svg viewBox="0 0 980 270" role="img" aria-label="Export: payload, JSON, zlib, base64, HMAC check, text block. Import: find the block, unpack with size limits, check HMAC, version and fields, then merge">
+  <defs>
+    <marker id="ar4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" class="fill-muted"/></marker>
+  </defs>
+  <text class="head" x="10" y="22">bashou export</text>
+  <rect class="node k-data" x="10" y="34" width="140" height="54" rx="6"/>
+  <text class="mono" x="80" y="56" text-anchor="middle">payload(s, mode)</text>
+  <text class="small" x="80" y="74" text-anchor="middle">minimal or --full</text>
+  <rect class="node k-run" x="180" y="34" width="140" height="54" rx="6"/>
+  <text class="mono" x="250" y="56" text-anchor="middle">JSON → zlib -9</text>
+  <text class="small" x="250" y="74" text-anchor="middle">small</text>
+  <rect class="node k-run" x="350" y="34" width="140" height="54" rx="6"/>
+  <text class="mono" x="420" y="56" text-anchor="middle">base64</text>
+  <text class="small" x="420" y="74" text-anchor="middle">safe in a mail</text>
+  <rect class="node k-run" x="520" y="34" width="190" height="54" rx="6"/>
+  <text class="mono" x="615" y="56" text-anchor="middle">HMAC-SHA256(SALT,</text>
+  <text class="mono" x="615" y="72" text-anchor="middle">version, mode, raw)</text>
+  <rect class="node k-shell" x="740" y="20" width="230" height="230" rx="6"/>
+  <text class="mono" x="752" y="46">-----BEGIN BASHOU SAVE-----</text>
+  <text class="mono" x="752" y="66">Version: 6</text>
+  <text class="mono" x="752" y="84">Mode: minimal</text>
+  <text class="mono" x="752" y="104">eNqtVctu2zAQ/BWD5xQQ…</text>
+  <text class="mono" x="752" y="122">…</text>
+  <text class="mono" x="752" y="142">-----END BASHOU SAVE-----</text>
+  <text class="mono" x="752" y="162">Check: 3f9a…</text>
+  <text class="small" x="855" y="230" text-anchor="middle">one text file</text>
+  <line class="msg" x1="150" y1="61" x2="176" y2="61" marker-end="url(#ar4)"/>
+  <line class="msg" x1="320" y1="61" x2="346" y2="61" marker-end="url(#ar4)"/>
+  <line class="msg" x1="490" y1="61" x2="516" y2="61" marker-end="url(#ar4)"/>
+  <line class="msg" x1="710" y1="61" x2="736" y2="61" marker-end="url(#ar4)"/>
+
+  <text class="head" x="10" y="150">bashou import</text>
+  <rect class="node k-game" x="520" y="162" width="190" height="72" rx="6"/>
+  <text class="mono" x="615" y="184" text-anchor="middle">decode(text)</text>
+  <text class="small" x="615" y="202" text-anchor="middle">find block (quoted, CRLF ok)</text>
+  <text class="small" x="615" y="218" text-anchor="middle">size limits, no zip bomb</text>
+  <rect class="node k-game" x="300" y="162" width="190" height="72" rx="6"/>
+  <text x="395" y="184" text-anchor="middle">refuse if:</text>
+  <text class="small" x="395" y="202" text-anchor="middle">Check differs · other version</text>
+  <text class="small" x="395" y="218" text-anchor="middle">unknown field or type</text>
+  <rect class="node k-data" x="10" y="162" width="260" height="72" rx="6"/>
+  <text class="head" x="140" y="184" text-anchor="middle">merge into state</text>
+  <text class="small" x="140" y="202" text-anchor="middle">highest value · lists joined, local first</text>
+  <text class="small" x="140" y="218" text-anchor="middle">best level per topic · counters rebuilt</text>
+  <line class="msg" x1="740" y1="198" x2="714" y2="198" marker-end="url(#ar4)"/>
+  <line class="msg" x1="520" y1="198" x2="494" y2="198" marker-end="url(#ar4)"/>
+  <line class="msg good" x1="300" y1="198" x2="274" y2="198" marker-end="url(#ar4)"/>
+</svg>
+<figcaption><code>bashou/transfer.py</code>. The salt is public (open source): the check stops hand edits, not a determined forger. Tests: <code>tests/test_transfer.py</code>.</figcaption>
+</figure>
+
+<h2 id="tests">10. Tests, tools and CI</h2>
 <div class="table-wrap"><table>
 <tr><th>Where</th><th>What</th></tr>
 <tr><td><code>tests/test_*.py</code></td><td>About one test file per module; run with <code>python3 -m unittest -q</code>.</td></tr>
@@ -227,7 +455,7 @@ security) plus <code>trials.py</code> for the adventure chests. <code>fight.py</
 <tr><td><code>.github/workflows/</code></td><td><code>ci.yml</code> (tests, Bandit, ShellCheck, Gitleaks, packages install), <code>codeql.yml</code>, <code>scorecard.yml</code>, <code>packages.yml</code>, <code>release.yml</code>.</td></tr>
 </table></div>
 
-<h2 id="docs">10. Documentation</h2>
+<h2 id="docs">11. Documentation</h2>
 <div class="table-wrap"><table>
 <tr><th>File</th><th>For</th></tr>
 <tr><td><code>README.md</code>, <code>README.fr.md</code></td><td>Players: install and play.</td></tr>
@@ -238,7 +466,7 @@ security) plus <code>trials.py</code> for the adventure chests. <code>fight.py</
 <tr><td><code>CHANGELOG.md</code></td><td>Release notes.</td></tr>
 </table></div>
 
-<footer>Generated 2026-10-17 from the repository layout.</footer>
+<footer>Generated 2026-10-17 from the repository layout and import graph.</footer>
 </main>
 </body>
 </html>

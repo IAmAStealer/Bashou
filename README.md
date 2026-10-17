@@ -58,23 +58,21 @@ Only zsh on this machine? Load `bashou.zsh` from your `~/.zshrc`:
 echo 'source ~/.bashou/bashou.zsh' >> ~/.zshrc && source ~/.zshrc
 ```
 
-**macOS** (test version, `macos-v0.9.1`): Bashou runs in zsh, the Mac's own shell.
+**macOS**, with [Homebrew](https://brew.sh): Bashou runs in zsh, the Mac's own shell.
 
 ```bash
-curl -fsSLO https://github.com/IAmAStealer/Bashou/releases/download/macos-v0.9.1/install-macos.sh
-less install-macos.sh
-sh install-macos.sh
+brew install iamastealer/bashou/bashou
+bashou on
 ```
 
-The first line downloads the installer, the second one shows it to you (press q to leave): it's short, and
-reading a script before running it is a good habit. The third one runs it. It checks that git and python3 are
-there (they come with Apple's command line tools; if they're missing, it opens the window that installs them,
-then you run it again), downloads Bashou into `~/.bashou` and loads it from your `~/.zshrc`. Run it again to
-update to the version it names.
+The first line adds Bashou's tap (a small repository with the recipe brew follows) and installs it. The
+second one adds one line to your `~/.zshrc`, so the pet comes in every new terminal. `brew upgrade` updates
+it with your other tools; `bashou update` reminds you of that.
 On a Mac, the questions and lessons are about macOS: Linux-only ones (systemd, apt, dnf, `ip`, `ss`) are left
 out. Do you also work on Linux servers? `bashou config os both` brings them back.
 macOS's own bash is too old for Bashou (it needs 4.4): use zsh, or a newer bash (`brew install bash`).
-For now `bashou update` doesn't offer macOS versions: a new one comes with its own installer.
+Used the test installer (`install-macos.sh`)? Remove the line `source ~/.bashou/bashou.zsh` from your
+`~/.zshrc` and the `~/.bashou` folder first. Your pets and progress stay: they live in `~/.local/share/bashou`.
 
 Installed with git on Debian or Red Hat, and want the repository instead? Run `bashou update --packages`.
 It shows every command it will run, asks you, then moves you over. Your pets and progress are kept.

@@ -344,8 +344,6 @@ class InstallerTest(unittest.TestCase):
         script = (ROOT / "tools/install-macos.sh").read_text()
         tag = re.search(r"^TAG=(\S+)$", script, re.M).group(1)
         self.assertFalse(fnmatch.fnmatch(tag, "v*.*.*"), tag)
-        for readme in ("README.md", "README.fr.md"):
-            self.assertIn(f"releases/download/{tag}/install-macos.sh", (ROOT / readme).read_text(), readme)
         self.assertIn(f"releases/download/{tag}/install-macos.sh", script)
 
 
@@ -381,7 +379,8 @@ class DocsTest(unittest.TestCase):
             text = (ROOT / name).read_text()
             with self.subTest(name):
                 self.assertIn("macOS", text)
-                self.assertIn("less install-macos.sh\nsh install-macos.sh", text)     # read it, then run it
+                self.assertIn("brew install iamastealer/bashou/bashou\nbashou on", text)   # 0.10.0: the tap
+                self.assertIn("source ~/.bashou/bashou.zsh", text)       # test installer users move over
         script = (ROOT / "tools/install-macos.sh").read_text()
         self.assertIn("xcode-select --install", script)
         self.assertIn('clone --quiet --branch "$TAG" "$REPO" "$DIR"', script)

@@ -25,6 +25,7 @@ fi
 unset _bashou_pkg
 
 BASHOU_DIR=${_bashou_sticky:A:h}
+[[ $BASHOU_DIR == */Cellar/bashou/*/libexec ]] && BASHOU_DIR=${BASHOU_DIR%/Cellar/bashou/*}/opt/bashou/libexec
 export BASHOU_SHELL=zsh                              # the arena and `bashou on` follow your shell
 _bashou_data=${BASHOU_DATA:-$HOME/.local/share/bashou}
 _bashou_events=$_bashou_data/events.$$

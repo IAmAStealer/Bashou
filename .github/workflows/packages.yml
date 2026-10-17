@@ -1,6 +1,7 @@
 # The apt and dnf repositories on GitHub Pages: built from a release tag, signed, pushed to gh-pages.
 # Runs after each release (ci.yml, release.yml), or by hand: Actions > Packages > Run workflow.
-# Needs the repository secret BASHOU_SIGNING_KEY (see doc/contributing/packaging.md).
+# Needs the repository secret BASHOU_SIGNING_KEY (see doc/contributing/packaging.md), and TAP_TOKEN for the
+# Homebrew tap (without it, the tap job only says so).
 name: Packages
 
 on:
@@ -73,7 +74,37 @@ jobs:
             exit 0
           fi
           cd dist
-          sha256sum -- *.deb *.rpm > SHA256SUMS
+          sha256sum -- *.deb *.rpm *.tar.gz > SHA256SUMS
           gpg --batch --yes --armor --detach-sign SHA256SUMS
-          gh release upload "$VERSION" --clobber --repo "$GITHUB_REPOSITORY" -- *.deb *.rpm SHA256SUMS SHA256SUMS.asc
+          gh release upload "$VERSION" --clobber --repo "$GITHUB_REPOSITORY" -- *.deb *.rpm *.tar.gz SHA256SUMS SHA256SUMS.asc
           gh release edit "$VERSION" --draft=false --latest --repo "$GITHUB_REPOSITORY"
+
+  # The Homebrew tap (IAmAStealer/homebrew-bashou): Formula/bashou.rb points at this release's tarball.
+  # TAP_TOKEN: a fine-grained token with Contents read and write on the tap repository only.
+  tap:
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          ref: ${{ inputs.version }}
+          persist-credentials: false
+      - name: Write the formula and push it to the tap
+        env:
+          VERSION: ${{ inputs.version }}
+          TAP_TOKEN: ${{ secrets.TAP_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          [ -n "$TAP_TOKEN" ] || { echo "::warning title=No tap token::Add the TAP_TOKEN secret, then run Packages again"; exit 0; }
+          # The attached tarball, not a fresh build: the formula's sha256 must match what users download.
+          gh release download "$VERSION" --repo "$GITHUB_REPOSITORY" --pattern "bashou-${VERSION#v}.tar.gz" --dir dist
+          auth=$(printf 'x-access-token:%s' "$TAP_TOKEN" | base64 -w0)
+          git -c http.extraheader="AUTHORIZATION: basic $auth" clone --quiet https://github.com/IAmAStealer/homebrew-bashou.git tap
+          mkdir -p tap/Formula
+          python3 tools/package.py formula "$VERSION" "dist/bashou-${VERSION#v}.tar.gz" > tap/Formula/bashou.rb
+          cd tap
+          git add Formula/bashou.rb
+          if git diff --cached --quiet; then echo "The tap already has $VERSION."; exit 0; fi
+          git -c user.name="github-actions[bot]" -c user.email="github-actions[bot]@users.noreply.github.com" \
+            commit -qm "bashou $VERSION"
+          git -c http.extraheader="AUTHORIZATION: basic $auth" push --quiet origin HEAD
