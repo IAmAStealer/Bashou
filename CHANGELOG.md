@@ -3,6 +3,16 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.10.1 — 2026-10-17
+
+### Changes
+
+- Each release now reaches Homebrew by itself: `brew upgrade` on a Mac gets new versions of Bashou on the day they come out.
+
+### Breaking changes
+
+- Breaking change: a pony learned to pour its own hay cider and no longer waits for anyone. Bring it home with `bashou pony hoof`.
+
 ## v0.10.0 — 2026-10-17
 
 ### Changes
