@@ -190,6 +190,17 @@ Avant le QR code, Bashou liste exactement ce que contient la carte : pas de comm
 de machines ni de dates. La progression voyage dans le lien, après le `#`, une partie que les navigateurs
 n'envoient jamais à un serveur.
 
+## Joue sur deux ordinateurs
+
+**`bashou export`** écrit ta progression dans un petit fichier texte, `bashou-save-DATE.txt`, dans le
+dossier où tu es. Emporte-le sur l'autre ordinateur comme tu veux (un mail à toi-même, une pièce jointe,
+une messagerie), puis lance **`bashou import bashou-save-DATE.txt`** là-bas, ou `bashou import` seul et
+colle le texte. Rien n'est perdu : pour chaque chose, Bashou garde le meilleur des deux ordinateurs.
+
+Par défaut le fichier ne contient que tes succès, tes compagnons, tes leçons, tes combats et ton
+aventure : aucune commande, aucun compteur d'outils, aucune date. `bashou export --full` emporte tout,
+compteurs compris. Les deux ordinateurs doivent avoir la même version de Bashou.
+
 ## Tes données restent sur ta machine
 
 Bashou ne collecte rien. Pas de compte, pas de télémétrie, pas de statistiques, pas de pub : **tu n'es pas le

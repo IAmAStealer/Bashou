@@ -33,7 +33,8 @@ RUNS = {"level": [], "pets": ["pets"], "achievements": ["achievements"], "evolve
         "stats": ["stats"], "share": ["share", "--name", "Tester"], "lesson": ["lesson"], "project": ["project"], "spot": ["spot"],
         "learn": ["learn", "grep", "-rn", "TODO", "."], "talk": ["talk"], "fight": ["fight"], "arena": ["arena"],
         "adventure": ["adventure"], "on": ["on"], "off": ["off"], "here": ["here"], "config": ["config", "list"], "start": ["start"],
-        "reset": ["reset"], "version": ["version"], "changelog": ["changelog", "v0.9.0"], "help": ["help"]}
+        "reset": ["reset"], "version": ["version"], "changelog": ["changelog", "v0.9.0"], "help": ["help"],
+        "export": ["export"], "import": ["import"]}
 NOT_RUN = {"update"}                                             # git or apt/dnf: not in a test
 DRAWN = "▀▄█░▌▐"                                                 # sprites, bars, QR codes
 
@@ -274,6 +275,9 @@ class ScreensTest(unittest.TestCase):
         visible = {c.name for c in cli.COMMANDS if not c.hidden}
         self.assertEqual(visible - NOT_RUN, set(RUNS), "a new command: add how to run it to RUNS")
         cols, rows = TINY
+        cwd = os.getcwd()
+        os.chdir(self.tmp.name)                                   # bashou export writes its file here
+        self.addCleanup(os.chdir, cwd)
         for name, argv in RUNS.items():
             with self.subTest(command=name):
                 out, keys = io.StringIO(), io.StringIO("")            # a terminal where Enter is never pressed

@@ -83,6 +83,7 @@ class Achievement:
     depth: int = 1              # its place in its chain (1 = where you start): how hard it is. Set below, from `next`
     progress: Optional[Callable] = None   # (state) -> (now, goal): where you stand, for a count to reach
     wanted: Optional[Callable] = None     # (state) -> bool: does it count for this player (the skills they learn)
+    floor: str = ""             # the save number a count reads ("tools.grep"): `bashou import` raises it to the goal
 
     def where(self, s):
         """"3/10" for a count to reach, else ""."""
@@ -118,12 +119,14 @@ def counter(s, path):
 def count(pet, aid, name, how, value, goal, next="", needs=(), wanted=None):
     """An achievement for reaching a count (owner, 2026-10-16: "use X N times" is one, the next N another)."""
     return Achievement(aid, pet, name, how, state=lambda s: value(s) >= goal, needs=needs, next=next,
-                       progress=lambda s: (value(s), goal), wanted=wanted)
+                       progress=lambda s: (value(s), goal), wanted=wanted, floor=getattr(value, "path", ""))
 
 
 def uses(pet, aid, name, how, tools, goal, next=""):
     """Use one of `tools` `goal` times (successful commands)."""
-    return count(pet, aid, name, how, lambda s: tool(s, *tools), goal, next=next, needs=tuple(tools))
+    value = lambda s: tool(s, *tools)
+    value.path = f"tools.{tools[0]}"
+    return count(pet, aid, name, how, value, goal, next=next, needs=tuple(tools))
 
 
 def made(construct, goal):
@@ -131,11 +134,13 @@ def made(construct, goal):
 
 
 def constructs(name):
-    return lambda s: s["constructs"].get(name, 0)
+    return at(f"constructs.{name}")
 
 
 def at(path):
-    return lambda s: counter(s, path)
+    value = lambda s: counter(s, path)
+    value.path = path                   # where the count lives: an import can rebuild it (Achievement.floor)
+    return value
 
 
 CODE = ("cargo", "clang", "cmake", "g++", "gcc", "go", "java", "javac", "make", "node", "npm", "perl", "php",
@@ -663,7 +668,7 @@ COMMAND_TIERS = [(10, "first_drop", "First drop"), (50, "puddle", "Puddle"), (10
                  (250, "pond", "Pond"), (500, "stream", "Stream"), (750, "brook", "Brook"), (1500, "lake", "Lake"),
                  (2500, "sea", "Sea"), (5000, "ocean", "Ocean"), (7500, "tide", "Tide"), (10000, "tidal_wave", "Tidal wave")]
 for _i, (_n, _id, _name) in enumerate(COMMAND_TIERS):
-    ALL.append(count("slime", _id, _name, "run {n} commands".replace("{n}", f"{_n:,}"), lambda s: s["commands"], _n,
+    ALL.append(count("slime", _id, _name, "run {n} commands".replace("{n}", f"{_n:,}"), at("commands"), _n,
                      next=COMMAND_TIERS[_i + 1][1] if _i + 1 < len(COMMAND_TIERS) else ""))
 for _i, (_n, _id, _name) in enumerate(STEP_MILESTONES):
     ALL.append(A(_id, "landscape", _name, ("finish a step of a project: `bashou project`" if _n == 1 else
@@ -729,7 +734,7 @@ ALL += [A("field_guide", "chameleon", "Field guide", "recognise every kind of st
           next="spot_fan"),
         A("clean_sweep", "chameleon", "Clean sweep", "give 10 good answers without a mistake in one game of `bashou spot`",
           state=lambda s: _spot(s).get("clean", 0) >= 10, next="spotless"),
-        count("chameleon", "spot_fan", "Fan", "play 50 games of `bashou spot`", lambda s: _spot(s).get("games", 0), 50),
+        count("chameleon", "spot_fan", "Fan", "play 50 games of `bashou spot`", at("spot.games"), 50),
         A("spotless", "chameleon", "Spotless", "give 15 good answers without a mistake in one game of `bashou spot`",
           state=lambda s: _spot(s).get("clean", 0) >= 15),
         count("chameleon", "quick_study", "Quick study", "recognise 12 kinds of string in `bashou spot`",

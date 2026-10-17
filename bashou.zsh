@@ -181,7 +181,7 @@ bashou() {
 }
 
 # Tab completion: the same static lists as bashou.bash (tests/test_completion.py keeps them equal).
-_bashou_commands="help level pets achievements fight arena talk learn lesson project spot share evolve swap stats start config update version changelog adventure reset on off here"
+_bashou_commands="help level pets achievements fight arena talk learn lesson project spot share evolve swap stats start config update version changelog export import adventure reset on off here"
 _bashou_pets="bat frog turtle mushroom slime sofa octopus dragon fox owl mole snake ghost spider ant axolotl gremlin snail beaver squirrel pigeon hedgehog bee whale meerkat leopard duck spark packet landscape chameleon"
 _bashou_languages="en fr"
 _bashou_dev="unlock-all stage stage-all level threat restore"
@@ -199,6 +199,7 @@ _bashou_words() {
     2:swap:*)         words="starter $_bashou_pets" ;;
     2:config:*)       words="list bubble updates size talk quiet editor os language skills" ;;
     2:update:*)       words="--version" ;;
+    2:export:*)       words="--full" ;;
     3:config:size)    words="small large default" ;;
     3:config:editor)  words="nano vi default" ;;
     3:config:os)      words="linux macos both default" ;;

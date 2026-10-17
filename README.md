@@ -208,6 +208,17 @@ Before the QR code, Bashou lists exactly what the card holds: no commands, files
 dates. The progress travels inside the link, after the `#`, a part browsers never send to a server:
 the page draws the banner on your phone and keeps nothing.
 
+## Play on two computers
+
+**`bashou export`** writes your progress in a small text file, `bashou-save-DATE.txt`, in the folder you
+are in. Carry it to the other computer the way you like (a mail to yourself, an attachment, a chat), then
+run **`bashou import bashou-save-DATE.txt`** there, or `bashou import` alone and paste the text. Nothing
+is lost: for each thing, Bashou keeps the best of the two computers.
+
+By default the file holds only your achievements, pets, lessons, fights and adventure: no command, no
+tool count, no date. `bashou export --full` carries everything, counters included. Both computers need
+the same version of Bashou.
+
 ## Your data stays on your machine
 
 Bashou collects nothing. No account, no telemetry, no analytics, no ads: **you are not the product.**
