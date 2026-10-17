@@ -79,6 +79,9 @@ It shows every command it will run, asks you, then moves you over. Your pets and
 
 ## What's new
 
+**0.10.0**
+- **macOS with Homebrew**, `bashou export`/`import` to play on two computers, an AI tools skill, `bashou changelog`, and pets that grow with their achievements.
+
 **0.9.0**
 - **zsh support**: your pet, completion and fights in zsh, plus a new lesson on where zsh and bash differ.
 

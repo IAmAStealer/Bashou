@@ -80,6 +80,9 @@ de ton `~/.zshrc` et le dossier `~/.bashou`. Tes compagnons et ta progression re
 
 ## Quoi de neuf
 
+**0.10.0**
+- **macOS avec Homebrew**, `bashou export`/`import` pour jouer sur deux ordinateurs, une compétence outils d'IA, `bashou changelog`, et des compagnons qui grandissent avec leurs succès.
+
 **0.9.0**
 - **zsh pris en charge** : ton compagnon, la complétion et les combats dans zsh, plus une nouvelle leçon sur ce qui change entre zsh et bash.
 

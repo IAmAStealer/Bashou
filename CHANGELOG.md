@@ -3,6 +3,24 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.10.0 — 2026-10-17
+
+### Changes
+
+- Bashou runs on macOS: install it with Homebrew (`brew install iamastealer/bashou/bashou`, then `bashou on`), and `brew upgrade` keeps it up to date. On a Mac, the questions and lessons follow your system: Linux-only ones are left out, and `bashou config os both` brings them back if you also work on Linux servers.
+- New `bashou export` and `bashou import`: carry your progress to another computer in a small text file you can mail to yourself.
+- A new AI tools skill: two lessons on context, memory and planning when you work with an AI assistant, with questions you answer on the adventure road or at the end of the lesson.
+- New `bashou changelog`: what changed in each release, newest first.
+- Every pet family now grows with its achievements: the first one brings the pet, each new count of a command is another, and five new forms wait to be reached.
+- `bashou swap` works with the mouse, lists each pet's forms with their stars next to the preview, and no longer flickers. The ponies share one tile: `f` shows the next pony you found.
+- Adventure bosses are drawn with square pixels at every size, so they no longer look stretched.
+- In `bashou spot`, 5 wrong answers end the game, so holding one arrow key no longer wins.
+- The Clutter Critter can be beaten with `mkdir` and `mv` on separate lines, and fights that want a loop or a pipeline now say so.
+
+### Breaking changes
+
+- Breaking change: a pony tried Homebrew, brewed a barrel of hay cider and trotted off to share it. Bring it home with `bashou pony hoof`.
+
 ## v0.9.0 — 2026-10-12
 
 ### Changes
