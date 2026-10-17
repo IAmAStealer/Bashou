@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bashou Architecture</title>
+<style>
+:root {
+  --bg: #fbfaf7; --panel: #ffffff; --text: #1f2328; --muted: #5d646d; --line: #e2ded6;
+  --accent: #6b4fbb; --accent-soft: #efeafb; --code: #f3f1ec;
+  --c-shell: #2f7d4f; --c-run: #6b4fbb; --c-game: #b4572d; --c-data: #2a6fb0; --c-tool: #7a6a2a;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171a; --panel: #1d2024; --text: #e6e6e3; --muted: #a0a6ad; --line: #30343a;
+    --accent: #b49cf5; --accent-soft: #2a2440; --code: #24282d;
+    --c-shell: #6cc58f; --c-run: #b49cf5; --c-game: #e8936a; --c-data: #7ab4ea; --c-tool: #d3c06f;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171a; --panel: #1d2024; --text: #e6e6e3; --muted: #a0a6ad; --line: #30343a;
+  --accent: #b49cf5; --accent-soft: #2a2440; --code: #24282d;
+  --c-shell: #6cc58f; --c-run: #b49cf5; --c-game: #e8936a; --c-data: #7ab4ea; --c-tool: #d3c06f;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text);
+  font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 1060px; margin: 0 auto; padding: 32px 16px 64px; }
+h1 { font-size: 1.9rem; margin: 0 0 4px; }
+h2 { font-size: 1.25rem; margin: 40px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+h3 { font-size: 1rem; margin: 22px 0 8px; }
+p.lead { color: var(--muted); margin: 0 0 20px; }
+code { font: 0.88em ui-monospace, "SF Mono", Menlo, Consolas, monospace; background: var(--code);
+  padding: 1px 5px; border-radius: 4px; }
+nav { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0 8px; }
+nav a { text-decoration: none; color: var(--accent); background: var(--accent-soft);
+  padding: 3px 10px; border-radius: 99px; font-size: 0.9rem; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line);
+  border-radius: 8px; overflow: hidden; font-size: 0.93rem; }
+th, td { text-align: left; vertical-align: top; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+th { background: var(--code); font-weight: 600; }
+tr:last-child td { border-bottom: 0; }
+td:first-child { white-space: nowrap; }
+.tag { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0 7px; border-radius: 99px;
+  border: 1px solid currentColor; margin-left: 4px; }
+.shell { color: var(--c-shell); } .run { color: var(--c-run); } .game { color: var(--c-game); }
+.data { color: var(--c-data); } .tool { color: var(--c-tool); }
+.flow { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+.box { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--accent);
+  border-radius: 8px; padding: 10px 12px; }
+.box b { display: block; margin-bottom: 2px; }
+.box small { color: var(--muted); }
+.box.shell { border-left-color: var(--c-shell); } .box.run { border-left-color: var(--c-run); }
+.box.game { border-left-color: var(--c-game); } .box.data { border-left-color: var(--c-data); }
+.box.tool { border-left-color: var(--c-tool); }
+.box.shell b, .box.run b, .box.game b, .box.data b, .box.tool b { color: var(--text); }
+.arrow { color: var(--muted); font-size: 0.85rem; margin: 6px 0 14px; }
+pre { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px;
+  overflow-x: auto; font: 0.85rem/1.5 ui-monospace, Menlo, Consolas, monospace; }
+.note { background: var(--accent-soft); border-radius: 8px; padding: 10px 14px; margin: 14px 0; }
+footer { color: var(--muted); font-size: 0.85rem; margin-top: 48px; }
+</style>
+</head>
+<body>
+<main>
+<h1>Bashou architecture</h1>
+<p class="lead">How the files fit together: the shell hook, the per-terminal companion, the
+<code>bashou</code> commands, the game data and the save. Python 3 standard library only, no third-party packages.</p>
+
+<nav>
+  <a href="#runtime">Runtime</a><a href="#tree">Tree</a><a href="#core">Core</a><a href="#commands">Commands</a>
+  <a href="#games">Games</a><a href="#data">Data</a><a href="#save">Save</a><a href="#rules">Rules</a>
+  <a href="#tests">Tests &amp; CI</a><a href="#docs">Docs</a>
+</nav>
+
+<h2 id="runtime">1. How a command reaches the pet</h2>
+<div class="flow">
+  <div class="box shell"><b>bashou.bash / bashou.zsh</b><small>Sourced from <code>~/.bashrc</code>. After each prompt, appends
+    <code>status⇥history line</code> to the events file (builtins only, no fork) and sends <code>SIGUSR1</code>.</small></div>
+  <div class="box run"><b>companion.py</b><small>One background process per terminal, started with
+    <code>launch.py bashou.companion &lt;shell pid&gt;</code>. Animates the pet, reads new events, shows bubbles.</small></div>
+  <div class="box run"><b>analyze.py</b><small>Turns a command line into tools, pipes and constructs
+    (<code>parse_log</code>).</small></div>
+  <div class="box run"><b>progress.py + achievements.py</b><small>Counters, unlocked pets, evolutions, notifications.</small></div>
+  <div class="box data"><b>state.py → state.json</b><small>One save shared by every terminal, behind a file lock.</small></div>
+</div>
+<p class="arrow">→ in order, left to right. The companion also calls <code>dialogue</code> (what to say), <code>behavior</code>
+(what the pet does), <code>render</code> (half-block drawing), <code>safety</code> (risky commands), <code>fight</code>
+(threats) and <code>update</code> (the daily fetch).</p>
+
+<div class="flow">
+  <div class="box shell"><b>bashou &lt;command&gt;</b><small>A shell function in bashou.bash; handles
+    <code>on/off/here</code> itself and passes everything else on.</small></div>
+  <div class="box tool"><b>launch.py</b><small>Small entry point: <code>python3 launch.py bashou [args]</code>.</small></div>
+  <div class="box run"><b>__main__.py → cli.py</b><small>argparse: help, completion, small commands. Larger commands
+    go to their own modules through <code>cli.run(module)</code>.</small></div>
+  <div class="box game"><b>Feature module</b><small><code>board</code>, <code>adventure</code>, <code>lesson</code>,
+    <code>arena</code>, <code>spot</code>, <code>transfer</code>…</small></div>
+</div>
+
+<h2 id="tree">2. Repository tree</h2>
+<pre>Bashou/
+├── bashou.bash, bashou.zsh   shell hooks (prompt, events, completion, `bashou` function)
+├── launch.py                 entry point used by the hooks
+├── bashou/                   the Python package
+│   ├── *.py                  core and commands (sections 3 and 4)
+│   ├── adventure/            `bashou adventure`: game, world, scene, sprites, quiz, lessons
+│   │   └── questions/{en,fr}/  13 topic question banks (JSON)
+│   ├── challenges/           arena fights, one file per topic (25 files)
+│   ├── lesson/               `bashou lesson`: library + reader, owl.json
+│   │   └── {en,fr}/          56 lessons (JSON) per language
+│   ├── project/              `bashou project`: step-by-step programs, {en,fr}/ 13 each
+│   ├── spot/                 `bashou spot`: "what is this string?"
+│   ├── pets/                 179 pet sprites (JSON); large/, unused/
+│   ├── enemies/              98 fight enemies (JSON)
+│   ├── families/             50 pet families (JSON)
+│   └── locales/fr.json       French translations (English is the source)
+├── tests/                    unittest suite + snapshot.json + JS checks for the share page
+├── tools/                    packaging, screenshots, changelog, lesson preview, macOS install
+├── doc/                      guides, contributing docs, images, share site
+├── art/                      pixel-art notes
+└── .github/                  CI workflows, issue templates, security policy</pre>
+
+<h2 id="core">3. Core modules</h2>
+<p>Shared by every feature. These are the lower layers: they don't import the feature modules.</p>
+<div class="table-wrap"><table>
+<tr><th>File</th><th>Role</th></tr>
+<tr><td><code>state.py</code> <span class="tag data">save</span></td><td>Load, migrate (<code>SAVE_VERSION</code>), lock and atomically write the save; backups and recovery of a broken file; settings.</td></tr>
+<tr><td><code>achievements.py</code></td><td>Achievements, each tied to a pet family; they evolve that pet.</td></tr>
+<tr><td><code>progress.py</code></td><td>Analyzed commands → counters, unlocks, notifications.</td></tr>
+<tr><td><code>analyze.py</code></td><td>Parse a command line into tools, pipes and constructs.</td></tr>
+<tr><td><code>creatures.py</code></td><td>Pet catalog: sprites, poses, how each pet is unlocked (reads <code>pets/</code>, <code>families/</code>).</td></tr>
+<tr><td><code>render.py</code></td><td>Draw sprites with half blocks over the terminal text.</td></tr>
+<tr><td><code>terminal.py</code></td><td>Full-screen views: keys, mouse, raw mode, shared by board, starter, library, adventure, evolve.</td></tr>
+<tr><td><code>behavior.py</code></td><td>What the pet does; each stage unlocks new actions.</td></tr>
+<tr><td><code>dialogue.py</code></td><td>What pets say: hints toward the next achievement, tool tips, personality.</td></tr>
+<tr><td><code>i18n.py</code></td><td><code>_()</code> translation; reads <code>locales/&lt;lang&gt;.json</code>.</td></tr>
+<tr><td><code>skills.py</code></td><td>The skills the player chose to learn; filters fights, lessons and questions.</td></tr>
+<tr><td><code>which.py</code></td><td>Is a command installed? Hints only propose what this system has.</td></tr>
+<tr><td><code>procs.py</code></td><td>Other processes: parent, command line, shell at its prompt.</td></tr>
+<tr><td><code>safety.py</code></td><td>Risky commands: warnings, and the Gremlin.</td></tr>
+<tr><td><code>art.py</code></td><td>Pixel art exported as PNG.</td></tr>
+<tr><td><code>changelog.py</code></td><td>Reads <code>CHANGELOG.md</code> sections.</td></tr>
+</table></div>
+
+<h2 id="commands">4. Commands</h2>
+<div class="table-wrap"><table>
+<tr><th>Command</th><th>File(s)</th><th>What it does</th></tr>
+<tr><td>(background)</td><td><code>companion.py</code></td><td>The pet in the corner of each terminal.</td></tr>
+<tr><td><code>bashou</code> (small commands)</td><td><code>cli.py</code></td><td>pets, stats, config, reset, backup, on/off/here, version, help.</td></tr>
+<tr><td>first launch</td><td><code>starter.py</code></td><td>Language, skills, starter pet.</td></tr>
+<tr><td><code>setup</code> / <code>on</code></td><td><code>setup.py</code>, <code>repo_setup.py</code></td><td>Add the line to the shell rc; move a git install to the apt/dnf repository.</td></tr>
+<tr><td><code>swap</code></td><td><code>board.py</code></td><td>4×4 board to pick the active pet and form.</td></tr>
+<tr><td><code>evolve</code></td><td><code>evolve.py</code></td><td>Watch pending evolutions.</td></tr>
+<tr><td><code>learn</code></td><td><code>learn.py</code></td><td>Take a command apart and explain each piece.</td></tr>
+<tr><td><code>lesson</code></td><td><code>lesson/__init__.py</code>, <code>lesson/reader.py</code></td><td>The Sage Owl's library, page by page, with end-of-lesson questions.</td></tr>
+<tr><td><code>adventure</code></td><td><code>adventure/*</code></td><td>Walk the world, answer questions, meet the owl, open chests (trials), fight bosses.</td></tr>
+<tr><td><code>arena</code></td><td><code>arena.py</code>, <code>fight.py</code>, <code>duel.py</code>, <code>security.py</code>, <code>challenges/*</code></td><td>Fights in a sandboxed sub-shell; security investigations.</td></tr>
+<tr><td><code>project</code></td><td><code>project/*</code></td><td>Real programs built step by step.</td></tr>
+<tr><td><code>spot</code></td><td><code>spot/*</code></td><td>Identify a string (hash, IP, UUID…).</td></tr>
+<tr><td><code>share</code></td><td><code>share.py</code>, <code>qr.py</code></td><td>QR code of your progress, read by the share page (<code>doc/site/</code>, published on GitHub Pages).</td></tr>
+<tr><td><code>export</code> / <code>import</code></td><td><code>transfer.py</code></td><td>Signed, compressed text block; merge progress on another computer.</td></tr>
+<tr><td><code>update</code> / <code>changelog</code></td><td><code>update.py</code>, <code>changelog.py</code></td><td>Daily <code>git fetch</code>, install new versions, release notes.</td></tr>
+<tr><td>hidden ponies</td><td><code>pony.py</code></td><td>Secret pets hidden in real places.</td></tr>
+<tr><td>translations</td><td><code>translations.py</code></td><td>Which messages exist and how much of each language is done.</td></tr>
+</table></div>
+
+<h2 id="games">5. The game parts</h2>
+<h3>Adventure (<code>bashou/adventure/</code>)</h3>
+<div class="table-wrap"><table>
+<tr><th>File</th><th>Role</th></tr>
+<tr><td><code>game.py</code></td><td>The main loop: input, events, screens.</td></tr>
+<tr><td><code>world.py</code></td><td>Chapters, forks, paths, checkpoints. Rules only, no drawing, easy to test.</td></tr>
+<tr><td><code>scene.py</code>, <code>canvas.py</code>, <code>sprites.py</code></td><td>Drawing: the scenery, a half-block pixel buffer that redraws only what changed, the hero from behind.</td></tr>
+<tr><td><code>quiz.py</code></td><td>Picks questions from <code>questions/&lt;lang&gt;/&lt;topic&gt;.json</code> by level, without repeats.</td></tr>
+<tr><td><code>lessons.py</code></td><td>The owl teaches a tool on the road before a fight or chest needs it.</td></tr>
+</table></div>
+<h3>Arena (<code>bashou/challenges/</code>)</h3>
+<p><code>challenges/__init__.py</code> is the challenge bank; each other file is a topic (basics, everyday, grep, sed, awk,
+find, pipe, ps, uniq, scripting, logic, system, packages, repos, network, secrets, sql, git, cicd, code, debug, rust,
+security) plus <code>trials.py</code> for the adventure chests. <code>fight.py</code> runs the sandbox sub-shell,
+<code>duel.py</code> draws the fight, <code>enemies/*.json</code> holds the foes.</p>
+
+<h2 id="data">6. Data files</h2>
+<div class="table-wrap"><table>
+<tr><th>Folder</th><th>Count</th><th>Contents</th><th>Guide</th></tr>
+<tr><td><code>bashou/pets/</code></td><td>179</td><td>Pet sprites and forms</td><td><code>doc/contributing/pixel-art.md</code></td></tr>
+<tr><td><code>bashou/families/</code></td><td>50</td><td>Pet families (which achievements evolve them)</td><td>—</td></tr>
+<tr><td><code>bashou/enemies/</code></td><td>98</td><td>Fight enemies</td><td><code>pixel-art.md</code></td></tr>
+<tr><td><code>bashou/lesson/{en,fr}/</code></td><td>56 ×2</td><td>Lessons: pages, schemes, questions</td><td><code>lessons.md</code></td></tr>
+<tr><td><code>bashou/adventure/questions/{en,fr}/</code></td><td>13 ×2</td><td>Question banks per topic</td><td><code>questions.md</code></td></tr>
+<tr><td><code>bashou/project/{en,fr}/</code></td><td>13 ×2</td><td>Projects, step by step</td><td><code>projects.md</code></td></tr>
+<tr><td><code>bashou/locales/fr.json</code></td><td>1</td><td>French UI messages</td><td><code>translations.md</code></td></tr>
+</table></div>
+<div class="note">The companion watches the newest mtime of every <code>*.py</code> and <code>*.json</code> in the package
+(<code>code_version()</code>): editing code or data restarts it with the new version.</div>
+
+<h2 id="save">7. Runtime files (outside the repo)</h2>
+<div class="table-wrap"><table>
+<tr><th>Path</th><th>Contents</th></tr>
+<tr><td><code>~/.local/share/bashou/state.json</code></td><td>The save (<code>$BASHOU_DATA</code>). Written to <code>.tmp</code> then renamed; <code>state.json.prev</code> and <code>state.json.bak-*</code> backups; a broken file is set aside as <code>state.json.broken-*</code>.</td></tr>
+<tr><td><code>~/.cache/bashou/</code></td><td>Cache (<code>$BASHOU_CACHE</code>).</td></tr>
+<tr><td>events file</td><td>Per terminal, appended by the shell hook, read by the companion.</td></tr>
+</table></div>
+
+<h2 id="rules">8. Architecture rules</h2>
+<div class="table-wrap"><table>
+<tr><th>Rule</th><th>Enforced by</th></tr>
+<tr><td>Imports go one way: no import cycles, even inside functions.</td><td><code>tests/test_layers.py</code></td></tr>
+<tr><td>Standard library only.</td><td>CI step "Only the standard library"</td></tr>
+<tr><td>Rules separate from drawing (e.g. <code>world.py</code> vs <code>scene.py</code>, <code>spot/__init__</code> vs <code>spot/screen</code>).</td><td>Convention; makes the rules testable</td></tr>
+<tr><td>English is the source; every message goes through <code>_()</code>.</td><td><code>test_i18n.py</code>, <code>test_snapshot.py</code></td></tr>
+<tr><td>Save shape changes bump <code>SAVE_VERSION</code> with a <code>migrate()</code> step.</td><td><code>state.py</code>, tests</td></tr>
+<tr><td>Fights never reach the network; hints only propose installed tools.</td><td><code>test_network.py</code>, <code>which.py</code></td></tr>
+</table></div>
+
+<h2 id="tests">9. Tests, tools and CI</h2>
+<div class="table-wrap"><table>
+<tr><th>Where</th><th>What</th></tr>
+<tr><td><code>tests/test_*.py</code></td><td>About one test file per module; run with <code>python3 -m unittest -q</code>.</td></tr>
+<tr><td><code>tests/snapshot.json</code></td><td>What players see of pets, recorded so a refactor can't change it by accident (<code>python3 -m tests.test_snapshot --write</code> to update).</td></tr>
+<tr><td><code>tests/share_*.js</code></td><td>Checks of the share web page.</td></tr>
+<tr><td><code>tests/watchdog.py</code></td><td>Runs the tests and stops a test stuck for 3 minutes, showing where it waits.</td></tr>
+<tr><td><code>tools/package.py</code></td><td>Builds .deb/.rpm and the signed apt + dnf repositories on GitHub Pages.</td></tr>
+<tr><td><code>tools/screenshot.py</code>, <code>lesson_preview.py</code></td><td>README SVGs; lessons as 80×24 text.</td></tr>
+<tr><td><code>.github/workflows/</code></td><td><code>ci.yml</code> (tests, Bandit, ShellCheck, Gitleaks, packages install), <code>codeql.yml</code>, <code>scorecard.yml</code>, <code>packages.yml</code>, <code>release.yml</code>.</td></tr>
+</table></div>
+
+<h2 id="docs">10. Documentation</h2>
+<div class="table-wrap"><table>
+<tr><th>File</th><th>For</th></tr>
+<tr><td><code>README.md</code>, <code>README.fr.md</code></td><td>Players: install and play.</td></tr>
+<tr><td><code>doc/GUIDE.md</code></td><td>Player guide.</td></tr>
+<tr><td><code>doc/contributing/*.md</code></td><td>Contributors: curriculum, lessons, questions, projects, pixel art, translations, security challenges, packaging.</td></tr>
+<tr><td><code>.github/CONTRIBUTING.md</code></td><td>How to contribute.</td></tr>
+<tr><td><code>doc/site/</code></td><td>The share page (HTML/CSS/JS).</td></tr>
+<tr><td><code>CHANGELOG.md</code></td><td>Release notes.</td></tr>
+</table></div>
+
+<footer>Generated 2026-10-17 from the repository layout.</footer>
+</main>
+</body>
+</html>
