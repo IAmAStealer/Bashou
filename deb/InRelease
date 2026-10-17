@@ -1,0 +1,29 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Date: Sat, 17 Oct 2026 20:12:40 +0000
+Label: Bashou
+Origin: Bashou
+MD5Sum:
+ 7d4f4a1ffce896db02deb67072545d33              850 Packages
+ be112f62ed9c3fcfb3f796c3c74e4975              591 Packages.gz
+ 9f737b8622de16acee1a304eecba7841               67 Release
+SHA1:
+ 19d5ee294340adcce0484f37e0b9beb1efd52aab              850 Packages
+ ffa0ef06b6014b375b11a04abbde6aa551423e18              591 Packages.gz
+ b7124dcda5534ab297382e48b15630a2fed97779               67 Release
+SHA256:
+ 507cb2badacfaf666cd125c086c201006686d5af15214dffa37633bf413af415              850 Packages
+ ea39b6311fea686e9a971c7a824874a62c4a35124c33a6978a6e181453077707              591 Packages.gz
+ 2d46e12ab483f56208cc3d7458f8b1f544e401ee591a43c75a932d28fc1f3898               67 Release
+SHA512:
+ e66e8ab084a679e969097019a8a98fec872d663b3e36cb4277055deb2f2bceb343b5fda3052b4bf9acadb05af373828b82ab4fc99d07644391db7816336b2c09              850 Packages
+ 2ce379a143145dcec9d5a176dbf34ccdc7249b86663111c2fe49944299d2c8062b8ef5daf621c7f7badf3ebfcec9fac1f594714f5a48d60cbfb46f65028dc37b              591 Packages.gz
+ 5a75e771a25bed28725a4d354bf95b3d03f3671367cb7a2815bfbe15e790a7fa8d4484a3ffec9bef354237cd294264feb09e87aa65578584f9c680b60fd3a711               67 Release
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQRK+0wOcTQxDX2Yq49j9Zo6YrnTdgUCatPWuAAKCRBj9Zo6YrnT
+dn6BAQDfo9JRMsBsqByUhipFNqRcZQU0tsr4BRwTrDVluqrzrwD/e2EOdCZwJ03s
+CshysbZ/ZbyG5zgE02cdHg1Jr0mI6g4=
+=M5JP
+-----END PGP SIGNATURE-----
