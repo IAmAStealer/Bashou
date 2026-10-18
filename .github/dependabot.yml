@@ -5,3 +5,7 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    groups:
+      codeql-action:                 # init, analyze and upload-sarif must move together
+        patterns:
+          - github/codeql-action*
