@@ -3,6 +3,17 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.10.2 — 2026-10-18
+
+### Changes
+
+- An opened chest stays opened: quitting the adventure right after a chest no longer brings it back.
+- The same chest never comes twice in one run of an adventure path. Replaying from a checkpoint is a new run, so its chests can come back.
+
+### Breaking changes
+
+- Breaking change: a pony found the chest that kept coming back, emptied it for good and trotted off with the loot. Bring it home with `bashou pony hoof`.
+
 ## v0.10.1 — 2026-10-17
 
 ### Changes
