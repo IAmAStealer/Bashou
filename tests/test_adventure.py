@@ -278,6 +278,59 @@ class GameTest(unittest.TestCase):
         again.close_result(0) if again.result else None
         self.assertNotIn("chest_done", again.adv)
 
+    def test_every_level_has_three_chests(self):
+        for level in range(1, 4):                                   # pick_trial: min(3, chapter)
+            with self.subTest(level=level):
+                self.assertGreaterEqual(len(adventure.chest_pool(level)), 3)
+
+    def open_chests(self, n, reload_at=None):
+        """Meet n chests in a row on the current run, leaving each; quit and come back before chest reload_at."""
+        ids = []
+        for i in range(n):
+            if i == reload_at:
+                adventure.save(self.game.adv)
+                self.game = adventure.Game(80, 24, rng=random.Random(0))
+            g = self.game
+            g.adv["phase"] = "chest"
+            g.start_event("chest", 0)
+            ids.append(g.trial.id)
+            g.key(" ", 0)                                           # leave it: not won, still no repeat
+            g.close_result(0)
+        return ids
+
+    def test_no_chest_twice_in_a_run(self):
+        """User: the same chest came up again on one path; a quit and reload is still the same run."""
+        g = self.game
+        g.adv.update(chapter=3, phase="fork")
+        world.choose(g.adv, "bash")
+        n = len(adventure.chest_pool(3)) + 2                        # more chests than the level has
+        ids = self.open_chests(n, reload_at=2)
+        self.assertEqual(len(ids), len(set(ids)), ids)
+
+    def test_reload_keeps_the_chest_you_stand_at(self):
+        g = self.game
+        g.adv["phase"] = "fork"
+        world.choose(g.adv, "bash")
+        g.adv["phase"] = "chest"
+        g.start_event("chest", 0)
+        first = g.trial.id
+        adventure.save(g.adv)
+        again = adventure.Game(80, 24, rng=random.Random(0))
+        self.assertEqual(again.trial.id, first)
+        self.assertEqual(again.adv["chests"], [first])
+
+    def test_checkpoint_replay_refills_the_chests(self):
+        """User: a replay from the checkpoint is a new run, so its chests may come again."""
+        g = self.game
+        g.adv.update(chapter=2, phase="fork")
+        world.choose(g.adv, "bash")
+        before = self.open_chests(3)
+        while not world.lose_heart(g.adv):
+            pass
+        self.assertEqual(g.adv["chests"], [])
+        world.choose(g.adv, "bash")
+        self.assertEqual(self.open_chests(3), before)               # same path, same draws
+
     def test_leave_a_chest(self):
         g = self.game
         self.go("\r", "\r")

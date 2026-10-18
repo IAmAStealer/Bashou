@@ -62,7 +62,7 @@ def chapter(n):
 def new():
     return {"chapter": 1, "leg": 0, "topic": None, "segment": 0, "distance": 0.0, "leg_start": 0.0,
             "hearts": HEARTS, "levels": {}, "seen": [], "bosses": [], "walked": 0.0, "correct": 0, "phase": "intro",
-            "flawless": True, "chapters_done": 0, "trials": [], "lessons": []}
+            "flawless": True, "chapters_done": 0, "trials": [], "lessons": [], "chests": []}
 
 
 def level(adv, topic):
@@ -114,7 +114,7 @@ def biome(adv, distance=None):
 
 
 def choose(adv, topic):
-    adv.update(topic=topic, segment=0, phase="walk", flawless=True, path_lesson=None)
+    adv.update(topic=topic, segment=0, phase="walk", flawless=True, path_lesson=None, chests=[])   # a new run
     lesson(adv)
 
 
@@ -136,6 +136,7 @@ def event_done(adv):
     adv["segment"] += 1
     adv["phase"] = "walk"
     adv.pop("chest_done", None)
+    adv.pop("chest", None)
 
 
 def lose_heart(adv):
@@ -149,7 +150,9 @@ def lose_heart(adv):
 
 
 def back_to_checkpoint(adv):
-    adv.update(distance=adv["leg_start"], topic=None, segment=0, hearts=HEARTS, phase="fork", path_lesson=None)
+    adv.update(distance=adv["leg_start"], topic=None, segment=0, hearts=HEARTS, phase="fork", path_lesson=None,
+               chests=[])                                     # the replay is a new run: chests refilled
+    adv.pop("chest", None)
 
 
 def boss_won(adv):

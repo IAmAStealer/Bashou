@@ -34,6 +34,11 @@ def load():
     return {**world.new(), **adv}
 
 
+def chest_pool(level):
+    """The chests a path of this level draws from (lesson chests aside)."""
+    return [t for t in challenges.TRIALS if t.level == level and not t.tools and t.available()]
+
+
 def save(adv):
     """Save, and return the achievements and pets it earned (🏆 / 🎉 lines)."""
     with state.locked() as s:
@@ -105,18 +110,30 @@ class Game:
             self.page = 0
 
     def pick_trial(self):
-        """A shell trial for this chapter's level, one you haven't opened yet if possible."""
+        """This chest's shell trial, drawn from the run's pool: each one drawn leaves it (saved, so a reload
+        keeps the run), so no chest comes twice in a run. A new run (a path chosen at the fork, a replay
+        from the checkpoint included) refills it. Seeded: same run, same draws."""
         adv = self.adv
+        by_id = {t.id: t for t in challenges.TRIALS}
+        if adv.get("chest") in by_id:                        # the chest you stand at, through a reload
+            return by_id[adv["chest"]]
+        drawn = adv.setdefault("chests", [])
+        lvl = min(3, adv["chapter"])
+        pools = [chest_pool(level) for level in range(lvl, 0, -1)]   # level used up: easier ones next
         taught = lessons.BY_ID.get(adv.get("path_lesson") or "")
         if taught and taught["id"] in adv["lessons"]:        # just learned: practice it now
-            pool = [t for t in challenges.TRIALS if taught["tool"] in t.tools and t.available()]
-            fresh = [t for t in pool if t.id not in adv["trials"]]
-            if pool:
-                return self.rng.choice(fresh or pool)
-        lvl = min(3, adv["chapter"])
-        pool = [t for t in challenges.TRIALS if t.level == lvl and not t.tools and t.available()]
-        fresh = [t for t in pool if t.id not in adv["trials"]]
-        return self.rng.choice(fresh or pool)
+            pools.insert(0, [t for t in challenges.TRIALS if taught["tool"] in t.tools and t.available()])
+        left = next(([t for t in pool if t.id not in drawn] for pool in pools
+                     if any(t.id not in drawn for t in pool)), None)
+        if left is None:                                     # every chest drawn (a very long run): start over
+            drawn.clear()
+            left = pools[-lvl]
+        fresh = [t for t in left if t.id not in adv["trials"]]
+        rng = random.Random(f"chest:{adv['chapter']}:{adv['leg']}:{adv['topic']}:{len(drawn)}")
+        trial = rng.choice(sorted(fresh or left, key=lambda t: t.id))
+        drawn.append(trial.id)
+        adv["chest"] = trial.id
+        return trial
 
     def trial_seed(self):
         return f"{self.trial.id}:{self.adv['walked']:.1f}"
