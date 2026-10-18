@@ -259,6 +259,25 @@ class GameTest(unittest.TestCase):
         g.close_result(0)
         self.assertEqual(g.adv["phase"], "walk")
 
+    def test_opened_chest_is_not_offered_again_after_quitting(self):
+        """Bug report: quit on the chest's result, come back, and the same chest could be opened again."""
+        g = self.game
+        self.go("\r", "\r")
+        g.adv["phase"] = "chest"
+        g.start_event("chest", 0)
+        segment = g.adv["segment"]
+        g.key("\r", 0)
+        g.adv["hearts"] = 2
+        g.trial_done(True, [])
+        g.key("q", 0)                                               # quit before closing the result
+        adventure.save(g.adv)                                       # what main() does on the way out
+        again = adventure.Game(80, 24, rng=random.Random(0))
+        self.assertEqual(again.adv["phase"], "walk")
+        self.assertEqual(again.adv["segment"], segment + 1)
+        self.assertEqual(again.adv["hearts"], 3)                    # no second heart
+        again.close_result(0) if again.result else None
+        self.assertNotIn("chest_done", again.adv)
+
     def test_leave_a_chest(self):
         g = self.game
         self.go("\r", "\r")

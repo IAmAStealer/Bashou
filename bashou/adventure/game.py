@@ -75,6 +75,8 @@ class Game:
         self.pending_trial = None       # set when you open it: main() runs the sandbox shell
         self.page = 0                   # lesson page
         self.hud_rows = 1               # status lines at the bottom: 2 when one is too narrow (portrait)
+        if self.adv.get("chest_done"):                  # quit on the chest's result: it's opened, walk on
+            world.event_done(self.adv)
         if self.adv["phase"] in ("monster", "boss", "chest", "lesson"):
             self.start_event(self.adv["phase"], time.time())   # an event you quit in: start it again
         self.resize(cols, rows)
@@ -133,6 +135,7 @@ class Game:
 
     def trial_done(self, won, notes):
         adv = self.adv
+        adv["chest_done"] = True                     # saved below: a reload must not offer it again
         if won:
             if self.trial.id not in adv["trials"]:
                 adv["trials"].append(self.trial.id)
@@ -249,7 +252,7 @@ class Game:
                 if lesson["id"] not in adv["lessons"]:
                     adv["lessons"].append(lesson["id"])
                 self.result = (True, [_("The owl nods: now try it, the next chest uses it.")] + save(adv))
-        elif phase == "chest" and not self.result:
+        elif phase == "chest" and not self.result and not self.pending_trial:
             if k in ENTER:
                 self.pending_trial = self.trial
             elif k == " ":

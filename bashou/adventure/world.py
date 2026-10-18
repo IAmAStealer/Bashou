@@ -135,6 +135,7 @@ def event_done(adv):
     """After a monster, a chest or a lesson: on to the next segment."""
     adv["segment"] += 1
     adv["phase"] = "walk"
+    adv.pop("chest_done", None)
 
 
 def lose_heart(adv):
