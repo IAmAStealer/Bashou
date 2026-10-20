@@ -942,9 +942,23 @@ class ThreatTest(unittest.TestCase):
         self.assertIsNotNone(fight.active_threat(s, now))
         # Only one at a time, and at least 2 h between two threats.
         self.assertIsNone(fight.maybe_threat(s, self.Always(), now + 60))
-        self.assertIsNone(fight.maybe_threat(s, self.Always(), now + 3600))
-        self.assertIsNone(fight.active_threat(s, now + 3600))    # it left after 10 min
-        self.assertIsNotNone(fight.maybe_threat(s, self.Always(), now + 2 * 3600 + 1))
+        self.assertIsNone(fight.maybe_threat(s, self.Always(), now + 3 * 3600))
+        self.assertIsNotNone(fight.active_threat(s, now + 3600))  # it still waits an hour later
+
+    def test_a_threat_waits_until_the_end_of_the_day(self):
+        """Owner (2026-10-20): one Bashou across terminals, fights are rare; missing one feels bad."""
+        morning = datetime.datetime(2027, 3, 10, 9, 0).timestamp()
+        s = state.default()
+        fight.maybe_threat(s, self.Always(), morning)
+        self.assertIsNotNone(fight.active_threat(s, datetime.datetime(2027, 3, 10, 23, 59).timestamp()))
+        self.assertIsNone(fight.active_threat(s, datetime.datetime(2027, 3, 11, 0, 1).timestamp()))
+
+    def test_a_late_threat_still_waits_two_hours(self):
+        late = datetime.datetime(2027, 3, 10, 23, 30).timestamp()
+        s = state.default()
+        fight.maybe_threat(s, self.Always(), late)
+        self.assertIsNotNone(fight.active_threat(s, late + fight.THREAT_HOURS * 3600 - 60))
+        self.assertIsNone(fight.active_threat(s, late + fight.THREAT_HOURS * 3600 + 60))
 
     def test_no_threat_when_bank_is_empty(self):
         s = state.default()
@@ -956,7 +970,7 @@ class ThreatTest(unittest.TestCase):
         s = state.default()
         self.assertEqual(fight.threats_per_day(s), 3)
         s["pets"] = ["bat", "frog", "fox", "owl", "mole", "snake", "ghost", "ant", "turtle"]
-        self.assertEqual(fight.threats_per_day(s), 1)
+        self.assertEqual(fight.threats_per_day(s), 2)          # 2 a day at most later (owner, 2026-10-20)
 
 
 if __name__ == "__main__":
@@ -1070,7 +1084,7 @@ class HoneyBadgerTest(unittest.TestCase):
         self.assertIsNone(s["threat"])
         self.assertTrue(fight.badger_fight(s, self.BORED, ThreatTest.Always(), self.NOW))
         self.assertTrue(s["threat"]["badger"])
-        self.assertGreater(s["threat"]["until"], self.NOW + fight.THREAT_MINUTES * 60)   # waits for you
+        self.assertGreater(s["threat"]["until"], self.NOW + fight.THREAT_HOURS * 3600)   # waits for you
         said = fight.announcement(s, now=self.NOW)
         self.assertIn("Honey badger", said)
         self.assertIn("after your next command", said)

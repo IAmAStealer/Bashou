@@ -23,7 +23,7 @@ from .render import BOLD, DIM, RESET, ACCENT, GOOD, BAD
 
 WIN, FLEE, KO = 42, 3, 4   # exit codes of the arena shell (Ctrl-D is a flee, KO: no hearts left)
 TIMEOUT = -1               # `bashou arena`'s clock ran out (not an exit code: Bashou stops the shell)
-THREAT_MINUTES = 30
+THREAT_HOURS = 2           # a threat waits until midnight, and at least this long (owner, 2026-10-20)
 
 RC = r"""
 [[ -f ~/.bash_aliases ]] && source ~/.bash_aliases
@@ -211,10 +211,10 @@ def to_discover(s):
 
 
 def threats_per_day(s, today=None):
-    """About 3 a day at first, 1 later, fewer when the bank runs low, none when it's empty
+    """About 3 a day at first, 2 later, fewer when the bank runs low, none when it's empty
     (reviews that are due count as fights left)."""
     left = len(remaining(s)) + len(due(s, today))
-    return max(1, min(3, 3 - level(s) // 3)) * min(1, left / 5)
+    return max(2, min(3, 3 - level(s) // 3)) * min(1, left / 5)
 
 
 # --- reviews: a beaten fight comes back after 1, 7 and 30 days (owner: learning is repetition) ---------
@@ -261,6 +261,13 @@ def active_threat(s, now=None):
     return None
 
 
+def threat_until(now):
+    """The end of the day, THREAT_HOURS from now at least: a fight a day or two is easy to miss."""
+    midnight = datetime.datetime.combine(datetime.date.fromtimestamp(now) + datetime.timedelta(days=1),
+                                         datetime.time()).timestamp()
+    return max(midnight, now + THREAT_HOURS * 3600)
+
+
 def maybe_threat(s, rng=random, now=None):
     """Called under the lock from the companion. Returns a notification or None."""
     now = now or time.time()
@@ -278,7 +285,7 @@ def maybe_threat(s, rng=random, now=None):
         return None
     review = bool(back) and (not new or rng.random() < REVIEW_FIRST)
     ch = rng.choice(back if review else new)
-    s["threat"] = {"challenge": ch.id, "until": now + THREAT_MINUTES * 60, "review": review}
+    s["threat"] = {"challenge": ch.id, "until": threat_until(now), "review": review}
     s["threat_day"]["count"] += 1
     s["last_threat"] = now
     return announcement(s, now)

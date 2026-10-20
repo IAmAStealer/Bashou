@@ -48,7 +48,8 @@ A pixel-art pet that lives in the top-right corner of your terminal and grows as
   achievement (with an example command), or a line shaped by your achievements (win fights and it
   gets bolder). `bashou talk` asks it right away.
 - **Threats.** A few times a day your pet warns you that a threat is coming (« ⚠ A Log Hydra is coming! Use `grep` to fight
-  it »). `bashou fight` drops you in a sandbox bash with random data: solve the task with the named
+  it »). The threat waits until midnight (2 hours at least) and your pet says it again every half
+  hour, in every terminal. `bashou fight` drops you in a sandbox bash with random data: solve the task with the named
   tool, `answer` it, and the threat's pet joins you. `hint` helps, `flee` runs away. No threat, no
   fight: the arena only opens after your pet's warning. Code fights hand you a small broken Python
   or C file instead: its first lines say what goes in, what should come out and how to run it; fix

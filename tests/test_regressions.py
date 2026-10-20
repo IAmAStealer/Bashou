@@ -397,6 +397,22 @@ class ThreatBubbleTest(TempState):
         self.pet.reload_pet()
         self.assertFalse(self.pet.threat)
 
+    def test_the_warning_comes_back_while_the_threat_waits(self):
+        """Owner (2026-10-20): the bubble went after 3 min and the day's fight was easy to miss."""
+        from bashou import companion
+        text = self.pet.bubble[0]
+        self.pet.bubble = None
+        self.pet.remind_threat(self.pet.threat_said + companion.REMIND_MS - 1)
+        self.assertNotIn(text, self.pet.notes)
+        self.pet.remind_threat(self.pet.threat_said + companion.REMIND_MS + 1)
+        self.assertIn(text, self.pet.notes)
+
+    def test_no_reminder_over_another_bubble(self):
+        from bashou import companion
+        self.pet.bubble = ("something else", 0, 5)
+        self.pet.remind_threat(self.pet.threat_said + companion.REMIND_MS + 1)
+        self.assertEqual(self.pet.notes, [])
+
     def test_no_goodbye_after_a_win(self):
         self.end_threat(won=True)
         self.assertIsNone(self.pet.bubble)

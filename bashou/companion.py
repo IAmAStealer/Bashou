@@ -35,6 +35,7 @@ def now_ms():
 
 
 BUBBLE_MS = 3 * 60_000     # a bubble never stays longer, however few commands you run
+REMIND_MS = 30 * 60_000    # a waiting threat's warning comes back this often (owner, 2026-10-20)
 BUBBLE_ROWS = 7            # a bubble of 4 lines covers the top 7 rows (see frame)
 
 
@@ -81,6 +82,7 @@ class Companion:
         self.threat = False
         self.threat_text = self.threat_id = None     # the waiting threat's announcement
         self.threat_until = 0.0
+        self.threat_said = 0           # when its warning was last queued (ms)
         self.fights_won = 0
         self.behavior = Behavior(now=now_ms())
         self.last_command = now_ms()
@@ -227,6 +229,13 @@ class Companion:
     def announce(self, text):
         if text not in self.notes and not (self.bubble and text in self.bubble[0]):
             self.notes.append(text)
+        self.threat_said = now_ms()
+
+    def remind_threat(self, ms):
+        """The ⚠ bubble goes after a few commands; the threat waits till midnight: say it again now and then."""
+        if self.threat and self.threat_text and ms - self.threat_said > REMIND_MS \
+                and not self.notes and not self.bubble:
+            self.announce(self.threat_text)
 
     def last_activity(self):
         """Last command, or last key typed: the kernel updates the terminal's atime on input."""
@@ -405,6 +414,7 @@ class Companion:
         if self.tick % 20 == 10 and self.code_changed():
             self.read_events()
             self.restart()
+        self.remind_threat(now_ms())
         self.maybe_talk(now_ms())
         self.draw(now_ms())
 
@@ -417,7 +427,7 @@ class Companion:
         return newest != self.code and time.time() - newest > 2
 
     HANDOVER = ("offset", "guests", "bubble", "bubble_at", "notes", "talk_at", "warn_at", "threat", "threat_text", "threat_id",
-                "threat_until", "fights_won", "old_loader_told")
+                "threat_until", "threat_said", "fights_won", "old_loader_told")
 
     def restart(self):
         """Run the new code in this same process (same PID, so the shell still knows us).
