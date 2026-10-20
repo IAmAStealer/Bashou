@@ -3,6 +3,18 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.10.3 — 2026-10-20
+
+### Changes
+
+- A threat now waits for you until midnight (2 hours at least) instead of 30 minutes, and your pet repeats its warning every half hour, so a day's fight is no longer missed when the bubble goes by.
+- Experienced players get up to 2 threats a day instead of 1.
+- Homebrew installs run on Homebrew's own Python 3.15 and no longer use whichever `python3` comes first on your PATH.
+
+### Breaking changes
+
+- Breaking change: a pony waited all day for a threat that never showed up, got bored and went to watch the sunset. Bring it home with `bashou pony hoof`.
+
 ## v0.10.2 — 2026-10-18
 
 ### Changes
