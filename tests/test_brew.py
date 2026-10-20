@@ -61,9 +61,10 @@ class UpgradeTest(unittest.TestCase):
         self.assertNotIn("sudo", out.getvalue())
 
 
-def loader_lines(name):
-    """The lines of `name` (bashou.bash, bashou.zsh) that set BASHOU_DIR."""
-    return "\n".join(l for l in (ROOT / name).read_text().splitlines() if l.startswith(("BASHOU_DIR=", "[[ $BASHOU_DIR")))
+def loader_lines(name, python=False):
+    """The lines of `name` (bashou.bash, bashou.zsh) that set BASHOU_DIR (and _bashou_py with `python`)."""
+    starts = ("BASHOU_DIR=", "[[ $BASHOU_DIR") + ("_bashou_py=", "[[ -x $BASHOU_DIR/python") * python
+    return "\n".join(l for l in (ROOT / name).read_text().splitlines() if l.startswith(starts))
 
 
 def has(shell):
@@ -104,6 +105,35 @@ class LoaderDirTest(unittest.TestCase):
                 (Path(tmp) / name).write_text(loader_lines(name) + "\n")
                 with self.subTest(shell=shell):
                     self.assertEqual(self.dir_from(shell, Path(tmp) / name), Path(tmp).resolve())
+
+
+class LoaderPythonTest(unittest.TestCase):
+    """The loaders run Bashou with the formula's python (libexec/python) when there is one, else python3."""
+
+    def python_from(self, shell, folder):
+        lines = loader_lines(shell == "zsh" and "bashou.zsh" or "bashou.bash", python=True)
+        (folder / "loader").write_text(lines + "\n")
+        out = subprocess.run([shell, "-c", '_bashou_sticky=$1; source "$1"; printf %s "$_bashou_py"', shell, str(folder / "loader")],
+                             capture_output=True, text=True, timeout=10)
+        self.assertEqual(out.stderr, "")
+        return out.stdout
+
+    def test_brew_python_then_python3(self):
+        for shell in ("bash", "zsh"):
+            if not has(shell):
+                continue
+            with self.subTest(shell=shell), tempfile.TemporaryDirectory() as tmp:
+                folder = Path(tmp)
+                self.assertEqual(self.python_from(shell, folder), "python3")
+                (folder / "python").symlink_to("/bin/sh")
+                self.assertEqual(self.python_from(shell, folder), str(folder.resolve() / "python"))
+
+    def test_no_bare_python3_left(self):
+        for name in ("bashou.bash", "bashou.zsh"):
+            with self.subTest(name=name):
+                self.assertNotIn('python3 "$BASHOU_DIR', (ROOT / name).read_text())
+        from bashou import fight
+        self.assertNotIn('python3 "$BASHOU_SRC', Path(fight.__file__).read_text())
 
 
 class TarballTest(unittest.TestCase):
@@ -161,9 +191,17 @@ class FormulaTest(unittest.TestCase):
     def test_installs_in_libexec_with_a_wrapper_on_opt(self):
         self.assertIn('libexec.install Dir["*"]', self.text)
         self.assertIn('#{opt_libexec}/launch.py', self.text)
-        self.assertIn('uses_from_macos "python"', self.text)
         self.assertIn("bashou on", self.text)                     # caveats: how to meet the pet
         self.assertIn("bashou version", self.text)                # brew test
+
+    def test_its_own_python(self):
+        """Homebrew's python is 3.15 (owner, 2026-10-20): the formula depends on it and runs it by its opt/
+        path, so neither the python3 first on PATH nor other installs (Apple's, pyenv, apt) are involved."""
+        self.assertIn('depends_on "python@3.15"', self.text)
+        self.assertNotIn("uses_from_macos", self.text)
+        self.assertIn('libexec.install_symlink Formula["python@3.15"].opt_bin/"python3.15" => "python"', self.text)
+        self.assertIn('exec "#{opt_libexec}/python" "#{opt_libexec}/launch.py" bashou "$@"', self.text)
+        self.assertNotIn("exec python3", self.text)
 
     def test_ruby_syntax(self):
         ruby = subprocess.run(["sh", "-c", "command -v ruby"], capture_output=True, text=True).stdout.strip()

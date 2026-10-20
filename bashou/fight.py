@@ -37,7 +37,7 @@ _arena_log() {
     printf '%s\t' "$s" >> "$BASHOU_ARENA/log"
     HISTTIMEFORMAT= history 1 >> "$BASHOU_ARENA/log"
     if [[ -n $BASHOU_DUEL ]]; then
-      python3 "$BASHOU_SRC/launch.py" bashou.duel judge "$BASHOU_ARENA"
+      "${BASHOU_PYTHON:-python3}" "$BASHOU_SRC/launch.py" bashou.duel judge "$BASHOU_ARENA"
       (( $? == 4 )) && exit 4
     fi
   fi
@@ -66,7 +66,7 @@ if [[ -n $BASHOU_DEADLINE ]]; then                 # `bashou arena`: the time le
   PROMPT_COMMAND='_arena_log; _arena_clock'
   PS1='\[\e[38;2;240;200;100m\]${_arena_left}\[\e[0m\] '$PS1
 fi
-_arena() { python3 "$BASHOU_SRC/launch.py" bashou.fight "$@" "$BASHOU_ARENA"; }
+_arena() { "${BASHOU_PYTHON:-python3}" "$BASHOU_SRC/launch.py" bashou.fight "$@" "$BASHOU_ARENA"; }
 answer() { _arena answer "$*" && exit 42; }
 verify() { _arena verify && exit 42; }
 hint() { _arena hint; }
@@ -106,7 +106,7 @@ _arena_log() {
   if [[ -n $cmd ]]; then
     printf '%s\t    1  %s\n' "$s" "$cmd" >> "$BASHOU_ARENA/log"
     if [[ -n $BASHOU_DUEL ]]; then
-      python3 "$BASHOU_SRC/launch.py" bashou.duel judge "$BASHOU_ARENA"
+      "${BASHOU_PYTHON:-python3}" "$BASHOU_SRC/launch.py" bashou.duel judge "$BASHOU_ARENA"
       (( $? == 4 )) && exit 4
     fi
     _arena_tip "$cmd"
@@ -133,7 +133,7 @@ if [[ -n $BASHOU_DEADLINE ]]; then                 # `bashou arena`: the time le
   setopt prompt_subst
   PS1=$'%{\e[38;2;240;200;100m%}${_arena_left}%{\e[0m%} '$PS1
 fi
-_arena() { python3 "$BASHOU_SRC/launch.py" bashou.fight "$@" "$BASHOU_ARENA"; }
+_arena() { "${BASHOU_PYTHON:-python3}" "$BASHOU_SRC/launch.py" bashou.fight "$@" "$BASHOU_ARENA"; }
 answer() { _arena answer "$*" && exit 42; }
 verify() { _arena verify && exit 42; }
 hint() { _arena hint; }
@@ -542,7 +542,7 @@ def arena(ch, intro, rng=None, fight=False, help_first=False, limit=None):
             (base / "height").write_text(f"{top}\n")
         print(intro(ch.task_text(meta)), flush=True)
         env = {**os.environ, "BASHOU_ARENA": str(base),
-               "BASHOU_SRC": str(Path(__file__).resolve().parent.parent)}
+               "BASHOU_SRC": str(Path(__file__).resolve().parent.parent), "BASHOU_PYTHON": sys.executable}
         env.update(meta.get("env", {}))                   # a fight's own practice folders (GNUPGHOME…)
         env.update(extra)
         env.pop("BASHOU_DUEL", None)

@@ -100,8 +100,9 @@ if [ "$1" -eq 0 ]; then {clean}; fi
 """
 
 
-# Homebrew (0.10.0): the tree in libexec, a wrapper like WRAPPER on opt/ (it stays across upgrades), the Mac's
-# own python3 (Homebrew needs Apple's command line tools, which bring it).
+# Homebrew (0.10.0): the tree in libexec, a wrapper like WRAPPER on opt/ (it stays across upgrades). Python is
+# Homebrew's python@3.15, linked as libexec/python and run by that path: the loaders use it too, so the python3
+# first on PATH (Apple's, pyenv's...) neither runs Bashou nor gets changed.
 FORMULA = """# Written by tools/package.py in IAmAStealer/Bashou at each release: changes here are overwritten.
 class Bashou < Formula
   desc "{summary}"
@@ -110,13 +111,14 @@ class Bashou < Formula
   sha256 "{sha256}"
   license "MIT"
 
-  uses_from_macos "python"
+  depends_on "python@3.15"
 
   def install
     libexec.install Dir["*"]
+    libexec.install_symlink Formula["python@3.15"].opt_bin/"python3.15" => "python"
     (bin/"bashou").write <<~SH
       #!/bin/sh
-      exec python3 "#{{opt_libexec}}/launch.py" bashou "$@"
+      exec "#{{opt_libexec}}/python" "#{{opt_libexec}}/launch.py" bashou "$@"
     SH
   end
 

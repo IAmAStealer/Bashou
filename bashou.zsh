@@ -26,6 +26,8 @@ unset _bashou_pkg
 
 BASHOU_DIR=${_bashou_sticky:A:h}
 [[ $BASHOU_DIR == */Cellar/bashou/*/libexec ]] && BASHOU_DIR=${BASHOU_DIR%/Cellar/bashou/*}/opt/bashou/libexec
+_bashou_py=python3                                   # Homebrew runs its own python (libexec/python, a link)
+[[ -x $BASHOU_DIR/python ]] && _bashou_py=$BASHOU_DIR/python
 export BASHOU_SHELL=zsh                              # the arena and `bashou on` follow your shell
 _bashou_data=${BASHOU_DATA:-$HOME/.local/share/bashou}
 _bashou_events=$_bashou_data/events.$$
@@ -67,7 +69,7 @@ _bashou_precmd() {
   fi
   if [[ -n $BASHOU_PID && -e $_bashou_fight ]]; then
     rm -f "$_bashou_fight"
-    python3 "$BASHOU_DIR/launch.py" bashou.fight badger
+    "$_bashou_py" "$BASHOU_DIR/launch.py" bashou.fight badger
   fi
   if [[ -n $BASHOU_PID ]]; then
     _bashou_make_room
@@ -142,7 +144,7 @@ _bashou_on() {
   echo 0 >| "$_bashou_room" 2>/dev/null
   # Its own process group (Ctrl+C mustn't reach it), no job message, SIGUSR1 ignored until Python handles it.
   setopt local_options no_notify
-  { (trap '' USR1; exec python3 "$BASHOU_DIR/launch.py" bashou.companion $$) </dev/null 2>/dev/null &! } 2>/dev/null
+  { (trap '' USR1; exec "$_bashou_py" "$BASHOU_DIR/launch.py" bashou.companion $$) </dev/null 2>/dev/null &! } 2>/dev/null
   BASHOU_PID=$!
 }
 
@@ -151,33 +153,33 @@ bashou() {
     off)
       _bashou_off
       if [[ -n $_bashou_auto && ! -e $_bashou_off ]] && : >| "$_bashou_off" 2>/dev/null; then
-        python3 "$BASHOU_DIR/launch.py" bashou off saved
+        "$_bashou_py" "$BASHOU_DIR/launch.py" bashou off saved
       else
-        python3 "$BASHOU_DIR/launch.py" bashou off hidden
+        "$_bashou_py" "$BASHOU_DIR/launch.py" bashou off hidden
       fi
       ;;
     on)
       # Always say what happened (owner: `bashou on` didn't reply when the pet was already there).
       rm -f "$_bashou_off"
       if [[ -n $BASHOU_PID ]]; then
-        python3 "$BASHOU_DIR/launch.py" bashou on already
+        "$_bashou_py" "$BASHOU_DIR/launch.py" bashou on already
       elif [[ -n $_bashou_guest ]] && _bashou_elsewhere; then
-        python3 "$BASHOU_DIR/launch.py" bashou on guest
+        "$_bashou_py" "$BASHOU_DIR/launch.py" bashou on guest
       else
         _bashou_ready || bashou start || return 1
         _bashou_on
-        python3 "$BASHOU_DIR/launch.py" bashou on back
+        "$_bashou_py" "$BASHOU_DIR/launch.py" bashou on back
       fi
       ;;
     here)
       if [[ -n $BASHOU_PID ]]; then
-        python3 "$BASHOU_DIR/launch.py" bashou here already
+        "$_bashou_py" "$BASHOU_DIR/launch.py" bashou here already
       else
         rm -f "$_bashou_off"
-        { _bashou_ready || bashou start; } && _bashou_on && python3 "$BASHOU_DIR/launch.py" bashou here moved
+        { _bashou_ready || bashou start; } && _bashou_on && "$_bashou_py" "$BASHOU_DIR/launch.py" bashou here moved
       fi
       ;;
-    *) python3 "$BASHOU_DIR/launch.py" bashou "$@" ;;
+    *) "$_bashou_py" "$BASHOU_DIR/launch.py" bashou "$@" ;;
   esac
 }
 
@@ -260,7 +262,7 @@ _bashou_ready() {
 }
 if _bashou_ready || BASHOU_AUTO=$_bashou_auto bashou start; then
   # bash gets its line in ~/.bashrc too, once.
-  [[ -e $_bashou_data/setup.bash ]] || (( ! $+commands[bash] )) || python3 "$BASHOU_DIR/launch.py" bashou on bash
+  [[ -e $_bashou_data/setup.bash ]] || (( ! $+commands[bash] )) || "$_bashou_py" "$BASHOU_DIR/launch.py" bashou on bash
   if _bashou_claim; then
     _bashou_on
   else
