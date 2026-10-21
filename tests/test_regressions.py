@@ -413,6 +413,19 @@ class ThreatBubbleTest(TempState):
         self.pet.remind_threat(self.pet.threat_said + companion.REMIND_MS + 1)
         self.assertEqual(self.pet.notes, [])
 
+    def test_no_reminder_after_fleeing(self):
+        """User: after fleeing, the threat came back 30 min later. It still waits for `bashou fight`."""
+        from bashou import companion
+        time.sleep(0.01)                                 # a new mtime for the state file
+        with mock.patch.object(fight, "arena", return_value=(fight.FLEE, [])), \
+                contextlib.redirect_stdout(io.StringIO()):
+            fight.run()
+        self.pet.reload_pet()
+        self.pet.bubble, self.pet.notes = None, []
+        self.pet.remind_threat(self.pet.threat_said + companion.REMIND_MS + 1)
+        self.assertEqual(self.pet.notes, [])
+        self.assertTrue(self.pet.threat)
+
     def test_no_goodbye_after_a_win(self):
         self.end_threat(won=True)
         self.assertIsNone(self.pet.bubble)

@@ -616,6 +616,8 @@ def run(ch=None, limit=None, badger=False):
         told = after_fight(s, ch, won) if won or code in (KO, TIMEOUT) else None
         if not won:
             s["fights_lost"] = s.get("fights_lost", 0) + 1
+            if s.get("threat") and s["threat"]["challenge"] == ch.id:
+                s["threat"]["faced"] = True                # you know it's there: no more reminders today
             notes += progress.check(s)
         if won:
             s["fights_won"] += 1

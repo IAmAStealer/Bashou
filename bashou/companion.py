@@ -83,6 +83,7 @@ class Companion:
         self.threat_text = self.threat_id = None     # the waiting threat's announcement
         self.threat_until = 0.0
         self.threat_said = 0           # when its warning was last queued (ms)
+        self.threat_faced = False      # you fled or lost it: the pet doesn't remind you of it again
         self.fights_won = 0
         self.behavior = Behavior(now=now_ms())
         self.last_command = now_ms()
@@ -213,6 +214,7 @@ class Companion:
             if (threat["challenge"] != self.threat_id or text != self.threat_text) and text:
                 self.announce(text)    # every terminal says it: a lone ⚠ explained nothing
             self.threat_text, self.threat_id, self.threat_until = text, threat["challenge"], threat["until"]
+            self.threat_faced = bool(threat.get("faced"))
         self.fights_won = s["fights_won"]
 
     def threat_ended(self, s):
@@ -233,7 +235,7 @@ class Companion:
 
     def remind_threat(self, ms):
         """The ⚠ bubble goes after a few commands; the threat waits till midnight: say it again now and then."""
-        if self.threat and self.threat_text and ms - self.threat_said > REMIND_MS \
+        if self.threat and self.threat_text and not self.threat_faced and ms - self.threat_said > REMIND_MS \
                 and not self.notes and not self.bubble:
             self.announce(self.threat_text)
 
@@ -427,7 +429,7 @@ class Companion:
         return newest != self.code and time.time() - newest > 2
 
     HANDOVER = ("offset", "guests", "bubble", "bubble_at", "notes", "talk_at", "warn_at", "threat", "threat_text", "threat_id",
-                "threat_until", "threat_said", "fights_won", "old_loader_told")
+                "threat_until", "threat_said", "threat_faced", "fights_won", "old_loader_told")
 
     def restart(self):
         """Run the new code in this same process (same PID, so the shell still knows us).
