@@ -3,6 +3,17 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.10.4 — 2026-10-21
+
+### Changes
+
+- Once you flee a fight (or lose it), your pet stops reminding you of that threat every half hour. It still waits for you with `bashou fight` until midnight.
+- Gary looks like the real Gary: yellow-green eyes with red pupils and a green belly.
+
+### Breaking changes
+
+- Breaking change: a pony saw Gary's new green belly, decided it was grass and trotted off to graze somewhere quieter. Bring it home with `bashou pony hoof`.
+
 ## v0.10.3 — 2026-10-20
 
 ### Changes
