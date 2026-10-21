@@ -12,6 +12,7 @@ import tempfile
 from pathlib import Path
 
 from . import Challenge
+from ..i18n import _
 
 PRODUCTS = [("lamp", 25, 12), ("chair", 45, 7), ("desk", 120, 3), ("mug", 8, 40), ("pen", 2, 300),
             ("notebook", 5, 150), ("backpack", 60, 9), ("headphones", 80, 14), ("kettle", 30, 6),
@@ -99,6 +100,15 @@ def join_setup(work, rng):
 def create_setup(work, rng):
     table, first, second = rng.choice([("books", "title", "year"), ("movies", "title", "year"),
                                        ("songs", "title", "plays"), ("planets", "name", "moons")])
+    (work / "create.sql").write_text("\n".join("-- " + line for line in [
+        _("A table has a name and columns. Each column has a name and a type: TEXT for words, INTEGER for whole "
+          "numbers."),
+        _("Example: a table of fruits, with their name (words) and their weight in grams (a whole number):"),
+        "  CREATE TABLE fruits (name TEXT, grams INTEGER);",
+        _("Your step: write the line for {table} below (without -- in front), then run: sqlite3 {db} < create.sql"
+          ).format(table=table, db=f"{table}.db"),
+        _("Check it with: sqlite3 {db} .schema").format(db=f"{table}.db"),
+    ]) + "\n\n")
     return {"args": {"db": f"{table}.db", "table": table, "text": first, "number": second}}
 
 
@@ -159,7 +169,14 @@ def upsert_setup(work, rng):
     items = [(n, rng.randint(2, 30), f"{rng.choice('ABCD')}{rng.randint(1, 9)}") for n in names]
     item, n = rng.choice(names), rng.randint(3, 12)
     make_stock(work / "stock.db", items)
-    (work / UPSERT_FILE).write_text("-- One statement: add the delivery to stock.db (see the task).\n")
+    (work / UPSERT_FILE).write_text("\n".join("-- " + line for line in [
+        _("The delivery: {n} × {item}. Bashou runs this file on stock.db with {item} in it, and on one without.").format(
+            n=n, item=item),
+        _("This INSERT already works when {item} isn't in stock yet.").format(item=item),
+        _("When it is, it fails: item is the PRIMARY KEY, and two rows can't have the same one."),
+        _("Your step: say what to do on that conflict: raise its qty by {n} instead.").format(n=n),
+        _("Try it on a copy: cp stock.db test.db; sqlite3 test.db < {file}").format(file=UPSERT_FILE),
+    ]) + f"\nINSERT INTO stock (item, qty) VALUES ('{item}', {n});\n")
     return {"args": {"item": item, "n": n, "file": UPSERT_FILE}, "items": items}
 
 
@@ -225,8 +242,8 @@ ALL = [
               setup=count_setup),
     Challenge(level=1, id="table_troll", threat="Table Troll", **SQL, fix=True,
               task="The Table Troll wants somewhere to keep its {table}.\nCreate the database {db} with a table "
-                   "{table}: a column {text} that holds text and a column {number} that holds whole numbers. "
-                   "Then: verify",
+                   "{table}: a column {text} that holds text and a column {number} that holds whole numbers.\n"
+                   "create.sql shows how a table is written: follow its example. Then: verify",
               hints=["sqlite3 {db} opens it, and creates the file as soon as you write something in it. "
                      "CREATE TABLE gives a table its name and its columns, each with a type: TEXT for words, "
                      "INTEGER for whole numbers.",
@@ -258,7 +275,8 @@ ALL = [
     Challenge(level=2, id="upsert_unicorn", threat="Upsert Unicorn", **SQL, fix=True, after=("update_urchin",),
               task="The Upsert Unicorn brings a delivery: {n} × {item}.\nWrite in {file} one SQL statement that "
                    "adds them to stock.db: if {item} is already in stock, raise its qty by {n} (keep its shelf); "
-                   "if it isn't, insert it with qty {n}. Bashou runs your file on both cases. Then: verify",
+                   "if it isn't, insert it with qty {n}. Bashou runs your file on both cases.\n"
+                   "{file} already holds an INSERT that works when {item} is missing: finish it. Then: verify",
               hints=["INSERT … ON CONFLICT(item) DO UPDATE tries the insert, and when the item already exists "
                      "(item is the PRIMARY KEY) runs the update instead: an \"upsert\". In the update, excluded.qty "
                      "is the qty you tried to insert. INSERT OR REPLACE is not the same: it deletes the old row, so "
