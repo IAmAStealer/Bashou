@@ -6644,9 +6644,12 @@
      "s": "#c04070",
      "b": "#8ab0d0",
      "B": "#6a90b0",
-     "w": "#ffffff",
-     "m": "#191919",
-     "p": "#ffa0aa"
+     "w": "#d8e870",
+     "m": "#e0405a",
+     "p": "#ffa0aa",
+     "g": "#a8cc40",
+     "G": "#7a9a28",
+     "l": "#c8e468"
     },
     "base": [
      "...........ww.ww.",
@@ -6660,7 +6663,7 @@
      ".aSSsssSSa..bbb..",
      "..aaSSSaa.bbbbb..",
      "BBbbbbbbbbbbbbb..",
-     ".BBbbbbbbbbbbb..."
+     ".GGgglllllggggG.."
     ]
    },
    "knight_snail": {
