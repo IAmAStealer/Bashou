@@ -18,6 +18,8 @@ import time
 from pathlib import Path
 
 from . import Challenge
+from .code import starter
+from ..i18n import _
 from .trials import trial as make
 
 NET = dict(pet="packet", skill="network")
@@ -190,6 +192,11 @@ def sprite_setup(work, rng):
     hosts = inside + near
     rng.shuffle(hosts)
     (work / "hosts.txt").write_text("".join(f"{h}\n" for h in hosts))
+    starter(work, "hosts.txt", [
+        _("ipaddress knows networks: address in net is True when the address is inside it."),
+        _("Your step: instead of printing each address, add 1 to count when it's inside the network."),
+    ], f'import ipaddress\n\nnet = ipaddress.ip_network("{net}")\ncount = 0\nfor line in open("hosts.txt"):\n'
+       '    address = ipaddress.ip_address(line.strip())\n    print(address)\nprint(count, "inside", net)\n')
     return {"args": {"net": str(net)}, "answer": sum(h in net for h in hosts)}
 
 
@@ -202,6 +209,11 @@ def serpent_setup(work, rng):
     lines = [str(a) for a in pick] + [str(twin), long_form]
     rng.shuffle(lines)
     (work / "addrs.txt").write_text("".join(f"{a}\n" for a in lines))
+    starter(work, "addrs.txt", [
+        _("Your step: it prints each address as written in the file. Print ipaddress.ip_address(...) "
+          "instead: Python always writes an address in its shortest form, so the twin shows up twice. "
+          "Then python3 solve.py | sort | uniq -d keeps only that one."),
+    ], 'import ipaddress\n\nfor line in open("addrs.txt"):\n    print(line.strip())\n')
     return {"answer": str(twin)}
 
 
@@ -375,7 +387,8 @@ ALL = [
               requires=["ip"], works=gateway_works, **NET),
     Challenge(level=1, id="subnet_sprite", tools=("python3", "python", "ipcalc", "sipcalc"), threat="Subnet Sprite",
               task="The Subnet Sprite mixed addresses into hosts.txt.\n"
-                   "How many of them are inside {net}? Answer with: answer <number>",
+                   "How many of them are inside {net}? Answer with: answer <number>\n"
+                   "solve.py is a start: run python3 solve.py, then finish it.",
               hints=["{net} is a /22: 1,024 addresses, four /24 blocks in a row. Near misses just outside "
                      "are the trap. Python's ipaddress module knows the exact limits, "
                      "and so does ipcalc {net} if it's installed.",
@@ -398,7 +411,8 @@ ALL = [
               setup=rook_setup, verify=lambda w, m, v: v.strip() in m["addrs"], requires=["getent"], **NET),
     Challenge(level=2, id="six_serpent", tools=("python3", "python"), threat="Six Serpent",
               task="The Six Serpent wrote one IPv6 address twice in addrs.txt: once short, once in full.\n"
-                   "Which address? Answer in its shortest form: answer <address>",
+                   "Which address? Answer in its shortest form: answer <address>\n"
+                   "solve.py is a start: run python3 solve.py, then finish it.",
               hints=["The same IPv6 address can be written many ways: leading zeros dropped, one run of zero "
                      "groups as ::. Python's ipaddress writes every one in the shortest form, then compare.",
                      "Try: python3 -c \"import ipaddress as i; [print(i.ip_address(l.strip())) for l in open('addrs.txt')]\" "

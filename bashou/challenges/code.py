@@ -37,6 +37,14 @@ def write(work, name, style, lines, code):
     (work / name).write_text(header(style, lines) + code)
 
 
+def starter(work, data, steps, code):
+    """solve.py, for the fights you win by writing a small program (user, 2026-10-21): it already reads
+    `data` and runs; `steps` say what's left to write."""
+    lines = [_("A start for you: this program already reads {file}. Run it as it is: python3 solve.py").format(
+        file=data)] + steps
+    (work / "solve.py").write_text("\n".join("# " + line for line in lines) + "\n\n" + code)
+
+
 # --- running your code --------------------------------------------------------
 
 HARNESS = r"""
@@ -337,6 +345,11 @@ def json_setup(work, rng):
               "database": {"host": "db.internal", "port": ports[2], "user": rng.choice(NAMES)},
               "metrics": {"enabled": True, "port": ports[3]}}
     (work / "config.json").write_text(json.dumps(config, indent=2) + "\n")
+    starter(work, "config.json", [
+        _("json.load turns the file into dicts: sections inside sections, like in the file."),
+        _("Your step: it prints the names at the top. Go down one level at a time, config[\"database\"] "
+          "first, until you print the port."),
+    ], 'import json\n\nwith open("config.json") as f:\n    config = json.load(f)\n\nprint(config.keys())\n')
     return {"answer": ports[2]}
 
 
@@ -344,6 +357,10 @@ def b64_setup(work, rng):
     word = rng.choice(("lantern", "harbor", "pebble", "thistle", "compass", "ember", "orchid", "falcon"))
     note = f"the vault word is {word}\n"
     (work / "secret.txt").write_text(base64.b64encode(note.encode()).decode() + "\n")
+    starter(work, "secret.txt", [
+        _("Your step: it prints the text still encoded. base64.b64decode(text) undoes base64 and gives "
+          "bytes; .decode() turns those bytes into text you can read."),
+    ], 'import base64\n\ntext = open("secret.txt").read()\nprint(text)\n')
     return {"answer": word}
 
 
@@ -360,6 +377,10 @@ def url_setup(work, rng):
     attack = "".join(f"%{b:02x}" for b in f"../../../etc/{target}".encode())
     lines.insert(rng.randint(5, len(lines) - 5), f"{rng.choice(ips)} GET /download?file={attack} 200")
     (work / "access.log").write_text("\n".join(lines) + "\n")
+    starter(work, "access.log", [
+        _("Your step: it prints each line as it is, %XX codes and all. urllib.parse.unquote(line) turns "
+          "them back into characters. Then look for /etc in what it prints."),
+    ], 'import urllib.parse\n\nfor line in open("access.log"):\n    print(line, end="")\n')
     return {"answer": target}
 
 
@@ -417,6 +438,12 @@ def jwt_setup(work, rng):
                               "exp": rng.randint(1_790_000_000, 1_800_000_000)}).encode())
     sig = b64url(bytes(rng.randrange(256) for _i in range(32)))
     (work / "token.txt").write_text(f"{head}.{body}.{sig}\n")
+    starter(work, "token.txt", [
+        _("It already splits the token at its dots: header, payload, signature."),
+        _("Your step: decode the payload. It's base64url without its = padding: "
+          "base64.urlsafe_b64decode(payload + \"==\") puts the padding back and decodes it."),
+    ], 'import base64\n\ntoken = open("token.txt").read().strip()\n'
+       'header, payload, signature = token.split(".")\nprint(payload)\n')
     return {"answer": user}
 
 
@@ -628,19 +655,22 @@ ALL = [
               setup=tree_setup, verify=py_tests("du.py", "total")),
     Challenge(level=2, id="json_jinn", pet="snake", threat="JSON Jinn", **PY,
               task="The JSON Jinn guards config.json. Read it with python3, not by eye.\n"
-                   "Which port does the database use? Answer with: answer <port>",
+                   "Which port does the database use? Answer with: answer <port>\n"
+                   "solve.py is a start: run python3 solve.py, then finish it.",
               hints=["python3 -c runs one line of Python. json.load turns the file into dicts.",
                      "Try: python3 -c \"import json; print(json.load(open('config.json'))['database']['port'])\""],
               setup=json_setup),
     Challenge(level=2, id="base64_banshee", pet="snake", threat="Base64 Banshee", **PY,
               task="The Base64 Banshee wails in secret.txt: it's base64, not a secret code.\n"
-                   "Decode it with python3. What is the vault word?",
+                   "Decode it with python3. What is the vault word?\n"
+                   "solve.py is a start: run python3 solve.py, then finish it.",
               hints=["base64 is an encoding, anyone can undo it.",
                      "Try: python3 -c \"import base64; print(base64.b64decode(open('secret.txt').read()).decode())\""],
               setup=b64_setup),
     Challenge(level=2, id="percent_poltergeist", pet="snake", threat="Percent Poltergeist", **PY,
               task="The Percent Poltergeist hides an attack in access.log behind %XX codes.\n"
-                   "Decode the log with python3. Which file under /etc was the attacker after?",
+                   "Decode the log with python3. Which file under /etc was the attacker after?\n"
+                   "solve.py is a start: run python3 solve.py, then finish it.",
               hints=["urllib.parse.unquote turns the %XX codes back into characters: %2e%2e%2f becomes ../",
                      "Try: python3 -c \"import urllib.parse; print(urllib.parse.unquote(open('access.log').read()))\""
                      " | grep etc"],
@@ -654,7 +684,8 @@ ALL = [
               setup=inject_setup, verify=inject_verify),
     Challenge(level=3, id="token_trickster", pet="snake", threat="Token Trickster", after=("base64_banshee",), **PY,
               task="The Token Trickster flashes a JWT in token.txt. Signed is not secret: read it.\n"
-                   "Which user (sub) is the token for? Decode it with python3.",
+                   "Which user (sub) is the token for? Decode it with python3.\n"
+                   "solve.py is a start: run python3 solve.py, then finish it.",
               hints=["A JWT is header.payload.signature, each part base64url without padding.",
                      "Try: python3 -c \"import base64; p = open('token.txt').read().split('.')[1]; "
                      "print(base64.urlsafe_b64decode(p + '=='))\""],
