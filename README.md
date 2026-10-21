@@ -79,53 +79,23 @@ It shows every command it will run, asks you, then moves you over. Your pets and
 
 ## What's new
 
+**0.10.4**
+- Fled a fight? Your pet stops reminding you of it; the threat still waits for `bashou fight` until midnight.
+- Gary has his real colors: yellow-green eyes with red pupils and a green belly.
+
+**0.10.3**
+- **Threats wait all day**: a fight now waits until midnight and your pet repeats its warning every half
+  hour, so you don't miss it. Experienced players get up to 2 threats a day.
+- Homebrew installs run on Homebrew's own Python 3.15.
+
+**0.10.2**
+- An opened chest stays opened, and the same chest never comes twice in one run of an adventure path.
+
+**0.10.1**
+- **New versions reach Homebrew by themselves**: `brew upgrade` gets them the day they come out.
+
 **0.10.0**
 - **macOS with Homebrew**, `bashou export`/`import` to play on two computers, an AI tools skill, `bashou changelog`, and pets that grow with their achievements.
-
-**0.9.0**
-- **zsh support**: your pet, completion and fights in zsh, plus a new lesson on where zsh and bash differ.
-
-**0.8.6**
-- **Kinder fights**: typos and checking your work are free, pipeline fights get `check`, logic fights a test to extend, and locked lessons say what they wait for.
-
-**0.8.5**
-- **More secrets**: a new secret pet, two more hidden friends, and a clue for the fiercest one.
-
-**0.8.4**
-- **Secret friends** are hiding in and around Bashou. Curious players will find them.
-
-**0.8.3**
-- **Bashou speaks French** on the web: a French README, a French home page, and French forms to report a
-  bug or suggest an idea.
-- **On right after installing**: with `apt` or `dnf`, open a new terminal and your pet is there.
-  `bashou off` keeps it off until `bashou on`.
-- The Squab has a new look.
-
-**0.8.2**
-- **Your starter grows further**: four new forms for each line, up to the Universe, the World tree and a Pet rock.
-- **`bashou spot`**: password hashes, CSRF tokens and OAuth2 strings to recognise.
-- A second secret pet, for players who like a good fight.
-
-**0.8.1**
-- **`bashou share`**: your card now shows your best `bashou spot` score and your rare pets: the ones you
-  grew to their last form, and the hardest to meet.
-
-**0.8.0**
-- **`bashou project`**: 13 real projects to build in Python, Shell, C or Rust, one small step at a time,
-  and a new pet, the Landscape, that grows from a hill into a town as you finish them.
-- **`bashou spot`**: an IPv6, a hash, base64, a JWT, a line of Rust? Say what the string is, as fast as
-  you can, in 25 seconds. A new pet comes with it: the Chameleon, up to the Eagle.
-- **`bashou here`** brings your pet to the terminal you're typing in.
-- A new lesson on command substitution, `$( )`: quotes, exit codes, and passwords from `pass` in scripts.
-
-**0.7.0**
-- The Sage Owl's library is a path now: each lesson opens once you've passed the ones before it, and
-  the owl warms you up with two questions on what you'll build on.
-- New lessons for the first steps (`--help` and `man`, nano or vi, a first taste of regex) and for logic.
-- 21 new fights: reading `--help`, fixing a typo in your editor, tidying files, wildcards, `nproc`, `if`
-  and `&&`, stderr, quotes, a broken shebang, a `for` loop, `grep -E`, groups, rights, `du`, `tar`, a
-  service file, `curl -I`, and git commits, branches and merge conflicts.
-- One pet for all your terminals: the others still count your commands.
 
 Every change, release by release: [CHANGELOG.md](CHANGELOG.md).
 

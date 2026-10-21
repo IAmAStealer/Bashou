@@ -80,46 +80,25 @@ de ton `~/.zshrc` et le dossier `~/.bashou`. Tes compagnons et ta progression re
 
 ## Quoi de neuf
 
+**0.10.4**
+- Tu as fui un combat ? Ton compagnon arrête de te le rappeler ; la menace t'attend quand même avec
+  `bashou fight` jusqu'à minuit.
+- Gary a ses vraies couleurs : des yeux jaune-vert aux pupilles rouges et un ventre vert.
+
+**0.10.3**
+- **Les menaces attendent toute la journée** : un combat attend jusqu'à minuit et ton compagnon répète son
+  avertissement toutes les demi-heures, pour que tu ne le rates pas. Les joueurs expérimentés ont jusqu'à
+  2 menaces par jour.
+- Avec Homebrew, Bashou tourne sur le Python 3.15 de Homebrew.
+
+**0.10.2**
+- Un coffre ouvert reste ouvert, et le même coffre ne revient jamais deux fois dans une partie d'un chemin d'aventure.
+
+**0.10.1**
+- **Les nouvelles versions arrivent seules sur Homebrew** : `brew upgrade` les récupère le jour de leur sortie.
+
 **0.10.0**
 - **macOS avec Homebrew**, `bashou export`/`import` pour jouer sur deux ordinateurs, une compétence outils d'IA, `bashou changelog`, et des compagnons qui grandissent avec leurs succès.
-
-**0.9.0**
-- **zsh pris en charge** : ton compagnon, la complétion et les combats dans zsh, plus une nouvelle leçon sur ce qui change entre zsh et bash.
-
-**0.8.6**
-- **Des combats plus doux** : les fautes de frappe et vérifier ton travail sont gratuits, les combats de pipeline ont `check`, les combats de logique un test à compléter, et les leçons verrouillées disent ce qu'elles attendent.
-
-**0.8.5**
-- **Encore des secrets** : un nouveau compagnon secret, deux amis cachés de plus, et un indice pour le plus féroce.
-
-**0.8.4**
-- **Des amis secrets** se cachent dans Bashou et autour. Les curieux les trouveront.
-
-**0.8.3**
-- **Bashou parle français** sur le web : un README en français, une page d'accueil en français, et des
-  formulaires en français pour signaler un bug ou proposer une idée.
-- **Actif dès l'installation** : avec `apt` ou `dnf`, ouvre un nouveau terminal et ton compagnon est là.
-  `bashou off` le garde éteint jusqu'à `bashou on`.
-- Le Pigeonneau a un nouveau look.
-
-**0.8.2**
-- **Ton compagnon de départ grandit plus loin** : quatre nouvelles formes pour chaque lignée, jusqu'à l'Univers,
-  l'Arbre-monde et un Caillou chéri.
-- **`bashou spot`** : des hachages de mots de passe, des jetons CSRF et des chaînes OAuth2 à reconnaître.
-- Un deuxième compagnon secret, pour ceux qui aiment la bagarre.
-
-**0.8.1**
-- **`bashou share`** : ta carte montre maintenant ton meilleur score à `bashou spot` et tes compagnons rares :
-  ceux que tu as fait grandir jusqu'à leur dernière forme, et les plus durs à rencontrer.
-
-**0.8.0**
-- **`bashou project`** : 13 vrais projets à construire en Python, Shell, C ou Rust, une petite étape à la fois,
-  et un nouveau compagnon, le Paysage, qui passe d'une colline à une ville au fil de tes projets.
-- **`bashou spot`** : une IPv6, un hachage, du base64, un JWT, une ligne de Rust ? Dis ce qu'est la chaîne, le
-  plus vite possible, en 25 secondes. Un nouveau compagnon arrive avec : le Caméléon, jusqu'à l'Aigle.
-- **`bashou here`** amène ton compagnon dans le terminal où tu tapes.
-- Une nouvelle leçon sur la substitution de commande, `$( )` : les guillemets, les codes de retour, et les mots
-  de passe de `pass` dans les scripts.
 
 Tous les changements, version par version (en anglais) : [CHANGELOG.md](CHANGELOG.md).
 
