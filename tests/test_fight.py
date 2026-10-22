@@ -293,6 +293,8 @@ WRONG_MOVES = [("index_imp", "zsh pick.sh"), ("flag_phantom", "sort sizes.txt | 
          ("echo_echidna", edit("names.sh", 'echo "$name"', 'printf -- "$name\\n"')),
          ("masked_mole", edit("stamp.sh", "  local sum=", '  [[ -f $1 ]] || die "cannot read $1"\n  local sum=')),
          ("masked_mole", edit("stamp.sh", '  local sum=$(cksum < "$1")', '  [[ -f $1 ]] || die "cannot read $1"\n  local sum="$(cksum < "$1")"')),
+         ("masked_mole", edit("stamp.sh", '  local sum=$(cksum < "$1")', '  [[ -f $1 ]] || die "cannot read $1"\n  declare sum=$(cksum < "$1")')),
+         ("masked_mole", edit("stamp.sh", '  local sum=$(cksum < "$1")', '  [[ -f $1 ]] || die "cannot read $1"\n  local sum="sum: $(cksum < "$1")"')),
          ("nomatch_nymph", edit("count.sh", "  printf '%s photos", "  n=$(ls \"$dir\" | grep -c '\\.jpg$')\n  printf '%s photos")),
          ("trap_troll", edit("report.sh", "tmp=/tmp/bashou-report.tmp", "tmp=$(mktemp) || exit 1") + " && "
           + edit("report.sh", "die() { printf", 'die() { rm -f -- "$tmp"; printf'))]
@@ -758,6 +760,20 @@ class SecretsFightTest(unittest.TestCase):
                     ch, work, meta = self.setup(fight)
                     ch.check(work, meta, "done")
             self.assertEqual(sorted(os.listdir(home)), [])
+
+
+class MaskedMoleTest(unittest.TestCase):
+    def test_the_right_fix_wins_even_with_the_old_line_in_a_comment(self):
+        """bash-judge round 3: the masked-line check reads code, not comments or $(( ))."""
+        ch = challenges.BY_ID["masked_mole"]
+        with tempfile.TemporaryDirectory() as tmp:
+            meta = ch.setup(Path(tmp), random.Random(0))
+            fix = edit("stamp.sh", '  local sum=$(cksum < "$1") || die "cannot read $1"',
+                       '  # was: local sum=$(cksum < "$1")\n  local sum n=$((1 + 2))\n'
+                       '  sum=$(cksum < "$1") || die "cannot read $1"')
+            subprocess.run(["bash", "-c", fix], cwd=tmp, check=True)
+            self.assertIn("# was:", (Path(tmp) / "stamp.sh").read_text())
+            self.assertTrue(ch.check(Path(tmp), meta, "done"))
 
 
 class SqlFightTest(unittest.TestCase):

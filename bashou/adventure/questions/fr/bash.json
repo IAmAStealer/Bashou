@@ -231,7 +231,7 @@
    "Non : ça ne marche qu'en root"
   ],
   "answer": 0,
-  "explain": "set -e arrête à une commande en échec, sauf là où un échec est une réponse (if, while, &&, || et les fonctions appelées là), après un local ou un export qui affecte un $( ), et il s'arrête sur ((n++)) avec n à 0. -u fait d'une variable non définie une erreur ; pipefail fait échouer un pipe dès qu'une étape échoue, même cmd | head quand head lit moins (code 141). Un filet troué : vérifie toi-même."
+  "explain": "set -e arrête à une commande en échec, sauf là où un échec est une réponse (if, while, &&, || et les fonctions appelées là), après un local ou un export qui affecte un $( ), et il s'arrête sur ((n++)) avec n à 0. -u fait d'une variable non définie une erreur ; pipefail fait échouer un pipe dès qu'une étape échoue, même cmd | head si head s'arrête tôt (code 141). Un filet troué : vérifie toi-même."
  },
  {
   "id": "bash-2-05",

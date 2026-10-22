@@ -54,7 +54,7 @@ _bashou_make_room() {
   (( _bashou_gap )) && [[ -e $_bashou_room ]] && _bashou_close_room
   _bashou_gap=0
   [[ -r $_bashou_height ]] && IFS= read -r lines < "$_bashou_height"
-  [[ $lines =~ ^[0-9]+$ ]] || lines=7                  # a number, or printf %d prints an error
+  [[ $lines =~ ^[0-9]+$ ]] || lines=7                  # a number: (( )) below would run anything else as code
   if ! _bashou_where; then
     if [[ $_bashou_dsr == off ]]; then
       (( _bashou_first )) && _bashou_below           # as before: below the pet at the start,

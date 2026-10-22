@@ -312,9 +312,11 @@ def stamp_cases():
                      "with an error instead.").format(
                 status=done.returncode,
                 wrote=_("wrote gone.txt.sum") if (box / "gone.txt.sum").exists() else _("wrote nothing"))
-        if re.search(r"\b(?:local|declare|typeset|export|readonly)\b[^;\n]*?\b\w+=[\"']?\$\(", (box / "stamp.sh").read_text()):
-            return _("stamp.sh stops now, but a local x=$(…) is still there: it hides the next failure. Declare "
-                     "first, assign on the next line.")
+        if re.search(r"^\s*(?:local|declare|typeset|export|readonly)\b[^;&|#\n]*?\w=[^;&|\n]*?\$\((?!\()",
+                     (box / "stamp.sh").read_text(), re.M):
+            return _("stamp.sh stops now, but a local x=$(…) (or declare, export, readonly) is still there: || sees "
+                     "that command's status, not the one inside $( ), so it hides the next failure. Declare first, "
+                     "assign on the next line.")
         return ""
     return [(build, ["notes.txt"], good), (build, ["notes.txt", "gone.txt"], missing)]
 

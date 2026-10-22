@@ -11647,7 +11647,7 @@
   "ss shows both ends of each connection on this machine: the clients' side has the port on the right (Peer). ss filters by state and port: state established '( dport = :{port} )'.",
   "ss: who listens, who is connected",
   "ssh -L 8080:localhost:80 host : a tunnel.",
-  "stamp.sh stops now, but a local x=$(…) is still there: it hides the next failure. Declare first, assign on the next line.",
+  "stamp.sh stops now, but a local x=$(…) (or declare, export, readonly) is still there: || sees that command's status, not the one inside $( ), so it hides the next failure. Declare first, assign on the next line.",
   "stands for each file or line",
   "start a branch with `git switch -c`",
   "start a password store with `pass init`",
