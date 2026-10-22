@@ -549,12 +549,35 @@ class ReviewTest(unittest.TestCase):
         self.assertNotIn("line_moth", self.s["reviews"])
         self.assertIsNone(self.fight("2026-06-01"))                   # acquired: nothing more
 
-    def test_a_lost_review_starts_over(self):
+    def test_a_lost_review_steps_back_one(self):
+        """Owner: losing a review doesn't erase the wins before it; it comes back sooner, by your mastery."""
         self.fight("2026-01-01")
         self.s["challenges"].append(self.ch.id)
-        self.fight("2026-01-02")                                       # review 1 won
-        self.assertIn("start over", self.fight("2026-01-09", won=False))
-        self.assertEqual(self.s["reviews"]["line_moth"], {"step": 0, "due": "2026-01-10"})
+        self.assertIn("tomorrow", self.fight("2026-01-02", won=False))       # review 1 lost
+        self.assertEqual(self.s["reviews"]["line_moth"], {"step": 0, "due": "2026-01-03"})
+        self.assertIsNone(self.fight("2026-01-02", won=False))               # not due any more
+        self.fight("2026-01-03")                                             # review 1 won
+        self.assertIn("tomorrow", self.fight("2026-01-10", won=False))       # review 2 lost
+        self.assertEqual(self.s["reviews"]["line_moth"], {"step": 0, "due": "2026-01-11"})
+        self.fight("2026-01-11")
+        self.fight("2026-01-18")                                             # review 2 won
+        self.assertIn("7 days", self.fight("2026-02-17", won=False))         # review 3 lost
+        self.assertEqual(self.s["reviews"]["line_moth"], {"step": 1, "due": "2026-02-24"})
+        self.assertIn(self.ch.id, self.s["challenges"])
+
+    def test_fleeing_a_review_reschedules_it(self):
+        """Owner: a fled review is planned again like a lost one, it doesn't stay due."""
+        s = self.s
+        s["challenges"], s["reviews"] = [self.ch.id], {"line_moth": {"step": 1, "due": "2000-01-01"}}
+        s["threat"] = {"challenge": "line_moth", "until": 9e9, "review": True}
+        with mock.patch.object(state, "load", return_value=s), \
+                mock.patch.object(state, "locked", return_value=contextlib.nullcontext(s)), \
+                mock.patch.object(fight, "arena", return_value=(fight.FLEE, [])), \
+                contextlib.redirect_stdout(io.StringIO()):
+            fight.run()
+        tomorrow = (datetime.date.today() + datetime.timedelta(days=1)).isoformat()
+        self.assertEqual(s["reviews"]["line_moth"], {"step": 0, "due": tomorrow})
+        self.assertEqual(fight.due(s), [])
 
     def test_losing_a_new_fight_schedules_nothing(self):
         self.assertIsNone(self.fight("2026-01-01", won=False))

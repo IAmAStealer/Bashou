@@ -235,10 +235,14 @@ def after_fight(s, ch, won, today=None):
     today = datetime.date.fromisoformat(today) if today else datetime.date.today()
     reviews = s.setdefault("reviews", {})
     r = reviews.get(ch.id)
-    if not won:
-        if r and r["due"] <= today.isoformat():             # lost a review: start again tomorrow
-            r.update(step=0, due=(today + datetime.timedelta(days=INTERVALS[0])).isoformat())
-            return _("It'll be back tomorrow: the reviews start over.")
+    if not won:                                            # lost or fled
+        if r and r["due"] <= today.isoformat():             # a review: the wins before it stay, one step back
+            step = max(0, r["step"] - 1)
+            r.update(step=step, due=(today + datetime.timedelta(days=INTERVALS[step])).isoformat())
+            if INTERVALS[step] == 1:
+                return _("It'll be back tomorrow for review {n}/{total}.").format(n=step + 1, total=len(INTERVALS))
+            return _("It'll be back in {days} days for review {n}/{total}.").format(
+                days=INTERVALS[step], n=step + 1, total=len(INTERVALS))
         return None
     if ch.id not in s["challenges"]:
         reviews[ch.id] = {"step": 0, "due": (today + datetime.timedelta(days=INTERVALS[0])).isoformat()}
@@ -613,7 +617,7 @@ def run(ch=None, limit=None, badger=False):
                         help_first=beginner(s), limit=limit)
     won = code == WIN
     with state.locked() as s:
-        told = after_fight(s, ch, won) if won or code in (KO, TIMEOUT) else None
+        told = after_fight(s, ch, won)
         if not won:
             s["fights_lost"] = s.get("fights_lost", 0) + 1
             if s.get("threat") and s["threat"]["challenge"] == ch.id:

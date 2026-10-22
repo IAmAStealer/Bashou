@@ -64,8 +64,8 @@ A pixel-art pet that lives in the top-right corner of your terminal and grows as
   Leitner boxes). A fight you win comes back **1 day** later, then **7 days** after that, then
   **30 days** after that. Win that fourth fight and the tool is yours for good: it doesn't come back.
   Your pet tells you when it's a review (« The Log Hydra is back! Still remember `grep`? ») and the
-  arena says which review it is. Knocked out in a review? It comes back the next day and the reviews
-  start over. Fleeing changes nothing: it stays due. Reviews are picked before new threats most of
+  arena says which review it is. Lost or fled a review? Your wins before it stay: it steps back one
+  review and comes back sooner (tomorrow, or in 7 days after a lost 30-day review). Reviews are picked before new threats most of
   the time, and they keep coming even once you've beaten every fight.
 
 ## Install
