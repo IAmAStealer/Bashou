@@ -415,17 +415,30 @@ class ThreatBubbleTest(TempState):
         self.assertEqual(self.pet.notes, [])
 
     def test_no_reminder_after_fleeing(self):
-        """User: after fleeing, the threat came back 30 min later. It still waits for `bashou fight`."""
+        """User: after fleeing, the threat came back 30 min later. Now it leaves: no retry, no reminder."""
         from bashou import companion
         time.sleep(0.01)                                 # a new mtime for the state file
         with mock.patch.object(fight, "arena", return_value=(fight.FLEE, [])), \
                 contextlib.redirect_stdout(io.StringIO()):
             fight.run()
         self.pet.reload_pet()
+        self.pet.update_bubble()
+        self.assertFalse(self.pet.threat)
+        self.assertNotIn("got tired of waiting", (self.pet.bubble or ("",))[0])   # you met it, it didn't wait
         self.pet.bubble, self.pet.notes = None, []
         self.pet.remind_threat(self.pet.threat_said + companion.REMIND_MS + 1)
         self.assertEqual(self.pet.notes, [])
-        self.assertTrue(self.pet.threat)
+
+    def test_no_instant_retry_after_losing(self):
+        """User: getting knocked out (or out of time) let you retry the fight at once."""
+        for code in (fight.KO, fight.TIMEOUT):
+            with state.locked() as s:
+                s["threat"] = {"challenge": "grep_hydra", "until": time.time() + 600}
+            with mock.patch.object(fight, "arena", return_value=(code, [])), \
+                    contextlib.redirect_stdout(io.StringIO()):
+                fight.run()
+            self.assertIsNone(state.load()["threat"])
+            self.assertIsNone(fight.pick(state.load()))
 
     def test_no_goodbye_after_a_win(self):
         self.end_threat(won=True)
@@ -892,3 +905,7 @@ class CommandCleanupTest(TempState):
         self.assertEqual(self.run_cli("config", "language", "xx")[0], 1)
         self.assertEqual(state.load()["language"], "fr")
         i18n.use("en")
+
+    def test_cleartext_cricket_needs_sha256sum(self):
+        """bash-judge: deploy.sh checks the password with sha256sum, which a Mac without coreutils lacks."""
+        self.assertIn("sha256sum", challenges.BY_ID["cleartext_cricket"].requires)

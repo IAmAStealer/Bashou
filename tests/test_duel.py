@@ -153,7 +153,8 @@ class ArenaShellTest(TempState):
         self.assertEqual(self.run_arena(["awk 1 app.log", "sed 1d app.log", "wc -l app.log", "flee"], duel_on=False),
                          fight.FLEE)
 
-    def test_a_knockout_is_a_flee(self):
+    def test_a_knockout_ends_the_threat(self):
+        """User: a knockout let you retry the fight at once. The threat leaves; it comes back later."""
         with state.locked() as s:
             s["threat"] = {"challenge": "grep_hydra", "until": 9e9}
         with mock.patch.object(fight, "arena", return_value=(duel.KO, [])), \
@@ -161,7 +162,10 @@ class ArenaShellTest(TempState):
             fight.run()
         self.assertIn("Knocked out", " ".join(str(c) for c in out.call_args_list))
         self.assertEqual(state.load()["fights_won"], 0)
-        self.assertIsNotNone(state.load()["threat"])
+        self.assertIsNone(state.load()["threat"])
+        with mock.patch.object(fight, "arena") as arena, mock.patch("builtins.print"):
+            self.assertIsNone(fight.run())                 # no instant retry
+        arena.assert_not_called()
 
 
 
