@@ -449,7 +449,7 @@
  {
   "id": "linux-1-15",
   "level": 1,
-  "q": "A script starts with DB_PASSWORD=\"s3cret\". What is the real problem?",
+  "q": "A script starts with db_password=\"s3cret\". What is the real problem?",
   "choices": [
    "Whoever reads the script, or its git history, has it",
    "The quotes are wrong",
@@ -457,7 +457,7 @@
    "It makes the script slower"
   ],
   "answer": 0,
-  "explain": "A password written in a script travels with it: into git, backups, screenshots, a colleague's copy. Fetch it when the script runs instead: DB_PASSWORD=$(pass show db/prod) || exit 1 (stop when pass fails). A password that was ever committed must be changed, since the history keeps it."
+  "explain": "A password written in a script travels with it: into git, backups, screenshots, a colleague's copy. Fetch it when the script runs instead: db_password=$(pass show db/prod) || exit 1 (stop when pass fails). A password that was ever committed must be changed, since the history keeps it."
  },
  {
   "id": "linux-2-11",

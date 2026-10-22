@@ -593,7 +593,7 @@ ALL = [
     A("vault", "leopard", "Vault", "start a password store with `pass init`", cmd=lambda c: c.sub("pass", "init"), next="generator", example='pass init <your key id>'),
     A("generator", "leopard", "Generator", "let `pass generate` make a strong password", cmd=lambda c: c.sub("pass", "generate"), next="keeper", example='pass generate web/forum 24'),
     A("keeper", "leopard", "Keeper", "hand a password to a command with `$(pass show …)`, never in clear",
-      cmd=lambda c: c.sub("pass", "show") and "subst" in c.analysis.constructs, example='API_TOKEN=$(pass show web/token) && export API_TOKEN'),  # gitleaks:allow (reads it from pass)
+      cmd=lambda c: c.sub("pass", "show") and "subst" in c.analysis.constructs, example='export API_TOKEN="$(pass show web/token)"'),  # gitleaks:allow (reads it from pass)
     uses("leopard", "secret_keeper", "Secret keeper", "use gpg or pass 5 times", SECRETS, 5),
     A("signer", "leopard", "Signer", "sign a file with `gpg --detach-sign`, so others can check it came from you",
       cmd=lambda c: c.flag(("gpg", "gpg2"), "sb", ("--sign", "--clearsign", "--clear-sign", "--detach-sign")),

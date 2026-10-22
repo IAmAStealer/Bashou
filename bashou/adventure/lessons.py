@@ -184,7 +184,7 @@ LESSONS = [
          "pass generate web/forum 24"),
         ("A script should never hold a password: it ends up in backups, screenshots and git history. $( ) lets it "
          "fetch the password when it runs, so the file stays safe to share. || exit 1 stops it when pass fails.",
-         "DB_PASSWORD=$(pass show db/prod) || exit 1"),
+         "db_password=$(pass show db/prod) || exit 1"),
         ("Not installed yet? On Debian and Ubuntu: sudo apt install gnupg pass. On Rocky, Alma and RHEL: sudo dnf "
          "install gnupg2, then pass from EPEL (sudo dnf install epel-release first).", "sudo apt install gnupg pass"),
     ]},

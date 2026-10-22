@@ -151,9 +151,9 @@ def vault_setup(work, rng):
 
 DEPLOY = """#!/usr/bin/env bash
 # deploy.sh: logs in to the database, then deploys the app.
-DB_PASSWORD="{pw}"
+db_password="{pw}"
 
-if [[ $(printf %s "$DB_PASSWORD" | sha256sum | cut -d' ' -f1) == "{hash}" ]]; then
+if [[ $(printf %s "$db_password" | sha256sum | cut -d' ' -f1) == "{hash}" ]]; then
   echo "login ok: deploying"
 else
   echo "login failed" >&2
@@ -237,7 +237,7 @@ ALL = [
                    "(bash deploy.sh). Then: verify",
               hints=["$( ) runs a command and puts what it prints in its place. pass show db/prod prints the "
                      "password, so the variable is filled when the script runs, and the file never holds it.",
-                     "Change the line to DB_PASSWORD=$(pass show db/prod) || exit 1 and try bash deploy.sh. In real "
+                     "Change the line to db_password=$(pass show db/prod) || exit 1 and try bash deploy.sh. In real "
                      "life, also change a password that was ever committed: it stays in the git history."],
               setup=cleartext_setup, verify=cleartext_verify),
 ]

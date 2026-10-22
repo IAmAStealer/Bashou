@@ -53,7 +53,8 @@
    "text": [
     "(( )) lit une valeur comme une expression. Une valeur comme x[$(date)] lancerait date : ce qu'on tape décide de ce qui tourne.",
     "",
-    "- Alors vérifie d'abord que ce sont des chiffres. =~ teste une expression régulière : ^[0-9]+$, ce sont des chiffres, du début à la fin."
+    "- Alors vérifie d'abord que ce sont des chiffres. =~ teste une expression régulière : ^[0-9]+$, ce sont des chiffres, du début à la fin.",
+    "- 10#$n le lit en base 10 : un 0 devant ferait lire (( )) en octal, et 08 est une erreur."
    ]
   },
   {

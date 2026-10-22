@@ -312,7 +312,7 @@ def stamp_cases():
                      "with an error instead.").format(
                 status=done.returncode,
                 wrote=_("wrote gone.txt.sum") if (box / "gone.txt.sum").exists() else _("wrote nothing"))
-        if re.search(r"\blocal +\w+=\$\(", (box / "stamp.sh").read_text()):
+        if re.search(r"\b(?:local|declare|typeset|export|readonly)\b[^;\n]*?\b\w+=[\"']?\$\(", (box / "stamp.sh").read_text()):
             return _("stamp.sh stops now, but a local x=$(…) is still there: it hides the next failure. Declare "
                      "first, assign on the next line.")
         return ""

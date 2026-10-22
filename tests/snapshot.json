@@ -9388,7 +9388,7 @@
   "Chain small tools, one step each: grep keeps the lines with error, sort puts identical lines side by side, uniq -c counts each group.",
   "Chameleon",
   "Change the language? (y/N) ",
-  "Change the line to DB_PASSWORD=$(pass show db/prod) || exit 1 and try bash deploy.sh. In real life, also change a password that was ever committed: it stays in the git history.",
+  "Change the line to db_password=$(pass show db/prod) || exit 1 and try bash deploy.sh. In real life, also change a password that was ever committed: it stays in the git history.",
   "Change what you learn? (y/N) ",
   "Chapter and verse",
   "Chapter one",

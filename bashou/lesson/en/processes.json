@@ -106,7 +106,7 @@
     "- ps aux lists every process of every user.",
     "- top (or htop) shows the same list, live. q quits.",
     "- pgrep -a python finds processes by name.",
-    "- --sort and pgrep -a are Linux (procps). On a Mac: ps aux -r sorts by CPU, pgrep -l python."
+    "- --sort and pgrep -a are Linux (procps). On a Mac: ps aux -r sorts by CPU, pgrep -lf python shows the command lines (pgrep -a means something else there)."
    ]
   }
  ]

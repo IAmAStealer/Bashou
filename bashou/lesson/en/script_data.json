@@ -90,7 +90,8 @@
    "text": [
     "(( )) reads a value as an expression. A value like x[$(date)] would run date: input decides what runs.",
     "",
-    "- So check that it's digits first. =~ matches a regular expression: ^[0-9]+$ is digits, from the start to the end."
+    "- So check that it's digits first. =~ matches a regular expression: ^[0-9]+$ is digits, from the start to the end.",
+    "- 10#$n reads it in base 10: a leading 0 would make (( )) read octal, and 08 is an error."
    ],
    "script": [
     "read -r n",

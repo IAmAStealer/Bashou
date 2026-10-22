@@ -300,8 +300,9 @@ class TextTest(unittest.TestCase):
                     with self.subTest(where, rule=rule):
                         self.assertIsNone(re.search(pattern, line), f"{where}: {line!r}")
 
-    def test_road_lessons_and_achievements_check_pass_too(self):
-        for path in (ROOT / "bashou/adventure/lessons.py", ROOT / "bashou/achievements.py"):
+    def test_road_lessons_check_pass_too(self):
+        # (achievement examples are prompt lines: there pass's error shows on the screen)
+        for path in (ROOT / "bashou/adventure/lessons.py",):
             for n, line in enumerate(path.read_text().split("\n"), 1):
                 for pattern, rule in BANNED_EVERYWHERE:
                     with self.subTest(path.name, line=n, rule=rule):

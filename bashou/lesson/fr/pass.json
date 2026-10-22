@@ -44,8 +44,8 @@
   {
    "scheme": [
     " deploy.sh",
-    " DB_PASSWORD=\"hunter2\"               ✗ en clair",
-    " DB_PASSWORD=$(pass show db/prod) || exit 1   ✔"
+    " db_password=\"hunter2\"               ✗ en clair",
+    " db_password=$(pass show db/prod) || exit 1   ✔"
    ],
    "point": 2,
    "mark": [

@@ -582,7 +582,7 @@
    "Every file of the folder"
   ],
   "answer": 0,
-  "explain": "A commit saves what is staged: what you added since the last commit. todo.txt stays changed, waiting for its own add. That's how one commit holds one idea. git status shows both lists; git add . takes everything, new files too; git commit -a takes every changed file git already knows, not new ones."
+  "explain": "A commit saves what is staged: what you added since the last commit. todo.txt stays changed, waiting for its own add. That's how one commit holds one idea. git status shows both lists; git add . takes everything in this folder and below, new files too; git commit -a takes every changed file git already knows, not new ones."
  },
  {
   "id": "bash-1-31",

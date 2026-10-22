@@ -449,7 +449,7 @@
  {
   "id": "linux-1-15",
   "level": 1,
-  "q": "Un script commence par DB_PASSWORD=\"s3cret\". Quel est le vrai problème ?",
+  "q": "Un script commence par db_password=\"s3cret\". Quel est le vrai problème ?",
   "choices": [
    "Qui lit le script, ou son historique git, l'a",
    "Les guillemets sont faux",
@@ -457,7 +457,7 @@
    "Ça ralentit le script"
   ],
   "answer": 0,
-  "explain": "Un mot de passe écrit dans un script voyage avec lui : dans git, les sauvegardes, les captures d'écran, la copie d'un collègue. Va le chercher quand le script tourne : DB_PASSWORD=$(pass show db/prod) || exit 1 (arrête si pass échoue). Un mot de passe déjà commité doit être changé, car l'historique le garde."
+  "explain": "Un mot de passe écrit dans un script voyage avec lui : dans git, les sauvegardes, les captures d'écran, la copie d'un collègue. Va le chercher quand le script tourne : db_password=$(pass show db/prod) || exit 1 (arrête si pass échoue). Un mot de passe déjà commité doit être changé, car l'historique le garde."
  },
  {
   "id": "linux-2-11",

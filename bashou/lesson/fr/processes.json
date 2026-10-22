@@ -84,7 +84,7 @@
     "- ps aux liste tous les processus de tous les utilisateurs.",
     "- top (ou htop) montre la même liste, en direct. q pour quitter.",
     "- pgrep -a python trouve des processus par leur nom.",
-    "- --sort et pgrep -a sont propres à Linux (procps). Sur un Mac : ps aux -r trie par CPU, pgrep -l python."
+    "- --sort et pgrep -a sont propres à Linux (procps). Sur un Mac : ps aux -r trie par CPU, pgrep -lf python montre les lignes de commande (pgrep -a y veut dire autre chose)."
    ]
   }
  ]

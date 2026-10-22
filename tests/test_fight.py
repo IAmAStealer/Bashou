@@ -196,7 +196,7 @@ SOLUTIONS = {
     "forger_ferret": ("for m in mirror1 mirror2; do gpgv --keyring ./vendor.gpg $m/tool-1.4.tar.gz.sig $m/tool-1.4.tar.gz "
                       "2>/dev/null && echo $m; done", None),
     "vault_vole": ("pass show backup/server", None),
-    "cleartext_cricket": ("sed -i 's|^DB_PASSWORD=.*|DB_PASSWORD=\"$(pass show db/prod)\"|' deploy.sh", None),
+    "cleartext_cricket": ("sed -i 's#^db_password=.*#db_password=$(pass show db/prod) || exit 1#' deploy.sh", None),
     "mirror_mimic": ("cat > debian.sources <<'X'\n" + repos.DEBIAN_OK + "X", None),
     "repo_revenant": ("cat > rocky.repo <<'X'\n" + repos.ROCKY_OK + "X", None),
     "enabled_ettin": ("dnf --disablerepo='*' --enablerepo={x} repolist", r"only the (\S+) repository"),
@@ -292,6 +292,7 @@ WRONG_MOVES = [("index_imp", "zsh pick.sh"), ("flag_phantom", "sort sizes.txt | 
          # bash-judge round 1: fixes that win on the cases but keep the habit the lesson replaces
          ("echo_echidna", edit("names.sh", 'echo "$name"', 'printf -- "$name\\n"')),
          ("masked_mole", edit("stamp.sh", "  local sum=", '  [[ -f $1 ]] || die "cannot read $1"\n  local sum=')),
+         ("masked_mole", edit("stamp.sh", '  local sum=$(cksum < "$1")', '  [[ -f $1 ]] || die "cannot read $1"\n  local sum="$(cksum < "$1")"')),
          ("nomatch_nymph", edit("count.sh", "  printf '%s photos", "  n=$(ls \"$dir\" | grep -c '\\.jpg$')\n  printf '%s photos")),
          ("trap_troll", edit("report.sh", "tmp=/tmp/bashou-report.tmp", "tmp=$(mktemp) || exit 1") + " && "
           + edit("report.sh", "die() { printf", 'die() { rm -f -- "$tmp"; printf'))]
