@@ -1,50 +1,51 @@
 {
  "name": "Masked Mole",
  "palette": {
-  "m": "#8a6a50",
+  "m": "#8c6c52",
   "M": "#5a4030",
-  "l": "#b08a6a",
-  "k": "#201818",
+  "l": "#b8926e",
+  "k": "#1c1418",
   "e": "#ffffff",
-  "n": "#f08aa0",
-  "c": "#f0e0c0"
+  "n": "#f28aa2",
+  "c": "#f2e2c2",
+  "C": "#bea684",
+  "b": "#a8866a"
  },
  "base": [
   ".................",
-  "....mmmmmm.......",
-  "...mllmmmmM......",
-  "..mmmmmmmmmM.....",
-  "..kkkkkkkkkM.....",
-  ".nkekkkekkkM.....",
-  ".nnmmmmmmmmM.....",
-  "..mmmmmmmmmM.....",
-  "..cmmmmmmmmM.....",
-  ".ccmmmmmmmM......",
-  "...mmM.mmM.......",
-  "...cc..cc........"
+  ".....mmmmmm......",
+  "....mllmmmmmM....",
+  "...mlmmmmmmmmM...",
+  "..kkkkkkkkkkkM...",
+  ".nkekkkkekkkkM...",
+  "nnmmmmmmmmmmmM...",
+  "..mmbbbbbbmmmM...",
+  ".ccmbbbbbbmmmM...",
+  "cCcmmbbbbmmmM....",
+  "...mmM...mmM.....",
+  "...CC....CC......"
  ],
  "poses": {
   "inhale": {
-   "3": "..mmmmmmmmmmM...."
+   "3": "...mlmmmmmmmmmM.."
   },
   "closed": {
-   "5": "---k---k---------"
+   "5": "---kk---kk-------"
   },
   "left": {
-   "5": "--ek--ek---------"
+   "5": "---ke---ke-------"
   },
   "right": {
-   "5": "---ke--ke--------"
+   "5": "---ek---ek-------"
   },
   "fidget": {
-   "8": "..c--------------",
-   "9": ".cc..............",
-   "10": "...mmM.mmM.......",
-   "11": "..cc...cc........"
+   "8": "cC---------------",
+   "9": "..c--------------",
+   "11": "..CC......CC....."
   }
  },
  "particles": [
   0,
-  12
+  13
  ]
 }

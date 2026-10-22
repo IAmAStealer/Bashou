@@ -186,18 +186,22 @@ def half(rows):
 
 # topic: (rows, palette). Our own designs.
 BOSSES = {
-    "bash": (half([
-        "..h.......", "..hh......", "...hhggggg", "..gggggggg", ".gggwwwggg", ".ggwwmwggg",
-        ".gggwwwggg", ".ggggggggg", "..gdtdtdtd", "..gddddddd", "...ggggggg", ".GGggg$ggg",
-        "GGGggggggg", ".G.ggggggg", "...gg.....", "..ggg.....",
-    ]), {"h": (230, 220, 190), "g": (80, 170, 90), "G": (50, 120, 60), "w": (255, 255, 255),
-         "m": (200, 40, 40), "d": (40, 30, 30), "t": (250, 250, 240), "$": (250, 220, 90)}),
-    "script": (half([                          # the Errexit Ogre: stops everything at the first stumble
-        "..h.......", "..hh..GGGG", "...hGggggg", "...Ggggggg", "..Ggwwgggg", "..Ggwmgggg",
-        "..Gggggggg", "...Ggtgddd", "..GGgggggg", ".GGggggggg", "GGggrrrrrr", "Gg.Grrrrry",
-        "gg.Ggggggg", "...GGg....", "...GGg....", "..GGGG....",
-    ]), {"h": (235, 225, 195), "g": (150, 175, 95), "G": (85, 105, 55), "w": (255, 255, 255),
-         "m": (25, 25, 25), "t": (250, 245, 230), "d": (70, 35, 35), "r": (205, 60, 50), "y": (245, 195, 60)}),
+    "bash": ([                      # the Bash Beast: horns, brows, a $_ screen on its chest
+        "h.................h", "hh...............hh", ".hh..GGGGGGGGG..hh.", "..hGGgggggggggGGh..",
+        "..GgggggggggggggG..", ".GgBBBgggggggBBBgG.", ".GgyykgggGgggkyygG.", ".Gggggggg.gggggggG.",
+        ".GgwkwkwkWkwkwkwgG.", ".GgkkkkkkkkkkkkkgG.", "GGggSSSSSSSSSSSggGG", "Gg.gS.$p_pppppSg.gG",
+        "Gg.gSpppppppppSg.gG", "...gSSSSSSSSSSSg...", "...GGg.......gGG...", "..GGGG.......GGGG..",
+    ], {"h": (235, 225, 195), "g": (80, 175, 95), "G": (40, 110, 55), "B": (30, 70, 35), "y": (250, 220, 80),
+        "k": (25, 25, 25), "w": (255, 255, 240), "W": (210, 210, 195), "S": (60, 60, 70), "p": (20, 30, 25),
+        "$": (110, 240, 120), "_": (110, 240, 120)}),
+    "script": ([                      # the Errexit Ogre: one brow, tusks, a STOP sign in its fist
+        "...................", "....GGGGGGGGGGG....", "RrrrRggggggggggG...", "rrrrrgggggggggggG..",
+        "rwwwrBBBBBBBBBBgG..", "rrrrrkgggggggkwgG..", "RrrrRgggggggggggG..", "..nggt.ggggg.tggG..",
+        "..nGgddddDddddgG...", "..nGgggggggggggGG..", ".GngGgggggggggGggG.", "GgngrrrrrRrrrrrgggG",
+        "Gg.GrrrryRyrrrrG.gG", "...GGgggGGGgggGG...", "...GG.........GG...", "..GGG.........GGG..",
+    ], {"g": (150, 178, 95), "G": (80, 104, 52), "B": (45, 55, 30), "w": (255, 255, 255), "k": (25, 25, 25),
+        "t": (250, 245, 225), "d": (90, 40, 40), "D": (90, 40, 40), "r": (210, 55, 45), "R": (140, 30, 25),
+        "y": (245, 195, 60), "n": (130, 90, 50)}),
     "linux": (half([
         "......rrrr", ".....rrrrr", "....ssssss", "...sbbbbbb", "...bbwwwbb", "..bbwmwwbb",
         "..bbwwwwbb", "..bbbwyyyy", ".bbbwwwwww", "sbbwwwwwww", "sbbwwwwwww", "s.bbwwwwww",

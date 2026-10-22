@@ -1,49 +1,48 @@
 {
  "name": "Newline Nixie",
  "palette": {
-  "b": "#5ab0e0",
-  "B": "#2a6fa0",
-  "l": "#a8e0f8",
-  "t": "#40c8b0",
-  "T": "#208870",
+  "b": "#5ab4e6",
+  "B": "#2a6fa8",
+  "l": "#c0ecff",
   "e": "#ffffff",
-  "k": "#102030"
+  "k": "#102030",
+  "a": "#ffffff",
+  "A": "#9ad8f0"
  },
  "base": [
-  ".....bbbb........",
-  "....bllbbb...tt..",
-  "...blbbbbbB..tt..",
-  "...bekbbekB..tt..",
-  "...bbbbbbbB..tt..",
-  "...bbbkkbbB..tt..",
-  "....bbbbbB.t.tt..",
-  "....BbbbB.tttttT.",
-  "...bbBbBbb.t.....",
-  "..bb.bbb.bb......",
-  ".bB..BbB..Bb.....",
-  "......BB........."
+  "....bb...........",
+  "...bllb......aaA.",
+  "..bllbbb.....aaA.",
+  ".bllbbbbB..a.aaA.",
+  ".bekbbekB.aa.aaA.",
+  ".bbbbbbbBaaaaaaA.",
+  ".bbbkkbbBbaaaaaA.",
+  "..bbbbbBb.aa.....",
+  "..BbbbbB...a.....",
+  "...bBbB..........",
+  "..lbbbbl.........",
+  ".bBbBbBbB........"
  ],
  "poses": {
   "inhale": {
-   "4": "..bbbbbbbbB..tt.."
+   "10": "..lbbbbbl........"
   },
   "closed": {
-   "3": "----kk--kk-------"
+   "4": "--kk--kk---------"
   },
   "left": {
-   "3": "----ke--ke-------"
+   "4": "--ke--ke---------"
   },
   "right": {
-   "3": "----ek--ek-------"
+   "4": "--ek--ek---------"
   },
   "fidget": {
-   "6": "-----------.t----",
-   "7": "----------.ttttT.",
-   "8": "-----------.t...."
+   "10": "..bllbbl.........",
+   "11": "..bBbBbBbB......."
   }
  },
  "particles": [
   0,
-  10
+  9
  ]
 }

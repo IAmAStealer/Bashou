@@ -2,49 +2,54 @@
  "name": "Echo Echidna",
  "palette": {
   "s": "#6a5040",
-  "S": "#a88a68",
-  "b": "#d0a888",
+  "S": "#3e2c22",
+  "t": "#9a7a5e",
+  "b": "#d6ae8c",
   "B": "#a07a5a",
   "e": "#ffffff",
   "k": "#201410",
-  "w": "#f0e8a0"
+  "y": "#f2c440",
+  "Y": "#a8801c",
+  "w": "#fff4b0"
  },
  "base": [
   ".................",
-  ".................",
-  "w.....S.S.S......",
-  ".w...SsSsSsS.....",
-  "w...SssssssS.....",
-  "...bbsssssssS....",
-  "..bekbssssssS....",
-  "bbbbbbsssssssS...",
-  "..BbbbsssssssS...",
-  "...BbbbbbbbbB....",
-  "....bb..bb..bb...",
-  "....kk..kk..kk..."
+  "........S.S.S....",
+  ".......StStStS...",
+  "..Y...SsssssssS..",
+  "w.YY.SssssssssS..",
+  ".wYyYbbsssssssssS",
+  "w.YY.bekbssssssS.",
+  "..Y...bbbsssssssS",
+  "......BbbbbbbbbB.",
+  ".......bb..bb..bb",
+  ".......kk..kk..kk",
+  "................."
  ],
  "poses": {
   "inhale": {
-   "5": "...bbssssssssS..."
+   "4": "w.YY.SsssssssssS."
   },
   "closed": {
-   "6": "---kk------------"
+   "6": "------kk---------"
   },
   "left": {
-   "6": "---ke------------"
+   "6": "------ke---------"
   },
   "right": {
-   "6": "---ek------------"
+   "6": "------ek---------"
   },
   "fidget": {
-   "2": ".w...S.S.S.S.....",
-   "3": "w...SsSsSsSsS....",
-   "4": ".w..SssssssS....."
+   "3": "w.Y--------------",
+   "4": ".wYY-------------",
+   "5": "w.YyY------------",
+   "6": ".wYY-------------",
+   "7": "w.Y--------------"
   }
  },
  "particles": [
   0,
-  12
+  14
  ],
  "lone_pixels": true
 }
