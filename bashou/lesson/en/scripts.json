@@ -89,7 +89,7 @@
    "text": [
     "Every script fight starts from this shape, a template:",
     "",
-    "- die writes an error on stderr (>&2) and stops with a non-zero status, so whoever ran the script, a person or cron, knows it failed.",
+    "- die writes an error on stderr (>&2) and stops with status 1, so whoever ran the script, a person or cron, knows it failed. The real template also names the script, and exits 2 on a wrong call.",
     "- main checks its arguments first, then does the work. The last line hands it the script's arguments."
    ],
    "script": [

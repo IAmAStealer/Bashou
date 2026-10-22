@@ -12,8 +12,8 @@ _bashou_handover() {
   PROMPT_COMMAND=${PROMPT_COMMAND//;_bashou_handover/}
   PROMPT_COMMAND=${PROMPT_COMMAND//_bashou_handover/}
   unset -f _bashou_handover
-  if [[ -z ${BASHOU_DIR:-} && $EUID != 0 && -r $package/bashou.bash
-        && ! -e ${BASHOU_DATA:-$HOME/.local/share/bashou}/off ]]; then
+  if [[ -z ${BASHOU_DIR:-} && -r $package/bashou.bash && ! -e ${BASHOU_DATA:-$HOME/.local/share/bashou}/off ]] \
+        && (( EUID != 0 )); then
     _bashou_auto=1
     # shellcheck source=bashou.bash
     source "$package/bashou.bash"

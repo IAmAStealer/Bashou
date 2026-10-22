@@ -10,7 +10,7 @@
    "Le premier trouvé dans $PATH"
   ],
   "answer": 0,
-  "explain": "Un chemin sans / au début est relatif : il part du dossier où tu te trouves quand tu lances le script (affiché par pwd), pas de là où est rangé le script. Lance-le depuis ton home et il supprime ~/build. Un script sûr fait d'abord cd vers un dossier connu, ou utilise des chemins complets comme /srv/app/build."
+  "explain": "Un chemin sans / au début est relatif : il part du dossier où tu te trouves quand tu lances le script (affiché par pwd), pas de là où est rangé le script. Lance-le depuis ton home et il supprime ~/build. Un script sûr fait d'abord cd vers un dossier connu et s'arrête si ça échoue (cd /srv/app || exit 1), ou utilise des chemins complets comme /srv/app/build."
  },
  {
   "id": "bash-1-02",
@@ -62,7 +62,7 @@
    "<"
   ],
   "answer": 0,
-  "explain": "Les signes > et < s'appellent des chevrons. >> (deux chevrons) ajoute à la fin du fichier et garde ce qui y est déjà. Un seul chevron > vide d'abord le fichier, puis écrit : un > de travers et /etc/hosts a disparu. | envoie la sortie à une autre commande, le chevron < lit un fichier en entrée. Astuce : set -o noclobber empêche > d'écraser un fichier."
+  "explain": "Les signes > et < s'appellent des chevrons. >> (deux chevrons) ajoute à la fin du fichier et garde ce qui y est déjà. Un seul chevron > vide d'abord le fichier, puis écrit : un > de travers et /etc/hosts a disparu. | envoie la sortie à une autre commande, le chevron < lit un fichier en entrée. /etc/hosts est à root : sudo echo … >> échoue (ton shell ouvre le fichier), echo … | sudo tee -a marche."
  },
  {
   "id": "bash-1-06",
@@ -88,7 +88,7 @@
    "cat /var/log/commands"
   ],
   "answer": 0,
-  "explain": "Ctrl+R cherche dans ton historique à mesure que tu tapes : Ctrl+R encore pour des résultats plus anciens, Entrée pour lancer, → pour la modifier avant. L'historique est enregistré dans ~/.bash_history. Attention : un mot de passe tapé en ligne de commande y est enregistré aussi."
+  "explain": "Ctrl+R cherche dans ton historique à mesure que tu tapes : Ctrl+R encore pour des résultats plus anciens, Entrée pour lancer, → pour la modifier avant. L'historique est enregistré dans ~/.bash_history (zsh : ~/.zsh_history). Attention : un mot de passe tapé en ligne de commande y est enregistré aussi."
  },
  {
   "id": "bash-1-08",
@@ -218,7 +218,7 @@
    "for f in \"$(ls)\"; do gzip \"$f\"; done"
   ],
   "answer": 0,
-  "explain": "*.log donne un élément par fichier, même si le nom a des espaces. $(ls) produit du texte que bash coupe à chaque espace, donc 'mon app.log' devient deux noms faux. Ensuite \"$f\" entre guillemets passe le nom d'un seul bloc. Habitude : boucler sur un motif, et toujours mettre les variables entre guillemets."
+  "explain": "*.log donne un élément par fichier, même si le nom a des espaces. $(ls) produit du texte que bash coupe à chaque espace, donc 'mon app.log' devient deux noms faux. Ensuite \"$f\" entre guillemets passe le nom d'un seul bloc. Habitude : boucler sur un motif, et toujours mettre les variables entre guillemets. Un script ajoute aussi shopt -s nullglob et gzip -- \"$f\"."
  },
  {
   "id": "bash-2-04",
@@ -231,7 +231,7 @@
    "Non : ça ne marche qu'en root"
   ],
   "answer": 0,
-  "explain": "set -e arrête à une commande en échec, sauf là où un échec est une réponse (if, while, &&, ||, et les fonctions appelées de là), après un local ou un export qui affecte un $( ), et il s'arrête sur ((n++)) avec n à 0. -u fait d'une variable non définie une erreur ; pipefail fait échouer un pipe dès qu'une étape échoue. Un filet troué : vérifie toi-même ce qui compte."
+  "explain": "set -e arrête à une commande en échec, sauf là où un échec est une réponse (if, while, &&, ||, et les fonctions appelées de là), après un local ou un export qui affecte un $( ), et il s'arrête sur ((n++)) avec n à 0. -u fait d'une variable non définie une erreur ; pipefail fait échouer un pipe dès qu'une étape échoue, même cmd | head (code 141). Un filet troué : vérifie toi-même ce qui compte."
  },
  {
   "id": "bash-2-05",
@@ -290,7 +290,7 @@
   "level": 2,
   "q": "Comment un script supprime son fichier temporaire même s'il échoue en route ?",
   "choices": [
-   "trap 'rm -f \"$tmp\"' EXIT",
+   "trap 'rm -f -- \"$tmp\"' EXIT",
    "Un rm sur sa dernière ligne",
    "set -e",
    "mktemp --autoremove"
@@ -582,7 +582,7 @@
    "Tous les fichiers du dossier"
   ],
   "answer": 0,
-  "explain": "Un commit sauvegarde ce qui est indexé : ce que tu as ajouté depuis le dernier commit. todo.txt reste modifié, en attente de son propre add. C'est comme ça qu'un commit contient une seule idée. git status montre les deux listes ; git add . ou git commit -a prennent tout d'un coup."
+  "explain": "Un commit sauvegarde ce qui est indexé : ce que tu as ajouté depuis le dernier commit. todo.txt reste modifié, en attente de son propre add. C'est comme ça qu'un commit contient une seule idée. git status montre les deux listes ; git add . prend tout, nouveaux fichiers compris ; git commit -a prend chaque fichier modifié que git connaît déjà, pas les nouveaux."
  },
  {
   "id": "bash-1-31",
@@ -647,7 +647,7 @@
    "[$(wc -l < list.txt)]"
   ],
   "answer": 0,
-  "explain": "$( ) retire les sauts de ligne à la fin de la sortie : la valeur se glisse dans une phrase ou un test comme [ \"$n\" -gt 10 ]. Avec le chevron <, le fichier arrive sur l'entrée standard : wc ne connaît pas son nom et n'écrit que le nombre. Écrit wc -l list.txt, il ajouterait le nom : 42 list.txt."
+  "explain": "$( ) retire les sauts de ligne à la fin de la sortie : la valeur se glisse dans une phrase ou un test comme [ \"$n\" -gt 10 ]. Avec le chevron <, le fichier arrive sur l'entrée standard : wc ne connaît pas son nom et n'écrit que le nombre. Écrit wc -l list.txt, il ajouterait le nom : 42 list.txt. (Le wc de macOS ajoute des espaces devant : [      42].)"
  },
  {
   "id": "bash-2-20",

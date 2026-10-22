@@ -49,7 +49,7 @@ jobs:
           python -m pip install --quiet --require-hashes -r .github/requirements/bandit.txt
           bandit -r bashou -ll
       - name: ShellCheck (bash loader)
-        run: shellcheck -s bash bashou.bash bashou/room.bash bashou/handover.bash
+        run: shellcheck -s bash bashou.bash bashou/room.bash bashou/handover.bash && shellcheck -s sh tools/install-macos.sh
       - name: Gitleaks (secrets in the history)
         run: |
           curl -fsSLO https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz
@@ -135,7 +135,7 @@ jobs:
           # The terminal tests run last, so a hang there doesn't hide the other failures.
           set -o pipefail
           others=()
-          for f in tests/test_*.py; do [ "$f" = tests/test_shell.py ] || { f=${f%.py}; others+=("${f//\//.}"); }; done
+          for f in tests/test_*.py; do [[ $f == tests/test_shell.py ]] || { f=${f%.py}; others+=("${f//\//.}"); }; done
           { /usr/bin/python3 -m tests.watchdog "${others[@]}" && /usr/bin/python3 -m tests.watchdog tests.test_shell; } 2>&1 | tee tests.log && exit 0
           /usr/bin/python3 -c "import sys; t = open('tests.log').read(); t = t[t.find('====='):][:6000] or t[-6000:]; print('::error title=Tests failed on macOS::' + t.replace('%', '%25').replace('\r', '').replace('\n', '%0A'))"
           exit 1
@@ -151,7 +151,7 @@ jobs:
           bashou version | grep -q v0.0.0
           export BASHOU_SHELL=zsh HOME="$RUNNER_TEMP/home" && mkdir -p "$HOME"
           bashou on
-          grep -qx "source $(brew --prefix)/opt/bashou/libexec/bashou.zsh" "$HOME/.zshrc"
+          grep -qxF "source $(brew --prefix)/opt/bashou/libexec/bashou.zsh" "$HOME/.zshrc"
           brew uninstall --quiet bashou
 
   # A commit on main with a line "release: v1.2.3" becomes that release once every check passed.

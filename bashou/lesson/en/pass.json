@@ -67,7 +67,7 @@
    "scheme": [
     " deploy.sh",
     " DB_PASSWORD=\"hunter2\"               ✗ in the file",
-    " DB_PASSWORD=\"$(pass show db/prod)\"  ✔ at run time"
+    " DB_PASSWORD=$(pass show db/prod) || exit 1   ✔"
    ],
    "point": 2,
    "mark": [
@@ -76,7 +76,7 @@
    "text": [
     "A password written in a script is read by anyone who reads the script, and stays in its git history.",
     "",
-    "- $( ) runs pass when the script runs: the file never holds the password.",
+    "- $( ) runs pass when the script runs: the file never holds the password. || exit 1 stops the script when pass fails (no key, wrong entry).",
     "- A password that was ever committed must be changed: deleting the line isn't enough."
    ]
   }

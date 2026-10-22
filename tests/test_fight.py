@@ -5,6 +5,7 @@ import json
 import os
 import random
 import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -124,7 +125,7 @@ SOLUTIONS = {
     "echo_echidna": ("""sed -i 's|echo "$name"|printf "%s\\\\n" "$name"|' names.sh""", None),
     "trap_troll": ("""sed -i "s#^tmp=/tmp/bashou-report.tmp\\$#tmp=\\$(mktemp) || exit 1; trap 'rm -f -- \\"\\$tmp\\"' EXIT#" """
                    "report.sh", None),
-    "trial_failing_copy": ("""sed -i 's#  cp "$1" backup/#  cp -- "$1" backup/ || die "cannot copy $1"#' save.sh""", None),
+    "trial_failing_copy": ("""sed -i 's#  cp -- "$1" backup/#  cp -- "$1" backup/ || die "cannot copy $1"#' save.sh""", None),
     "trial_dash_name": ("printf '%s\\n' -n > name.txt", None),
     "pattern_pixie": ("grep -cxE '[A-Z]{{2}}-[0-9]{{4}}' codes.txt", None),
     # linux fights: id, rights, du, tar, a unit file, headers
@@ -266,6 +267,12 @@ class SanitizerHangTest(unittest.TestCase):
 
 
 # The easy wrong moves of the everyday fights: each must lose.
+def edit(name, old, new):
+    """A shell command that replaces `old` with `new` once in `name` (python: no sed quoting games)."""
+    code = f"import pathlib; p = pathlib.Path({name!r}); p.write_text(p.read_text().replace({old!r}, {new!r}, 1))"
+    return "python3 -c " + shlex.quote(code)
+
+
 WRONG_MOVES = [("index_imp", "zsh pick.sh"), ("flag_phantom", "sort sizes.txt | tail -1"), ("flag_phantom", "sort -n sizes.txt | tail -1"),
          ("flag_phantom", "sort -f sizes.txt | tail -1"), ("glob_goblin", "rm *.csv"),
          ("clutter_critter", "mkdir photos docs && mv *.jpg photos/"), ("typo_troll", "true"),
@@ -281,7 +288,13 @@ WRONG_MOVES = [("index_imp", "zsh pick.sh"), ("flag_phantom", "sort sizes.txt | 
          ("dash_demon", "mkdir -p inbox/trash && mv -- inbox/*.tmp inbox/trash/"),
          ("nomatch_nymph", "touch albums/winter/x.jpg"),
          ("stdin_siren", "printf '#!/usr/bin/env bash\\nprintf \"%s: up\\\\n\" \"$1\"\\n' > remote"),
-         ("trap_troll", "sed -i 's|^  rm -f -- \"$tmp\"$||' report.sh && sed -i \"s|^main() {$|trap 'rm -f -- \\\"\\$tmp\\\"' EXIT\\nmain() {|\" report.sh")]
+         ("trap_troll", "sed -i 's|^  rm -f -- \"$tmp\"$||' report.sh && sed -i \"s|^main() {$|trap 'rm -f -- \\\"\\$tmp\\\"' EXIT\\nmain() {|\" report.sh"),
+         # bash-judge round 1: fixes that win on the cases but keep the habit the lesson replaces
+         ("echo_echidna", edit("names.sh", 'echo "$name"', 'printf -- "$name\\n"')),
+         ("masked_mole", edit("stamp.sh", "  local sum=", '  [[ -f $1 ]] || die "cannot read $1"\n  local sum=')),
+         ("nomatch_nymph", edit("count.sh", "  printf '%s photos", "  n=$(ls \"$dir\" | grep -c '\\.jpg$')\n  printf '%s photos")),
+         ("trap_troll", edit("report.sh", "tmp=/tmp/bashou-report.tmp", "tmp=$(mktemp) || exit 1") + " && "
+          + edit("report.sh", "die() { printf", 'die() { rm -f -- "$tmp"; printf'))]
 
 # 0.9.0, zsh players fight in zsh. A fight whose reference solution needs another command there gets it
 # here, and a wrong move that zsh gets right (it doesn't split $var into words…) is listed below: both

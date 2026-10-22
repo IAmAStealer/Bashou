@@ -23,11 +23,11 @@
  "pages": [
   {
    "scheme": [
-    " $ grep -q alice guests.txt",
+    " $ grep -qx alice guests.txt",
     " $ echo $?",
     " 0          ← yes: alice is on the list",
     "",
-    " $ grep -q eve guests.txt",
+    " $ grep -qx eve guests.txt",
     " $ echo $?",
     " 1          ← no: eve isn't"
    ],
@@ -40,12 +40,12 @@
     "",
     "- 0 means yes, it worked. Any other number means no (grep: 1 for not found, 2 for an error).",
     "- $? holds the answer of the last command.",
-    "- -q tells grep to stay quiet: only the answer counts. -x matches whole lines only, so al doesn't find alice."
+    "- -q tells grep to stay quiet: only the answer counts. -x matches whole lines only: without it, eve would find steven."
    ]
   },
   {
    "scheme": [
-    " if grep -q \"$1\" guests.txt; then",
+    " if grep -qxF -- \"$1\" guests.txt; then",
     "     │",
     "     ├─ yes (0) ─▶  echo open",
     "     │",
@@ -62,6 +62,7 @@
     "",
     "- then: what to do when the answer is yes. else (optional): when it's no.",
     "- fi closes the if: it's if written backwards.",
+    "- -F reads the name as plain text, -- as a name even if it starts with -: a guard can't trust its input.",
     "",
     "That is how a program decides: it asks a yes/no question, then picks a road."
    ]
@@ -94,7 +95,7 @@
     "   yes   ─▶  no",
     "   no    ─▶  yes",
     "",
-    " if ! grep -q \"$1\" guests.txt",
+    " if ! grep -qxF -- \"$1\" guests.txt",
     "      = if the name is NOT on the list"
    ],
    "point": 5,

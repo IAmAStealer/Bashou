@@ -69,7 +69,8 @@
     "sudo runs one command as root, if you're allowed to (the sudo group, or wheel on Red Hat).",
     "",
     "- Use it only for the command that needs it, never out of habit.",
-    "- sudo remembers your password for a few minutes, then asks again."
+    "- sudo remembers your password for a few minutes, then asks again.",
+    "- ✘ sudo echo x > /etc/f: your shell opens the file, as you. ✔ echo x | sudo tee /etc/f > /dev/null."
    ]
   }
  ]

@@ -51,7 +51,8 @@
     "sudo lance une commande en root, si tu en as le droit (groupe sudo, ou wheel sur Red Hat).",
     "",
     "- Utilise-le seulement pour la commande qui en a besoin, jamais par habitude.",
-    "- sudo retient ton mot de passe quelques minutes, puis le redemande."
+    "- sudo retient ton mot de passe quelques minutes, puis le redemande.",
+    "- ✘ sudo echo x > /etc/f : ton shell ouvre le fichier, en ton nom. ✔ echo x | sudo tee /etc/f > /dev/null."
    ]
   }
  ]

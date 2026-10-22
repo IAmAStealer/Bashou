@@ -17,7 +17,7 @@
   {
    "do": "Compte les erreurs avec grep (le mot error, ou les codes HTTP 5xx dans un journal d'accès).",
    "done": "le compte correspond à ce que tu vois dans le fichier.",
-   "hint": "`grep -c`, `-i` pour ignorer la casse, et une regex comme `\" 5[0-9][0-9] \"` pour les codes.",
+   "hint": "`grep -c`, `-i` pour ignorer la casse, et une regex comme `' 5[0-9][0-9] '` pour les codes.",
    "why": "Une recherche ne vaut que par son motif : trop large, elle compte des lignes qui ne sont pas des erreurs ; trop étroit, elle en rate. Vérifie quelques résultats à l'œil."
   },
   {
@@ -35,7 +35,7 @@
   {
    "do": "Ne garde que les lignes d'aujourd'hui.",
    "done": "une ligne d'hier n'est pas comptée.",
-   "hint": "Construis la date du jour dans le format du journal avec `date +…`, et cherche-la avec `grep`.",
+   "hint": "Construis la date du jour dans le format du journal : `LC_ALL=C date +%d/%b/%Y` pour nginx (LC_ALL=C garde le mois en anglais, comme le journal), puis cherche-la avec `grep -F`.",
    "why": "Chaque journal écrit les dates à sa façon. Suivre leur format, pas le tien, c'est l'astuce."
   },
   {
@@ -47,13 +47,13 @@
   {
    "do": "Rends le rapport lisible : un titre, des sections et des colonnes alignées.",
    "done": "quelqu'un d'autre comprend le rapport sans ton aide.",
-   "hint": "`printf \"%-15s %5d\\n\"` aligne des colonnes ; `column -t` peut aider aussi.",
+   "hint": "`printf '%-15s %5d\\n'` aligne des colonnes ; `column -t` peut aider aussi.",
    "why": "Un rapport, c'est pour des gens. Des nombres alignés se comparent d'un coup d'œil ; des nombres en vrac se lisent un par un."
   },
   {
    "do": "Lance-le chaque jour avec cron ou un timer systemd, et enregistre chaque rapport dans un fichier daté.",
    "done": "un nouveau fichier de rapport apparaît chaque jour.",
-   "hint": "Redirige la sortie : `report.sh journal > rapports/$(date +%F).txt`. Dans une crontab, % doit s'écrire \\%.",
+   "hint": "Redirige la sortie : `report.sh journal > \"rapports/$(date +%F).txt\"`. Dans une crontab, mets des chemins complets (cron démarre presque sans PATH) et écris % comme \\% : `0 6 * * * /home/toi/report.sh /var/log/app.log > \"/home/toi/rapports/$(date +\\%F).txt\"`.",
    "why": "L'automatisation est là où les scripts rapportent. Attention au piège de cron : % a un sens spécial dans une ligne de crontab."
   },
   {

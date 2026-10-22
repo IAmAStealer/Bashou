@@ -92,7 +92,7 @@ CLEAN = trial("trial_clean", 1, "Sweep the camp: remove every .tmp file, keep th
 
 def spell_setup(work, rng):
     spell = work / "spell.sh"
-    spell.write_text("#!/bin/sh\necho '✨ it worked' > cast.txt\necho '✨ cast!'\n")
+    spell.write_text("#!/usr/bin/env bash\necho '✨ it worked' > cast.txt\necho '✨ cast!'\n")
     spell.chmod(0o644)
     return {}
 

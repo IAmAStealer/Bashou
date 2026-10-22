@@ -40,7 +40,7 @@
   {
    "do": "Merge every PDF in the folder, sorted by name, including files with spaces in their names.",
    "done": "one file holds all of them, and \"my scan.pdf\" is included.",
-   "hint": "A glob like `*.pdf` is already sorted. Quote it right: `\"$@\"` or an array keep names with spaces whole.",
+   "hint": "A glob like `*.pdf` is already sorted. `files=(./*.pdf)` keeps the names whole (and ./ keeps a name starting with - from looking like an option). Write the merged file outside the folder, or it joins the next merge.",
    "why": "Spaces in file names break more shell scripts than anything else. Quoting variables every time is the habit that prevents it."
   },
   {

@@ -3,6 +3,7 @@ BASH"; no line between bash typed at the prompt and bash in scripts). Every scri
 template, the code of lesson pages and our own shell code pass bash -n and ShellCheck; the text players read
 never teaches the script habits the rules forbid."""
 
+import importlib.util
 import json
 import os
 import random
@@ -24,7 +25,10 @@ QUESTIONS = ROOT / "bashou" / "adventure" / "questions" / "en"
 
 # The bug a fight's file holds on purpose, since the player fixes it: what ShellCheck may say about it.
 ON_PURPOSE = {
-    "shebang_shade": {"SC2148"},            # the ! of #! is missing: the shell is unknown
+    "shebang_shade": {"SC2148", "SC1113"},  # the ! of #! is missing: the shell is unknown
+    "nomatch_nymph": {"SC2034"},            # the loop counts turns: f is the bug's witness
+    "newline_nixie": {"SC2045"},            # for f in $(ls ...): the bug
+    "masked_mole": {"SC2155"},              # local x=$(cmd): the bug
 }
 # Files whose first line is the lesson: not #!/usr/bin/env bash, on purpose.
 SHEBANG_ON_PURPOSE = {"shebang_shade"}
@@ -120,7 +124,7 @@ class OurCodeTest(Lint):
         self.need_shellcheck()
         for path in OURS:
             with self.subTest(path.name):
-                self.lint_file(path)
+                self.lint_file(path, {"SC1091"})    # a note: sourced files are linted on their own
 
 
 class FightScriptTest(Lint):
@@ -150,6 +154,29 @@ class FightScriptTest(Lint):
             with self.subTest(cid, file=name):
                 self.assertIn(text.split("\n", 1)[0], ("#!/usr/bin/env bash", "#!/bin/sh"),
                               "S1: /bin/bash is 3.2 on a Mac; plain sh scripts may say #!/bin/sh")
+
+
+class PackageShellTest(Lint):
+    """The sh the .deb and .rpm install: the wrapper, the profile hook, postinst and prerm."""
+
+    def scripts(self):
+        spec = importlib.util.spec_from_file_location("package", ROOT / "tools/package.py")
+        package = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(package)
+        return {"wrapper": package.WRAPPER, "profile": "#!/bin/sh\n" + package.PROFILE,
+                "postinst": f"#!/bin/sh\nset -e\n{package.COMPILE}\n", "prerm": f"#!/bin/sh\nset -e\n{package.CLEAN}\n"}
+
+    def test_package_scripts_are_plain_sh(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            for name, text in self.scripts().items():
+                with self.subTest(name):
+                    path = Path(tmp) / name
+                    path.write_text(text)
+                    done = subprocess.run(["sh", "-n", str(path)], capture_output=True, text=True, timeout=10)
+                    self.assertEqual(done.returncode, 0, done.stderr)
+                    if SHELLCHECK:
+                        codes, report = shellcheck(path)
+                        self.assertLessEqual(codes, {"SC1091"}, report)   # the sourced files are installed ones
 
 
 class LessonCodeTest(Lint):
@@ -195,6 +222,7 @@ BANNED_IN_SCRIPTS = [
 ]
 BANNED_EVERYWHERE = [
     (r"\b(?:local|export|readonly) \w+=[\"']?\$\(", "S5: the builtin hides the command's status"),
+    (r"\b\w+=\"?\$\(pass show [^)]*\)\"?(?!\s*(?:\|\||&&))", "S2: a password read by pass is checked (|| exit 1)"),
 ]
 
 
@@ -272,6 +300,13 @@ class TextTest(unittest.TestCase):
                     with self.subTest(where, rule=rule):
                         self.assertIsNone(re.search(pattern, line), f"{where}: {line!r}")
 
+    def test_road_lessons_and_achievements_check_pass_too(self):
+        for path in (ROOT / "bashou/adventure/lessons.py", ROOT / "bashou/achievements.py"):
+            for n, line in enumerate(path.read_text().split("\n"), 1):
+                for pattern, rule in BANNED_EVERYWHERE:
+                    with self.subTest(path.name, line=n, rule=rule):
+                        self.assertIsNone(re.search(pattern, line.replace('\\"', '"')), line)
+
     def test_set_e_only_where_its_holes_are_taught(self):
         for owner, lines in all_texts():
             if owner in SET_E_TEACHES:
@@ -279,3 +314,43 @@ class TextTest(unittest.TestCase):
             for where, line in lines:
                 with self.subTest(where):
                     self.assertNotIn("set -e", line, f"S4: {where}: {line!r}")
+
+
+# --- bugs the first bash-judge pass found (2026-10-22) ----------------------------------------------------
+
+class ReviewFixesTest(unittest.TestCase):
+    def bash(self, script, **env):
+        return subprocess.run(["bash", "-c", script], capture_output=True, text=True, timeout=10,
+                              env={**os.environ, **env})
+
+    def test_a_write_that_fails_stays_quiet(self):
+        """`echo 0 > "$f" 2>/dev/null` still prints the error: the file is opened before 2> applies."""
+        done = self.bash(f'source "{ROOT}/bashou/room.bash"; _bashou_room=/nonexistent/x/room; '
+                         '_bashou_erase=/nonexistent/x/erase; _bashou_hide')
+        self.assertEqual(done.stderr, "")
+        for path in (ROOT / "bashou.bash", ROOT / "bashou" / "room.bash"):
+            for n, line in enumerate(path.read_text().split("\n"), 1):
+                with self.subTest(path.name, line=n):
+                    self.assertIsNone(re.search(r'(?<!\{) (?:>|>\||>>) "\$\w+"(?: [^;{]*)? 2>/dev/null', line), line)
+
+    def test_a_bad_height_file_is_not_code(self):
+        """room.bash reads the pet's height from a file into (( )): junk there must not run."""
+        with tempfile.TemporaryDirectory() as tmp:
+            height = Path(tmp) / "height"
+            height.write_text(f"a[$(touch {tmp}/ran)]\n")
+            done = self.bash(f'source "{ROOT}/bashou/room.bash"; _bashou_height={height}; _bashou_below')
+            self.assertFalse((Path(tmp) / "ran").exists())
+            self.assertEqual(done.stdout, "\x1b[7B", "the default height")
+
+    def test_the_door_keeps_regex_and_options_out(self):
+        """grep -qx "$1" read the name as a pattern: '.*' got in, and -v made grep wait for the keyboard."""
+        from bashou.challenges import logic
+        with tempfile.TemporaryDirectory() as tmp:
+            work = Path(tmp)
+            meta = logic.door_setup(work, random.Random(0))
+            door = work / "door.sh"
+            self.assertIn('grep -qxF -- "$1" guests.txt', door.read_text())
+            door.write_text(door.read_text().replace("if ! grep -qxF --", "if grep -qx"))
+            self.assertFalse(logic.door_verify(work, meta, ""), "a regex guard lets '.*' in")
+            door.write_text(door.read_text().replace("if grep -qx", "if grep -qxF --"))
+            self.assertTrue(logic.door_verify(work, meta, ""))

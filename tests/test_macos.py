@@ -342,7 +342,7 @@ class InstallerTest(unittest.TestCase):
         takes the newest tag of `git tag --list v*.*.*`: a tag like v0.9.1-macos would reach every Linux player."""
         import fnmatch
         script = (ROOT / "tools/install-macos.sh").read_text()
-        tag = re.search(r"^TAG=(\S+)$", script, re.M).group(1)
+        tag = re.search(r"^tag=(\S+)$", script, re.M).group(1)
         self.assertFalse(fnmatch.fnmatch(tag, "v*.*.*"), tag)
         self.assertIn(f"releases/download/{tag}/install-macos.sh", script)
 
@@ -383,7 +383,7 @@ class DocsTest(unittest.TestCase):
                 self.assertIn("source ~/.bashou/bashou.zsh", text)       # test installer users move over
         script = (ROOT / "tools/install-macos.sh").read_text()
         self.assertIn("xcode-select --install", script)
-        self.assertIn('clone --quiet --branch "$TAG" "$REPO" "$DIR"', script)
+        self.assertIn('clone --quiet --branch "$tag" "$repo" "$dir"', script)
         self.assertIn("BASHOU_SHELL=zsh python3 -m bashou setup", script)
 
     def test_ci_runs_the_tests_on_a_mac(self):

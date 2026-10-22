@@ -44,7 +44,7 @@
    "scheme": [
     " read -r n",
     " [[ $n =~ ^[0-9]+$ ]] || die \"not a number: $n\"",
-    " (( n > 5 )) && printf '%s\\n' big"
+    " (( 10#$n > 5 )) && printf '%s\\n' big"
    ],
    "point": 1,
    "mark": [

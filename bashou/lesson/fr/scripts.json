@@ -64,7 +64,7 @@
    "text": [
     "Chaque combat de script part de cette forme, un modèle :",
     "",
-    "- die écrit une erreur sur stderr (>&2) et s'arrête avec un statut non nul : celui qui a lancé le script, une personne ou cron, sait qu'il a échoué.",
+    "- die écrit une erreur sur stderr (>&2) et s'arrête avec le statut 1 : qui a lancé le script, une personne ou cron, sait qu'il a échoué. Le vrai modèle nomme aussi le script, et sort avec 2 si on le lance mal.",
     "- main vérifie d'abord ses arguments, puis fait le travail. La dernière ligne lui passe les arguments du script."
    ]
   },

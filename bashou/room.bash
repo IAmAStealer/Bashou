@@ -11,6 +11,7 @@
 _bashou_below() {
   local lines=7
   [[ -r $_bashou_height ]] && IFS= read -r lines < "$_bashou_height"
+  [[ $lines =~ ^[0-9]+$ ]] || lines=7                  # a number, or (( )) would run it as code
   printf '\e[%dB' "$lines"
 }
 
@@ -32,7 +33,7 @@ _bashou_where() {   # the cursor's row and column, and the screen's last row: "r
   # wait for it, or the answer comes after we stopped reading and shows up on the screen (^[[30;120R).
   [[ $_bashou_dsr == on ]] && wait=10
   printf '\e[6n\e7\e[9999;9999H\e[6n\e8' > /dev/tty
-  if ! IFS='[;' read -rs -t $wait -dR _ row col || ! IFS='[;' read -rs -t $wait -dR _ bottom _ \
+  if ! IFS='[;' read -rs -t "$wait" -dR _ row col || ! IFS='[;' read -rs -t "$wait" -dR _ bottom _ \
      || [[ ! $row$col$bottom =~ ^[0-9]+$ ]]; then
     _bashou_dsr=off                                  # no answer: this terminal doesn't do it
     return 1
@@ -42,7 +43,7 @@ _bashou_where() {   # the cursor's row and column, and the screen's last row: "r
 }
 
 _bashou_hide() {    # no room this time: the pet isn't drawn, and nothing may blank its cells
-  echo 0 > "$_bashou_room"
+  { echo 0 > "$_bashou_room"; } 2>/dev/null
   rm -f "$_bashou_erase"
 }
 
@@ -53,11 +54,12 @@ _bashou_make_room() {
   (( _bashou_gap )) && [[ -e $_bashou_room ]] && _bashou_close_room
   _bashou_gap=0
   [[ -r $_bashou_height ]] && IFS= read -r lines < "$_bashou_height"
+  [[ $lines =~ ^[0-9]+$ ]] || lines=7                  # a number, or (( )) would run it as code
   if ! _bashou_where; then
     if [[ $_bashou_dsr == off ]]; then
       (( _bashou_first )) && _bashou_below           # as before: below the pet at the start,
       _bashou_first=0
-      echo 1 > "$_bashou_room"                       # and drawn over the text after that
+      { echo 1 > "$_bashou_room"; } 2>/dev/null       # and drawn over the text after that
     else
       _bashou_hide
     fi
@@ -75,7 +77,7 @@ _bashou_make_room() {
   (( scroll )) && printf -v nl '%*s' "$scroll" '' && nl=${nl// /$'\n'}
   printf '\e[%d;1H%s\e[H\e[%dL\e[%d;%dH' "$bottom" "$nl" "$lines" $(( row - scroll + lines )) "$col" > /dev/tty
   _bashou_gap=$lines
-  echo 1 > "$_bashou_room"
+  { echo 1 > "$_bashou_room"; } 2>/dev/null
 }
 
 # When a command starts (PS0): the command line sits under the empty top rows. Delete them (the pet

@@ -96,7 +96,7 @@
    "text": [
     "When nothing matches, bash keeps the pattern as it is (zsh stops with an error instead). The loop then turns once, on a name that doesn't exist.",
     "",
-    "- shopt -s nullglob turns 'no match' into an empty list.",
+    "- shopt -s nullglob turns 'no match' into an empty list. But a command given an empty list runs with no name: cat then reads the keyboard. Count first: (( ${#files[@]} )) || die.",
     "- Or test inside the loop: [[ -e $f ]] || continue."
    ],
    "script": [

@@ -21,7 +21,7 @@
     "- Tes commandes sont des enfants de ton shell.",
     "- Le PID 1 démarre en premier au boot : sur la plupart des Linux aujourd'hui, c'est systemd.",
     "",
-    "$ ps -ef --forest"
+    "$ ps -ef --forest      # Linux ; sur un Mac : ps -ef"
    ]
   },
   {
@@ -83,7 +83,8 @@
     "",
     "- ps aux liste tous les processus de tous les utilisateurs.",
     "- top (ou htop) montre la même liste, en direct. q pour quitter.",
-    "- pgrep -a python trouve des processus par leur nom."
+    "- pgrep -a python trouve des processus par leur nom.",
+    "- --sort et pgrep -a sont propres à Linux (procps). Sur un Mac : ps aux -r trie par CPU, pgrep -l python."
    ]
   }
  ]

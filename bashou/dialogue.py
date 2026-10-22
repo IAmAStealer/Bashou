@@ -78,7 +78,7 @@ DISCOVER = {
     "awk": ["Meet awk: `awk '{print $1}' file` prints the first word of each line.",
             "awk splits lines into columns: $1, $2… `awk -F, '{print $2}' data.csv` for CSV."],
     "uniq": ["`sort file | uniq -c` counts how many times each line appears."],
-    "sed": ["sed replaces text: `sed 's/old/new/g' file` (add -i to edit the file)."],
+    "sed": ["sed replaces text: `sed 's/old/new/g' file` (add -i to edit the file; on a Mac: -i '')."],
     "|": ["Pipes chain commands: `ls | wc -l` counts the files here."],
     "find": ["`find . -name '*.log'` looks for files in every folder below."],
     "ps": ["`ps aux` lists every running process with its PID."],

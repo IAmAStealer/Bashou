@@ -45,7 +45,7 @@
    "scheme": [
     " deploy.sh",
     " DB_PASSWORD=\"hunter2\"               ✗ en clair",
-    " DB_PASSWORD=\"$(pass show db/prod)\"  ✔ en direct"
+    " DB_PASSWORD=$(pass show db/prod) || exit 1   ✔"
    ],
    "point": 2,
    "mark": [
@@ -54,7 +54,7 @@
    "text": [
     "Un mot de passe écrit dans un script est lu par quiconque lit le script, et reste dans son historique git.",
     "",
-    "- $( ) lance pass quand le script tourne : le fichier ne contient jamais le mot de passe.",
+    "- $( ) lance pass quand le script tourne : le fichier ne contient jamais le mot de passe. || exit 1 arrête le script quand pass échoue (pas de clé, mauvaise entrée).",
     "- Un mot de passe qui a été commité doit être changé : supprimer la ligne ne suffit pas."
    ]
   }

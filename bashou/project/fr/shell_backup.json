@@ -29,7 +29,7 @@
   {
    "do": "Mets-le dans un script qui prend en arguments le dossier à sauvegarder et le dossier de destination.",
    "done": "`./backup.sh ~/test ~/backups` marche, et un argument manquant affiche comment l'utiliser.",
-   "hint": "Pars du modèle (leçon Ton premier script) : `$1` et `$2`, et `(( $# == 2 )) || die \"usage: backup.sh DOSSIER DEST\"` pour vérifier que tu as les deux.",
+   "hint": "Pars du modèle (leçon Ton premier script) : `$1` et `$2`, et `(( $# == 2 )) || usage` pour vérifier que tu as les deux, avec une usage() qui écrit `usage: backup.sh DOSSIER DEST` sur stderr et sort avec 2.",
    "why": "Les arguments permettent au même script de sauvegarder n'importe quel dossier n'importe où. Les vérifier d'abord empêche une faute de frappe de devenir une erreur bizarre plus loin."
   },
   {
@@ -41,7 +41,7 @@
   {
    "do": "Vérifie chaque commande : si tar échoue (disque plein, dossier absent), le script le dit et se termine avec un code d'erreur.",
    "done": "un dossier absent donne un message clair, et `echo $?` affiche un code différent de 0.",
-   "hint": "`tar … || die \"sauvegarde ratée\"`, avec le die du modèle : le message sur stderr, puis exit 1. Vérifie ainsi chaque commande qui compte (leçon Les erreurs dans les scripts).",
+   "hint": "`tar … || die \"sauvegarde ratée\"`, avec le die du modèle : le message sur stderr, puis exit 1. Vérifie ainsi chaque commande qui compte (leçon Les erreurs dans les scripts). Écris l'archive sous \"$archive.part\", puis mv -- vers son vrai nom seulement si tar a réussi : une archive cassée ne compte jamais parmi les 5 gardées.",
    "why": "Une sauvegarde qui échoue en silence est la pire : tu le découvres le jour où tu en as besoin. Les échecs bruyants sont une fonctionnalité."
   },
   {

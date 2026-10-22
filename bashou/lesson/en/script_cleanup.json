@@ -39,6 +39,9 @@
    ],
    "script": [
     "tmp=$(mktemp) || exit 1"
+   ],
+   "shellcheck_ok": [
+    "SC2034"
    ]
   },
   {
@@ -66,8 +69,8 @@
   },
   {
    "scheme": [
-    " rm -rf -- \"$dir/\"       dir empty: rm -rf /",
-    " rm -rf -- \"${dir:?}/\"   dir empty: stops",
+    " rm -rf -- \"$dir\"/*       ✘ dir empty: rm -rf /*",
+    " rm -rf -- \"${dir:?}\"/*   ✔ dir empty: stops",
     " dir: parameter null or not set"
    ],
    "point": 1,
@@ -80,7 +83,7 @@
     "- Use it in every rm -r on a variable: a typo in a name, and the variable is empty."
    ],
    "script": [
-    "rm -rf -- \"${dir:?}/\""
+    "rm -rf -- \"${dir:?}\"/*"
    ],
    "shellcheck_ok": [
     "SC2154"

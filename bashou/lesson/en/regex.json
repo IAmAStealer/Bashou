@@ -99,7 +99,7 @@
     "The same patterns work in sed and awk, which you'll meet next.",
     "",
     "- sed -E uses them to find what to replace.",
-    "- awk puts one between slashes to pick the lines to work on. It needs no -E: it always understands + {4} |.",
+    "- awk puts one between slashes to pick the lines to work on. It needs no -E: it understands + and |. {4} works in gawk, macOS awk and recent mawk, not in the older mawk of Debian 12 or Ubuntu 22.04.",
     "That's enough regex for daily work: start simple, and add a piece only when you need it."
    ]
   }

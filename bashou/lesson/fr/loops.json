@@ -16,7 +16,8 @@
    "text": [
     "for prend chaque élément d'une liste à tour de rôle. Ici la liste vient de *.jpg.",
     "",
-    "- Dedans, $f est l'élément du moment : mets-le entre guillemets, les noms peuvent avoir des espaces."
+    "- Dedans, $f est l'élément du moment : mets-le entre guillemets, les noms peuvent avoir des espaces.",
+    "- C'est une boucle de prompt. Un script ajoute shopt -s nullglob (rien ne correspond : aucun tour) et mv -- \"$f\" (un nom peut commencer par -) : leçon Les noms de fichiers dans les scripts."
    ]
   },
   {
@@ -32,7 +33,8 @@
    ],
    "text": [
     "- {1..3} compte pour toi. seq 1 3 fait pareil.",
-    "- Sur une ligne, ; sépare les morceaux."
+    "- Sur une ligne, ; sépare les morceaux.",
+    "- {1..$n} ne compte pas : les accolades sont développées avant les variables. Utilise for ((i = 1; i <= n; i++)) ou seq 1 \"$n\"."
    ]
   },
   {
@@ -51,14 +53,15 @@
     "while read traite un fichier ligne par ligne, même un long fichier.",
     "",
     "- IFS= garde les espaces aux deux bouts de la ligne, -r garde les antislashs tels quels.",
-    "- N'utilise pas for line in $(cat file) : ça coupe à chaque espace, pas seulement en fin de ligne."
+    "- ✘ for line in $(cat file) coupe à chaque espace, pas seulement en fin de ligne.",
+    "- Une commande dedans qui lit son entrée, comme ssh, mange la suite du fichier : ssh -n, ou < /dev/null."
    ]
   },
   {
    "shell": "zsh",
    "scheme": [
     " $ words=\"a b c\"",
-    " $ for w in $words; do echo $w; done",
+    " $ for w in $words; do echo \"$w\"; done",
     "   zsh :  a b c       un tour",
     "   bash : a           trois tours",
     "          b",

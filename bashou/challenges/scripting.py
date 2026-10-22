@@ -97,7 +97,7 @@ SPACE_SPRITE = Challenge(
 REPORT = """#/usr/bin/env bash
 # Says how many lines each .txt file has.
 for f in *.txt; do
-  echo "$f: $(wc -l < "$f")"
+  printf '%s: %s\\n' "$f" "$(wc -l < "$f")"
 done
 """
 
@@ -132,7 +132,7 @@ SHEBANG_SHADE = Challenge(
            "the program, #!/usr/bin/env bash (env finds bash in your PATH: a recent bash wins over an old "
            "/bin/bash, like the Mac's). Here the ! is missing. And a file needs the x (execute) right to run as "
            "./report.sh: ls -l shows rw-r--r--, no x.",
-           "Fix the first line with {editor} report.sh (or sed -i '1s|.*|#!/usr/bin/env bash|' report.sh), then "
+           "Fix the first line with {editor} report.sh (or sed -i '1s|.*|#!/usr/bin/env bash|' report.sh; on a Mac: sed -i '' …), then "
            "chmod +x report.sh, then ./report.sh"],
     setup=shebang_setup, verify=shebang_verify,
 )

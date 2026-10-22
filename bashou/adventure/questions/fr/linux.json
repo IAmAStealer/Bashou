@@ -249,7 +249,7 @@
    "rm ne fait que cacher les fichiers"
   ],
   "answer": 0,
-  "explain": "rm enlève le nom du fichier, mais tant qu'un programme garde le fichier ouvert, ses données restent sur le disque. Le service qui écrit ce log le garde, et df ne voit aucun changement. lsof +L1 liste les fichiers supprimés encore ouverts ; redémarrer ce service libère la place. La prochaine fois, vide un log avec le chevron > fichier au lieu de rm."
+  "explain": "rm enlève le nom du fichier, mais tant qu'un programme garde le fichier ouvert, ses données restent sur le disque. Le service qui écrit ce log le garde, et df ne voit aucun changement. lsof +L1 liste les fichiers supprimés encore ouverts ; redémarrer ce service libère la place. La prochaine fois, vide un log au lieu de le supprimer : sudo truncate -s 0 fichier."
  },
  {
   "id": "linux-2-08",
@@ -457,7 +457,7 @@
    "Ça ralentit le script"
   ],
   "answer": 0,
-  "explain": "Un mot de passe écrit dans un script voyage avec lui : dans git, les sauvegardes, les captures d'écran, la copie d'un collègue. Va le chercher quand le script tourne : DB_PASSWORD=\"$(pass show db/prod)\". Un mot de passe déjà commité doit être changé, car l'historique le garde."
+  "explain": "Un mot de passe écrit dans un script voyage avec lui : dans git, les sauvegardes, les captures d'écran, la copie d'un collègue. Va le chercher quand le script tourne : DB_PASSWORD=$(pass show db/prod) || exit 1 (arrête si pass échoue). Un mot de passe déjà commité doit être changé, car l'historique le garde."
  },
  {
   "id": "linux-2-11",
@@ -510,7 +510,7 @@
    "Le numéro du processus en cours"
   ],
   "answer": 0,
-  "explain": "nproc veut dire number of processors, nombre de processeurs. Un cœur exécute un programme à la fois ; avec 8 cœurs, 8 programmes tournent vraiment en même temps, et les autres attendent leur tour. C'est pour ça que make -j$(nproc) construit autant de morceaux à la fois qu'il y a de cœurs. ps ou top comptent les programmes, free montre la mémoire, et echo $$ affiche le numéro du shell lui-même."
+  "explain": "nproc veut dire number of processors, nombre de processeurs. Un cœur exécute un programme à la fois ; avec 8 cœurs, 8 programmes tournent vraiment en même temps, et les autres attendent leur tour. C'est pour ça que make -j\"$(nproc)\" construit autant de morceaux à la fois qu'il y a de cœurs. ps ou top comptent les programmes, free montre la mémoire, et echo $$ affiche le numéro du shell lui-même."
  },
  {
   "id": "linux-1-17",

@@ -4,11 +4,11 @@
  "pages": [
   {
    "scheme": [
-    " $ grep -q alice guests.txt",
+    " $ grep -qx alice guests.txt",
     " $ echo $?",
     " 0          ← oui : alice est sur la liste",
     "",
-    " $ grep -q eve guests.txt",
+    " $ grep -qx eve guests.txt",
     " $ echo $?",
     " 1          ← non : eve n'y est pas"
    ],
@@ -21,12 +21,12 @@
     "",
     "- 0 veut dire oui, elle a réussi. Tout autre nombre veut dire non (grep : 1 pour pas trouvé, 2 pour une erreur).",
     "- $? contient la réponse de la dernière commande.",
-    "- -q demande à grep de ne rien afficher : seule la réponse compte. -x ne garde que les lignes entières, donc al ne trouve pas alice."
+    "- -q demande à grep de ne rien afficher : seule la réponse compte. -x ne garde que les lignes entières : sans lui, eve trouverait steven."
    ]
   },
   {
    "scheme": [
-    " if grep -q \"$1\" guests.txt; then",
+    " if grep -qxF -- \"$1\" guests.txt; then",
     "     │",
     "     ├─ oui (0) ─▶  echo open",
     "     │",
@@ -43,6 +43,7 @@
     "",
     "- then : ce qu'il faut faire quand la réponse est oui. else (facultatif) : quand c'est non.",
     "- fi ferme le if : c'est if écrit à l'envers.",
+    "- -F lit le nom comme du texte, -- comme un nom même s'il commence par - : une garde ne fait pas confiance à ce qu'on lui donne.",
     "",
     "C'est ainsi qu'un programme décide : il pose une question oui/non, puis choisit un chemin."
    ]
@@ -75,7 +76,7 @@
     "   oui   ─▶  non",
     "   non   ─▶  oui",
     "",
-    " if ! grep -q \"$1\" guests.txt",
+    " if ! grep -qxF -- \"$1\" guests.txt",
     "      = si le nom n'est PAS sur la liste"
    ],
    "point": 5,

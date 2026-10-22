@@ -21,8 +21,8 @@
    "scheme": [
     " file=\"my notes.txt\"",
     "",
-    " rm $file       rm reçoit : my │ notes.txt  2 !",
-    " rm \"$file\"     rm reçoit : my notes.txt     1"
+    " rm $file     ✘ rm reçoit : my │ notes.txt  2 !",
+    " rm \"$file\"   ✔ rm reçoit : my notes.txt     1"
    ],
    "point": 3,
    "mark": [

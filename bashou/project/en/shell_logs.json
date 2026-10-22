@@ -29,7 +29,7 @@
   {
    "do": "Count the errors with grep (the word error, or HTTP codes 5xx in an access log).",
    "done": "the count matches what you see in the file.",
-   "hint": "`grep -c`, `-i` to ignore case, and a regex like `\" 5[0-9][0-9] \"` for the codes.",
+   "hint": "`grep -c`, `-i` to ignore case, and a regex like `' 5[0-9][0-9] '` for the codes.",
    "why": "A search is only as good as its pattern: too wide and it counts lines that aren't errors, too narrow and it misses some. Check a few matches by eye."
   },
   {
@@ -47,7 +47,7 @@
   {
    "do": "Keep only today's lines.",
    "done": "a line from yesterday isn't counted.",
-   "hint": "Build today's date in the log's own format with `date +…`, and `grep` for it.",
+   "hint": "Build today's date in the log's own format: `LC_ALL=C date +%d/%b/%Y` for nginx (LC_ALL=C keeps the month in English, like the log), then `grep -F` for it.",
    "why": "Each log writes dates its own way. Matching their format, not yours, is the trick."
   },
   {
@@ -59,13 +59,13 @@
   {
    "do": "Make the report readable: a title, sections, and aligned columns.",
    "done": "someone else understands the report without your help.",
-   "hint": "`printf \"%-15s %5d\\n\"` aligns columns; `column -t` can help too.",
+   "hint": "`printf '%-15s %5d\\n'` aligns columns; `column -t` can help too.",
    "why": "A report is for people. Aligned numbers can be compared at a glance; ragged ones have to be read one by one."
   },
   {
    "do": "Run it every day with cron or a systemd timer, and save each report in a dated file.",
    "done": "a new report file appears each day.",
-   "hint": "Redirect the output: `report.sh log > reports/$(date +%F).txt`. In crontab, % must be written \\%.",
+   "hint": "Redirect the output: `report.sh log > \"reports/$(date +%F).txt\"`. In crontab, use full paths (cron starts with almost no PATH) and write % as \\%: `0 6 * * * /home/you/report.sh /var/log/app.log > \"/home/you/reports/$(date +\\%F).txt\"`.",
    "why": "Automation is where scripts pay off. Note the cron trap: % has a special meaning in a crontab line."
   },
   {

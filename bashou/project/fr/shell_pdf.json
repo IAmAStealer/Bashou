@@ -29,7 +29,7 @@
   {
    "do": "Fusionne tous les PDF du dossier, triés par nom, y compris ceux qui ont des espaces dans leur nom.",
    "done": "un seul fichier les contient tous, et \"mon scan.pdf\" en fait partie.",
-   "hint": "Un motif comme `*.pdf` est déjà trié. Mets les bons guillemets : `\"$@\"` ou un tableau gardent entiers les noms avec des espaces.",
+   "hint": "Un motif comme `*.pdf` est déjà trié. `fichiers=(./*.pdf)` garde les noms entiers (et ./ empêche un nom qui commence par - de passer pour une option). Écris le fichier fusionné hors du dossier, sinon il entre dans la fusion suivante.",
    "why": "Les espaces dans les noms de fichiers cassent plus de scripts shell que n'importe quoi d'autre. Mettre des guillemets autour des variables à chaque fois est l'habitude qui l'évite."
   },
   {

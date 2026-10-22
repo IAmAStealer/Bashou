@@ -62,7 +62,7 @@ says so, and Mac players install a newer one with `brew install bash`.
 | S11 | Temp files: `tmp=$(mktemp) \|\| exit 1` and `trap 'rm -f -- "$tmp"' EXIT`. Never a fixed `/tmp/name`. | Cleaned up on every exit; nobody can plant the name first. |
 | S12 | A variable used in `rm -r` is guarded: `rm -rf -- "${dir:?}/"`. | An empty variable would make it `rm -rf /`. |
 | S13 | Lowercase names for the script's own variables; UPPERCASE is for the environment (`PATH`, `HOME`). | No clash with what programs read. |
-| S14 | Arguments are checked and the script prints a usage line: `(( $# == 1 )) \|\| die "usage: ${0##*/} FILE"`. | The first bug of every script is being run the wrong way. |
+| S14 | Arguments are checked and the script prints a usage line: `(( $# == 1 )) \|\| usage`, where usage() prints `usage: ${0##*/} FILE` on stderr and exits 2 (die exits 1). | The first bug of every script is being run the wrong way. |
 | S15 | `command -v`, not `which`; `$(( ))`, not `expr`; `name() { … }`, without the `function` keyword. | Builtins, same in every bash. |
 | S16 | `bash -n` passes, and ShellCheck is clean. Each `# shellcheck disable=` says why on the same line. | The tests run both on our script samples. |
 

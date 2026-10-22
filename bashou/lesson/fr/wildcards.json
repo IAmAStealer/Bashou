@@ -49,7 +49,7 @@
     "Pas sûr de ce qu'un motif va attraper ? Fais un echo d'abord : tu vois la liste, rien n'est supprimé.",
     "",
     "- Les guillemets empêchent le développement : '*.tmp' reste du texte.",
-    "- Si rien ne correspond, le motif reste tel quel : echo *.xyz affiche *.xyz."
+    "- En bash, si rien ne correspond, le motif reste tel quel : echo *.xyz affiche *.xyz (zsh s'arrête : page suivante)."
    ]
   },
   {

@@ -10,12 +10,12 @@
    "env runs the script as root"
   ],
   "answer": 0,
-  "explain": "The shebang names the program that reads the script. /bin/bash is a fixed path: on a Mac it is bash 3.2, from 2007. env looks bash up in your PATH, where a newer bash you installed comes first."
+  "explain": "The shebang names the program that reads the script. /bin/bash is a fixed path: on a Mac it is bash 3.2, from 2006. env looks bash up in your PATH, where a newer bash you installed comes first."
  },
  {
   "id": "script-1-02",
   "level": 1,
-  "q": "The template has die() { printf '%s\\n' \"$*\" >&2; exit 1; }. Why the >&2?",
+  "q": "The template has die() { printf '%s: %s\\n' \"${0##*/}\" \"$*\" >&2; exit 1; }. Why the >&2?",
   "choices": [
    "Errors go to stderr, apart from the results",
    "It runs die twice",
@@ -214,7 +214,7 @@
   "choices": [
    "yes | head -n 1",
    "printf 'a\\n' | sort",
-   "grep -c x file | cat",
+   "wc -l < file | cat",
    "true | true"
   ],
   "answer": 0,
@@ -244,12 +244,12 @@
    "(( )) only reads one digit"
   ],
   "answer": 0,
-  "explain": "Arithmetic evaluates what the variable holds, array indexes included, and an index can hold a command substitution. Checking that the value is digits first keeps input from deciding what runs."
+  "explain": "Arithmetic evaluates what the variable holds, array indexes included, and an index can hold a command substitution. Checking that the value is digits first keeps input from deciding what runs. Then write (( 10#$n > 5 )): a leading 0 makes (( )) read octal, and 08 is an error."
  },
  {
   "id": "script-3-04",
   "level": 3,
-  "q": "rm -rf -- \"${dir:?}/\" runs with dir empty. What happens?",
+  "q": "rm -rf -- \"${dir:?}\"/* runs with dir empty. What happens?",
   "choices": [
    "The script stops with an error, before rm runs",
    "rm removes everything under /",
@@ -257,7 +257,7 @@
    "rm asks for confirmation"
   ],
   "answer": 0,
-  "explain": "${dir:?} stops the script with 'dir: parameter null or not set' when dir is empty or unset. Without it, the line would be rm -rf -- \"/\". A typo in a variable name is enough to empty it."
+  "explain": "${dir:?} stops the script with 'dir: parameter null or not set' when dir is empty or unset. Without it, the line would be rm -rf -- /*: rm refuses / itself, but not everything in it. A typo in a variable name is enough to empty it."
  },
  {
   "id": "script-3-05",
@@ -283,7 +283,7 @@
    "The shell refuses the line"
   ],
   "answer": 0,
-  "explain": "The value becomes part of sed's program, so its characters are code there: /, & and \\ mean something. Escape them first, or pass data to a program that takes it as data, like awk -v new=\"$new\"."
+  "explain": "The value becomes part of sed's program, so its characters are code there: /, & and \\ mean something. Escape them first, or pass data to a program that takes it as data, like awk through the environment: new=$new awk '{ … ENVIRON[\"new\"] … }' (-v would still turn backslashes into escapes)."
  },
  {
   "id": "script-3-07",
@@ -296,7 +296,7 @@
    "A variable LOCKED=1 at the top"
   ],
   "answer": 0,
-  "explain": "mkdir creates the folder or fails, in one step: two copies can't both succeed. With a test then a touch, both copies can pass the test before either creates the file. flock is the other safe tool on Linux."
+  "explain": "mkdir creates the folder or fails, in one step: two copies can't both succeed. With a test then a touch, both copies can pass the test before either creates the file. flock is the other safe tool on Linux. Remove the lock however the script ends: trap 'rmdir -- \"$lock\"' EXIT, right after mkdir worked. After a kill -9 it stays: remove it by hand."
  },
  {
   "id": "script-3-08",

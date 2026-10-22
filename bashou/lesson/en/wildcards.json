@@ -63,7 +63,7 @@
     "Not sure what a pattern will match? echo it first: you see the list, nothing is deleted.",
     "",
     "- Quotes stop the expansion: '*.tmp' stays plain text.",
-    "- If nothing matches, the pattern is left as it is: echo *.xyz prints *.xyz."
+    "- In bash, if nothing matches, the pattern is left as it is: echo *.xyz prints *.xyz (zsh stops instead: next page)."
    ]
   },
   {

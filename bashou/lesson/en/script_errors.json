@@ -101,6 +101,9 @@
     "local sum",
     "sum=$(cksum < \"$1\") || die \"no $1\"",
     "}"
+   ],
+   "shellcheck_ok": [
+    "SC2034"
    ]
   },
   {

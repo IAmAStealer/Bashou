@@ -5,7 +5,7 @@
 
 # macOS's own bash is 3.2, too old: Bashou needs 4.4 (PS0). zsh, the Mac's default shell, loads bashou.zsh.
 if (( BASH_VERSINFO[0] * 100 + BASH_VERSINFO[1] < 404 )); then
-  echo "Bashou needs bash 4.4 or newer (this is $BASH_VERSION): use zsh and bashou.zsh, or a newer bash (brew install bash)." >&2
+  printf 'Bashou needs bash 4.4 or newer (this is %s): use zsh and bashou.zsh, or a newer bash (brew install bash).\n' "$BASH_VERSION" >&2
   return 0
 fi
 
@@ -139,8 +139,8 @@ _bashou_on() {
   [[ -z $BASHOU_PID ]] || return 0
   _bashou_guest=
   _bashou_events=$_bashou_data/events.$$
-  echo "$$" >| "$_bashou_home" 2>/dev/null           # guests' commands now come to this pet
-  echo 0 > "$_bashou_room" 2>/dev/null               # this loader makes room: the pet waits for it
+  { echo "$$" >| "$_bashou_home"; } 2>/dev/null       # guests' commands now come to this pet
+  { echo 0 > "$_bashou_room"; } 2>/dev/null           # this loader makes room: the pet waits for it
   # SIGUSR1 ignored until Python installs its handler (the default action would kill it).
   { (trap '' USR1; exec "$_bashou_py" "$BASHOU_DIR/launch.py" bashou.companion "$$") </dev/null 2>/dev/null & } 2>/dev/null
   BASHOU_PID=$!
@@ -152,7 +152,7 @@ bashou() {
   case $1 in
     off)
       _bashou_off
-      if [[ -n $_bashou_auto && ! -e $_bashou_off ]] && : > "$_bashou_off" 2>/dev/null; then
+      if [[ -n $_bashou_auto && ! -e $_bashou_off ]] && { : > "$_bashou_off"; } 2>/dev/null; then
         "$_bashou_py" "$BASHOU_DIR/launch.py" bashou off saved
       else
         "$_bashou_py" "$BASHOU_DIR/launch.py" bashou off hidden
@@ -250,5 +250,5 @@ if _bashou_ready || BASHOU_AUTO=$_bashou_auto bashou start; then
   fi
 elif [[ -n $_bashou_auto && -t 0 ]]; then
   # q in the starter picker the package opened by itself: don't open it again in every new terminal.
-  : > "$_bashou_off" 2>/dev/null
+  { : > "$_bashou_off"; } 2>/dev/null
 fi

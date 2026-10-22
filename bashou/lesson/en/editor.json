@@ -120,7 +120,7 @@
     "Errors often give a line number. Open the file right on that line with +N.",
     "",
     "- git, crontab and others open an editor too: they use $EDITOR. Set it once; new terminals will use it:",
-    "$ echo 'export EDITOR=nano' >> ~/.bashrc"
+    "$ echo 'export EDITOR=nano' >> ~/.bashrc     # zsh: ~/.zshrc"
    ]
   }
  ]

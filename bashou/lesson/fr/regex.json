@@ -83,7 +83,7 @@
     "Les mêmes motifs marchent dans sed et awk, que tu vas voir ensuite.",
     "",
     "- sed -E s'en sert pour trouver quoi remplacer.",
-    "- awk en met un entre barres obliques pour choisir les lignes à traiter. Pas besoin de -E : il comprend toujours + {4} |.",
+    "- awk en met un entre barres obliques pour choisir les lignes à traiter. Pas besoin de -E : il comprend + et |. {4} marche avec gawk, l'awk de macOS et un mawk récent, pas avec le vieux mawk de Debian 12 ou d'Ubuntu 22.04.",
     "C'est assez de regex pour le quotidien : commence simple, et n'ajoute un morceau que quand tu en as besoin."
    ]
   }

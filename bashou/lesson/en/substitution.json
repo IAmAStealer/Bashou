@@ -90,7 +90,7 @@
     "The newlines at the end of the output are removed. That is why the value fits in a sentence or a test.",
     "",
     "- Newlines in the middle stay: $(ls) keeps one name per line, inside quotes.",
-    "- wc -l < file prints only the number; wc -l file adds the name."
+    "- wc -l < file prints only the number; wc -l file adds the name. (macOS's wc pads it with spaces: [      42]. A test like -gt still reads it.)"
    ]
   },
   {
@@ -132,7 +132,7 @@
     "",
     "- Keep it in a variable. A command's arguments can be read by every user of the machine with ps, while it runs.",
     "- ✘ export X=$(cmd) would lose a failure of pass: the status is export's. Assign, then export.",
-    "- pass prints the password on the first line: $(pass show db | head -n 1) keeps only that one."
+    "- pass prints the password on the first line: pw=$(pass show db) || exit 1, then ${pw%%$'\\n'*} keeps only that line."
    ],
    "script": [
     "DB_PASSWORD=$(pass show db) || exit 1",

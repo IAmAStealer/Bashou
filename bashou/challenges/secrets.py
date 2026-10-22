@@ -151,11 +151,9 @@ def vault_setup(work, rng):
 
 DEPLOY = """#!/usr/bin/env bash
 # deploy.sh: logs in to the database, then deploys the app.
-set -euo pipefail
-
 DB_PASSWORD="{pw}"
 
-if [ "$(printf %s "$DB_PASSWORD" | sha256sum | cut -d' ' -f1)" = "{hash}" ]; then
+if [[ $(printf %s "$DB_PASSWORD" | sha256sum | cut -d' ' -f1) == "{hash}" ]]; then
   echo "login ok: deploying"
 else
   echo "login failed" >&2
@@ -193,7 +191,7 @@ def cleartext_verify(work, meta, value):
 PINENTRY = ("If gpg says it can't ask for the passphrase, add --pinentry-mode loopback and it asks right "
             "here in the terminal.")
 GPG = dict(pet="leopard", tools=("gpg", "gpg2"), requires=["gpg", "gpgconf"], skill="linux")
-PASS = dict(pet="leopard", tools=("pass",), requires=["pass", "gpg", "gpgconf"], skill="linux", cleanup=practice_cleanup)
+PASS = dict(pet="leopard", tools=("pass",), requires=["pass", "gpg", "gpgconf", "sha256sum"], skill="linux", cleanup=practice_cleanup)
 
 ALL = [
     Challenge(level=1, id="plaintext_pixie", threat="Plaintext Pixie", **GPG, fix=True,
@@ -239,7 +237,7 @@ ALL = [
                    "(bash deploy.sh). Then: verify",
               hints=["$( ) runs a command and puts what it prints in its place. pass show db/prod prints the "
                      "password, so the variable is filled when the script runs, and the file never holds it.",
-                     "Change the line to DB_PASSWORD=\"$(pass show db/prod)\" and try bash deploy.sh. In real "
+                     "Change the line to DB_PASSWORD=$(pass show db/prod) || exit 1 and try bash deploy.sh. In real "
                      "life, also change a password that was ever committed: it stays in the git history."],
               setup=cleartext_setup, verify=cleartext_verify),
 ]

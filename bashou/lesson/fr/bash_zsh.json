@@ -60,7 +60,7 @@
   {
    "scheme": [
     " $ colors=(red green blue)",
-    " $ echo ${colors[1]}",
+    " $ echo \"${colors[1]}\"",
     "   bash : green     compte depuis 0",
     "   zsh :  red       compte depuis 1"
    ],

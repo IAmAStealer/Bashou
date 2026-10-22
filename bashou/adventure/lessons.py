@@ -12,7 +12,7 @@ LESSONS = [
          "Ctrl+O saves, Ctrl+X quits. In vi, press i to type, Esc to stop, then :wq to save and quit.",
          "nano recipe.txt"),
         ("For one word to replace, sed can do it without opening the file: s/old/new/ replaces, -i writes "
-         "the change into the file itself.", "sed -i 's/suger/sugar/' recipe.txt"),
+         "the change into the file itself (on a Mac: sed -i '').", "sed -i 's/suger/sugar/' recipe.txt"),
     ]},
     {"id": "help_wildcards", "tool": "*", "topics": ("bash", "linux"), "title": "Help and wildcards", "pages": [
         ("Every tool explains itself: --help lists its options, one per line, short form (-f), long form "
@@ -28,7 +28,7 @@ LESSONS = [
         ("A script runs alone, later. When a command fails, nothing stops it: the next lines work on a broken "
          "state. So a script checks the steps that matter, in the code.", "cp -- \"$1\" backup/ || die \"cannot copy $1\""),
         ("die writes the error on stderr and stops with status 1, so whoever ran the script knows. The template "
-         "of every script fight has it.", "die() { printf '%s\\n' \"$*\" >&2; exit 1; }"),
+         "of every script fight has it.", "die() { printf '%s: %s\\n' \"${0##*/}\" \"$*\" >&2; exit 1; }"),
         ("set -e stops at a failed command, but not inside if, while, && or ||, and ((n++)) with n at 0 counts "
          "as a failure. A net with holes: check what matters yourself.", "count=$((count + 1))"),
         ("A temp file gets a private random name from mktemp, and a trap removes it however the script ends, "
@@ -40,7 +40,7 @@ LESSONS = [
         ("A name like -rf looks like options to a command. -- ends the options: whatever comes after is a name.",
          "mv -- \"$f\" trash/"),
         ("A pattern that matches nothing stays the pattern, and the loop turns once on it. nullglob turns it "
-         "into an empty list.", "shopt -s nullglob"),
+         "into an empty list; then check it isn't empty, or cat ./*.txt reads the keyboard.", "shopt -s nullglob"),
         ("echo takes data like -n for its option. printf prints any value exactly: the format first, the "
          "values after.", "printf '%s\\n' \"$name\""),
     ]},
@@ -56,7 +56,7 @@ LESSONS = [
          "#!/usr/bin/env bash. chmod +x gives the right to run it, then ./ runs it from here.",
          "chmod +x report.sh; ./report.sh"),
         ("A for loop runs the same commands once per item: $f holds one file name each turn. Put echo in front "
-         "first to see what it would do, then remove it.", "for f in *.JPG; do echo mv \"$f\" \"${f%.JPG}.jpg\"; done"),
+         "first to see what it would do, then remove it. A script adds shopt -s nullglob and mv --.", "for f in *.JPG; do echo mv \"$f\" \"${f%.JPG}.jpg\"; done"),
     ]},
     {"id": "sort", "tool": "sort", "topics": ("bash", "linux"), "title": "sort, the organizer", "pages": [
         ("sort prints the lines of a file in alphabetical order. The file itself doesn't change.",
@@ -84,8 +84,8 @@ LESSONS = [
         ("awk reads a file line by line and cuts each line into fields: $1 is the first word, "
          "$2 the second, $NF the last.", "awk '{print $1}' people.txt"),
         ("-F sets the separator, for CSV and friends.", "awk -F, '{print $2}' sales.csv"),
-        ("A condition before the braces picks lines; END runs after the last one.",
-         "awk '$2 > 30 {n++} END {print n}' people.txt"),
+        ("A condition before the braces picks lines; END runs after the last one. n+0 prints 0 when no line matched.",
+         "awk '$2 > 30 {n++} END {print n+0}' people.txt"),
     ]},
     {"id": "rights_disk_archives", "tool": "chmod", "topics": ("linux",), "title": "Rights, disk and archives", "pages": [
         ("ls -l shows each file's rights in three groups: you (user), your group, everyone else (others). "
@@ -133,12 +133,12 @@ LESSONS = [
     {"id": "conditions", "tool": "if", "topics": ("logic",), "title": "Conditions: if, !, && and ||", "pages": [
         ("Every command answers yes or no when it ends: its exit status. 0 means it worked (yes), anything else "
          "means it didn't (no). if runs its block only when the command after it says yes.",
-         "if grep -q alice guests.txt; then echo welcome; fi"),
+         "if grep -qx alice guests.txt; then echo welcome; fi"),
         ("[ ] is a command too, made to test things: -f name is a file, -d name is a folder, \"$a\" = \"$b\" "
          "compares two texts. Keep a space after [ and before ], or bash can't read it.",
          "if [ -d backup ]; then echo 'the backup folder is here'; fi"),
         ("! turns the answer around: yes becomes no. Read it aloud as NOT. One ! too many or too few, and a "
-         "script lets in exactly the people it should keep out.", "if ! grep -q eve guests.txt; then echo 'not invited'; fi"),
+         "script lets in exactly the people it should keep out.", "if ! grep -qx eve guests.txt; then echo 'not invited'; fi"),
         ("&& means AND: true only when both sides are true. || means OR: true as soon as one side is. Before "
          "copying a file into a folder, you need the file AND the folder.",
          "if [ -f notes.txt ] && [ -d backup ]; then cp notes.txt backup/; fi"),
@@ -183,7 +183,8 @@ LESSONS = [
          "your gpg key. pass init <your key> starts it; pass generate makes a strong password; pass show prints one.",
          "pass generate web/forum 24"),
         ("A script should never hold a password: it ends up in backups, screenshots and git history. $( ) lets it "
-         "fetch the password when it runs, so the file stays safe to share.", "DB_PASSWORD=\"$(pass show db/prod)\""),
+         "fetch the password when it runs, so the file stays safe to share. || exit 1 stops it when pass fails.",
+         "DB_PASSWORD=$(pass show db/prod) || exit 1"),
         ("Not installed yet? On Debian and Ubuntu: sudo apt install gnupg pass. On Rocky, Alma and RHEL: sudo dnf "
          "install gnupg2, then pass from EPEL (sudo dnf install epel-release first).", "sudo apt install gnupg pass"),
     ]},

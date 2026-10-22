@@ -10,7 +10,7 @@
    "The first one found in $PATH"
   ],
   "answer": 0,
-  "explain": "A path without a leading / is relative: it starts from the folder you are in when you run the script (shown by pwd), not from where the script file lives. Run it from your home and it deletes ~/build. Safe scripts first cd to a known folder, or use full paths like /srv/app/build."
+  "explain": "A path without a leading / is relative: it starts from the folder you are in when you run the script (shown by pwd), not from where the script file lives. Run it from your home and it deletes ~/build. Safe scripts first cd to a known folder and stop if that fails (cd /srv/app || exit 1), or use full paths like /srv/app/build."
  },
  {
   "id": "bash-1-02",
@@ -62,7 +62,7 @@
    "<"
   ],
   "answer": 0,
-  "explain": ">> adds at the end of the file and keeps what is already there. A single > empties the file first, then writes: one wrong > and /etc/hosts is gone. | sends output to another command, < reads a file as input. Tip: set -o noclobber makes > refuse to overwrite an existing file."
+  "explain": ">> adds at the end of the file and keeps what is already there. A single > empties the file first, then writes: one wrong > and /etc/hosts is gone. | sends output to another command, < reads a file as input. /etc/hosts is root's: sudo echo … >> fails (your shell opens the file), echo … | sudo tee -a works."
  },
  {
   "id": "bash-1-06",
@@ -88,7 +88,7 @@
    "cat /var/log/commands"
   ],
   "answer": 0,
-  "explain": "Ctrl+R searches your history backwards as you type: press Ctrl+R again for older matches, Enter to run, → to edit first. The history is saved in ~/.bash_history. Careful: a password typed on a command line is saved there too."
+  "explain": "Ctrl+R searches your history backwards as you type: press Ctrl+R again for older matches, Enter to run, → to edit first. The history is saved in ~/.bash_history (zsh: ~/.zsh_history). Careful: a password typed on a command line is saved there too."
  },
  {
   "id": "bash-1-08",
@@ -218,7 +218,7 @@
    "for f in \"$(ls)\"; do gzip \"$f\"; done"
   ],
   "answer": 0,
-  "explain": "*.log gives one item per file, even when the name has spaces. $(ls) produces text that bash then cuts at every space, so 'my app.log' becomes two wrong names. Then \"$f\" in quotes passes the name as one piece. Habit: loop over a glob, and always quote your variables."
+  "explain": "*.log gives one item per file, even when the name has spaces. $(ls) produces text that bash then cuts at every space, so 'my app.log' becomes two wrong names. Then \"$f\" in quotes passes the name as one piece. Habit: loop over a glob, and always quote your variables. A script also adds shopt -s nullglob and gzip -- \"$f\"."
  },
  {
   "id": "bash-2-04",
@@ -231,7 +231,7 @@
    "No: it only works as root"
   ],
   "answer": 0,
-  "explain": "set -e stops at a failed command, except where a failure is an answer (if, while, &&, ||, and the functions called there), after a local or export that assigns a $( ), and it stops on ((n++)) with n at 0. -u makes an unset variable an error; pipefail makes a pipe fail when any stage fails. A net with holes: check what matters yourself."
+  "explain": "set -e stops at a failed command, except where a failure is an answer (if, while, &&, ||, and the functions called there), after a local or export that assigns a $( ), and it stops on ((n++)) with n at 0. -u makes an unset variable an error; pipefail makes a pipe fail when any stage fails, even cmd | head when head stops reading early (status 141). A net with holes: check what matters yourself."
  },
  {
   "id": "bash-2-05",
@@ -290,7 +290,7 @@
   "level": 2,
   "q": "How does a script remove its temp file even when it fails half way?",
   "choices": [
-   "trap 'rm -f \"$tmp\"' EXIT",
+   "trap 'rm -f -- \"$tmp\"' EXIT",
    "An rm on its last line",
    "set -e",
    "mktemp --autoremove"
@@ -582,7 +582,7 @@
    "Every file of the folder"
   ],
   "answer": 0,
-  "explain": "A commit saves what is staged: what you added since the last commit. todo.txt stays changed, waiting for its own add. That's how one commit holds one idea. git status shows both lists; git add . or git commit -a take everything at once."
+  "explain": "A commit saves what is staged: what you added since the last commit. todo.txt stays changed, waiting for its own add. That's how one commit holds one idea. git status shows both lists; git add . takes everything, new files too; git commit -a takes every changed file git already knows, not new ones."
  },
  {
   "id": "bash-1-31",
@@ -647,7 +647,7 @@
    "[$(wc -l < list.txt)]"
   ],
   "answer": 0,
-  "explain": "$( ) removes the newlines at the end of the output, so the value fits in a sentence or a test like [ \"$n\" -gt 10 ]. With < the file comes on stdin, so wc doesn't know its name and prints only the number. Written wc -l list.txt, it would add the name: 42 list.txt."
+  "explain": "$( ) removes the newlines at the end of the output, so the value fits in a sentence or a test like [ \"$n\" -gt 10 ]. With < the file comes on stdin, so wc doesn't know its name and prints only the number. Written wc -l list.txt, it would add the name: 42 list.txt. (macOS's wc pads the number with spaces: [      42].)"
  },
  {
   "id": "bash-2-20",

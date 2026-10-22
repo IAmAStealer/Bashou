@@ -10,12 +10,12 @@
    "env lance le script en root"
   ],
   "answer": 0,
-  "explain": "Le shebang nomme le programme qui lit le script. /bin/bash est un chemin fixe : sur un Mac, c'est bash 3.2, de 2007. env cherche bash dans ton PATH, où un bash plus récent que tu as installé passe en premier."
+  "explain": "Le shebang nomme le programme qui lit le script. /bin/bash est un chemin fixe : sur un Mac, c'est bash 3.2, de 2006. env cherche bash dans ton PATH, où un bash plus récent que tu as installé passe en premier."
  },
  {
   "id": "script-1-02",
   "level": 1,
-  "q": "Le modèle contient die() { printf '%s\\n' \"$*\" >&2; exit 1; }. Pourquoi le >&2 ?",
+  "q": "Le modèle contient die() { printf '%s: %s\\n' \"${0##*/}\" \"$*\" >&2; exit 1; }. Pourquoi le >&2 ?",
   "choices": [
    "Les erreurs vont sur stderr, à part des résultats",
    "Il lance die deux fois",
@@ -214,7 +214,7 @@
   "choices": [
    "yes | head -n 1",
    "printf 'a\\n' | sort",
-   "grep -c x file | cat",
+   "wc -l < file | cat",
    "true | true"
   ],
   "answer": 0,
@@ -244,12 +244,12 @@
    "(( )) ne lit qu'un chiffre"
   ],
   "answer": 0,
-  "explain": "L'arithmétique évalue ce que contient la variable, indices de tableau compris, et un indice peut contenir une substitution de commande. Vérifier d'abord que ce sont des chiffres empêche ce qu'on tape de décider de ce qui tourne."
+  "explain": "L'arithmétique évalue ce que contient la variable, indices de tableau compris, et un indice peut contenir une substitution de commande. Vérifier d'abord que ce sont des chiffres empêche ce qu'on tape de décider de ce qui tourne. Puis écris (( 10#$n > 5 )) : un 0 devant fait lire (( )) en octal, et 08 est une erreur."
  },
  {
   "id": "script-3-04",
   "level": 3,
-  "q": "rm -rf -- \"${dir:?}/\" tourne avec dir vide. Que se passe-t-il ?",
+  "q": "rm -rf -- \"${dir:?}\"/* tourne avec dir vide. Que se passe-t-il ?",
   "choices": [
    "Le script s'arrête sur une erreur, avant que rm ne tourne",
    "rm supprime tout sous /",
@@ -257,7 +257,7 @@
    "rm demande une confirmation"
   ],
   "answer": 0,
-  "explain": "${dir:?} arrête le script avec « dir: parameter null or not set » quand dir est vide ou pas définie. Sans ça, la ligne serait rm -rf -- \"/\". Une faute de frappe dans un nom de variable suffit à la vider."
+  "explain": "${dir:?} arrête le script avec « dir: parameter null or not set » quand dir est vide ou pas définie. Sans ça, la ligne serait rm -rf -- /* : rm refuse / lui-même, mais pas tout ce qu'il contient. Une faute de frappe dans un nom de variable suffit à la vider."
  },
  {
   "id": "script-3-05",
@@ -283,7 +283,7 @@
    "Le shell refuse la ligne"
   ],
   "answer": 0,
-  "explain": "La valeur devient une partie du programme de sed, donc ses caractères y sont du code : /, & et \\ veulent dire quelque chose. Échappe-les d'abord, ou passe la donnée à un programme qui la prend comme donnée, comme awk -v new=\"$new\"."
+  "explain": "La valeur devient une partie du programme de sed, donc ses caractères y sont du code : /, & et \\ veulent dire quelque chose. Échappe-les d'abord, ou passe la donnée à un programme qui la prend comme donnée, comme awk par l'environnement : new=$new awk '{ … ENVIRON[\"new\"] … }' (-v changerait encore les \\ en échappements)."
  },
  {
   "id": "script-3-07",
@@ -296,7 +296,7 @@
    "Une variable LOCKED=1 en haut"
   ],
   "answer": 0,
-  "explain": "mkdir crée le dossier ou échoue, en une seule étape : deux copies ne peuvent pas réussir toutes les deux. Avec un test puis un touch, les deux copies peuvent passer le test avant que l'une crée le fichier. flock est l'autre outil sûr sous Linux."
+  "explain": "mkdir crée le dossier ou échoue, en une seule étape : deux copies ne peuvent pas réussir toutes les deux. Avec un test puis un touch, les deux copies peuvent passer le test avant que l'une crée le fichier. flock est l'autre outil sûr sous Linux. Retire le verrou à toute sortie : trap 'rmdir -- \"$lock\"' EXIT après le mkdir. Après un kill -9, il reste : à la main."
  },
  {
   "id": "script-3-08",

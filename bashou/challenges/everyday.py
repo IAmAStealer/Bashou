@@ -33,7 +33,7 @@ def sizes_setup(work, rng):
 FLAG_PHANTOM = Challenge(
     level=1, id="flag_phantom", pet="sofa", tools=("sort",), threat="Flag Phantom", requires=["sort"],
     task="The Flag Phantom listed the size of each folder in sizes.txt, with a unit: K (kilobytes), M "
-         "(megabytes, a thousand K) or G (gigabytes, a thousand M). A plain sort compares text, and sort -n "
+         "(megabytes, 1024 K) or G (gigabytes, 1024 M). A plain sort compares text, and sort -n "
          "only looks at the number, so neither knows that 1.5G is bigger than 900M.\n"
          "Which folder is the biggest?",
     help="Here, find the option that sorts sizes written with a unit (K, M, G).",

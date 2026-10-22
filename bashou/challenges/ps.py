@@ -38,8 +38,8 @@ CHALLENGE = Challenge(
     level=2, id="ps_phantom", pet="ghost", tools=("ps", "pgrep", "pidof"), threat="Process Phantom",
     task="A Process Phantom named {name} haunts this machine.\nWhat is its PID?",
     help="Here, find how to see every process, not only yours.",
-    hints=["`ps aux` lists every process with its PID in the 2nd column; filter it with grep.",
-           "Try: pgrep -f phantom   or   ps aux | grep phantom"],
+    hints=["`ps aux` lists every process with its PID in the 2nd column. pgrep -f finds one by its command line.",
+           "Try: pgrep -f phantom   (ps aux | grep phantom also lists the grep itself)"],
     setup=setup, cleanup=cleanup, requires=["ps"],
 )
 ALL = [CHALLENGE]

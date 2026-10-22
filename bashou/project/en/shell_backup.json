@@ -40,7 +40,7 @@
   {
    "do": "Put it in a script that takes the folder to save and the destination folder as arguments.",
    "done": "`./backup.sh ~/test ~/backups` works, and a missing argument prints how to use it.",
-   "hint": "Start from the template (lesson Your first script): `$1` and `$2`, and `(( $# == 2 )) || die \"usage: backup.sh FOLDER DEST\"` to check you got both.",
+   "hint": "Start from the template (lesson Your first script): `$1` and `$2`, and `(( $# == 2 )) || usage` to check you got both, with a usage() that prints `usage: backup.sh FOLDER DEST` on stderr and exits 2.",
    "why": "Arguments let the same script back up any folder anywhere. Checking them first stops a typo from becoming a strange error further down."
   },
   {
@@ -52,7 +52,7 @@
   {
    "do": "Check every command: if tar fails (a full disk, a missing folder), the script says so and exits with an error code.",
    "done": "a missing folder gives a clear message, and `echo $?` shows a code that isn't 0.",
-   "hint": "`tar … || die \"backup failed\"`, with the template's die: the message on stderr, then exit 1. Check each command that matters this way (lesson Errors in scripts).",
+   "hint": "`tar … || die \"backup failed\"`, with the template's die: the message on stderr, then exit 1. Check each command that matters this way (lesson Errors in scripts). Write the archive as \"$archive.part\", and mv -- it to its real name only when tar worked: a broken archive never counts as one of the 5 kept.",
    "why": "A backup that fails silently is the worst kind: you find out on the day you need it. Loud failures are a feature."
   },
   {

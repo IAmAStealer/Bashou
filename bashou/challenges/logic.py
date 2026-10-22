@@ -11,6 +11,7 @@ from .repos import EDITORS
 
 GUESTS = ["alice", "bruno", "chloe", "dimitri", "emma", "farid", "giulia", "hugo", "ines", "jonas"]
 STRANGERS = ["mallory", "trudy", "eve", "oscar"]
+TRICKY = [".*", "a.*", "-v"]       # a regex or an option: the guard reads names as plain text (grep -F --)
 FILES = ["notes.txt", "todo.txt", "journal.txt"]
 FOLDERS = ["backup", "safe", "archive"]
 
@@ -18,7 +19,8 @@ FOLDERS = ["backup", "safe", "archive"]
 def run(script, work, *args):
     """What the script prints, run with bash in `work` (empty when it hangs or bash is missing)."""
     try:
-        done = subprocess.run(["bash", script.name, *args], cwd=work, capture_output=True, text=True, timeout=5)
+        done = subprocess.run(["bash", script.name, *args], cwd=work, stdin=subprocess.DEVNULL, capture_output=True,
+                              text=True, timeout=5)
     except (OSError, subprocess.TimeoutExpired):
         return ""
     return done.stdout.strip()
@@ -29,7 +31,7 @@ def run(script, work, *args):
 DOOR = """#!/usr/bin/env bash
 # The party door: only the guests written in guests.txt may come in.
 # Usage: bash door.sh NAME
-if ! grep -qx "$1" guests.txt; then
+if ! grep -qxF -- "$1" guests.txt; then
   echo open
 else
   echo closed
@@ -81,7 +83,7 @@ def door_verify(work, meta, value):
         guests = meta["guests"] + ["zoe"]
         (tmp / "guests.txt").write_text("\n".join(guests) + "\n")
         return (all(run(tmp / "door.sh", tmp, g) == "open" for g in guests)
-                and all(run(tmp / "door.sh", tmp, s) == "closed" for s in STRANGERS))
+                and all(run(tmp / "door.sh", tmp, s) == "closed" for s in STRANGERS + TRICKY))
 
 
 # --- Coin Wraith: heads OR tails, `||` where both conditions must hold ------------------------------------------------
@@ -164,7 +166,7 @@ ALL = [
                      "the list. The ! in front turns that answer around, so the if now means \"if the name is "
                      "NOT on the list, open\". Then run bash door.sh {guest} and bash door.sh {stranger} to "
                      "see the difference.",
-                     "Remove the ! (and its space) from the if line: `if grep -qx \"$1\" guests.txt; then`. "
+                     "Remove the ! (and its space) from the if line: `if grep -qxF -- \"$1\" guests.txt; then`. "
                      "Open it with {editor} door.sh, fix the line ({save_keys}). Or in one "
                      "command: sed -i 's/if ! grep/if grep/' door.sh"],
               setup=door_setup, verify=door_verify),

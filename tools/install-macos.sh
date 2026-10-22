@@ -6,39 +6,35 @@
 #   sh install-macos.sh
 #
 # The tag doesn't look like vX.Y.Z on purpose: `bashou update` on Linux only offers those.
-set -eu
+set -u          # each step that can fail is checked below: set -e would miss some (bash-style.md, S4)
 
-TAG=macos-v0.9.1
-REPO=https://github.com/IAmAStealer/Bashou.git
-DIR="$HOME/.bashou"
+tag=macos-v0.9.1
+repo=https://github.com/IAmAStealer/Bashou.git
+dir="$HOME/.bashou"
 
-say() { printf '  %s\n' "$*"; }
+say() { printf '  %s\n' "$@"; }
+die() { printf '  %s\n' "$@" >&2; exit 1; }
 
-if [ "$(uname -s)" != Darwin ]; then
-    say "This installer is for macOS. On Linux, see the README: apt, dnf or git."
-    exit 1
-fi
+[ "$(uname -s)" = Darwin ] || die "This installer is for macOS. On Linux, see the README: apt, dnf or git."
 
 # git and python3 come with Apple's command line tools. Without them, /usr/bin/git only offers to install them.
 if ! xcode-select -p >/dev/null 2>&1 || ! git --version >/dev/null 2>&1 || ! python3 --version >/dev/null 2>&1; then
-    say "Bashou needs git and python3, which come with Apple's command line tools."
-    say "A window opens to install them. When it's done, run this installer again."
     xcode-select --install 2>/dev/null || true
-    exit 1
+    die "Bashou needs git and python3, which come with Apple's command line tools." \
+        "A window opens to install them. When it's done, run this installer again."
 fi
 
-if [ -d "$DIR/.git" ]; then
-    say "Updating $DIR to $TAG"
-    git -C "$DIR" fetch --quiet --tags --force "$REPO"
-    git -C "$DIR" -c advice.detachedHead=false checkout --quiet "$TAG"
-elif [ -e "$DIR" ]; then
-    say "$DIR already exists and isn't a Bashou download. Move it away, then run this installer again."
-    exit 1
+if [ -d "$dir/.git" ]; then
+    say "Updating $dir to $tag"
+    git -C "$dir" fetch --quiet --tags --force "$repo" || die "Could not download $tag."
+    git -C "$dir" -c advice.detachedHead=false checkout --quiet "$tag" || die "Could not switch to $tag."
+elif [ -e "$dir" ]; then
+    die "$dir already exists and isn't a Bashou download. Move it away, then run this installer again."
 else
-    say "Downloading Bashou $TAG into $DIR"
-    git -c advice.detachedHead=false clone --quiet --branch "$TAG" "$REPO" "$DIR"
+    say "Downloading Bashou $tag into $dir"
+    git -c advice.detachedHead=false clone --quiet --branch "$tag" "$repo" "$dir" || die "Could not download $tag."
 fi
 
 # The line in ~/.zshrc (and ~/.bashrc when a bash 4.4+ is installed), the same way `bashou on` adds it.
-cd "$DIR"
-BASHOU_SHELL=zsh python3 -m bashou setup
+cd "$dir" || die "Could not enter $dir."
+BASHOU_SHELL=zsh python3 -m bashou setup || die "The setup failed: see the message above."

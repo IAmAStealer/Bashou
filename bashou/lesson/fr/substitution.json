@@ -74,7 +74,7 @@
     "Les sauts de ligne à la fin de la sortie sont retirés. C'est pour ça que la valeur se glisse dans une phrase ou un test.",
     "",
     "- Ceux du milieu restent : $(ls) garde un nom par ligne, entre guillemets.",
-    "- wc -l < fichier n'écrit que le nombre ; wc -l fichier ajoute le nom."
+    "- wc -l < fichier n'écrit que le nombre ; wc -l fichier ajoute le nom. (Le wc de macOS le décale avec des espaces : [      42]. Un test comme -gt le lit quand même.)"
    ]
   },
   {
@@ -116,7 +116,7 @@
     "",
     "- Garde-le dans une variable. Les arguments d'une commande se lisent avec ps, par tous, pendant qu'elle tourne.",
     "- ✘ export X=$(cmd) perdrait un échec de pass : le statut est celui d'export. Affecte, puis exporte.",
-    "- pass écrit le mot de passe sur la première ligne : $(pass show db | head -n 1) ne garde que celle-là."
+    "- pass écrit le mot de passe sur la première ligne : pw=$(pass show db) || exit 1, puis ${pw%%$'\\n'*} ne garde que celle-là."
    ]
   }
  ]

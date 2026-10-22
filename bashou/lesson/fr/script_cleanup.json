@@ -38,8 +38,8 @@
   },
   {
    "scheme": [
-    " rm -rf -- \"$dir/\"       dir vide : rm -rf /",
-    " rm -rf -- \"${dir:?}/\"   dir vide : arrêt",
+    " rm -rf -- \"$dir\"/*       ✘ dir vide : rm -rf /*",
+    " rm -rf -- \"${dir:?}\"/*   ✔ dir vide : arrêt",
     " dir: parameter null or not set"
    ],
    "point": 1,

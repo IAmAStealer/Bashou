@@ -5,6 +5,7 @@ your script again in a fresh folder, on its own tricky input, so only a real fix
 hand doesn't."""
 
 import os
+import re
 import shutil
 import subprocess
 import tempfile
@@ -21,7 +22,7 @@ def script(name, what, usage, body, top="", head=""):
     `top` before main (functions, globals), `body` inside main after the argument check."""
     return (f"#!/usr/bin/env bash\n# {what}\n# Usage: {name} {usage}\n\n{head}"
             "die() { printf '%s: %s\\n' \"${0##*/}\" \"$*\" >&2; exit 1; }\n\n" + top +
-            "main() {\n  if (( $# < 1 )); then\n    printf 'usage: %s " + usage + "\\n' \"${0##*/}\" >&2\n"
+            "main() {\n  if (( $# " + ("< 1" if usage.endswith("...") else "!= 1") + " )); then\n    printf 'usage: %s " + usage + "\\n' \"${0##*/}\" >&2\n"
             "    exit 2\n  fi\n" + body + "}\n\nmain \"$@\"\n")
 
 
@@ -150,7 +151,7 @@ def count_cases():
         return judge
     return [(lambda box: (box / "empty").mkdir(), ["empty"], expect(0)),
             (lambda box: files(box / "pics", ["notes.txt", "map.png"]), ["pics"], expect(0)),
-            (lambda box: files(box / "pics", ["a.jpg", "my cat.jpg", "b.png"]), ["pics"], expect(2))]
+            (lambda box: files(box / "pics", ["a.jpg", "my cat.jpg", "new\nline.jpg", "old.jpg\nnotes.txt", "b.png"]), ["pics"], expect(3))]
 
 
 NOMATCH_NYMPH = fight(
@@ -311,6 +312,9 @@ def stamp_cases():
                      "with an error instead.").format(
                 status=done.returncode,
                 wrote=_("wrote gone.txt.sum") if (box / "gone.txt.sum").exists() else _("wrote nothing"))
+        if re.search(r"\blocal +\w+=\$\(", (box / "stamp.sh").read_text()):
+            return _("stamp.sh stops now, but a local x=$(…) is still there: it hides the next failure. Declare "
+                     "first, assign on the next line.")
         return ""
     return [(build, ["notes.txt"], good), (build, ["notes.txt", "gone.txt"], missing)]
 
@@ -393,7 +397,7 @@ NAMES = script("names.sh", "Copies the names of a list that aren't empty into LI
     echo "$name"
   done < "$list" > "$list.ok"
 """)
-GUESTS = ["Ana", "-n", "", "Zoé", "-e", "-E", "back\\slash", "", "Sam"]
+GUESTS = ["Ana", "-n", "", "Zoé", "-e", "-E", "back\\slash", "50%", "", "Sam"]   # 50%: data never goes in the format
 
 
 def names_setup(work, rng):
@@ -489,9 +493,13 @@ def report_cases():
             return _("On a log where b comes 3 times, report.sh said: {said}").format(said=said(done))
         if junk:
             return _("report.sh worked but left {junk} behind.").format(junk=", ".join(junk))
-        if "mktemp" not in (box / "report.sh").read_text():
+        text = (box / "report.sh").read_text()
+        if "mktemp" not in text:
             return _("No leftovers this time, but the temp file still has a name anyone can guess: make it with "
                      "mktemp.")
+        if not re.search(r"\btrap\b.*\bEXIT\b", text):
+            return _("No leftovers this time, but only because every exit has its own rm: the next die someone adds "
+                     "will forget it. One trap … EXIT removes the file however the script ends.")
         return ""
     return [(build(""), ["app.log"], failing), (build("a\nb\nb\nc\nb\n"), ["app.log"], working)]
 
@@ -519,7 +527,7 @@ ALL = [DASH_DEMON, NOMATCH_NYMPH, NEWLINE_NIXIE, STDIN_SIREN, MASKED_MOLE, ERREX
 
 SAVE = script("save.sh", "Copies a file into backup/.", "FILE", """\
   mkdir -p backup || die "cannot create backup/"
-  cp "$1" backup/
+  cp -- "$1" backup/
   printf 'saved %s\\n' "$1"
 """)
 

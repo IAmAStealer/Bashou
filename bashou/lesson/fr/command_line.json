@@ -60,7 +60,7 @@
    "text": [
     "Une commande, c'est juste un fichier programme quelque part sur le disque. $PATH est la liste des dossiers où le shell le cherche.",
     "",
-    "$ echo $PATH",
+    "$ echo \"$PATH\"",
     "$ type -a ls      # tous les ls que le shell trouve, dans l'ordre",
     "",
     "« command not found » veut dire qu'aucun dossier de $PATH ne l'a : une faute de frappe, ou il n'est pas installé."
@@ -72,7 +72,7 @@
     " ls: cannot access '/nothing':",
     "     No such file or directory",
     " $ echo $?",
-    " 2",
+    " 2          (ls de GNU ; celui de macOS : 1)",
     "",
     " 0          ça a marché",
     " 1, 2, …    quelque chose s'est mal passé"

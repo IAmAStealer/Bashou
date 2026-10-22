@@ -38,8 +38,8 @@
    "scheme": [
     " file=\"my notes.txt\"",
     "",
-    " rm $file       rm gets: my │ notes.txt  2 files!",
-    " rm \"$file\"     rm gets: my notes.txt     1 file"
+    " rm $file     ✘ rm gets: my │ notes.txt  2 files!",
+    " rm \"$file\"   ✔ rm gets: my notes.txt     1 file"
    ],
    "point": 3,
    "mark": [

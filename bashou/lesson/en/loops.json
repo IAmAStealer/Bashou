@@ -33,7 +33,8 @@
    "text": [
     "for takes each item of a list in turn. Here the list comes from *.jpg.",
     "",
-    "- Inside, $f is the current item: quote it, names can have spaces."
+    "- Inside, $f is the current item: quote it, names can have spaces.",
+    "- That's a prompt loop. A script adds shopt -s nullglob (no match: no turn) and mv -- \"$f\" (a name can start with -): lesson File names in scripts."
    ]
   },
   {
@@ -49,7 +50,8 @@
    ],
    "text": [
     "- {1..3} counts for you. seq 1 3 does the same.",
-    "- On one line, ; separates the parts."
+    "- On one line, ; separates the parts.",
+    "- {1..$n} doesn't count: braces are expanded before variables. Use for ((i = 1; i <= n; i++)) or seq 1 \"$n\"."
    ]
   },
   {
@@ -68,14 +70,15 @@
     "while read handles a file line by line, even long files.",
     "",
     "- IFS= keeps the spaces at both ends of a line, -r keeps backslashes as they are.",
-    "- Don't use for line in $(cat file): it cuts at every space, not only at line ends."
+    "- ✘ for line in $(cat file) cuts at every space, not only at line ends.",
+    "- A command inside that reads its input, like ssh, eats the rest of the file: ssh -n, or < /dev/null."
    ]
   },
   {
    "shell": "zsh",
    "scheme": [
     " $ words=\"a b c\"",
-    " $ for w in $words; do echo $w; done",
+    " $ for w in $words; do echo \"$w\"; done",
     "   zsh:  a b c       one turn",
     "   bash: a           three turns",
     "         b",

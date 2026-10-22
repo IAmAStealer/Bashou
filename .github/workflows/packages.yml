@@ -41,12 +41,13 @@ jobs:
           SIGNING_KEY: ${{ secrets.BASHOU_SIGNING_KEY }}
           GH_TOKEN: ${{ github.token }}
         run: |
-          [[ $VERSION =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Version must look like v1.2.3"; exit 1; }
+          [[ $VERSION =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "::error title=Bad version::Version must look like v1.2.3"; exit 1; }
           [ -n "$SIGNING_KEY" ] || { echo "::error title=No signing key::Add the BASHOU_SIGNING_KEY secret"; exit 1; }
           export GNUPGHOME="$RUNNER_TEMP/gnupg"
           install -dm700 "$GNUPGHOME"
           printf '%s\n' "$SIGNING_KEY" | gpg --batch --quiet --import
           key=$(gpg --list-secret-keys --with-colons | awk -F: '/^fpr/ {print $10; exit}')
+          [ -n "$key" ] || { echo "::error title=No signing key::BASHOU_SIGNING_KEY holds no secret key"; exit 1; }
           python3 tools/package.py build "$VERSION" dist
           python3 tools/package.py repo dist site "$key"
           cd site
@@ -55,8 +56,9 @@ jobs:
           git -c user.name="github-actions[bot]" -c user.email="github-actions[bot]@users.noreply.github.com" \
             commit -qm "Bashou $VERSION packages"
           auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
-          git -c http.extraheader="AUTHORIZATION: basic $auth" \
-            push --force --quiet "https://github.com/$GITHUB_REPOSITORY.git" gh-pages
+          # The token goes through the environment, not git's arguments: ps shows arguments to every user.
+          GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=http.extraheader GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $auth" \
+            git push --force --quiet "https://github.com/$GITHUB_REPOSITORY.git" gh-pages
       - name: Provenance of the packages
         uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8  # v4.2.2
         with:
@@ -99,7 +101,8 @@ jobs:
           # The attached tarball, not a fresh build: the formula's sha256 must match what users download.
           gh release download "$VERSION" --repo "$GITHUB_REPOSITORY" --pattern "bashou-${VERSION#v}.tar.gz" --dir dist
           auth=$(printf 'x-access-token:%s' "$TAP_TOKEN" | base64 -w0)
-          git -c http.extraheader="AUTHORIZATION: basic $auth" clone --quiet https://github.com/IAmAStealer/homebrew-bashou.git tap
+          GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=http.extraheader GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $auth" \
+            git clone --quiet https://github.com/IAmAStealer/homebrew-bashou.git tap
           mkdir -p tap/Formula
           python3 tools/package.py formula "$VERSION" "dist/bashou-${VERSION#v}.tar.gz" > tap/Formula/bashou.rb
           cd tap
@@ -107,4 +110,5 @@ jobs:
           if git diff --cached --quiet; then echo "The tap already has $VERSION."; exit 0; fi
           git -c user.name="github-actions[bot]" -c user.email="github-actions[bot]@users.noreply.github.com" \
             commit -qm "bashou $VERSION"
-          git -c http.extraheader="AUTHORIZATION: basic $auth" push --quiet origin HEAD
+          GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=http.extraheader GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $auth" \
+            git push --quiet origin HEAD

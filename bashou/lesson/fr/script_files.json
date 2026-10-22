@@ -58,7 +58,7 @@
    "text": [
     "Quand rien ne correspond, bash garde le motif tel quel (zsh, lui, s'arrête sur une erreur). La boucle fait alors un tour, sur un nom qui n'existe pas.",
     "",
-    "- shopt -s nullglob change « rien ne correspond » en liste vide.",
+    "- shopt -s nullglob change « rien ne correspond » en liste vide. Mais une commande qui reçoit une liste vide tourne sans nom : cat lit alors le clavier. Compte d'abord : (( ${#files[@]} )) || die.",
     "- Ou teste dans la boucle : [[ -e $f ]] || continue."
    ]
   },

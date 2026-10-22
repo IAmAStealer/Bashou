@@ -36,7 +36,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ inputs.version }}
         run: |
-          [[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Version must look like 1.2.3"; exit 1; }
+          [[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "::error title=Bad version::Version must look like 1.2.3"; exit 1; }
           python3 tools/changelog.py "v$VERSION" > notes.md || { echo "::error title=No changelog::Add '## v$VERSION' to CHANGELOG.md"; exit 1; }
           git tag "v$VERSION"
           git push origin "v$VERSION"
