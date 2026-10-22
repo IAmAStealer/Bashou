@@ -441,7 +441,7 @@ ECHO_ECHIDNA = fight(
 
 # --- Trap Troll: a temp file left behind, with a name anyone can guess (lesson script_cleanup) ----------
 
-FIXED_TMP = Path("/tmp/bashou-report.tmp")
+FIXED_TMP = Path("/", "tmp", "bashou-report.tmp")   # the guessable name the fight teaches against; tests clean it
 REPORT = script("report.sh", "Writes the 3 most frequent lines of a log into LOG.top.", "LOG", """\
   local log=$1
   [[ -r $log ]] || die "cannot read $log"

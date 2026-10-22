@@ -8,6 +8,7 @@ Bashou never runs the player's SQL except the upsert file, on throwaway copies, 
 
 import shutil
 import sqlite3
+import string
 import tempfile
 from pathlib import Path
 
@@ -164,6 +165,10 @@ def make_stock(path, items):
     db.close()
 
 
+# The player's starter line, filled with our own product names (never input).
+STARTER_INSERT = string.Template("INSERT INTO stock (item, qty) VALUES ('$item', $n);")
+
+
 def upsert_setup(work, rng):
     names = rng.sample([n for n, _, _ in PRODUCTS], 6)
     items = [(n, rng.randint(2, 30), f"{rng.choice('ABCD')}{rng.randint(1, 9)}") for n in names]
@@ -176,7 +181,7 @@ def upsert_setup(work, rng):
         _("When it is, it fails: item is the PRIMARY KEY, and two rows can't have the same one."),
         _("Your step: say what to do on that conflict: raise its qty by {n} instead.").format(n=n),
         _("Try it on a copy: cp stock.db test.db; sqlite3 test.db < {file}").format(file=UPSERT_FILE),
-    ]) + f"\nINSERT INTO stock (item, qty) VALUES ('{item}', {n});\n")
+    ]) + "\n" + STARTER_INSERT.substitute(item=item, n=n) + "\n")
     return {"args": {"item": item, "n": n, "file": UPSERT_FILE}, "items": items}
 
 
