@@ -445,6 +445,59 @@ class ThreatBubbleTest(TempState):
         self.assertIsNone(self.pet.bubble)
 
 
+class UpdateBubbleTest(TempState):
+    """Owner (2026-10-22): "I cannot see often the update bubble". Only the one terminal that ran the daily
+    check said it, once: every terminal now says it soon after it starts, then every few hours."""
+
+    def setUp(self):
+        super().setUp()
+        from bashou import companion
+        self.companion = companion
+        with state.locked() as s:
+            s["update_available"] = "v9.9.9"
+        self.pet = companion.Companion(os.getpid())
+        self.pet.notes, self.pet.bubble = [], None        # a terminal past its welcome
+        self.pet.see_update()
+
+    def said(self):
+        return any("v9.9.9" in n for n in self.pet.notes)
+
+    def test_a_new_terminal_says_it(self):
+        self.pet.remind_update(self.companion.now_ms())
+        self.assertTrue(self.said())
+
+    def test_it_comes_back_every_few_hours(self):
+        start = self.companion.now_ms()
+        self.pet.remind_update(start)
+        self.pet.notes = []
+        self.pet.remind_update(start + self.companion.UPDATE_REMIND_MS - 1)
+        self.assertFalse(self.said())
+        self.pet.remind_update(start + self.companion.UPDATE_REMIND_MS + 1)
+        self.assertTrue(self.said())
+
+    def test_not_over_another_bubble(self):
+        self.pet.bubble = ("something else", 0, 5)
+        self.pet.remind_update(self.companion.now_ms())
+        self.assertFalse(self.said())
+
+    def test_quiet_once_updated(self):
+        with state.locked() as s:
+            s["update_available"] = ""
+        self.pet.see_update()
+        self.pet.remind_update(self.companion.now_ms())
+        self.assertFalse(self.said())
+
+    def test_quiet_when_updates_are_off(self):
+        with state.locked() as s:
+            s["settings"]["updates"] = "off"
+        self.pet.see_update()
+        self.pet.remind_update(self.companion.now_ms())
+        self.assertFalse(self.said())
+
+    def test_a_restart_keeps_the_last_time_it_said_it(self):
+        self.assertIn("update_said", self.companion.Companion.HANDOVER)
+
+
 class ConfigTest(TempState):
     def test_bubble_setting(self):
         with contextlib.redirect_stdout(io.StringIO()):

@@ -36,6 +36,7 @@ def now_ms():
 
 BUBBLE_MS = 3 * 60_000     # a bubble never stays longer, however few commands you run
 REMIND_MS = 30 * 60_000    # a waiting threat's warning comes back this often (owner, 2026-10-20)
+UPDATE_REMIND_MS = 2 * 3600_000   # a new release's bubble comes back this often, in every terminal (owner, 2026-10-22)
 BUBBLE_ROWS = 7            # a bubble of 4 lines covers the top 7 rows (see frame)
 
 
@@ -83,6 +84,8 @@ class Companion:
         self.threat_text = self.threat_id = None     # the waiting threat's announcement
         self.threat_until = 0.0
         self.threat_said = 0           # when its warning was last queued (ms)
+        self.update_tag = ""           # a release out and not installed (from the state file)
+        self.update_said = 0           # when its bubble was last queued (ms): 0, so a new terminal says it
         self.fights_won = self.fights_lost = 0
         self.behavior = Behavior(now=now_ms())
         self.last_command = now_ms()
@@ -237,6 +240,17 @@ class Companion:
                 and not self.notes and not self.bubble:
             self.announce(self.threat_text)
 
+    def see_update(self):
+        """The release the daily check found (any terminal may have run it), unless updates are off."""
+        s = state.load()
+        self.update_tag = s["update_available"] if state.setting(s, "updates") == "on" else ""
+
+    def remind_update(self, ms):
+        """The daily check said it in one terminal, once: say it in every terminal, and again every few hours."""
+        if self.update_tag and ms - self.update_said > UPDATE_REMIND_MS and not self.notes and not self.bubble:
+            self.notes.append(update.note(self.update_tag))
+            self.update_said = ms
+
     def last_activity(self):
         """Last command, or last key typed: the kernel updates the terminal's atime on input."""
         try:
@@ -294,6 +308,7 @@ class Companion:
                 note = update.check()
                 if note:
                     self.notes.append(note)
+                    self.update_said = now_ms()
         except Exception:
             log_error()
 
@@ -406,6 +421,7 @@ class Companion:
             self.reload_pet()
         if self.tick % 120 == 60:
             self.check_threat()
+            self.see_update()
         if self.tick == 80:              # 20 s after the start, not to slow down the first prompt
             threading.Thread(target=self.check_update, daemon=True).start()
         if self.busy:
@@ -415,6 +431,7 @@ class Companion:
             self.read_events()
             self.restart()
         self.remind_threat(now_ms())
+        self.remind_update(now_ms())
         self.maybe_talk(now_ms())
         self.draw(now_ms())
 
@@ -427,7 +444,7 @@ class Companion:
         return newest != self.code and time.time() - newest > 2
 
     HANDOVER = ("offset", "guests", "bubble", "bubble_at", "notes", "talk_at", "warn_at", "threat", "threat_text", "threat_id",
-                "threat_until", "threat_said", "fights_won", "fights_lost", "old_loader_told")
+                "threat_until", "threat_said", "update_tag", "update_said", "fights_won", "fights_lost", "old_loader_told")
 
     def restart(self):
         """Run the new code in this same process (same PID, so the shell still knows us).
