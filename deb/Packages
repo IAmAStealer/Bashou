@@ -1,0 +1,19 @@
+Package: bashou
+Architecture: all
+Version: 0.10.5
+Priority: optional
+Section: games
+Maintainer: Bashou <noreply@github.com>
+Depends: bash (>= 4.4), python3 (>= 3.9)
+Suggests: zsh
+Filename: ./bashou_0.10.5_all.deb
+Size: 572568
+MD5sum: 8f79496022eb197172e131d14fdfc2df
+SHA1: fdcea3921b6f64b41246eb5821852b1724849ca3
+SHA256: 8b67d1b2eefef842c219d2dd33a5aa2615068ddc93dfde3d1e6961de4e73f1cc
+SHA512: 96b1725a65896de8ded66a7048ebf433d0aa73d140c46a0898f389ea1f4e67491892a40ef58afa7d7cdc884b6bb926d326895ae58639703834f50c84c739b9e3
+Homepage: https://github.com/IAmAStealer/Bashou
+Description: A pet in your terminal that grows as you learn bash (psst: bashou pony hay)
+ Bashou lives in the corner of your terminal and evolves as you use bash: fights, a quiz
+ adventure and hints teach the command line, offline. It's on for every user; bashou off hides it.
+
