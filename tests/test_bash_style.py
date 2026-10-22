@@ -52,6 +52,8 @@ def syntax(path):
 def fight_scripts(seeds=range(3)):
     """(fight id, file name, text) of every bash script a fight or chest writes."""
     for c in challenges.ALL + challenges.TRIALS:
+        if not c.available():               # a Linux-only fight on a Mac: its setup can wait for minutes
+            continue
         for seed in seeds:
             with tempfile.TemporaryDirectory() as tmp:
                 work = Path(tmp)
@@ -146,6 +148,14 @@ class FightScriptTest(Lint):
                     path.write_text(text)
                     codes, report = shellcheck(path)
                     self.assertLessEqual(codes, ON_PURPOSE.get(cid, set()), f"{cid}:\n{report}")
+
+    def test_fights_this_machine_cant_run_are_skipped(self):
+        """CI macOS (v0.10.5): loopback_lurker's setup waited 3 min for a port its Mac couldn't see."""
+        from unittest import mock
+        fight = challenges.BY_ID["loopback_lurker"]
+        with mock.patch.object(type(fight), "available", lambda self: self.id != "loopback_lurker"), \
+                mock.patch.object(fight, "setup", side_effect=AssertionError("setup ran")):
+            self.assertNotIn("loopback_lurker", {cid for cid, _, _ in fight_scripts(range(1))})
 
     def test_scripts_name_bash_portably(self):
         for cid, name, text in fight_scripts(range(1)):
