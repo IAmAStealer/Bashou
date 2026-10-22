@@ -1,0 +1,314 @@
+[
+ {
+  "id": "script-1-01",
+  "level": 1,
+  "q": "Pourquoi commencer un script par #!/usr/bin/env bash plutôt que #!/bin/bash ?",
+  "choices": [
+   "env trouve le bash du PATH, plus récent que le 3.2 du Mac",
+   "Le script va plus vite",
+   "/bin/bash n'existe pas sous Linux",
+   "env lance le script en root"
+  ],
+  "answer": 0,
+  "explain": "Le shebang nomme le programme qui lit le script. /bin/bash est un chemin fixe : sur un Mac, c'est bash 3.2, de 2007. env cherche bash dans ton PATH, où un bash plus récent que tu as installé passe en premier."
+ },
+ {
+  "id": "script-1-02",
+  "level": 1,
+  "q": "Le modèle contient die() { printf '%s\\n' \"$*\" >&2; exit 1; }. Pourquoi le >&2 ?",
+  "choices": [
+   "Les erreurs vont sur stderr, à part des résultats",
+   "Il lance die deux fois",
+   "Il colore le message en rouge",
+   "Il écrit l'erreur dans un fichier nommé 2"
+  ],
+  "answer": 0,
+  "explain": ">&2 envoie le message sur stderr, le flux des erreurs. Les résultats (stdout) peuvent alors aller dans un fichier ou un pipe pendant que l'erreur arrive quand même à l'écran ou dans un journal, et exit 1 dit à l'appelant que ça a échoué."
+ },
+ {
+  "id": "script-1-03",
+  "level": 1,
+  "q": "Au prompt, ls *.log | wc -l va très bien. Pourquoi pas dans un script ?",
+  "choices": [
+   "Un nom avec un saut de ligne dedans compte pour deux",
+   "wc ne marche pas dans les scripts",
+   "ls est interdit dans les scripts",
+   "Il ne compte que les fichiers cachés"
+  ],
+  "answer": 0,
+  "explain": "ls affiche les noms en texte, un par ligne, pour tes yeux. Un nom peut contenir un saut de ligne, et wc -l le compte alors deux fois. Au prompt tu le remarquerais ; un script garde les noms eux-mêmes, dans un tableau : logs=(./*.log)."
+ },
+ {
+  "id": "script-1-04",
+  "level": 1,
+  "q": "name='-n'. Qu'affiche echo \"$name\" ?",
+  "choices": [
+   "Rien : echo prend -n pour son option",
+   "-n",
+   "name",
+   "Un message d'erreur"
+  ],
+  "answer": 0,
+  "explain": "echo lit son premier mot comme une option quand il y ressemble. -n veut dire « pas de saut de ligne », donc il ne reste rien à afficher. printf '%s\\n' \"$name\" affiche -n, car printf ne prend jamais ses valeurs pour des options."
+ },
+ {
+  "id": "script-1-05",
+  "level": 1,
+  "q": "Pourquoi un script écrit-il cd /srv/app || exit 1, et pas juste cd /srv/app ?",
+  "choices": [
+   "Si cd échoue, la suite ne tourne pas au mauvais endroit",
+   "cd va plus vite",
+   "exit 1 rend cd plus discret",
+   "Sans ça, cd ne marche qu'en root"
+  ],
+  "answer": 0,
+  "explain": "Un script ne s'arrête pas quand une commande échoue. Si /srv/app manque, la ligne suivante, rm -rf ./cache par exemple, tourne dans le dossier où le script se trouvait. || exit 1 l'arrête tout de suite."
+ },
+ {
+  "id": "script-1-06",
+  "level": 1,
+  "q": "Que veut dire -- dans rm -- \"$f\" ?",
+  "choices": [
+   "Plus d'options : $f est un nom, même s'il commence par -",
+   "Supprimer deux fois, pour être sûr",
+   "Demander avant de supprimer",
+   "Supprimer le dossier et son contenu"
+  ],
+  "answer": 0,
+  "explain": "Un fichier peut s'appeler -rf. Sans --, rm lirait ce nom comme des options. -- termine les options : ce qui suit est un nom. La plupart des commandes le comprennent."
+ },
+ {
+  "id": "script-1-07",
+  "level": 1,
+  "q": "Pourquoi un script crée-t-il son fichier temporaire avec mktemp ?",
+  "choices": [
+   "Un fichier neuf et privé, au nom que personne ne devine",
+   "Les fichiers de mktemp se suppriment tout seuls",
+   "/tmp n'accepte que les fichiers de mktemp",
+   "C'est plus rapide que >"
+  ],
+  "answer": 0,
+  "explain": "/tmp est partagé par tous les utilisateurs. Un nom fixe comme /tmp/report.tmp peut être créé avant toi par quelqu'un d'autre, ou changé en lien vers un de tes fichiers. mktemp choisit un nom aléatoire, crée le fichier pour toi seul et affiche son nom. Il ne le supprime pas : un trap s'en charge."
+ },
+ {
+  "id": "script-1-08",
+  "level": 1,
+  "q": "Ton script se trompe en route. Qu'est-ce qui montre chaque ligne lancée, avec ses valeurs ?",
+  "choices": [
+   "bash -x script.sh",
+   "bash -n script.sh",
+   "cat script.sh",
+   "chmod +x script.sh"
+  ],
+  "answer": 0,
+  "explain": "bash -x affiche chaque ligne, après développement, avant de la lancer, avec un + devant : tu vois les vraies valeurs des variables. bash -n ne vérifie que la syntaxe et ne lance rien."
+ },
+ {
+  "id": "script-2-01",
+  "level": 2,
+  "q": "Dans un script, quelle ligne compte les fichiers .log du dossier, quels que soient leurs noms ?",
+  "choices": [
+   "logs=(./*.log), avec nullglob, puis ${#logs[@]}",
+   "n=$(ls *.log | wc -l)",
+   "n=$(echo *.log | wc -w)",
+   "n=$(find . -name *.log | wc -l)"
+  ],
+  "answer": 0,
+  "explain": "Le tableau garde les noms eux-mêmes, un élément chacun, et ${#logs[@]} les compte. nullglob fait que le motif ne donne rien quand aucun fichier ne correspond. Les autres comptent des mots ou des lignes de texte : une espace ou un saut de ligne dans un nom, ou aucun fichier, et le nombre est faux."
+ },
+ {
+  "id": "script-2-02",
+  "level": 2,
+  "q": "set -e est actif et count=0. Que fait ((count++)) ?",
+  "choices": [
+   "Il arrête le script : pour (( )), 0 est un échec",
+   "count passe à 1 et le script continue",
+   "Rien : (( )) est ignoré sous set -e",
+   "Il affiche 1"
+  ],
+  "answer": 0,
+  "explain": "count++ donne l'ancienne valeur, 0, puis ajoute un. Pour (( )), 0 veut dire faux, donc la commande « échoue » et set -e arrête le script, sans message. count=$((count + 1)) n'échoue jamais."
+ },
+ {
+  "id": "script-2-03",
+  "level": 2,
+  "q": "local out=$(backup_db) || die \"backup failed\". backup_db échoue. Que se passe-t-il ?",
+  "choices": [
+   "die ne tourne pas : le statut est celui de local, réussi",
+   "die tourne et le script s'arrête",
+   "bash refuse la ligne",
+   "backup_db tourne une seconde fois"
+  ],
+  "answer": 0,
+  "explain": "local est une commande aussi, et son propre statut remplace celui de backup_db. Déclare d'abord, puis affecte : local out; out=$(backup_db) || die \"backup failed\". export et readonly cachent l'échec de la même façon."
+ },
+ {
+  "id": "script-2-04",
+  "level": 2,
+  "q": "for f in \"$dir\"/*.jpg tourne sur un dossier sans .jpg. Combien de tours fait la boucle ?",
+  "choices": [
+   "Un, avec f qui contient le motif lui-même",
+   "Aucun",
+   "Une erreur arrête la boucle",
+   "Un par fichier du dossier"
+  ],
+  "answer": 0,
+  "explain": "Quand aucun fichier ne correspond, bash garde le motif tel quel : la boucle fait un tour, sur un nom qui n'existe pas. shopt -s nullglob donne une liste vide à la place, ou teste [[ -e $f ]] || continue dans la boucle."
+ },
+ {
+  "id": "script-2-05",
+  "level": 2,
+  "q": "while IFS= read -r host; do ssh \"$host\" uptime; done < hosts.txt ne vérifie que le premier serveur. Pourquoi ?",
+  "choices": [
+   "ssh lit l'entrée de la boucle et avale le reste de la liste",
+   "read s'arrête après une ligne",
+   "uptime ferme la boucle",
+   "hosts.txt a besoin d'une ligne vide de plus"
+  ],
+  "answer": 0,
+  "explain": "Les commandes de la boucle partagent son entrée standard : la liste. ssh lit tout ce qu'il peut, pour le transmettre à la commande distante, et read ne trouve plus rien. ssh -n, ou < /dev/null sur cette ligne, l'en tient éloigné."
+ },
+ {
+  "id": "script-2-06",
+  "level": 2,
+  "q": "Pourquoi printf '%s\\n' \"$x\" plutôt que printf \"$x\\n\" ?",
+  "choices": [
+   "Un % dans x serait lu comme une partie du format",
+   "printf ne prend que des guillemets simples",
+   "\"$x\\n\" affiche le texte deux fois",
+   "%s va plus vite"
+  ],
+  "answer": 0,
+  "explain": "Le premier argument de printf est un format : %s, %d et compagnie sont remplacés par les valeurs qui suivent. Si la donnée sert de format, une valeur comme 50% le casse. Le format reste fixe, les données viennent après."
+ },
+ {
+  "id": "script-2-07",
+  "level": 2,
+  "q": "b='*.txt'. Que compare [[ $a == $b ]] ?",
+  "choices": [
+   "a avec le motif *.txt",
+   "a avec le texte exact *.txt",
+   "Les fichiers a et b",
+   "Rien : c'est une erreur"
+  ],
+  "answer": 0,
+  "explain": "À droite de == dans [[ ]], une valeur sans guillemets est un motif. [[ $a == \"$b\" ]], avec guillemets, compare le texte exact. Mets des guillemets, sauf si tu veux un motif."
+ },
+ {
+  "id": "script-2-08",
+  "level": 2,
+  "q": "Pourquoi supprimer un fichier temporaire avec trap 'rm -f -- \"$tmp\"' EXIT plutôt qu'un rm en dernière ligne ?",
+  "choices": [
+   "Le trap tourne aussi quand le script s'arrête avant",
+   "trap va plus vite que rm",
+   "rm ne peut pas supprimer les fichiers de mktemp",
+   "La dernière ligne ne tourne jamais en bash"
+  ],
+  "answer": 0,
+  "explain": "Un rm en dernière ligne ne tourne que si tout s'est bien passé. Un trap sur EXIT tourne quelle que soit la fin du script : la dernière ligne, un exit ou un die en route, Ctrl+C. Pas kill -9 : rien ne tourne alors."
+ },
+ {
+  "id": "script-3-01",
+  "level": 3,
+  "q": "set -o pipefail est actif. Quel pipeline peut échouer alors que chaque commande a fait son travail ?",
+  "choices": [
+   "yes | head -n 1",
+   "printf 'a\\n' | sort",
+   "grep -c x file | cat",
+   "true | true"
+  ],
+  "answer": 0,
+  "explain": "head cesse de lire après une ligne, et l'écriture suivante de yes reçoit SIGPIPE : statut 141. Avec pipefail, tout le pipeline échoue. Active pipefail là où tu vérifies les pipes, et souviens-toi de ce cas."
+ },
+ {
+  "id": "script-3-02",
+  "level": 3,
+  "q": "Quelle boucle traite chaque fichier d'un arbre, même les noms avec un saut de ligne ?",
+  "choices": [
+   "while IFS= read -r -d '' f … < <(find . -type f -print0)",
+   "for f in $(find . -type f)",
+   "find . -type f | while read f; do …; done",
+   "for f in $(ls -R)"
+  ],
+  "answer": 0,
+  "explain": "-print0 termine chaque nom par un octet nul, le seul caractère qu'un nom ne peut pas contenir, et read -d '' coupe exactement là. Les autres coupent le texte aux espaces ou aux sauts de ligne. find -exec cmd {} + est l'autre façon sûre."
+ },
+ {
+  "id": "script-3-03",
+  "level": 3,
+  "q": "n vient de l'utilisateur. Pourquoi vérifier [[ $n =~ ^[0-9]+$ ]] avant (( n > 5 )) ?",
+  "choices": [
+   "(( )) lit n comme du code : x[$(date)] lancerait date",
+   "(( )) est lent avec du texte",
+   "=~ change n en nombre",
+   "(( )) ne lit qu'un chiffre"
+  ],
+  "answer": 0,
+  "explain": "L'arithmétique évalue ce que contient la variable, indices de tableau compris, et un indice peut contenir une substitution de commande. Vérifier d'abord que ce sont des chiffres empêche ce qu'on tape de décider de ce qui tourne."
+ },
+ {
+  "id": "script-3-04",
+  "level": 3,
+  "q": "rm -rf -- \"${dir:?}/\" tourne avec dir vide. Que se passe-t-il ?",
+  "choices": [
+   "Le script s'arrête sur une erreur, avant que rm ne tourne",
+   "rm supprime tout sous /",
+   "dir prend . comme valeur par défaut",
+   "rm demande une confirmation"
+  ],
+  "answer": 0,
+  "explain": "${dir:?} arrête le script avec « dir: parameter null or not set » quand dir est vide ou pas définie. Sans ça, la ligne serait rm -rf -- \"/\". Une faute de frappe dans un nom de variable suffit à la vider."
+ },
+ {
+  "id": "script-3-05",
+  "level": 3,
+  "q": "n=0; grep x f | while read -r l; do n=$((n + 1)); done; printf '%s\\n' \"$n\" affiche 0. Pourquoi ?",
+  "choices": [
+   "La boucle tournait dans un sous-shell : son n est perdu",
+   "grep ne trouve jamais rien",
+   "read ne sait pas compter",
+   "printf affiche la première valeur de n"
+  ],
+  "answer": 0,
+  "explain": "Chaque partie d'un pipeline tourne dans son propre sous-shell, la boucle while aussi : elle compte dans une copie de n. Nourris-la plutôt avec une substitution de processus, et la boucle tourne dans le script lui-même : while …; done < <(grep x f)."
+ },
+ {
+  "id": "script-3-06",
+  "level": 3,
+  "q": "Un script lance sed \"s/$old/$new/\" file, et new contient a/b. Que se passe-t-il ?",
+  "choices": [
+   "Son / clôt l'expression : erreur, ou mauvais changement",
+   "sed remplace old par a/b",
+   "sed échappe le / tout seul",
+   "Le shell refuse la ligne"
+  ],
+  "answer": 0,
+  "explain": "La valeur devient une partie du programme de sed, donc ses caractères y sont du code : /, & et \\ veulent dire quelque chose. Échappe-les d'abord, ou passe la donnée à un programme qui la prend comme donnée, comme awk -v new=\"$new\"."
+ },
+ {
+  "id": "script-3-07",
+  "level": 3,
+  "q": "Deux copies d'un script ne doivent jamais tourner en même temps. Quel verrou est sûr ?",
+  "choices": [
+   "mkdir \"$lock\" 2>/dev/null || die \"already running\"",
+   "[ -e lock ] || touch lock",
+   "touch lock, puis vérifier qu'il existe",
+   "Une variable LOCKED=1 en haut"
+  ],
+  "answer": 0,
+  "explain": "mkdir crée le dossier ou échoue, en une seule étape : deux copies ne peuvent pas réussir toutes les deux. Avec un test puis un touch, les deux copies peuvent passer le test avant que l'une crée le fichier. flock est l'autre outil sûr sous Linux."
+ },
+ {
+  "id": "script-3-08",
+  "level": 3,
+  "q": "Pourquoi sort data.txt > data.txt laisse-t-il data.txt vide ?",
+  "choices": [
+   "Le shell vide data.txt pour > avant que sort le lise",
+   "sort ne sait pas lire et écrire",
+   "sort supprime son entrée",
+   "> ne marche qu'avec des fichiers neufs"
+  ],
+  "answer": 0,
+  "explain": "Les redirections se font avant que la commande démarre : > vide data.txt, puis sort lit un fichier vide. Écris dans un autre fichier, puis déplace-le : sort data.txt > data.tmp && mv data.tmp data.txt (ou sort -o data.txt data.txt, que sort sait gérer)."
+ }
+]

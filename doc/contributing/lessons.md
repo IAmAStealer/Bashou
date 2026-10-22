@@ -63,6 +63,10 @@ No code needed: a lesson is one JSON file.
   (from 0) the owl points at. `mark`: words shown in color, usually what changed since the page
   before.
 - `text`: one entry per line. `""` is a blank line, `- ` starts a bullet, `$ ` a command (green).
+- `script` (optional): the exact bash the scheme shows, one line per entry, without the drawing around it.
+  `tests/test_bash_style.py` checks each line is drawn on the page and runs `bash -n` and ShellCheck on it.
+  Every lesson of the `script` skill has at least one. `shellcheck_ok`: the codes a page shows on purpose
+  (its ✘ example).
 
 ## Style
 
@@ -75,6 +79,8 @@ No code needed: a lesson is one JSON file.
 - **Draw only when it helps**: structures, flows, before/after, where things are. A list in boxes
   is still a list.
 - **True today**: check facts against primary docs (man pages, official documentation).
+- **Bash**: every sample follows [bash-style.md](bash-style.md): at the prompt (skill `bash`) or in a
+  script (skill `script`), and a bad form shown on purpose is marked ✘.
 
 ## Check
 
@@ -85,3 +91,4 @@ python3 -m unittest tests.test_lesson          # widths, heights, points, condit
 
 With Claude Code, the `scheme-judge` agent (`.claude/agents/scheme-judge.md`) reviews a new lesson:
 is each drawing needed, true (checked on the web), and readable.
+The `bash-judge` agent (`.claude/agents/bash-judge.md`) checks the bash of any lesson, question or fight.

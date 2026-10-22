@@ -138,7 +138,8 @@ def hero(form):
 # --- things on the road (drawn from their bottom center by scene.blit) ------------------------
 
 TOPIC_COLORS = {
-    "bash": ((90, 200, 110), (40, 120, 60)), "linux": ((240, 200, 70), (150, 110, 30)),
+    "bash": ((90, 200, 110), (40, 120, 60)), "script": ((150, 175, 95), (85, 105, 55)),
+    "linux": ((240, 200, 70), (150, 110, 30)),
     "python": ((80, 140, 220), (240, 210, 80)), "rust": ((220, 110, 60), (130, 60, 30)),
     "c": ((150, 160, 190), (80, 90, 120)), "debian": ((215, 30, 90), (120, 20, 50)),
     "rocky": ((60, 180, 140), (30, 100, 80)), "cicd": ((170, 110, 230), (90, 50, 140)),
@@ -191,6 +192,12 @@ BOSSES = {
         "GGGggggggg", ".G.ggggggg", "...gg.....", "..ggg.....",
     ]), {"h": (230, 220, 190), "g": (80, 170, 90), "G": (50, 120, 60), "w": (255, 255, 255),
          "m": (200, 40, 40), "d": (40, 30, 30), "t": (250, 250, 240), "$": (250, 220, 90)}),
+    "script": (half([                          # the Errexit Ogre: stops everything at the first stumble
+        "..h.......", "..hh..GGGG", "...hGggggg", "...Ggggggg", "..Ggwwgggg", "..Ggwmgggg",
+        "..Gggggggg", "...Ggtgddd", "..GGgggggg", ".GGggggggg", "GGggrrrrrr", "Gg.Grrrrry",
+        "gg.Ggggggg", "...GGg....", "...GGg....", "..GGGG....",
+    ]), {"h": (235, 225, 195), "g": (150, 175, 95), "G": (85, 105, 55), "w": (255, 255, 255),
+         "m": (25, 25, 25), "t": (250, 245, 230), "d": (70, 35, 35), "r": (205, 60, 50), "y": (245, 195, 60)}),
     "linux": (half([
         "......rrrr", ".....rrrrr", "....ssssss", "...sbbbbbb", "...bbwwwbb", "..bbwmwwbb",
         "..bbwwwwbb", "..bbbwyyyy", ".bbbwwwwww", "sbbwwwwwww", "sbbwwwwwww", "s.bbwwwwww",

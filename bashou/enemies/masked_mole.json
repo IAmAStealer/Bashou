@@ -1,0 +1,50 @@
+{
+ "name": "Masked Mole",
+ "palette": {
+  "m": "#8a6a50",
+  "M": "#5a4030",
+  "l": "#b08a6a",
+  "k": "#201818",
+  "e": "#ffffff",
+  "n": "#f08aa0",
+  "c": "#f0e0c0"
+ },
+ "base": [
+  ".................",
+  "....mmmmmm.......",
+  "...mllmmmmM......",
+  "..mmmmmmmmmM.....",
+  "..kkkkkkkkkM.....",
+  ".nkekkkekkkM.....",
+  ".nnmmmmmmmmM.....",
+  "..mmmmmmmmmM.....",
+  "..cmmmmmmmmM.....",
+  ".ccmmmmmmmM......",
+  "...mmM.mmM.......",
+  "...cc..cc........"
+ ],
+ "poses": {
+  "inhale": {
+   "3": "..mmmmmmmmmmM...."
+  },
+  "closed": {
+   "5": "---k---k---------"
+  },
+  "left": {
+   "5": "--ek--ek---------"
+  },
+  "right": {
+   "5": "---ke--ke--------"
+  },
+  "fidget": {
+   "8": "..c--------------",
+   "9": ".cc..............",
+   "10": "...mmM.mmM.......",
+   "11": "..cc...cc........"
+  }
+ },
+ "particles": [
+  0,
+  12
+ ]
+}

@@ -1,0 +1,50 @@
+{
+ "name": "Nomatch Nymph",
+ "palette": {
+  "p": "#d8d0f0",
+  "P": "#9888c8",
+  "w": "#ffffff",
+  "e": "#ffffff",
+  "k": "#403060",
+  "y": "#f0d060",
+  "Y": "#b09030"
+ },
+ "base": [
+  "............y....",
+  "....pppp..y.y.y..",
+  "...pwwppp..yyy...",
+  "..pwpppppPyyYyy..",
+  "..pekppekP.yyy...",
+  "..pppppppP.y.y.y.",
+  "..ppPkkPpP...y...",
+  "..pppppppP.......",
+  "...pppppP........",
+  "...pPpPpP........",
+  "...P.P.P.P.......",
+  "....P...P........"
+ ],
+ "poses": {
+  "inhale": {
+   "8": "..ppppppP........"
+  },
+  "closed": {
+   "4": "---kk--kk--------"
+  },
+  "left": {
+   "4": "---ke--ke--------"
+  },
+  "right": {
+   "4": "---ek--ek--------"
+  },
+  "fidget": {
+   "0": "............Y....",
+   "3": "----------yyyyy--",
+   "6": "-------------Y---"
+  }
+ },
+ "particles": [
+  5,
+  13
+ ],
+ "lone_pixels": true
+}

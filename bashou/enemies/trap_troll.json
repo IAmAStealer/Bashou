@@ -1,0 +1,51 @@
+{
+ "name": "Trap Troll",
+ "palette": {
+  "t": "#8a9a78",
+  "T": "#5a6a50",
+  "l": "#b8c8a8",
+  "e": "#ffffff",
+  "k": "#202020",
+  "m": "#b0b0bc",
+  "M": "#6a6a78",
+  "w": "#f4f4f0",
+  "h": "#6a4a30"
+ },
+ "base": [
+  "..hhhh...........",
+  ".htttth..........",
+  ".tllttt..........",
+  ".tekttekt........",
+  ".ttttttttT.......",
+  ".ttwtwtwtT..MmmM.",
+  ".TtttttttT.Mw.wM.",
+  "..tttttttTMMmmmMM",
+  "..ttttttttTMmmmM.",
+  "..tt.ttt.tt......",
+  "..TT.TT..TT......",
+  "................."
+ ],
+ "poses": {
+  "inhale": {
+   "4": "ttttttttttT......"
+  },
+  "closed": {
+   "3": "--kk--kk---------"
+  },
+  "left": {
+   "3": "--ke--ke---------"
+  },
+  "right": {
+   "3": "--ek--ek---------"
+  },
+  "fidget": {
+   "5": "------------.....",
+   "6": "-----------MmmmM.",
+   "7": "----------MMwwwMM"
+  }
+ },
+ "particles": [
+  0,
+  8
+ ]
+}

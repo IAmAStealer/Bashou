@@ -185,6 +185,8 @@ def checklist_drawer(ticked):
         room = render.rows() - "".join(out).count("\n") - (3 if not ticked & set(keys) else 1)
         other = skills.other_os(s)
         below = [f"  {DIM}{part}{RESET}" for part in render.wrap(other, max(20, width - 3), 2)] if other else []
+        if len(below) > max(0, room):                       # a short screen: the line without the list
+            below = [f"  {DIM}{part}{RESET}" for part in render.wrap(skills.other_os(s, short=True), max(20, width - 3), 1)]
         if below and room > len(below):                    # a blank line first when there's room for it
             below.insert(0, "")
         out += [line + "\n" for line in (below + uses_lines(keys[pos], width))[:max(0, room)]]

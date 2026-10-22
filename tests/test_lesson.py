@@ -457,7 +457,7 @@ class BashZshLessonTest(unittest.TestCase):
             self.assertGreaterEqual(len(ch.hints), 2)
         self.assertTrue(le["recall"])
         text = " ".join(" ".join(p.get("text", [])) for p in le["pages"])
-        for word in ("zsh", "split", "#!/bin/bash", "[1]"):
+        for word in ("zsh", "split", "#!/usr/bin/env bash", "[1]"):
             self.assertIn(word, text)
 
     def test_the_owl_lesson_and_its_chest(self):

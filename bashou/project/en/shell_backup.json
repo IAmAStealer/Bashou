@@ -40,19 +40,19 @@
   {
    "do": "Put it in a script that takes the folder to save and the destination folder as arguments.",
    "done": "`./backup.sh ~/test ~/backups` works, and a missing argument prints how to use it.",
-   "hint": "`$1` and `$2`, and `[[ $# -eq 2 ]]` to check you got both.",
+   "hint": "Start from the template (lesson Your first script): `$1` and `$2`, and `(( $# == 2 )) || die \"usage: backup.sh FOLDER DEST\"` to check you got both.",
    "why": "Arguments let the same script back up any folder anywhere. Checking them first stops a typo from becoming a strange error further down."
   },
   {
    "do": "Keep only the last 5 backups: delete the older ones.",
    "done": "after 7 runs, only the 5 newest archives are left.",
-   "hint": "Dated names sort in time order: `ls`, `head -n -5` and `xargs rm`, or a loop. Test with fake dates (`touch backup-2020-01-0{1..7}.tar.gz`).",
+   "hint": "Dated names sort in time order, and a glob gives them sorted: `backups=(\"$dest\"/backup-*.tar.gz)`. All but the last 5 are `\"${backups[@]:0:${#backups[@]}-5}\"`, when there are more than 5: `rm --` them. Test with fake dates (`touch backup-2020-01-0{1..7}.tar.gz`).",
    "why": "Backups that are never cleaned fill the disk, and then the next backup fails. Deleting is dangerous, so test this part with fake files first."
   },
   {
    "do": "Check every command: if tar fails (a full disk, a missing folder), the script says so and exits with an error code.",
    "done": "a missing folder gives a clear message, and `echo $?` shows a code that isn't 0.",
-   "hint": "`set -euo pipefail`, or `tar … || { echo \"backup failed\" >&2; exit 1; }`.",
+   "hint": "`tar … || die \"backup failed\"`, with the template's die: the message on stderr, then exit 1. Check each command that matters this way (lesson Errors in scripts).",
    "why": "A backup that fails silently is the worst kind: you find out on the day you need it. Loud failures are a feature."
   },
   {

@@ -21,7 +21,7 @@
    "scheme": [
     " $ today=$(date +%A)",
     "         └────┬────┘ lance date, garde sa sortie",
-    " $ echo $today",
+    " $ echo \"$today\"",
     " Monday"
    ],
    "point": 1,

@@ -223,15 +223,15 @@
  {
   "id": "bash-2-04",
   "level": 2,
-  "q": "Why start a script with `set -euo pipefail`?",
+  "q": "A script starts with set -euo pipefail. Does that catch every failure?",
   "choices": [
-   "It stops at a failed command, unset variable or broken pipe",
-   "It makes the script faster",
-   "It prints each command",
-   "It runs the script as root"
+   "No: set -e lets failures go in if, && and ||",
+   "Yes: any failed command stops it",
+   "Yes, but only inside functions",
+   "No: it only works as root"
   ],
   "answer": 0,
-  "explain": "By default bash carries on after an error. -e stops at the first failed command, -u stops on a variable that was never set (a typo becomes an error, not an empty string), -o pipefail makes a pipe fail if any part fails. Without them, a failed cd is followed by an rm in the wrong folder."
+  "explain": "set -e stops at a failed command, except where a failure is an answer (if, while, &&, ||, and the functions called there), after a local or export that assigns a $( ), and it stops on ((n++)) with n at 0. -u makes an unset variable an error; pipefail makes a pipe fail when any stage fails. A net with holes: check what matters yourself."
  },
  {
   "id": "bash-2-05",
@@ -296,7 +296,7 @@
    "mktemp --autoremove"
   ],
   "answer": 0,
-  "explain": "trap 'command' EXIT registers a command that bash runs whenever the script ends: normal end, an error with set -e, or Ctrl+C. An rm on the last line never runs if the script stops earlier. Usual pair: tmp=$(mktemp) then trap 'rm -f \"$tmp\"' EXIT."
+  "explain": "trap 'command' EXIT registers a command that bash runs whenever the script ends: normal end, an exit or a die half way, or Ctrl+C. An rm on the last line never runs if the script stops earlier. Usual pair: tmp=$(mktemp) then trap 'rm -f -- \"$tmp\"' EXIT."
  },
  {
   "id": "bash-2-10",
@@ -665,7 +665,7 @@
  {
   "id": "bash-2-21",
   "level": 2,
-  "q": "In zsh, you run ./backup.sh. Its first line is #!/bin/bash. Which shell reads the rest of the script?",
+  "q": "In zsh, you run ./backup.sh. Its first line is #!/usr/bin/env bash. Which shell reads the rest of the script?",
   "choices": [
    "bash",
    "zsh, the shell you typed in",
@@ -673,7 +673,7 @@
    "Whichever shell runs fastest"
   ],
   "answer": 0,
-  "explain": "The first line, #!/bin/bash, tells the system which program reads the script. Whatever shell you type in, bash runs it. That's why a script behaves the same on every machine: it doesn't depend on the shell of the person who starts it."
+  "explain": "The first line, #!/usr/bin/env bash, tells the system which program reads the script. Whatever shell you type in, bash runs it. That's why a script behaves the same on every machine: it doesn't depend on the shell of the person who starts it."
  },
  {
   "id": "bash-2-22",
@@ -699,6 +699,6 @@
    "bash: red. zsh: green"
   ],
   "answer": 0,
-  "explain": "bash numbers the items of an array from 0, so [1] is the second item, green. zsh numbers them from 1, so [1] is the first item, red. In a script that starts with #!/bin/bash, count from 0, because bash runs it."
+  "explain": "bash numbers the items of an array from 0, so [1] is the second item, green. zsh numbers them from 1, so [1] is the first item, red. In a script that starts with #!/usr/bin/env bash, count from 0, because bash runs it."
  }
 ]

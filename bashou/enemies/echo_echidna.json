@@ -1,0 +1,50 @@
+{
+ "name": "Echo Echidna",
+ "palette": {
+  "s": "#6a5040",
+  "S": "#a88a68",
+  "b": "#d0a888",
+  "B": "#a07a5a",
+  "e": "#ffffff",
+  "k": "#201410",
+  "w": "#f0e8a0"
+ },
+ "base": [
+  ".................",
+  ".................",
+  "w.....S.S.S......",
+  ".w...SsSsSsS.....",
+  "w...SssssssS.....",
+  "...bbsssssssS....",
+  "..bekbssssssS....",
+  "bbbbbbsssssssS...",
+  "..BbbbsssssssS...",
+  "...BbbbbbbbbB....",
+  "....bb..bb..bb...",
+  "....kk..kk..kk..."
+ ],
+ "poses": {
+  "inhale": {
+   "5": "...bbssssssssS..."
+  },
+  "closed": {
+   "6": "---kk------------"
+  },
+  "left": {
+   "6": "---ke------------"
+  },
+  "right": {
+   "6": "---ek------------"
+  },
+  "fidget": {
+   "2": ".w...S.S.S.S.....",
+   "3": "w...SsSsSsSsS....",
+   "4": ".w..SssssssS....."
+  }
+ },
+ "particles": [
+  0,
+  12
+ ],
+ "lone_pixels": true
+}

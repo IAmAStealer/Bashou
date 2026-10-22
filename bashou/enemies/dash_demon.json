@@ -1,0 +1,51 @@
+{
+ "name": "Dash Demon",
+ "palette": {
+  "r": "#d04838",
+  "R": "#8c2a22",
+  "l": "#f08a70",
+  "h": "#f0e0b0",
+  "H": "#b0a070",
+  "e": "#fff4e0",
+  "k": "#201010",
+  "s": "#eceaf4",
+  "S": "#9c9ab4"
+ },
+ "base": [
+  "..h.....h........",
+  "..Hr...rH........",
+  "..Rrrrrrr........",
+  ".Rrlllrrrr.......",
+  ".Rrekrrekr.......",
+  ".Rrrrrrrrr.......",
+  ".Rrrkkkkrr.......",
+  "..Rrrrrrrrssssss.",
+  "..RrrrrrrRSSSSSS.",
+  "..Rrr.rrr........",
+  "..RR..RR.........",
+  "..R....R........."
+ ],
+ "poses": {
+  "inhale": {
+   "2": ".RrrrrrrrR......."
+  },
+  "closed": {
+   "4": "---kk--kk--------"
+  },
+  "left": {
+   "4": "---ke--ke--------"
+  },
+  "right": {
+   "4": "---ek--ek--------"
+  },
+  "fidget": {
+   "6": "----------ssssss.",
+   "7": "----------SSSSSS.",
+   "8": "----------......."
+  }
+ },
+ "particles": [
+  0,
+  11
+ ]
+}

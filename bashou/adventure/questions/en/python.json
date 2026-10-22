@@ -283,6 +283,6 @@
    "text=True"
   ],
   "answer": 0,
-  "explain": "subprocess.run doesn't raise an error when the command fails: it stores the exit code in result.returncode and carries on. With check=True, a non-zero exit code raises CalledProcessError and the script stops, like set -e in bash. Otherwise, read returncode yourself."
+  "explain": "subprocess.run doesn't raise an error when the command fails: it stores the exit code in result.returncode and carries on. With check=True, a non-zero exit code raises CalledProcessError and the script stops, like cmd || exit 1 in bash. Otherwise, read returncode yourself."
  }
 ]

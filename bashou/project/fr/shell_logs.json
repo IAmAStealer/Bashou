@@ -41,7 +41,7 @@
   {
    "do": "Mets-le dans un script qui prend le fichier journal en argument.",
    "done": "`./report.sh access.log` affiche les comptes, et un fichier absent affiche un message clair.",
-   "hint": "`$1`, `[[ -r $1 ]]` pour vérifier que tu peux le lire, et des fonctions pour séparer chaque comptage.",
+   "hint": "Pars du modèle (leçon Ton premier script) : `$1`, `[[ -r $1 ]] || die \"illisible : $1\"`, et des fonctions pour séparer chaque comptage.",
    "why": "Les fonctions rendent un long script lisible : chacune fait un comptage et porte un nom qui dit lequel."
   },
   {

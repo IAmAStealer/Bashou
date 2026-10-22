@@ -82,7 +82,8 @@
     "",
     "- sed affiche le résultat et laisse le fichier tranquille. -i modifie le fichier sur place.",
     "$ sed -i 's/teh/the/g; s/Teh/The/g' letter.txt",
-    "- Essaie d'abord sans -i : tu vois le résultat, et rien n'est encore modifié."
+    "- Essaie d'abord sans -i : tu vois le résultat, et rien n'est encore modifié.",
+    "- -i tout seul, c'est le sed de GNU (Linux). Le sed de macOS veut un suffixe de sauvegarde juste après, même vide : sed -i '' 's/teh/the/g' letter.txt."
    ]
   }
  ]

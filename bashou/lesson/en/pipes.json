@@ -39,7 +39,8 @@
     "",
     "- ls prints the file names. Into a pipe, it writes one per line.",
     "- wc -l counts lines. Together: how many files are here?",
-    "- Nothing is written to disk in between."
+    "- Nothing is written to disk in between.",
+    "- ls | wc -l is fine at the prompt, to look. A script counts names another way (lesson At the prompt or in a script)."
    ]
   },
   {

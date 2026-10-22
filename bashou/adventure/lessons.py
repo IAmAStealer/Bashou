@@ -24,6 +24,26 @@ LESSONS = [
         ("A pattern matches the whole name, from the first letter: report-* doesn't catch old-report-1.csv. "
          "? stands for exactly one character, [12] for one of the characters inside.", "rm report-2025-*.csv"),
     ]},
+    {"id": "failing_well", "tool": "||", "topics": ("script",), "title": "Scripts that fail well", "pages": [
+        ("A script runs alone, later. When a command fails, nothing stops it: the next lines work on a broken "
+         "state. So a script checks the steps that matter, in the code.", "cp -- \"$1\" backup/ || die \"cannot copy $1\""),
+        ("die writes the error on stderr and stops with status 1, so whoever ran the script knows. The template "
+         "of every script fight has it.", "die() { printf '%s\\n' \"$*\" >&2; exit 1; }"),
+        ("set -e stops at a failed command, but not inside if, while, && or ||, and ((n++)) with n at 0 counts "
+         "as a failure. A net with holes: check what matters yourself.", "count=$((count + 1))"),
+        ("A temp file gets a private random name from mktemp, and a trap removes it however the script ends, "
+         "an error half way included.", "tmp=$(mktemp) || exit 1; trap 'rm -f -- \"$tmp\"' EXIT"),
+    ]},
+    {"id": "names_that_bite", "tool": "printf", "topics": ("script",), "title": "Names that bite", "pages": [
+        ("At the prompt you see the names you work on. A script meets any name: with spaces, with a line break "
+         "inside, starting with a dash. Let the shell hand them over: a pattern, never ls.", "for f in ./*.txt; do"),
+        ("A name like -rf looks like options to a command. -- ends the options: whatever comes after is a name.",
+         "mv -- \"$f\" trash/"),
+        ("A pattern that matches nothing stays the pattern, and the loop turns once on it. nullglob turns it "
+         "into an empty list.", "shopt -s nullglob"),
+        ("echo takes data like -n for its option. printf prints any value exactly: the format first, the "
+         "values after.", "printf '%s\\n' \"$name\""),
+    ]},
     {"id": "streams_scripts", "tool": "2>", "topics": ("bash", "linux"), "title": "Streams and scripts", "pages": [
         ("A program has two outputs. stdout (number 1) gets the normal results, stderr (number 2) the error "
          "messages. Both show on the screen, so they look the same until you split them.", "ls notes.txt nowhere"),
@@ -33,7 +53,7 @@ LESSONS = [
         ("Bash cuts every line at its spaces before running it. A name with a space becomes two names, unless "
          "quotes keep it together. Quote every \"$variable\" too, for the same reason.", "cp \"my notes.txt\" backup/"),
         ("A script is a file of commands. Its first line, the shebang, names the program that reads it: "
-         "#!/bin/bash. chmod +x gives the right to run it, then ./ runs it from here.",
+         "#!/usr/bin/env bash. chmod +x gives the right to run it, then ./ runs it from here.",
          "chmod +x report.sh; ./report.sh"),
         ("A for loop runs the same commands once per item: $f holds one file name each turn. Put echo in front "
          "first to see what it would do, then remove it.", "for f in *.JPG; do echo mv \"$f\" \"${f%.JPG}.jpg\"; done"),
@@ -192,7 +212,7 @@ LESSONS = [
     {"id": "bash_zsh", "tool": "bash", "topics": ("bash",), "title": "bash and zsh", "pages": [
         ("Your terminal runs a shell: bash on most Linux systems, zsh on a Mac and for many developers. They read almost every line the same way. echo $0 tells you which one you're typing in.",
          "echo $0"),
-        ("A script names its shell on its first line, #!/bin/bash. Run it as ./script.sh and bash reads it, even from zsh, so it behaves the same for everyone. bash script.sh does the same by hand.",
+        ("A script names its shell on its first line, #!/usr/bin/env bash. Run it as ./script.sh and bash reads it, even from zsh, so it behaves the same for everyone. bash script.sh does the same by hand.",
          "bash nothing.sh"),
         ("Where they differ: bash splits an unquoted $var at its spaces, zsh doesn't. Quotes, \"$var\", give one word in both, so they're the habit to keep.",
          "ls \"$f\""),

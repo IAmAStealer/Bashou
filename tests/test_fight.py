@@ -113,6 +113,19 @@ SOLUTIONS = {
     "space_sprite": ("cp \"{x}\" backup/", r'name: "([^"]+)"'),
     "shebang_shade": ("sed -i '1s/.*/#!\\/bin\\/bash/' report.sh && chmod +x report.sh", None),
     "rename_rat": ("for f in *.JPG; do mv \"$f\" \"${{f%.JPG}}.jpg\"; done", None),
+    # script fights (shellscript.py): an edit of the script; verify runs it again on its own input
+    "dash_demon": ("""sed -i 's|mv "$f" trash/|mv -- "$f" trash/|' tidy.sh""", None),
+    "nomatch_nymph": ("sed -i '/^main() {{$/i shopt -s nullglob' count.sh", None),
+    "newline_nixie": ("""sed -i 's#for f in $(ls "$dir"); do#for f in "$dir"/*; do [[ -f $f ]] || continue#; """
+                      """s#$(wc -c < "$dir/$f")#$(wc -c < "$f")#' size.sh""", None),
+    "stdin_siren": ("""sed -i 's|./remote "$host" uptime|./remote "$host" uptime < /dev/null|' check.sh""", None),
+    "masked_mole": ("""sed -i 's|  local sum=$(cksum < "$1")|  local sum; sum=$(cksum < "$1")|' stamp.sh""", None),
+    "errexit_eel": ("sed -i 's|((count++))|count=$((count + 1))|' errors.sh", None),
+    "echo_echidna": ("""sed -i 's|echo "$name"|printf "%s\\\\n" "$name"|' names.sh""", None),
+    "trap_troll": ("""sed -i "s#^tmp=/tmp/bashou-report.tmp\\$#tmp=\\$(mktemp) || exit 1; trap 'rm -f -- \\"\\$tmp\\"' EXIT#" """
+                   "report.sh", None),
+    "trial_failing_copy": ("""sed -i 's#  cp "$1" backup/#  cp -- "$1" backup/ || die "cannot copy $1"#' save.sh""", None),
+    "trial_dash_name": ("printf '%s\\n' -n > name.txt", None),
     "pattern_pixie": ("grep -cxE '[A-Z]{{2}}-[0-9]{{4}}' codes.txt", None),
     # linux fights: id, rights, du, tar, a unit file, headers
     "group_gremlin": ("id -gn", None),
@@ -263,7 +276,12 @@ WRONG_MOVES = [("index_imp", "zsh pick.sh"), ("flag_phantom", "sort sizes.txt | 
          ("bloat_blob", "for d in */; do echo $(ls $d | wc -l) ${d%/}; done | sort -n | tail -1 | cut -d' ' -f2"),
          ("commit_crowd", "git add . && git commit -qm all"), ("unit_imp", "true"),
          ("branch_bramble", "git add idea.txt && git commit -qm idea"),
-         ("conflict_chimera", "git add menu.txt && git commit -q --no-edit")]
+         ("conflict_chimera", "git add menu.txt && git commit -q --no-edit"),
+         # script fights: doing the job by hand, or a fix that only works on the folder you see, loses
+         ("dash_demon", "mkdir -p inbox/trash && mv -- inbox/*.tmp inbox/trash/"),
+         ("nomatch_nymph", "touch albums/winter/x.jpg"),
+         ("stdin_siren", "printf '#!/usr/bin/env bash\\nprintf \"%s: up\\\\n\" \"$1\"\\n' > remote"),
+         ("trap_troll", "sed -i 's|^  rm -f -- \"$tmp\"$||' report.sh && sed -i \"s|^main() {$|trap 'rm -f -- \\\"\\$tmp\\\"' EXIT\\nmain() {|\" report.sh")]
 
 # 0.9.0, zsh players fight in zsh. A fight whose reference solution needs another command there gets it
 # here, and a wrong move that zsh gets right (it doesn't split $var into words…) is listed below: both

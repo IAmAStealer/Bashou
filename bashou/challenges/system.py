@@ -44,7 +44,7 @@ GROUP_GREMLIN = Challenge(
 def rights_setup(work, rng):
     (work / "diary.txt").write_text("Dear diary, today I learned chmod.\n")
     (work / "diary.txt").chmod(0o666)
-    (work / "backup.sh").write_text("#!/bin/bash\necho backing up\n")
+    (work / "backup.sh").write_text("#!/usr/bin/env bash\necho backing up\n")
     (work / "backup.sh").chmod(0o600)
     return {}
 

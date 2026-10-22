@@ -1,41 +1,49 @@
 {
  "id": "scripts",
  "order": 240,
- "skill": "bash",
+ "skill": "script",
  "after": [
   "quotes"
+ ],
+ "tools": [
+  "bash"
  ],
  "masters": [
   "achievement dry_run | achievement xray | won shebang_shade",
   "achievement exit_code"
  ],
  "recall": [
-  "bash-2-04",
   "bash-2-08",
-  "bash-2-06"
+  "script-1-01",
+  "script-1-02"
  ],
  "fights": [
   "shebang_shade"
  ],
  "title": "Your first script",
- "summary": "Put commands in a file, make it runnable, and give it arguments.",
+ "summary": "Put commands in a file, make it runnable, give it arguments, and start from a template that checks them.",
  "pages": [
   {
    "scheme": [
     " hello.sh",
-    " ┌──────────────────────────┐",
-    " │ #!/bin/bash              │ ◀ which program",
-    " │ echo \"hello $1\"          │   runs the file",
-    " └──────────────────────────┘"
+    " ┌──────────────────────────────┐",
+    " │ #!/usr/bin/env bash          │ ◀ which program",
+    " │ printf 'hello %s\\n' \"$1\"    │   reads the file",
+    " └──────────────────────────────┘"
    ],
    "point": 2,
    "mark": [
-    "#!/bin/bash"
+    "#!/usr/bin/env bash"
    ],
    "text": [
-    "A script is a text file of commands, run from top to bottom.",
+    "A script is a text file of commands, run from top to bottom. It runs later, without you watching: that changes how you write it.",
     "",
-    "- The first line, #! (the shebang), says which program reads it."
+    "- The first line, #! (the shebang), says which program reads the file.",
+    "- env finds bash in your PATH. On a Mac, /bin/bash is an old 3.2; the bash you install (brew install bash) is newer, and env picks it."
+   ],
+   "script": [
+    "#!/usr/bin/env bash",
+    "printf 'hello %s\\n' \"$1\""
    ]
   },
   {
@@ -43,36 +51,72 @@
     " $ chmod +x hello.sh",
     " $ ./hello.sh sam",
     " hello sam",
-    "        ▲",
-    "        └─ $1 = the first argument"
+    "",
+    " $1    the first argument: sam",
+    " $#    how many there are: 1",
+    " \"$@\"  all of them, each one whole"
    ],
    "point": 4,
    "mark": [
-    "$1"
+    "$1",
+    "\"$@\""
    ],
    "text": [
-    "- chmod +x makes it runnable, ./ runs the one in this folder.",
-    "- $1, $2… are the arguments, $# how many there are."
+    "- chmod +x makes the file runnable, and ./ runs the one in this folder.",
+    "- $1, $2… are the arguments. \"$@\", with its quotes, hands them all on, and a name with a space stays one argument."
    ]
   },
   {
    "scheme": [
-    " #!/bin/bash",
-    " set -euo pipefail",
-    "      │││",
-    "      ││└─ a failure inside a pipe counts",
-    "      │└── an unset variable is an error",
-    "      └─── stop at the first failed command"
+    " #!/usr/bin/env bash",
+    " # Usage: lines.sh FILE",
+    "",
+    " die() { printf '%s\\n' \"$*\" >&2; exit 1; }",
+    "",
+    " main() {",
+    "   (( $# == 1 )) || die \"usage: lines.sh FILE\"",
+    "   [[ -f $1 ]] || die \"not a file: $1\"",
+    "   wc -l < \"$1\"",
+    " }",
+    "",
+    " main \"$@\""
    ],
-   "point": 1,
+   "point": 3,
    "mark": [
-    "set -euo pipefail"
+    "die()",
+    "main \"$@\""
    ],
    "text": [
-    "By default a script goes on after an error, and the next lines work on a broken state.",
+    "Every script fight starts from this shape, a template:",
     "",
-    "- This line makes it stop early and loudly. Put it at the top of your scripts.",
-    "- bash -n checks the syntax, bash -x shows each line as it runs."
+    "- die writes an error on stderr (>&2) and stops with a non-zero status, so whoever ran the script, a person or cron, knows it failed.",
+    "- main checks its arguments first, then does the work. The last line hands it the script's arguments."
+   ],
+   "script": [
+    "#!/usr/bin/env bash",
+    "die() { printf '%s\\n' \"$*\" >&2; exit 1; }",
+    "main() {",
+    "(( $# == 1 )) || die \"usage: lines.sh FILE\"",
+    "[[ -f $1 ]] || die \"not a file: $1\"",
+    "wc -l < \"$1\"",
+    "}",
+    "main \"$@\""
+   ]
+  },
+  {
+   "scheme": [
+    " $ bash -n lines.sh       syntax only",
+    " $ bash -x lines.sh f     each line as it runs",
+    " + wc -l",
+    " $ shellcheck lines.sh    the usual traps"
+   ],
+   "point": 2,
+   "mark": [
+    "bash -x"
+   ],
+   "text": [
+    "- bash -n checks the syntax and runs nothing. bash -x shows each line with its values: the way to see where a script goes wrong.",
+    "- ShellCheck (install it with apt, dnf or brew) reads a script and names the traps of the next lessons, each with a page that explains it."
    ]
   }
  ]

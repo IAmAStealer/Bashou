@@ -106,7 +106,7 @@ tokens spent to learn what a command does. It stays out of your way: one pet for
 it never draws over your text.
 
 - **`bashou learn <command>`** takes a command apart and explains every piece: the command, each
-  option, the arguments, pipes and redirections (81 commands, from `ls` to `tar`, `awk`, `gpg` and `kubectl`).
+  option, the arguments, pipes and redirections (87 commands, from `ls` to `tar`, `awk`, `gpg` and `kubectl`).
   With no command, it explains the last one your pet suggested.
 - **Your pet gives tips** as you go (Ctrl+R, `cd -`, `du -sh *`…) and notices the tools you haven't
   tried yet.
@@ -119,6 +119,9 @@ it never draws over your text.
   the right tool hits the enemy; other commands cost you a heart (looking around with `ls`, `cat` or `find`,
   or a typo, never does; in a fight where you fix a file, only a failed try with the tool does). Code fights hand you a small broken
   Python or C file to fix (a missing `;`, a loop that never ends, a memory leak, a shell injection);
+  script fights hand you a bash script built on a small template, with a habit that's fine at the prompt and
+  a bug in a script (`ls` output in a loop, a name starting with `-`, `local x=$(cmd)`, `echo` on data, a temp
+  file left behind): your fix wins only when the script works again on Bashou's own tricky files;
   package fights ask your own machine with `apt`, `dpkg` or `rpm`, or have you fix a repository file;
   CI/CD fights hand you a GitHub Actions or GitLab CI file to fix (indentation, stages, a token in
   clear, `needs:` and `if:`, `when: manual`); SQL fights hand you an SQLite database to query and fix
@@ -143,8 +146,8 @@ it never draws over your text.
 - **`bashou arena`**: come and fight when you want. A timed fight (hearts and a clock), or a security
   investigation with no clock (a hidden file, a cron backdoor, a SUID binary). Lose, and the arena
   closes for an hour.
-- **`bashou adventure`**: a walk through 13 topics (coding logic, bash, Linux, systemd, Python, Rust,
-  C, Debian, Rocky Linux, CI/CD, SQL, networks, AI tools) with 394 questions about what goes wrong and what to check first, bosses, and
+- **`bashou adventure`**: a walk through 14 topics (coding logic, bash at the prompt, bash scripts, Linux, systemd, Python, Rust,
+  C, Debian, Rocky Linux, CI/CD, SQL, networks, AI tools) with 418 questions about what goes wrong and what to check first, bosses, and
   chests that open with real commands.
 
 ![bashou fight: a Planet and its hearts face the Log Hydra, the task in a bubble, and the arena

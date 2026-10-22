@@ -37,7 +37,7 @@
   },
   {
    "scheme": [
-    " while read -r host; do",
+    " while IFS= read -r host; do",
     "   ping -c1 \"$host\"",
     " done < hosts.txt",
     "        ▲",
@@ -50,7 +50,7 @@
    "text": [
     "while read traite un fichier ligne par ligne, même un long fichier.",
     "",
-    "- -r garde les antislashs tels quels.",
+    "- IFS= garde les espaces aux deux bouts de la ligne, -r garde les antislashs tels quels.",
     "- N'utilise pas for line in $(cat file) : ça coupe à chaque espace, pas seulement en fin de ligne."
    ]
   },

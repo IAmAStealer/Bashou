@@ -33,7 +33,7 @@
    "scheme": [
     " $ today=$(date +%A)",
     "         └────┬────┘ runs date, keeps its output",
-    " $ echo $today",
+    " $ echo \"$today\"",
     " Monday"
    ],
    "point": 1,

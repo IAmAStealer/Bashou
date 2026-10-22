@@ -47,13 +47,13 @@
   {
    "do": "Mets tout dans un script pdf.sh qui prend l'action en premier : `./pdf.sh merge out.pdf a.pdf b.pdf` et `./pdf.sh split a.pdf`.",
    "done": "les deux actions marchent sans modifier le script.",
-   "hint": "Commence par `#!/usr/bin/env bash`, puis `chmod +x`. `$1` est l'action ; `shift` l'enlève, et `\"$@\"` est le reste. Un `case` choisit l'action.",
+   "hint": "Pars du modèle (leçon Ton premier script), puis `chmod +x`. `$1` est l'action ; `shift` l'enlève, et `\"$@\"` est le reste. Un `case` choisit l'action.",
    "why": "Un script avec des arguments, c'est une nouvelle commande à toi. `case` est la façon du shell de choisir entre plusieurs actions, et il se lit clairement."
   },
   {
    "do": "Gère les erreurs : un fichier absent, un fichier qui n'est pas un PDF, un fichier de sortie qui existe déjà, et une commande qui échoue.",
    "done": "chaque erreur affiche un message clair, et le script se termine avec un code différent de 0.",
-   "hint": "`set -euo pipefail` en haut, `[[ -e $fichier ]]` pour tester, `file --mime-type` pour vérifier que c'est un PDF, et `exit 1` après le message (envoyé sur stderr avec `>&2`).",
+   "hint": "`[[ -e $fichier ]] || die \"fichier absent : $fichier\"` pour tester, `file --mime-type` pour vérifier que c'est un PDF, et le die du modèle pour chaque échec : le message sur stderr (`>&2`), puis `exit 1`.",
    "why": "Les codes de sortie, c'est comme ça que les scripts disent aux autres programmes qu'ils ont échoué. Les messages vont sur stderr pour ne jamais se mélanger à la vraie sortie."
   },
   {

@@ -1,0 +1,93 @@
+{
+ "title": "Au prompt ou dans un script",
+ "summary": "Le même bash pour deux métiers : les habitudes qui économisent des touches au prompt deviennent des bugs dans un script.",
+ "pages": [
+  {
+   "scheme": [
+    "            au prompt       dans un script",
+    " qui lit    toi, tout de    personne, plus",
+    " les noms   ceux que tu     tous : -rf, a b,",
+    "            vois            un saut de ligne",
+    " un échec   tu le vois      il continue",
+    " le but     vite tapé       juste à chaque fois"
+   ],
+   "point": 4,
+   "mark": [
+    "un échec"
+   ],
+   "text": [
+    "Le même bash, deux métiers. Au prompt, tu tapes une fois, tu lis le résultat et tu corriges sur le moment. Un script tourne plus tard, seul, sur des noms et des échecs que personne n'avait prévus.",
+    "",
+    "- Les habitudes qui économisent des touches au prompt deviennent des bugs dans un script. Cette leçon les met côte à côte."
+   ]
+  },
+  {
+   "scheme": [
+    " prompt  $ ls *.log | wc -l",
+    "",
+    " script  shopt -s nullglob",
+    "         logs=(./*.log)",
+    "         printf '%s\\n' \"${#logs[@]}\""
+   ],
+   "point": 3,
+   "mark": [
+    "logs=(./*.log)"
+   ],
+   "text": [
+    "- ls affiche des noms pour tes yeux. Un nom avec un saut de ligne dedans compte deux fois dans ls | wc -l : très bien pour regarder, faux dans un script.",
+    "- Un script garde les noms eux-mêmes, dans un tableau. nullglob fait qu'un motif qui ne correspond à rien ne donne rien, au lieu de lui-même."
+   ]
+  },
+  {
+   "scheme": [
+    " $ name='-n'",
+    " $ echo \"$name\"",
+    "                      (rien !)",
+    " $ printf '%s\\n' \"$name\"",
+    " -n"
+   ],
+   "point": 3,
+   "mark": [
+    "printf '%s\\n'"
+   ],
+   "text": [
+    "- echo va très bien pour le texte que tu écris toi-même. Une donnée peut commencer par -n ou -e, et echo la prend pour une option.",
+    "- printf '%s\\n' affiche n'importe quelle valeur telle quelle : le format d'abord, les données après."
+   ]
+  },
+  {
+   "scheme": [
+    " prompt  $ cd /srv/app",
+    "         (le prompt montre où tu es)",
+    "",
+    " script  cd /srv/app || exit 1",
+    "         rm -rf ./cache"
+   ],
+   "point": 3,
+   "mark": [
+    "|| exit 1"
+   ],
+   "text": [
+    "- Au prompt, tu vois que cd a marché. Un script ne regarde pas : si cd échoue, la ligne suivante tourne dans le dossier où il était.",
+    "- Alors un script vérifie chaque étape qui compte, dans le code : || exit 1 l'arrête tout de suite."
+   ]
+  },
+  {
+   "scheme": [
+    " prompt  $ rm *.tmp       tu lis la liste",
+    "",
+    " script  rm -- ./*.tmp    un fichier -rf.tmp",
+    "                          reste un nom"
+   ],
+   "point": 2,
+   "mark": [
+    "--"
+   ],
+   "text": [
+    "- Un nom peut commencer par un tiret, et une commande le lirait comme des options.",
+    "- -- veut dire : plus d'options après ça. ./ devant aide aussi : ./-rf.tmp ne commence pas par un tiret.",
+    "- Les alias, !! et l'historique sont des outils du prompt : un script utilise des fonctions."
+   ]
+  }
+ ]
+}

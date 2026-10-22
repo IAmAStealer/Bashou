@@ -1,0 +1,128 @@
+{
+ "id": "script_data",
+ "order": 257,
+ "skill": "script",
+ "after": [
+  "script_files"
+ ],
+ "tools": [
+  "bash"
+ ],
+ "masters": [
+  "won echo_echidna"
+ ],
+ "recall": [
+  "script-2-06",
+  "script-2-07",
+  "script-3-03"
+ ],
+ "fights": [
+  "echo_echidna"
+ ],
+ "title": "Data in scripts",
+ "summary": "Print values with printf, test with [[ ]] and (( )), check numbers, and keep lists in arrays.",
+ "pages": [
+  {
+   "scheme": [
+    " name='-n'",
+    " echo \"$name\"             ✘ prints nothing",
+    " printf '%s\\n' \"$name\"    ✔ prints -n",
+    "",
+    " printf '%s: %d files\\n' \"$dir\" \"$n\""
+   ],
+   "point": 2,
+   "mark": [
+    "printf"
+   ],
+   "text": [
+    "printf takes a format first, then the values: %s is a text, %d a whole number, \\n the end of the line.",
+    "",
+    "- echo reads its first word as an option when it looks like one (-n, -e). printf never does that with its values.",
+    "- Never put data in the format: printf \"$x\" breaks on a %."
+   ],
+   "script": [
+    "name='-n'",
+    "printf '%s\\n' \"$name\"",
+    "printf '%s: %d files\\n' \"$dir\" \"$n\""
+   ],
+   "shellcheck_ok": [
+    "SC2154"
+   ]
+  },
+  {
+   "scheme": [
+    " [[ -f $f ]]         a file? no quotes needed",
+    " [[ $a == \"$b\" ]]    the same text",
+    " [[ $a == *.txt ]]   a pattern, unquoted",
+    " (( n > 5 ))         numbers, as in math"
+   ],
+   "point": 0,
+   "mark": [
+    "[[",
+    "(("
+   ],
+   "text": [
+    "In bash, [[ ]] is the test to write: an empty variable or one with spaces can't break it, and && and || work inside.",
+    "",
+    "- On the right of ==, quotes mean the exact text, no quotes mean a pattern.",
+    "- (( )) compares numbers: no $ needed, and > means greater."
+   ],
+   "script": [
+    "[[ -f $f ]]",
+    "[[ $a == \"$b\" ]]",
+    "[[ $a == *.txt ]]",
+    "(( n > 5 ))"
+   ],
+   "shellcheck_ok": [
+    "SC2154"
+   ]
+  },
+  {
+   "scheme": [
+    " read -r n",
+    " [[ $n =~ ^[0-9]+$ ]] || die \"not a number: $n\"",
+    " (( n > 5 )) && printf '%s\\n' big"
+   ],
+   "point": 1,
+   "mark": [
+    "^[0-9]+$"
+   ],
+   "text": [
+    "(( )) reads a value as an expression. A value like x[$(date)] would run date: input decides what runs.",
+    "",
+    "- So check that it's digits first. =~ matches a regular expression: ^[0-9]+$ is digits, from the start to the end."
+   ],
+   "script": [
+    "read -r n",
+    "[[ $n =~ ^[0-9]+$ ]] || die \"not a number: $n\"",
+    "(( n > 5 )) && printf '%s\\n' big"
+   ]
+  },
+  {
+   "scheme": [
+    " opts=\"-v --name $n\"      ✘ one string",
+    " opts=(-v --name \"$n\")    ✔ an array",
+    " tool \"${opts[@]}\"         each item, whole",
+    " tool \"$@\"                 your arguments"
+   ],
+   "point": 1,
+   "mark": [
+    "opts=(",
+    "\"${opts[@]}\""
+   ],
+   "text": [
+    "A list of arguments lives in an array, not in a string: a string can't keep 'my file' as one word.",
+    "",
+    "- \"${opts[@]}\" gives each item as its own word. \"$@\" does the same with the script's arguments; $* glues them together.",
+    "- Your own variables in lowercase: UPPERCASE names (PATH, HOME) belong to the environment."
+   ],
+   "script": [
+    "opts=(-v --name \"$n\")",
+    "tool \"${opts[@]}\""
+   ],
+   "shellcheck_ok": [
+    "SC2154"
+   ]
+  }
+ ]
+}

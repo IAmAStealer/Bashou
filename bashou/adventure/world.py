@@ -16,6 +16,7 @@ HEARTS = 3
 # topic: (name, home biome, boss)
 TOPICS = {
     "bash": ("Bash", "meadow", "Bash Beast"),
+    "script": ("Bash scripts", "hills", "Errexit Ogre"),
     "linux": ("Linux", "dungeon", "Kernel Warden"),
     "python": ("Python", "forest", "Coil Serpent"),
     "rust": ("Rust", "sand", "Oxide Crab"),

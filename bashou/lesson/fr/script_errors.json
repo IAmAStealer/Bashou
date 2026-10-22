@@ -1,0 +1,90 @@
+{
+ "title": "Les erreurs dans les scripts",
+ "summary": "Vérifier soi-même les étapes qui comptent ; savoir ce que set -e et pipefail attrapent, et ce qu'ils ratent.",
+ "pages": [
+  {
+   "scheme": [
+    " if ! cp -- \"$src\" \"$dst\"; then",
+    "   die \"cannot copy $src\"",
+    " fi",
+    "",
+    " cp -- \"$src\" \"$dst\" || die \"cannot copy $src\""
+   ],
+   "point": 0,
+   "mark": [
+    "if !",
+    "||"
+   ],
+   "text": [
+    "Chaque commande finit avec un statut : 0 quand elle a marché, un autre nombre sinon. Un script le lit pour décider de la suite.",
+    "",
+    "- if ! cmd lance cmd et prend la route quand elle a échoué. cmd || die fait pareil sur une ligne.",
+    "- die est celui du modèle : le message sur stderr, puis exit 1."
+   ]
+  },
+  {
+   "scheme": [
+    " set -e     arrête à une commande qui échoue…",
+    "",
+    " …sauf :",
+    "  if cmd; then    un échec ici est une réponse",
+    "  cmd || autre    pareil",
+    "  ((n++))         n=0 : « échoue », et arrête !",
+    "  local x=$(cmd)  ✘ le statut de local (0)"
+   ],
+   "point": 5,
+   "mark": [
+    "((n++))"
+   ],
+   "text": [
+    "set -e arrête un script à la première commande qui échoue. C'est un filet de sécurité, avec des trous.",
+    "",
+    "- Dans if, while, && et ||, un échec est une réponse : set -e le laisse passer, même dans les fonctions appelées de là.",
+    "- ((n++)) donne l'ancienne valeur : 0 compte comme faux, donc le premier compte arrête le script.",
+    "- Vérifie toi-même ce qui compte. Si tu ajoutes set -e aussi, sache où il ne regarde pas."
+   ]
+  },
+  {
+   "scheme": [
+    " stamp() {",
+    "   local sum=$(cksum < \"$1\")  ✘ n'échoue jamais",
+    "",
+    "   local sum                  ✔",
+    "   sum=$(cksum < \"$1\") || die \"no $1\"",
+    " }"
+   ],
+   "point": 4,
+   "mark": [
+    "local sum"
+   ],
+   "text": [
+    "x=$(cmd) garde le statut de cmd : || et if voient l'échec.",
+    "",
+    "- ✘ local x=$(cmd) : local, export et readonly sont aussi des commandes, donc le statut que tu obtiens est celui de local, et local marche toujours.",
+    "- Déclare d'abord, affecte à la ligne suivante : l'échec revient."
+   ]
+  },
+  {
+   "scheme": [
+    " grep ERROR app.log | sort > errors.txt",
+    "   statut : celui de sort, 0, même sans app.log",
+    "",
+    " set -o pipefail",
+    "   statut : la dernière étape en échec (2)",
+    "",
+    " cmd | head -n 1  peut alors échouer en 141 :",
+    "   head a cessé de lire, cmd a reçu SIGPIPE"
+   ],
+   "point": 3,
+   "mark": [
+    "set -o pipefail"
+   ],
+   "text": [
+    "Le statut d'un pipeline est celui de sa dernière commande : un échec plus tôt dans le tuyau est perdu.",
+    "",
+    "- set -o pipefail le garde : le pipeline échoue quand une étape échoue.",
+    "- Il compte aussi un écrivain que head a coupé (statut 141). Active-le là où tu vérifies les pipes, et souviens-toi de ce cas."
+   ]
+  }
+ ]
+}

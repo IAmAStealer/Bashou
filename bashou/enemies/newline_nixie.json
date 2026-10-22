@@ -1,0 +1,49 @@
+{
+ "name": "Newline Nixie",
+ "palette": {
+  "b": "#5ab0e0",
+  "B": "#2a6fa0",
+  "l": "#a8e0f8",
+  "t": "#40c8b0",
+  "T": "#208870",
+  "e": "#ffffff",
+  "k": "#102030"
+ },
+ "base": [
+  ".....bbbb........",
+  "....bllbbb...tt..",
+  "...blbbbbbB..tt..",
+  "...bekbbekB..tt..",
+  "...bbbbbbbB..tt..",
+  "...bbbkkbbB..tt..",
+  "....bbbbbB.t.tt..",
+  "....BbbbB.tttttT.",
+  "...bbBbBbb.t.....",
+  "..bb.bbb.bb......",
+  ".bB..BbB..Bb.....",
+  "......BB........."
+ ],
+ "poses": {
+  "inhale": {
+   "4": "..bbbbbbbbB..tt.."
+  },
+  "closed": {
+   "3": "----kk--kk-------"
+  },
+  "left": {
+   "3": "----ke--ke-------"
+  },
+  "right": {
+   "3": "----ek--ek-------"
+  },
+  "fidget": {
+   "6": "-----------.t----",
+   "7": "----------.ttttT.",
+   "8": "-----------.t...."
+  }
+ },
+ "particles": [
+  0,
+  10
+ ]
+}

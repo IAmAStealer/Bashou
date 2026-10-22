@@ -1,0 +1,56 @@
+{
+ "title": "Faire le ménage",
+ "summary": "Des fichiers temporaires avec mktemp, supprimés par un trap quelle que soit la fin du script ; des rm -r qui ne peuvent pas toucher /.",
+ "pages": [
+  {
+   "scheme": [
+    " tmp=/tmp/report.tmp       ✘ nom connu",
+    " tmp=$(mktemp) || exit 1   ✔ neuf, privé"
+   ],
+   "point": 1,
+   "mark": [
+    "mktemp"
+   ],
+   "text": [
+    "/tmp est partagé par tous les utilisateurs de la machine. Un nom connu d'avance peut être créé avant toi par quelqu'un d'autre, ou changé en lien vers un de tes fichiers.",
+    "",
+    "- mktemp crée un nouveau fichier au nom aléatoire que toi seul peux lire, et affiche ce nom."
+   ]
+  },
+  {
+   "scheme": [
+    " tmp=$(mktemp) || exit 1",
+    " trap 'rm -f -- \"$tmp\"' EXIT",
+    " …",
+    " die \"bad input\"     exit : le trap tourne,",
+    "                     le fichier disparaît"
+   ],
+   "point": 1,
+   "mark": [
+    "trap"
+   ],
+   "text": [
+    "trap 'commande' EXIT lance la commande chaque fois que le script finit : après la dernière ligne, à un exit ou un die en route, à un Ctrl+C. Pas à un kill -9 : rien ne tourne alors.",
+    "",
+    "- Un rm sur la dernière ligne ne tourne jamais quand le script s'arrête avant.",
+    "- Des guillemets simples : $tmp est lu quand le trap tourne. Garde tmp hors des fonctions, pour qu'il existe encore à ce moment-là."
+   ]
+  },
+  {
+   "scheme": [
+    " rm -rf -- \"$dir/\"       dir vide : rm -rf /",
+    " rm -rf -- \"${dir:?}/\"   dir vide : arrêt",
+    " dir: parameter null or not set"
+   ],
+   "point": 1,
+   "mark": [
+    "${dir:?}"
+   ],
+   "text": [
+    "${dir:?} arrête le script sur une erreur quand dir est vide ou pas définie, avant que rm ne tourne.",
+    "",
+    "- Mets-le dans chaque rm -r sur une variable : une faute de frappe dans un nom, et la variable est vide."
+   ]
+  }
+ ]
+}

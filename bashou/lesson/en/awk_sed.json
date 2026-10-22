@@ -106,7 +106,8 @@
     "",
     "- sed prints the result and leaves the file alone. -i edits the file in place.",
     "$ sed -i 's/teh/the/g; s/Teh/The/g' letter.txt",
-    "- Try it without -i first: you see the result, and nothing is changed yet."
+    "- Try it without -i first: you see the result, and nothing is changed yet.",
+    "- -i alone is GNU sed (Linux). macOS's sed wants a backup suffix after it, even an empty one: sed -i '' 's/teh/the/g' letter.txt."
    ]
   }
  ]

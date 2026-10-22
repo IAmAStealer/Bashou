@@ -1,0 +1,127 @@
+{
+ "id": "prompt_script",
+ "order": 252,
+ "skill": "script",
+ "after": [
+  "scripts"
+ ],
+ "tools": [
+  "bash"
+ ],
+ "masters": [
+  "won dash_demon | won echo_echidna"
+ ],
+ "recall": [
+  "script-1-03",
+  "script-1-04",
+  "script-2-01"
+ ],
+ "fights": [],
+ "title": "At the prompt or in a script",
+ "summary": "The same bash for two jobs: habits that save keystrokes at the prompt become bugs in a script.",
+ "pages": [
+  {
+   "scheme": [
+    "            at the prompt   in a script",
+    " who reads  you, right now  nobody, later",
+    " names      the ones you    any: -rf, a b,",
+    "            see             a line break",
+    " a failure  you see it      it goes on",
+    " goal       fast to type    right every time"
+   ],
+   "point": 4,
+   "mark": [
+    "a failure"
+   ],
+   "text": [
+    "The same bash, two jobs. At the prompt you type once, read the result and fix it on the spot. A script runs later, alone, on names and failures nobody planned for.",
+    "",
+    "- Habits that save keystrokes at the prompt become bugs in a script. This lesson puts them side by side."
+   ]
+  },
+  {
+   "scheme": [
+    " prompt  $ ls *.log | wc -l",
+    "",
+    " script  shopt -s nullglob",
+    "         logs=(./*.log)",
+    "         printf '%s\\n' \"${#logs[@]}\""
+   ],
+   "point": 3,
+   "mark": [
+    "logs=(./*.log)"
+   ],
+   "text": [
+    "- ls prints names for your eyes. A name with a line break inside counts twice in ls | wc -l: fine to look around, wrong in a script.",
+    "- A script keeps the names themselves, in an array. nullglob makes a pattern that matches nothing give nothing, instead of itself."
+   ],
+   "script": [
+    "shopt -s nullglob",
+    "logs=(./*.log)",
+    "printf '%s\\n' \"${#logs[@]}\""
+   ]
+  },
+  {
+   "scheme": [
+    " $ name='-n'",
+    " $ echo \"$name\"",
+    "                      (nothing!)",
+    " $ printf '%s\\n' \"$name\"",
+    " -n"
+   ],
+   "point": 3,
+   "mark": [
+    "printf '%s\\n'"
+   ],
+   "text": [
+    "- echo is fine for text you write yourself. Data can start with -n or -e, and echo takes it for an option.",
+    "- printf '%s\\n' prints any value exactly as it is: the format comes first, the data after."
+   ],
+   "script": [
+    "name='-n'",
+    "printf '%s\\n' \"$name\""
+   ]
+  },
+  {
+   "scheme": [
+    " prompt  $ cd /srv/app",
+    "         (the prompt shows where you are)",
+    "",
+    " script  cd /srv/app || exit 1",
+    "         rm -rf ./cache"
+   ],
+   "point": 3,
+   "mark": [
+    "|| exit 1"
+   ],
+   "text": [
+    "- At the prompt you see that cd worked. A script doesn't look: if cd fails, the next line runs in the folder you were in.",
+    "- So a script checks every step that matters, in the code: || exit 1 stops it right there."
+   ],
+   "script": [
+    "cd /srv/app || exit 1",
+    "rm -rf ./cache"
+   ]
+  },
+  {
+   "scheme": [
+    " prompt  $ rm *.tmp       you read the list",
+    "",
+    " script  rm -- ./*.tmp    a file named -rf.tmp",
+    "                          stays a file name"
+   ],
+   "point": 2,
+   "mark": [
+    "--"
+   ],
+   "text": [
+    "- A name can start with a dash, and a command would read it as options.",
+    "- -- says: no options after this point. ./ in front helps too: ./-rf.tmp doesn't start with a dash.",
+    "- Aliases, !! and history are prompt tools too: a script uses functions."
+   ],
+   "script": [
+    "rm -- ./*.tmp"
+   ]
+  }
+ ]
+}

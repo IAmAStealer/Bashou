@@ -1,0 +1,314 @@
+[
+ {
+  "id": "script-1-01",
+  "level": 1,
+  "q": "Why start a script with #!/usr/bin/env bash rather than #!/bin/bash?",
+  "choices": [
+   "env finds the bash in your PATH, newer than the Mac's 3.2",
+   "It makes the script run faster",
+   "/bin/bash doesn't exist on Linux",
+   "env runs the script as root"
+  ],
+  "answer": 0,
+  "explain": "The shebang names the program that reads the script. /bin/bash is a fixed path: on a Mac it is bash 3.2, from 2007. env looks bash up in your PATH, where a newer bash you installed comes first."
+ },
+ {
+  "id": "script-1-02",
+  "level": 1,
+  "q": "The template has die() { printf '%s\\n' \"$*\" >&2; exit 1; }. Why the >&2?",
+  "choices": [
+   "Errors go to stderr, apart from the results",
+   "It runs die twice",
+   "It colors the message red",
+   "It writes the error into a file named 2"
+  ],
+  "answer": 0,
+  "explain": ">&2 sends the message to stderr, the error stream. The results (stdout) can then go into a file or a pipe while the error still reaches the screen or a log, and exit 1 tells the caller it failed."
+ },
+ {
+  "id": "script-1-03",
+  "level": 1,
+  "q": "At the prompt, ls *.log | wc -l is fine. Why not in a script?",
+  "choices": [
+   "A name with a line break inside counts as two",
+   "wc doesn't work in scripts",
+   "ls is forbidden in scripts",
+   "It only counts hidden files"
+  ],
+  "answer": 0,
+  "explain": "ls prints names as text, one per line, for your eyes. A name can hold a line break, and wc -l then counts it twice. At the prompt you would notice; a script keeps the names themselves, in an array: logs=(./*.log)."
+ },
+ {
+  "id": "script-1-04",
+  "level": 1,
+  "q": "name='-n'. What does echo \"$name\" print?",
+  "choices": [
+   "Nothing: echo takes -n for its option",
+   "-n",
+   "name",
+   "An error message"
+  ],
+  "answer": 0,
+  "explain": "echo reads its first word as an option when it looks like one. -n means 'no newline', so there is nothing left to print. printf '%s\\n' \"$name\" prints -n, since printf never takes its values for options."
+ },
+ {
+  "id": "script-1-05",
+  "level": 1,
+  "q": "Why does a script write cd /srv/app || exit 1, and not just cd /srv/app?",
+  "choices": [
+   "If cd fails, the next lines don't run in the wrong folder",
+   "cd is faster that way",
+   "exit 1 makes cd quieter",
+   "Without it, cd only works as root"
+  ],
+  "answer": 0,
+  "explain": "A script doesn't stop when a command fails. If /srv/app is missing, the next line, rm -rf ./cache for example, runs in whatever folder the script was in. || exit 1 stops it right there."
+ },
+ {
+  "id": "script-1-06",
+  "level": 1,
+  "q": "What does -- mean in rm -- \"$f\"?",
+  "choices": [
+   "No options after it: $f is a name, even starting with -",
+   "Remove twice, to be sure",
+   "Ask before removing",
+   "Remove the folder and its content"
+  ],
+  "answer": 0,
+  "explain": "A file can be called -rf. Without --, rm would read that name as options. -- ends the options: whatever follows is a name. Most commands understand it."
+ },
+ {
+  "id": "script-1-07",
+  "level": 1,
+  "q": "Why does a script create its temp file with mktemp?",
+  "choices": [
+   "It makes a new private file, with a name nobody can guess",
+   "mktemp files remove themselves",
+   "/tmp only accepts files made by mktemp",
+   "It's faster than >"
+  ],
+  "answer": 0,
+  "explain": "/tmp is shared by every user. A fixed name like /tmp/report.tmp can be created first by someone else, or made a link to one of your files. mktemp picks a random name, creates the file for you only, and prints its name. It doesn't remove it: a trap does that."
+ },
+ {
+  "id": "script-1-08",
+  "level": 1,
+  "q": "Your script goes wrong half way. What shows you each line as it runs, with its values?",
+  "choices": [
+   "bash -x script.sh",
+   "bash -n script.sh",
+   "cat script.sh",
+   "chmod +x script.sh"
+  ],
+  "answer": 0,
+  "explain": "bash -x prints each line, after expansion, before running it, with a + in front: you see the values the variables really had. bash -n only checks the syntax and runs nothing."
+ },
+ {
+  "id": "script-2-01",
+  "level": 2,
+  "q": "In a script, which line counts the .log files of the folder, whatever their names?",
+  "choices": [
+   "logs=(./*.log), with nullglob on, then ${#logs[@]}",
+   "n=$(ls *.log | wc -l)",
+   "n=$(echo *.log | wc -w)",
+   "n=$(find . -name *.log | wc -l)"
+  ],
+  "answer": 0,
+  "explain": "The array holds the names themselves, one item each, and ${#logs[@]} counts them. nullglob makes the pattern give nothing when no file matches. The others count words or lines of text: a space or a line break in a name, or no match at all, gives a wrong number."
+ },
+ {
+  "id": "script-2-02",
+  "level": 2,
+  "q": "set -e is on and count=0. What does ((count++)) do?",
+  "choices": [
+   "It stops the script: (( )) saw 0, which counts as a failure",
+   "count becomes 1 and the script goes on",
+   "Nothing: (( )) is ignored under set -e",
+   "It prints 1"
+  ],
+  "answer": 0,
+  "explain": "count++ gives the old value, 0, then adds one. For (( )), 0 is false, so the command 'fails' and set -e stops the script, with no message. count=$((count + 1)) never fails."
+ },
+ {
+  "id": "script-2-03",
+  "level": 2,
+  "q": "local out=$(backup_db) || die \"backup failed\". backup_db fails. What happens?",
+  "choices": [
+   "die never runs: the status is local's, and local worked",
+   "die runs and the script stops",
+   "bash refuses the line",
+   "backup_db runs a second time"
+  ],
+  "answer": 0,
+  "explain": "local is a command too, and its own status replaces backup_db's. Declare first, then assign: local out; out=$(backup_db) || die \"backup failed\". export and readonly hide the failure the same way."
+ },
+ {
+  "id": "script-2-04",
+  "level": 2,
+  "q": "for f in \"$dir\"/*.jpg runs on a folder with no .jpg. How many turns does the loop take?",
+  "choices": [
+   "One, with f holding the pattern itself",
+   "None",
+   "An error stops the loop",
+   "One per file of the folder"
+  ],
+  "answer": 0,
+  "explain": "When no file matches, bash keeps the pattern as it is: the loop turns once, on a name that doesn't exist. shopt -s nullglob gives an empty list instead, or test [[ -e $f ]] || continue inside the loop."
+ },
+ {
+  "id": "script-2-05",
+  "level": 2,
+  "q": "while IFS= read -r host; do ssh \"$host\" uptime; done < hosts.txt only checks the first host. Why?",
+  "choices": [
+   "ssh reads the loop's input and swallows the rest of the list",
+   "read stops after one line",
+   "uptime closes the loop",
+   "hosts.txt needs one more blank line"
+  ],
+  "answer": 0,
+  "explain": "Commands inside the loop share its standard input: the list. ssh reads all it can, to pass it on to the remote command, so read finds nothing left. ssh -n, or < /dev/null on that line, keeps it away."
+ },
+ {
+  "id": "script-2-06",
+  "level": 2,
+  "q": "Why printf '%s\\n' \"$x\" rather than printf \"$x\\n\"?",
+  "choices": [
+   "A % inside x would be read as part of the format",
+   "printf only takes single quotes",
+   "\"$x\\n\" prints the text twice",
+   "%s makes it faster"
+  ],
+  "answer": 0,
+  "explain": "printf's first argument is a format: %s, %d and friends are replaced by the values after it. If the data is the format, a value like 50% breaks it. The format stays fixed, the data comes after."
+ },
+ {
+  "id": "script-2-07",
+  "level": 2,
+  "q": "b='*.txt'. What does [[ $a == $b ]] compare?",
+  "choices": [
+   "a against the pattern *.txt",
+   "a against the exact text *.txt",
+   "The files a and b",
+   "Nothing: it's an error"
+  ],
+  "answer": 0,
+  "explain": "On the right of == inside [[ ]], an unquoted value is a pattern. [[ $a == \"$b\" ]], with quotes, compares the exact text. Quote it unless you mean a pattern."
+ },
+ {
+  "id": "script-2-08",
+  "level": 2,
+  "q": "Why remove a temp file with trap 'rm -f -- \"$tmp\"' EXIT rather than an rm on the last line?",
+  "choices": [
+   "The trap also runs when the script stops early",
+   "trap is faster than rm",
+   "rm can't remove files made by mktemp",
+   "The last line never runs in bash"
+  ],
+  "answer": 0,
+  "explain": "An rm on the last line only runs when everything went well. A trap on EXIT runs however the script ends: the last line, an exit or a die half way, Ctrl+C. Not kill -9: nothing runs then."
+ },
+ {
+  "id": "script-3-01",
+  "level": 3,
+  "q": "set -o pipefail is on. Which pipeline can fail even though each command did its job?",
+  "choices": [
+   "yes | head -n 1",
+   "printf 'a\\n' | sort",
+   "grep -c x file | cat",
+   "true | true"
+  ],
+  "answer": 0,
+  "explain": "head stops reading after one line, and the next write of yes gets SIGPIPE: status 141. With pipefail, that makes the whole pipeline fail. Turn pipefail on where you check pipes, and remember this case."
+ },
+ {
+  "id": "script-3-02",
+  "level": 3,
+  "q": "Which loop handles every file of a tree, even names with line breaks?",
+  "choices": [
+   "while IFS= read -r -d '' f … < <(find . -type f -print0)",
+   "for f in $(find . -type f)",
+   "find . -type f | while read f; do …; done",
+   "for f in $(ls -R)"
+  ],
+  "answer": 0,
+  "explain": "-print0 ends each name with a zero byte, the one character a name can't hold, and read -d '' cuts exactly there. The others cut text at spaces or line breaks. find -exec cmd {} + is the other safe way."
+ },
+ {
+  "id": "script-3-03",
+  "level": 3,
+  "q": "n comes from the user. Why check [[ $n =~ ^[0-9]+$ ]] before (( n > 5 ))?",
+  "choices": [
+   "(( )) reads n as code: x[$(date)] would run date",
+   "(( )) is slow with text",
+   "=~ turns n into a number",
+   "(( )) only reads one digit"
+  ],
+  "answer": 0,
+  "explain": "Arithmetic evaluates what the variable holds, array indexes included, and an index can hold a command substitution. Checking that the value is digits first keeps input from deciding what runs."
+ },
+ {
+  "id": "script-3-04",
+  "level": 3,
+  "q": "rm -rf -- \"${dir:?}/\" runs with dir empty. What happens?",
+  "choices": [
+   "The script stops with an error, before rm runs",
+   "rm removes everything under /",
+   "dir gets . as a default",
+   "rm asks for confirmation"
+  ],
+  "answer": 0,
+  "explain": "${dir:?} stops the script with 'dir: parameter null or not set' when dir is empty or unset. Without it, the line would be rm -rf -- \"/\". A typo in a variable name is enough to empty it."
+ },
+ {
+  "id": "script-3-05",
+  "level": 3,
+  "q": "n=0; grep x f | while read -r l; do n=$((n + 1)); done; printf '%s\\n' \"$n\" prints 0. Why?",
+  "choices": [
+   "The loop ran in a subshell: its n is gone after the pipe",
+   "grep found nothing, always",
+   "read can't count",
+   "printf prints the first value n had"
+  ],
+  "answer": 0,
+  "explain": "Each part of a pipeline runs in its own subshell, the while loop too: it counts in a copy of n. Feed it with process substitution instead, and the loop runs in the script itself: while …; done < <(grep x f)."
+ },
+ {
+  "id": "script-3-06",
+  "level": 3,
+  "q": "A script runs sed \"s/$old/$new/\" file, and new holds a/b. What happens?",
+  "choices": [
+   "Its / ends the expression: an error, or a wrong change",
+   "sed replaces old with a/b",
+   "sed escapes the / by itself",
+   "The shell refuses the line"
+  ],
+  "answer": 0,
+  "explain": "The value becomes part of sed's program, so its characters are code there: /, & and \\ mean something. Escape them first, or pass data to a program that takes it as data, like awk -v new=\"$new\"."
+ },
+ {
+  "id": "script-3-07",
+  "level": 3,
+  "q": "Two copies of a script must never run at once. Which lock is safe?",
+  "choices": [
+   "mkdir \"$lock\" 2>/dev/null || die \"already running\"",
+   "[ -e lock ] || touch lock",
+   "touch lock, then check that it exists",
+   "A variable LOCKED=1 at the top"
+  ],
+  "answer": 0,
+  "explain": "mkdir creates the folder or fails, in one step: two copies can't both succeed. With a test then a touch, both copies can pass the test before either creates the file. flock is the other safe tool on Linux."
+ },
+ {
+  "id": "script-3-08",
+  "level": 3,
+  "q": "Why does sort data.txt > data.txt leave data.txt empty?",
+  "choices": [
+   "The shell empties data.txt for > before sort reads it",
+   "sort can't read and write",
+   "sort deletes its input",
+   "> only works with new files"
+  ],
+  "answer": 0,
+  "explain": "Redirections happen before the command starts: > truncates data.txt, then sort reads an empty file. Write to another file, then move it: sort data.txt > data.tmp && mv data.tmp data.txt (or sort -o data.txt data.txt, which sort handles)."
+ }
+]

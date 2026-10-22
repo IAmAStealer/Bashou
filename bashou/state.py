@@ -16,7 +16,7 @@ from . import achievements, creatures, i18n
 DATA = Path(os.environ.get("BASHOU_DATA", Path.home() / ".local/share/bashou"))
 CACHE = Path(os.environ.get("BASHOU_CACHE", Path.home() / ".cache/bashou"))
 STATE = DATA / "state.json"
-SAVE_VERSION = 6        # bump with a step in migrate() whenever the save's shape changes
+SAVE_VERSION = 7        # bump with a step in migrate() whenever the save's shape changes
 
 
 @dataclass(frozen=True)
@@ -441,6 +441,14 @@ def migrate_families(state):
         best[pet] = forms[min(len(forms), max(form, saved)) - 1]
 
 
+def migrate_script_skill(state):
+    """Version 7 (owner, 2026-10-22): bash scripts became a skill of their own, next to bash at the prompt.
+    Who picked bash keeps getting its script lessons and fights."""
+    picks = state.get("skills")
+    if isinstance(picks, list) and "bash" in picks and "script" not in picks:
+        picks.insert(picks.index("bash") + 1, "script")
+
+
 def version_of(saved):
     """The version a save was written with (the first ones had none; a damaged one counts as those)."""
     version = saved.get("version", 1)
@@ -456,6 +464,7 @@ MIGRATIONS = [
     (lambda saved: True, migrate_form_ids),        # version 4; also a number written by hand since
     (lambda saved: "win_times" not in saved, migrate_win_times),   # version 5
     (lambda saved: version_of(saved) < 6, migrate_families),       # version 6
+    (lambda saved: version_of(saved) < 7, migrate_script_skill),   # version 7
 ]
 # Numbers in looks, starter_best, ladder_best and evolving (int in FIELDS) are forms saved before
 # version 4, turned into sprite ids by migrate_form_ids.

@@ -1,0 +1,90 @@
+{
+ "id": "script_cleanup",
+ "order": 258,
+ "skill": "script",
+ "after": [
+  "script_errors"
+ ],
+ "tools": [
+  "bash"
+ ],
+ "masters": [
+  "won trap_troll"
+ ],
+ "recall": [
+  "bash-2-09",
+  "bash-2-10",
+  "script-2-08",
+  "script-3-04"
+ ],
+ "fights": [
+  "trap_troll"
+ ],
+ "title": "Cleaning up",
+ "summary": "Temp files with mktemp, removed by a trap however the script ends; rm -r that can't hit /.",
+ "pages": [
+  {
+   "scheme": [
+    " tmp=/tmp/report.tmp       ✘ known name",
+    " tmp=$(mktemp) || exit 1   ✔ new, private"
+   ],
+   "point": 1,
+   "mark": [
+    "mktemp"
+   ],
+   "text": [
+    "/tmp is shared by every user of the machine. A name known in advance can be created first by someone else, or made a link to one of your files.",
+    "",
+    "- mktemp creates a new file with a random name that only you can read, and prints that name."
+   ],
+   "script": [
+    "tmp=$(mktemp) || exit 1"
+   ]
+  },
+  {
+   "scheme": [
+    " tmp=$(mktemp) || exit 1",
+    " trap 'rm -f -- \"$tmp\"' EXIT",
+    " …",
+    " die \"bad input\"     exit: the trap runs,",
+    "                     the temp file goes"
+   ],
+   "point": 1,
+   "mark": [
+    "trap"
+   ],
+   "text": [
+    "trap 'command' EXIT runs the command whenever the script ends: after the last line, at an exit or a die half way, at Ctrl+C. Not at kill -9: nothing runs then.",
+    "",
+    "- An rm on the last line never runs when the script stops earlier.",
+    "- Single quotes: $tmp is read when the trap runs. Keep tmp outside functions, so it still exists then."
+   ],
+   "script": [
+    "tmp=$(mktemp) || exit 1",
+    "trap 'rm -f -- \"$tmp\"' EXIT"
+   ]
+  },
+  {
+   "scheme": [
+    " rm -rf -- \"$dir/\"       dir empty: rm -rf /",
+    " rm -rf -- \"${dir:?}/\"   dir empty: stops",
+    " dir: parameter null or not set"
+   ],
+   "point": 1,
+   "mark": [
+    "${dir:?}"
+   ],
+   "text": [
+    "${dir:?} stops the script with an error when dir is empty or unset, before rm can run.",
+    "",
+    "- Use it in every rm -r on a variable: a typo in a name, and the variable is empty."
+   ],
+   "script": [
+    "rm -rf -- \"${dir:?}/\""
+   ],
+   "shellcheck_ok": [
+    "SC2154"
+   ]
+  }
+ ]
+}

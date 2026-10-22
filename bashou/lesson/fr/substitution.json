@@ -79,19 +79,19 @@
   },
   {
    "scheme": [
-    " set -e",
-    " out=$(backup_db)          échec : arrêt du script",
-    " echo \"$(backup_db)\"       échec : echo réussit,",
-    "                           le script continue",
+    " out=$(backup_db) || exit 1",
+    "                     échec : arrêt du script",
+    " echo \"$(backup_db)\"   échec : echo réussit,",
+    "                     le script continue",
     "",
     " if out=$(backup_db); then ... fi"
    ],
-   "point": 1,
+   "point": 0,
    "mark": [
     "out=$(backup_db)"
    ],
    "text": [
-    "x=$(cmd) garde le code de retour de cmd : if, || et set -e voient l'échec.",
+    "x=$(cmd) garde le code de retour de cmd : if et || voient l'échec.",
     "",
     "- Dans les arguments d'une autre commande, seul le code de celle-ci compte : echo réussit, l'échec est perdu.",
     "- Donc range d'abord la sortie, vérifie-la, puis utilise-la."
@@ -101,21 +101,22 @@
    "scheme": [
     " deploy.sh",
     " ┌────────────────────────────────────────┐",
-    " │ export DB_PASSWORD=\"$(pass show db)\"   │",
+    " │ DB_PASSWORD=$(pass show db) || exit 1  │",
+    " │ export DB_PASSWORD                     │",
     " │ ./migrate                              │",
     " └────────────────────────────────────────┘",
-    "",
     " tool --password \"$(pass show db)\"  ✘ ps le montre"
    ],
    "point": 2,
    "mark": [
-    "\"$(pass show db)\""
+    "$(pass show db)"
    ],
    "text": [
     "Dans un script, $(pass show db) lit le mot de passe au moment où le script tourne : le fichier ne le contient jamais, il peut donc aller dans git.",
     "",
-    "- Garde-le dans une variable. Les arguments d'une commande sont lisibles par tous les utilisateurs de la machine avec ps, pendant qu'elle tourne.",
-    "- pass écrit le mot de passe sur la première ligne. Si l'entrée contient d'autres lignes, ne garde que celle-là : $(pass show db | head -n 1)."
+    "- Garde-le dans une variable. Les arguments d'une commande se lisent avec ps, par tous, pendant qu'elle tourne.",
+    "- ✘ export X=$(cmd) perdrait un échec de pass : le statut est celui d'export. Affecte, puis exporte.",
+    "- pass écrit le mot de passe sur la première ligne : $(pass show db | head -n 1) ne garde que celle-là."
    ]
   }
  ]

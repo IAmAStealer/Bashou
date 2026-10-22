@@ -29,19 +29,19 @@
   {
    "do": "Mets-le dans un script qui prend en arguments le dossier à sauvegarder et le dossier de destination.",
    "done": "`./backup.sh ~/test ~/backups` marche, et un argument manquant affiche comment l'utiliser.",
-   "hint": "`$1` et `$2`, et `[[ $# -eq 2 ]]` pour vérifier que tu as les deux.",
+   "hint": "Pars du modèle (leçon Ton premier script) : `$1` et `$2`, et `(( $# == 2 )) || die \"usage: backup.sh DOSSIER DEST\"` pour vérifier que tu as les deux.",
    "why": "Les arguments permettent au même script de sauvegarder n'importe quel dossier n'importe où. Les vérifier d'abord empêche une faute de frappe de devenir une erreur bizarre plus loin."
   },
   {
    "do": "Ne garde que les 5 dernières sauvegardes : supprime les plus anciennes.",
    "done": "après 7 lancements, il ne reste que les 5 archives les plus récentes.",
-   "hint": "Les noms datés se trient dans l'ordre du temps : `ls`, `head -n -5` et `xargs rm`, ou une boucle. Teste avec de fausses dates (`touch backup-2020-01-0{1..7}.tar.gz`).",
+   "hint": "Les noms datés se trient dans l'ordre du temps, et un motif les donne triés : `backups=(\"$dest\"/backup-*.tar.gz)`. Tous sauf les 5 derniers, c'est `\"${backups[@]:0:${#backups[@]}-5}\"`, quand il y en a plus de 5 : `rm --` dessus. Teste avec de fausses dates (`touch backup-2020-01-0{1..7}.tar.gz`).",
    "why": "Des sauvegardes jamais nettoyées remplissent le disque, et alors la suivante échoue. Supprimer est dangereux : teste cette partie avec de faux fichiers d'abord."
   },
   {
    "do": "Vérifie chaque commande : si tar échoue (disque plein, dossier absent), le script le dit et se termine avec un code d'erreur.",
    "done": "un dossier absent donne un message clair, et `echo $?` affiche un code différent de 0.",
-   "hint": "`set -euo pipefail`, ou `tar … || { echo \"sauvegarde ratée\" >&2; exit 1; }`.",
+   "hint": "`tar … || die \"sauvegarde ratée\"`, avec le die du modèle : le message sur stderr, puis exit 1. Vérifie ainsi chaque commande qui compte (leçon Les erreurs dans les scripts).",
    "why": "Une sauvegarde qui échoue en silence est la pire : tu le découvres le jour où tu en as besoin. Les échecs bruyants sont une fonctionnalité."
   },
   {

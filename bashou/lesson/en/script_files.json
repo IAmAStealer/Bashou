@@ -1,0 +1,157 @@
+{
+ "id": "script_files",
+ "order": 256,
+ "skill": "script",
+ "after": [
+  "script_errors"
+ ],
+ "tools": [
+  "bash"
+ ],
+ "masters": [
+  "won dash_demon | won nomatch_nymph",
+  "won newline_nixie | won stdin_siren"
+ ],
+ "recall": [
+  "bash-2-03",
+  "bash-2-05",
+  "script-2-04",
+  "script-2-05",
+  "script-3-02"
+ ],
+ "fights": [
+  "dash_demon",
+  "nomatch_nymph",
+  "newline_nixie",
+  "stdin_siren"
+ ],
+ "title": "File names in scripts",
+ "summary": "Names can hold spaces, line breaks and leading dashes, and a pattern can match nothing: scripts handle all of it.",
+ "pages": [
+  {
+   "scheme": [
+    " for f in $(ls); do      ✘ cut at spaces",
+    "",
+    " for f in ./*; do        ✔ each name whole",
+    "   [[ -f $f ]] || continue",
+    "   wc -c < \"$f\"",
+    " done"
+   ],
+   "point": 2,
+   "mark": [
+    "./*"
+   ],
+   "text": [
+    "The shell expands ./* into the names themselves: one word each, even with spaces or line breaks inside.",
+    "",
+    "- ✘ $(ls) gives text instead, and the shell cuts that text at every space and line break.",
+    "- [[ -f $f ]] || continue skips what isn't a regular file, like folders."
+   ],
+   "script": [
+    "for f in ./*; do",
+    "[[ -f $f ]] || continue",
+    "wc -c < \"$f\"",
+    "done"
+   ]
+  },
+  {
+   "scheme": [
+    " $ ls",
+    " -n.tmp  a.tmp",
+    "",
+    " mv \"$f\" trash/       ✘ mv: invalid option",
+    " mv -- \"$f\" trash/    ✔",
+    " for f in ./*.tmp     ✔ ./-n.tmp: no option"
+   ],
+   "point": 4,
+   "mark": [
+    "--"
+   ],
+   "text": [
+    "A file name can start with a dash. Handed to a command, it looks like an option.",
+    "",
+    "- -- ends the options: whatever follows is a name.",
+    "- Or start the pattern with ./ : every name then starts with ./, never with a dash."
+   ],
+   "script": [
+    "mv -- \"$f\" trash/"
+   ],
+   "shellcheck_ok": [
+    "SC2154"
+   ]
+  },
+  {
+   "scheme": [
+    " a folder with no .jpg:",
+    " for f in ./*.jpg; do   turns once,",
+    "                        f='./*.jpg'",
+    "",
+    " shopt -s nullglob      ✔ no match: no turn",
+    " [[ -e $f ]] || continue  ✔ or skip it"
+   ],
+   "point": 4,
+   "mark": [
+    "shopt -s nullglob"
+   ],
+   "text": [
+    "When nothing matches, bash keeps the pattern as it is (zsh stops with an error instead). The loop then turns once, on a name that doesn't exist.",
+    "",
+    "- shopt -s nullglob turns 'no match' into an empty list.",
+    "- Or test inside the loop: [[ -e $f ]] || continue."
+   ],
+   "script": [
+    "shopt -s nullglob"
+   ]
+  },
+  {
+   "scheme": [
+    " find . -name '*.log' -exec gzip -- {} +",
+    "",
+    " find . -name '*.log' -print0 |",
+    "   xargs -0 gzip --",
+    "",
+    " while IFS= read -r -d '' f; do",
+    "   gzip -- \"$f\"",
+    " done < <(find . -name '*.log' -print0)"
+   ],
+   "point": 0,
+   "mark": [
+    "-exec",
+    "-print0"
+   ],
+   "text": [
+    "For a whole tree, let find hand the names over safely:",
+    "",
+    "- -exec cmd {} + runs cmd on many names at once, each one whole.",
+    "- -print0 ends each name with a zero byte, the one character a name can't hold: xargs -0 and read -d '' cut there, and only there."
+   ],
+   "script": [
+    "find . -name '*.log' -exec gzip -- {} +",
+    "while IFS= read -r -d '' f; do",
+    "gzip -- \"$f\"",
+    "done < <(find . -name '*.log' -print0)"
+   ]
+  },
+  {
+   "scheme": [
+    " while IFS= read -r host; do",
+    "   ssh -n \"$host\" uptime    -n: hands off",
+    " done < hosts.txt          the list"
+   ],
+   "point": 1,
+   "mark": [
+    "-n"
+   ],
+   "text": [
+    "- IFS= keeps the spaces at both ends of a line, -r keeps its backslashes.",
+    "- Every command inside the loop shares the loop's input. ssh reads it to pass it on, and swallows the rest of the list: give it -n, or < /dev/null.",
+    "- ✘ for line in $(cat file) cuts at every space, not only at line ends."
+   ],
+   "script": [
+    "while IFS= read -r host; do",
+    "ssh -n \"$host\" uptime",
+    "done < hosts.txt"
+   ]
+  }
+ ]
+}

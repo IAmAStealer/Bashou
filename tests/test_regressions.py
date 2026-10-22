@@ -52,6 +52,7 @@ class ArenaBugs(unittest.TestCase):
         expected.update({ch.id: ch.tools[0] for m in (challenges.everyday, challenges.scripting, challenges.system,
                                                      challenges.gitfights) for ch in m.ALL})
         expected.update({ch.id: ch.tools[0] for ch in challenges.network.ALL})
+        expected.update({ch.id: "bash" for ch in challenges.shellscript.ALL})
         expected.update({"linker_lynx": "gcc", "warning_wraith": "gcc", "segfault_salamander": "gdb", "breakpoint_beetle": "gdb"})
         editor = challenges.BY_ID["mirror_mimic"].tools[0]                  # the first editor installed
         expected.update({"mirror_mimic": editor, "repo_revenant": editor, "enabled_ettin": "dnf"})
@@ -783,7 +784,7 @@ class SaveSafetyTest(TempState):
                                            "starter": "cat", "tools": {"ls": 3}, "skills": ["bash"]}))
         s = state.load()
         self.assertEqual((s["pets"], s["achievements"], s["commands"]), ([], [], 12))
-        self.assertEqual((s["starter"], s["tools"], s["skills"]), ("star", {"ls": 3}, ["bash"]))
+        self.assertEqual((s["starter"], s["tools"], s["skills"]), ("star", {"ls": 3}, ["bash", "script"]))   # bash learners get scripts (v7)
         self.assertEqual(list(state.DATA.glob("state.json.broken-*")), [])
 
     def test_an_old_save_is_upgraded_on_disk_and_kept(self):

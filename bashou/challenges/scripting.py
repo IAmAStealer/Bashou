@@ -20,7 +20,7 @@ def runs(work, *cmd):
 
 # --- Stderr Stalker: keep only the errors, with 2> -----------------------------------------------------
 
-NOISY = """#!/bin/bash
+NOISY = """#!/usr/bin/env bash
 # Checks every room: what's fine goes to the screen (stdout), what's wrong to the errors (stderr).
 {lines}
 """
@@ -94,7 +94,7 @@ SPACE_SPRITE = Challenge(
 
 # --- Shebang Shade: the first line of a script, and the right to run it ---------------------------------
 
-REPORT = """#/bin/bash
+REPORT = """#/usr/bin/env bash
 # Says how many lines each .txt file has.
 for f in *.txt; do
   echo "$f: $(wc -l < "$f")"
@@ -123,15 +123,16 @@ def shebang_verify(work, meta, value):
 
 
 SHEBANG_SHADE = Challenge(
-    level=1, id="shebang_shade", pet="hedgehog", tools=("chmod",) + EDITORS, threat="Shebang Shade",
+    level=1, id="shebang_shade", pet="hedgehog", tools=("chmod",) + EDITORS, threat="Shebang Shade", skill="script",
     requires=["chmod", "sed"], fix=True, uses=lambda a: "chmod" in a.tools,
     task="The Shebang Shade ate a character from the first line of report.sh, and took away the right to run "
          "it.\nMake ./report.sh run. Then: verify",
     help="Here, look at the Usage line and at u+x in the examples: who may do what.",
     hints=["Two things to fix. The first line, the shebang, says which program reads the script: #! then "
-           "the path, #!/bin/bash. Here the ! is missing. And a file needs the x (execute) right to run as "
+           "the program, #!/usr/bin/env bash (env finds bash in your PATH: a recent bash wins over an old "
+           "/bin/bash, like the Mac's). Here the ! is missing. And a file needs the x (execute) right to run as "
            "./report.sh: ls -l shows rw-r--r--, no x.",
-           "Fix the first line with {editor} report.sh (or sed -i '1s/.*/#!\\/bin\\/bash/' report.sh), then "
+           "Fix the first line with {editor} report.sh (or sed -i '1s|.*|#!/usr/bin/env bash|' report.sh), then "
            "chmod +x report.sh, then ./report.sh"],
     setup=shebang_setup, verify=shebang_verify,
 )
@@ -210,7 +211,7 @@ def index_setup(work, rng):
     """pick.sh prints ${colors[1]}: the second color in bash (which runs it), the first one in zsh."""
     colors = rng.sample(COLORS, 5)
     script = work / "pick.sh"
-    script.write_text("#!/bin/bash\n# The Index Imp's pick of the day.\ncolors=(" + " ".join(colors) + ")\n"
+    script.write_text("#!/usr/bin/env bash\n# The Index Imp's pick of the day.\ncolors=(" + " ".join(colors) + ")\n"
                       'echo "${colors[1]}"\n')
     script.chmod(0o755)
     return {"answer": colors[1], "args": {"first": colors[0]}}
@@ -224,7 +225,7 @@ INDEX_IMP = Challenge(
          "Which color does pick.sh print? Then: answer <color>",
     help="Here, --help won't help: read the first line of pick.sh (head -1 pick.sh). It names the shell that "
          "runs the script.",
-    hints=["Read the script before you guess: cat pick.sh. Its first line, #!/bin/bash, says that bash runs it, "
+    hints=["Read the script before you guess: cat pick.sh. Its first line, #!/usr/bin/env bash, says that bash runs it, "
            "whatever shell you type in. Bash counts the items of a list from 0, so [1] is the second color.",
            "Try: ./pick.sh (or bash pick.sh). The script answers for itself."],
     zsh="You type in zsh, where ${colors[1]} is the first item ({first}). pick.sh still runs in bash, because "
@@ -251,7 +252,7 @@ def unmatched_setup(work, rng):
     for name in rng.sample(("notes.txt", "todo.txt", "photo.jpg", "song.ogg", "plan.md"), 3):
         (work / name).write_text("")
     script = work / "nothing.sh"
-    script.write_text(f"#!/bin/bash\n# Lists the .{ext} files here.\necho *.{ext}\n")
+    script.write_text(f"#!/usr/bin/env bash\n# Lists the .{ext} files here.\necho *.{ext}\n")
     script.chmod(0o755)
     return {"answer": f"*.{ext}", "args": {"ext": ext}}
 

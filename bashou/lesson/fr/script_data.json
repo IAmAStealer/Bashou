@@ -1,0 +1,79 @@
+{
+ "title": "Les données dans les scripts",
+ "summary": "Afficher les valeurs avec printf, tester avec [[ ]] et (( )), vérifier les nombres, et garder les listes dans des tableaux.",
+ "pages": [
+  {
+   "scheme": [
+    " name='-n'",
+    " echo \"$name\"             ✘ n'affiche rien",
+    " printf '%s\\n' \"$name\"    ✔ affiche -n",
+    "",
+    " printf '%s: %d files\\n' \"$dir\" \"$n\""
+   ],
+   "point": 2,
+   "mark": [
+    "printf"
+   ],
+   "text": [
+    "printf prend d'abord un format, puis les valeurs : %s est un texte, %d un nombre entier, \\n la fin de la ligne.",
+    "",
+    "- echo lit son premier mot comme une option quand il y ressemble (-n, -e). printf ne fait jamais ça avec ses valeurs.",
+    "- Ne mets jamais de données dans le format : printf \"$x\" casse sur un %."
+   ]
+  },
+  {
+   "scheme": [
+    " [[ -f $f ]]         un fichier ? sans guillemets",
+    " [[ $a == \"$b\" ]]    le même texte",
+    " [[ $a == *.txt ]]   un motif, sans guillemets",
+    " (( n > 5 ))         des nombres, comme en maths"
+   ],
+   "point": 0,
+   "mark": [
+    "[[",
+    "(("
+   ],
+   "text": [
+    "En bash, [[ ]] est le test à écrire : une variable vide ou avec des espaces ne peut pas le casser, et && et || marchent dedans.",
+    "",
+    "- À droite de ==, des guillemets veulent dire le texte exact, sans guillemets un motif.",
+    "- (( )) compare des nombres : pas besoin de $, et > veut dire plus grand."
+   ]
+  },
+  {
+   "scheme": [
+    " read -r n",
+    " [[ $n =~ ^[0-9]+$ ]] || die \"not a number: $n\"",
+    " (( n > 5 )) && printf '%s\\n' big"
+   ],
+   "point": 1,
+   "mark": [
+    "^[0-9]+$"
+   ],
+   "text": [
+    "(( )) lit une valeur comme une expression. Une valeur comme x[$(date)] lancerait date : ce qu'on tape décide de ce qui tourne.",
+    "",
+    "- Alors vérifie d'abord que ce sont des chiffres. =~ teste une expression régulière : ^[0-9]+$, ce sont des chiffres, du début à la fin."
+   ]
+  },
+  {
+   "scheme": [
+    " opts=\"-v --name $n\"      ✘ une seule chaîne",
+    " opts=(-v --name \"$n\")    ✔ un tableau",
+    " tool \"${opts[@]}\"         chaque élément entier",
+    " tool \"$@\"                 tes arguments"
+   ],
+   "point": 1,
+   "mark": [
+    "opts=(",
+    "\"${opts[@]}\""
+   ],
+   "text": [
+    "Une liste d'arguments vit dans un tableau, pas dans une chaîne : une chaîne ne peut pas garder « my file » comme un seul mot.",
+    "",
+    "- \"${opts[@]}\" donne chaque élément comme un mot à part. \"$@\" fait pareil avec les arguments du script ; $* les colle ensemble.",
+    "- Tes propres variables en minuscules : les noms en MAJUSCULES (PATH, HOME) sont à l'environnement."
+   ]
+  }
+ ]
+}

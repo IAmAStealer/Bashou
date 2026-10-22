@@ -1,0 +1,132 @@
+{
+ "id": "script_errors",
+ "order": 254,
+ "skill": "script",
+ "after": [
+  "prompt_script"
+ ],
+ "tools": [
+  "bash"
+ ],
+ "masters": [
+  "won masked_mole",
+  "won errexit_eel"
+ ],
+ "recall": [
+  "bash-2-04",
+  "bash-2-20",
+  "script-2-02",
+  "script-2-03",
+  "script-3-01"
+ ],
+ "fights": [
+  "masked_mole",
+  "errexit_eel"
+ ],
+ "title": "Errors in scripts",
+ "summary": "Check the steps that matter yourself; know what set -e and pipefail catch, and what they miss.",
+ "pages": [
+  {
+   "scheme": [
+    " if ! cp -- \"$src\" \"$dst\"; then",
+    "   die \"cannot copy $src\"",
+    " fi",
+    "",
+    " cp -- \"$src\" \"$dst\" || die \"cannot copy $src\""
+   ],
+   "point": 0,
+   "mark": [
+    "if !",
+    "||"
+   ],
+   "text": [
+    "Every command ends with a status: 0 when it worked, another number when it didn't. A script reads it to decide what comes next.",
+    "",
+    "- if ! cmd runs cmd and takes the road when it failed. cmd || die does the same on one line.",
+    "- die is the template's: the message on stderr, then exit 1."
+   ],
+   "script": [
+    "if ! cp -- \"$src\" \"$dst\"; then",
+    "die \"cannot copy $src\"",
+    "fi",
+    "cp -- \"$src\" \"$dst\" || die \"cannot copy $src\""
+   ],
+   "shellcheck_ok": [
+    "SC2154"
+   ]
+  },
+  {
+   "scheme": [
+    " set -e     stops at a command that fails…",
+    "",
+    " …but not:",
+    "  if cmd; then    a failure here is an answer",
+    "  cmd || other    the same",
+    "  ((n++))         n=0: it 'fails', and stops!",
+    "  local x=$(cmd)  ✘ local's status (0) wins"
+   ],
+   "point": 5,
+   "mark": [
+    "((n++))"
+   ],
+   "text": [
+    "set -e stops a script at the first command that fails. It's a safety net, with holes.",
+    "",
+    "- In if, while, && and ||, a failure is an answer: set -e lets it go, even inside functions called from there.",
+    "- ((n++)) gives the old value: 0 counts as false, so the first count stops the script.",
+    "- Check what matters yourself. If you add set -e too, know where it doesn't look."
+   ]
+  },
+  {
+   "scheme": [
+    " stamp() {",
+    "   local sum=$(cksum < \"$1\")  ✘ never fails",
+    "",
+    "   local sum                  ✔",
+    "   sum=$(cksum < \"$1\") || die \"no $1\"",
+    " }"
+   ],
+   "point": 4,
+   "mark": [
+    "local sum"
+   ],
+   "text": [
+    "x=$(cmd) keeps cmd's status: || and if see the failure.",
+    "",
+    "- ✘ local x=$(cmd): local, export and readonly are commands too, so the status you get is local's, and local always works.",
+    "- Declare first, assign on the next line: the failure comes back."
+   ],
+   "script": [
+    "stamp() {",
+    "local sum",
+    "sum=$(cksum < \"$1\") || die \"no $1\"",
+    "}"
+   ]
+  },
+  {
+   "scheme": [
+    " grep ERROR app.log | sort > errors.txt",
+    "   status: sort's, 0, even with no app.log",
+    "",
+    " set -o pipefail",
+    "   status: the last stage that failed (2)",
+    "",
+    " cmd | head -n 1  may now fail with 141:",
+    "   head stopped reading, cmd got SIGPIPE"
+   ],
+   "point": 3,
+   "mark": [
+    "set -o pipefail"
+   ],
+   "text": [
+    "A pipeline's status is its last command's: a failure earlier in the pipe is lost.",
+    "",
+    "- set -o pipefail keeps it: the pipeline fails when any stage fails.",
+    "- It also counts a writer that head cut short (status 141). Turn it on where you check pipes, and remember that case."
+   ],
+   "script": [
+    "set -o pipefail"
+   ]
+  }
+ ]
+}

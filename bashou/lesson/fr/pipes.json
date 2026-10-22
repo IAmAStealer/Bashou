@@ -19,7 +19,8 @@
     "",
     "- ls affiche les noms de fichiers. Dans un pipe, il en écrit un par ligne.",
     "- wc -l compte les lignes. Ensemble : combien de fichiers ici ?",
-    "- Rien n'est écrit sur le disque entre les deux."
+    "- Rien n'est écrit sur le disque entre les deux.",
+    "- ls | wc -l va très bien au prompt, pour regarder. Un script compte les noms autrement (leçon Au prompt ou dans un script)."
    ]
   },
   {

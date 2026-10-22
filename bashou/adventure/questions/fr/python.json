@@ -283,6 +283,6 @@
    "text=True"
   ],
   "answer": 0,
-  "explain": "subprocess.run ne lève pas d'erreur quand la commande échoue : il range le code de retour dans result.returncode et continue. Avec check=True, un code non nul lève CalledProcessError et le script s'arrête, comme set -e en bash. Sinon, lis returncode toi-même."
+  "explain": "subprocess.run ne lève pas d'erreur quand la commande échoue : il range le code de retour dans result.returncode et continue. Avec check=True, un code non nul lève CalledProcessError et le script s'arrête, comme cmd || exit 1 en bash. Sinon, lis returncode toi-même."
  }
 ]

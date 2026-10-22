@@ -44,7 +44,7 @@ class JudgeTest(unittest.TestCase):
                 cmd = "gcc prog.c -o prog" if "gcc" in ch.tools else "python3 prog.py"
             if ch in challenges.rust.ALL:
                 cmd = "rustc prog.rs && ./counter"
-            if "micro" in ch.tools:                                      # repository files: edit them
+            if "micro" in ch.tools and ch.skill != "script":             # repository files: edit them
                 cmd = f"{ch.tool} the.repo"
             if ch.id == "cleartext_cricket":                             # edit the script, then use pass
                 cmd = "pass show db/prod"

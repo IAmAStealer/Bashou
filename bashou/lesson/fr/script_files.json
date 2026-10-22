@@ -1,0 +1,105 @@
+{
+ "title": "Les noms de fichiers dans les scripts",
+ "summary": "Les noms peuvent contenir des espaces, des sauts de ligne, commencer par un tiret, et un motif peut ne rien trouver : un script gère tout ça.",
+ "pages": [
+  {
+   "scheme": [
+    " for f in $(ls); do      ✘ coupé aux espaces",
+    "",
+    " for f in ./*; do        ✔ chaque nom entier",
+    "   [[ -f $f ]] || continue",
+    "   wc -c < \"$f\"",
+    " done"
+   ],
+   "point": 2,
+   "mark": [
+    "./*"
+   ],
+   "text": [
+    "Le shell développe ./* en noms eux-mêmes : un mot chacun, même avec des espaces ou des sauts de ligne dedans.",
+    "",
+    "- ✘ $(ls) donne du texte à la place, et le shell coupe ce texte à chaque espace et saut de ligne.",
+    "- [[ -f $f ]] || continue saute ce qui n'est pas un fichier normal, comme les dossiers."
+   ]
+  },
+  {
+   "scheme": [
+    " $ ls",
+    " -n.tmp  a.tmp",
+    "",
+    " mv \"$f\" trash/       ✘ mv: invalid option",
+    " mv -- \"$f\" trash/    ✔",
+    " for f in ./*.tmp     ✔ ./-n.tmp : pas d'option"
+   ],
+   "point": 4,
+   "mark": [
+    "--"
+   ],
+   "text": [
+    "Un nom de fichier peut commencer par un tiret. Donné à une commande, il ressemble à une option.",
+    "",
+    "- -- termine les options : ce qui suit est un nom.",
+    "- Ou commence le motif par ./ : chaque nom commence alors par ./, jamais par un tiret."
+   ]
+  },
+  {
+   "scheme": [
+    " un dossier sans .jpg :",
+    " for f in ./*.jpg; do   un tour,",
+    "                        f='./*.jpg'",
+    "",
+    " shopt -s nullglob      ✔ rien : aucun tour",
+    " [[ -e $f ]] || continue  ✔ ou saute-le"
+   ],
+   "point": 4,
+   "mark": [
+    "shopt -s nullglob"
+   ],
+   "text": [
+    "Quand rien ne correspond, bash garde le motif tel quel (zsh, lui, s'arrête sur une erreur). La boucle fait alors un tour, sur un nom qui n'existe pas.",
+    "",
+    "- shopt -s nullglob change « rien ne correspond » en liste vide.",
+    "- Ou teste dans la boucle : [[ -e $f ]] || continue."
+   ]
+  },
+  {
+   "scheme": [
+    " find . -name '*.log' -exec gzip -- {} +",
+    "",
+    " find . -name '*.log' -print0 |",
+    "   xargs -0 gzip --",
+    "",
+    " while IFS= read -r -d '' f; do",
+    "   gzip -- \"$f\"",
+    " done < <(find . -name '*.log' -print0)"
+   ],
+   "point": 0,
+   "mark": [
+    "-exec",
+    "-print0"
+   ],
+   "text": [
+    "Pour tout un arbre, laisse find passer les noms sans risque :",
+    "",
+    "- -exec cmd {} + lance cmd sur beaucoup de noms à la fois, chacun entier.",
+    "- -print0 termine chaque nom par un octet nul, le seul caractère qu'un nom ne peut pas contenir : xargs -0 et read -d '' coupent là, et seulement là."
+   ]
+  },
+  {
+   "scheme": [
+    " while IFS= read -r host; do",
+    "   ssh -n \"$host\" uptime    -n : laisse la",
+    " done < hosts.txt          liste tranquille"
+   ],
+   "point": 1,
+   "mark": [
+    "-n"
+   ],
+   "text": [
+    "- IFS= garde les espaces aux deux bouts d'une ligne, -r garde ses antislashs.",
+    "- Chaque commande dans la boucle partage l'entrée de la boucle. ssh la lit pour la transmettre, et avale le reste de la liste : donne-lui -n, ou < /dev/null.",
+    "- ✘ for line in $(cat file) coupe à chaque espace, pas seulement en fin de ligne."
+   ]
+  }
+ ]
+}

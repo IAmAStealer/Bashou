@@ -21,9 +21,11 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
         with:
           python-version: ${{ matrix.python }}
-      - name: qrencode, the reference for our QR codes, and zsh (its tests are required)
-        run: sudo apt-get install -y -qq --no-install-recommends qrencode zsh
+      - name: qrencode, the reference for our QR codes, zsh (its tests are required) and ShellCheck (bash samples)
+        run: sudo apt-get install -y -qq --no-install-recommends qrencode zsh shellcheck
       - name: Unit and shell tests
+        env:
+          BASHOU_REQUIRE_SHELLCHECK: "1"     # tests/test_bash_style.py fails instead of skipping
         run: |
           python -m unittest -v 2> tests.log && exit 0
           cat tests.log
@@ -121,9 +123,11 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
-      - name: A recent bash, qrencode (the reference for our QR codes) and GNU sed (the fights' reference solutions)
-        run: brew install --quiet bash qrencode gnu-sed
+      - name: A recent bash, qrencode (the reference for our QR codes), GNU sed (the fights' reference solutions) and ShellCheck
+        run: brew install --quiet bash qrencode gnu-sed shellcheck
       - name: Unit and shell tests
+        env:
+          BASHOU_REQUIRE_SHELLCHECK: "1"
         run: |
           /usr/bin/python3 --version
           bash --version | head -1

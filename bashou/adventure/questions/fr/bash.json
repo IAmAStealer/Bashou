@@ -223,15 +223,15 @@
  {
   "id": "bash-2-04",
   "level": 2,
-  "q": "Pourquoi commencer un script par `set -euo pipefail` ?",
+  "q": "Un script commence par set -euo pipefail. Est-ce que ça attrape chaque échec ?",
   "choices": [
-   "Arrêt sur commande ratée, variable vide ou pipe cassé",
-   "Il rend le script plus rapide",
-   "Il affiche chaque commande",
-   "Il lance le script en root"
+   "Non : set -e laisse passer les échecs dans if, && et ||",
+   "Oui : toute commande en échec l'arrête",
+   "Oui, mais seulement dans les fonctions",
+   "Non : ça ne marche qu'en root"
   ],
   "answer": 0,
-  "explain": "Par défaut bash continue après une erreur. -e arrête à la première commande ratée, -u arrête sur une variable jamais définie (une faute de frappe devient une erreur, pas un texte vide), -o pipefail fait échouer un pipe si une partie échoue. Sans eux, un cd raté est suivi d'un rm au mauvais endroit."
+  "explain": "set -e arrête à une commande en échec, sauf là où un échec est une réponse (if, while, &&, ||, et les fonctions appelées de là), après un local ou un export qui affecte un $( ), et il s'arrête sur ((n++)) avec n à 0. -u fait d'une variable non définie une erreur ; pipefail fait échouer un pipe dès qu'une étape échoue. Un filet troué : vérifie toi-même ce qui compte."
  },
  {
   "id": "bash-2-05",
@@ -296,7 +296,7 @@
    "mktemp --autoremove"
   ],
   "answer": 0,
-  "explain": "trap 'commande' EXIT enregistre une commande que bash lance quand le script se termine : fin normale, erreur avec set -e, ou Ctrl+C. Un rm sur la dernière ligne ne tourne jamais si le script s'arrête avant. Duo habituel : tmp=$(mktemp) puis trap 'rm -f \"$tmp\"' EXIT."
+  "explain": "trap 'commande' EXIT enregistre une commande que bash lance quand le script se termine : fin normale, un exit ou un die en route, ou Ctrl+C. Un rm sur la dernière ligne ne tourne jamais si le script s'arrête avant. Duo habituel : tmp=$(mktemp) puis trap 'rm -f -- \"$tmp\"' EXIT."
  },
  {
   "id": "bash-2-10",
@@ -665,7 +665,7 @@
  {
   "id": "bash-2-21",
   "level": 2,
-  "q": "Dans zsh, tu lances ./backup.sh. Sa première ligne est #!/bin/bash. Quel shell lit la suite du script ?",
+  "q": "Dans zsh, tu lances ./backup.sh. Sa première ligne est #!/usr/bin/env bash. Quel shell lit la suite du script ?",
   "choices": [
    "bash",
    "zsh, le shell où tu as tapé",
@@ -673,7 +673,7 @@
    "Le shell le plus rapide"
   ],
   "answer": 0,
-  "explain": "La première ligne, #!/bin/bash, dit au système quel programme lit le script. Quel que soit le shell où tu tapes, c'est bash qui le lance. C'est pour ça qu'un script se comporte pareil sur chaque machine : il ne dépend pas du shell de la personne qui le lance."
+  "explain": "La première ligne, #!/usr/bin/env bash, dit au système quel programme lit le script. Quel que soit le shell où tu tapes, c'est bash qui le lance. C'est pour ça qu'un script se comporte pareil sur chaque machine : il ne dépend pas du shell de la personne qui le lance."
  },
  {
   "id": "bash-2-22",
@@ -699,6 +699,6 @@
    "bash : red. zsh : green"
   ],
   "answer": 0,
-  "explain": "bash numérote les éléments d'un tableau à partir de 0 : [1] est le deuxième, green. zsh les numérote à partir de 1 : [1] est le premier, red. Dans un script qui commence par #!/bin/bash, compte depuis 0, car c'est bash qui le lance."
+  "explain": "bash numérote les éléments d'un tableau à partir de 0 : [1] est le deuxième, green. zsh les numérote à partir de 1 : [1] est le premier, red. Dans un script qui commence par #!/usr/bin/env bash, compte depuis 0, car c'est bash qui le lance."
  }
 ]

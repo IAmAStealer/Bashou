@@ -109,7 +109,7 @@ de modèle d'IA, pas de jetons dépensés pour savoir ce que fait une commande. 
 compagnon pour tous tes terminaux, et il ne dessine jamais par-dessus ton texte.
 
 - **`bashou learn <commande>`** démonte une commande et explique chaque morceau : la commande, chaque option,
-  les arguments, les pipes et les redirections (81 commandes, de `ls` à `tar`, `awk`, `gpg` et `kubectl`).
+  les arguments, les pipes et les redirections (87 commandes, de `ls` à `tar`, `awk`, `gpg` et `kubectl`).
   Sans commande, il explique la dernière que ton compagnon t'a suggérée.
 - **Ton compagnon donne des astuces** en chemin (Ctrl+R, `cd -`, `du -sh *`…) et repère les outils que tu
   n'as pas encore essayés.
@@ -121,6 +121,10 @@ compagnon pour tous tes terminaux, et il ne dessine jamais par-dessus ton texte.
   monte jusqu'aux droits Linux, aux services et aux conflits de fusion git. Une commande réussie avec le bon
   outil touche l'ennemi ; les autres te coûtent un cœur. Les combats de code te donnent un petit fichier Python
   ou C cassé à réparer (un `;` oublié, une boucle sans fin, une fuite de mémoire, une injection shell) ; les
+  combats de scripts te donnent un script bash bâti sur un petit modèle, avec une habitude qui va au prompt et
+  devient un bug dans un script (la sortie de `ls` dans une boucle, un nom qui commence par `-`, `local x=$(cmd)`,
+  `echo` sur des données, un fichier temporaire oublié) : ta correction ne gagne que si le script remarche sur
+  les fichiers piégés de Bashou ; les
   combats de paquets interrogent ta propre machine avec `apt`, `dpkg` ou `rpm`, ou te font réparer un fichier
   de dépôt ; les combats CI/CD te donnent un fichier GitHub Actions ou GitLab CI à réparer ; les combats SQL
   te donnent une base SQLite à interroger et à réparer. Les combats de secrets apprennent `gpg` et `pass`, avec
@@ -141,8 +145,8 @@ compagnon pour tous tes terminaux, et il ne dessine jamais par-dessus ton texte.
   25 secondes ; 5 erreurs terminent la partie.
 - **`bashou arena`** : viens te battre quand tu veux. Un combat chronométré, ou une enquête de sécurité sans
   chrono (un fichier caché, une porte dérobée dans cron, un binaire SUID).
-- **`bashou adventure`** : une balade à travers 13 thèmes (logique de code, bash, Linux, systemd, Python, Rust,
-  C, Debian, Rocky Linux, CI/CD, SQL, réseaux, outils d'IA) avec 394 questions sur ce qui tourne mal et ce qu'il faut
+- **`bashou adventure`** : une balade à travers 14 thèmes (logique de code, bash au prompt, scripts bash, Linux, systemd, Python, Rust,
+  C, Debian, Rocky Linux, CI/CD, SQL, réseaux, outils d'IA) avec 418 questions sur ce qui tourne mal et ce qu'il faut
   vérifier en premier, des boss, et des coffres qui s'ouvrent avec de vraies commandes.
 
 ![bashou fight : une Planète et ses cœurs face à l'Hydre des logs, la tâche dans une bulle, et le shell de

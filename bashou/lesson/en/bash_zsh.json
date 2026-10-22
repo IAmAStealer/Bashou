@@ -20,19 +20,19 @@
   {
    "scheme": [
     " $ echo $0",
-    "   zsh            the shell you type in",
+    "   zsh                  the shell you type in",
     "",
-    " #!/bin/bash     first line of a script:",
-    "                 ./script.sh runs it in bash"
+    " #!/usr/bin/env bash  first line of a script:",
+    "                      ./script.sh: bash runs it"
    ],
    "point": 3,
    "mark": [
-    "#!/bin/bash"
+    "#!/usr/bin/env bash"
    ],
    "text": [
     "Your terminal runs a shell: often bash on Linux, zsh on a Mac and for many developers. Both read the same commands, pipes, quotes and loops, so what Bashou teaches works in both.",
     "",
-    "- A script names its shell on its first line: #!/bin/bash. When you run it as ./script.sh, bash runs it, even from zsh, so it behaves the same for everyone.",
+    "- A script names its shell on its first line: #!/usr/bin/env bash. When you run it as ./script.sh, bash runs it, even from zsh, so it behaves the same for everyone.",
     "- echo $0 shows the shell you're typing in right now (a leading - just means a login shell)."
    ]
   },
@@ -86,7 +86,7 @@
    "text": [
     "A list (an array) keeps several values in one variable. bash numbers its items from 0, zsh from 1: ${colors[1]} is the second color in bash and the first one in zsh.",
     "",
-    "- In a script that starts with #!/bin/bash, count from 0: bash runs it.",
+    "- In a script that starts with #!/usr/bin/env bash, count from 0: bash runs it.",
     "- ${colors[@]} gives all the items, the same way in both shells."
    ]
   }

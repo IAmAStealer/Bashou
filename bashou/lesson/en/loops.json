@@ -54,7 +54,7 @@
   },
   {
    "scheme": [
-    " while read -r host; do",
+    " while IFS= read -r host; do",
     "   ping -c1 \"$host\"",
     " done < hosts.txt",
     "        ▲",
@@ -67,7 +67,7 @@
    "text": [
     "while read handles a file line by line, even long files.",
     "",
-    "- -r keeps backslashes as they are.",
+    "- IFS= keeps the spaces at both ends of a line, -r keeps backslashes as they are.",
     "- Don't use for line in $(cat file): it cuts at every space, not only at line ends."
    ]
   },

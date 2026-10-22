@@ -65,7 +65,7 @@
     "[ ] est une commande faite pour les questions : elle répond oui ou non, comme grep -q.",
     "",
     "- Laisse une espace après [ et avant ] : [-f x] n'est pas compris.",
-    "- Mets les variables entre guillemets doubles : une variable vide casserait le test.",
+    "- Mets les variables entre guillemets doubles : une variable vide casserait le test. Dans les scripts bash, [[ ]] fait le même travail sans ce piège (leçon Les données dans les scripts).",
     "$ if [ -d backup ]; then echo 'prêt'; fi"
    ]
   },

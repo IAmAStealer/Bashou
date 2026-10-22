@@ -26,7 +26,7 @@ def run(script, work, *args):
 
 # --- Negation Gnome: a `!` that turns the guard around ----------------------------------------------
 
-DOOR = """#!/bin/bash
+DOOR = """#!/usr/bin/env bash
 # The party door: only the guests written in guests.txt may come in.
 # Usage: bash door.sh NAME
 if ! grep -qx "$1" guests.txt; then
@@ -39,7 +39,7 @@ fi
 
 # A test to start from (owner): a case you know the answer to, run after every change. The player
 # adds the next case; verify runs its own cases anyway.
-DOOR_TEST = """#!/bin/bash
+DOOR_TEST = """#!/usr/bin/env bash
 # A small test for door.sh. Run it: bash test_door.sh
 # A test is a list of cases you already know the answer to. The test runs the script on each one and
 # compares what it prints with what it should print. Programmers keep tests next to their code and run
@@ -86,7 +86,7 @@ def door_verify(work, meta, value):
 
 # --- Coin Wraith: heads OR tails, `||` where both conditions must hold ------------------------------------------------
 
-SAVE = """#!/bin/bash
+SAVE = """#!/usr/bin/env bash
 # Saves {file} into the folder {folder}/, but only when BOTH are there: the file and the folder.
 if [ -f {file} ] || [ -d {folder} ]; then
   cp {file} {folder}/ && echo saved
@@ -96,7 +96,7 @@ fi
 """
 
 
-SAVE_TEST = """#!/bin/bash
+SAVE_TEST = """#!/usr/bin/env bash
 # A small test for save.sh. Run it: bash test_save.sh
 # save.sh must say "saved" only when BOTH the file and the folder are there. So the test tries each
 # case: it hides one of them, runs the script, then puts it back. A FAIL means the condition is wrong.

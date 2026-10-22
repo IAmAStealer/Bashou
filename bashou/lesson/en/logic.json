@@ -84,7 +84,7 @@
     "[ ] is a command made for questions: it answers yes or no, like grep -q.",
     "",
     "- Keep a space after [ and before ]: [-f x] is not understood.",
-    "- Put variables in double quotes: an empty one would break the test.",
+    "- Put variables in double quotes: an empty one would break the test. In bash scripts, [[ ]] does the same job without that trap (lesson Data in scripts).",
     "$ if [ -d backup ]; then echo 'ready'; fi"
    ]
   },

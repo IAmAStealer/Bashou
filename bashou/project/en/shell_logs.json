@@ -53,7 +53,7 @@
   {
    "do": "Put it in a script that takes the log file as its argument.",
    "done": "`./report.sh access.log` prints the counts, and a missing file prints a clear message.",
-   "hint": "`$1`, `[[ -r $1 ]]` to check you can read it, and functions to keep each count apart.",
+   "hint": "Start from the template (lesson Your first script): `$1`, `[[ -r $1 ]] || die \"cannot read $1\"`, and functions to keep each count apart.",
    "why": "Functions make a long script readable: each one does one count and has a name that says which."
   },
   {

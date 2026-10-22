@@ -22,8 +22,9 @@ class Skill:
 # In the order of the list (the adventure's topics, world.TOPICS). Debian and Rocky fights also need
 # their system (which.SYSTEMS).
 SKILLS = {
-    "bash": Skill("Bash: grep, sed, awk, find, pipes", uses=(
+    "bash": Skill("Bash at the prompt: grep, sed, awk, find, pipes", uses=(
         ("git", "the git fights: commits, branches and merge conflicts, in a real repository"),)),
+    "script": Skill("Bash scripts: errors, file names, data, cleanup"),
     "linux": Skill("Linux: files, users, permissions, processes", uses=(
         ("gpg", "the key fights: lock a file with a passphrase, sign it, check a signature"),
         ("pass", "the password store fights: keep secrets out of your scripts"))),
@@ -80,12 +81,15 @@ def wanted(s, skill):
         skill not in SKILLS or shows(SKILLS[skill], oses(s)))
 
 
-def other_os(s):
-    """Under the skills checklist: how to learn the skills of another system (`s` the save), or ""."""
+def other_os(s, short=False):
+    """Under the skills checklist: how to learn the skills of another system (`s` the save), or "".
+    `short`: without the list of skills, for a screen with one line left."""
     hidden = [k for k in SKILLS if k not in topics(s)]
     if not hidden:
         return ""
     system = SKILLS[hidden[0]].os
+    if short:
+        return _("{name} skills: bashou config os {system}").format(name=OS_NAMES[system], system=system)
     return _("{name} skills ({skills}): bashou config os {system}").format(
         name=OS_NAMES[system], skills=", ".join(_(SKILLS[k].text).split(":")[0] for k in hidden), system=system)
 

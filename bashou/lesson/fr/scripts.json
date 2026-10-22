@@ -1,23 +1,24 @@
 {
  "title": "Ton premier script",
- "summary": "Mettre des commandes dans un fichier, le rendre exécutable, et lui donner des arguments.",
+ "summary": "Mettre des commandes dans un fichier, le rendre exécutable, lui passer des arguments, et partir d'un modèle qui les vérifie.",
  "pages": [
   {
    "scheme": [
     " hello.sh",
-    " ┌──────────────────────────┐",
-    " │ #!/bin/bash              │ ◀ quel programme",
-    " │ echo \"hello $1\"          │   lit le fichier",
-    " └──────────────────────────┘"
+    " ┌──────────────────────────────┐",
+    " │ #!/usr/bin/env bash          │ ◀ quel programme",
+    " │ printf 'hello %s\\n' \"$1\"    │   lit le fichier",
+    " └──────────────────────────────┘"
    ],
    "point": 2,
    "mark": [
-    "#!/bin/bash"
+    "#!/usr/bin/env bash"
    ],
    "text": [
-    "Un script est un fichier texte de commandes, exécutées de haut en bas.",
+    "Un script est un fichier texte de commandes, lancées de haut en bas. Il tourne plus tard, sans que tu regardes : ça change la façon de l'écrire.",
     "",
-    "- La première ligne, #! (le shebang), dit quel programme le lit."
+    "- La première ligne, #! (le shebang), dit quel programme lit le fichier.",
+    "- env cherche bash dans ton PATH. Sur un Mac, /bin/bash est un vieux 3.2 ; le bash que tu installes (brew install bash) est plus récent, et env le choisit."
    ]
   },
   {
@@ -25,36 +26,62 @@
     " $ chmod +x hello.sh",
     " $ ./hello.sh sam",
     " hello sam",
-    "        ▲",
-    "        └─ $1 = le premier argument"
+    "",
+    " $1    le premier argument : sam",
+    " $#    combien il y en a : 1",
+    " \"$@\"  tous, chacun en entier"
    ],
    "point": 4,
    "mark": [
-    "$1"
+    "$1",
+    "\"$@\""
    ],
    "text": [
-    "- chmod +x le rend exécutable, ./ lance celui de ce dossier.",
-    "- $1, $2… sont les arguments, $# combien il y en a."
+    "- chmod +x rend le fichier exécutable, et ./ lance celui de ce dossier.",
+    "- $1, $2… sont les arguments. \"$@\", avec ses guillemets, les transmet tous, et un nom avec une espace reste un seul argument."
    ]
   },
   {
    "scheme": [
-    " #!/bin/bash",
-    " set -euo pipefail",
-    "      │││",
-    "      ││└─ un échec dans un pipe compte",
-    "      │└── une variable non définie : erreur",
-    "      └─── s'arrêter à la 1re commande ratée"
+    " #!/usr/bin/env bash",
+    " # Usage: lines.sh FILE",
+    "",
+    " die() { printf '%s\\n' \"$*\" >&2; exit 1; }",
+    "",
+    " main() {",
+    "   (( $# == 1 )) || die \"usage: lines.sh FILE\"",
+    "   [[ -f $1 ]] || die \"not a file: $1\"",
+    "   wc -l < \"$1\"",
+    " }",
+    "",
+    " main \"$@\""
    ],
-   "point": 1,
+   "point": 3,
    "mark": [
-    "set -euo pipefail"
+    "die()",
+    "main \"$@\""
    ],
    "text": [
-    "Par défaut, un script continue après une erreur, et les lignes suivantes travaillent sur un état cassé.",
+    "Chaque combat de script part de cette forme, un modèle :",
     "",
-    "- Cette ligne le fait s'arrêter tôt et bruyamment. Mets-la en haut de tes scripts.",
-    "- bash -n vérifie la syntaxe, bash -x montre chaque ligne pendant qu'elle tourne."
+    "- die écrit une erreur sur stderr (>&2) et s'arrête avec un statut non nul : celui qui a lancé le script, une personne ou cron, sait qu'il a échoué.",
+    "- main vérifie d'abord ses arguments, puis fait le travail. La dernière ligne lui passe les arguments du script."
+   ]
+  },
+  {
+   "scheme": [
+    " $ bash -n lines.sh       la syntaxe seule",
+    " $ bash -x lines.sh f     chaque ligne lancée",
+    " + wc -l",
+    " $ shellcheck lines.sh    les pièges connus"
+   ],
+   "point": 2,
+   "mark": [
+    "bash -x"
+   ],
+   "text": [
+    "- bash -n vérifie la syntaxe et ne lance rien. bash -x montre chaque ligne avec ses valeurs : le moyen de voir où un script se trompe.",
+    "- ShellCheck (à installer avec apt, dnf ou brew) lit un script et nomme les pièges des leçons suivantes, chacun avec une page qui l'explique."
    ]
   }
  ]

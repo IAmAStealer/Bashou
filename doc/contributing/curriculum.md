@@ -43,6 +43,9 @@ A topic is complete when it has all four: questions, a lesson, one or more fight
 - Bash: reading → streams; reading → grep → regex; streams + grep → pipes → text_tools;
   regex + text_tools → awk_sed; wildcards → find; variables → logic; logic + streams → quotes →
   scripts → loops; scripts → substitution; scripts → git
+- Bash scripts (skill `script`, owner 2026-10-22: bash at the prompt and bash in scripts are two jobs):
+  quotes → scripts → prompt_script → script_errors → script_files → script_data;
+  script_errors → script_cleanup
 - Linux: files → users → permissions → keys; keys + scripts → pass; files → disk;
   disk + find → archives; computer + users → processes
 - systemd: processes + streams → services
@@ -92,9 +95,22 @@ paths above.
 5. `pipes` — chains, step by step · Knot Eel, Echo Swarm, Peak Harpy
 6. `awk_sed` — columns and edits · Field Wasp, Ledger Golem, Verse Viper, Typo Serpent
 7. `find` · Maze Wraith
-8. `scripts` — shebang, arguments, set -euo pipefail · Shebang Shade
 8. `substitution` — $( ) and backticks, quotes, exit code, pass in scripts
 9. `loops` — for, while read · Rename Rat
+
+### Bash scripts
+
+Every script fight hands you a script built on the template (`bashou/challenges/template.sh`) with one
+habit that is fine at the prompt and a bug in a script; `verify` runs your script again on its own tricky
+input. Rules: [bash-style.md](bash-style.md).
+
+1. `scripts` — shebang (env bash), arguments, the template, bash -n/-x, ShellCheck · Shebang Shade
+2. `prompt_script` — the same job at the prompt and in a script: ls, echo, cd, --
+3. `script_errors` — statuses, || die, set -e and its holes, local x=$( ), pipefail · Masked Mole, Errexit Eel
+4. `script_files` — globs not ls, --, nullglob, find -print0, read loops and stdin · Dash Demon,
+   Nomatch Nymph, Newline Nixie, Stdin Siren
+5. `script_data` — printf, [[ ]], (( )), checking numbers, arrays · Echo Echidna
+6. `script_cleanup` — mktemp, trap EXIT, ${dir:?} · Trap Troll
 
 ### Linux
 

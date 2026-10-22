@@ -58,13 +58,13 @@
   {
    "do": "Put it all in a script pdf.sh that takes the action first: `./pdf.sh merge out.pdf a.pdf b.pdf` and `./pdf.sh split a.pdf`.",
    "done": "both actions work without editing the script.",
-   "hint": "Start with `#!/usr/bin/env bash`, `chmod +x`. `$1` is the action; `shift` removes it, then `\"$@\"` is the rest. A `case` picks the action.",
+   "hint": "Start from the template (lesson Your first script), then `chmod +x`. `$1` is the action; `shift` removes it, then `\"$@\"` is the rest. A `case` picks the action.",
    "why": "A script with arguments is a new command of your own. `case` is the shell's way to choose between several actions, and it reads clearly."
   },
   {
    "do": "Handle mistakes: a missing file, a file that isn't a PDF, an output file that already exists, and a command that fails.",
    "done": "each mistake prints a clear message, and the script exits with a code that isn't 0.",
-   "hint": "`set -euo pipefail` at the top, `[[ -e $file ]]` to test, `file --mime-type` to check it's a PDF, and `exit 1` after the message (sent to stderr with `>&2`).",
+   "hint": "`[[ -e $file ]] || die \"no such file: $file\"` to test, `file --mime-type` to check it's a PDF, and the template's die for every failure: the message on stderr (`>&2`), then `exit 1`.",
    "why": "Exit codes are how scripts tell other programs they failed. Messages go to stderr so they never end up mixed with real output."
   },
   {
