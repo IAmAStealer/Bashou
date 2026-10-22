@@ -3,6 +3,23 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.10.5 — 2026-10-22
+
+### Changes
+
+- Bash scripts are a skill of their own, next to Bash at the prompt. Typing a quick command and writing a script that runs alone later are different jobs: the new lessons teach the second one (errors, file names, data, cleanup), from a small script template. If you had picked Bash, Bash scripts is added to your skills.
+- Eight new script fights: Bashou runs your fixed script on its own hostile files (a name starting with -, a folder with no match, a name with a newline…), so a fix that only works on the files you see doesn't win. With 24 new questions, two road lessons and their chests, and a new boss, the Errexit Ogre.
+- The bash shown everywhere was reviewed line by line against the r/bash references (BashFAQ, BashPitfalls): checked failures (`|| exit 1` after reading a password), notes where a Mac differs (`sed -i ''`, `wc`, `pgrep`), whole-name `grep -qxF --` in conditions, and lessons that say when a habit is fine at the prompt but not in a script.
+- Losing or fleeing a fight sends the threat away for a while instead of letting you retry at once.
+- A lost or fled review keeps your earlier wins and comes back sooner instead of starting over.
+- New art for the Bash Beast and for the script enemies.
+- When a new version is out, every terminal's pet tells you, and says it again every two hours until you run `bashou update`. Before, only one terminal said it, once a day.
+- A progress file exported with an older Bashou can't be imported any more: update Bashou on both computers, then export again.
+
+### Breaking changes
+
+- Breaking change: a pony read `set -e`, tripped over its own `((hooves++))` at zero and stopped right there in the field. Bring it home with `bashou pony hoof`.
+
 ## v0.10.4 — 2026-10-21
 
 ### Changes
