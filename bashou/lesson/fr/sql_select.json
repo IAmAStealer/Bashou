@@ -35,7 +35,8 @@
     "Lis-le comme une phrase. Le résultat est une petite table neuve :",
     "",
     "- lamp 25 et chair 60. Le mug est laissé de côté.",
-    "- Le texte va entre apostrophes : WHERE name = 'mug'."
+    "- Le texte va entre apostrophes : WHERE name = 'mug'.",
+    "- Les lignes reviennent sans ordre promis : ORDER BY price DESC les trie, et LIMIT 3 derrière garde les 3 plus chères."
    ]
   },
   {

@@ -6,10 +6,12 @@ The databases are made at setup with Python's own sqlite3 module and read back t
 Bashou never runs the player's SQL except the upsert file, on throwaway copies, with ATTACH refused.
 """
 
+import contextlib
 import shutil
 import sqlite3
 import string
 import tempfile
+import time
 from pathlib import Path
 
 from . import Challenge
@@ -32,7 +34,7 @@ ALLOWED = {sqlite3.SQLITE_SELECT, sqlite3.SQLITE_READ, sqlite3.SQLITE_INSERT, sq
 
 def connect(path, readonly=True):
     """Read-only for Bashou's own queries; for the player's SQL, only row changes (see ALLOWED)."""
-    uri = f"file:{Path(path).resolve()}?mode=ro" if readonly else f"file:{Path(path).resolve()}"
+    uri = Path(path).resolve().as_uri() + ("?mode=ro" if readonly else "")    # as_uri: '#', '?' or '%' in a folder
     db = sqlite3.connect(uri, uri=True, timeout=2)
     if not readonly:
         db.set_authorizer(lambda action, *args: sqlite3.SQLITE_OK if action in ALLOWED else sqlite3.SQLITE_DENY)
@@ -55,22 +57,20 @@ def rows(path, query, *params):
 
 def make_shop(work, rng, products=None):
     """shop.db: products, and customers with their orders (a customer's id in each order)."""
-    db = sqlite3.connect(work / "shop.db")
-    db.executescript("CREATE TABLE products (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, price INTEGER, stock INTEGER);"
-                     "CREATE TABLE customers (id INTEGER PRIMARY KEY, name TEXT NOT NULL, city TEXT);"
-                     "CREATE TABLE orders (id INTEGER PRIMARY KEY, customer_id INTEGER REFERENCES customers(id), "
-                     "product TEXT, total INTEGER);")
-    products = products or rng.sample(PRODUCTS, 10)
-    db.executemany("INSERT INTO products (name, price, stock) VALUES (?, ?, ?)", products)
-    people = rng.sample(PEOPLE, 6)
-    db.executemany("INSERT INTO customers (name, city) VALUES (?, ?)", [(p, rng.choice(CITIES)) for p in people])
-    for _ in range(18):
-        name, price, _stock = rng.choice(products)
-        qty = rng.randint(1, 3)
-        db.execute("INSERT INTO orders (customer_id, product, total) VALUES (?, ?, ?)",
-                   (rng.randint(1, len(people)), name, price * qty))
-    db.commit()
-    db.close()
+    with contextlib.closing(sqlite3.connect(work / "shop.db")) as db, db:
+        db.executescript("CREATE TABLE products (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, price INTEGER, stock INTEGER);"
+                         "CREATE TABLE customers (id INTEGER PRIMARY KEY, name TEXT NOT NULL, city TEXT);"
+                         "CREATE TABLE orders (id INTEGER PRIMARY KEY, customer_id INTEGER REFERENCES customers(id), "
+                         "product TEXT, total INTEGER);")
+        products = products or rng.sample(PRODUCTS, 10)
+        db.executemany("INSERT INTO products (name, price, stock) VALUES (?, ?, ?)", products)
+        people = rng.sample(PEOPLE, 6)
+        db.executemany("INSERT INTO customers (name, city) VALUES (?, ?)", [(p, rng.choice(CITIES)) for p in people])
+        for _ in range(18):
+            name, price, _stock = rng.choice(products)
+            qty = rng.randint(1, 3)
+            db.execute("INSERT INTO orders (customer_id, product, total) VALUES (?, ?, ?)",
+                       (rng.randint(1, len(people)), name, price * qty))
     return products, people
 
 
@@ -158,11 +158,9 @@ UPSERT_FILE = "restock.sql"
 
 
 def make_stock(path, items):
-    db = sqlite3.connect(path)
-    db.execute("CREATE TABLE stock (item TEXT PRIMARY KEY, qty INTEGER NOT NULL, shelf TEXT)")
-    db.executemany("INSERT INTO stock (item, qty, shelf) VALUES (?, ?, ?)", items)
-    db.commit()
-    db.close()
+    with contextlib.closing(sqlite3.connect(path)) as db, db:
+        db.execute("CREATE TABLE stock (item TEXT PRIMARY KEY, qty INTEGER NOT NULL, shelf TEXT)")
+        db.executemany("INSERT INTO stock (item, qty, shelf) VALUES (?, ?, ?)", items)
 
 
 # The player's starter line, filled with our own product names (never input).
@@ -185,12 +183,17 @@ def upsert_setup(work, rng):
     return {"args": {"item": item, "n": n, "file": UPSERT_FILE}, "items": items}
 
 
+QUERY_SECONDS = 2
+
+
 def run_on_copy(sql, items, drop=None):
     """Run the player's file on a fresh throwaway stock (without the row `drop`); its rows, or None."""
     tmp = Path(tempfile.mkdtemp(prefix="bashou-sql-"))
     try:
         make_stock(tmp / "stock.db", [i for i in items if i[0] != drop])
         db = connect(tmp / "stock.db", readonly=False)
+        deadline = time.monotonic() + QUERY_SECONDS
+        db.set_progress_handler(lambda: time.monotonic() > deadline, 10_000)    # a query without end stops
         try:
             db.executescript(sql)
             db.commit()
@@ -221,13 +224,11 @@ def upsert_verify(work, meta, value):
 
 
 def chest_setup(work, rng):
-    db = sqlite3.connect(work / "loot.db")
-    db.execute("CREATE TABLE loot (item TEXT, rarity TEXT, gold INTEGER)")
-    loot = [(f"{rng.choice(['old', 'shiny', 'tiny', 'heavy'])} {rng.choice(['ring', 'coin', 'map', 'key', 'gem'])}",
-             rng.choice(["common", "common", "rare", "epic"]), rng.randint(1, 90)) for _ in range(12)]
-    db.executemany("INSERT INTO loot (item, rarity, gold) VALUES (?, ?, ?)", loot)
-    db.commit()
-    db.close()
+    with contextlib.closing(sqlite3.connect(work / "loot.db")) as db, db:
+        db.execute("CREATE TABLE loot (item TEXT, rarity TEXT, gold INTEGER)")
+        loot = [(f"{rng.choice(['old', 'shiny', 'tiny', 'heavy'])} {rng.choice(['ring', 'coin', 'map', 'key', 'gem'])}",
+                 rng.choice(["common", "common", "rare", "epic"]), rng.randint(1, 90)) for _ in range(12)]
+        db.executemany("INSERT INTO loot (item, rarity, gold) VALUES (?, ?, ?)", loot)
     return {"args": {}, "answer": str(sum(r == "rare" for _, r, _ in loot))}
 
 

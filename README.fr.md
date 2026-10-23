@@ -146,7 +146,7 @@ compagnon pour tous tes terminaux, et il ne dessine jamais par-dessus ton texte.
 - **`bashou arena`** : viens te battre quand tu veux. Un combat chronométré, ou une enquête de sécurité sans
   chrono (un fichier caché, une porte dérobée dans cron, un binaire SUID).
 - **`bashou adventure`** : une balade à travers 14 thèmes (logique de code, bash au prompt, scripts bash, Linux, systemd, Python, Rust,
-  C, Debian, Rocky Linux, CI/CD, SQL, réseaux, outils d'IA) avec 418 questions sur ce qui tourne mal et ce qu'il faut
+  C, Debian, Rocky Linux, CI/CD, SQL, réseaux, outils d'IA) avec 419 questions sur ce qui tourne mal et ce qu'il faut
   vérifier en premier, des boss, et des coffres qui s'ouvrent avec de vraies commandes.
 
 ![bashou fight : une Planète et ses cœurs face à l'Hydre des logs, la tâche dans une bulle, et le shell de

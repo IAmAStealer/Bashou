@@ -36,9 +36,7 @@
    "text": [
     "JOIN … ON remet côte à côte les lignes qui correspondent. Ada apparaît deux fois : une par commande.",
     "",
-    "$ SELECT customers.name, orders.total",
-    "$ FROM orders JOIN customers",
-    "$ ON orders.customer_id = customers.id;"
+    "$ sqlite3 shop.db \"SELECT customers.name, orders.total FROM orders JOIN customers ON orders.customer_id = customers.id;\""
    ]
   },
   {
@@ -48,7 +46,7 @@
     " Bo     12",
     " Ada    25",
     "",
-    " GROUP BY customers.id, SUM(total) :",
+    " GROUP BY customers.id, SUM(orders.total) :",
     " Ada    55",
     " Bo     12"
    ],

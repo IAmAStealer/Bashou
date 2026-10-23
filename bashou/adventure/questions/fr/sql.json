@@ -127,7 +127,7 @@
    "Redémarrer la base avant"
   ],
   "answer": 0,
-  "explain": "SELECT … WHERE montre exactement les lignes que DELETE va supprimer, sans rien supprimer. Si la liste paraît fausse, tu corriges la condition avant le moindre dégât. Avec SQLite, un cp du fichier est aussi une sauvegarde rapide."
+  "explain": "SELECT … WHERE montre exactement les lignes que DELETE va supprimer, sans rien supprimer. Si la liste paraît fausse, tu corriges la condition avant le moindre dégât. Avec SQLite, un cp du fichier est aussi une sauvegarde rapide, quand aucun programme n'a la base ouverte (sinon tape .backup copie.db dans sqlite3)."
  },
  {
   "id": "sql-1-11",
@@ -156,6 +156,19 @@
   "explain": "Toute la base est le fichier, donc rm efface tout. SQLite n'a ni serveur ni DROP DATABASE. L'outil lui-même est un seul paquet : sudo apt remove sqlite3 (ou dnf remove sqlite) si tu veux l'enlever aussi."
  },
  {
+  "id": "sql-1-13",
+  "level": 1,
+  "q": "Tu veux les 3 produits les plus chers. Quelle requête est la bonne ?",
+  "choices": [
+   "SELECT name FROM products ORDER BY price DESC LIMIT 3;",
+   "SELECT name FROM products LIMIT 3;",
+   "SELECT TOP 3 name FROM products;",
+   "SELECT name FROM products WHERE price = MAX;"
+  ],
+  "answer": 0,
+  "explain": "Sans ORDER BY, les lignes reviennent sans ordre promis : LIMIT 3 seul donne 3 produits au hasard. ORDER BY price DESC met les plus chers en premier, puis LIMIT en garde 3. TOP, c'est la façon de SQL Server ; SQLite ne le connaît pas."
+ },
+ {
   "id": "sql-2-01",
   "level": 2,
   "q": "orders a customer_id, customers a id et name. Comment lister chaque commande avec le nom du client ?",
@@ -179,7 +192,7 @@
    "10 lignes"
   ],
   "answer": 0,
-  "explain": "Sans condition, SQL associe chaque ligne d'une table à chaque ligne de l'autre (un produit cartésien). 100 × 10 = 1 000 lignes mélangées. Quand un JOIN renvoie beaucoup trop de lignes, cherche un ON oublié ou faux."
+  "explain": "Sans condition, SQL associe chaque ligne d'une table à chaque ligne de l'autre (un produit cartésien). 100 × 10 = 1 000 lignes mélangées. Quand un JOIN renvoie beaucoup trop de lignes, cherche un ON oublié ou faux. SQLite et MySQL acceptent un JOIN sans ON sans rien dire ; PostgreSQL le refuse."
  },
  {
   "id": "sql-2-03",
@@ -218,7 +231,7 @@
    "DO UPDATE supprime l'ancienne ligne"
   ],
   "answer": 0,
-  "explain": "INSERT OR REPLACE supprime la ligne existante et en insère une nouvelle : chaque colonne que tu n'as pas donnée redevient vide (ou sa valeur par défaut). ON CONFLICT DO UPDATE garde la ligne et ne change que ce que tu mets dans SET, comme ajouter à une quantité."
+  "explain": "INSERT OR REPLACE supprime la ligne existante et en insère une nouvelle : chaque colonne que tu n'as pas donnée redevient NULL (ou sa valeur par défaut). ON CONFLICT DO UPDATE garde la ligne et ne change que ce que tu mets dans SET, comme ajouter à une quantité."
  },
  {
   "id": "sql-2-06",
@@ -244,7 +257,7 @@
    "Aucun, les apostrophes protègent"
   ],
   "answer": 0,
-  "explain": "Si name vaut ' OR '1'='1, la requête devient WHERE name = '' OR '1'='1', qui correspond à toutes les lignes. C'est l'injection SQL. Passe plutôt les valeurs en paramètres (? avec sqlite3 en Python, $1 ailleurs) : la base ne les lit jamais comme du SQL."
+  "explain": "Si name vaut ' OR '1'='1, la requête devient WHERE name = '' OR '1'='1', qui correspond à toutes les lignes. C'est l'injection SQL. Passe plutôt les valeurs en paramètres (? avec sqlite3 en Python ; d'autres bibliothèques ont leur propre marque, comme %s dans psycopg pour PostgreSQL) : la base ne les lit jamais comme du SQL. Les noms de tables et de colonnes ne peuvent pas être des paramètres : choisis-les dans une liste fixe de ton code."
  },
  {
   "id": "sql-2-08",
@@ -257,7 +270,7 @@
    "Des commandes sqlite3 séparées"
   ],
   "answer": 0,
-  "explain": "Une transaction regroupe des instructions : après BEGIN, rien n'est définitif avant COMMIT, et ROLLBACK annule tout. Si le programme plante au milieu, la base reste comme avant BEGIN, jamais à moitié modifiée."
+  "explain": "Une transaction regroupe des instructions : après BEGIN, rien n'est définitif avant COMMIT, et ROLLBACK annule tout. Si le programme plante au milieu, la base reste comme avant BEGIN, jamais à moitié modifiée. Dans un programme Python, with con: fait pareil : il valide à la fin, ou annule si une erreur arrive."
  },
  {
   "id": "sql-2-09",
@@ -270,7 +283,7 @@
    "Renommer les tables avant"
   ],
   "answer": 0,
-  "explain": "Comme toute la base est un fichier, cp shop.db test.db te donne une copie complète en une seconde. Essaie ton SQL sur test.db ; quand il fait ce que tu veux, lance-le sur la vraie. Ne copie pas pendant qu'un programme y écrit."
+  "explain": "Comme toute la base est un fichier, cp shop.db test.db te donne une copie complète en une seconde. Essaie ton SQL sur test.db ; quand il fait ce que tu veux, lance-le sur la vraie. Copie-le seulement quand aucun programme ne l'a ouvert : des changements peuvent encore attendre dans shop.db-wal. Sinon tape .backup test.db dans sqlite3, qui fait une copie sûre même alors."
  },
  {
   "id": "sql-2-10",

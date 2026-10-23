@@ -51,7 +51,8 @@
     "Read it like a sentence. The result is a small new table:",
     "",
     "- lamp 25 and chair 60. The mug is left out.",
-    "- Text goes between single quotes: WHERE name = 'mug'."
+    "- Text goes between single quotes: WHERE name = 'mug'.",
+    "- Rows come back in no promised order: ORDER BY price DESC sorts them, and LIMIT 3 after it keeps the 3 most expensive."
    ],
    "sql": [
     "SELECT name, price FROM products WHERE price > 20;"

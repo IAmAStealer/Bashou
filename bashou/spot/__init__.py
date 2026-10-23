@@ -181,7 +181,7 @@ C = ["#include <stdio.h>", "int main(void) { return 0; }", "char *p = malloc(n *
 BASH = ["for f in *.txt; do echo \"$f\"; done", "if [[ -f $file ]]; then", "grep -rn TODO . | wc -l",
         "#!/usr/bin/env bash", "name=${1:-world}", "while read -r line; do", "echo \"$(date +%F)\" >> log",
         "[ $# -eq 0 ] && exit 1"]
-SQL = ["SELECT name FROM users WHERE id = 3;", "INSERT INTO logs VALUES ('ok');", "UPDATE items SET qty = 0;",
+SQL = ["SELECT name FROM users WHERE id = 3;", "INSERT INTO logs (msg) VALUES ('ok');", "UPDATE items SET qty = 0 WHERE id = 7;",
        "CREATE TABLE notes (id INTEGER);", "SELECT count(*) FROM t GROUP BY day;",
        "DELETE FROM sessions WHERE age > 30;", "SELECT * FROM a JOIN b ON a.id = b.id;", "ALTER TABLE t ADD c TEXT;"]
 

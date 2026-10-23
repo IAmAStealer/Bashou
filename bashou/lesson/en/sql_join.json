@@ -51,9 +51,7 @@
    "text": [
     "JOIN … ON puts the matching rows side by side again. Ada shows twice: once for each of her orders.",
     "",
-    "$ SELECT customers.name, orders.total",
-    "$ FROM orders JOIN customers",
-    "$ ON orders.customer_id = customers.id;"
+    "$ sqlite3 shop.db \"SELECT customers.name, orders.total FROM orders JOIN customers ON orders.customer_id = customers.id;\""
    ],
    "sql": [
     "SELECT customers.name, orders.total FROM orders JOIN customers ON orders.customer_id = customers.id;"
@@ -66,7 +64,7 @@
     " Bo     12",
     " Ada    25",
     "",
-    " GROUP BY customers.id, SUM(total):",
+    " GROUP BY customers.id, SUM(orders.total):",
     " Ada    55",
     " Bo     12"
    ],

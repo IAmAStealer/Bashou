@@ -127,7 +127,7 @@
    "Restart the database first"
   ],
   "answer": 0,
-  "explain": "SELECT … WHERE shows the exact rows the DELETE will remove, without removing anything. If the list looks wrong, you fix the condition before any damage. With SQLite, a cp of the file is also a quick backup."
+  "explain": "SELECT … WHERE shows the exact rows the DELETE will remove, without removing anything. If the list looks wrong, you fix the condition before any damage. With SQLite, a cp of the file is also a quick backup, when no program has the database open (otherwise type .backup copy.db inside sqlite3)."
  },
  {
   "id": "sql-1-11",
@@ -156,6 +156,19 @@
   "explain": "The whole database is the file, so rm removes it all. SQLite has no server and no DROP DATABASE. The tool itself is one package: sudo apt remove sqlite3 (or dnf remove sqlite) if you want it gone too."
  },
  {
+  "id": "sql-1-13",
+  "level": 1,
+  "q": "You want the 3 most expensive products. Which query is right?",
+  "choices": [
+   "SELECT name FROM products ORDER BY price DESC LIMIT 3;",
+   "SELECT name FROM products LIMIT 3;",
+   "SELECT TOP 3 name FROM products;",
+   "SELECT name FROM products WHERE price = MAX;"
+  ],
+  "answer": 0,
+  "explain": "Without ORDER BY, rows come back in no promised order, so LIMIT 3 alone gives any 3 products. ORDER BY price DESC puts the most expensive first, then LIMIT keeps 3. TOP is SQL Server's way; SQLite doesn't know it."
+ },
+ {
   "id": "sql-2-01",
   "level": 2,
   "q": "orders has customer_id, customers has id and name. How do you list each order with its customer's name?",
@@ -179,7 +192,7 @@
    "10 rows"
   ],
   "answer": 0,
-  "explain": "Without a condition, SQL pairs each row of one table with each row of the other (a cross join). 100 × 10 = 1,000 mixed-up rows. When a JOIN returns far too many rows, look for a missing or wrong ON."
+  "explain": "Without a condition, SQL pairs each row of one table with each row of the other (a cross join). 100 × 10 = 1,000 mixed-up rows. When a JOIN returns far too many rows, look for a missing or wrong ON. SQLite and MySQL accept a JOIN without ON without a word; PostgreSQL refuses it."
  },
  {
   "id": "sql-2-03",
@@ -218,7 +231,7 @@
    "DO UPDATE deletes the old row"
   ],
   "answer": 0,
-  "explain": "INSERT OR REPLACE removes the existing row and inserts a new one: every column you didn't give is back to empty (or its default). ON CONFLICT DO UPDATE keeps the row and changes only what you SET, like adding to a quantity."
+  "explain": "INSERT OR REPLACE removes the existing row and inserts a new one: every column you didn't give is back to NULL (or its default). ON CONFLICT DO UPDATE keeps the row and changes only what you SET, like adding to a quantity."
  },
  {
   "id": "sql-2-06",
@@ -244,7 +257,7 @@
    "None, quotes protect it"
   ],
   "answer": 0,
-  "explain": "If name is ' OR '1'='1, the query becomes WHERE name = '' OR '1'='1', which matches every row. That's SQL injection. Give values as parameters instead (? in Python's sqlite3, $1 in others): the database never reads them as SQL."
+  "explain": "If name is ' OR '1'='1, the query becomes WHERE name = '' OR '1'='1', which matches every row. That's SQL injection. Give values as parameters instead (? in Python's sqlite3; other libraries have their own mark, like %s in psycopg for PostgreSQL): the database never reads them as SQL. Table and column names can't be parameters: pick them from a fixed list in your code."
  },
  {
   "id": "sql-2-08",
@@ -257,7 +270,7 @@
    "Separate sqlite3 commands"
   ],
   "answer": 0,
-  "explain": "A transaction groups statements: after BEGIN, nothing is final until COMMIT, and ROLLBACK cancels everything. If the program crashes halfway, the database stays as it was before BEGIN, never half-updated."
+  "explain": "A transaction groups statements: after BEGIN, nothing is final until COMMIT, and ROLLBACK cancels everything. If the program crashes halfway, the database stays as it was before BEGIN, never half-updated. In a Python program, with con: does the same: it commits at the end, or rolls back if an error happens."
  },
  {
   "id": "sql-2-09",
@@ -270,7 +283,7 @@
    "Rename the tables first"
   ],
   "answer": 0,
-  "explain": "Since the whole database is one file, cp shop.db test.db gives you a full copy in a second. Try your SQL on test.db; when it does what you want, run it on the real one. Don't copy while a program is writing to it."
+  "explain": "Since the whole database is one file, cp shop.db test.db gives you a full copy in a second. Try your SQL on test.db; when it does what you want, run it on the real one. Copy it only when no program has it open: changes can still wait in shop.db-wal. Otherwise type .backup test.db inside sqlite3, which makes a safe copy even then."
  },
  {
   "id": "sql-2-10",

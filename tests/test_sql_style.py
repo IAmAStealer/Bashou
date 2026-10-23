@@ -129,7 +129,11 @@ def runs(db, stmt):
     stmt = stmt.removesuffix(";")
     try:
         if re.match(r"CREATE TABLE", stmt, re.I):
-            sqlite3.connect(":memory:").execute("EXPLAIN " + stmt)
+            con = sqlite3.connect(":memory:")
+            try:
+                con.execute("EXPLAIN " + stmt)
+            finally:
+                con.close()
         else:
             con = sqlite3.connect(f"file:{db}?mode=ro", uri=True)
             try:
@@ -189,6 +193,51 @@ class StatementTest(unittest.TestCase):
                 self.assertIn(rule, broken_rules(stmt))
         self.assertEqual(broken_rules("SELECT name FROM products WHERE stock IS NULL;"), set())
         self.assertEqual(broken_rules("SELECT name FROM products ORDER BY price LIMIT 3;"), set())
+
+
+class PromptTest(unittest.TestCase):
+    """QP3 (sql-judge 2026-10-23): a line drawn after "$ " is typed in the shell, so SQL there goes through sqlite3."""
+
+    def test_shell_lines_never_start_with_sql(self):
+        bare = re.compile(r"^\s*(SELECT|INSERT|UPDATE|DELETE|CREATE|FROM|ON|WHERE)\b")
+        for lang in ("en", "fr"):
+            for le, page, n, _ in lesson_pages(lang):
+                for t in page.get("text", []):
+                    if t.startswith("$ "):
+                        with self.subTest(lang, lesson=le["id"], page=n, line=t):
+                            self.assertNotRegex(t[2:], bare)
+        for le in owl.LESSONS:
+            if le["id"] == "sql":
+                for n, (_text, example) in enumerate(le["pages"], 1):
+                    with self.subTest("owl", page=n):
+                        self.assertNotRegex(example, bare, "the owl shows it as $ …: wrap it in sqlite3")
+
+
+class FightCodeTest(unittest.TestCase):
+    def test_a_folder_with_odd_characters_still_opens(self):
+        """QC5: the URI is built with as_uri(): '#', '?' and '%' in a folder name broke every verify."""
+        for name in ("we#ird?dir", "pct%41dir"):
+            with self.subTest(name), tempfile.TemporaryDirectory() as tmp:
+                work = Path(tmp) / name
+                work.mkdir()
+                fights.make_shop(work, random.Random(0))
+                self.assertTrue(fights.all_products(work))
+
+    def test_an_endless_query_is_stopped(self):
+        """QC6: the player's file runs with a time limit; a recursive CTE without end hung verify."""
+        import time
+        start = time.monotonic()
+        endless = "WITH RECURSIVE c(x) AS (SELECT 1 UNION ALL SELECT x + 1 FROM c) SELECT count(*) FROM c;"
+        self.assertIsNone(fights.run_on_copy(endless, [("mug", 3, "A1")]))
+        self.assertLess(time.monotonic() - start, 10)
+
+
+class SpotTest(unittest.TestCase):
+    def test_spot_sql_follows_the_rules(self):
+        from bashou import spot
+        for stmt in spot.SQL:
+            with self.subTest(stmt):
+                self.assertEqual(broken_rules(stmt) - {"Q7"}, set())
 
 
 class LessonPageTest(unittest.TestCase):
