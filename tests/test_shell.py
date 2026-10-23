@@ -408,6 +408,47 @@ class RoomTest(unittest.TestCase):
         self.assertIn(b"\x1b[H\x1b[7L", sh.out[start:])
         self.assertLess(sh.out.index(b"\x1b[7M", start), sh.out.index(b"\x1b[7L", start))
 
+    def test_an_empty_enter_keeps_a_room_that_still_fits(self):
+        """Owner, 2026-10-23: each Enter made the whole screen flicker. The room was deleted and made
+        again (the screen moved up 7 rows and back down) even when nothing had to scroll."""
+        sh = self.sh
+        sh.row = 12
+        sh.send("echo hi\n", 1)
+        start = len(sh.out)
+        sh.row = 13                                    # Enter moved the prompt one row down, far from the bottom
+        sh.send("\n", 1)
+        self.assertNotIn(b"\x1b[7M", sh.out[start:])
+        self.assertNotIn(b"\x1b[7L", sh.out[start:])
+        self.assertEqual(self.room(), "1")
+
+    def test_an_empty_enter_makes_the_room_again_when_the_pet_waits_for_it(self):
+        """`bashou on`, or a pet that restarted, writes 0 in the room file: it waits for a new room. An
+        empty Enter keeping the old one left the pet undrawn."""
+        sh = self.sh
+        sh.row = 12
+        sh.send("echo hi\n", 1)
+        (sh.cache / f"room.{sh.pid}").write_text("0\n")
+        start = len(sh.out)
+        sh.row = 13
+        sh.send("\n", 1)
+        self.assertIn(b"\x1b[7L", sh.out[start:])
+        self.assertEqual(self.room(), "1")
+
+    def test_a_room_made_again_moves_in_one_frame(self):
+        """At the bottom an empty Enter must scroll: the old room goes, the screen scrolls and the new
+        room comes in one synchronized frame, asking where the cursor is once, not twice."""
+        sh = self.sh
+        sh.row = 29
+        sh.send("echo hi\n", 1)
+        start = len(sh.out)
+        sh.row = 29
+        sh.send("\n", 1)
+        out = sh.out[start:]
+        begin, end = out.index(b"\x1b[?2026h"), out.index(b"\x1b[?2026l")
+        self.assertLess(begin, out.index(b"\x1b[7M"))
+        self.assertLess(out.index(b"\x1b[7L"), end)
+        self.assertEqual(out.count(b"\x1b[6n"), 2)    # the cursor, then the screen's corner
+
     def test_closing_the_shell_stops_its_pet(self):
         """The v0.7.0 release failed: the pet outlived close() and wrote in cache/ during cleanup."""
         pet = int(self.sh.value("BASHOU_PID"))
@@ -448,11 +489,46 @@ class RoomTest(unittest.TestCase):
                         out += os.read(fd, 4096)
                     except OSError:
                         break
-                if out.count(b"\x1b[6n") >= asked + 2:   # both questions of one _bashou_where
-                    asked += 2
-                    if asked == 4:
+                if out.count(b"\x1b[6n") > asked:         # one question at a time
+                    asked += 1
+                    if asked == 3:
                         time.sleep(3)                    # the second time, the terminal is busy
-                    os.write(fd, b"\x1b[12;5R\x1b[30;140R")
+                    os.write(fd, b"\x1b[12;5R" if asked % 2 else b"\x1b[30;140R")
+        finally:
+            os.kill(pid, signal.SIGKILL)
+            os.waitpid(pid, 0)
+            os.close(fd)
+        self.assertIn(b"@@12 5 30@@", out)
+
+    def test_the_second_question_waits_for_the_first_answer(self):
+        """Owner, 2026-10-23: ^[[30;120R came back on the screen. Both questions went out together; between
+        the two reads echo is back on, and the second answer, arriving then, was printed."""
+        script = (f"source <(sed -n '/^_bashou_dsr=/,/^_bashou_make_room()/p' {ROOT}/bashou/room.{self.SHELL} | sed '$d')\n"
+                  "_bashou_where && echo \"@@$_bashou_at@@\" || echo @@skipped@@\n")
+        need(self.SHELL)
+        pid, fd = pty.fork()
+        if pid == 0:
+            os.execvp(self.SHELL, [self.SHELL, "-c", script])
+        out, end = b"", time.time() + 20
+        try:
+            while b"\x1b[6n" not in out and time.time() < end:
+                if select.select([fd], [], [], 0.05)[0]:
+                    out += os.read(fd, 4096)
+            time.sleep(0.5)                              # time for a second question to come out too
+            if select.select([fd], [], [], 0.05)[0]:
+                out += os.read(fd, 4096)
+            self.assertEqual(out.count(b"\x1b[6n"), 1, "asked again before the first answer")
+            os.write(fd, b"\x1b[12;5R")
+            while out.count(b"\x1b[6n") < 2 and time.time() < end:
+                if select.select([fd], [], [], 0.05)[0]:
+                    out += os.read(fd, 4096)
+            os.write(fd, b"\x1b[30;140R")
+            while out.count(b"@@") < 2 and time.time() < end:
+                if select.select([fd], [], [], 0.05)[0]:
+                    try:
+                        out += os.read(fd, 4096)
+                    except OSError:
+                        break
         finally:
             os.kill(pid, signal.SIGKILL)
             os.waitpid(pid, 0)

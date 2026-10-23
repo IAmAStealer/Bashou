@@ -32,9 +32,10 @@ _bashou_where() {   # the cursor's row and column, and the screen's last row: "r
   # A terminal that answered once will answer again, only late when busy (WSL after a long output):
   # wait for it, or the answer comes after we stopped reading and shows up on the screen (^[[30;120R).
   [[ $_bashou_dsr == on ]] && wait=10
-  printf '\e[6n\e7\e[9999;9999H\e[6n\e8' > /dev/tty
-  if ! IFS='[;' read -rs -t "$wait" -dR _ row col || ! IFS='[;' read -rs -t "$wait" -dR _ bottom _ \
-     || [[ ! $row$col$bottom =~ ^[0-9]+$ ]]; then
+  # One question at a time: between two reads echo is back on, and an answer that came then was printed.
+  printf '\e[6n' > /dev/tty
+  if ! IFS='[;' read -rs -t "$wait" -dR _ row col || ! printf '\e7\e[9999;9999H\e[6n\e8' > /dev/tty \
+     || ! IFS='[;' read -rs -t "$wait" -dR _ bottom _ || [[ ! $row$col$bottom =~ ^[0-9]+$ ]]; then
     _bashou_dsr=off                                  # no answer: this terminal doesn't do it
     return 1
   fi
@@ -48,14 +49,24 @@ _bashou_hide() {    # no room this time: the pet isn't drawn, and nothing may bl
 }
 
 _bashou_make_room() {
-  local lines=7 row col bottom scroll nl=
-  # An empty Enter runs no PS0 (bash shows it only before a command): the last room is still there,
-  # the pet in it. Delete it first, or the new blank rows push it down and it's drawn again above.
-  (( _bashou_gap )) && [[ -e $_bashou_room ]] && _bashou_close_room
-  _bashou_gap=0
+  local lines=7 row col bottom scroll asked='' used='' nl=''
   [[ -r $_bashou_height ]] && IFS= read -r lines < "$_bashou_height"
   [[ $lines =~ ^[0-9]+$ ]] || lines=7                  # a number: (( )) below would run anything else as code
-  if ! _bashou_where; then
+  # An empty Enter runs no PS0 (bash shows it only before a command): the last room is still there,
+  # the pet in it. Same size, with its 2 free rows under the prompt: keep it (made again, the whole
+  # screen moved up and back down at each Enter: owner, it flickered). Else delete it first, or the new
+  # blank rows push it down and it's drawn again above; in one frame with the new room (synchronized
+  # output: terminals that don't know it ignore it).
+  if (( _bashou_gap )) && [[ -e $_bashou_room ]] && _bashou_where; then
+    asked=1
+    read -r row col bottom <<< "$_bashou_at"
+    IFS= read -r used < "$_bashou_room"                # 0: the pet waits for a new room (`bashou on`)
+    [[ $used == 1 ]] && (( lines == _bashou_gap && row + 2 <= bottom )) && return
+    printf '\e[?2026h' > /dev/tty
+    _bashou_close_room asked
+  fi
+  _bashou_gap=0
+  if [[ -z $asked ]] && ! _bashou_where; then
     if [[ $_bashou_dsr == off ]]; then
       (( _bashou_first )) && _bashou_below           # as before: below the pet at the start,
       _bashou_first=0
@@ -69,24 +80,28 @@ _bashou_make_room() {
   read -r row col bottom <<< "$_bashou_at"
   if (( bottom < lines + 8 )); then                  # too short a screen to give the pet its rows
     _bashou_hide
+    printf '\e[?2026l' > /dev/tty
     return
   fi
   # Keep 2 free rows under the prompt: Enter on a one-line command must not scroll the screen.
   scroll=$(( row + lines + 2 - bottom ))
   (( scroll < 0 )) && scroll=0
   (( scroll )) && printf -v nl '%*s' "$scroll" '' && nl=${nl// /$'\n'}
-  printf '\e[%d;1H%s\e[H\e[%dL\e[%d;%dH' "$bottom" "$nl" "$lines" $(( row - scroll + lines )) "$col" > /dev/tty
+  printf '\e[%d;1H%s\e[H\e[%dL\e[%d;%dH\e[?2026l' "$bottom" "$nl" "$lines" $(( row - scroll + lines )) "$col" > /dev/tty
   _bashou_gap=$lines
   { echo 1 > "$_bashou_room"; } 2>/dev/null
 }
 
 # When a command starts (PS0): the command line sits under the empty top rows. Delete them (the pet
 # goes with them) and follow it up. Not if the screen scrolled (a long command reached the last row):
-# the top rows moved. Fails when there was nothing to delete.
+# the top rows moved. Fails when there was nothing to delete. `asked`: _bashou_at is fresh, don't ask
+# again; it then tells where the cursor went.
 _bashou_close_room() {
   local row col bottom
-  (( _bashou_gap )) && _bashou_where || return 1
+  (( _bashou_gap )) || return 1
+  [[ ${1-} == asked ]] || _bashou_where || return 1
   read -r row col bottom <<< "$_bashou_at"
   (( row < bottom && row > _bashou_gap )) || return 1
   printf '\e[H\e[%dM\e[%d;%dH' "$_bashou_gap" $(( row - _bashou_gap )) "$col" > /dev/tty
+  _bashou_at="$(( row - _bashou_gap )) $col $bottom"
 }
