@@ -52,6 +52,9 @@
     "",
     "- lamp 25 and chair 60. The mug is left out.",
     "- Text goes between single quotes: WHERE name = 'mug'."
+   ],
+   "sql": [
+    "SELECT name, price FROM products WHERE price > 20;"
    ]
   },
   {
@@ -68,6 +71,9 @@
    "text": [
     "- sqlite3 opens the database file; .tables lists the tables, .quit leaves.",
     "- Every SQL statement ends with ;, or sqlite3 waits for more."
+   ],
+   "sql": [
+    "SELECT COUNT(*) FROM products;"
    ]
   }
  ]

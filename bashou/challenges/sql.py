@@ -160,7 +160,7 @@ UPSERT_FILE = "restock.sql"
 def make_stock(path, items):
     db = sqlite3.connect(path)
     db.execute("CREATE TABLE stock (item TEXT PRIMARY KEY, qty INTEGER NOT NULL, shelf TEXT)")
-    db.executemany("INSERT INTO stock VALUES (?, ?, ?)", items)
+    db.executemany("INSERT INTO stock (item, qty, shelf) VALUES (?, ?, ?)", items)
     db.commit()
     db.close()
 
@@ -225,7 +225,7 @@ def chest_setup(work, rng):
     db.execute("CREATE TABLE loot (item TEXT, rarity TEXT, gold INTEGER)")
     loot = [(f"{rng.choice(['old', 'shiny', 'tiny', 'heavy'])} {rng.choice(['ring', 'coin', 'map', 'key', 'gem'])}",
              rng.choice(["common", "common", "rare", "epic"]), rng.randint(1, 90)) for _ in range(12)]
-    db.executemany("INSERT INTO loot VALUES (?, ?, ?)", loot)
+    db.executemany("INSERT INTO loot (item, rarity, gold) VALUES (?, ?, ?)", loot)
     db.commit()
     db.close()
     return {"args": {}, "answer": str(sum(r == "rare" for _, r, _ in loot))}

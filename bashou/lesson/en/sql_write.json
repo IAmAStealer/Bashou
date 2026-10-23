@@ -50,6 +50,9 @@
     "- sqlite3 movies.db creates the file as soon as you write something in it.",
     "- .schema shows how a table was made: handy to check your columns.",
     "$ sqlite3 movies.db \"CREATE TABLE movies (title TEXT, year INTEGER);\""
+   ],
+   "sql": [
+    "CREATE TABLE movies (title TEXT, year INTEGER);"
    ]
   },
   {
@@ -73,6 +76,9 @@
     "",
     "- Text goes between single quotes: 'Alien'. Numbers don't.",
     "- A column you leave out gets NULL, the empty value (or its default, if it has one)."
+   ],
+   "sql": [
+    "INSERT INTO movies (title, year) VALUES ('Alien', 1979);"
    ]
   },
   {
@@ -97,6 +103,9 @@
     "- Forget WHERE and every row changes: a classic accident in production.",
     "- Run a SELECT with the same WHERE first: you see exactly what you're about to change.",
     "- DELETE FROM works the same way, and needs the same care."
+   ],
+   "sql": [
+    "UPDATE movies SET year = 1986 WHERE title = 'Aliens';"
    ]
   },
   {
@@ -118,6 +127,9 @@
     "- ON CONFLICT needs a column that can't repeat, like a PRIMARY KEY: item, here.",
     "- excluded.qty is the value you tried to insert: 3.",
     "- INSERT OR REPLACE is different: it deletes the old row first, so its other columns are lost."
+   ],
+   "sql": [
+    "INSERT INTO stock (item, qty) VALUES ('chair', 3) ON CONFLICT(item) DO UPDATE SET qty = qty + excluded.qty;"
    ]
   }
  ]

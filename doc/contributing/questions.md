@@ -52,6 +52,8 @@ answer positions); a missing translation falls back to English. See [translation
 - Check it's true today (versions change: say which tool or distro when it matters).
 - Bash questions follow [bash-style.md](bash-style.md): the right answer and its explanation are good bash
   for their mode (the prompt in `bash`, scripts in `script`); wrong choices may be wrong on purpose.
+- SQL questions follow [sql-style.md](sql-style.md): a full statement in the right answer or the
+  explanation runs on the fight tables (`tests/test_sql_style.py`).
 
 ## Check
 

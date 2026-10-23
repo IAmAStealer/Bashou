@@ -54,6 +54,9 @@
     "$ SELECT customers.name, orders.total",
     "$ FROM orders JOIN customers",
     "$ ON orders.customer_id = customers.id;"
+   ],
+   "sql": [
+    "SELECT customers.name, orders.total FROM orders JOIN customers ON orders.customer_id = customers.id;"
    ]
   },
   {
