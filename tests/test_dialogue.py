@@ -64,7 +64,19 @@ class DialogueTest(unittest.TestCase):
     def test_typo_learns_your_tools(self):
         s = state.default()
         s["tools"] = {"kubectl": 30}
-        self.assertIn("`kubectl`", dialogue.typo(s, "star", "kubctl get pods", random.Random(0)))
+        with mock.patch.object(dialogue.which, "installed", lambda name: name != "kubctl"):
+            self.assertIn("`kubectl`", dialogue.typo(s, "star", "kubctl get pods", random.Random(0)))
+
+    def test_typo_never_suggests_a_missing_command(self):
+        # Owner report: `pip3 install bandit` with no pip at all got "Fat paws again? `pip3` → `pip`".
+        missing = {"pip", "pip3", "gerp"}
+        with mock.patch.object(dialogue.which, "installed", lambda name: name not in missing):
+            text = dialogue.typo(state.default(), "star", "gerp foo file", random.Random(0))
+            self.assertIn("`grep`", text)
+            for typed in ("pip3 install bandit", "pip install bandit"):
+                self.assertIsNone(dialogue.typo(state.default(), "star", typed, random.Random(0)), typed)
+        with mock.patch.object(dialogue.which, "installed", lambda name: name not in {"gerp", "grep"}):
+            self.assertNotIn("`grep`", dialogue.typo(state.default(), "star", "gerp foo", random.Random(0)))
 
     def test_no_typo_joke_for_real_commands(self):
         self.assertIsNone(dialogue.typo(state.default(), "star", "ls /nope", random.Random(0)))

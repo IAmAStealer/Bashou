@@ -173,7 +173,7 @@ def line(state, pet, rng=random):
 
 COMMON = ("ls cd cat grep find awk sed sort uniq head tail less more echo printf pwd mkdir rmdir rm cp mv "
           "touch chmod chown ln ps kill top htop df du free tar gzip zip unzip curl wget ssh scp git make "
-          "python3 pip vim nano man which whereis history clear exit sudo apt xargs jq tr cut wc tee diff "
+          "python3 pip pip3 vim nano man which whereis history clear exit sudo apt xargs jq tr cut wc tee diff "
           "strace watch time date cal file stat env export source alias type").split()
 
 TYPO_FIX = ["Hehe, `{typo}`? I think you meant `{fix}`.", "`{typo}`… so close! `{fix}`?",
@@ -198,7 +198,8 @@ def typo(state, pet, command, rng=random):
     if not unknown:
         return None
     word = unknown[0]
-    candidates = sorted(set(COMMON) | set(state["tools"]))
+    # Only installed ones: `pip3` → `pip` is no help when pip isn't there either (owner report).
+    candidates = sorted(c for c in set(COMMON) | set(state["tools"]) if which.installed(c))
     # Swapped letters first (`sl` → `ls`): too short for difflib to score well.
     close = [c for c in candidates if len(c) == len(word) and sorted(c) == sorted(word)][:1]
     close = close or difflib.get_close_matches(word, candidates, n=1, cutoff=0.6)
