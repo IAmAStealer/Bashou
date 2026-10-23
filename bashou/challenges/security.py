@@ -39,7 +39,7 @@ HIDDEN = Challenge(
 
 def encoded_setup(work, rng):
     word = rng.choice(WORDS) + str(rng.randint(10, 99))
-    text = f"password: {word}\n"
+    text = f"answer {word}\n"
     (work / "note.txt").write_text(base64.b64encode(text.encode()).decode() + "\n")
     return {"answer": word}
 

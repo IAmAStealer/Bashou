@@ -355,7 +355,7 @@ def json_setup(work, rng):
 
 def b64_setup(work, rng):
     word = rng.choice(("lantern", "harbor", "pebble", "thistle", "compass", "ember", "orchid", "falcon"))
-    note = f"the vault word is {word}\n"
+    note = f"answer {word}\n"
     (work / "secret.txt").write_text(base64.b64encode(note.encode()).decode() + "\n")
     starter(work, "secret.txt", [
         _("Your step: it prints the text still encoded. base64.b64decode(text) undoes base64 and gives "

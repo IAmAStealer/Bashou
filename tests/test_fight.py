@@ -189,9 +189,9 @@ SOLUTIONS = {
     # gpg and pass (run with a throwaway GNUPGHOME, or the fight's practice one: never your own keys)
     "plaintext_pixie": ("gpg --batch --pinentry-mode loopback --passphrase {x} -c secrets.txt && rm secrets.txt",
                         r"passphrase (\S+), then"),
-    "cipher_crow": ("gpg --batch --pinentry-mode loopback --passphrase {x} -d message.txt.gpg | sed -n 's/.*code is \\(.*\\)\\./\\1/p'",
+    "cipher_crow": ("gpg --batch --pinentry-mode loopback --passphrase {x} -d message.txt.gpg | awk '{{print $2}}'",
                     r"passphrase (\S+)\."),
-    "trial_gpg_note": ("gpg --batch --pinentry-mode loopback --passphrase {x} -d note.txt.gpg | sed -n 's/.*code is \\(.*\\)\\./\\1/p'",
+    "trial_gpg_note": ("gpg --batch --pinentry-mode loopback --passphrase {x} -d note.txt.gpg | awk '{{print $2}}'",
                        r"passphrase (\S+)\."),
     "forger_ferret": ("for m in mirror1 mirror2; do gpgv --keyring ./vendor.gpg $m/tool-1.4.tar.gz.sig $m/tool-1.4.tar.gz "
                       "2>/dev/null && echo $m; done", None),
@@ -615,6 +615,54 @@ class LenientAnswerTest(unittest.TestCase):
         self.assertTrue(packages.same_version("bash 5.2.37-2+b9", "5.2.37-2+b9"))       # dpkg-query -W
         self.assertTrue(packages.same_version("4.0.4-9", "2:4.0.4-9"))
         self.assertFalse(packages.same_version("", "2:4.0.4-9"))
+
+
+class HiddenAnswerTest(unittest.TestCase):
+    """A note that hides the answer holds only the word, or `answer <word>`: "the vault word is harbor"
+    left players wondering what to type (bug report)."""
+
+    @staticmethod
+    def readings(path, meta):
+        """What a player gets out of a file: as is, base64-decoded, %XX-decoded, gpg-opened."""
+        import base64
+        import binascii
+        import urllib.parse
+        pw = meta.get("args", {}).get("pw")
+        if path.suffix in (".gpg", ".asc") and pw:
+            yield secrets.unlock(path, pw) or ""
+            return
+        text = path.read_bytes().decode(errors="ignore")
+        yield text
+        yield urllib.parse.unquote(text)
+        with contextlib.suppress(binascii.Error, UnicodeDecodeError, ValueError):
+            yield base64.b64decode(text.strip(), validate=True).decode()
+
+    def test_a_note_holds_only_the_answer(self):
+        for c in challenges.ALL + challenges.SECURITY + challenges.TRIALS:
+            if not c.available():
+                continue
+            with self.subTest(c.id), tempfile.TemporaryDirectory() as tmp:
+                work = Path(tmp)
+                try:
+                    meta = c.setup(work, random.Random(0)) or {}
+                except (OSError, RuntimeError):     # no loopback here (a sandbox): these hide no note
+                    continue
+                answer = str(meta.get("answer", ""))
+                for path in sorted(work.rglob("*")):
+                    if not answer or ".git" in path.relative_to(work).parts or not path.is_file() or path.is_symlink():
+                        continue
+                    for text in self.readings(path, meta):
+                        lines = [line.strip() for line in text.splitlines() if line.strip()]
+                        if len(lines) == 1 and re.search(rf"(?<!\w){re.escape(answer)}(?!\w)", lines[0]):
+                            self.assertIn(lines[0], (answer, f"answer {answer}"), path.name)
+                if c.cleanup:
+                    c.cleanup(meta)
+
+    def test_the_old_sentence_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            note = Path(tmp, "note.txt")
+            note.write_text("the vault word is harbor\n")
+            self.assertEqual(list(self.readings(note, {}))[0].strip(), "the vault word is harbor")
 
 
 class CicdFightTest(unittest.TestCase):

@@ -90,7 +90,7 @@ def seal_verify(work, meta, value):
 def message_setup(work, rng, name="message.txt"):
     code = f"{rng.choice(WORDS)}-{rng.randint(100, 999)}"
     pw = passphrase(rng)
-    (work / name).write_text(f"Meet at the old bridge. The vault code is {code}.\n")
+    (work / name).write_text(f"answer {code}\n")
     lock(work / name, work / f"{name}.gpg", pw)
     (work / name).unlink()
     return {"args": {"pw": pw}, "answer": code}
