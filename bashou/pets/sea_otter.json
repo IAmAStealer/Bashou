@@ -7,8 +7,9 @@
   "o": "#5c3c26",
   "O": "#3c2618",
   "b": "#86603e",
-  "c": "#e2d8c4",
+  "c": "#d6cab2",
   "C": "#a89c86",
+  "w": "#fbf8f0",
   "n": "#120c08",
   "r": "#d8303a",
   "R": "#8a1c24",
@@ -20,28 +21,28 @@
   ".................",
   "............k.k..",
   "..kkkk.....kOkOk.",
-  ".kCcCCk....kOOOk.",
-  "kcccccok.....kok.",
-  "kcmcmcCokRRRkoook",
-  "kccnccoORYyYROook",
-  ".kccCbbbOOOOObbOk",
-  "..kbbboooooooOOOk",
+  ".kCccCk....kOOOk.",
+  "kCccccCk.....kok.",
+  "kcmccmcokRRRkoook",
+  "kcwnnwcORYyYROook",
+  ".kcwwcbbOOOOObbOk",
+  "..kkbboooooooOOOk",
   "...kOOOOOOOOOOOk.",
   "....kkkkkkkkkkk.."
  ],
  "poses": {
   "inhale": {
-   "9": ".kbbbooooooooOOOk",
+   "9": ".kkbbbooooooOOOOk",
    "10": "..kOOOOOOOOOOOOk."
   },
   "closed": {
-   "6": "--C-C------------"
+   "6": "--C--C-----------"
   },
   "left": {
-   "6": "--m-m------------"
+   "6": "--m--m-----------"
   },
   "right": {
-   "6": "--m-m------------"
+   "6": "--m--m-----------"
   },
   "fidget": {
    "2": "...........k.k...",
