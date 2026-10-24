@@ -1,0 +1,56 @@
+{
+ "name": "Royal seal",
+ "palette": {
+  "m": "#141418",
+  "e": "#ffffff",
+  "k": "#2e3240",
+  "s": "#a8b2c2",
+  "S": "#727c90",
+  "l": "#d6dce6",
+  "n": "#22222a",
+  "y": "#ffd040",
+  "Y": "#b08a18",
+  "r": "#d8303a",
+  "R": "#8a1c24",
+  "b": "#3a6ad0"
+ },
+ "base": [
+  "..y.y.y..........",
+  "..yYyYy..........",
+  "..kkkkkk.........",
+  ".ksmessSk........",
+  "nllsssssk........",
+  ".kklsssssk.......",
+  "...ksllssk.......",
+  ".rrrklllssk......",
+  "rRrRrklllssk..k..",
+  "rRyRrkllllsskkSk.",
+  ".rrrbkSllSSSSSSk.",
+  "..b.bkkkkkkkkkk.."
+ ],
+ "poses": {
+  "inhale": {
+   "6": "...kslllssk......",
+   "7": ".rrrkllllssk....."
+  },
+  "closed": {
+   "3": "---kk------------"
+  },
+  "left": {
+   "3": "---em------------"
+  },
+  "right": {
+   "3": "---mm------------"
+  },
+  "fidget": {
+   "0": ".y.y.y...........",
+   "1": ".yYyYy...........",
+   "8": "rRrRrklllssk.kk..",
+   "9": "rRyRrkllllssk.kSk"
+  }
+ },
+ "particles": [
+  0,
+  9
+ ]
+}

@@ -97,11 +97,15 @@ class Achievement:
 
 
 def won_network(s):
-    return any(ch.id in s["challenges"] for ch in challenges.network.ALL)
+    return network_wins(s) >= 1
 
 
-def network_wins(s):
-    return sum(ch.id in s["challenges"] for ch in challenges.network.ALL)
+def network_wins(s):                    # the certificate fights are network fights too (skill network)
+    return sum(ch.id in s["challenges"] for ch in challenges.network.ALL + challenges.certs.ALL)
+
+
+def won_certs(s):
+    return any(ch.id in s["challenges"] for ch in challenges.certs.ALL)
 
 
 def tool(s, *names):
@@ -503,6 +507,29 @@ ALL = [
     uses("packet", "operator", "Operator", "use ip, ss or ping 100 times", NET, 100, next="netadmin"),
     uses("packet", "netadmin", "Netadmin", "use ip, ss or ping 250 times", NET, 250, next="backbone"),
     uses("packet", "backbone", "Backbone", "use ip, ss or ping 500 times", NET, 500),
+    A("cert_reader", "seal", "Who signed it?", "read a certificate's subject and issuer with `openssl x509`",
+      cmd=lambda c: c.sub("openssl", "x509") and c.arg("openssl", r"^-(subject|issuer)$"), needs=("openssl",),
+      next="every_name", example='openssl x509 -in site.pem -noout -subject -issuer'),
+    A("every_name", "seal", "Every name", "list the names a certificate covers: `-ext subjectAltName`",
+      cmd=lambda c: c.sub("openssl", "x509") and c.arg("openssl", r"subjectAltName"), needs=("openssl",),
+      next="countdown", example='openssl x509 -in site.pem -noout -ext subjectAltName'),
+    A("countdown", "seal", "Countdown", "ask if a certificate is still valid in 30 days with `-checkend`",
+      cmd=lambda c: c.sub("openssl", "x509") and c.arg("openssl", r"^-checkend$"), needs=("openssl",),
+      example='openssl x509 -in site.pem -noout -checkend 2592000'),
+    A("hello_server", "seal", "Hello, server", "see what a server sends with `openssl s_client -servername`",
+      cmd=lambda c: c.sub("openssl", "s_client") and c.arg("openssl", r"^-servername$"), needs=("openssl",),
+      example='openssl s_client -connect example.org:443 -servername example.org < /dev/null'),
+    A("unbroken_chain", "seal", "Unbroken chain", "check a chain up to its root with `openssl verify -CAfile`",
+      cmd=lambda c: c.sub("openssl", "verify") and c.arg("openssl", r"^-CAfile$"), needs=("openssl",),
+      example='openssl verify -CAfile root.pem -untrusted fullchain.pem fullchain.pem'),
+    A("requester", "seal", "Requester", "make a certificate request with its names: `openssl req -addext`",
+      cmd=lambda c: c.sub("openssl", "req") and c.arg("openssl", r"^subjectAltName="), needs=("openssl",),
+      example="openssl req -new -key shop.key -out shop.csr -subj '/CN=shop.example' -addext 'subjectAltName=DNS:shop.example'"),
+    A("matching_pair", "seal", "Matching pair", "check that a key goes with its certificate: `openssl pkey -pubout`",
+      cmd=lambda c: c.sub("openssl", "pkey") and c.arg("openssl", r"^-pubout$"), needs=("openssl",),
+      example='openssl pkey -in server.key -pubout'),
+    A("cert_fighter", "seal", "Signed and sealed", "win a certificate fight: `bashou fight`", state=won_certs,
+      needs=("openssl",)),
     A("neighbours", "packet", "Neighbours", "see the machines next to you with `ip neigh`",
       cmd=lambda c: c.sub("ip", "neigh") or c.sub("ip", "neighbour") or c.sub("ip", "n"), needs=("ip",), example='ip neigh'),
     A("counters", "packet", "Counters", "read your interfaces' counters with `ip -s link`",

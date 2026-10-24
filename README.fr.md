@@ -109,11 +109,11 @@ de modèle d'IA, pas de jetons dépensés pour savoir ce que fait une commande. 
 compagnon pour tous tes terminaux, et il ne dessine jamais par-dessus ton texte.
 
 - **`bashou learn <commande>`** démonte une commande et explique chaque morceau : la commande, chaque option,
-  les arguments, les pipes et les redirections (87 commandes, de `ls` à `tar`, `awk`, `gpg` et `kubectl`).
+  les arguments, les pipes et les redirections (88 commandes, de `ls` à `tar`, `awk`, `gpg` et `kubectl`).
   Sans commande, il explique la dernière que ton compagnon t'a suggérée.
 - **Ton compagnon donne des astuces** en chemin (Ctrl+R, `cd -`, `du -sh *`…) et repère les outils que tu
   n'as pas encore essayés.
-- **293 succès** récompensent de vraies compétences : un pipe de 3 commandes, `find -exec`, `sed -i`,
+- **301 succès** récompensent de vraies compétences : un pipe de 3 commandes, `find -exec`, `sed -i`,
   `git bisect`, `tar -tf`…
 - **Des menaces** apparaissent de temps en temps. `bashou fight` ouvre un shell bac à sable où tu les bats avec
   le bon outil : `grep` contre l'Hydre des logs, `awk` contre le Golem comptable. Ça commence par les premiers
@@ -157,7 +157,7 @@ l'arène en dessous](doc/img/duel.svg)
 Choisis un compagnon de départ : Poussière, Graine ou Caillou. Il grandit jusqu'au niveau 20 et change de
 forme en chemin. Ce qu'il devient, c'est à toi de le découvrir.
 
-31 autres compagnons se cachent dans ton terminal. Chacun vient de ce qu'il représente : une Gouttelette après
+32 autres compagnons se cachent dans ton terminal. Chacun vient de ce qu'il représente : une Gouttelette après
 tes 10 premières commandes, un codeur de nuit pour tes premiers programmes, un champignon pour tes propres
 scripts, d'autres pour un nouvel outil assez utilisé, un long pipe, un combat perdu ou gagné, une balade dans
 l'aventure… Le tableau des compagnons ne montre que leur silhouette tant que tu ne les as pas rencontrés.

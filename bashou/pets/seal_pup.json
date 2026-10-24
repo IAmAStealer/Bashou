@@ -1,0 +1,57 @@
+{
+ "name": "Seal pup",
+ "next": "harbor_seal",
+ "next_at": {
+  "achievements": 3
+ },
+ "palette": {
+  "m": "#141418",
+  "e": "#ffffff",
+  "k": "#6a7080",
+  "w": "#fbfbff",
+  "g": "#dfe4ee",
+  "G": "#aeb6c6",
+  "n": "#3a3a44",
+  "r": "#e0443a"
+ },
+ "base": [
+  ".................",
+  ".................",
+  ".................",
+  "...kkkkkkk.......",
+  "..kwwwwwwwk......",
+  "..kwmmwwmmwk.....",
+  "..kwmmwwmmwwkkk..",
+  ".kgwwwnnwwwwwwwk.",
+  ".kgwwwwwwrwggwwwk",
+  "..kggwwwwwgggwgGk",
+  "...kGGgggggGGkGk.",
+  "....kkkkkkkkk.kk."
+ ],
+ "poses": {
+  "inhale": {
+   "8": ".kgwwwwwwrwwgwwwk",
+   "9": "..kggwwwwwwggwwGk"
+  },
+  "closed": {
+   "5": "---www-www-------",
+   "6": "---kkk-kkk-------"
+  },
+  "left": {
+   "5": "---mmw-mmw-------",
+   "6": "---mmw-mmw-------"
+  },
+  "right": {
+   "5": "----wmm-wmm------",
+   "6": "----wmm-wmm------"
+  },
+  "fidget": {
+   "10": "...kGGgggggGGkkGk",
+   "11": "....kkkkkkkkk..kk"
+  }
+ },
+ "particles": [
+  0,
+  9
+ ]
+}

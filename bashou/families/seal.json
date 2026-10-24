@@ -1,0 +1,22 @@
+{
+ "name": "Seal",
+ "first": "seal_pup",
+ "order": 48,
+ "needs": "openssl",
+ "unlock": {
+  "family_achievement": true
+ },
+ "achievement_needs": [
+  "openssl"
+ ],
+ "voice": "*arf*",
+ "tips": [
+  "openssl x509 -in site.pem -noout -subject -issuer -dates : who, signed by whom, until when.",
+  "Browsers read the names in the SAN, never the CN.",
+  "curl -k is never the fix. curl --cacert ca.pem is.",
+  "-checkend 2592000 : exit status 1 if it ends within 30 days. Let a program watch the dates."
+ ],
+ "personal": [
+  "Signed. Sealed. Checked."
+ ]
+}
