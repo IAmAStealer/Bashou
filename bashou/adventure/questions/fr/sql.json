@@ -257,7 +257,7 @@
    "Aucun, les apostrophes protègent"
   ],
   "answer": 0,
-  "explain": "Si name vaut ' OR '1'='1, la requête devient WHERE name = '' OR '1'='1', qui correspond à toutes les lignes. C'est l'injection SQL. Passe plutôt les valeurs en paramètres (? avec sqlite3 en Python ; d'autres bibliothèques ont leur propre marque, comme %s dans psycopg pour PostgreSQL) : la base ne les lit jamais comme du SQL. Les noms de tables et de colonnes ne peuvent pas être des paramètres : choisis-les dans une liste fixe de ton code."
+  "explain": "Si name vaut ' OR '1'='1, la requête devient WHERE name = '' OR '1'='1', qui correspond à toutes les lignes. C'est l'injection SQL. Passe plutôt les valeurs en paramètres (? avec sqlite3 en Python, %s avec psycopg pour PostgreSQL) : la base ne les lit jamais comme du SQL. Les noms de tables et de colonnes ne peuvent pas être des paramètres : choisis-les dans une liste fixe de ton code."
  },
  {
   "id": "sql-2-08",
