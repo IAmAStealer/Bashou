@@ -45,7 +45,8 @@
     "",
     "- The private key never leaves your server.",
     "- -noenc: no passphrase, so the server can start alone. On a Mac's LibreSSL: -nodes.",
-    "$ openssl req -new -newkey ec -pkeyopt ec_paramgen_curve:P-256 -noenc -keyout shop.key -out shop.csr -subj '/CN=shop.example' -addext 'subjectAltName=DNS:shop.example,DNS:www.shop.example'"
+    "- umask 077: the key is readable by you only, from its first moment (LibreSSL doesn't do it by itself).",
+    "$ (umask 077 && openssl req -new -newkey ec -pkeyopt ec_paramgen_curve:P-256 -noenc -keyout shop.key -out shop.csr -subj '/CN=shop.example' -addext 'subjectAltName=DNS:shop.example,DNS:www.shop.example')"
    ]
   },
   {
@@ -67,6 +68,7 @@
     "",
     "- Debian only reads files ending in .crt, in PEM.",
     "- curl --cacert lab.crt trusts it for one command, without touching the system.",
+    "- Firefox, Node and Python's requests keep their own CA list (NODE_EXTRA_CA_CERTS, REQUESTS_CA_BUNDLE).",
     "- Turning the check off (-k) is never the fix: it trusts an attacker's certificate too."
    ]
   },
@@ -109,7 +111,7 @@
     "",
     "- The certbot package installs a timer that runs certbot renew twice a day.",
     "- A check in your monitoring catches what renewal missed: -checkend gives exit status 1 when the certificate ends within that many seconds.",
-    "- After a renewal, the web server must reload to read the new file."
+    "- The web server must then reload: a script in /etc/letsencrypt/renewal-hooks/deploy/ runs after each renewal."
    ]
   },
   {
@@ -128,7 +130,7 @@
     "A few rules cover most of certificate security.",
     "",
     "- Whoever copies the private key can pretend to be your server: guard it like a password.",
-    "- Old TLS versions (1.0, 1.1) and old hashes have known attacks: clients refuse them."
+    "- Old TLS versions (1.0, 1.1) and old hashes have known attacks: clients refuse them. In nginx: ssl_protocols TLSv1.2 TLSv1.3;"
    ]
   }
  ]

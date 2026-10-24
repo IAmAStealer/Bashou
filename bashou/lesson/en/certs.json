@@ -70,7 +70,7 @@
     "",
     "- Roots sign intermediates, and intermediates sign the servers' certificates.",
     "- The server sends its own certificate and the intermediates. The client follows the signatures up to a root it already has.",
-    "- An intermediate missing, and the chain breaks, even if each certificate is fine."
+    "- An intermediate missing, and the chain breaks, even if each certificate is fine. A browser may fetch the missing one by itself, but curl and openssl don't: \"works in my browser\" proves nothing."
    ]
   },
   {
@@ -113,8 +113,8 @@
     "A certificate works between two dates. After the second one, every client refuses it: the site is down for everyone at once.",
     "",
     "- Public certificates live shorter and shorter (CA/Browser Forum rules): renewing by hand stops working.",
-    "- So renewing is a program's job (certbot and its timer), and so is checking:",
-    "$ openssl x509 -in site.pem -noout -enddate"
+    "- So renewing is a program's job (certbot and its timer), and so is checking: exit status 1 = it ends within 30 days.",
+    "$ openssl x509 -in site.pem -noout -checkend 2592000"
    ]
   }
  ]

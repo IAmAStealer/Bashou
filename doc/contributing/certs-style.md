@@ -37,7 +37,8 @@ table. Lifetimes and limits change: the CA/Browser Forum rules are checked again
 ## Fights
 
 - Offline only: every certificate, CA and key is made by the fight's setup, in the arena. A server is
-  `openssl s_server` on 127.0.0.1 (Linux-only, like the Loopback Lurker), stopped at cleanup.
+  `openssl s_server` or Python's `http.server` with `ssl`, on 127.0.0.1, TLS 1.2+ (T8), Linux-only like the
+  Loopback Lurker, stopped at cleanup.
 - Setup makes lab keys and certificates with `openssl` commands only (no Python crypto library), with no passphrase (T9, T13).
 - The verify reads files and runs `openssl` on them; it never trusts what the player typed alone when
   a file can prove it.

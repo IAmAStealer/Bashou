@@ -37,11 +37,11 @@
     "Root CA"
    ],
    "text": [
-    "Personne ne connaît tous les serveurs. Ton système garde une courte liste de CA racines de confiance : le magasin de confiance (trust store).",
+    "Personne ne connaît tous les serveurs. Ton système garde une courte liste de CA racines : le magasin de confiance (trust store).",
     "",
     "- Les racines signent des intermédiaires, et les intermédiaires signent les certificats des serveurs.",
     "- Le serveur envoie son certificat et les intermédiaires. Le client suit les signatures jusqu'à une racine qu'il a déjà.",
-    "- Un intermédiaire manque, et la chaîne casse, même si chaque certificat est bon."
+    "- Un intermédiaire manque, et la chaîne casse. Un navigateur sait le retrouver, pas curl ni openssl : « ça marche dans le navigateur » ne prouve rien."
    ]
   },
   {
@@ -84,8 +84,8 @@
     "Un certificat marche entre deux dates. Après la seconde, tous les clients le refusent : le site tombe pour tout le monde d'un coup.",
     "",
     "- Les certificats publics vivent de moins en moins longtemps (règles du CA/Browser Forum) : renouveler à la main ne tient plus.",
-    "- Renouveler est donc le travail d'un programme (certbot et son timer), vérifier aussi :",
-    "$ openssl x509 -in site.pem -noout -enddate"
+    "- Renouveler est donc le travail d'un programme (certbot et son timer), vérifier aussi : code de sortie 1 = il finit dans les 30 jours.",
+    "$ openssl x509 -in site.pem -noout -checkend 2592000"
    ]
   }
  ]

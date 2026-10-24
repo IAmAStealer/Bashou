@@ -18,7 +18,8 @@
     "",
     "- La clé privée ne quitte jamais ton serveur.",
     "- -noenc : sans phrase de passe, pour que le serveur démarre seul. Avec LibreSSL sur Mac : -nodes.",
-    "$ openssl req -new -newkey ec -pkeyopt ec_paramgen_curve:P-256 -noenc -keyout shop.key -out shop.csr -subj '/CN=shop.example' -addext 'subjectAltName=DNS:shop.example,DNS:www.shop.example'"
+    "- umask 077 : la clé n'est lisible que par toi, dès sa création (LibreSSL ne le fait pas tout seul).",
+    "$ (umask 077 && openssl req -new -newkey ec -pkeyopt ec_paramgen_curve:P-256 -noenc -keyout shop.key -out shop.csr -subj '/CN=shop.example' -addext 'subjectAltName=DNS:shop.example,DNS:www.shop.example')"
    ]
   },
   {
@@ -40,6 +41,7 @@
     "",
     "- Debian ne lit que les fichiers en .crt, au format PEM.",
     "- curl --cacert lab.crt lui fait confiance pour une commande, sans toucher au système.",
+    "- Firefox, Node et requests de Python gardent leur propre liste de CA (NODE_EXTRA_CA_CERTS, REQUESTS_CA_BUNDLE).",
     "- Couper la vérification (-k) n'est jamais la solution : elle accepte aussi le certificat d'un attaquant."
    ]
   },
@@ -81,8 +83,8 @@
     "Renouveler, c'est le travail d'un programme, pas d'un calendrier : les durées raccourcissent sans cesse.",
     "",
     "- Le paquet certbot installe un timer qui lance certbot renew deux fois par jour.",
-    "- Une vérification dans ta supervision rattrape ce que le renouvellement a raté : -checkend renvoie le code 1 quand le certificat finit dans ce nombre de secondes.",
-    "- Après un renouvellement, le serveur web doit recharger pour lire le nouveau fichier."
+    "- Ta supervision rattrape ce que le renouvellement a raté : -checkend renvoie le code 1 si le certificat finit dans ce nombre de secondes.",
+    "- Le serveur web doit alors recharger : un script dans /etc/letsencrypt/renewal-hooks/deploy/ tourne après chaque renouvellement."
    ]
   },
   {
@@ -101,7 +103,7 @@
     "Quelques règles couvrent l'essentiel de la sécurité des certificats.",
     "",
     "- Qui copie la clé privée peut se faire passer pour ton serveur : garde-la comme un mot de passe.",
-    "- Les vieilles versions de TLS (1.0, 1.1) et les vieux hachages ont des attaques connues : les clients les refusent."
+    "- Les vieilles versions de TLS (1.0, 1.1) et les vieux hachages ont des attaques connues : les clients les refusent. Dans nginx : ssl_protocols TLSv1.2 TLSv1.3;"
    ]
   }
  ]

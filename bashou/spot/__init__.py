@@ -166,13 +166,17 @@ def timestamp(rng):
 B64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 
 
+STARTS = {"EC PRIVATE KEY": ["MHcCAQEE"], "PRIVATE KEY": ["MII", "MIGHAgEA"],
+          "OPENSSH PRIVATE KEY": ["b3BlbnNzaC1rZXktdjE"]}
+
+
 def pem(headers):
-    """A PEM header and the start of its base64 (DER starts with MII, OpenSSH's own format with
-    b3BlbnNzaC1rZXktdjE: "openssh-key-v1"), cut to fit the line."""
+    """A PEM header and the start of its base64, cut to fit the line: what openssl writes (MII for most
+    DER, MHcCAQEE for a P-256 EC key, MIGHAgEA for a P-256 PKCS#8 key) or OpenSSH's own "openssh-key-v1"."""
     def make(rng):
         name = rng.choice(headers)
         head = f"-----BEGIN {name}-----"
-        body = ("b3BlbnNzaC1rZXktdjE" if name.startswith("OPENSSH") else "MII") + "".join(
+        body = rng.choice(STARTS.get(name, ["MII"])) + "".join(
             rng.choice(B64) for _ in range(LONGEST))
         return (head + body)[:LONGEST] if len(head) <= LONGEST - 4 else head
     return make

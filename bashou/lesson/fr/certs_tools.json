@@ -43,8 +43,9 @@
     "s_client se connecte comme un navigateur et montre ce que le serveur envoie.",
     "",
     "- -servername envoie le nom voulu (SNI) : un serveur à plusieurs sites choisit son certificat avec.",
-    "- La connexion s'ouvre même si la vérification échoue : lis la ligne Verify return code.",
-    "- -showcerts affiche chaque certificat envoyé. LibreSSL (Mac) n'a pas -verify_hostname."
+    "- La connexion s'ouvre même si la vérification échoue : lis Verify return code.",
+    "- -showcerts affiche chaque certificat envoyé.",
+    "- Sur Mac, LibreSSL n'a pas -verify_hostname : vérifie le nom avec curl."
    ]
   },
   {
@@ -94,7 +95,7 @@
     " certificate has expired           les dates",
     " no alternative certificate        le SAN",
     "   subject name matches",
-    " self-signed certificate           faire confiance"
+    " self-signed certificate           prendre une CA"
    ],
    "point": 1,
    "mark": [
@@ -103,8 +104,8 @@
    "text": [
     "Chaque erreur de certificat dit quelle partie a échoué. Répare cette partie.",
     "",
-    "- unable to get local issuer : le serveur n'envoie pas ses intermédiaires, ou tu ne fais pas confiance à sa CA. Pour une CA privée : curl --cacert ca.pem.",
-    "- ✘ curl -k (--insecure) cache toutes ces erreurs, y compris le certificat d'un attaquant."
+    "- ✘ curl -k (--insecure) cache toutes ces erreurs, y compris le certificat d'un attaquant.",
+    "- unable to get local issuer : le serveur n'envoie pas ses intermédiaires, ou tu ne fais pas confiance à sa CA. Pour une CA privée : curl --cacert ca.pem."
    ]
   }
  ]

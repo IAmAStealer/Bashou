@@ -6,6 +6,7 @@ stopped when the arena closes (the Loopback Lurker's way).
 """
 
 import os
+import random
 import re
 import subprocess
 import sys
@@ -114,7 +115,7 @@ def expiry_setup(work, rng):
     dying = rng.choice(names)
     for name in names:
         key = new_key(hidden(work) / f"{name}.key")
-        days = rng.randint(3, 25) if name == dying else rng.randint(45, 397)
+        days = rng.randint(3, 25) if name == dying else rng.randint(45, 200)
         issue(work / "certs" / f"{name}.pem", key, name, rng, issuer=ca, days=days, sans=[name])
     return {"answer": f"{dying}.pem"}
 
@@ -241,24 +242,46 @@ def iguana_setup(work, rng):
     return {"pid": pid, "word": word}
 
 
-INSECURE = re.compile(r"(?<![\w-])(-[a-zA-Z]*k[a-zA-Z]*|--insecure)(?![\w-])")
+# -k, --insecure, and -K/--config (a file can say insecure too), anywhere in the script: an array or a
+# continued line hides them from a curl line.
+INSECURE = re.compile(r"(?<![\w-])(-[a-zA-Z]*[kK][a-zA-Z]*|--insecure|--config)(?![\w-])")
+
+
+def fetch(work, home):
+    """What fetch.sh prints, run from another folder (cron does), with no curl settings from the player's
+    home or environment; "" when it fails."""
+    env = {k: v for k, v in os.environ.items() if not k.startswith(("CURL_", "SSL_", "XDG_CONFIG"))}
+    try:
+        done = subprocess.run(["bash", str(work / "fetch.sh")], cwd=work.parent, capture_output=True, text=True,
+                              timeout=15, env={**env, "HOME": home})
+    except subprocess.SubprocessError:
+        return ""
+    return done.stdout if done.returncode == 0 else ""
 
 
 def iguana_verify(work, meta, value):
-    """fetch.sh gets the page with curl, trusting ca.pem, and nothing turns the check off (T1)."""
+    """fetch.sh gets the page with curl, trusting ca.pem, and nothing turns the check off (T1): with another
+    CA in ca.pem, it must fail."""
+    ca = work / "ca.pem"
     try:
-        code = [line for line in (work / "fetch.sh").read_text().splitlines() if not line.lstrip().startswith("#")]
+        text = (work / "fetch.sh").read_text().replace("\\\n", " ")
+        real = ca.read_bytes()
     except OSError:
         return False
-    curl = [line for line in code if re.search(r"\bcurl\b", line)]
-    if not curl or any(INSECURE.search(line) for line in curl) or not any("--cacert" in line for line in curl):
+    code = [line for line in text.splitlines() if not line.lstrip().startswith("#")]
+    if any(INSECURE.search(line) for line in code) or not any("--cacert" in line for line in code):
         return False
-    env = {k: v for k, v in os.environ.items() if not k.startswith(("CURL_", "SSL_"))}
-    try:
-        done = subprocess.run(["bash", "fetch.sh"], cwd=work, capture_output=True, text=True, timeout=15, env=env)
-    except subprocess.SubprocessError:
-        return False
-    return done.returncode == 0 and f"status: {meta['word']}" in done.stdout
+    page = f"status: {meta['word']}"
+    with tempfile.TemporaryDirectory(prefix="bashou-cert-") as home:
+        if page not in fetch(work, home):
+            return False
+        other = lab_ca(Path(home) / "other", random.Random(), "Other Lab CA")[0]
+        try:
+            ca.write_text(other.read_text())
+            fooled = page in fetch(work, home)
+        finally:
+            ca.write_bytes(real)
+    return not fooled
 
 
 # --- a key and a CSR with the right names ---------------------------------------------------------------------
@@ -288,12 +311,12 @@ def raccoon_verify(work, meta, value):
             return False
     except OSError:
         return False
-    ok_key, key_text = check("pkey", "-in", key, "-noout", "-text")
+    ok_key, key_text = check("pkey", "-in", key, "-passin", "pass:", "-noout", "-text")
     ok_csr, csr_text = check("req", "-in", csr, "-noout", "-text", "-verify")
     if not (ok_key and ok_csr and strong_key(key_text)):
         return False
     _, csr_pub = check("req", "-in", csr, "-noout", "-pubkey")
-    _, key_pub = check("pkey", "-in", key, "-pubout")
+    _, key_pub = check("pkey", "-in", key, "-passin", "pass:", "-pubout")
     san = re.search(r"Subject Alternative Name:.*?\n\s*(.+)", csr_text)
     names = set(re.findall(r"DNS:([^,\s]+)", san.group(1))) if san else set()
     signature = re.findall(r"Signature Algorithm: (\S+)", csr_text)
@@ -312,7 +335,7 @@ def chest_setup(work, rng):
 
 
 def same_issuer(work, meta, value):
-    return value.strip().removeprefix("issuer=").removeprefix("CN=").removeprefix("CN = ").strip().lower() == \
+    return value.strip().removeprefix("issuer=").strip().removeprefix("/").removeprefix("CN=").removeprefix("CN = ").strip().lower() == \
         meta["answer"].lower()
 
 
@@ -338,7 +361,8 @@ ALL = [
                      "subjectAltName shows that list (a Mac's LibreSSL has no -ext: use -text, and read the line "
                      "under Subject Alternative Name).",
                      "for f in sites/*.pem; do openssl x509 -in \"$f\" -noout -checkhost \"$(basename \"$f\" "
-                     ".pem)\"; done"],
+                     ".pem)\"; done (a Mac's LibreSSL has no -checkhost: read the line under Subject Alternative "
+                     "Name in -text instead)"],
               setup=san_setup, verify=same_site, **NET),
     Challenge(level=2, id="key_kobold", threat="Key Kobold",
               task="The Key Kobold hid server.pem's private key among the keys in keys/.\n"
@@ -358,17 +382,21 @@ ALL = [
                      "server.pem, find the file whose subject is its issuer, and go on up to the root (its subject "
                      "and issuer are the same). Clients already have the root: it stays out. One file belongs to "
                      "another chain.",
-                     "cat server.pem certs/A.pem certs/B.pem > fullchain.pem (A issued server.pem, B issued A), "
-                     "then: openssl verify -CAfile certs/ROOT.pem -untrusted fullchain.pem fullchain.pem"],
+                     "cat server.pem certs/A.pem certs/B.pem > fullchain.pem (A issued server.pem, B issued A). "
+                     "openssl verify -CAfile certs/ROOT.pem -untrusted fullchain.pem fullchain.pem checks that the "
+                     "links exist, not their order: the order is yours (each file's issuer is the next file's "
+                     "subject)."],
               setup=chain_setup, verify=chain_verify, **NET),
     Challenge(level=2, id="insecure_iguana", threat="Insecure Iguana", fix=True, os="linux", after=("chain_chameleon",),
               task="The Insecure Iguana got into fetch.sh: someone \"fixed\" a certificate error with curl -k, "
-                   "which turns the check off.\nMake fetch.sh trust the lab's CA (ca.pem) instead, without -k. "
-                   "Then: verify",
+                   "which turns the check off.\nMake fetch.sh trust the lab's CA (ca.pem, next to the script) instead, without -k. "
+                   "It must work from any folder: cron runs it from elsewhere. Then: verify",
               hints=["-k (--insecure) makes curl accept any certificate, an attacker's too, and it stays in the "
                      "script forever. The real fix: tell curl which CA signed the server's certificate. "
                      "--cacert FILE trusts that CA for this one command.",
-                     "In fetch.sh, replace -k with --cacert ca.pem, then run: bash fetch.sh"],
+                     "In fetch.sh, add the line dir=$(dirname -- \"${BASH_SOURCE[0]}\") (the script's own folder: a script "
+                     "can't count on the folder it's run from), replace -k with --cacert \"$dir/ca.pem\", then run: "
+                     "bash fetch.sh"],
               setup=iguana_setup, verify=iguana_verify, cleanup=stop, works=loopback_works,
               pet="packet", skill="network", tools=("openssl", "curl"), requires=["openssl", "curl"]),
     Challenge(level=3, id="request_raccoon", threat="Request Raccoon", fix=True, after=("san_salamander",),
@@ -379,14 +407,14 @@ ALL = [
                      "signed with your key, for a CA to sign. -newkey makes the key at the same time, -noenc leaves "
                      "it without a passphrase (fine for a lab), -addext adds the SAN. A CN alone covers nothing. "
                      "On a Mac's LibreSSL: -newkey rsa:2048 -nodes instead of the ec, -pkeyopt and -noenc part.",
-                     "openssl req -new -newkey ec -pkeyopt ec_paramgen_curve:P-256 -noenc -keyout shop.key -out "
-                     "shop.csr -subj '/CN={first}' -addext 'subjectAltName=DNS:{first},DNS:{second}' && "
-                     "chmod 600 shop.key"],
+                     "(umask 077 && openssl req -new -newkey ec -pkeyopt ec_paramgen_curve:P-256 -noenc -keyout "
+                     "shop.key -out shop.csr -subj '/CN={first}' -addext 'subjectAltName=DNS:{first},DNS:{second}') "
+                     "(umask 077: the key is made readable by you only, from its first moment)"],
               setup=raccoon_setup, verify=raccoon_verify, **NET),
 ]
 
 CHEST = trial("trial_cert_issuer", 1, "This chest holds site.pem, a certificate. Who signed it? answer <issuer>",
               ["Every certificate names who signed it: its issuer. openssl x509 -in site.pem -noout -issuer "
-               "prints it, after issuer= and CN=.", "openssl x509 -in site.pem -noout -issuer"],
+               "prints it, after issuer= and CN= (on a Mac: issuer= /CN=).", "openssl x509 -in site.pem -noout -issuer"],
               chest_setup, same_issuer, requires=["openssl"], teaches=["openssl"])
 CHESTS = [CHEST]                  # locked chests in `bashou adventure`

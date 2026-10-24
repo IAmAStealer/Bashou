@@ -194,7 +194,8 @@ SOLUTIONS = {
     "chain_chameleon": ("subj() {{ openssl x509 -in \"$1\" -noout -\"$2\" | sed 's/^[a-z]*= *//'; }}; cur=server.pem; cp server.pem fullchain.pem; "
                         "while :; do i=$(subj \"$cur\" issuer); n=; for f in certs/*.pem; do [ \"$(subj \"$f\" subject)\" = \"$i\" ] && n=$f; done; "
                         "[ -n \"$n\" ] && [ \"$(subj \"$n\" subject)\" != \"$(subj \"$n\" issuer)\" ] || break; cat \"$n\" >> fullchain.pem; cur=$n; done", None),
-    "insecure_iguana": ("sed -i 's/ -k / --cacert ca.pem /' fetch.sh && bash fetch.sh", None),
+    "insecure_iguana": ("sed -i 's|^url=|dir=$(dirname -- \"${{BASH_SOURCE[0]}}\")\\nurl=|; s| -k | --cacert \"$dir/ca.pem\" |' "
+                        "fetch.sh && bash fetch.sh", None),
     "request_raccoon": ("openssl req -new -newkey ec -pkeyopt ec_paramgen_curve:P-256 -noenc -keyout shop.key -out shop.csr "
                         "-subj \"/CN={x}\" -addext \"subjectAltName=DNS:{x},DNS:www.{x}\" 2>/dev/null && chmod 600 shop.key",
                         r"certificate for (\S+) and"),
@@ -314,6 +315,7 @@ WRONG_MOVES = [("index_imp", "zsh pick.sh"), ("flag_phantom", "sort sizes.txt | 
          ("insecure_iguana", "sed -i 's/ -k / -k --cacert ca.pem /' fetch.sh"),
          ("insecure_iguana", "sed -i 's/ -k / --insecure --cacert ca.pem /' fetch.sh"),
          ("insecure_iguana", "sed -i 's/curl -fsS -k/curl -fsSk --cacert ca.pem/' fetch.sh"),
+         ("insecure_iguana", "sed -i 's/ -k / --cacert ca.pem /' fetch.sh"),                 # works only from here
          ("request_raccoon", "openssl req -new -newkey ec -pkeyopt ec_paramgen_curve:P-256 -noenc -keyout shop.key -out shop.csr "
           "-subj /CN=shop.example 2>/dev/null && chmod 600 shop.key"),
          ("request_raccoon", "openssl req -new -newkey rsa:1024 -noenc -keyout shop.key -out shop.csr -subj /CN=x "

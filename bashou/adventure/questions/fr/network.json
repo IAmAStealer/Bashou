@@ -617,7 +617,7 @@
    "Passer en http://"
   ],
   "answer": 0,
-  "explain": "Ton système ne connaît pas la CA de l'entreprise, donc il ne peut pas finir la chaîne. Donne-la à curl avec --cacert pour une commande, ou installe-la dans le magasin de confiance (update-ca-certificates sur Debian, update-ca-trust sur Rocky) pour tous les programmes. -k accepterait n'importe quel certificat, aussi celui d'un attaquant ; http:// envoie tout en clair."
+  "explain": "Ton système ne connaît pas la CA de l'entreprise : il ne peut pas finir la chaîne. Donne-la à curl avec --cacert, ou installe-la dans le magasin du système (update-ca-certificates sur Debian, update-ca-trust sur Rocky) pour presque tous les programmes (Firefox, Node et requests ont leur liste). -k accepterait n'importe quel certificat, aussi celui d'un attaquant ; http:// envoie tout en clair."
  },
  {
   "id": "network-3-14",

@@ -10,6 +10,7 @@ import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from bashou import challenges, lesson
 from bashou.adventure import lessons as owl
@@ -245,6 +246,7 @@ class FightTest(unittest.TestCase):
         if not c.available():
             self.skipTest("Linux loopback only")
         meta = c.setup(self.work, random.Random(5))
+        meta_ca = (self.work / "ca.pem").read_text()
         try:
             self.assertFalse(c.check(self.work, meta, "done"), "the starter keeps -k")
             script = self.work / "fetch.sh"
@@ -254,9 +256,65 @@ class FightTest(unittest.TestCase):
             script.write_text(text.replace(" -k ", " --cacert ca.pem -k "))
             self.assertFalse(c.check(self.work, meta, "done"), "T1: -k still there")
             script.write_text(text.replace(" -k ", " --cacert ca.pem "))
-            self.assertTrue(c.check(self.work, meta, "done"))
+            self.assertFalse(c.check(self.work, meta, "done"), "ca.pem from the current folder: fails from cron")
+            fixed = ' --cacert "$dir/ca.pem" '
+            text = text.replace("\nurl=", '\ndir=$(dirname -- "${BASH_SOURCE[0]}")\nurl=')
+            tricks = {"-k on a continued line": text.replace(" -k ", fixed + "\\\n  -k "),
+                      "-k in an array": text.replace("page=$(curl", "opts=(-k)\npage=$(curl").replace(
+                          " -k ", fixed + '"${opts[@]}" '),
+                      "insecure in a config file": text.replace(" -k ", fixed + '-K "$dir/my.cfg" ')}
+            (self.work / "my.cfg").write_text("insecure\n")
+            for why, bad in tricks.items():
+                script.write_text(bad)
+                self.assertFalse(c.check(self.work, meta, "done"), why)
+            home = Path(self.tmp.name) / "home"
+            home.mkdir()
+            (home / ".curlrc").write_text("insecure\n")
+            script.write_text(text.replace(" -k ", fixed))
+            with mock.patch.dict(os.environ, {"HOME": str(home)}):
+                self.assertTrue(c.check(self.work, meta, "done"), "the player's ~/.curlrc isn't read")
+            self.assertEqual((self.work / "ca.pem").read_text(), meta_ca, "verify puts ca.pem back")
         finally:
             c.cleanup(meta)
+
+    def test_the_chest_takes_what_libressl_prints(self):
+        """LibreSSL on a Mac prints issuer= /CN=…, OpenSSL 3 issuer=CN=…: both win."""
+        meta = {"answer": "Old Oak CA"}
+        for printed in ("issuer=CN=Old Oak CA", "issuer= /CN=Old Oak CA", "CN = Old Oak CA", "old oak ca"):
+            self.assertTrue(challenges.certs.same_issuer(self.work, meta, printed), printed)
+
+    def test_a_key_with_a_passphrase_fails_without_asking(self):
+        """openssl pkey asked for the passphrase on the terminal, and the verify hung until its timeout."""
+        c = challenges.BY_ID["request_raccoon"]
+        meta = c.setup(self.work, random.Random(0))
+        first, second = meta["names"]
+        pw = Path(self.tmp.name) / "pw"
+        pw.write_text("secret\n")
+        subprocess.run(["openssl", "req", "-new", "-newkey", "ec", "-pkeyopt", "ec_paramgen_curve:P-256",
+                        "-passout", f"file:{pw}", "-keyout", "shop.key", "-out", "shop.csr", "-subj", f"/CN={first}",
+                        "-addext", f"subjectAltName=DNS:{first},DNS:{second}"], cwd=self.work, capture_output=True,
+                       check=True, stdin=subprocess.DEVNULL)
+        os.chmod(self.work / "shop.key", 0o600)
+        calls, real = [], challenges.certs.check
+        def spy(*args):
+            calls.append(args)
+            return real(*args)
+        with mock.patch.object(challenges.certs, "check", spy):
+            self.assertFalse(c.check(self.work, meta, "done"))
+        keys = [a for a in calls if a[0] == "pkey"]
+        self.assertTrue(keys)
+        for args in keys:                       # on a terminal, openssl would ask for it there
+            self.assertIn("-passin", args)
+
+    def test_healthy_certificates_fit_todays_public_limit(self):
+        """T7: public certificates last 200 days at most since 2026-03-15."""
+        c = challenges.BY_ID["expiry_elk"]
+        meta = c.setup(self.work, random.Random(3))
+        for f in (self.work / "certs").glob("*.pem"):
+            self.assertEqual(subprocess.run(["openssl", "x509", "-in", f, "-noout", "-checkend", str(201 * 86400)],
+                                            capture_output=True).returncode, 1, f.name)
+        self.assertTrue(meta["answer"])
+
 
 
 class SpotTest(unittest.TestCase):
