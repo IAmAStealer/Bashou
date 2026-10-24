@@ -1,0 +1,135 @@
+{
+ "id": "certs_admin",
+ "order": 526,
+ "skill": "network",
+ "after": [
+  "certs_tools"
+ ],
+ "tools": [
+  "openssl"
+ ],
+ "masters": [
+  "won request_raccoon",
+  "won insecure_iguana | answered certs_admin 3"
+ ],
+ "recall": [
+  "network-3-14",
+  "network-3-16"
+ ],
+ "questions": [
+  "network-3-14",
+  "network-3-15",
+  "network-3-16",
+  "network-2-18"
+ ],
+ "fights": [
+  "request_raccoon",
+  "insecure_iguana"
+ ],
+ "title": "Certificates on your servers",
+ "summary": "Ask for a certificate, trust a private CA, renew on time, and keep the key safe, without ever turning the check off.",
+ "pages": [
+  {
+   "scheme": [
+    " shop.key ──┐  stays here, chmod 600",
+    "            ├─▶ shop.csr ──▶ CA ──▶ shop.pem",
+    " names ─────┘   public key         signed",
+    "                + names (SAN)"
+   ],
+   "point": 1,
+   "mark": [
+    "shop.csr"
+   ],
+   "text": [
+    "To get a certificate, you send a CA a CSR (certificate signing request): your public key and the names, signed with your key to prove you hold it.",
+    "",
+    "- The private key never leaves your server.",
+    "- -noenc: no passphrase, so the server can start alone. On a Mac's LibreSSL: -nodes.",
+    "$ openssl req -new -newkey ec -pkeyopt ec_paramgen_curve:P-256 -noenc -keyout shop.key -out shop.csr -subj '/CN=shop.example' -addext 'subjectAltName=DNS:shop.example,DNS:www.shop.example'"
+   ]
+  },
+  {
+   "scheme": [
+    " Debian, Ubuntu",
+    "   /usr/local/share/ca-certificates/lab.crt",
+    "   $ sudo update-ca-certificates",
+    "",
+    " Rocky, Red Hat",
+    "   /etc/pki/ca-trust/source/anchors/lab.crt",
+    "   $ sudo update-ca-trust"
+   ],
+   "point": 2,
+   "mark": [
+    "update-ca-certificates"
+   ],
+   "text": [
+    "For servers only your team uses, run your own CA, and add its certificate to each machine's trust store.",
+    "",
+    "- Debian only reads files ending in .crt, in PEM.",
+    "- curl --cacert lab.crt trusts it for one command, without touching the system.",
+    "- Turning the check off (-k) is never the fix: it trusts an attacker's certificate too."
+   ]
+  },
+  {
+   "scheme": [
+    " self-signed    a lab, a test         ✓",
+    " private CA     your team's servers   ✓",
+    " public CA      the internet          ✓",
+    "                (Let's Encrypt: free)",
+    "",
+    " self-signed for real users          ✗"
+   ],
+   "point": 5,
+   "mark": [
+    "✗"
+   ],
+   "text": [
+    "A self-signed certificate is its own issuer: nobody vouches for it, so every client warns.",
+    "",
+    "- Users who click through warnings learn to click through real attacks.",
+    "- Let's Encrypt gives free public certificates, renewed by certbot."
+   ]
+  },
+  {
+   "scheme": [
+    " certbot.timer ──▶ twice a day",
+    "   certbot renew ──▶ renews what ends soon",
+    "",
+    " monitoring:",
+    "   openssl x509 -in site.pem -noout \\",
+    "     -checkend 1209600",
+    "   status 0: still valid in 14 days"
+   ],
+   "point": 1,
+   "mark": [
+    "certbot renew"
+   ],
+   "text": [
+    "Renewing is a program's job, not a calendar's: lifetimes keep getting shorter.",
+    "",
+    "- The certbot package installs a timer that runs certbot renew twice a day.",
+    "- A check in your monitoring catches what renewal missed: -checkend gives exit status 1 when the certificate ends within that many seconds.",
+    "- After a renewal, the web server must reload to read the new file."
+   ]
+  },
+  {
+   "scheme": [
+    " private key   chmod 600, owner root",
+    "               never in git, never sent",
+    " key size      RSA 2048+ or ECDSA P-256",
+    " signature     SHA-256 (never MD5, SHA-1)",
+    " TLS           1.2 and 1.3 only"
+   ],
+   "point": 0,
+   "mark": [
+    "chmod 600"
+   ],
+   "text": [
+    "A few rules cover most of certificate security.",
+    "",
+    "- Whoever copies the private key can pretend to be your server: guard it like a password.",
+    "- Old TLS versions (1.0, 1.1) and old hashes have known attacks: clients refuse them."
+   ]
+  }
+ ]
+}

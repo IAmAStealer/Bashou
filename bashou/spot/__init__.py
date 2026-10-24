@@ -163,6 +163,21 @@ def timestamp(rng):
     return str(rng.randint(1_400_000_000, 1_900_000_000))
 
 
+B64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+
+
+def pem(headers):
+    """A PEM header and the start of its base64 (DER starts with MII, OpenSSH's own format with
+    b3BlbnNzaC1rZXktdjE: "openssh-key-v1"), cut to fit the line."""
+    def make(rng):
+        name = rng.choice(headers)
+        head = f"-----BEGIN {name}-----"
+        body = ("b3BlbnNzaC1rZXktdjE" if name.startswith("OPENSSH") else "MII") + "".join(
+            rng.choice(B64) for _ in range(LONGEST))
+        return (head + body)[:LONGEST] if len(head) <= LONGEST - 4 else head
+    return make
+
+
 def pick(lines):
     return lambda rng: rng.choice(lines)
 
@@ -197,6 +212,9 @@ KINDS = {
     "date": ("ISO 8601 date", "text", iso_date), "timestamp": ("Unix timestamp", "text", timestamp),
     "python": ("Python", "lang", pick(PYTHON)), "rust": ("Rust", "lang", pick(RUST)), "c": ("C", "lang", pick(C)),
     "bash": ("Bash", "lang", pick(BASH)), "sql": ("SQL", "lang", pick(SQL)),
+    "cert": ("Certificate", "pem", pem(["CERTIFICATE"])),
+    "csr": ("CSR", "pem", pem(["CERTIFICATE REQUEST", "NEW CERTIFICATE REQUEST"])),
+    "privkey": ("Private key", "pem", pem(["PRIVATE KEY", "EC PRIVATE KEY", "RSA PRIVATE KEY", "OPENSSH PRIVATE KEY"])),
 }
 ARROWS = ["up", "left", "right", "down"]
 

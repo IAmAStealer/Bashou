@@ -501,5 +501,174 @@
   ],
   "answer": 0,
   "explain": "-I (--head) demande seulement les en-têtes : les lignes que le serveur envoie avant un fichier, comme Content-Type, Content-Length (la taille en octets) ou Last-Modified. Pratique pour vérifier un gros téléchargement, ou une redirection, sans rien télécharger. -O enregistrerait le fichier."
+ },
+ {
+  "id": "network-1-14",
+  "level": 1,
+  "q": "Que contient surtout le certificat d'un serveur ?",
+  "choices": [
+   "Sa clé publique, ses noms, ses dates et qui l'a signé",
+   "Sa clé privée, pour que les clients lui parlent",
+   "Le mot de passe du site",
+   "La liste de ses utilisateurs"
+  ],
+  "answer": 0,
+  "explain": "Un certificat lie une clé publique à des noms, entre deux dates, et une CA signe cette promesse. La clé privée reste sur le serveur : si elle était dans le certificat, n'importe qui pourrait se faire passer pour lui. Les certificats sont publics ; tout le monde peut en télécharger un."
+ },
+ {
+  "id": "network-1-15",
+  "level": 1,
+  "q": "Tu ouvres https://shop.example. Où ton navigateur cherche-t-il ce nom dans le certificat ?",
+  "choices": [
+   "Dans la liste Subject Alternative Name (SAN)",
+   "Dans le CN du sujet",
+   "Dans l'émetteur",
+   "N'importe où dans le fichier"
+  ],
+  "answer": 0,
+  "explain": "Les navigateurs ne comparent le nom qu'au SAN, la liste des noms que couvre le certificat. Le CN (Common Name) du sujet est un vieil endroit que les navigateurs ne lisent plus depuis des années. Un certificat dont le CN dit shop.example mais pas le SAN est refusé."
+ },
+ {
+  "id": "network-1-16",
+  "level": 1,
+  "q": "Pourquoi ton ordinateur fait-il confiance à un certificat signé par une CA à qui il n'a jamais parlé ?",
+  "choices": [
+   "La racine de la CA est dans son magasin de confiance",
+   "Tout certificat est fiable au début",
+   "Le serveur dit qu'il est fiable",
+   "Le certificat contient un cadenas"
+  ],
+  "answer": 0,
+  "explain": "Ton système arrive avec une courte liste de CA racines : le magasin de confiance (trust store). Le serveur envoie son certificat et les intermédiaires ; chacun est signé par le suivant, jusqu'à une racine de cette liste. Pas de racine au bout de la chaîne, pas de confiance."
+ },
+ {
+  "id": "network-1-17",
+  "level": 1,
+  "q": "Le certificat d'un site a dépassé sa date notAfter cette nuit. Que se passe-t-il ?",
+  "choices": [
+   "Tous les clients le refusent, jusqu'au remplacement",
+   "Seuls les vieux navigateurs râlent",
+   "Il marche encore un mois de grâce",
+   "La CA le renouvelle toute seule"
+  ],
+  "answer": 0,
+  "explain": "Après notAfter, le certificat est expiré et tous les clients refusent la connexion, d'un coup. Rien ne le renouvelle sauf un programme (certbot et son timer). C'est pour ça que l'expiration se vérifie dans la supervision, par exemple avec openssl x509 -checkend."
+ },
+ {
+  "id": "network-2-14",
+  "level": 2,
+  "q": "Le SAN d'un certificat contient *.shop.example. Quel nom couvre-t-il ?",
+  "choices": [
+   "www.shop.example",
+   "shop.example",
+   "a.b.shop.example",
+   "shop.example.org"
+  ],
+  "answer": 0,
+  "explain": "Un * remplace exactement un niveau, à gauche : www.shop.example oui, mais pas shop.example lui-même, ni a.b.shop.example (deux niveaux). C'est pourquoi beaucoup de certificats listent à la fois shop.example et *.shop.example."
+ },
+ {
+  "id": "network-2-15",
+  "level": 2,
+  "q": "openssl s_client se connecte, mais finit par : Verify return code: 21 (unable to verify the first certificate). Quelle est la cause probable ?",
+  "choices": [
+   "Le serveur n'envoie pas son certificat intermédiaire",
+   "Le certificat a expiré",
+   "Le port est fermé",
+   "Ton horloge a une minute de décalage"
+  ],
+  "answer": 0,
+  "explain": "Le code 21 veut dire que le client a reçu le certificat du serveur mais n'a pas pu le relier à une racine de confiance : en général le serveur n'envoie que son certificat, sans les intermédiaires (solution : servir fullchain.pem). Un certificat expiré donne le code 10, un mauvais nom le code 62 (avec -verify_hostname). Un port fermé ne donne aucune connexion."
+ },
+ {
+  "id": "network-2-16",
+  "level": 2,
+  "q": "Comment vérifier que server.key va avec server.pem ?",
+  "choices": [
+   "Comparer les clés publiques qu'openssl tire de chacun",
+   "Vérifier que les deux fichiers ont la même taille",
+   "Vérifier que les deux fichiers ont la même date",
+   "Ouvrir les deux avec cat et regarder la première ligne"
+  ],
+  "answer": 0,
+  "explain": "Un certificat contient une clé publique, et le fichier de clé privée contient les deux moitiés. openssl x509 -in server.pem -noout -pubkey et openssl pkey -in server.key -pubout affichent les moitiés publiques : mêmes lignes, c'est une paire. La taille, la date et la ligne BEGIN ne disent rien de la clé pour laquelle un certificat a été fait."
+ },
+ {
+  "id": "network-2-17",
+  "level": 2,
+  "q": "Pourquoi donner -servername shop.example à openssl s_client ?",
+  "choices": [
+   "Le serveur choisit le certificat du site par ce nom (SNI)",
+   "Ça rend la connexion chiffrée",
+   "Ça remplace le DNS",
+   "Ça active la vérification du certificat"
+  ],
+  "answer": 0,
+  "explain": "Une adresse sert souvent plusieurs sites. Le client dit lequel il veut dès le premier message (SNI, Server Name Indication), et le serveur répond avec le certificat de ce site. Sans lui, tu peux voir le certificat d'un autre site et chercher un problème qui n'existe pas."
+ },
+ {
+  "id": "network-3-13",
+  "level": 3,
+  "q": "curl vers un serveur interne dit : unable to get local issuer certificate. Le serveur utilise la CA privée de ton entreprise. Que fais-tu ?",
+  "choices": [
+   "Faire confiance à cette CA : curl --cacert ca-entreprise.pem",
+   "Ajouter -k à la commande curl",
+   "Redémarrer le serveur",
+   "Passer en http://"
+  ],
+  "answer": 0,
+  "explain": "Ton système ne connaît pas la CA de l'entreprise, donc il ne peut pas finir la chaîne. Donne-la à curl avec --cacert pour une commande, ou installe-la dans le magasin de confiance (update-ca-certificates sur Debian, update-ca-trust sur Rocky) pour tous les programmes. -k accepterait n'importe quel certificat, aussi celui d'un attaquant ; http:// envoie tout en clair."
+ },
+ {
+  "id": "network-3-14",
+  "level": 3,
+  "q": "Un script tourne depuis des années avec curl -k. Quel est le problème ?",
+  "choices": [
+   "Quiconque est entre les deux peut lire et changer le trafic",
+   "Aucun, -k rend juste curl plus discret",
+   "-k le ralentit",
+   "Il ne marche qu'avec des certificats autosignés"
+  ],
+  "answer": 0,
+  "explain": "-k (--insecure) coupe la vérification du certificat : la connexion reste chiffrée, mais avec celui qui répond, attaquant compris. Il cache le vrai problème (une CA manquante, un mauvais nom, un certificat expiré). La solution : faire confiance à la bonne CA avec --cacert, ou réparer le serveur."
+ },
+ {
+  "id": "network-3-15",
+  "level": 3,
+  "q": "Que doit contenir fullchain.pem sur un serveur web ?",
+  "choices": [
+   "Le certificat du serveur, puis les intermédiaires",
+   "Seulement le certificat racine",
+   "La clé privée et le certificat",
+   "La racine d'abord, puis le certificat du serveur"
+  ],
+  "answer": 0,
+  "explain": "Le serveur envoie ce fichier aux clients : son certificat d'abord, puis chaque intermédiaire, celui qui a signé le précédent. Les clients ont déjà la racine dans leur magasin de confiance, l'envoyer ne sert à rien. La clé privée va dans son propre fichier, jamais envoyé."
+ },
+ {
+  "id": "network-3-16",
+  "level": 3,
+  "q": "ls -l affiche -rw-r--r-- sur /etc/ssl/private/shop.key. Pourquoi est-ce un problème ?",
+  "choices": [
+   "Tout utilisateur peut lire la clé et usurper le serveur",
+   "Le serveur web ne peut pas la lire",
+   "Le certificat expirera plus tôt",
+   "Ce n'en est pas un : les clés sont publiques"
+  ],
+  "answer": 0,
+  "explain": "r pour les autres veut dire que chaque compte de la machine peut copier la clé, et qui a la clé peut être le serveur. Une clé privée est en chmod 600 (ou 640 pour un groupe de service), à root, et jamais dans git."
+ },
+ {
+  "id": "network-2-18",
+  "level": 2,
+  "q": "Sur Debian, tu as copié lab-ca.pem dans /usr/local/share/ca-certificates/ puis lancé update-ca-certificates, mais curl la refuse. Pourquoi ?",
+  "choices": [
+   "Le fichier doit finir en .crt pour être lu",
+   "Debian a besoin d'un redémarrage",
+   "curl ne lit jamais le magasin du système",
+   "Le fichier doit être au format DER"
+  ],
+  "answer": 0,
+  "explain": "update-ca-certificates ne prend que les fichiers en .crt (au format PEM) de ce dossier. Renomme-le lab-ca.crt et relance : il doit dire 1 added. Sur Rocky et Red Hat, le dossier est /etc/pki/ca-trust/source/anchors/ et la commande update-ca-trust."
  }
 ]

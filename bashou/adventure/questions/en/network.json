@@ -501,5 +501,174 @@
   ],
   "answer": 0,
   "explain": "-I (--head) asks only for the headers: lines the server sends before a file, like Content-Type, Content-Length (the size in bytes) or Last-Modified. Handy to check a big download, or a redirect, without downloading anything. -O would save the file."
+ },
+ {
+  "id": "network-1-14",
+  "level": 1,
+  "q": "What does a server's certificate mainly hold?",
+  "choices": [
+   "Its public key, its names, its dates, and who signed it",
+   "Its private key, so clients can talk to it",
+   "The password of the website",
+   "The list of its users"
+  ],
+  "answer": 0,
+  "explain": "A certificate ties a public key to names, between two dates, and a CA signs that promise. The private key stays on the server: if it were in the certificate, anyone could pretend to be the server. Certificates are public; anyone can download one."
+ },
+ {
+  "id": "network-1-15",
+  "level": 1,
+  "q": "You open https://shop.example. Where does your browser look for that name in the certificate?",
+  "choices": [
+   "In the Subject Alternative Name (SAN) list",
+   "In the CN of the subject",
+   "In the issuer",
+   "Anywhere in the file"
+  ],
+  "answer": 0,
+  "explain": "Browsers only match the name against the SAN, the list of names the certificate covers. The CN (Common Name) in the subject is an old place that browsers stopped reading years ago. A certificate whose CN says shop.example but whose SAN doesn't is refused."
+ },
+ {
+  "id": "network-1-16",
+  "level": 1,
+  "q": "Why does your computer trust a certificate signed by a CA it has never talked to?",
+  "choices": [
+   "The CA's root is in its trust store",
+   "Every certificate is trusted at first",
+   "The server says it's trusted",
+   "The certificate has a padlock inside"
+  ],
+  "answer": 0,
+  "explain": "Your system ships with a short list of root CAs: the trust store. The server sends its certificate and the intermediates; each one is signed by the next, up to a root in that list. No root at the end of the chain, no trust."
+ },
+ {
+  "id": "network-1-17",
+  "level": 1,
+  "q": "A site's certificate passed its notAfter date last night. What happens?",
+  "choices": [
+   "Every client refuses it until a new one is installed",
+   "Only old browsers complain",
+   "It keeps working for a month of grace",
+   "The CA renews it by itself"
+  ],
+  "answer": 0,
+  "explain": "After notAfter, the certificate is expired and every client refuses the connection, all at once. Nothing renews it unless a program does (certbot and its timer). That's why expiry is checked by monitoring, for example with openssl x509 -checkend."
+ },
+ {
+  "id": "network-2-14",
+  "level": 2,
+  "q": "A certificate's SAN holds *.shop.example. Which name does it cover?",
+  "choices": [
+   "www.shop.example",
+   "shop.example",
+   "a.b.shop.example",
+   "shop.example.org"
+  ],
+  "answer": 0,
+  "explain": "A * stands for exactly one label, at the left: www.shop.example yes, but not shop.example itself, and not a.b.shop.example (two labels). That's why many certificates list both shop.example and *.shop.example."
+ },
+ {
+  "id": "network-2-15",
+  "level": 2,
+  "q": "openssl s_client connects, but ends with: Verify return code: 21 (unable to verify the first certificate). What's the likely cause?",
+  "choices": [
+   "The server doesn't send its intermediate certificate",
+   "The certificate has expired",
+   "The port is closed",
+   "Your clock is one minute off"
+  ],
+  "answer": 0,
+  "explain": "Code 21 means the client got the server's certificate but couldn't link it to a root it trusts: usually the server sends only its own certificate, without the intermediates (fix: serve fullchain.pem). An expired certificate gives code 10, a wrong name code 62 (with -verify_hostname). A closed port gives no connection at all."
+ },
+ {
+  "id": "network-2-16",
+  "level": 2,
+  "q": "How do you check that server.key goes with server.pem?",
+  "choices": [
+   "Compare the public keys openssl prints from each",
+   "Check that both files have the same size",
+   "Check that both files have the same date",
+   "Open both with cat and look at the first line"
+  ],
+  "answer": 0,
+  "explain": "A certificate holds a public key, and the private key file holds both halves. openssl x509 -in server.pem -noout -pubkey and openssl pkey -in server.key -pubout print the public halves: the same lines, they're a pair. Sizes, dates and the BEGIN line say nothing about which key a certificate was made for."
+ },
+ {
+  "id": "network-2-17",
+  "level": 2,
+  "q": "Why give -servername shop.example to openssl s_client?",
+  "choices": [
+   "It picks which site's certificate the server sends (SNI)",
+   "It makes the connection encrypted",
+   "It replaces DNS",
+   "It turns on the certificate check"
+  ],
+  "answer": 0,
+  "explain": "One address often serves many sites. The client says which one it wants in the first message (SNI, Server Name Indication), and the server answers with that site's certificate. Without it, you may see another site's certificate and chase a problem that isn't there."
+ },
+ {
+  "id": "network-3-13",
+  "level": 3,
+  "q": "curl to an internal server says: unable to get local issuer certificate. The server uses your company's private CA. What do you do?",
+  "choices": [
+   "Trust that CA: curl --cacert company-ca.pem",
+   "Add -k to the curl command",
+   "Restart the server",
+   "Use http:// instead"
+  ],
+  "answer": 0,
+  "explain": "Your system doesn't know the company's CA, so it can't finish the chain. Give curl the CA with --cacert for one command, or install it in the trust store (update-ca-certificates on Debian, update-ca-trust on Rocky) for every program. -k would accept any certificate, an attacker's too; http:// sends everything in clear."
+ },
+ {
+  "id": "network-3-14",
+  "level": 3,
+  "q": "A script has worked for years with curl -k. What's the problem?",
+  "choices": [
+   "Anyone in between can read and change the traffic",
+   "Nothing, -k only makes curl quieter",
+   "-k makes it slower",
+   "It only works with self-signed certificates"
+  ],
+  "answer": 0,
+  "explain": "-k (--insecure) turns the certificate check off: the connection is still encrypted, but to whoever answers, an attacker included. It hides the real problem (a missing CA, a wrong name, an expired certificate). The fix is to trust the right CA with --cacert, or to fix the server."
+ },
+ {
+  "id": "network-3-15",
+  "level": 3,
+  "q": "What should fullchain.pem on a web server hold?",
+  "choices": [
+   "The server's certificate, then the intermediates",
+   "Only the root certificate",
+   "The private key and the certificate",
+   "The root first, then the server's certificate"
+  ],
+  "answer": 0,
+  "explain": "The server sends this file to clients: its own certificate first, then each intermediate, the one that signed the previous. Clients already have the root in their trust store, so sending it is useless. The private key goes in its own file, never sent."
+ },
+ {
+  "id": "network-3-16",
+  "level": 3,
+  "q": "ls -l shows -rw-r--r-- on /etc/ssl/private/shop.key. Why is that a problem?",
+  "choices": [
+   "Every user can read the key and pose as the server",
+   "The web server can't read it",
+   "The certificate will expire sooner",
+   "It isn't one: keys are public"
+  ],
+  "answer": 0,
+  "explain": "r for others means every account on the machine can copy the key, and whoever has the key can be the server. A private key is chmod 600 (or 640 for a service group), owned by root, and never put in git."
+ },
+ {
+  "id": "network-2-18",
+  "level": 2,
+  "q": "On Debian, you copied lab-ca.pem to /usr/local/share/ca-certificates/ and ran update-ca-certificates, but curl still doesn't trust it. Why?",
+  "choices": [
+   "The file must end in .crt to be read",
+   "Debian needs a reboot",
+   "curl never reads the system store",
+   "The file must be in DER format"
+  ],
+  "answer": 0,
+  "explain": "update-ca-certificates only picks up files ending in .crt (in PEM) in that folder. Rename it lab-ca.crt and run it again: it should say 1 added. On Rocky and Red Hat, the folder is /etc/pki/ca-trust/source/anchors/ and the command is update-ca-trust."
  }
 ]

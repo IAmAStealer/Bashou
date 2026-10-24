@@ -1,0 +1,51 @@
+{
+ "name": "Key Kobold",
+ "palette": {
+  "e": "#ffffff",
+  "k": "#1e1a28",
+  "g": "#ffd040",
+  "G": "#a87a10",
+  "r": "#d8483a",
+  "R": "#8a2820",
+  "p": "#f08070",
+  "h": "#f0e8d0",
+  "w": "#ffffff"
+ },
+ "base": [
+  ".ggg.....h....h..",
+  "gG.Gg....hh..hh..",
+  "gG.Gg...rrrrrrr..",
+  ".ggg...rkerkerrr.",
+  "..g....rrrrrrrrr.",
+  "..g....rRwRwRrr..",
+  "..gg...prrrrrrp..",
+  "..g...pprrrrrrpp.",
+  "..gg..p.RrrrrR.p.",
+  "..g.....rrrrrr...",
+  "........RR..RR...",
+  ".......RRR..RRR.."
+ ],
+ "poses": {
+  "inhale": {
+   "7": "------prrrrrrrp--"
+  },
+  "closed": {
+   "3": "--------kk-kk----"
+  },
+  "left": {
+   "3": "--------ke-ke----"
+  },
+  "right": {
+   "3": "--------ek-ek----"
+  },
+  "fidget": {
+   "0": "-ggg.....h.....h-",
+   "1": "gG.Gg....hh...hh-"
+  }
+ },
+ "particles": [
+  0,
+  5
+ ],
+ "lone_pixels": true
+}

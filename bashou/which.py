@@ -62,7 +62,7 @@ def system():
 PACKAGES = {"rustc": ("rustc cargo", "rust cargo"), "gpg": ("gnupg", "gnupg2"), "pass": ("pass", "pass"),
             "sqlite3": ("sqlite3", "sqlite"), "python3": ("python3", "python3"), "gcc": ("gcc", "gcc"),
             "gdb": ("gdb", "gdb"), "git": ("git", "git"), "tcpdump": ("tcpdump", "tcpdump"),
-            "yamllint": ("yamllint", "yamllint")}
+            "openssl": ("openssl", "openssl"), "yamllint": ("yamllint", "yamllint")}
 
 
 def install(tool):

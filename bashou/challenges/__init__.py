@@ -97,10 +97,10 @@ class Challenge:
         return all(which.installed(t) for t in (self.requires or [self.tool])) and (self.works is None or self.works())
 
 
-from . import awk, basics, cicd, code, debug, everyday, find, gitfights, grep, logic, network, packages, pipe, ps, repos, rust, scripting, secrets, sed, security, shellscript, sql, system, trials, uniq  # noqa: E402
+from . import awk, basics, certs, cicd, code, debug, everyday, find, gitfights, grep, logic, network, packages, pipe, ps, repos, rust, scripting, secrets, sed, security, shellscript, sql, system, trials, uniq  # noqa: E402
 
 MODULES = (basics, everyday, scripting, shellscript, system, gitfights, grep, awk, find, uniq, sed, ps, pipe, code, debug, rust, packages, repos, cicd, sql, secrets, logic,
-           network, trials)
+           network, certs, trials)
 ALL = [c for m in MODULES for c in getattr(m, "ALL", ())]            # fights
 SECURITY = security.SECURITY        # `bashou arena security`, in order
 TRIALS = [c for m in MODULES for c in getattr(m, "CHESTS", ())]      # locked chests in `bashou adventure`

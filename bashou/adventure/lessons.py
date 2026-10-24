@@ -210,6 +210,18 @@ LESSONS = [
         ("Without -l, ss shows connections: ESTAB is open, TIME-WAIT just closed. -6 keeps IPv6 only, and filters pick "
          "a port: state established '( dport = :443 )'.", "ss -tn state established"),
     ]},
+    {"id": "certs", "tool": "openssl", "topics": ("network",), "title": "openssl: read a certificate", "pages": [
+        ("A certificate ties a public key to names, until a date, and a CA signs that promise. openssl x509 reads one: "
+         "-noout skips the base64 block, and you name the fields you want.", "openssl x509 -in site.pem -noout -subject -enddate"),
+        ("-issuer names who signed it. Each issuer is signed in turn, up to a root CA your system trusts: the chain. A "
+         "self-signed certificate is its own issuer, and nobody vouches for it.", "openssl x509 -in site.pem -noout -issuer"),
+        ("Browsers only check the names in the Subject Alternative Name (SAN), never the CN. A Mac's openssl is LibreSSL, "
+         "without -ext: use -text there, and read the line under Subject Alternative Name.",
+         "openssl x509 -in site.pem -noout -ext subjectAltName"),
+        ("-checkend asks: still valid in that many seconds? Exit status 0 for yes, 1 for no, so a script or your "
+         "monitoring can warn before the site goes down. 2592000 seconds is 30 days.",
+         "openssl x509 -in site.pem -noout -checkend 2592000"),
+    ]},
     {"id": "bash_zsh", "tool": "bash", "topics": ("bash",), "title": "bash and zsh", "pages": [
         ("Your terminal runs a shell: bash on most Linux systems, zsh on a Mac and for many developers. They read almost every line the same way. echo $0 tells you which one you're typing in.",
          "echo $0"),

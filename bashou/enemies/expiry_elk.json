@@ -1,0 +1,53 @@
+{
+ "name": "Expiry Elk",
+ "palette": {
+  "e": "#ffffff",
+  "k": "#1e1a28",
+  "A": "#f0e2b8",
+  "a": "#b89c68",
+  "b": "#9a6436",
+  "B": "#5e3a1c",
+  "l": "#c8925a",
+  "h": "#e0c050",
+  "H": "#8a6a20",
+  "r": "#e86a50"
+ },
+ "base": [
+  "A..A..A....HhhhH.",
+  "AaaAaaA.....h.h..",
+  ".AaaaaA.....hrh..",
+  "..AaaA.......h...",
+  "...lbl......hrh..",
+  "..lbbbl....h.r.h.",
+  ".kebbbbl...HhrrH.",
+  "lbbbbbbbbbbbbbbb.",
+  "BbbbbbllbbbbbbbbB",
+  ".Bbbbbbbbbbbbbbb.",
+  "..BB..BB...BB..BB",
+  "..BB..BB...BB..BB"
+ ],
+ "poses": {
+  "inhale": {
+   "8": "-bbbbbbbbbbbbbbb-",
+   "9": "Bbbbbbbbbbbbbbbbb"
+  },
+  "closed": {
+   "6": "-kk--------------"
+  },
+  "left": {
+   "6": "-ke--------------"
+  },
+  "right": {
+   "6": "-ek--------------"
+  },
+  "fidget": {
+   "2": "------------h.h--",
+   "5": "-----------hrr.h-"
+  }
+ },
+ "particles": [
+  0,
+  7
+ ],
+ "lone_pixels": true
+}

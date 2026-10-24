@@ -1,0 +1,111 @@
+{
+ "title": "Certificats : openssl pour voir dedans",
+ "summary": "Lire un certificat, interroger un serveur, vérifier une chaîne et une clé, et lire les erreurs de curl.",
+ "pages": [
+  {
+   "scheme": [
+    " $ openssl x509 -in site.pem -noout \\",
+    "     -subject -issuer -enddate -ext subjectAltName",
+    " subject=CN=shop.example",
+    " issuer=CN=Lab CA",
+    " notAfter=Dec  1 10:00:00 2026 GMT",
+    " X509v3 Subject Alternative Name:",
+    "     DNS:shop.example, DNS:www.shop.example"
+   ],
+   "point": 6,
+   "mark": [
+    "DNS:shop.example"
+   ],
+   "text": [
+    "openssl x509 lit un fichier certificat. -noout saute le bloc base64, et tu nommes les champs voulus.",
+    "",
+    "- -text affiche tout : utile une fois, beaucoup à lire.",
+    "- L'openssl d'un Mac est LibreSSL, sans -ext : utilise -text et lis sous Subject Alternative Name (ou brew install openssl@3)."
+   ]
+  },
+  {
+   "scheme": [
+    " $ openssl s_client -connect shop.example:443 \\",
+    "     -servername shop.example \\",
+    "     -verify_hostname shop.example < /dev/null",
+    " …",
+    " Verify return code: 0 (ok)             ◀ bon",
+    " Verify return code: 21 (unable to",
+    "   verify the first certificate)        ◀ chaîne",
+    " Verify return code: 62 (hostname       ◀ nom",
+    "   mismatch)"
+   ],
+   "point": 4,
+   "mark": [
+    "0 (ok)"
+   ],
+   "text": [
+    "s_client se connecte comme un navigateur et montre ce que le serveur envoie.",
+    "",
+    "- -servername envoie le nom voulu (SNI) : un serveur à plusieurs sites choisit son certificat avec.",
+    "- La connexion s'ouvre même si la vérification échoue : lis la ligne Verify return code.",
+    "- -showcerts affiche chaque certificat envoyé. LibreSSL (Mac) n'a pas -verify_hostname."
+   ]
+  },
+  {
+   "scheme": [
+    " $ openssl verify -CAfile root.pem \\",
+    "     -untrusted intermediate.pem server.pem",
+    " server.pem: OK",
+    "",
+    " fullchain.pem = server.pem",
+    "               + intermediate.pem",
+    "               (pas la racine : les clients l'ont)"
+   ],
+   "point": 2,
+   "mark": [
+    "server.pem: OK"
+   ],
+   "text": [
+    "openssl verify suit les signatures, sans aucun réseau.",
+    "",
+    "- -CAfile, c'est ce à quoi tu fais confiance. -untrusted donne les intermédiaires pour faire les liens, sans leur faire confiance.",
+    "- fullchain.pem, c'est ce qu'un serveur doit envoyer : son certificat d'abord, puis les intermédiaires dans l'ordre."
+   ]
+  },
+  {
+   "scheme": [
+    " $ openssl x509 -in server.pem -noout -pubkey",
+    " $ openssl pkey -in server.key -pubout",
+    "",
+    " mêmes lignes : cette clé va avec ce certificat"
+   ],
+   "point": 3,
+   "mark": [
+    "mêmes lignes"
+   ],
+   "text": [
+    "Un serveur refuse de démarrer quand sa clé ne va pas avec son certificat. Compare les moitiés publiques :",
+    "",
+    "- le certificat contient la clé publique ;",
+    "- le fichier de clé privée contient les deux moitiés, et -pubout affiche la publique."
+   ]
+  },
+  {
+   "scheme": [
+    " curl dit …                        regarde",
+    " unable to get local issuer        chaîne, ou CA",
+    "   certificate",
+    " certificate has expired           les dates",
+    " no alternative certificate        le SAN",
+    "   subject name matches",
+    " self-signed certificate           faire confiance"
+   ],
+   "point": 1,
+   "mark": [
+    "chaîne, ou CA"
+   ],
+   "text": [
+    "Chaque erreur de certificat dit quelle partie a échoué. Répare cette partie.",
+    "",
+    "- unable to get local issuer : le serveur n'envoie pas ses intermédiaires, ou tu ne fais pas confiance à sa CA. Pour une CA privée : curl --cacert ca.pem.",
+    "- ✘ curl -k (--insecure) cache toutes ces erreurs, y compris le certificat d'un attaquant."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,92 @@
+{
+ "title": "Certificats : qui est un serveur",
+ "summary": "Ce que dit un certificat, la chaîne jusqu'à une racine de confiance, les noms qu'il couvre, et pourquoi il expire.",
+ "pages": [
+  {
+   "scheme": [
+    " site.pem, un certificat",
+    " ├── clé publique  celle du serveur",
+    " ├── names (SAN)   shop.example, www.shop.example",
+    " ├── dates         pas avant … pas après",
+    " └── émetteur      Lab CA, qui a signé tout ça"
+   ],
+   "point": 2,
+   "mark": [
+    "names (SAN)"
+   ],
+   "text": [
+    "Un certificat, c'est une clé publique avec une promesse : cette clé appartient à ces noms, jusqu'à cette date. Une CA (autorité de certification) l'a vérifié et a signé la promesse.",
+    "",
+    "- Sa clé privée reste sur le serveur : elle prouve que le serveur est bien celui dont parle le certificat.",
+    "- N'importe qui peut copier un certificat. Sans sa clé privée, il ne sert à rien."
+   ]
+  },
+  {
+   "scheme": [
+    " trust store (sur ta machine)",
+    "   Root CA",
+    "     │ signe",
+    "     ▼",
+    "   Intermediate CA     ┐ le serveur",
+    "     │ signe           │ envoie",
+    "     ▼                 │ ces deux-là",
+    "   shop.example        ┘ (la feuille)"
+   ],
+   "point": 1,
+   "mark": [
+    "Root CA"
+   ],
+   "text": [
+    "Personne ne connaît tous les serveurs. Ton système garde une courte liste de CA racines de confiance : le magasin de confiance (trust store).",
+    "",
+    "- Les racines signent des intermédiaires, et les intermédiaires signent les certificats des serveurs.",
+    "- Le serveur envoie son certificat et les intermédiaires. Le client suit les signatures jusqu'à une racine qu'il a déjà.",
+    "- Un intermédiaire manque, et la chaîne casse, même si chaque certificat est bon."
+   ]
+  },
+  {
+   "scheme": [
+    " tu demandes :  shop.example",
+    "",
+    " SAN: www.shop.example           ✗ ne colle pas",
+    " SAN: shop.example,",
+    "      www.shop.example           ✓",
+    "",
+    " subject: CN=shop.example        pas vérifié"
+   ],
+   "point": 2,
+   "mark": [
+    "✗ ne colle pas"
+   ],
+   "text": [
+    "Le client vérifie que le nom demandé est dans le SAN (Subject Alternative Name) du certificat.",
+    "",
+    "- Le CN du sujet est un vieil endroit pour un nom : les navigateurs ne le lisent pas, seulement le SAN.",
+    "- shop.example et www.shop.example sont deux noms. Un certificat ne couvre que ceux qu'il liste.",
+    "- *.shop.example couvre un niveau : www.shop.example oui, shop.example non."
+   ]
+  },
+  {
+   "scheme": [
+    " not before   2026-09-01",
+    " not after    2026-12-01   ◀ après : refusé",
+    "",
+    " certificats publics, durée maximale :",
+    "   dès le 2026-03-15    200 jours",
+    "   dès le 2027-03-15    100 jours",
+    "   dès le 2029-03-15     47 jours"
+   ],
+   "point": 1,
+   "mark": [
+    "not after"
+   ],
+   "text": [
+    "Un certificat marche entre deux dates. Après la seconde, tous les clients le refusent : le site tombe pour tout le monde d'un coup.",
+    "",
+    "- Les certificats publics vivent de moins en moins longtemps (règles du CA/Browser Forum) : renouveler à la main ne tient plus.",
+    "- Renouveler est donc le travail d'un programme (certbot et son timer), vérifier aussi :",
+    "$ openssl x509 -in site.pem -noout -enddate"
+   ]
+  }
+ ]
+}

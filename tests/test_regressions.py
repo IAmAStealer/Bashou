@@ -58,6 +58,7 @@ class ArenaBugs(unittest.TestCase):
         expected.update({"mirror_mimic": editor, "repo_revenant": editor, "enabled_ettin": "dnf"})
         expected.update({ch.id: editor for ch in challenges.cicd.ALL + challenges.logic.ALL})
         expected.update({ch.id: "sqlite3" for ch in challenges.sql.ALL})
+        expected.update({ch.id: "openssl" for ch in challenges.certs.ALL})
         expected.update({"plaintext_pixie": "gpg", "cipher_crow": "gpg", "forger_ferret": "gpgv", "vault_vole": "pass", "cleartext_cricket": "pass"})
         for ch in challenges.ALL:
             self.assertEqual(ch.tool, expected[ch.id])

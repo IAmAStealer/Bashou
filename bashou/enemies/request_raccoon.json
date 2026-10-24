@@ -1,0 +1,51 @@
+{
+ "name": "Request Raccoon",
+ "palette": {
+  "e": "#ffffff",
+  "k": "#1e1a28",
+  "g": "#9a9aa8",
+  "G": "#5a5a68",
+  "m": "#26222e",
+  "w": "#f4f4f4",
+  "p": "#fafaf0",
+  "n": "#7a8ad0",
+  "P": "#c8c8b8"
+ },
+ "base": [
+  "...g...g.........",
+  "..ggg.ggg........",
+  ".gwwgggwwg.......",
+  ".mkemmmkem.......",
+  ".gmmwwwmmg.......",
+  "..gggmggg..ppppp.",
+  "...ggggggggpnnnP.",
+  "..gggggggggpnnnP.",
+  "..gGgggggGgpppPP.",
+  "..gg.gg..gg.GgGgG",
+  "..GG.GG..GG..GgGg",
+  "................."
+ ],
+ "poses": {
+  "inhale": {
+   "7": "..ggggggggggpnnnP"
+  },
+  "closed": {
+   "3": "--kk---kk--------"
+  },
+  "left": {
+   "3": "--ke---ke--------"
+  },
+  "right": {
+   "3": "--ek---ek--------"
+  },
+  "fidget": {
+   "9": "..gg.gg..gg..GgGg",
+   "10": "..GG.GG..GG.GgGgG"
+  }
+ },
+ "particles": [
+  0,
+  12
+ ],
+ "lone_pixels": true
+}

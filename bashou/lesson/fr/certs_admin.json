@@ -1,0 +1,108 @@
+{
+ "title": "Les certificats sur tes serveurs",
+ "summary": "Demander un certificat, faire confiance à une CA privée, renouveler à temps et protéger la clé, sans jamais couper la vérification.",
+ "pages": [
+  {
+   "scheme": [
+    " shop.key ──┐  reste ici, chmod 600",
+    "            ├─▶ shop.csr ──▶ CA ──▶ shop.pem",
+    " noms ──────┘   clé publique       signé",
+    "                + noms (SAN)"
+   ],
+   "point": 1,
+   "mark": [
+    "shop.csr"
+   ],
+   "text": [
+    "Pour obtenir un certificat, tu envoies à une CA un CSR (demande de signature) : ta clé publique et les noms, signés avec ta clé pour prouver que tu la détiens.",
+    "",
+    "- La clé privée ne quitte jamais ton serveur.",
+    "- -noenc : sans phrase de passe, pour que le serveur démarre seul. Avec LibreSSL sur Mac : -nodes.",
+    "$ openssl req -new -newkey ec -pkeyopt ec_paramgen_curve:P-256 -noenc -keyout shop.key -out shop.csr -subj '/CN=shop.example' -addext 'subjectAltName=DNS:shop.example,DNS:www.shop.example'"
+   ]
+  },
+  {
+   "scheme": [
+    " Debian, Ubuntu",
+    "   /usr/local/share/ca-certificates/lab.crt",
+    "   $ sudo update-ca-certificates",
+    "",
+    " Rocky, Red Hat",
+    "   /etc/pki/ca-trust/source/anchors/lab.crt",
+    "   $ sudo update-ca-trust"
+   ],
+   "point": 2,
+   "mark": [
+    "update-ca-certificates"
+   ],
+   "text": [
+    "Pour des serveurs que seule ton équipe utilise, monte ta propre CA, et ajoute son certificat au magasin de confiance de chaque machine.",
+    "",
+    "- Debian ne lit que les fichiers en .crt, au format PEM.",
+    "- curl --cacert lab.crt lui fait confiance pour une commande, sans toucher au système.",
+    "- Couper la vérification (-k) n'est jamais la solution : elle accepte aussi le certificat d'un attaquant."
+   ]
+  },
+  {
+   "scheme": [
+    " autosigné      un labo, un test      ✓",
+    " CA privée      serveurs de l'équipe  ✓",
+    " CA publique    internet              ✓",
+    "                (Let's Encrypt : gratuit)",
+    "",
+    " autosigné pour de vrais gens        ✗"
+   ],
+   "point": 5,
+   "mark": [
+    "✗"
+   ],
+   "text": [
+    "Un certificat autosigné est son propre émetteur : personne ne s'en porte garant, alors chaque client avertit.",
+    "",
+    "- Les gens qui passent les avertissements apprennent à passer les vraies attaques.",
+    "- Let's Encrypt donne des certificats publics gratuits, renouvelés par certbot."
+   ]
+  },
+  {
+   "scheme": [
+    " certbot.timer ──▶ deux fois par jour",
+    "   certbot renew ──▶ renouvelle ce qui finit",
+    "",
+    " supervision :",
+    "   openssl x509 -in site.pem -noout \\",
+    "     -checkend 1209600",
+    "   code 0 : encore valide dans 14 jours"
+   ],
+   "point": 1,
+   "mark": [
+    "certbot renew"
+   ],
+   "text": [
+    "Renouveler, c'est le travail d'un programme, pas d'un calendrier : les durées raccourcissent sans cesse.",
+    "",
+    "- Le paquet certbot installe un timer qui lance certbot renew deux fois par jour.",
+    "- Une vérification dans ta supervision rattrape ce que le renouvellement a raté : -checkend renvoie le code 1 quand le certificat finit dans ce nombre de secondes.",
+    "- Après un renouvellement, le serveur web doit recharger pour lire le nouveau fichier."
+   ]
+  },
+  {
+   "scheme": [
+    " clé privée    chmod 600, à root",
+    "               jamais dans git, jamais envoyée",
+    " taille        RSA 2048+ ou ECDSA P-256",
+    " signature     SHA-256 (jamais MD5, SHA-1)",
+    " TLS           1.2 et 1.3 seulement"
+   ],
+   "point": 0,
+   "mark": [
+    "chmod 600"
+   ],
+   "text": [
+    "Quelques règles couvrent l'essentiel de la sécurité des certificats.",
+    "",
+    "- Qui copie la clé privée peut se faire passer pour ton serveur : garde-la comme un mot de passe.",
+    "- Les vieilles versions de TLS (1.0, 1.1) et les vieux hachages ont des attaques connues : les clients les refusent."
+   ]
+  }
+ ]
+}

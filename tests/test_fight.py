@@ -185,6 +185,20 @@ SOLUTIONS = {
                       "WHERE name = '$(sed -E 's/.*price of (\\w+) .*/\\1/' <<< '{x}')';\"", r"(Set the price of \w+ to \d+)"),
     "upsert_unicorn": ("printf \"INSERT INTO stock (item, qty) VALUES ('%s', %s) ON CONFLICT(item) DO UPDATE SET qty = qty + excluded.qty;\" "
                        "$(sed -E 's/([0-9]+) × (\\w+).*/\\2 \\1/' <<< '{x}') > restock.sql", r"(\d+ × \w+)"),
+    # certificates (openssl 3 here; the fights also teach the LibreSSL lines)
+    "expiry_elk": ("for f in certs/*.pem; do openssl x509 -in \"$f\" -noout -checkend 2592000 > /dev/null || basename \"$f\"; done", None),
+    "san_salamander": ("for f in sites/*.pem; do s=$(basename \"$f\" .pem); openssl x509 -in \"$f\" -noout -checkhost \"$s\" "
+                       "| grep -q 'does match' || echo \"$s\"; done", None),
+    "key_kobold": ("c=$(openssl x509 -in server.pem -noout -pubkey); for k in keys/*; do "
+                   "[ \"$(openssl pkey -in \"$k\" -pubout)\" = \"$c\" ] && basename \"$k\"; done", None),
+    "chain_chameleon": ("subj() {{ openssl x509 -in \"$1\" -noout -\"$2\" | sed 's/^[a-z]*= *//'; }}; cur=server.pem; cp server.pem fullchain.pem; "
+                        "while :; do i=$(subj \"$cur\" issuer); n=; for f in certs/*.pem; do [ \"$(subj \"$f\" subject)\" = \"$i\" ] && n=$f; done; "
+                        "[ -n \"$n\" ] && [ \"$(subj \"$n\" subject)\" != \"$(subj \"$n\" issuer)\" ] || break; cat \"$n\" >> fullchain.pem; cur=$n; done", None),
+    "insecure_iguana": ("sed -i 's/ -k / --cacert ca.pem /' fetch.sh && bash fetch.sh", None),
+    "request_raccoon": ("openssl req -new -newkey ec -pkeyopt ec_paramgen_curve:P-256 -noenc -keyout shop.key -out shop.csr "
+                        "-subj \"/CN={x}\" -addext \"subjectAltName=DNS:{x},DNS:www.{x}\" 2>/dev/null && chmod 600 shop.key",
+                        r"certificate for (\S+) and"),
+    "trial_cert_issuer": ("openssl x509 -in site.pem -noout -issuer | sed 's/^issuer= *CN *= *//'", None),
     "trial_sql_loot": ("sqlite3 loot.db \"SELECT COUNT(*) FROM loot WHERE rarity = 'rare';\"", None),
     # gpg and pass (run with a throwaway GNUPGHOME, or the fight's practice one: never your own keys)
     "plaintext_pixie": ("gpg --batch --pinentry-mode loopback --passphrase {x} -c secrets.txt && rm secrets.txt",
@@ -296,6 +310,16 @@ WRONG_MOVES = [("index_imp", "zsh pick.sh"), ("flag_phantom", "sort sizes.txt | 
          ("masked_mole", edit("stamp.sh", '  local sum=$(cksum < "$1")', '  [[ -f $1 ]] || die "cannot read $1"\n  declare sum=$(cksum < "$1")')),
          ("masked_mole", edit("stamp.sh", '  local sum=$(cksum < "$1")', '  [[ -f $1 ]] || die "cannot read $1"\n  local sum="sum: $(cksum < "$1")"')),
          ("nomatch_nymph", edit("count.sh", "  printf '%s photos", "  n=$(ls \"$dir\" | grep -c '\\.jpg$')\n  printf '%s photos")),
+         # certificates: turning the check off, a CN without SAN, the root sent, a weak key
+         ("insecure_iguana", "sed -i 's/ -k / -k --cacert ca.pem /' fetch.sh"),
+         ("insecure_iguana", "sed -i 's/ -k / --insecure --cacert ca.pem /' fetch.sh"),
+         ("insecure_iguana", "sed -i 's/curl -fsS -k/curl -fsSk --cacert ca.pem/' fetch.sh"),
+         ("request_raccoon", "openssl req -new -newkey ec -pkeyopt ec_paramgen_curve:P-256 -noenc -keyout shop.key -out shop.csr "
+          "-subj /CN=shop.example 2>/dev/null && chmod 600 shop.key"),
+         ("request_raccoon", "openssl req -new -newkey rsa:1024 -noenc -keyout shop.key -out shop.csr -subj /CN=x "
+          "-addext subjectAltName=DNS:x 2>/dev/null; chmod 600 shop.key"),
+         ("chain_chameleon", "cat server.pem certs/*.pem > fullchain.pem"),
+         ("chain_chameleon", "cp server.pem fullchain.pem"),
          ("trap_troll", edit("report.sh", "tmp=/tmp/bashou-report.tmp", "tmp=$(mktemp) || exit 1") + " && "
           + edit("report.sh", "die() { printf", 'die() { rm -f -- "$tmp"; printf'))]
 
@@ -411,8 +435,12 @@ class ChallengeTest(unittest.TestCase):
             for seed in range(3):
                 with self.subTest(cid, seed=seed), tempfile.TemporaryDirectory() as tmp:
                     meta = ch.setup(Path(tmp), random.Random(seed))
-                    out = subprocess.run(["bash", "-c", cmd], cwd=tmp, capture_output=True, text=True).stdout.strip()
-                    self.assertFalse(ch.check(Path(tmp), meta, out or "done"))
+                    try:                                # a server fight (Insecure Iguana) left its server running
+                        out = subprocess.run(["bash", "-c", cmd], cwd=tmp, capture_output=True, text=True).stdout.strip()
+                        self.assertFalse(ch.check(Path(tmp), meta, out or "done"))
+                    finally:
+                        if ch.cleanup:
+                            ch.cleanup(meta)
 
     def test_everyday_wrong_moves_lose_in_zsh_too(self):
         from tests.test_shell import need
@@ -424,8 +452,12 @@ class ChallengeTest(unittest.TestCase):
             for seed in range(2):
                 with self.subTest(cid, seed=seed), tempfile.TemporaryDirectory() as tmp:
                     meta = ch.setup(Path(tmp), random.Random(seed))
-                    out = subprocess.run(["zsh", "-c", cmd], cwd=tmp, capture_output=True, text=True).stdout.strip()
-                    self.assertFalse(ch.check(Path(tmp), meta, out or "done"))
+                    try:                                # a server fight (Insecure Iguana) left its server running
+                        out = subprocess.run(["zsh", "-c", cmd], cwd=tmp, capture_output=True, text=True).stdout.strip()
+                        self.assertFalse(ch.check(Path(tmp), meta, out or "done"))
+                    finally:
+                        if ch.cleanup:
+                            ch.cleanup(meta)
 
     def test_the_pipe_eel_needs_a_real_pipeline(self):
         with tempfile.TemporaryDirectory() as base:

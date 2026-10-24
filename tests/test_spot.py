@@ -55,6 +55,9 @@ SPOTTER = {
     "c": r"^(#include <|int main\(|char \*|printf\(\"|for \(int |struct \w+ \*|free\(|if \(\w+ == NULL\))",
     "bash": r"^(for \w+ in .*; do|if \[\[|grep |#!/usr/bin/env bash|\w+=\$\{|while read|echo |\[ \$#)",
     "sql": r"^(SELECT|INSERT INTO|UPDATE|CREATE TABLE|DELETE FROM|ALTER TABLE) ",
+    "cert": r"^-----BEGIN CERTIFICATE-----",
+    "csr": r"^-----BEGIN (NEW )?CERTIFICATE REQUEST-----",
+    "privkey": r"^-----BEGIN ((EC|RSA|OPENSSH) )?PRIVATE KEY-----",
 }
 
 
@@ -70,7 +73,7 @@ class KindsTest(unittest.TestCase):
     """Owner: 20 kinds of strings seen in IT, generated at random (never the same twice)."""
 
     def test_twenty_kinds_each_generated_right(self):
-        self.assertEqual(len(spot.KINDS), 24)
+        self.assertEqual(len(spot.KINDS), 27)
         rng = random.Random(1)
         def ipv6(t):
             self.assertRegex(t, IPV6)

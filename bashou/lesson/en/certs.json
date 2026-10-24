@@ -1,0 +1,121 @@
+{
+ "id": "certs",
+ "order": 522,
+ "skill": "network",
+ "after": [
+  "keys",
+  "net_debug"
+ ],
+ "tools": [
+  "openssl"
+ ],
+ "masters": [
+  "won san_salamander",
+  "won expiry_elk"
+ ],
+ "recall": [
+  "network-1-15",
+  "network-1-16"
+ ],
+ "questions": [
+  "network-1-14",
+  "network-1-15",
+  "network-1-16",
+  "network-1-17",
+  "network-2-14"
+ ],
+ "fights": [
+  "expiry_elk",
+  "san_salamander"
+ ],
+ "title": "Certificates: who a server is",
+ "summary": "What a certificate says, the chain up to a root you trust, the names it covers, and why it ends.",
+ "pages": [
+  {
+   "scheme": [
+    " site.pem, a certificate",
+    " ├── public key    the server's own",
+    " ├── names (SAN)   shop.example, www.shop.example",
+    " ├── dates         not before … not after",
+    " └── issuer        Lab CA, who signed all this"
+   ],
+   "point": 2,
+   "mark": [
+    "names (SAN)"
+   ],
+   "text": [
+    "A certificate is a public key with a promise attached: this key belongs to these names, until this date. A CA (certificate authority) checked it and signed the promise.",
+    "",
+    "- Its private key stays on the server: it proves the server is the one the certificate talks about.",
+    "- Anyone can copy a certificate. Without its private key, it's useless."
+   ]
+  },
+  {
+   "scheme": [
+    " trust store (on your machine)",
+    "   Root CA",
+    "     │ signed",
+    "     ▼",
+    "   Intermediate CA     ┐ the server",
+    "     │ signed          │ sends",
+    "     ▼                 │ these two",
+    "   shop.example        ┘ (the leaf)"
+   ],
+   "point": 1,
+   "mark": [
+    "Root CA"
+   ],
+   "text": [
+    "Nobody knows every server. Your system keeps a short list of root CAs it trusts: the trust store.",
+    "",
+    "- Roots sign intermediates, and intermediates sign the servers' certificates.",
+    "- The server sends its own certificate and the intermediates. The client follows the signatures up to a root it already has.",
+    "- An intermediate missing, and the chain breaks, even if each certificate is fine."
+   ]
+  },
+  {
+   "scheme": [
+    " you ask for:  shop.example",
+    "",
+    " SAN: www.shop.example           ✗ no match",
+    " SAN: shop.example,",
+    "      www.shop.example           ✓",
+    "",
+    " subject: CN=shop.example        not checked"
+   ],
+   "point": 2,
+   "mark": [
+    "✗ no match"
+   ],
+   "text": [
+    "The client checks that the name you asked for is in the certificate's SAN (Subject Alternative Name).",
+    "",
+    "- The CN in the subject is an old place for a name: browsers don't read it, only the SAN.",
+    "- shop.example and www.shop.example are two names. A certificate covers only the ones it lists.",
+    "- *.shop.example covers one level: www.shop.example yes, shop.example no."
+   ]
+  },
+  {
+   "scheme": [
+    " not before   2026-09-01",
+    " not after    2026-12-01   ◀ after it: refused",
+    "",
+    " public certificates, longest life:",
+    "   from 2026-03-15    200 days",
+    "   from 2027-03-15    100 days",
+    "   from 2029-03-15     47 days"
+   ],
+   "point": 1,
+   "mark": [
+    "not after"
+   ],
+   "text": [
+    "A certificate works between two dates. After the second one, every client refuses it: the site is down for everyone at once.",
+    "",
+    "- Public certificates live shorter and shorter (CA/Browser Forum rules): renewing by hand stops working.",
+    "- So renewing is a program's job (certbot and its timer), and so is checking:",
+    "$ openssl x509 -in site.pem -noout -enddate"
+   ]
+  }
+ ]
+}

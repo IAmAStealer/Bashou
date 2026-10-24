@@ -43,8 +43,9 @@ SKILLS = {
         ("yamllint", "optional: `check` runs it on your pipeline files, as real projects do before a push"),)),
     "sql": Skill("SQL: databases with SQLite (SELECT, JOIN, UPDATE)", needs="sqlite3", uses=(
         ("sqlite3", "runs your SQL on a small database file: every SQL fight needs it"),)),
-    "network": Skill("Network: IPv4, IPv6, DNS, TCP", uses=(
-        ("tcpdump", "the packet fights: watch a TCP connection open, packet by packet"),)),
+    "network": Skill("Network: IPv4, IPv6, DNS, TCP, TLS", uses=(
+        ("tcpdump", "the packet fights: watch a TCP connection open, packet by packet"),
+        ("openssl", "the certificate fights: read a certificate, check its chain, make a request"))),
     "ai": Skill("AI tools: context, memory, planning"),      # lessons and questions, no fights (owner)
 }
 

@@ -1,0 +1,138 @@
+{
+ "id": "certs_tools",
+ "order": 524,
+ "skill": "network",
+ "after": [
+  "certs"
+ ],
+ "tools": [
+  "openssl"
+ ],
+ "masters": [
+  "won chain_chameleon | tool openssl 3",
+  "won key_kobold"
+ ],
+ "recall": [
+  "network-2-15",
+  "network-2-16"
+ ],
+ "questions": [
+  "network-2-15",
+  "network-2-16",
+  "network-2-17",
+  "network-3-13"
+ ],
+ "fights": [
+  "key_kobold",
+  "chain_chameleon"
+ ],
+ "title": "Certificates: openssl to look inside",
+ "summary": "Read a certificate, ask a server, check a chain and a key, and read the errors curl gives.",
+ "pages": [
+  {
+   "scheme": [
+    " $ openssl x509 -in site.pem -noout \\",
+    "     -subject -issuer -enddate -ext subjectAltName",
+    " subject=CN=shop.example",
+    " issuer=CN=Lab CA",
+    " notAfter=Dec  1 10:00:00 2026 GMT",
+    " X509v3 Subject Alternative Name:",
+    "     DNS:shop.example, DNS:www.shop.example"
+   ],
+   "point": 6,
+   "mark": [
+    "DNS:shop.example"
+   ],
+   "text": [
+    "openssl x509 reads a certificate file. -noout skips the base64 block, and you name the fields you want.",
+    "",
+    "- -text prints everything: useful once, a lot to read.",
+    "- A Mac's openssl is LibreSSL, without -ext: use -text and read under Subject Alternative Name (or brew install openssl@3)."
+   ]
+  },
+  {
+   "scheme": [
+    " $ openssl s_client -connect shop.example:443 \\",
+    "     -servername shop.example \\",
+    "     -verify_hostname shop.example < /dev/null",
+    " …",
+    " Verify return code: 0 (ok)             ◀ good",
+    " Verify return code: 21 (unable to",
+    "   verify the first certificate)        ◀ chain",
+    " Verify return code: 62 (hostname       ◀ name",
+    "   mismatch)"
+   ],
+   "point": 4,
+   "mark": [
+    "0 (ok)"
+   ],
+   "text": [
+    "s_client connects like a browser and shows what the server sends.",
+    "",
+    "- -servername sends the name you want (SNI): a server with many sites picks its certificate by it.",
+    "- The connection opens even when the check fails: read the Verify return code line.",
+    "- -showcerts prints each certificate sent. LibreSSL (Mac) has no -verify_hostname."
+   ]
+  },
+  {
+   "scheme": [
+    " $ openssl verify -CAfile root.pem \\",
+    "     -untrusted intermediate.pem server.pem",
+    " server.pem: OK",
+    "",
+    " fullchain.pem = server.pem",
+    "               + intermediate.pem",
+    "               (no root: clients have it)"
+   ],
+   "point": 2,
+   "mark": [
+    "server.pem: OK"
+   ],
+   "text": [
+    "openssl verify follows the signatures, with no network at all.",
+    "",
+    "- -CAfile is what you trust. -untrusted gives the intermediates to link with, and trusts nothing by itself.",
+    "- fullchain.pem is what a server should send: its own certificate first, then the intermediates in order."
+   ]
+  },
+  {
+   "scheme": [
+    " $ openssl x509 -in server.pem -noout -pubkey",
+    " $ openssl pkey -in server.key -pubout",
+    "",
+    " same lines: this key goes with this certificate"
+   ],
+   "point": 3,
+   "mark": [
+    "same lines"
+   ],
+   "text": [
+    "A server refuses to start when its key doesn't go with its certificate. Compare the public halves:",
+    "",
+    "- the certificate holds the public key;",
+    "- the private key file holds both halves, and -pubout prints the public one."
+   ]
+  },
+  {
+   "scheme": [
+    " curl says …                       look at",
+    " unable to get local issuer        chain, or CA",
+    "   certificate",
+    " certificate has expired           the dates",
+    " no alternative certificate        the SAN",
+    "   subject name matches",
+    " self-signed certificate           trust a CA"
+   ],
+   "point": 1,
+   "mark": [
+    "chain, or CA"
+   ],
+   "text": [
+    "Each certificate error says which part failed. Fix that part.",
+    "",
+    "- unable to get local issuer: the server doesn't send its intermediates, or you don't trust its CA. For a private CA: curl --cacert ca.pem.",
+    "- ✘ curl -k (--insecure) hides every one of these errors, an attacker's certificate included."
+   ]
+  }
+ ]
+}

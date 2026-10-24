@@ -1,0 +1,51 @@
+{
+ "name": "Insecure Iguana",
+ "palette": {
+  "e": "#ffffff",
+  "k": "#1e1a28",
+  "i": "#3ab8a0",
+  "I": "#1e6a5c",
+  "s": "#e8a03a",
+  "y": "#ffd040",
+  "Y": "#a87a10",
+  "x": "#3a2a10"
+ },
+ "base": [
+  ".........yyy.....",
+  "........y...y....",
+  "............y....",
+  "...s.s.s.YYYYY...",
+  "..siiiiisYyxyY...",
+  ".iiiiiiiiYyyyY...",
+  "ikeiiiiiiiYYY....",
+  "iiiiIiiiiiiiiii..",
+  ".IiiiiiiiiiiiIiii",
+  "..II..II..II...Ii",
+  ".II..II..II.....I",
+  "................."
+ ],
+ "poses": {
+  "inhale": {
+   "7": "iiiiIiiiiiiiiiii-"
+  },
+  "closed": {
+   "6": "-kk--------------"
+  },
+  "left": {
+   "6": "-ke--------------"
+  },
+  "right": {
+   "6": "-ek--------------"
+  },
+  "fidget": {
+   "0": "..........yyy....",
+   "1": ".........y...y...",
+   "2": ".............y..."
+  }
+ },
+ "particles": [
+  0,
+  3
+ ],
+ "lone_pixels": true
+}

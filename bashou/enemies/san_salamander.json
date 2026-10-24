@@ -1,0 +1,50 @@
+{
+ "name": "SAN Salamander",
+ "palette": {
+  "e": "#ffffff",
+  "k": "#1e1a28",
+  "o": "#f08a30",
+  "O": "#a8501a",
+  "y": "#ffd23c",
+  "t": "#fafaf0",
+  "T": "#9a9a90",
+  "n": "#4a6ad0"
+ },
+ "base": [
+  "........TTTTTTTT.",
+  "........TnnntnnT.",
+  "........TntnnnnT.",
+  "........TTTTTTTT.",
+  "...........t.....",
+  "..ooo......t.....",
+  ".okeooo..ooo.....",
+  "ooooooooooooooo..",
+  "OoyoooyoooyoooOo.",
+  ".OooooooooooOOOoo",
+  "..OO..OO..OO...oO",
+  ".OO..OO..OO.....O"
+ ],
+ "poses": {
+  "inhale": {
+   "7": "-oooooooooooooooo"
+  },
+  "closed": {
+   "6": "--kk-------------"
+  },
+  "left": {
+   "6": "--ke-------------"
+  },
+  "right": {
+   "6": "--ek-------------"
+  },
+  "fidget": {
+   "9": "-OooooooooooOOOo-",
+   "10": "--OO..OO..OO..ooO"
+  }
+ },
+ "particles": [
+  0,
+  3
+ ],
+ "lone_pixels": true
+}
