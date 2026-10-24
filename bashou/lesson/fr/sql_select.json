@@ -52,7 +52,8 @@
    ],
    "text": [
     "- sqlite3 ouvre le fichier de la base ; .tables liste les tables, .quit quitte.",
-    "- Chaque instruction SQL finit par ;, sinon sqlite3 attend la suite."
+    "- Chaque instruction SQL finit par ;, sinon sqlite3 attend la suite.",
+    "- Les lignes qui commencent par un point (.tables, .quit) sont des commandes de sqlite3, pas du SQL : pas de ; derrière."
    ]
   }
  ]

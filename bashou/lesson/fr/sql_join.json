@@ -46,7 +46,7 @@
     " Bo     12",
     " Ada    25",
     "",
-    " GROUP BY customers.id, SUM(orders.total) :",
+    " une ligne par client (GROUP BY customers.id) :",
     " Ada    55",
     " Bo     12"
    ],

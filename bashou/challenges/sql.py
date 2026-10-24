@@ -66,11 +66,12 @@ def make_shop(work, rng, products=None):
         db.executemany("INSERT INTO products (name, price, stock) VALUES (?, ?, ?)", products)
         people = rng.sample(PEOPLE, 6)
         db.executemany("INSERT INTO customers (name, city) VALUES (?, ?)", [(p, rng.choice(CITIES)) for p in people])
+        orders = []
         for _ in range(18):
             name, price, _stock = rng.choice(products)
             qty = rng.randint(1, 3)
-            db.execute("INSERT INTO orders (customer_id, product, total) VALUES (?, ?, ?)",
-                       (rng.randint(1, len(people)), name, price * qty))
+            orders.append((rng.randint(1, len(people)), name, price * qty))
+        db.executemany("INSERT INTO orders (customer_id, product, total) VALUES (?, ?, ?)", orders)
     return products, people
 
 
@@ -91,7 +92,7 @@ def count_setup(work, rng):
 def join_setup(work, rng):
     make_shop(work, rng)
     spent = rows(work / "shop.db", "SELECT customers.name, SUM(orders.total) FROM orders "
-                 "JOIN customers ON orders.customer_id = customers.id GROUP BY customers.id")
+                 "JOIN customers ON orders.customer_id = customers.id GROUP BY customers.id ORDER BY customers.id")
     name, total = rng.choice(spent)
     return {"args": {"name": name}, "answer": str(total)}
 
@@ -250,7 +251,7 @@ ALL = [
               task="The Table Troll wants somewhere to keep its {table}.\nCreate the database {db} with a table "
                    "{table}: a column {text} that holds text and a column {number} that holds whole numbers.\n"
                    "create.sql shows how a table is written: follow its example. Then: verify",
-              hints=["sqlite3 {db} opens it, and creates the file as soon as you write something in it. "
+              hints=["sqlite3 {db} opens it, and creates the file at your first command. "
                      "CREATE TABLE gives a table its name and its columns, each with a type: TEXT for words, "
                      "INTEGER for whole numbers.",
                      "sqlite3 {db} \"CREATE TABLE {table} ({text} TEXT, {number} INTEGER);\" then check it "
@@ -274,7 +275,7 @@ ALL = [
               task="The Join Jackal split shop.db: the orders only keep a customer's number (customer_id), the "
                    "names are in customers.\nHow much did {name} spend in total? answer <number>",
               hints=["JOIN puts two tables side by side: ON says which rows go together. Here an order goes with "
-                     "the customer whose id is its customer_id. SUM(total) adds up a column.",
+                     "the customer whose id is its customer_id. SUM(orders.total) adds up a column.",
                      "SELECT SUM(orders.total) FROM orders JOIN customers ON orders.customer_id = customers.id "
                      "WHERE customers.name = '{name}';"],
               setup=join_setup),

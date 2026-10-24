@@ -4,13 +4,13 @@
   "level": 1,
   "q": "You run sqlite3 notes.db, but notes.db doesn't exist yet. What happens?",
   "choices": [
-   "SQLite creates the file when you first write to it",
+   "SQLite creates it at your first command",
    "An error: create the file with touch first",
    "It opens a random database",
    "It needs a server running"
   ],
   "answer": 0,
-  "explain": "sqlite3 opens a database file and creates it as soon as you write something in it (a table, a row). No server, no setup: the whole database is that one file. That's why SQLite is perfect to learn: when you're done, rm notes.db removes everything."
+  "explain": "sqlite3 creates the file at your first command, even .tables: an empty database, ready for a table. A typo in the name gives you a new empty file, so check with ls. No server, no setup: the whole database is that one file, and rm notes.db removes everything."
  },
  {
   "id": "sql-1-02",
@@ -75,7 +75,7 @@
    "It doesn't matter at all"
   ],
   "answer": 0,
-  "explain": "Between single quotes, SQL reads text: 'Lyon' is a word. Without quotes, it reads a number, or the name of a column. WHERE city = Lyon would look for a column called Lyon and fail."
+  "explain": "Between single quotes, SQL reads text: 'Lyon' is a word. Without quotes, it reads a number, or the name of a column. WHERE city = Lyon would look for a column called Lyon and fail. Double quotes are for names, not text: \"Lyon\" only works as text because SQLite is lenient, and sqlite3 3.41+ refuses it."
  },
  {
   "id": "sql-1-07",
@@ -114,7 +114,7 @@
    "SQLite asks for confirmation"
   ],
   "answer": 0,
-  "explain": "Without WHERE, UPDATE changes every row, and SQLite doesn't ask. It's a classic accident in production. Always write the WHERE, and first run a SELECT with the same WHERE to see exactly which rows will change."
+  "explain": "Without WHERE, UPDATE changes every row, and SQLite doesn't ask. It's a classic accident in production. Write a WHERE whenever you mean only some rows, and first run a SELECT with the same WHERE to see exactly which rows will change."
  },
  {
   "id": "sql-1-10",
@@ -270,7 +270,7 @@
    "Separate sqlite3 commands"
   ],
   "answer": 0,
-  "explain": "A transaction groups statements: after BEGIN, nothing is final until COMMIT, and ROLLBACK cancels everything. If the program crashes halfway, the database stays as it was before BEGIN, never half-updated. In a Python program, with con: does the same: it commits at the end, or rolls back if an error happens."
+  "explain": "After BEGIN, nothing is final until COMMIT, and a crash leaves the database as it was before BEGIN. But a statement that fails cancels only itself: the transaction stays open, so type ROLLBACK; (COMMIT would keep the others). For a file, sqlite3 -bail shop.db < fix.sql stops at the first error. In Python, with con: commits at the end, or rolls back on an error."
  },
  {
   "id": "sql-2-09",

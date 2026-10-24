@@ -22,7 +22,7 @@
    "text": [
     "CREATE TABLE donne à une table son nom et ses colonnes, chacune avec un type.",
     "",
-    "- sqlite3 movies.db crée le fichier dès que tu y écris quelque chose.",
+    "- sqlite3 movies.db crée le fichier à ta première commande.",
     "- .schema montre comment une table a été créée : pratique pour vérifier tes colonnes.",
     "- En SQLite, un type est une indication, pas un garde : mets 'abc' dans une colonne INTEGER et SQLite garde le texte. Une table STRICT le refuse (il faut SQLite 3.37+).",
     "$ sqlite3 movies.db \"CREATE TABLE movies (title TEXT, year INTEGER);\""

@@ -4,13 +4,13 @@
   "level": 1,
   "q": "Tu lances sqlite3 notes.db, mais notes.db n'existe pas encore. Que se passe-t-il ?",
   "choices": [
-   "SQLite crée le fichier dès que tu y écris",
+   "SQLite le crée à ta première commande",
    "Une erreur : crée d'abord le fichier avec touch",
    "Il ouvre une base au hasard",
    "Il faut un serveur qui tourne"
   ],
   "answer": 0,
-  "explain": "sqlite3 ouvre un fichier de base de données et le crée dès que tu y écris quelque chose (une table, une ligne). Pas de serveur, rien à installer de plus : toute la base est ce fichier. C'est pour ça que SQLite est parfait pour apprendre : quand tu as fini, rm notes.db efface tout."
+  "explain": "sqlite3 crée le fichier à ta première commande, même .tables : une base vide, prête pour une table. Une faute dans le nom te donne un nouveau fichier vide, alors vérifie avec ls. Pas de serveur, rien à installer : toute la base est ce fichier, et rm notes.db efface tout."
  },
  {
   "id": "sql-1-02",
@@ -67,15 +67,15 @@
  {
   "id": "sql-1-06",
   "level": 1,
-  "q": "En SQL, pourquoi écrire 'Lyon' entre guillemets mais 20 sans ?",
+  "q": "En SQL, pourquoi écrire 'Lyon' entre apostrophes mais 20 sans ?",
   "choices": [
-   "Le texte va entre guillemets, pas les nombres",
-   "Les guillemets accélèrent la recherche",
+   "Le texte va entre apostrophes, pas les nombres",
+   "Les apostrophes accélèrent la recherche",
    "Seuls les noms de villes en ont besoin",
    "Ça ne change rien du tout"
   ],
   "answer": 0,
-  "explain": "Entre apostrophes, SQL lit du texte : 'Lyon' est un mot. Sans elles, il lit un nombre, ou le nom d'une colonne. WHERE city = Lyon chercherait une colonne appelée Lyon et échouerait."
+  "explain": "Entre apostrophes, SQL lit du texte : 'Lyon' est un mot. Sans elles, il lit un nombre, ou le nom d'une colonne. WHERE city = Lyon chercherait une colonne appelée Lyon et échouerait. Les guillemets doubles sont pour les noms, pas le texte : \"Lyon\" ne marche comme texte que parce que SQLite est tolérant, et sqlite3 3.41+ le refuse."
  },
  {
   "id": "sql-1-07",
@@ -114,7 +114,7 @@
    "SQLite demande une confirmation"
   ],
   "answer": 0,
-  "explain": "Sans WHERE, UPDATE modifie toutes les lignes, et SQLite ne demande rien. C'est un accident classique en production. Écris toujours le WHERE, et lance d'abord un SELECT avec le même WHERE pour voir exactement quelles lignes vont changer."
+  "explain": "Sans WHERE, UPDATE modifie toutes les lignes, et SQLite ne demande rien. C'est un accident classique en production. Écris un WHERE dès que tu ne vises que certaines lignes, et lance d'abord un SELECT avec le même WHERE pour voir exactement quelles lignes vont changer."
  },
  {
   "id": "sql-1-10",
@@ -166,7 +166,7 @@
    "SELECT name FROM products WHERE price = MAX;"
   ],
   "answer": 0,
-  "explain": "Sans ORDER BY, les lignes reviennent sans ordre promis : LIMIT 3 seul donne 3 produits au hasard. ORDER BY price DESC met les plus chers en premier, puis LIMIT en garde 3. TOP, c'est la façon de SQL Server ; SQLite ne le connaît pas."
+  "explain": "Sans ORDER BY, les lignes reviennent sans ordre promis : LIMIT 3 seul donne 3 produits quelconques, pas forcément les plus chers. ORDER BY price DESC met les plus chers en premier, puis LIMIT en garde 3. TOP, c'est la façon de SQL Server ; SQLite ne le connaît pas."
  },
  {
   "id": "sql-2-01",
@@ -270,7 +270,7 @@
    "Des commandes sqlite3 séparées"
   ],
   "answer": 0,
-  "explain": "Une transaction regroupe des instructions : après BEGIN, rien n'est définitif avant COMMIT, et ROLLBACK annule tout. Si le programme plante au milieu, la base reste comme avant BEGIN, jamais à moitié modifiée. Dans un programme Python, with con: fait pareil : il valide à la fin, ou annule si une erreur arrive."
+  "explain": "Après BEGIN, rien n'est définitif avant COMMIT, et un plantage laisse la base comme avant BEGIN. Mais une instruction qui échoue n'annule qu'elle-même : la transaction reste ouverte, alors tape ROLLBACK; (COMMIT garderait les autres). Pour un fichier, sqlite3 -bail shop.db < fix.sql s'arrête à la première erreur. En Python, with con: valide à la fin, ou annule sur une erreur."
  },
  {
   "id": "sql-2-09",

@@ -47,7 +47,7 @@
    "text": [
     "CREATE TABLE gives a table its name and its columns, each with a type.",
     "",
-    "- sqlite3 movies.db creates the file as soon as you write something in it.",
+    "- sqlite3 movies.db creates the file at your first command, even .tables.",
     "- .schema shows how a table was made: handy to check your columns.",
     "- In SQLite a type is a hint, not a guard: put 'abc' in an INTEGER column and SQLite keeps the text. A STRICT table refuses it (needs SQLite 3.37+).",
     "$ sqlite3 movies.db \"CREATE TABLE movies (title TEXT, year INTEGER);\""
