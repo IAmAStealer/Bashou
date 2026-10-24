@@ -1773,47 +1773,62 @@
    [
     1,
     "Seal pup",
-    "★☆☆☆"
+    "★☆☆☆☆"
    ],
    [
     1,
     "Seal pup",
-    "★☆☆☆"
+    "★☆☆☆☆"
    ],
    [
     1,
     "Seal pup",
-    "★☆☆☆"
+    "★☆☆☆☆"
    ],
    [
     2,
     "Harbor seal",
-    "★★☆☆"
+    "★★☆☆☆"
    ],
    [
     2,
     "Harbor seal",
-    "★★☆☆"
+    "★★☆☆☆"
    ],
    [
     3,
     "Elephant seal",
-    "★★★☆"
+    "★★★☆☆"
    ],
    [
     3,
     "Elephant seal",
-    "★★★☆"
+    "★★★☆☆"
    ],
    [
     3,
     "Elephant seal",
-    "★★★☆"
+    "★★★☆☆"
    ],
    [
     4,
     "Royal seal",
-    "★★★★"
+    "★★★★☆"
+   ],
+   [
+    4,
+    "Royal seal",
+    "★★★★☆"
+   ],
+   [
+    4,
+    "Royal seal",
+    "★★★★☆"
+   ],
+   [
+    5,
+    "Sea otter",
+    "★★★★★"
    ]
   ],
   "starter:star": [
@@ -4326,19 +4341,22 @@
      "seal_pup",
      "harbor_seal",
      "elephant_seal",
-     "royal_seal"
+     "royal_seal",
+     "sea_otter"
     ],
     "en": [
      "Seal pup",
      "Harbor seal",
      "Elephant seal",
-     "Royal seal"
+     "Royal seal",
+     "Sea otter"
     ],
     "fr": [
      "Bébé phoque",
      "Veau marin",
      "Éléphant de mer",
-     "Phoque royal"
+     "Phoque royal",
+     "Loutre de mer"
     ]
    }
   },
@@ -9068,8 +9086,7 @@
      "w": "#fbfbff",
      "g": "#dfe4ee",
      "G": "#aeb6c6",
-     "n": "#3a3a44",
-     "r": "#e0443a"
+     "n": "#3a3a44"
     },
     "base": [
      ".................",
@@ -9080,7 +9097,7 @@
      "..kwmmwwmmwk.....",
      "..kwmmwwmmwwkkk..",
      ".kgwwwnnwwwwwwwk.",
-     ".kgwwwwwwrwggwwwk",
+     ".kgwwwwwwwwggwwwk",
      "..kggwwwwwgggwgGk",
      "...kGGgggggGGkGk.",
      "....kkkkkkkkk.kk."
@@ -9171,6 +9188,37 @@
      "rRyRrkllllsskkSk.",
      ".rrrbkSllSSSSSSk.",
      "..b.bkkkkkkkkkk.."
+    ]
+   },
+   "sea_otter": {
+    "palette": {
+     "m": "#141418",
+     "e": "#ffffff",
+     "k": "#3a2618",
+     "o": "#8a5a36",
+     "O": "#5e3c22",
+     "c": "#d8b48c",
+     "n": "#26160e",
+     "r": "#d8303a",
+     "R": "#8a1c24",
+     "y": "#ffd040",
+     "b": "#4a9ad8",
+     "B": "#2a6aa8",
+     "w": "#d8f0ff"
+    },
+    "base": [
+     ".................",
+     ".................",
+     ".................",
+     "..kkk............",
+     ".kcccko..o.......",
+     "kcmecckoOokk.....",
+     "kccnccrrrooook...",
+     ".kcckrRyRrooOook.",
+     "..kkorrRrroooOk..",
+     "bbbbkkkkkkkkkkbbb",
+     "bwBbbbbwbbBbbbwbb",
+     "BbbbwbBbbbbwbBbbb"
     ]
    }
   },
@@ -9335,6 +9383,9 @@
   "A \"breaking change\" stops an old habit from working: a renamed option, a removed command.",
   "A * in a name stands for any characters. Bash turns the pattern into the list of matching names before the command even starts, so the command just sees the names.",
   "A .tar.gz is many files packed into one (tar), then squeezed (gzip). tar -tzf backup.tar.gz lists what's inside without unpacking. -x unpacks, and -C picks where: by default it's the folder you're in.",
+  "A CA is a certificate whose basicConstraints says CA:TRUE: it may sign others. pathlen says how many CAs may come below it; pathlen:0, servers' certificates only. A Mac's LibreSSL has no -ext: use -text, and read Basic Constraints.",
+  "A CA's basicConstraints can hold pathlen: how many CAs may come below it. pathlen:0 means server certificates only, no CA below. openssl x509 -in FILE -noout -ext basicConstraints shows it (a Mac's LibreSSL has no -ext: read Basic Constraints in -text).",
+  "A CRL (certificate revocation list) holds the serial numbers of the certificates its CA revoked, signed by that CA. openssl crl -in crl.pem -noout -text prints them, under Revoked Certificates.",
   "A Dust Bunny rolled into crates/.\nWhich file in there ends in .key?",
   "A JWT always starts with eyJ: it's base64 for {\"",
   "A JWT is header.payload.signature, each part base64url without padding.",
@@ -9623,6 +9674,7 @@
   "Comparer",
   "Conditions decide when a job runs: if: on GitHub, rules: on GitLab. when: manual makes GitLab wait for someone to click, handy for a production deploy.",
   "Conditions: if, !, && and ||",
+  "Config Cobra",
   "Configure Bashou",
   "Conflict Chimera",
   "Connected",
@@ -9660,6 +9712,7 @@
   "Deep reader",
   "Deep trace",
   "Defaced site",
+  "Depth gauge",
   "Describer",
   "Desert",
   "Desert of Dangling Pointers",
@@ -9966,6 +10019,8 @@
   "ISO 8601 date",
   "Ice slime",
   "Ideas for more? Open an issue on GitHub.",
+  "Impostor Ibex",
+  "In a section, each line is name = value. basicConstraints = critical, CA:TRUE, pathlen:N: a CA with at most N CAs below it. keyUsage = critical, keyCertSign, cRLSign: it may sign certificates and revocation lists. digitalSignature alone is a server's.",
   "In fetch.sh, add the line dir=$(dirname -- \"${BASH_SOURCE[0]}\") (the script's own folder: a script can't count on the folder it's run from), replace -k with --cacert \"$dir/ca.pem\", then run: bash fetch.sh",
   "In place",
   "In real projects, a linter checks YAML before you push it: yamllint (sudo apt install yamllint, or sudo dnf install yamllint). Once it's installed, check runs it too, and you can run it yourself: yamllint {file}",
@@ -10075,6 +10130,7 @@
   "Look for how to open a database file, and how to pass SQL on the command line.",
   "Look for the option that decrypts.",
   "Look for the option that encrypts with a passphrase only (symmetric).",
+  "Look for what openssl verify prints when a chain fails, and how a CA says how deep it goes.",
   "Lookout",
   "Loop",
   "Loop Lich",
@@ -10237,6 +10293,7 @@
   "One small step per command, joined with |: keep the 404 lines, keep the IP, drop duplicates, count.",
   "One-liner",
   "Only `{tool}` hurts it; looking around (ls, cat, find…) and typos are free. It'll be back.",
+  "Only a CA may sign certificates: its basicConstraints says CA:TRUE and its keyUsage holds keyCertSign. A server's certificate says CA:FALSE. openssl verify follows each signature up to the root and checks that every signer is a CA.",
   "Only a loop that runs mv once per photo can hurt the Rename Rat. Write a for loop around your mv (or use rename), then answer again.",
   "Only one form so far: it evolves with achievements.",
   "Only one pipeline of at least 3 commands, joined with |, can hurt the Knot Eel. Write it as a single line, then answer again.",
@@ -10271,6 +10328,7 @@
   "Paste error messages in full, as text. The exact words help people search for the cause.",
   "Paste the save (every line from BEGIN to Check), then press Enter and Ctrl+D.",
   "Pathfinder",
+  "Pathlen Panther",
   "Paths are case-sensitive: open dl.rockylinux.org/pub/rocky/9/ in a browser and follow them. gpgcheck must stay 1, and the key must be Rocky 9's.",
   "Pattern Pixie",
   "Peak Harpy",
@@ -10389,6 +10447,8 @@
   "Reverser",
   "Review {n}/{total} won. It'll be back in {days} days.",
   "Review {n}/{total}: it came back on purpose. Beating it again after a break is what makes `{tool}` stay with you.",
+  "Revoked",
+  "Revoked Reindeer",
   "Ribbit.",
   "Right answer, but only `{tool}` can hurt the {threat}. Solve it with {tool} (a successful command), then answer again.",
   "Right answer.",
@@ -10440,6 +10500,7 @@
   "Scripts that fail well",
   "Scroll keeper",
   "Sea",
+  "Sea otter",
   "Sea turtle",
   "Seal",
   "Seal pup",
@@ -10603,6 +10664,7 @@
   "The Colon Cobra swallowed a character in greet.py: Python stops at a SyntaxError.\nFix greet.py (its first lines say what it must do). Run it: python3 greet.py\nWhen it works, type: verify",
   "The Column Crab pinches the wrong column.\nservers.csv holds name,room,port. Which room is on line {n}?",
   "The Commit Crowd wants to sneak into your next commit: notes.txt, todo.txt and draft.txt all changed.\nCommit only notes.txt (any message). todo.txt isn't ready and draft.txt stays out. Then: verify",
+  "The Config Cobra bit lab.cnf: its [ v3_intermediate ] section makes an intermediate CA that can't sign anything.\nFix that section: a CA (basicConstraints critical) that may sign server certificates but no other CA, with the key usages a CA needs. Then: verify (Bashou signs an intermediate with your section and tries it)",
   "The Conflict Chimera has two heads: you merged the branch chef into main, and both changed the dessert line of menu.txt. Git stopped and left markers in the file.\nKeep both desserts, remove the markers and finish the merge. Then: verify",
   "The Const Condor stole a type from points.rs: rustc stops at the constant.\nFix points.rs (its first lines say what it must do). Run it: rustc points.rs && ./points\nWhen it works, type: verify",
   "The Core Counter wants to know who it's up against.\nHow many processors (cores) can programs use on this computer?",
@@ -10625,6 +10687,7 @@
   "The Handshake Heron swallowed a connection in capture.pcap: one client sent SYN, again and again, and never got an answer.\nWhich client port? Answer with: answer <port>",
   "The Header Hound guards a web server on http://127.0.0.1:{port}.\nHow big is /report.csv, in bytes? Ask the server without downloading the file.",
   "The Hitchhiker Hare asks: which package put {path} on this machine?\nA file nobody owns in /usr/bin would be suspicious. Answer with the package name.",
+  "The Impostor Ibex made one of the certificates in sites/ itself: it signed it with a server's certificate, not a CA.\nca.pem is the root, chain.pem holds what the servers send. Which site? answer <site>",
   "The Indent Imp pushed one line of the GitHub workflow .github/workflows/ci.yml out of line.\nPut it back in line, so the job test has its two steps: checkout, then the tests. Then: verify",
   "The Index Imp wrote pick.sh: it keeps five colors in a list and prints one of them with ${colors[1]}. Bash numbers the items of a list from 0, zsh from 1, so the same line can pick two different colors.\nWhich color does pick.sh print? Then: answer <color>",
   "The Injection Imp slipped a command into hosts.txt, and check_hosts.py runs it.\nFix check_hosts.py (its first lines say what it must do). Run it: python3 check_hosts.py\nWhen it works, type: verify",
@@ -10658,6 +10721,7 @@
   "The Ouroboros bites its own tail: du.py forgets the files in subfolders.\nFix du.py (its first lines say what it must do). Run it: python3 du.py\nWhen it works, type: verify",
   "The Overflow Ogre stuffs long names into an 8-byte box in greet.c.\nFix greet.c (its first lines say what it must do). Run it: gcc -g -fsanitize=address greet.c -o greet && ./greet averyveryverylongname\nWhen it works, type: verify",
   "The Padlock Pest mixed up the rights.\ndiary.txt: only you may read and write it, nobody else gets anything (rw-------). backup.sh: you may do everything, everyone else may read and run it (rwxr-xr-x). Then: verify",
+  "The Pathlen Panther broke a chain: leaf.pem is refused now, though every file in certs/ is a CA.\nOne of them allows fewer CAs below it than there are. Which file? answer <file>",
   "The Pattern Pixie mixed fake parcel codes into codes.txt. A real code is exactly 2 capital letters, a dash and 4 digits, like AB-1234, and nothing else on the line.\nHow many real codes are there?",
   "The Peak Harpy nests on the highest score.\nWhat is the biggest number in scores.txt?",
   "The Percent Poltergeist hides an attack in access.log behind %XX codes.\nDecode the log with python3. Which file under /etc was the attacker after?\nsolve.py is a start: run python3 solve.py, then finish it.",
@@ -10669,6 +10733,7 @@
   "The Repo Revenant haunts rocky.repo: 3 mistakes in the BaseOS and AppStream repos.\nFix it for Rocky Linux 9 (browse dl.rockylinux.org/pub/rocky/9/ to check paths). Then: verify",
   "The Request Raccoon wants a certificate for {first} and {second}.\nMake a private key shop.key (ECDSA P-256, or RSA 2048 bits or more) that only you can read, and a request shop.csr whose SAN holds both names. Then: verify",
   "The Resolver Rook asks what programs get for this machine's own name, {name}.\ndig only asks DNS; programs read /etc/hosts first. Which address? Answer with: answer <address>",
+  "The Revoked Reindeer stole a key: the key of {site} leaked, so its certificate must stop being trusted now, not at its end date.\nYou run the lab CA (ca.cnf, from this folder): revoke certs/{site}.pem with the reason keyCompromise, and publish a new CRL as crl.pem. Then: verify",
   "The Route Raven asks: a packet for {target} leaves this machine through a gateway.\nWhat is the gateway's address? Answer with: answer <address>",
   "The SAN Salamander swapped names in sites/: each certificate is named after the site that serves it.\nOne of them doesn't cover its own site, so browsers refuse it. Which site? answer <site>",
   "The Sage Owl has a new lesson for you, with drawings: `bashou lesson`",
@@ -10731,6 +10796,7 @@
   "These files are YAML, written like an outline: a line pushed further right belongs to the line above it. Each level is 2 spaces further right. Only spaces, never tabs.",
   "Things break. Then we fix them, better.",
   "This INSERT already works when {item} isn't in stock yet.",
+  "This chest holds crl.pem, a revocation list. Which serial number does it revoke? answer <serial>",
   "This chest holds loot.db, a list of treasures. How many of them are rare? answer <number>",
   "This chest holds site.pem, a certificate. Who signed it? answer <issuer>",
   "This chest is a git repository with one new file, map.txt. Save it in a first commit (any message). Then: verify",
@@ -10888,6 +10954,7 @@
   "URL",
   "UUID",
   "Unbroken chain",
+  "Under [ v3_intermediate ]: basicConstraints = critical, CA:TRUE, pathlen:0 and keyUsage = critical, keyCertSign, cRLSign",
   "Under `deploy:`, at the level of runs-on, add two lines: `needs: test` and `if: github.ref == 'refs/heads/main'`.",
   "Under deploy:, add: rules:, then a list item `- if: $CI_COMMIT_BRANCH == \"main\"` with `when: manual` under it (2 more spaces).",
   "Unique",
@@ -10958,6 +11025,7 @@
   "What you learned just before: does it still come back?",
   "What? {name} is evolving!",
   "When a command fails, read its error message to the end: it usually says exactly what is missing.",
+  "When a key leaks, its CA revokes the certificate and publishes a CRL, a signed list of serial numbers that must not be trusted any more. openssl crl reads one.",
   "When a threat shows up, `bashou fight` opens the arena.",
   "When it is, it fails: item is the PRIMARY KEY, and two rows can't have the same one.",
   "When it works, type: verify",
@@ -10965,6 +11033,7 @@
   "When no file matches a pattern, bash hands the pattern itself to the command, while zsh stops with \"no matches found\". And arrays count from 0 in bash, from 1 in zsh.",
   "When no file matches a pattern, bash leaves the pattern as it is and gives it to the command: echo then prints the pattern itself. zsh would stop instead, with \"no matches found\". The script's first line says which of the two runs it.",
   "When you ask for help, say which docs you read: people help faster, and nobody needs to answer RTFM.",
+  "Where it lives",
   "Where they differ: bash splits an unquoted $var at its spaces, zsh doesn't. Quotes, \"$var\", give one word in both, so they're the habit to keep.",
   "Which editor do you want to learn?",
   "Which one? (number, Enter leaves): ",
@@ -11159,8 +11228,10 @@
   "adds the output at the end of this file",
   "adventure: chapter {n} is next",
   "after editing a unit file: `systemctl daemon-reload`",
+  "after version: the folder of its configuration (OPENSSLDIR); after enc or base64: decode",
   "after {lessons}",
   "all: listening and connected",
+  "also check the certificate's CRL",
   "an option of {cmd}: `man {cmd}` explains it",
   "and start it right away",
   "another system: questions only",
@@ -11184,6 +11255,7 @@
   "asks the DNS about a name or an address, in one short line per answer",
   "asks the DNS where a name points",
   "asks the system databases (hosts, users, groups) the way programs do",
+  "at most {value} intermediate CAs",
   "audit a machine with `lynis`",
   "awk 'NR==5' prints line 5.",
   "awk 'length > 80' finds long lines.",
@@ -11227,6 +11299,7 @@
   "capture output with `$( )` 100 times",
   "capture output with `$( )` 25 times",
   "cat <<EOF > file writes several lines at once.",
+  "cat certs/*.pem > all.pem; openssl verify -CAfile root.pem -untrusted all.pem leaf.pem (the line above the error names the CA), then find its file: for f in certs/*.pem; do echo \"$f\"; openssl x509 -in \"$f\" -noout -subject; done",
   "cat menu.txt: between <<<<<<< and ======= is your side (main), between ======= and >>>>>>> the other branch's. Git can't choose for you. Edit the file so it reads the way you want, without the three marker lines, then tell git it's settled: git add menu.txt.",
   "cat server.pem certs/A.pem certs/B.pem > fullchain.pem (A issued server.pem, B issued A). openssl verify -CAfile certs/ROOT.pem -untrusted fullchain.pem fullchain.pem checks that the links exist, not their order: the order is yours (each file's issuer is the next file's subject).",
   "chain 3 commands with pipes",
@@ -11314,6 +11387,7 @@
   "dig into a dump or a firmware",
   "dnf takes --disablerepo and --enablerepo on the command line: disable them all, then enable the one you need. Quote the * so bash leaves it alone.",
   "do maths in the shell: `echo $((6 * 7))`",
+  "don't ask for confirmation",
   "don't go into it",
   "don't print the file itself",
   "download to a file with `curl -o` or `wget`, not into a shell",
@@ -11369,6 +11443,7 @@
   "find bugs before they bite with `shellcheck`",
   "find by date: `-mtime`, `-mmin` or `-newer`",
   "find duplicates and sort your papers in Rust: `bashou project start rust papers`",
+  "find openssl's own configuration with `openssl version -d`",
   "find out what a name really runs: `type ls`",
   "find searches every folder below; wc -l counts lines.",
   "find the commit that broke something, by halves",
@@ -11412,6 +11487,7 @@
   "follow: keep printing new lines",
   "for f in *.log; do gzip \"$f\"; done",
   "for f in certs/*.pem; do openssl x509 -in \"$f\" -noout -checkend 2592000 > /dev/null || echo \"$f\"; done",
+  "for f in sites/*.pem; do openssl verify -CAfile ca.pem -untrusted chain.pem \"$f\"; done (look for invalid CA certificate: the line above it names the signer, the refused file is the answer)",
   "for f in sites/*.pem; do openssl x509 -in \"$f\" -noout -checkhost \"$(basename \"$f\" .pem)\"; done (a Mac's LibreSSL has no -checkhost: read the line under Subject Alternative Name in -text instead)",
   "for i in {1..5}; do echo $i; done",
   "for this person's key",
@@ -11573,6 +11649,7 @@
   "make a folder instead of a file",
   "make a new random password and store it",
   "make a symbolic link with `ln -s`",
+  "make the CRL from the CA's records",
   "make your own key pair with `gpg --full-generate-key`",
   "makes a variable that only exists inside this function",
   "master 10 lessons you read",
@@ -11649,10 +11726,16 @@
   "opens a shell on another machine, encrypted",
   "opens an SQLite database (the whole database is one file) and runs SQL on it",
   "opens the GNU manuals: longer than man pages, with chapters and links",
+  "openssl ca -config ca.cnf -revoke certs/{site}.pem -crl_reason keyCompromise, then: openssl ca -config ca.cnf -gencrl -out crl.pem. Check it: openssl crl -in crl.pem -noout -text",
+  "openssl ca -config ca.cnf runs the CA. -revoke FILE marks the certificate R (revoked) in pki/index.txt, and -crl_reason says why. Clients never read index.txt: they read the CRL (certificate revocation list), which -gencrl makes from it, signed by the CA.",
+  "openssl crl -in crl.pem -noout -text",
+  "openssl reads its settings from openssl.cnf: openssl version -d prints its folder. -config uses another file, -extensions picks one of its sections.",
   "openssl req -new makes a CSR (certificate signing request): your public key and the names, signed with your key, for a CA to sign. -newkey makes the key at the same time, -noenc leaves it without a passphrase (fine for a lab), -addext adds the SAN. A CN alone covers nothing. On a Mac's LibreSSL: -newkey rsa:2048 -nodes instead of the ec, -pkeyopt and -noenc part.",
+  "openssl verify checks a chain like a client: -CAfile the root you trust, -untrusted the intermediates. When it fails, the line above the error names the certificate, and depth 0 is the leaf.",
   "openssl x509 -in FILE -noout -enddate prints the date a certificate stops working (notAfter). -checkend 2592000 asks: still valid in 30 days (2,592,000 seconds)? Its exit status says no with 1.",
   "openssl x509 -in site.pem -noout -issuer",
   "openssl x509 -in site.pem -noout -subject -issuer -dates : who, signed by whom, until when.",
+  "openssl: inside a CA",
   "openssl: read a certificate",
   "optional: `check` runs it on your pipeline files, as real projects do before a push",
   "or",
@@ -11724,6 +11807,7 @@
   "read 6 lessons to the end",
   "read 9 lessons to the end",
   "read a certificate",
+  "read a certificate revocation list (CRL)",
   "read a certificate's subject and issuer with `openssl x509`",
   "read a command's help 10 times: `--help`, `man` or `help`",
   "read a command's help 200 times",
@@ -11737,6 +11821,7 @@
   "read a script before running it: `less install.sh`",
   "read a service's logs with `journalctl -u`",
   "read every lesson of the skills you learn",
+  "read how deep a CA may go: `-ext basicConstraints`",
   "read lessons of 3 different skills",
   "read lessons of 5 different skills",
   "read lines with `while read`",
@@ -11766,6 +11851,8 @@
   "rerun a command every few seconds with `watch -n`",
   "reverse lookup: the name that belongs to this address",
   "reverse order",
+  "revoke a certificate with `openssl ca -revoke`",
+  "revoke this certificate: {value}",
   "risky commands",
   "rm -r on / or ~ deletes everything you have. Always double-check that path!",
   "rm has no undo, no recycle bin. So first look at what a pattern catches with ls, and only then remove: the same pattern gives the same list.",
@@ -11793,6 +11880,7 @@
   "run a command between midnight and 5 am",
   "run a command inside a pod",
   "run a script of your own 5 times: `./backup.sh`",
+  "run a small CA: sign requests, revoke, publish CRLs",
   "run away (the threat will come back)",
   "run code 10 times: python3, gcc, node, cargo…",
   "run code 100 times: python3, gcc, node, cargo…",
@@ -11947,6 +12035,7 @@
   "tcpdump -nnr capture.pcap reads the file (no root needed); -nn keeps addresses and ports as numbers. Flags: [S] SYN, [S.] SYN-ACK, [.] ACK. A filter keeps only some packets: 'tcp[tcpflags] == tcp-syn'.",
   "test injections with `sqlmap`",
   "text; $( ) inside runs a command and puts its output here",
+  "the CRL to check against: {value}",
   "the DNS servers of each interface",
   "the SQL to run",
   "the Sage Owl's library: lessons with drawings, unlocked as you play",
@@ -11959,6 +12048,7 @@
   "the characters to replace (A-Z: every capital letter)",
   "the column separator (here: {value})",
   "the command to run",
+  "the configuration file to read: {value}",
   "the copy",
   "the current folder",
   "the database file",
@@ -11966,6 +12056,7 @@
   "the debugger fights: gdb stops a program and shows the line where it crashed",
   "the end word",
   "the file",
+  "the file the extensions come from: {value}",
   "the file to read: {value}",
   "the file to write: {value}",
   "the filter: what to take from the JSON",
@@ -12008,6 +12099,7 @@
   "the rest is the command to run inside",
   "the root to trust: {value}",
   "the routes: where packets go",
+  "the section of extensions to use: {value}",
   "the sed script: s/old/new/ replaces, g = every time, p = print",
   "the server and port: {value}",
   "the service",
@@ -12110,12 +12202,14 @@
   "what you want to learn: bashou config skills",
   "where to",
   "where to look",
+  "which openssl this is",
   "which route this address would take (nothing is sent)",
   "which version of Bashou this is",
   "while read -r l; do echo \"$l\"; done < file",
   "who signed it",
   "who the certificate is for",
   "whole words only",
+  "why it's revoked: {value}",
   "win 10 fights",
   "win 3 fights in 24 hours",
   "win 3 network fights",

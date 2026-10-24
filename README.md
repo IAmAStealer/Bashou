@@ -110,7 +110,7 @@ it never draws over your text.
   With no command, it explains the last one your pet suggested.
 - **Your pet gives tips** as you go (Ctrl+R, `cd -`, `du -sh *`…) and notices the tools you haven't
   tried yet.
-- **301 achievements** reward real skills: a pipe of 3 commands, `find -exec`, `sed -i`, `git bisect`,
+- **304 achievements** reward real skills: a pipe of 3 commands, `find -exec`, `sed -i`, `git bisect`,
   `tar -tf`…
 - **Threats** show up now and then. `bashou fight` opens a sandbox shell where you beat them with the
   right tool: `grep` against the Log Hydra, `awk` against the Ledger Golem. They start with the first
@@ -147,7 +147,7 @@ it never draws over your text.
   investigation with no clock (a hidden file, a cron backdoor, a SUID binary). Lose, and the arena
   closes for an hour.
 - **`bashou adventure`**: a walk through 14 topics (coding logic, bash at the prompt, bash scripts, Linux, systemd, Python, Rust,
-  C, Debian, Rocky Linux, CI/CD, SQL, networks, AI tools) with 432 questions about what goes wrong and what to check first, bosses, and
+  C, Debian, Rocky Linux, CI/CD, SQL, networks, AI tools) with 444 questions about what goes wrong and what to check first, bosses, and
   chests that open with real commands.
 
 ![bashou fight: a Planet and its hearts face the Log Hydra, the task in a bubble, and the arena

@@ -1,5 +1,9 @@
 {
  "name": "Royal seal",
+ "next": "sea_otter",
+ "next_at": {
+  "achievements": 11
+ },
  "palette": {
   "m": "#141418",
   "e": "#ffffff",

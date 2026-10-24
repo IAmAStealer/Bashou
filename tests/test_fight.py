@@ -199,6 +199,16 @@ SOLUTIONS = {
     "request_raccoon": ("openssl req -new -newkey ec -pkeyopt ec_paramgen_curve:P-256 -noenc -keyout shop.key -out shop.csr "
                         "-subj \"/CN={x}\" -addext \"subjectAltName=DNS:{x},DNS:www.{x}\" 2>/dev/null && chmod 600 shop.key",
                         r"certificate for (\S+) and"),
+    "pathlen_panther": ("cat certs/*.pem > all.pem; cn=$(openssl verify -CAfile root.pem -untrusted all.pem leaf.pem 2>&1 "
+                        "| sed -n 's/^CN *= *//p' | head -1); for f in certs/*.pem; do "
+                        "openssl x509 -in \"$f\" -noout -subject | grep -q \"= *$cn\\$\" && echo \"$f\"; done", None),
+    "impostor_ibex": ("for f in sites/*.pem; do openssl verify -CAfile ca.pem -untrusted chain.pem \"$f\" > /dev/null 2>&1 "
+                      "|| basename \"$f\" .pem; done", None),
+    "config_cobra": ("sed -i '/^\\[ v3_intermediate \\]/,/^\\[/{{s/^basicConstraints.*/basicConstraints = critical, CA:TRUE, "
+                     "pathlen:0/; s/^keyUsage.*/keyUsage = critical, keyCertSign, cRLSign/}}' lab.cnf", None),
+    "revoked_reindeer": ("openssl ca -batch -config ca.cnf -revoke certs/{x}.pem -crl_reason keyCompromise 2>/dev/null && "
+                         "openssl ca -batch -config ca.cnf -gencrl -out crl.pem 2>/dev/null", r"key of (\S+) leaked"),
+    "trial_crl_serial": ("openssl crl -in crl.pem -noout -text | sed -n 's/^ *Serial Number: //p'", None),
     "trial_cert_issuer": ("openssl x509 -in site.pem -noout -issuer | sed 's/^issuer= *CN *= *//'", None),
     "trial_sql_loot": ("sqlite3 loot.db \"SELECT COUNT(*) FROM loot WHERE rarity = 'rare';\"", None),
     # gpg and pass (run with a throwaway GNUPGHOME, or the fight's practice one: never your own keys)
@@ -321,6 +331,9 @@ WRONG_MOVES = [("index_imp", "zsh pick.sh"), ("flag_phantom", "sort sizes.txt | 
          ("request_raccoon", "openssl req -new -newkey rsa:1024 -noenc -keyout shop.key -out shop.csr -subj /CN=x "
           "-addext subjectAltName=DNS:x 2>/dev/null; chmod 600 shop.key"),
          ("chain_chameleon", "cat server.pem certs/*.pem > fullchain.pem"),
+         ("config_cobra", "sed -i 's/^basicConstraints = CA:FALSE$/basicConstraints = critical, CA:TRUE/' lab.cnf"),
+         ("config_cobra", "sed -i 's/digitalSignature$/keyCertSign, cRLSign/; s/^basicConstraints = CA:FALSE$/basicConstraints = CA:TRUE, pathlen:0/' lab.cnf"),
+         ("revoked_reindeer", "openssl ca -batch -config ca.cnf -gencrl -out crl.pem 2>/dev/null"),
          ("chain_chameleon", "cp server.pem fullchain.pem"),
          ("trap_troll", edit("report.sh", "tmp=/tmp/bashou-report.tmp", "tmp=$(mktemp) || exit 1") + " && "
           + edit("report.sh", "die() { printf", 'die() { rm -f -- "$tmp"; printf'))]

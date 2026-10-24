@@ -1,0 +1,116 @@
+{
+ "id": "certs_revoke",
+ "order": 529,
+ "skill": "network",
+ "after": [
+  "certs_cnf"
+ ],
+ "tools": [
+  "openssl"
+ ],
+ "masters": [
+  "won revoked_reindeer | answered certs_revoke 3"
+ ],
+ "recall": [
+  "network-2-22",
+  "network-3-20"
+ ],
+ "questions": [
+  "network-2-22",
+  "network-2-23",
+  "network-3-20",
+  "network-3-21"
+ ],
+ "fights": [
+  "revoked_reindeer"
+ ],
+ "title": "Revoking a certificate",
+ "summary": "When a key leaks, the certificate must stop being trusted before its end date: revoke it, publish a CRL, and check against it.",
+ "pages": [
+  {
+   "scheme": [
+    " shop.key leaked on Monday",
+    "",
+    " the certificate:  valid until 2027-01-20",
+    " the thief:        can be shop.example",
+    "                   until then",
+    "",
+    " → revoke it: the CA lists it as revoked"
+   ],
+   "point": 6,
+   "mark": [
+    "revoke it"
+   ],
+   "text": [
+    "A certificate stays valid until its end date, even when its key leaked. Revoking it is the CA saying: don't trust this one any more.",
+    "",
+    "- Revoke when a key leaks, or when a certificate was made by mistake.",
+    "- Then make a new key and a new certificate: revoking replaces nothing."
+   ]
+  },
+  {
+   "scheme": [
+    " pki/index.txt",
+    " V  270122…Z              1000  unknown  /CN=web1",
+    " R  270122…Z  261024…Z,…  1001  unknown  /CN=web2",
+    "",
+    " V = valid, R = revoked (when, why)"
+   ],
+   "point": 2,
+   "mark": [
+    "R  270122"
+   ],
+   "text": [
+    "openssl ca -revoke marks the certificate R in index.txt. Clients never see that file: -gencrl publishes the list, a CRL, signed by the CA.",
+    "",
+    "$ openssl ca -config ca.cnf -revoke certs/web2.pem -crl_reason keyCompromise",
+    "$ openssl ca -config ca.cnf -gencrl -out crl.pem",
+    "- A CRL has a next update date: publish the next one before it, or the clients that check it refuse every certificate."
+   ]
+  },
+  {
+   "scheme": [
+    " $ openssl crl -in crl.pem -noout -text",
+    " Next Update: Oct 31 12:30:19 2026 GMT",
+    " Revoked Certificates:",
+    "     Serial Number: 1001",
+    "         Revocation Date: Oct 24 12:30:19 2026 GMT",
+    "         …",
+    "             Key Compromise"
+   ],
+   "point": 3,
+   "mark": [
+    "Serial Number"
+   ],
+   "text": [
+    "A CRL lists serial numbers. openssl crl reads it; openssl verify checks a certificate against it.",
+    "",
+    "- Make it again before its Next Update (default_crl_days in ca.cnf): a timer does it, like renewals.",
+    "$ openssl verify -crl_check -CAfile ca.pem -CRLfile crl.pem certs/web2.pem",
+    "- error 23: certificate revoked. Without a CRL, -crl_check fails too: unable to get certificate CRL.",
+    "- Where to fetch the CRL is usually written in the certificate: -ext crlDistributionPoints (Mac: read it in -text). Your CA adds it with crlDistributionPoints = URI:http://… in its section."
+   ]
+  },
+  {
+   "scheme": [
+    " CRL    a list the CA publishes; clients",
+    "        fetch it now and then",
+    " OCSP   asks the CA about one certificate,",
+    "        live: the CA sees which site",
+    "",
+    " 2024   OCSP optional, CRLs required",
+    " 2025   Let's Encrypt turns OCSP off"
+   ],
+   "point": 6,
+   "mark": [
+    "2025"
+   ],
+   "text": [
+    "OCSP asked the CA about a certificate at each visit: slow, and the CA learned which sites you visit. Public CAs now publish CRLs, and browsers keep their own lists, updated in the background (Firefox: CRLite).",
+    "",
+    "- Short lifetimes are the other answer: public certificates last 200 days at most now, 47 from 2029-03-15, and a short one rarely needs revoking.",
+    "- For your private CA: publish the CRL where the clients that check it can fetch it."
+   ]
+  }
+ ]
+}

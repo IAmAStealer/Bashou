@@ -115,7 +115,8 @@ FLAGS = {
              "-S": "still show errors", "-L": "follow redirects", "-o": "save to this file: {value}",
              "-I": "only the headers of the answer", "-d": "send this data (a POST): {value}"},
     "date": {"+%A": "the format: %A is the day of the week"},
-    "openssl": {"-in": "the file to read: {value}",
+    "openssl": {"-d": "after version: the folder of its configuration (OPENSSLDIR); after enc or base64: decode", "-revoke": "revoke this certificate: {value}", "-gencrl": "make the CRL from the CA's records", "-crl_reason": "why it's revoked: {value}", "-config": "the configuration file to read: {value}", "-CRLfile": "the CRL to check against: {value}", "-crl_check": "also check the certificate's CRL", "-extfile": "the file the extensions come from: {value}", "-extensions": "the section of extensions to use: {value}", "-batch": "don't ask for confirmation", "-verify_depth": "at most {value} intermediate CAs",
+                "-in": "the file to read: {value}",
                 "-out": "the file to write: {value}",
                 "-noout": "don't print the file itself",
                 "-subject": "who the certificate is for",
@@ -214,14 +215,14 @@ FLAGS = {
               "-n": "{value} argument per run", "-0": "lines separated by a null byte (safe with any name)"},
     "xz": {"-k": "keep the original file"},
 }
-FLAG_VALUE = {"awk": {"F"}, "openssl": {"in", "out", "ext", "checkend", "connect", "servername", "CAfile", "untrusted", "key", "subj", "addext"}, "mtr": {"c"}, "bash": {"c"}, "curl": {"o", "d"}, "dig": {"x"}, "find": {"mtime", "name", "type"},
+FLAG_VALUE = {"awk": {"F"}, "openssl": {"revoke", "crl_reason", "config", "CRLfile", "extfile", "extensions", "verify_depth", "in", "out", "ext", "checkend", "connect", "servername", "CAfile", "untrusted", "key", "subj", "addext"}, "mtr": {"c"}, "bash": {"c"}, "curl": {"o", "d"}, "dig": {"x"}, "find": {"mtime", "name", "type"},
               "grep": {"C"}, "journalctl": {"u"}, "nc": {"w"}, "ping": {"c"}, "ssh": {"L"}, "stat": {"c"},
               "strace": {"e"}, "tar": {"f", "C"}, "tcpdump": {"r", "i", "c", "w"},
               "watch": {"n"}, "xargs": {"I", "P", "n"}}
 
 # Words right after a command that pick what it does (git switch, systemctl status…).
 SUBCOMMANDS = {
-    "openssl": {"x509": "read a certificate", "s_client": "connect to a TLS server like a browser and show what it sends", "verify": "check a certificate's chain of signatures up to a root", "req": "make a certificate request (CSR)", "pkey": "read a private key"},
+    "openssl": {"ca": "run a small CA: sign requests, revoke, publish CRLs", "crl": "read a certificate revocation list (CRL)", "version": "which openssl this is", "x509": "read a certificate", "s_client": "connect to a TLS server like a browser and show what it sends", "verify": "check a certificate's chain of signatures up to a root", "req": "make a certificate request (CSR)", "pkey": "read a private key"},
     "bashou": {"fight": "enter the arena", "learn": "take a command apart and explain each piece"},
     "dig": {"A": "ask for the IPv4 address (the default)", "AAAA": "ask for the IPv6 addresses",
             "MX": "ask for the mail servers", "TXT": "ask for the text records", "NS": "ask for the name servers",

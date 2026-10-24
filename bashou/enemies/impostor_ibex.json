@@ -1,0 +1,53 @@
+{
+ "name": "Impostor Ibex",
+ "palette": {
+  "e": "#ffffff",
+  "k": "#1e1a28",
+  "h": "#c8b48c",
+  "H": "#8a7650",
+  "b": "#b08a5a",
+  "B": "#6e5034",
+  "l": "#e0caa0",
+  "m": "#26222e",
+  "w": "#f4f4f4",
+  "g": "#d8d8d8"
+ },
+ "base": [
+  ".hhh....hhh......",
+  "h..Hh..h..Hh.....",
+  "h...Hh.h...Hh....",
+  ".h...Hbbh...H....",
+  "..hh.kbbbk.......",
+  "...mmkemmkem.....",
+  "...kbbbbbbbk.....",
+  "..kblbbbbbbbkkkkk",
+  "..kgwbbbbbbbbbbBk",
+  "...kgkbbbbbbbbBk.",
+  "....kBk.kBk.kBkBk",
+  "....kk..kk..kk.kk"
+ ],
+ "poses": {
+  "inhale": {
+   "8": "..kgwbbbbbbbbbbbB",
+   "9": "...kgkbbbbbbbbbBk"
+  },
+  "closed": {
+   "5": "-----kk--kk------"
+  },
+  "left": {
+   "5": "-----ke--ke------"
+  },
+  "right": {
+   "5": "-----ek--ek------"
+  },
+  "fidget": {
+   "0": "..hhh....hhh.....",
+   "1": ".h..Hh.h...Hh...."
+  }
+ },
+ "particles": [
+  0,
+  13
+ ],
+ "lone_pixels": true
+}

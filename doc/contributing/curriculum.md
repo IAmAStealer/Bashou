@@ -51,7 +51,7 @@ A topic is complete when it has all four: questions, a lesson, one or more fight
 - systemd: processes + streams → services
 - Packages: users → packages; packages + network → repos
 - Network: processes → network → ip_addr → ipv6; ip_addr → dns → dns_tools; ip_addr → tcp;
-  dns_tools + tcp → net_debug; keys + net_debug → certs → certs_tools → certs_admin
+  dns_tools + tcp → net_debug; keys + net_debug → certs → certs_tools → certs_admin → certs_ca → certs_cnf → certs_revoke
 - Logic: variables → logic
 - Python: scripts + loops + logic → py_start → py_flow → py_names; py_names + pipes → py_data
 - C: computer + scripts + logic → compilation → gcc_use → stack_heap → pointers → debugger
@@ -177,6 +177,9 @@ input. Rules: [bash-style.md](bash-style.md).
 8. `certs` — what a certificate says, the chain, the SAN, expiry · Expiry Elk, SAN Salamander
 9. `certs_tools` — openssl x509, s_client, verify, curl's errors · Key Kobold, Chain Chameleon
 10. `certs_admin` — CSR, private CA and trust store, renewal, key safety · Request Raccoon, Insecure Iguana
+11. `certs_ca` — basicConstraints, pathlen (depth), keyUsage, reading verify errors · Pathlen Panther, Impostor Ibex
+12. `certs_cnf` — where openssl.cnf is, its sections, -extensions, openssl ca's [CA_default] · Config Cobra
+13. `certs_revoke` — revoke, CRLs, crl_check, OCSP's end, short lifetimes · Revoked Reindeer
 
 ### CI/CD
 

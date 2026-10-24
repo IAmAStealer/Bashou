@@ -1,0 +1,73 @@
+{
+ "title": "openssl.cnf",
+ "summary": "Trouver le fichier de configuration que lit openssl, lire ses sections, et choisir les extensions d'un certificat.",
+ "pages": [
+  {
+   "scheme": [
+    " $ openssl version -d",
+    " OPENSSLDIR: \"/usr/lib/ssl\"",
+    "",
+    " Debian, Ubuntu   /usr/lib/ssl/openssl.cnf",
+    "                  (→ /etc/ssl/openssl.cnf)",
+    " Rocky, Red Hat   /etc/pki/tls/openssl.cnf",
+    " macOS            /etc/ssl/openssl.cnf",
+    " Homebrew         $(brew --prefix)/etc/openssl@3/",
+    "                  openssl.cnf"
+   ],
+   "point": 1,
+   "mark": [
+    "OPENSSLDIR"
+   ],
+   "text": [
+    "Chaque commande openssl lit un fichier de configuration, openssl.cnf, dans le dossier qu'affiche openssl version -d. Ses valeurs par défaut décident de ce que tu obtiens sans rien dire.",
+    "",
+    "- OPENSSL_CONF=FICHIER envoie openssl vers un autre fichier ; -config FICHIER le fait pour une commande req ou ca.",
+    "- Sur Rocky, le fichier inclut la politique crypto du système : update-crypto-policies --set change ce qu'acceptent les programmes qui la suivent (OpenSSL, GnuTLS, NSS, Java…)."
+   ]
+  },
+  {
+   "scheme": [
+    " [ req ]                    ◀ openssl req",
+    " distinguished_name = dn",
+    " x509_extensions    = v3_ca",
+    "",
+    " [ v3_ca ]                  ◀ une section",
+    " basicConstraints = critical, CA:TRUE",
+    " keyUsage = critical, keyCertSign, cRLSign"
+   ],
+   "point": 4,
+   "mark": [
+    "[ v3_ca ]"
+   ],
+   "text": [
+    "Le fichier est fait de sections : un [ nom ], puis une ligne nom = valeur par réglage, et # commence un commentaire. Chaque commande lit sa section, qui peut en nommer d'autres.",
+    "",
+    "- -extensions NOM choisit la section d'extensions que reçoit le certificat ; -extfile FICHIER la lit dans un autre fichier.",
+    "$ openssl x509 -req -in mid.csr -CA root.pem -CAkey root.key -CAcreateserial -extfile lab.cnf -extensions v3_intermediate -out mid.pem"
+   ]
+  },
+  {
+   "scheme": [
+    " [ CA_default ]",
+    " dir           = ./pki",
+    " database      = $dir/index.txt  ◀ ses signatures",
+    " serial        = $dir/serial     ◀ suivant, hexa",
+    " new_certs_dir = $dir/newcerts",
+    " default_days  = 90",
+    " policy        = only_cn",
+    " x509_extensions = server  ◀ y fixe CA:FALSE",
+    " copy_extensions = copy"
+   ],
+   "point": 2,
+   "mark": [
+    "index.txt"
+   ],
+   "text": [
+    "openssl ca fait d'un dossier une petite CA : elle signe des demandes et note chaque certificat signé dans index.txt. Sa section dit où est chaque chose.",
+    "",
+    "- serial et crlnumber gardent les prochains numéros, en hexadécimal.",
+    "- copy_extensions = copy prend le SAN de la demande, mais garde le basicConstraints de la section : mets-le là. copyall laisse la demande gagner, CA:TRUE compris."
+   ]
+  }
+ ]
+}

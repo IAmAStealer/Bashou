@@ -1,5 +1,7 @@
 """Certificates (owner, 2026-10-23: "so many people are bad at it"): lessons certs, certs_tools, certs_admin, six
-fights and a chest, questions, and the rules of doc/contributing/certs-style.md on everything players read."""
+fights and a chest, questions, and the rules of doc/contributing/certs-style.md on everything players read.
+Owner, 2026-10-24: "not only how to make them": the CA side (certs_ca: basicConstraints, pathlen, keyUsage),
+openssl.cnf (certs_cnf) and revocation (certs_revoke), with four more fights and a second chest."""
 
 import json
 import os
@@ -17,9 +19,11 @@ from bashou.adventure import lessons as owl
 
 ROOT = Path(__file__).resolve().parent.parent
 QUESTIONS = ROOT / "bashou" / "adventure" / "questions"
-LESSONS = ("certs", "certs_tools", "certs_admin")
-FIGHTS = ("expiry_elk", "san_salamander", "key_kobold", "chain_chameleon", "insecure_iguana", "request_raccoon")
+LESSONS = ("certs", "certs_tools", "certs_admin", "certs_ca", "certs_cnf", "certs_revoke")
+FIGHTS = ("expiry_elk", "san_salamander", "key_kobold", "chain_chameleon", "insecure_iguana", "request_raccoon",
+          "pathlen_panther", "impostor_ibex", "config_cobra", "revoked_reindeer")
 CHEST = "trial_cert_issuer"
+CHESTS = (CHEST, "trial_crl_serial")
 # A text that names the mistake on purpose: where -> the rules it shows broken.
 ON_PURPOSE = {"insecure_iguana": {"T1"}}           # the task says what someone did: curl -k
 OPENSSL = shutil.which("openssl")
@@ -45,12 +49,12 @@ def texts(lang="en"):
         for n, page in enumerate(le["pages"], 1):
             yield f"{le['id']}/{n}", "\n".join(page.get("scheme", []) + page.get("text", []))
     for le in owl.LESSONS:
-        if le["id"] == "certs":
+        if le["id"] in ("certs", "certs_ca"):
             for n, (text, example) in enumerate(le["pages"], 1):
-                yield f"owl certs/{n}", f"{text}\n{example}"
+                yield f"owl {le['id']}/{n}", f"{text}\n{example}"
     for q in cert_questions(lang):
         yield q["id"], f"{q['choices'][q['answer']]}\n{q['explain']}"
-    for cid in (*FIGHTS, CHEST):
+    for cid in (*FIGHTS, *CHESTS):
         c = challenges.BY_ID[cid]
         yield cid, "\n".join([c.task, *c.hints, c.help or ""])
 
@@ -84,6 +88,9 @@ class StructureTest(unittest.TestCase):
         self.assertEqual(by_id["certs"]["after"], ["keys", "net_debug"])
         self.assertEqual(by_id["certs_tools"]["after"], ["certs"])
         self.assertEqual(by_id["certs_admin"]["after"], ["certs_tools"])
+        self.assertEqual(by_id["certs_ca"]["after"], ["certs_admin"])
+        self.assertEqual(by_id["certs_cnf"]["after"], ["certs_ca"])
+        self.assertEqual(by_id["certs_revoke"]["after"], ["certs_cnf"])
         for lid in LESSONS:
             with self.subTest(lid):
                 self.assertEqual(by_id[lid]["skill"], "network")
@@ -101,7 +108,7 @@ class StructureTest(unittest.TestCase):
                     self.assertIn(qid, en)
                     self.assertIn(qid, fr)
                     self.assertEqual(fr[qid]["answer"], en[qid]["answer"])
-        self.assertGreaterEqual(len(en), 12)
+        self.assertGreaterEqual(len(en), 24)
 
     def test_the_fights_belong_to_network(self):
         for cid in FIGHTS:
@@ -109,12 +116,14 @@ class StructureTest(unittest.TestCase):
                 c = challenges.BY_ID[cid]
                 self.assertEqual(c.skill, "network")
                 self.assertIn("openssl", c.requires)
-        self.assertIn(CHEST, {c.id for c in challenges.TRIALS})
+        for chest in CHESTS:
+            self.assertIn(chest, {c.id for c in challenges.TRIALS})
 
     def test_the_owl_teaches_openssl(self):
-        le = next(le for le in owl.LESSONS if le["id"] == "certs")
-        self.assertEqual(le["tool"], "openssl")
-        self.assertIn("network", le["topics"])
+        for lid in ("certs", "certs_ca"):
+            le = next(le for le in owl.LESSONS if le["id"] == lid)
+            self.assertEqual(le["tool"], "openssl")
+            self.assertIn("network", le["topics"])
 
 
 class RulesTest(unittest.TestCase):
@@ -149,7 +158,7 @@ class RulesTest(unittest.TestCase):
         """T2: the lessons never send players to the CN."""
         for where, text in texts():
             for sentence in re.split(r"(?<=[.!?])\s", text):
-                if re.search(r"\bCN\b|Common Name", sentence):
+                if re.search(r"\bCN\b(?!=)|Common Name", sentence):      # CN=x is a subject as openssl prints it
                     with self.subTest(where, sentence=sentence):
                         self.assertRegex(sentence, r"SAN|Subject Alternative|subjectAltName|issuer|not|ignore|n't|stopped")
 
@@ -168,7 +177,7 @@ class FightTest(unittest.TestCase):
         return subprocess.run(["bash", "-c", cmd], cwd=self.work, capture_output=True, text=True, timeout=30)
 
     def test_setup_makes_only_lab_keys_inside_the_arena(self):
-        for cid in (*FIGHTS, CHEST):
+        for cid in (*FIGHTS, *CHESTS):
             c = challenges.BY_ID[cid]
             if not c.available():
                 continue
@@ -276,6 +285,95 @@ class FightTest(unittest.TestCase):
             self.assertEqual((self.work / "ca.pem").read_text(), meta_ca, "verify puts ca.pem back")
         finally:
             c.cleanup(meta)
+
+    def test_pathlen_panther_wants_the_ca_that_breaks_the_depth(self):
+        """The verify error names the CA; a pathlen:0 that is fine (the last CA) is the trap."""
+        c = challenges.BY_ID["pathlen_panther"]
+        for seed in range(4):
+            with self.subTest(seed=seed):
+                for p in list(self.work.iterdir()):
+                    shutil.rmtree(p) if p.is_dir() else p.unlink()
+                meta = c.setup(self.work, random.Random(seed))
+                out = self.sh("cat certs/*.pem > all.pem && openssl verify -CAfile root.pem -untrusted all.pem leaf.pem 2>&1")
+                self.assertIn("path length constraint exceeded", out.stdout)
+                culprit = meta["answer"]
+                cn = self.sh(f"openssl x509 -in certs/{culprit} -noout -subject").stdout.split("CN", 1)[1].strip(" =\n")
+                self.assertIn(cn, out.stdout)
+                self.assertTrue(c.check(self.work, meta, culprit))
+                self.assertTrue(c.check(self.work, meta, f"certs/{culprit}"))
+                others = [f.name for f in (self.work / "certs").glob("*.pem") if f.name != culprit]
+                self.assertTrue(any("pathlen:0" in self.sh(f"openssl x509 -in certs/{n} -noout -text").stdout
+                                    for n in others + [culprit]))
+                self.assertFalse(c.check(self.work, meta, others[0]))
+
+    def test_impostor_ibex_is_signed_by_a_server_certificate(self):
+        c = challenges.BY_ID["impostor_ibex"]
+        meta = c.setup(self.work, random.Random(6))
+        results = {f.stem: self.sh(f"openssl verify -CAfile ca.pem -untrusted chain.pem sites/{f.name}")
+                   for f in (self.work / "sites").glob("*.pem")}
+        failing = [site for site, r in results.items() if r.returncode != 0]
+        self.assertEqual(failing, [meta["answer"]])
+        self.assertIn("invalid CA certificate", results[meta["answer"]].stdout + results[meta["answer"]].stderr)
+        self.assertTrue(c.check(self.work, meta, meta["answer"]))
+        self.assertFalse(c.check(self.work, meta, next(s for s in results if s != meta["answer"])))
+
+    def test_config_cobra_signs_with_the_players_section(self):
+        c = challenges.BY_ID["config_cobra"]
+        meta = c.setup(self.work, random.Random(7))
+        cnf = self.work / "lab.cnf"
+        text = cnf.read_text()
+        self.assertFalse(c.check(self.work, meta, "done"), "the starter makes a CA that can't sign")
+        section = "[ v3_intermediate ]"
+        self.assertIn(section, text)
+        head, rest = text.split(section, 1)
+        tail = rest[rest.index("\n["):] if "\n[" in rest else ""
+        def write(lines):
+            cnf.write_text(head + section + "\n" + lines + "\nsubjectKeyIdentifier = hash\nauthorityKeyIdentifier = keyid\n" + tail)
+        write("basicConstraints = critical, CA:TRUE, pathlen:0\nkeyUsage = critical, keyCertSign, cRLSign")
+        self.assertTrue(c.check(self.work, meta, "done"))
+        write("basicConstraints = critical, CA:TRUE\nkeyUsage = critical, keyCertSign, cRLSign")
+        self.assertFalse(c.check(self.work, meta, "done"), "no pathlen: a CA under it would work")
+        write("basicConstraints = critical, CA:TRUE, pathlen:0\nkeyUsage = critical, digitalSignature")
+        self.assertFalse(c.check(self.work, meta, "done"), "keyCertSign: it can't sign certificates")
+        write("basicConstraints = critical, CA:TRUE, pathlen:0\nkeyUsage = keyCertSign, cRLSign")
+        self.assertFalse(c.check(self.work, meta, "done"), "T14: a CA marks keyUsage critical too")
+        write("basicConstraints = CA:TRUE, pathlen:0\nkeyUsage = critical, keyCertSign, cRLSign")
+        self.assertFalse(c.check(self.work, meta, "done"), "T14: a CA marks basicConstraints critical")
+        cnf.write_text("[ v3_intermediate\nnot a config")
+        self.assertFalse(c.check(self.work, meta, "done"))
+
+    def test_revoked_reindeer_wants_the_leaked_one_in_a_new_crl(self):
+        c = challenges.BY_ID["revoked_reindeer"]
+        meta = c.setup(self.work, random.Random(8))
+        leaked = meta["leaked"]
+        self.assertFalse(c.check(self.work, meta, "done"), "the old CRL revokes nothing")
+        others = [f.stem for f in (self.work / "certs").glob("*.pem") if f.stem != leaked]
+        ca = "openssl ca -batch -config ca.cnf"
+        self.assertEqual(self.sh(f"{ca} -revoke certs/{others[0]}.pem -crl_reason keyCompromise").returncode, 0)
+        self.sh(f"{ca} -gencrl -out crl.pem")
+        self.assertFalse(c.check(self.work, meta, "done"), "the wrong certificate")
+        meta = self.fresh(c, 8)
+        self.assertEqual(self.sh(f"{ca} -revoke certs/{leaked}.pem -crl_reason keyCompromise").returncode, 0)
+        self.assertFalse(c.check(self.work, meta, "done"), "revoked in index.txt, but no new CRL published")
+        self.sh(f"{ca} -gencrl -out crl.pem")
+        self.assertTrue(c.check(self.work, meta, "done"))
+        meta = self.fresh(c, 8)
+        self.sh(f"{ca} -revoke certs/{leaked}.pem && {ca} -gencrl -out crl.pem")
+        self.assertFalse(c.check(self.work, meta, "done"), "the reason says the key leaked: keyCompromise")
+
+    def fresh(self, c, seed):
+        for p in list(self.work.iterdir()):
+            shutil.rmtree(p) if p.is_dir() else p.unlink()
+        return c.setup(self.work, random.Random(seed))
+
+    def test_the_crl_chest_takes_the_serial(self):
+        c = challenges.BY_ID["trial_crl_serial"]
+        meta = c.setup(self.work, random.Random(9))
+        out = self.sh("openssl crl -in crl.pem -noout -text").stdout
+        serial = re.search(r"Serial Number: (\S+)", out).group(1)
+        for said in (serial, serial.lower(), "0x" + serial, "serial=" + serial):
+            self.assertTrue(c.check(self.work, meta, said), said)
+        self.assertFalse(c.check(self.work, meta, "1"))
 
     def test_the_chest_takes_what_libressl_prints(self):
         """LibreSSL on a Mac prints issuer= /CN=…, OpenSSL 3 issuer=CN=…: both win."""

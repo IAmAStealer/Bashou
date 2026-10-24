@@ -1,6 +1,7 @@
 # Certificates style: TLS, X.509 and openssl
 
-Bashou teaches certificates (lessons `certs`, `certs_tools`, `certs_admin`, skill `network`): what a
+Bashou teaches certificates (lessons `certs`, `certs_tools`, `certs_admin`, `certs_ca`, `certs_cnf`,
+`certs_revoke`, skill `network`): what a
 certificate says, how to read one with `openssl`, and how to run them on a server. Many people "fix"
 certificate errors by turning the check off, so every sample here has to teach the real fix.
 
@@ -33,6 +34,10 @@ table. Lifetimes and limits change: the CA/Browser Forum rules are checked again
 | T11 | Commands say which tool when LibreSSL (macOS `/usr/bin/openssl`) differs from OpenSSL 3, and give the Mac line: LibreSSL has no `x509 -ext`, `x509 -checkhost`, `s_client -verify_hostname` or `-noenc` (use `-text` and read the SAN, `-nodes`); `req -addext` needs LibreSSL 3.1.3+. Or `brew install openssl@3`. | Mac players run LibreSSL by default. | [LibreSSL openssl(1)](https://man.openbsd.org/openssl.1), [openssl-req(1)](https://docs.openssl.org/3.0/man1/openssl-req/) |
 | T12 | `openssl x509` reading samples use `-noout` and the fields wanted (`-subject -issuer -dates -ext subjectAltName`), not a full `-text` dump, unless the page is about the dump. | Beginners drown in `-text`; the fields are what you check. | [openssl-x509(1)](https://docs.openssl.org/3.0/man1/openssl-x509/) |
 | T13 | Passwords and keys never go on the command line in samples (`-passout pass:secret`): a lab key is made with `-noenc` (`-nodes` before OpenSSL 3), or the password comes from a file or the prompt. | argv is visible to every user in `ps`. | [openssl-passphrase-options(1)](https://docs.openssl.org/3.0/man1/openssl-passphrase-options/) |
+| T14 | A CA certificate has `basicConstraints = critical, CA:TRUE` and `keyUsage = critical, keyCertSign, cRLSign`; a server's has `CA:FALSE` and `digitalSignature` (+ `extendedKeyUsage serverAuth`). `pathlen:N` is how many CAs may come below; server certificates don't count. An intermediate made for someone else gets a `pathlen`. | Clients refuse a signer without CA:TRUE or keyCertSign (errors 79, 32) and a chain deeper than a pathlen allows (error 25). | [RFC 5280 §4.2.1.9, §4.2.1.3](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.9) |
+| T15 | Revocation as it is now: CRLs are required of public CAs and OCSP optional since 2024-03-15; Let's Encrypt turned OCSP off in August 2025; browsers keep their own revocation lists (Firefox CRLite since 137). Never teach OCSP Must-Staple as current practice. Revoking replaces nothing: a new key and certificate follow. | Old guides still say "check OCSP"; the web moved to CRLs and short lifetimes. | [CA/B ballot SC-063](https://cabforum.org/2023/07/14/ballot-sc063v4-make-ocsp-optional-require-crls-and-incentivize-automation), [Let's Encrypt: ending OCSP](https://letsencrypt.org/2024/12/05/ending-ocsp/), [Mozilla CRLite](https://hacks.mozilla.org/2025/08/crlite-fast-private-and-comprehensive-certificate-revocation-checking-in-firefox/) |
+| T16 | `openssl ca` samples set `basicConstraints` in the signing section and use `copy_extensions = copy` (adds only what the section doesn't set), never `copyall` (the request wins, CA:TRUE included). `serial` and `crlnumber` are hex. | A careless CA config lets any request become a CA. | [openssl-ca(1)](https://docs.openssl.org/3.0/man1/openssl-ca/) |
+| T17 | Where openssl.cnf is comes from `openssl version -d` (OPENSSLDIR): Debian `/usr/lib/ssl` (links to `/etc/ssl/openssl.cnf`), Rocky `/etc/pki/tls` (includes the crypto policy), macOS LibreSSL `/etc/ssl`, Homebrew `$(brew --prefix)/etc/openssl@3`. Never a single path for everyone. | Each system and each openssl build has its own. | [openssl-version(1)](https://docs.openssl.org/3.0/man1/openssl-version/), [openssl-config(5)](https://docs.openssl.org/3.0/man5/config/) |
 
 ## Fights
 

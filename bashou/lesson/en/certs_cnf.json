@@ -1,0 +1,98 @@
+{
+ "id": "certs_cnf",
+ "order": 528,
+ "skill": "network",
+ "after": [
+  "certs_ca"
+ ],
+ "tools": [
+  "openssl"
+ ],
+ "masters": [
+  "won config_cobra | answered certs_cnf 3"
+ ],
+ "recall": [
+  "network-1-19",
+  "network-3-18"
+ ],
+ "questions": [
+  "network-1-19",
+  "network-2-21",
+  "network-3-18",
+  "network-3-19"
+ ],
+ "fights": [
+  "config_cobra"
+ ],
+ "title": "openssl.cnf",
+ "summary": "Find the configuration file openssl reads, read its sections, and pick the extensions a certificate gets.",
+ "pages": [
+  {
+   "scheme": [
+    " $ openssl version -d",
+    " OPENSSLDIR: \"/usr/lib/ssl\"",
+    "",
+    " Debian, Ubuntu   /usr/lib/ssl/openssl.cnf",
+    "                  (→ /etc/ssl/openssl.cnf)",
+    " Rocky, Red Hat   /etc/pki/tls/openssl.cnf",
+    " macOS            /etc/ssl/openssl.cnf",
+    " Homebrew         $(brew --prefix)/etc/openssl@3/",
+    "                  openssl.cnf"
+   ],
+   "point": 1,
+   "mark": [
+    "OPENSSLDIR"
+   ],
+   "text": [
+    "Every openssl command reads a configuration file, openssl.cnf, in the folder openssl version -d prints. Its defaults decide what you get when you don't say.",
+    "",
+    "- OPENSSL_CONF=FILE points openssl at another file; -config FILE does it for one req or ca command.",
+    "- On Rocky, the file includes the system's crypto policy: update-crypto-policies --set changes what the programs that follow it accept (OpenSSL, GnuTLS, NSS, Java…)."
+   ]
+  },
+  {
+   "scheme": [
+    " [ req ]                    ◀ openssl req",
+    " distinguished_name = dn",
+    " x509_extensions    = v3_ca",
+    "",
+    " [ v3_ca ]                  ◀ a section",
+    " basicConstraints = critical, CA:TRUE",
+    " keyUsage = critical, keyCertSign, cRLSign"
+   ],
+   "point": 4,
+   "mark": [
+    "[ v3_ca ]"
+   ],
+   "text": [
+    "The file is made of sections: a [ name ], then one name = value per line, and # starts a comment. Each command reads its own section, which can name others.",
+    "",
+    "- -extensions NAME picks the section of extensions the certificate gets; -extfile FILE reads it from another file.",
+    "$ openssl x509 -req -in mid.csr -CA root.pem -CAkey root.key -CAcreateserial -extfile lab.cnf -extensions v3_intermediate -out mid.pem"
+   ]
+  },
+  {
+   "scheme": [
+    " [ CA_default ]",
+    " dir           = ./pki",
+    " database      = $dir/index.txt  ◀ all it signed",
+    " serial        = $dir/serial     ◀ next, in hex",
+    " new_certs_dir = $dir/newcerts",
+    " default_days  = 90",
+    " policy        = only_cn",
+    " x509_extensions = server  ◀ CA:FALSE set there",
+    " copy_extensions = copy"
+   ],
+   "point": 2,
+   "mark": [
+    "index.txt"
+   ],
+   "text": [
+    "openssl ca turns a folder into a small CA: it signs requests and records each certificate it signed in index.txt. Its section says where everything is.",
+    "",
+    "- serial and crlnumber hold the next numbers, in hex.",
+    "- copy_extensions = copy takes the SAN from the request, but keeps the section's own basicConstraints: set it there. copyall lets the request win, CA:TRUE included."
+   ]
+  }
+ ]
+}

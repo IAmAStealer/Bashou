@@ -1,0 +1,50 @@
+{
+ "name": "Config Cobra",
+ "palette": {
+  "e": "#ffffff",
+  "k": "#1e1a28",
+  "c": "#5ab06a",
+  "C": "#2e7a40",
+  "l": "#bce8a0",
+  "y": "#ffd23c",
+  "r": "#e0443a"
+ },
+ "base": [
+  ".....ccccc.......",
+  "....cCcccCc......",
+  "...ccyycyyccc....",
+  "...cyc.c.cycc....",
+  "...ccyycyyccc....",
+  "....ckecekc......",
+  "....ccccccc......",
+  ".rr..clllc.......",
+  "r..ccclllc.......",
+  "....ccllccc..cc..",
+  "...cCcccccCcccCc.",
+  "....CCCCCCCCCCC.."
+ ],
+ "poses": {
+  "inhale": {
+   "6": "...ccccccccc.....",
+   "9": "...cccllcccc.cc.."
+  },
+  "closed": {
+   "5": "-----kk-kk-------"
+  },
+  "left": {
+   "5": "-----ke-ke-------"
+  },
+  "right": {
+   "5": "-----ek-ek-------"
+  },
+  "fidget": {
+   "7": "..rr.clllc.......",
+   "8": ".r.ccclllc......."
+  }
+ },
+ "particles": [
+  0,
+  12
+ ],
+ "lone_pixels": true
+}

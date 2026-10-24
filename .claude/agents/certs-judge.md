@@ -1,6 +1,6 @@
 ---
 name: certs-judge
-description: Judges the certificate content Bashou shows players (lessons certs, certs_tools, certs_admin, the owl's openssl lesson, the certificate questions in network.json, the six certificate fights and their chest) against doc/contributing/certs-style.md - never -k as a fix, SAN not CN, chain order, trust stores, key safety, expiry, LibreSSL differences - and runs the openssl commands it shows. Use it after adding or changing certificate content. Reports; doesn't edit.
+description: Judges the certificate content Bashou shows players (lessons certs, certs_tools, certs_admin, certs_ca, certs_cnf, certs_revoke, the owl's openssl lessons, the certificate questions in network.json, the ten certificate fights and their two chests) against doc/contributing/certs-style.md - never -k as a fix, SAN not CN, chain order, trust stores, key safety, expiry, CA constraints, revocation, openssl.cnf, LibreSSL differences - and runs the openssl commands it shows. Use it after adding or changing certificate content. Reports; doesn't edit.
 tools: Read, Grep, Glob, Bash, WebFetch
 ---
 

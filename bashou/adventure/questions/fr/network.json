@@ -670,5 +670,161 @@
   ],
   "answer": 0,
   "explain": "update-ca-certificates ne prend que les fichiers en .crt (au format PEM) de ce dossier. Renomme-le lab-ca.crt et relance : il doit dire 1 added. Sur Rocky et Red Hat, le dossier est /etc/pki/ca-trust/source/anchors/ et la commande update-ca-trust."
+ },
+ {
+  "id": "network-1-18",
+  "level": 1,
+  "q": "Qu'est-ce qui fait d'un certificat une CA, capable d'en signer d'autres ?",
+  "choices": [
+   "Son basicConstraints dit CA:TRUE",
+   "Son nom finit par CA",
+   "Il est autosigné",
+   "Il est dans /etc/ssl/certs"
+  ],
+  "answer": 0,
+  "explain": "Une extension décide : basicConstraints. CA:TRUE, il peut signer des certificats ; CA:FALSE, les clients refusent ce qu'il signe. Un nom ne prouve rien, et être autosigné veut seulement dire que personne ne se porte garant. Les clients le vérifient à chaque étape de la chaîne, et le keyUsage d'une CA doit contenir keyCertSign (sinon error 32)."
+ },
+ {
+  "id": "network-2-19",
+  "level": 2,
+  "q": "Une CA intermédiaire a pathlen:0. Que peut-elle signer ?",
+  "choices": [
+   "Des certificats de serveurs, mais aucune CA",
+   "Rien du tout",
+   "Seulement d'autres CA",
+   "Des certificats valides 0 jour"
+  ],
+  "answer": 0,
+  "explain": "pathlen compte les CA permises en dessous : 0 veut dire aucune. Elle signe toujours des certificats de serveurs, qui ne comptent pas. Si elle signe quand même une CA, les clients refusent ses certificats : path length constraint exceeded."
+ },
+ {
+  "id": "network-2-20",
+  "level": 2,
+  "q": "openssl verify dit : invalid CA certificate. Que s'est-il passé ?",
+  "choices": [
+   "Un certificat sans CA:TRUE en a signé un autre",
+   "La racine a expiré",
+   "Le SAN manque",
+   "La clé est trop courte"
+  ],
+  "answer": 0,
+  "explain": "Le certificat nommé au-dessus de l'erreur en a signé un autre, mais son basicConstraints dit CA:FALSE (ou rien) : seule une CA peut signer. Les autres erreurs ont leur propre message : certificate has expired (10), hostname mismatch (62, avec -verify_hostname), EE certificate key too weak (66)."
+ },
+ {
+  "id": "network-3-17",
+  "level": 3,
+  "q": "Pourquoi une CA met-elle pathlen sur un intermédiaire qu'elle fait pour quelqu'un d'autre ?",
+  "choices": [
+   "Pour qu'il ne crée pas ses propres CA en douce",
+   "Pour rendre le certificat plus petit",
+   "Pour accélérer la poignée de main TLS",
+   "Les navigateurs en ont besoin pour le cadenas"
+  ],
+  "answer": 0,
+  "explain": "Qui a la clé de l'intermédiaire peut signer des certificats que tous les clients de la racine croient. pathlen:0 limite ce pouvoir aux certificats de serveurs : aucune CA cachée ne peut pousser dessous. keyUsage et nameConstraints restreignent encore."
+ },
+ {
+  "id": "network-1-19",
+  "level": 1,
+  "q": "Comment trouver le openssl.cnf que lit ton openssl ?",
+  "choices": [
+   "openssl version -d affiche son dossier",
+   "C'est toujours /etc/openssl.cnf",
+   "openssl --config le montre",
+   "Prendre n'importe quel fichier en .cnf"
+  ],
+  "answer": 0,
+  "explain": "openssl version -d affiche OPENSSLDIR, le dossier de openssl.cnf : /usr/lib/ssl sur Debian, /etc/pki/tls sur Rocky, /private/etc/ssl (c'est /etc/ssl) sur Mac. Chaque système le met ailleurs, et un openssl de Homebrew a le sien : demande à l'openssl que tu lances."
+ },
+ {
+  "id": "network-2-21",
+  "level": 2,
+  "q": "Que fait -extensions v3_ca dans openssl x509 -req … -extfile lab.cnf -extensions v3_ca ?",
+  "choices": [
+   "Met les extensions de [ v3_ca ] dans le certificat",
+   "Nomme le fichier à écrire",
+   "Liste toutes les extensions connues",
+   "Produit un format de fichier version 3"
+  ],
+  "answer": 0,
+  "explain": "-extfile nomme le fichier de configuration, -extensions la section dedans dont les lignes (basicConstraints, keyUsage…) deviennent les extensions du certificat. Sans eux, x509 -req n'ajoute ni basicConstraints ni keyUsage (OpenSSL 3 n'ajoute que les identifiants de clé), et le résultat n'est pas une CA utilisable."
+ },
+ {
+  "id": "network-3-18",
+  "level": 3,
+  "q": "Le ca.cnf d'une CA dit copy_extensions = copyall. Quel est le risque ?",
+  "choices": [
+   "Une demande qui veut CA:TRUE l'obtient",
+   "Les certificats deviennent trop gros",
+   "Le SAN est perdu",
+   "Aucun : c'est la valeur par défaut"
+  ],
+  "answer": 0,
+  "explain": "copyall copie chaque extension de la demande par-dessus celles de la CA : qui écrit la demande décide, et une demande qui veut CA:TRUE devient une CA. copy n'ajoute que ce que la section ne fixe pas : mets-y basicConstraints. Par défaut, rien n'est copié."
+ },
+ {
+  "id": "network-3-19",
+  "level": 3,
+  "q": "Dans le dossier de openssl ca, qu'est-ce que index.txt ?",
+  "choices": [
+   "La trace de chaque certificat signé, valide ou révoqué",
+   "La liste des racines de confiance",
+   "La clé privée de la CA",
+   "La page web de la CA"
+  ],
+  "answer": 0,
+  "explain": "Chaque ligne est un certificat signé par la CA : V (valide), R (révoqué, avec quand et pourquoi) ou E (expiré), sa date de fin, son numéro de série en hexadécimal et son sujet. -revoke change V en R, et -gencrl le lit pour faire la CRL."
+ },
+ {
+  "id": "network-2-22",
+  "level": 2,
+  "q": "La clé d'un serveur a fuité. Son certificat est valide encore 60 jours. Que fais-tu ?",
+  "choices": [
+   "Le révoquer, puis une nouvelle clé et un nouveau certificat",
+   "Rien : il finit dans 60 jours",
+   "Supprimer le fichier du certificat",
+   "Changer le mot de passe du serveur"
+  ],
+  "answer": 0,
+  "explain": "Qui a la clé peut se faire passer pour ton serveur jusqu'à la date de fin. Révoquer dit aux clients de ne plus le croire tout de suite ; une nouvelle clé et un nouveau certificat remettent ton serveur en route. Supprimer ta copie ne change rien pour le voleur."
+ },
+ {
+  "id": "network-2-23",
+  "level": 2,
+  "q": "Tu as lancé openssl ca -revoke sur un certificat. Pourquoi les clients l'acceptent-ils encore ?",
+  "choices": [
+   "Aucune nouvelle CRL publiée : lance -gencrl",
+   "Révoquer prend 24 heures",
+   "Les clients gardent les certificats pour toujours",
+   "-revoke ne marche que sur les racines"
+  ],
+  "answer": 0,
+  "explain": "-revoke marque seulement le certificat R dans index.txt, que personne d'autre ne lit. Les clients l'apprennent par la CRL : openssl ca -gencrl -out crl.pem en fait une nouvelle, que tu publies là où ils la récupèrent. Seuls les clients à qui on dit de la vérifier la voient : curl --crlfile crl.pem, openssl verify -crl_check."
+ },
+ {
+  "id": "network-3-20",
+  "level": 3,
+  "q": "openssl verify -crl_check dit : unable to get certificate CRL. Que manque-t-il ?",
+  "choices": [
+   "La CRL : donne-la avec -CRLfile crl.pem",
+   "La CA racine",
+   "La clé privée",
+   "Un accès internet vers la CA"
+  ],
+  "answer": 0,
+  "explain": "-crl_check fait vérifier à verify la CRL de la CA du certificat, et verify ne va pas la chercher seul (OpenSSL 3 le peut avec -crl_download, LibreSSL sur Mac non) : sans -CRLfile il n'en a pas, et échoue plutôt que deviner. -crl_check_all vérifie toute la chaîne. Avec la CRL : OK, ou error 23."
+ },
+ {
+  "id": "network-3-21",
+  "level": 3,
+  "q": "Pourquoi Let's Encrypt a-t-il coupé son service OCSP en 2025 ?",
+  "choices": [
+   "Chaque requête OCSP disait à la CA quel site tu visites",
+   "OCSP était trop précis",
+   "Les navigateurs ont lâché TLS",
+   "Les certificats n'expirent plus"
+  ],
+  "answer": 0,
+  "explain": "OCSP interrogeait la CA sur un certificat à chaque visite, donc la CA apprenait qui visite quel site. Les CRL se récupèrent en bloc et ne disent rien de toi. Depuis 2024, les CA publiques doivent publier des CRL et peuvent se passer d'OCSP ; les durées courtes font le reste."
  }
 ]

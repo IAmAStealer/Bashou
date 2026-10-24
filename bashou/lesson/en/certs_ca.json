@@ -1,0 +1,122 @@
+{
+ "id": "certs_ca",
+ "order": 527,
+ "skill": "network",
+ "after": [
+  "certs_admin"
+ ],
+ "tools": [
+  "openssl"
+ ],
+ "masters": [
+  "won pathlen_panther",
+  "won impostor_ibex | answered certs_ca 3"
+ ],
+ "recall": [
+  "network-2-19",
+  "network-2-20"
+ ],
+ "questions": [
+  "network-1-18",
+  "network-2-19",
+  "network-2-20",
+  "network-3-17"
+ ],
+ "fights": [
+  "pathlen_panther",
+  "impostor_ibex"
+ ],
+ "title": "Inside a CA",
+ "summary": "What makes a certificate a CA, how deep a CA may go (pathlen), what each key may sign, and how to read what openssl verify says.",
+ "pages": [
+  {
+   "scheme": [
+    " Root CA        CA:TRUE",
+    "   │ signs",
+    "   ▼",
+    " Intermediate   CA:TRUE, pathlen:0",
+    "   │ signs",
+    "   ▼",
+    " shop.example   CA:FALSE"
+   ],
+   "point": 0,
+   "mark": [
+    "CA:TRUE"
+   ],
+   "text": [
+    "One extension makes a certificate a CA: basicConstraints. CA:TRUE, it may sign other certificates. CA:FALSE, it may not, whoever holds its key.",
+    "",
+    "- A CA marks it critical: a client that doesn't understand it must refuse the certificate.",
+    "- Clients check it at each step of the chain: a server's certificate that signed another is refused (invalid CA certificate)."
+   ]
+  },
+  {
+   "scheme": [
+    " pathlen = how many CAs may come below",
+    "",
+    " Root            no pathlen: no limit",
+    "  └ Inter A      pathlen:1",
+    "     └ Inter B   pathlen:0",
+    "        └ shop.example",
+    "",
+    " a CA under Inter B:",
+    "   error 25: path length constraint exceeded"
+   ],
+   "point": 4,
+   "mark": [
+    "pathlen:0"
+   ],
+   "text": [
+    "pathlen limits the depth below a CA. It keeps a CA you trust from making CAs of its own, out of your sight.",
+    "",
+    "- pathlen:0: it signs servers' certificates only.",
+    "- Server certificates don't count, only the CAs between.",
+    "$ openssl x509 -in inter.pem -noout -ext basicConstraints",
+    "- On a Mac's LibreSSL: -text, and read Basic Constraints."
+   ]
+  },
+  {
+   "scheme": [
+    " keyUsage           for",
+    " keyCertSign        a CA: signs certificates",
+    " cRLSign            a CA: signs revocation lists",
+    " digitalSignature   a server: signs its TLS part",
+    "",
+    " extendedKeyUsage",
+    " serverAuth         a web server",
+    " clientAuth         a client that logs in"
+   ],
+   "point": 1,
+   "mark": [
+    "keyCertSign"
+   ],
+   "text": [
+    "keyUsage says what the key may sign. A CA needs keyCertSign, and cRLSign for its revocation lists. A server needs digitalSignature.",
+    "",
+    "- extendedKeyUsage narrows it further: serverAuth for a web server.",
+    "- A CA whose keyUsage lacks keyCertSign gets what it signed refused: key usage does not include certificate signing."
+   ]
+  },
+  {
+   "scheme": [
+    " $ openssl verify -CAfile root.pem \\",
+    "     -untrusted chain.pem leaf.pem",
+    " CN=Inter B                         ◀ who",
+    " error 25 at 2 depth lookup: path  ◀ why",
+    "   length constraint exceeded",
+    "",
+    " depth 0 = the leaf, 1 = its issuer, …"
+   ],
+   "point": 3,
+   "mark": [
+    "error 25"
+   ],
+   "text": [
+    "openssl verify builds the chain like a client and says what breaks: the line above the error names the certificate, and the depth counts from the leaf (0).",
+    "",
+    "- -untrusted gives the intermediates, -CAfile the root you trust. verify goes on after an error: read the first one.",
+    "- -verify_depth N refuses more than N intermediates (OpenSSL 3; a Mac's LibreSSL doesn't have it)."
+   ]
+  }
+ ]
+}

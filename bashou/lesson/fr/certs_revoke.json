@@ -1,0 +1,91 @@
+{
+ "title": "Révoquer un certificat",
+ "summary": "Quand une clé fuit, le certificat doit cesser d'être cru avant sa date de fin : le révoquer, publier une CRL, et vérifier avec.",
+ "pages": [
+  {
+   "scheme": [
+    " shop.key a fuité lundi",
+    "",
+    " le certificat :  valide jusqu'au 2027-01-20",
+    " le voleur :      peut être shop.example",
+    "                  jusque-là",
+    "",
+    " → révoque-le : la CA le liste comme révoqué"
+   ],
+   "point": 6,
+   "mark": [
+    "révoque-le"
+   ],
+   "text": [
+    "Un certificat reste valide jusqu'à sa date de fin, même si sa clé a fuité. Le révoquer, c'est la CA qui dit : ne crois plus celui-là.",
+    "",
+    "- Révoque quand une clé fuit, ou quand un certificat a été fait par erreur.",
+    "- Puis fais une nouvelle clé et un nouveau certificat : révoquer ne remplace rien."
+   ]
+  },
+  {
+   "scheme": [
+    " pki/index.txt",
+    " V  270122…Z              1000  unknown  /CN=web1",
+    " R  270122…Z  261024…Z,…  1001  unknown  /CN=web2",
+    "",
+    " V = valide, R = révoqué (quand, pourquoi)"
+   ],
+   "point": 2,
+   "mark": [
+    "R  270122"
+   ],
+   "text": [
+    "openssl ca -revoke marque le certificat R dans index.txt. Les clients ne voient jamais ce fichier : -gencrl publie la liste, une CRL, signée par la CA.",
+    "",
+    "$ openssl ca -config ca.cnf -revoke certs/web2.pem -crl_reason keyCompromise",
+    "$ openssl ca -config ca.cnf -gencrl -out crl.pem",
+    "- Une CRL a une date de prochaine mise à jour : publie la suivante avant, sinon les clients qui la vérifient refusent tous les certificats."
+   ]
+  },
+  {
+   "scheme": [
+    " $ openssl crl -in crl.pem -noout -text",
+    " Next Update: Oct 31 12:30:19 2026 GMT",
+    " Revoked Certificates:",
+    "     Serial Number: 1001",
+    "         Revocation Date: Oct 24 12:30:19 2026 GMT",
+    "         …",
+    "             Key Compromise"
+   ],
+   "point": 3,
+   "mark": [
+    "Serial Number"
+   ],
+   "text": [
+    "Une CRL liste des numéros de série. openssl crl la lit ; openssl verify vérifie un certificat avec.",
+    "",
+    "- Refais-la avant son Next Update (default_crl_days dans ca.cnf) : un timer s'en charge, comme pour les renouvellements.",
+    "$ openssl verify -crl_check -CAfile ca.pem -CRLfile crl.pem certs/web2.pem",
+    "- error 23 : certificate revoked. Sans CRL, -crl_check échoue aussi : unable to get certificate CRL.",
+    "- Où récupérer la CRL est en général écrit dans le certificat : -ext crlDistributionPoints (Mac : lis-le dans -text). Ta CA l'ajoute avec crlDistributionPoints = URI:http://… dans sa section."
+   ]
+  },
+  {
+   "scheme": [
+    " CRL    une liste que publie la CA ; les",
+    "        clients la récupèrent de temps en temps",
+    " OCSP   demande à la CA pour un certificat,",
+    "        en direct : la CA voit quel site",
+    "",
+    " 2024   OCSP facultatif, CRL obligatoires",
+    " 2025   Let's Encrypt coupe OCSP"
+   ],
+   "point": 6,
+   "mark": [
+    "2025"
+   ],
+   "text": [
+    "OCSP interrogeait la CA sur un certificat à chaque visite : lent, et la CA apprenait quels sites tu visites. Les CA publiques publient maintenant des CRL, et les navigateurs gardent leurs propres listes, mises à jour en arrière-plan (Firefox : CRLite).",
+    "",
+    "- Les durées courtes sont l'autre réponse : les certificats publics durent 200 jours au plus aujourd'hui, 47 dès le 2029-03-15, et un certificat court a rarement besoin d'être révoqué.",
+    "- Pour ta CA privée : publie la CRL là où les clients qui la vérifient peuvent la récupérer."
+   ]
+  }
+ ]
+}

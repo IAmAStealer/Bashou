@@ -1,0 +1,54 @@
+{
+ "name": "Sea otter",
+ "palette": {
+  "m": "#141418",
+  "e": "#ffffff",
+  "k": "#3a2618",
+  "o": "#8a5a36",
+  "O": "#5e3c22",
+  "c": "#d8b48c",
+  "n": "#26160e",
+  "r": "#d8303a",
+  "R": "#8a1c24",
+  "y": "#ffd040",
+  "b": "#4a9ad8",
+  "B": "#2a6aa8",
+  "w": "#d8f0ff"
+ },
+ "base": [
+  ".................",
+  ".................",
+  ".................",
+  "..kkk............",
+  ".kcccko..o.......",
+  "kcmecckoOokk.....",
+  "kccnccrrrooook...",
+  ".kcckrRyRrooOook.",
+  "..kkorrRrroooOk..",
+  "bbbbkkkkkkkkkkbbb",
+  "bwBbbbbwbbBbbbwbb",
+  "BbbbwbBbbbbwbBbbb"
+ ],
+ "poses": {
+  "inhale": {
+   "8": "..kkorrRrrooooOk."
+  },
+  "closed": {
+   "5": "--kk-------------"
+  },
+  "left": {
+   "5": "--em-------------"
+  },
+  "right": {
+   "5": "--mm-------------"
+  },
+  "fidget": {
+   "10": "bbwBbbbbwbbBbbbwb",
+   "11": "bBbbbwbBbbbbwbBbb"
+  }
+ },
+ "particles": [
+  0,
+  7
+ ]
+}

@@ -222,6 +222,18 @@ LESSONS = [
          "monitoring can warn before the site goes down. 2592000 seconds is 30 days.",
          "openssl x509 -in site.pem -noout -checkend 2592000"),
     ]},
+    {"id": "certs_ca", "tool": "openssl", "topics": ("network",), "title": "openssl: inside a CA", "pages": [
+        ("A CA is a certificate whose basicConstraints says CA:TRUE: it may sign others. pathlen says how many CAs may "
+         "come below it; pathlen:0, servers' certificates only. A Mac's LibreSSL has no -ext: use -text, and read "
+         "Basic Constraints.", "openssl x509 -in inter.pem -noout -ext basicConstraints"),
+        ("openssl verify checks a chain like a client: -CAfile the root you trust, -untrusted the intermediates. When it "
+         "fails, the line above the error names the certificate, and depth 0 is the leaf.",
+         "openssl verify -CAfile root.pem -untrusted chain.pem leaf.pem"),
+        ("When a key leaks, its CA revokes the certificate and publishes a CRL, a signed list of serial numbers that "
+         "must not be trusted any more. openssl crl reads one.", "openssl crl -in crl.pem -noout -text"),
+        ("openssl reads its settings from openssl.cnf: openssl version -d prints its folder. -config uses another file, "
+         "-extensions picks one of its sections.", "openssl version -d"),
+    ]},
     {"id": "bash_zsh", "tool": "bash", "topics": ("bash",), "title": "bash and zsh", "pages": [
         ("Your terminal runs a shell: bash on most Linux systems, zsh on a Mac and for many developers. They read almost every line the same way. echo $0 tells you which one you're typing in.",
          "echo $0"),

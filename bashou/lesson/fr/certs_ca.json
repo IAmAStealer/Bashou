@@ -1,0 +1,95 @@
+{
+ "title": "Dans une CA",
+ "summary": "Ce qui fait d'un certificat une CA, jusqu'où une CA peut descendre (pathlen), ce que chaque clé peut signer, et comment lire ce que dit openssl verify.",
+ "pages": [
+  {
+   "scheme": [
+    " Root CA        CA:TRUE",
+    "   │ signe",
+    "   ▼",
+    " Intermediate   CA:TRUE, pathlen:0",
+    "   │ signe",
+    "   ▼",
+    " shop.example   CA:FALSE"
+   ],
+   "point": 0,
+   "mark": [
+    "CA:TRUE"
+   ],
+   "text": [
+    "Une extension fait d'un certificat une CA : basicConstraints. CA:TRUE, il peut signer d'autres certificats. CA:FALSE, il ne peut pas, quel que soit celui qui détient sa clé.",
+    "",
+    "- Une CA la marque critical : un client qui ne la comprend pas doit refuser le certificat.",
+    "- Les clients la vérifient à chaque étape de la chaîne : un certificat de serveur qui en a signé un autre est refusé (invalid CA certificate)."
+   ]
+  },
+  {
+   "scheme": [
+    " pathlen = combien de CA peuvent suivre",
+    "",
+    " Root            sans pathlen : sans limite",
+    "  └ Inter A      pathlen:1",
+    "     └ Inter B   pathlen:0",
+    "        └ shop.example",
+    "",
+    " une CA sous Inter B :",
+    "   error 25: path length constraint exceeded"
+   ],
+   "point": 4,
+   "mark": [
+    "pathlen:0"
+   ],
+   "text": [
+    "pathlen limite la profondeur sous une CA. Il empêche une CA de confiance de créer ses propres CA, hors de ta vue.",
+    "",
+    "- pathlen:0 : elle ne signe que des certificats de serveurs.",
+    "- Les certificats de serveurs ne comptent pas, seulement les CA entre les deux.",
+    "$ openssl x509 -in inter.pem -noout -ext basicConstraints",
+    "- Avec LibreSSL sur Mac : -text, et lis Basic Constraints."
+   ]
+  },
+  {
+   "scheme": [
+    " keyUsage           pour",
+    " keyCertSign        une CA : signe des certificats",
+    " cRLSign            une CA : signe ses CRL",
+    " digitalSignature   un serveur : signe sa part TLS",
+    "",
+    " extendedKeyUsage",
+    " serverAuth         un serveur web",
+    " clientAuth         un client qui se connecte"
+   ],
+   "point": 1,
+   "mark": [
+    "keyCertSign"
+   ],
+   "text": [
+    "keyUsage dit ce que la clé peut signer. Une CA a besoin de keyCertSign, et de cRLSign pour ses listes de révocation. Un serveur a besoin de digitalSignature.",
+    "",
+    "- extendedKeyUsage restreint encore : serverAuth pour un serveur web.",
+    "- Si le keyUsage d'une CA n'a pas keyCertSign, ce qu'elle signe est refusé : key usage does not include certificate signing."
+   ]
+  },
+  {
+   "scheme": [
+    " $ openssl verify -CAfile root.pem \\",
+    "     -untrusted chain.pem leaf.pem",
+    " CN=Inter B                         ◀ qui",
+    " error 25 at 2 depth lookup: path  ◀ pourquoi",
+    "   length constraint exceeded",
+    "",
+    " depth 0 = la feuille, 1 = son émetteur, …"
+   ],
+   "point": 3,
+   "mark": [
+    "error 25"
+   ],
+   "text": [
+    "openssl verify construit la chaîne comme un client et dit ce qui casse : la ligne au-dessus de l'erreur nomme le certificat, et la profondeur compte depuis la feuille (0).",
+    "",
+    "- -untrusted donne les intermédiaires, -CAfile la racine de confiance. verify continue après une erreur : lis la première.",
+    "- -verify_depth N refuse plus de N intermédiaires (OpenSSL 3 ; LibreSSL sur Mac ne l'a pas)."
+   ]
+  }
+ ]
+}

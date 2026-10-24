@@ -50,6 +50,8 @@ class JudgeTest(unittest.TestCase):
                 cmd = "pass show db/prod"
             if ch.id == "upsert_unicorn":                                # write the file, then try it on a copy
                 cmd = "sqlite3 test.db < restock.sql"
+            if ch.id == "config_cobra":                                  # edit lab.cnf, then try the section
+                cmd = "openssl x509 -req -in mid.csr -CA root.pem -CAkey root.key -extfile lab.cnf -extensions v3_intermediate"
             if ch.id == "insecure_iguana":                               # edit fetch.sh, then try the CA with curl
                 cmd = "curl -fsS --cacert ca.pem https://127.0.0.1:8443/status"
             self.assertEqual(duel.judge(ch, 0, cmd), "hit", ch.id)

@@ -1,0 +1,52 @@
+{
+ "name": "Revoked Reindeer",
+ "palette": {
+  "e": "#ffffff",
+  "k": "#1e1a28",
+  "a": "#d8c49c",
+  "A": "#9a8458",
+  "b": "#a0704a",
+  "B": "#6a4a30",
+  "l": "#e8d4b0",
+  "r": "#e0303a",
+  "R": "#8a1c24"
+ },
+ "base": [
+  "a.a..a.a.........",
+  ".aAa.aAa.........",
+  "..aAAAa..........",
+  "....bb...........",
+  "...kbbbk.........",
+  "..kekbbbk........",
+  "rkbbbbbbbbbbbbk..",
+  "Rkbbbbbr.bbbr.bk.",
+  ".kbbbbbbrbbrbbbk.",
+  ".kbbbbbbbrrbbbBk.",
+  "..kBk.kBkr.rkBk..",
+  "..kk..kk..r.rkk.."
+ ],
+ "poses": {
+  "inhale": {
+   "8": "kbbbbbbbrbbrbbbbk",
+   "9": "kbbbbbbbbrrbbbbBk"
+  },
+  "closed": {
+   "5": "--kk-------------"
+  },
+  "left": {
+   "5": "--ke-------------"
+  },
+  "right": {
+   "5": "--ek-------------"
+  },
+  "fidget": {
+   "0": ".a.a..a.a........",
+   "1": "..aAa.aAa........"
+  }
+ },
+ "particles": [
+  0,
+  10
+ ],
+ "lone_pixels": true
+}

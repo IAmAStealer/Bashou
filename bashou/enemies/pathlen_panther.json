@@ -1,0 +1,53 @@
+{
+ "name": "Pathlen Panther",
+ "palette": {
+  "e": "#ffd23c",
+  "k": "#1e1a28",
+  "p": "#3a3448",
+  "P": "#22202c",
+  "l": "#5a5270",
+  "n": "#e87aa0",
+  "y": "#f0d050",
+  "Y": "#a88a20"
+ },
+ "base": [
+  "...............y.",
+  "..k...k........Y.",
+  ".kpk.kpk.......y.",
+  ".kppppppk......Y.",
+  "kpkepkeppk.....y.",
+  "kpppnppppkkkkkkY.",
+  ".kplllpppppppppy.",
+  "..kppppppppppppk.",
+  "..kPppppppppPppk.",
+  "..kPPkppppkPPkk..",
+  ".kpk.kpk..kpk.kp.",
+  ".kk..kk...kk...kk"
+ ],
+ "poses": {
+  "inhale": {
+   "7": "..kpppppppppppppk",
+   "8": ".kPppppppppppPppk"
+  },
+  "closed": {
+   "4": "--kk-kk----------"
+  },
+  "left": {
+   "4": "--ke-ke----------"
+  },
+  "right": {
+   "4": "--ek-ek----------"
+  },
+  "fidget": {
+   "0": "..............y..",
+   "1": "..k...k.......Y..",
+   "2": ".kpk.kpk......y..",
+   "3": ".kppppppk.....Y.."
+  }
+ },
+ "particles": [
+  0,
+  8
+ ],
+ "lone_pixels": true
+}
