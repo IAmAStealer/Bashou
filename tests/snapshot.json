@@ -9194,31 +9194,28 @@
     "palette": {
      "m": "#141418",
      "e": "#ffffff",
-     "k": "#3a2618",
-     "o": "#8a5a36",
-     "O": "#5e3c22",
-     "c": "#d8b48c",
-     "n": "#26160e",
+     "k": "#2e1c10",
+     "o": "#7a4e2e",
+     "O": "#4e3020",
+     "c": "#e6d6bc",
+     "n": "#1a100a",
      "r": "#d8303a",
      "R": "#8a1c24",
-     "y": "#ffd040",
-     "b": "#4a9ad8",
-     "B": "#2a6aa8",
-     "w": "#d8f0ff"
+     "y": "#ffd040"
     },
     "base": [
      ".................",
      ".................",
-     ".................",
-     "..kkk............",
-     ".kcccko..o.......",
-     "kcmecckoOokk.....",
-     "kccnccrrrooook...",
-     ".kcckrRyRrooOook.",
-     "..kkorrRrroooOk..",
-     "bbbbkkkkkkkkkkbbb",
-     "bwBbbbbwbbBbbbwbb",
-     "BbbbwbBbbbbwbBbbb"
+     "............k.k..",
+     "..kkkk.....kOkOk.",
+     ".koooOk....kOOOk.",
+     "kocccook.kkk.kok.",
+     "kcmcmcokkrrrkkook",
+     "kccnccooOryrOoook",
+     ".kccooooOrrrOoOOk",
+     "..koooooooooOOOOk",
+     "...kOOOOOOOOOOOk.",
+     "....kkkkkkkkkkk.."
     ]
    }
   },
