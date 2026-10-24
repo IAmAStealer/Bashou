@@ -11,7 +11,10 @@
   "w": "#fbfbff",
   "g": "#dfe4ee",
   "G": "#aeb6c6",
-  "n": "#3a3a44"
+  "n": "#3a3a44",
+  "r": "#d8483a",
+  "R": "#8a2820",
+  "y": "#ffd040"
  },
  "base": [
   ".................",
@@ -23,14 +26,14 @@
   "..kwmmwwmmwwkkk..",
   ".kgwwwnnwwwwwwwk.",
   ".kgwwwwwwwwggwwwk",
-  "..kggwwwwwgggwgGk",
-  "...kGGgggggGGkGk.",
-  "....kkkkkkkkk.kk."
+  ".rrrkwwwwwgggwgGk",
+  "rRyRrGgggggGGkGk.",
+  "rrRrrkkkkkkkk.kk."
  ],
  "poses": {
   "inhale": {
    "8": ".kgwwwwwwwwwgwwwk",
-   "9": "..kggwwwwwwggwwGk"
+   "9": ".rrrkwwwwwwggwwGk"
   },
   "closed": {
    "5": "---www-www-------",
@@ -45,8 +48,8 @@
    "6": "----wmm-wmm------"
   },
   "fidget": {
-   "10": "...kGGgggggGGkkGk",
-   "11": "....kkkkkkkkk..kk"
+   "10": "rRyRrGgggggGGkkGk",
+   "11": "rrRrrkkkkkkkk..kk"
   }
  },
  "particles": [
