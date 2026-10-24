@@ -1,53 +1,49 @@
 {
  "name": "Sea otter",
  "palette": {
-  "m": "#141418",
+  "m": "#1c120c",
   "e": "#ffffff",
-  "k": "#241610",
-  "o": "#5c3c26",
-  "O": "#3c2618",
-  "b": "#86603e",
-  "c": "#d6cab2",
-  "C": "#a89c86",
-  "w": "#fbf8f0",
-  "n": "#120c08",
-  "r": "#d8303a",
+  "k": "#393234",
+  "O": "#6c5b55",
+  "o": "#a17f6e",
+  "l": "#d8c4b0",
+  "c": "#f8eedc",
+  "n": "#1c120c",
   "R": "#8a1c24",
-  "y": "#ffd040",
-  "Y": "#b08a18"
+  "Y": "#b08a18",
+  "y": "#ffd040"
  },
  "base": [
   ".................",
   ".................",
   "............k.k..",
   "..kkkk.....kOkOk.",
-  ".kCccCk....kOOOk.",
-  "kCccccCk.....kok.",
-  "kcmccmcokRRRkoook",
-  "kcwnnwcORYyYROook",
-  ".kcwwcbbOOOOObbOk",
-  "..kkbboooooooOOOk",
+  ".kooooOk...kOOOk.",
+  "komoomok.....kOk.",
+  "kocncooOkRRRkOOOk",
+  "klcccloORYyYRooOk",
+  ".kOolcccOOOOOoOOk",
+  "..kOOoooooooOOOOk",
   "...kOOOOOOOOOOOk.",
   "....kkkkkkkkkkk.."
  ],
  "poses": {
   "inhale": {
-   "9": ".kkbbbooooooOOOOk",
-   "10": "..kOOOOOOOOOOOOk."
+   "9": ".kOOoooooooOOOOk."
   },
   "closed": {
-   "6": "--C--C-----------"
+   "5": "-OO--OO----------"
   },
   "left": {
-   "6": "--m--m-----------"
+   "5": "--ml-ml----------"
   },
   "right": {
-   "6": "--m--m-----------"
+   "5": "-lm-lm-----------"
   },
   "fidget": {
    "2": "...........k.k...",
    "3": "..kkkk....kOkOk..",
-   "4": ".kCcCCk....kOOk.."
+   "4": ".kooooOk...kOOk.."
   }
  },
  "particles": [
