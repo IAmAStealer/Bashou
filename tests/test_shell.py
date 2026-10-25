@@ -644,7 +644,9 @@ class ShellTest(unittest.TestCase):
 
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
-        self.sh = Shell(self.tmp.name, shell=self.SHELL)
+        # Night shift (and its Mouseling) already won: run between midnight and 5 am, its bubbles covered the
+        # one a test waited for
+        self.sh = Shell(self.tmp.name, state={"achievements": ["night_owl"], "pets": ["bat"]}, shell=self.SHELL)
         self.sh.read(1)
         self.sh.expect(b"38;2;216;200;160")              # the pet is drawn: rc read, pet started
 
