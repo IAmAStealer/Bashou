@@ -1136,11 +1136,15 @@ class ArenaShellTest(unittest.TestCase):
                 self.assertRegex(version, r"^\d")
                 # Typed before the next prompt, a line can be lost (zsh drops typeahead): wait for it.
                 self.assertTrue(sh.expect(ARENA_PROMPT, sh.out.index(b"@@V=", start)))
+                start = len(sh.out)
                 other = sh.value("BASH_VERSION" if self.SHELL == "zsh" else "ZSH_VERSION")
                 self.assertEqual(other, "")
+                # Each line waits for the prompt, as a player would (CI rocky lost one typed before it)
+                self.assertTrue(sh.expect(ARENA_PROMPT, sh.out.index(b"@@V=", start)))
                 start = len(sh.out)
                 sh.send("task\n", 0)
                 self.assertTrue(sh.expect(b"app.log", start))              # the arena's own commands work
+                self.assertTrue(sh.expect(ARENA_PROMPT, sh.out.index(b"app.log", start)))
                 start = len(sh.out)
                 sh.send("printf '%s\\n' one \\\n two\n", 0)              # a command on two lines
                 self.assertTrue(sh.expect(b"one\r\ntwo\r\n", start))
