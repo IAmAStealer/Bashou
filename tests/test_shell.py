@@ -1227,7 +1227,10 @@ class ZshCompletionTest(unittest.TestCase):
             sh = Shell(tmp, bashrc=rc, shell="zsh")
             try:
                 self.assertTrue(sh.expect(b"38;2;216;200;160"))
+                start = len(sh.out)
                 self.assertEqual(sh.value("_comps[bashou]"), "_bashou")
+                # Wait for the prompt, as a player would (CI macOS: typed before it, the Tab was lost)
+                self.assertTrue(sh.expect(b"$ ", sh.out.index(b"@@V=", start)))
                 start = len(sh.out)
                 sh.send("bashou swa\t", 1)
                 end = time.time() + TIMEOUT                    # zle redraws with cursor moves between letters
