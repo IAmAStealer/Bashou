@@ -18,7 +18,7 @@ GAME_SECONDS = 25                # owner: 20 good answers is the last star, 5 mo
 MAX_MISTAKES = 5                 # owner bug 2026-10-16: holding one arrow won every star (1 in 4 is right)
 COPIES = 2                       # each kind twice in the bag: it can come back
 LONGEST, LABEL = 40, 14           # string and answer lengths: all on one line of 80 columns
-GAP = 5                          # columns between the string and the answers on its sides
+GAP = 4                          # columns between the string and the answers on its sides
 TIERS = [(5, "Quick eye"), (10, "Sharp eyes"), (15, "Hawk eyes"), (20, "Eagle eyes")]   # good answers in a game
 
 WORDS = ["cat", "data", "home", "user", "log", "mail", "shop", "blue", "cloud", "pixel", "river", "stone",

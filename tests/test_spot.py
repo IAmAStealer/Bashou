@@ -248,6 +248,16 @@ class GameTest(unittest.TestCase):
         self.assertEqual(spot.tier(20), "Eagle eyes")                             # the last one: 20
         self.assertEqual(spot.GAME_SECONDS, 25)
 
+    def test_the_longest_string_and_answers_fit_80_columns(self):
+        """A 40-character string with "Unix timestamp" on both sides needed 82 columns: the left answer
+        started at column 0 (pre-push hook, 2026-10-25, a random draw)."""
+        self.assertLessEqual(spot.LONGEST + 2 * (spot.GAP + spot.LABEL + 2), 80)
+        g = self.game()
+        for text in ("x" * spot.LONGEST, "x" * (spot.LONGEST - 1)):
+            g.text, g.answers = text, ["timestamp"] * 4
+            for r, c, shown, style in screen.layout(g, 80, 14):
+                self.assertTrue(c >= 1 and c + len(shown) - 1 <= 80, (len(text), shown, c))
+
     def test_the_string_in_the_middle_the_answers_around_the_clock_on_top(self):
         """Owner: the string right in the middle, little distraction, the time at the top of the terminal,
         the answers around the string with room around them."""
