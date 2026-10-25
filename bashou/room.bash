@@ -34,9 +34,15 @@ _bashou_where() {   # the cursor's row and column, and the screen's last row: "r
   [[ $_bashou_dsr == on ]] && wait=10
   # One question at a time: between two reads echo is back on, and an answer that came then was printed.
   printf '\e[6n' > /dev/tty
-  if ! IFS='[;' read -rs -t "$wait" -dR _ row col || ! printf '\e7\e[9999;9999H\e[6n\e8' > /dev/tty \
-     || ! IFS='[;' read -rs -t "$wait" -dR _ bottom _ || [[ ! $row$col$bottom =~ ^[0-9]+$ ]]; then
+  if ! IFS='[;' read -rs -t "$wait" -dR _ row col; then
     _bashou_dsr=off                                  # no answer: this terminal doesn't do it
+    return 1
+  fi
+  read -t 0 && return 1                              # keys typed meanwhile: the second read would eat them
+  # (keys typed while the second answer is on its way are still lost: the window is short)
+  if ! printf '\e7\e[9999;9999H\e[6n\e8' > /dev/tty || ! IFS='[;' read -rs -t "$wait" -dR _ bottom _ \
+     || [[ ! $row$col$bottom =~ ^[0-9]+$ ]]; then
+    _bashou_dsr=off
     return 1
   fi
   _bashou_dsr=on

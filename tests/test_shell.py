@@ -535,6 +535,49 @@ class RoomTest(unittest.TestCase):
             os.close(fd)
         self.assertIn(b"@@12 5 30@@", out)
 
+    def test_keys_typed_after_the_first_answer_are_kept(self):
+        """CI macOS (v0.10.6): `flee`, typed between the two questions, was read as part of the second
+        answer and lost. Keys waiting after the first answer: no second question, the keys stay."""
+        for typed, later in ((b"flee\n", b""), (b"fl", b"ee\n")):         # a whole line, or half of one
+            with self.subTest(typed=typed):
+                self.keys_after_the_first_answer(typed, later)
+
+    def keys_after_the_first_answer(self, typed, later):
+        load = "zmodload zsh/zselect\n" if self.SHELL == "zsh" else ""
+        script = (f"{load}source <(sed -n '/^_bashou_dsr=/,/^_bashou_make_room()/p' {ROOT}/bashou/room.{self.SHELL} | sed '$d')\n"
+                  "_bashou_where && echo \"@@$_bashou_at@@\" || echo @@skipped@@\n"
+                  "read -r line; echo \"@@got $line@@\"\n")
+        need(self.SHELL)
+        pid, fd = pty.fork()
+        if pid == 0:
+            os.execvp(self.SHELL, [self.SHELL, "-c", script])
+        out, end = b"", time.time() + 20
+        try:
+            while b"\x1b[6n" not in out and time.time() < end:
+                if select.select([fd], [], [], 0.05)[0]:
+                    out += os.read(fd, 4096)
+            os.write(fd, b"\x1b[12;5R" + typed)              # the answer, then keys right behind it
+            time.sleep(0.3)
+            os.write(fd, later)
+            while b"@@got" not in out and time.time() < end:
+                if out.count(b"\x1b[6n") > 1:
+                    os.write(fd, b"\x1b[30;140R")
+                    out = out.replace(b"\x1b[6n", b"", 1)
+                if select.select([fd], [], [], 0.05)[0]:
+                    try:
+                        out += os.read(fd, 4096)
+                    except OSError:
+                        break
+            while b"@@\r\n" not in out[out.find(b"@@got"):] and time.time() < end:
+                if select.select([fd], [], [], 0.05)[0]:
+                    out += os.read(fd, 4096)
+        finally:
+            os.kill(pid, signal.SIGKILL)
+            os.waitpid(pid, 0)
+            os.close(fd)
+        self.assertIn(b"@@skipped@@", out)
+        self.assertIn(b"@@got flee@@", out)
+
 
 class ArenaRoomTest(unittest.TestCase):
     """Owner, 2026-09-26: the arena's fight panel still hid lines (drawn over the text, then blanked):
@@ -1067,7 +1110,11 @@ class ArenaShellTest(unittest.TestCase):
                 start = len(sh.out)
                 sh.send("task\n", 0)
                 self.assertTrue(sh.expect(b"app.log", start))              # the arena's own commands work
-                sh.send("printf '%s\\n' one \\\n two\n", 0.5)            # a command on two lines
+                start = len(sh.out)
+                sh.send("printf '%s\\n' one \\\n two\n", 0)              # a command on two lines
+                self.assertTrue(sh.expect(b"one\r\ntwo\r\n", start))
+                # Wait for the prompt, as a player would: typed while the room is made, `flee` was lost
+                self.assertTrue(sh.expect(ARENA_PROMPT, sh.out.index(b"one\r\ntwo\r\n", start)))
                 sh.send("flee\n", 0)
                 self.assertTrue(sh.expect(b"You fled"))
                 self.assertTrue(sh.wait_state(lambda s: s["commands"] >= 4),     # CI macOS failed here (v0.10.6)

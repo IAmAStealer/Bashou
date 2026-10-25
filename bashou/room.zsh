@@ -20,11 +20,16 @@ _bashou_where() {   # the cursor's row and column, and the screen's last row: "r
   zselect -t 0 -r 0 2>/dev/null && return 1          # keys typed ahead: asking would eat them
   [[ $_bashou_dsr == on ]] && wait=10
   printf '\e[6n' > /dev/tty                          # one question at a time (see room.bash)
-  if ! IFS='[;' read -rs -t $wait -d R skip row col < /dev/tty \
-     || ! printf '\e7\e[9999;9999H\e[6n\e8' > /dev/tty \
+  if ! IFS='[;' read -rs -t $wait -d R skip row col < /dev/tty; then
+    _bashou_dsr=off                                  # no answer: this terminal doesn't do it
+    return 1
+  fi
+  zselect -t 0 -r 0 2>/dev/null && return 1          # keys typed meanwhile: the second read would eat them
+  # (keys typed while the second answer is on its way are still lost: the window is short)
+  if ! printf '\e7\e[9999;9999H\e[6n\e8' > /dev/tty \
      || ! IFS='[;' read -rs -t $wait -d R skip bottom skip < /dev/tty \
      || [[ ! $row$col$bottom =~ '^[0-9]+$' ]]; then
-    _bashou_dsr=off                                  # no answer: this terminal doesn't do it
+    _bashou_dsr=off
     return 1
   fi
   _bashou_dsr=on
