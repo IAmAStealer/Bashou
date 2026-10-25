@@ -19,13 +19,15 @@ def git(work, *args):
 
 
 def repo(work):
-    """A fresh repository with its own name and email (none is needed from the player)."""
+    """A fresh repository with its own name and email (none is needed from the player). No auto gc or
+    maintenance: since git 2.47 it runs detached after a commit and wrote into .git while it was deleted."""
     git(work, "init", "-q", "-b", "main")
     if git(work, "rev-parse", "--git-dir") is None:            # git before 2.28: no -b
         git(work, "init", "-q")
         git(work, "symbolic-ref", "HEAD", "refs/heads/main")
     for key, value in (("user.name", "Bashou"), ("user.email", "bashou@example.invalid"),
-                       ("commit.gpgsign", "false"), ("core.editor", "true"), ("merge.conflictstyle", "merge")):
+                       ("commit.gpgsign", "false"), ("core.editor", "true"), ("merge.conflictstyle", "merge"),
+                       ("gc.auto", "0"), ("maintenance.auto", "false")):
         git(work, "config", key, value)
 
 

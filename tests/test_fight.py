@@ -345,6 +345,11 @@ ZSH_SOLUTIONS = {}
 ZSH_RIGHT_MOVES = {"space_sprite"}      # zsh keeps $n as one word
 
 
+def playable_wrong_moves():
+    """WRONG_MOVES of the fights this machine can run (Insecure Iguana's server is Linux only)."""
+    return [(cid, cmd) for cid, cmd in WRONG_MOVES if challenges.BY_ID[cid].available()]
+
+
 def run_solution(ch, meta, work, shell="bash"):
     """Run the reference solution of `ch` in `work` with `shell`; (output, status)."""
     cmd, pattern = ZSH_SOLUTIONS.get(ch.id, SOLUTIONS[ch.id]) if shell == "zsh" else SOLUTIONS[ch.id]
@@ -444,8 +449,7 @@ class ChallengeTest(unittest.TestCase):
 
     def test_everyday_fights_refuse_the_easy_wrong_move(self):
         """A plain sort or sort -n misreads sizes, a too wide pattern removes files that stay, a loose file fails."""
-        cases = WRONG_MOVES
-        for cid, cmd in cases:
+        for cid, cmd in playable_wrong_moves():
             ch = challenges.BY_ID[cid]
             for seed in range(3):
                 with self.subTest(cid, seed=seed), tempfile.TemporaryDirectory() as tmp:
@@ -460,7 +464,7 @@ class ChallengeTest(unittest.TestCase):
     def test_everyday_wrong_moves_lose_in_zsh_too(self):
         from tests.test_shell import need
         need("zsh")
-        for cid, cmd in WRONG_MOVES:
+        for cid, cmd in playable_wrong_moves():
             if cid in ZSH_RIGHT_MOVES:
                 continue
             ch = challenges.BY_ID[cid]
@@ -473,6 +477,13 @@ class ChallengeTest(unittest.TestCase):
                     finally:
                         if ch.cleanup:
                             ch.cleanup(meta)
+
+    def test_wrong_moves_skip_fights_this_machine_cant_run(self):
+        """CI macOS (v0.10.6): Insecure Iguana's setup waited 3 min for a loopback server its Mac couldn't start."""
+        iguana = challenges.BY_ID["insecure_iguana"]
+        with mock.patch.object(type(iguana), "available", lambda self: self.id != "insecure_iguana"):
+            self.assertNotIn("insecure_iguana", {cid for cid, _ in playable_wrong_moves()})
+        self.assertTrue(any(cid == "insecure_iguana" for cid, _ in WRONG_MOVES))
 
     def test_the_pipe_eel_needs_a_real_pipeline(self):
         with tempfile.TemporaryDirectory() as base:
@@ -948,6 +959,17 @@ class SqlFightTest(unittest.TestCase):
             total, = db.execute("SELECT SUM(total) FROM orders JOIN customers ON orders.customer_id = customers.id "
                                 "WHERE customers.name = ?", (meta["args"]["name"],)).fetchone()
             self.assertEqual(meta["answer"], str(total))
+
+
+class GitFightTest(unittest.TestCase):
+    @unittest.skipUnless(shutil.which("git"), "needs git")
+    def test_fight_repos_run_no_background_maintenance(self):
+        """CI (v0.10.6): a detached auto-maintenance wrote into arena/.git while the test deleted it."""
+        from bashou.challenges import gitfights
+        with tempfile.TemporaryDirectory() as tmp:
+            gitfights.repo(Path(tmp))
+            self.assertEqual(gitfights.git(tmp, "config", "gc.auto"), "0\n")
+            self.assertEqual(gitfights.git(tmp, "config", "maintenance.auto"), "false\n")
 
 
 class RepoFightTest(unittest.TestCase):
