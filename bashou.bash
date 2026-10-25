@@ -119,6 +119,7 @@ bind -x '"\C-l": _bashou_clear' 2>/dev/null
 # Erase the pet before a command runs, so it never scrolls with the output.
 _bashou_ps0() {
   local seq
+  _bashou_tty_back
   [[ -n $BASHOU_PID ]] || return
   rm -f "$_bashou_room"                              # the pet waits for the next prompt's room
   _bashou_close_room && return

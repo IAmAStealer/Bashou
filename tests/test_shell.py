@@ -542,6 +542,37 @@ class RoomTest(unittest.TestCase):
             with self.subTest(typed=typed):
                 self.keys_after_the_first_answer(typed, later)
 
+    def test_ctrl_c_during_the_questions_gives_the_command_its_echo_back(self):
+        """bash-judge (v0.10.6): Ctrl+C while waiting for an answer skipped the stty that puts canonical
+        mode and echo back: the next commands ran without echo. PS0 (pet and arena) puts them back."""
+        if self.SHELL != "bash":
+            self.skipTest("zsh puts the terminal back by itself")
+        self.assertIn("_bashou_tty_back", (ROOT / "bashou.bash").read_text().split("_bashou_ps0() {")[1].split("}")[0])
+        from bashou import fight
+        self.assertIn("_bashou_tty_back", fight.RC.split("_arena_ps0() {")[1].split("}")[0])
+        script = (f"source <(sed -n '/^_bashou_dsr=/,/^_bashou_make_room()/p' {ROOT}/bashou/room.bash | sed '$d')\n"
+                  "_bashou_raw=1; stty -icanon -echo < /dev/tty          # where Ctrl+C left it\n"
+                  "_bashou_tty_back\n"
+                  "echo \"@@$(stty -a < /dev/tty | tr '\\n' ' ')@@\"\n")
+        pid, fd = pty.fork()
+        if pid == 0:
+            os.execvp("bash", ["bash", "-c", script])
+        out, end = b"", time.time() + 20
+        try:
+            while out.count(b"@@") < 2 and time.time() < end:
+                if select.select([fd], [], [], 0.05)[0]:
+                    try:
+                        out += os.read(fd, 4096)
+                    except OSError:
+                        break
+        finally:
+            os.kill(pid, signal.SIGKILL)
+            os.waitpid(pid, 0)
+            os.close(fd)
+        flags = out.split(b"@@")[1].split()
+        self.assertIn(b"icanon", flags)
+        self.assertIn(b"echo", flags)
+
     def keys_after_the_first_answer(self, typed, later):
         load = "zmodload zsh/zselect\n" if self.SHELL == "zsh" else ""
         script = (f"{load}source <(sed -n '/^_bashou_dsr=/,/^_bashou_make_room()/p' {ROOT}/bashou/room.{self.SHELL} | sed '$d')\n"

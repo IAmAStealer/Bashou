@@ -77,6 +77,7 @@ flee() { exit 3; }
 # The fight panel is drawn at the top, like the pet: the same room is made for it (bashou/room.bash).
 _bashou_height=$BASHOU_ARENA/height _bashou_room=$BASHOU_ARENA/room _bashou_erase=$BASHOU_ARENA/erase
 _arena_ps0() {
+  _bashou_tty_back
   rm -f "$_bashou_room"                              # the panel waits for the next prompt's room
   _bashou_close_room && return
   [[ -r $_bashou_erase ]] && printf '%s' "$(< "$_bashou_erase")"

@@ -26,14 +26,32 @@ _bashou_dsr=
 _bashou_gap=0
 _bashou_first=1
 _bashou_where() {   # the cursor's row and column, and the screen's last row: "row col bottom"
-  local row col bottom wait=2
+  local rc
   [[ $_bashou_dsr == off ]] && return 1
+  # The whole exchange without canonical mode or echo: a half-typed line then counts as keys waiting
+  # (a Mac hides it until Enter, and the second read ate it), and nothing is printed between the reads.
+  _bashou_raw=1
+  stty -icanon -echo 2>/dev/null < /dev/tty
+  _bashou_ask
+  rc=$?
+  stty icanon echo 2>/dev/null < /dev/tty
+  _bashou_raw=
+  return "$rc"
+}
+
+_bashou_raw=
+_bashou_tty_back() {  # Ctrl+C during the questions skipped the stty above: the command would run without echo
+  [[ -n $_bashou_raw ]] && stty icanon echo 2>/dev/null < /dev/tty
+  _bashou_raw=
+}
+
+_bashou_ask() {
+  local row col bottom wait=2
   read -t 0 && return 1                              # keys typed ahead: asking would eat them
   # A terminal that answered once will answer again, only late when busy (WSL after a long output):
   # wait for it, or the answer comes after we stopped reading and shows up on the screen (^[[30;120R).
   [[ $_bashou_dsr == on ]] && wait=10
-  # One question at a time: between two reads echo is back on, and an answer that came then was printed.
-  printf '\e[6n' > /dev/tty
+  printf '\e[6n' > /dev/tty                           # one question at a time
   if ! IFS='[;' read -rs -t "$wait" -dR _ row col; then
     _bashou_dsr=off                                  # no answer: this terminal doesn't do it
     return 1

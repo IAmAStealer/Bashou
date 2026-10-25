@@ -15,8 +15,17 @@ _bashou_dsr=
 _bashou_gap=0
 _bashou_first=1
 _bashou_where() {   # the cursor's row and column, and the screen's last row: "row col bottom"
-  local row col bottom skip wait=2
+  local rc
   [[ $_bashou_dsr == off ]] && return 1
+  stty -icanon -echo 2>/dev/null < /dev/tty          # the whole exchange raw (see room.bash)
+  _bashou_ask
+  rc=$?
+  stty icanon echo 2>/dev/null < /dev/tty
+  return $rc
+}
+
+_bashou_ask() {
+  local row col bottom skip wait=2
   zselect -t 0 -r 0 2>/dev/null && return 1          # keys typed ahead: asking would eat them
   [[ $_bashou_dsr == on ]] && wait=10
   printf '\e[6n' > /dev/tty                          # one question at a time (see room.bash)
