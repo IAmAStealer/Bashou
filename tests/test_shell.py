@@ -1070,7 +1070,8 @@ class ArenaShellTest(unittest.TestCase):
                 sh.send("printf '%s\\n' one \\\n two\n", 0.5)            # a command on two lines
                 sh.send("flee\n", 0)
                 self.assertTrue(sh.expect(b"You fled"))
-                self.assertTrue(sh.wait_state(lambda s: s["commands"] >= 4))
+                self.assertTrue(sh.wait_state(lambda s: s["commands"] >= 4),     # CI macOS failed here (v0.10.6)
+                                f"commands={sh.state().get('commands')}\n{sh.out[-3000:].decode(errors='replace')}")
             finally:
                 sh.close()
 
