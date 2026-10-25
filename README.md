@@ -79,6 +79,14 @@ It shows every command it will run, asks you, then moves you over. Your pets and
 
 ## What's new
 
+**0.10.6**
+- **Certificates**: six lessons and ten fights, from reading a certificate to running your own CA and
+  revoking one, and a new pet, the Seal, that grows with them.
+- SQL lessons and questions corrected and checked statement by statement.
+
+**0.10.5**
+- **Bash scripts** are a skill of their own, with eight fights that run your fixed script on hostile files.
+
 **0.10.4**
 - Fled a fight? Your pet stops reminding you of it; the threat still waits for `bashou fight` until midnight.
 - Gary has his real colors: yellow-green eyes with red pupils and a green belly.
@@ -90,12 +98,6 @@ It shows every command it will run, asks you, then moves you over. Your pets and
 
 **0.10.2**
 - An opened chest stays opened, and the same chest never comes twice in one run of an adventure path.
-
-**0.10.1**
-- **New versions reach Homebrew by themselves**: `brew upgrade` gets them the day they come out.
-
-**0.10.0**
-- **macOS with Homebrew**, `bashou export`/`import` to play on two computers, an AI tools skill, `bashou changelog`, and pets that grow with their achievements.
 
 Every change, release by release: [CHANGELOG.md](CHANGELOG.md).
 

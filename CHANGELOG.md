@@ -3,6 +3,22 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.10.6 — 2026-10-25
+
+### Changes
+
+- Certificates join the Network skill: six lessons, from reading a certificate and checking its names and dates to running your own CA (basicConstraints, path length, key usage), finding and reading `openssl.cnf`, and revoking a certificate with a CRL. With 25 new questions, two owl lessons and their chests.
+- Ten certificate fights: an expiring certificate, a missing name, a key that doesn't match, a chain in the wrong order, a script that turned off checking with `-k`, a request to fill in, an intermediate that signs too deep, an impostor CA, a config section Bashou signs with, and a certificate to revoke. Where a Mac's LibreSSL differs, the lessons give its line too.
+- A new pet, the Seal, grows through five forms with eleven certificate achievements, up to the Sea otter keeping its wax seal in its pouch.
+- SQL lessons and questions follow written rules now, and every statement you're shown is run in the tests: name the columns of an INSERT, ORDER BY before LIMIT, transactions that a failed statement leaves open, safe copies with `.backup`.
+- Hidden notes in fights say just "answer <word>", so it's clear what to type.
+- Bashou no longer prints `^[[30;120R` on the screen, and Enter no longer makes the screen flicker.
+- The pet no longer suggests a command that isn't installed when you mistype one.
+
+### Breaking changes
+
+- Breaking change: a pony read about revocation, put its own horseshoe on the CRL and galloped off unshod. Bring it home with `bashou pony hoof`.
+
 ## v0.10.5 — 2026-10-22
 
 ### Changes

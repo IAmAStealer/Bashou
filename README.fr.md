@@ -80,6 +80,15 @@ de ton `~/.zshrc` et le dossier `~/.bashou`. Tes compagnons et ta progression re
 
 ## Quoi de neuf
 
+**0.10.6**
+- **Certificats** : six leçons et dix combats, de la lecture d'un certificat jusqu'à ta propre CA et la
+  révocation, et un nouveau compagnon, le Phoque, qui grandit avec eux.
+- Les leçons et questions SQL corrigées et vérifiées requête par requête.
+
+**0.10.5**
+- **Les scripts bash** deviennent une compétence à part, avec huit combats qui lancent ton script corrigé
+  sur des fichiers piégés.
+
 **0.10.4**
 - Tu as fui un combat ? Ton compagnon arrête de te le rappeler ; la menace t'attend quand même avec
   `bashou fight` jusqu'à minuit.
@@ -93,12 +102,6 @@ de ton `~/.zshrc` et le dossier `~/.bashou`. Tes compagnons et ta progression re
 
 **0.10.2**
 - Un coffre ouvert reste ouvert, et le même coffre ne revient jamais deux fois dans une partie d'un chemin d'aventure.
-
-**0.10.1**
-- **Les nouvelles versions arrivent seules sur Homebrew** : `brew upgrade` les récupère le jour de leur sortie.
-
-**0.10.0**
-- **macOS avec Homebrew**, `bashou export`/`import` pour jouer sur deux ordinateurs, une compétence outils d'IA, `bashou changelog`, et des compagnons qui grandissent avec leurs succès.
 
 Tous les changements, version par version (en anglais) : [CHANGELOG.md](CHANGELOG.md).
 
