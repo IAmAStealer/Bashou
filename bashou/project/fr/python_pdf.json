@@ -11,7 +11,7 @@
   {
    "do": "Crée un environnement virtuel pour ton projet et installe-y la bibliothèque pypdf avec pip.",
    "done": "`import pypdf` fonctionne dans ton programme, sans erreur.",
-   "hint": "Cherche `python3 -m venv`, active-le, puis lance `pip install pypdf` à l'intérieur.",
+   "hint": "Cherche `python3 -m venv .venv`, puis lance `.venv/bin/pip install pypdf` (ou d'abord `source .venv/bin/activate`, puis `pip install pypdf`).",
    "why": "Un environnement virtuel sépare les bibliothèques de chaque projet : installer quelque chose pour l'un ne casse jamais l'autre. pip est la façon dont les programmeurs Python récupèrent les bibliothèques écrites par d'autres."
   },
   {
@@ -52,14 +52,14 @@
   },
   {
    "do": "Laisse l'utilisateur choisir depuis la ligne de commande, sans modifier le code : `python3 pdf.py merge a.pdf b.pdf out.pdf` et `python3 pdf.py split a.pdf`.",
-   "done": "les deux commandes fonctionnent, et une commande inconnue affiche comment utiliser le programme.",
-   "hint": "`sys.argv` contient les mots tapés après `python` ; le module `argparse` fait la même chose avec une aide plus jolie.",
+   "done": "les deux commandes fonctionnent, et une commande inconnue affiche comment utiliser le programme sur stderr et sort avec le code 1 (argparse fait les deux).",
+   "hint": "`sys.argv` contient les mots de la ligne de commande : `sys.argv[0]` vaut `pdf.py`, puis `merge`, `a.pdf`… ; le module `argparse` fait la même chose avec une aide plus jolie.",
    "why": "Les arguments transforment un script qu'on modifie en un outil qu'on utilise. C'est la frontière entre « mon code » et « mon programme »."
   },
   {
    "do": "Gère les erreurs : un fichier absent, un fichier qui n'est pas un PDF, un numéro de page qui n'existe pas, et un fichier de sortie qui existe déjà (ne l'écrase pas).",
    "done": "chaque erreur affiche un message clair au lieu de planter, et aucun fichier n'est jamais écrasé.",
-   "hint": "`try` / `except` autour de la partie risquée ; `Path.exists()` avant d'écrire.",
+   "hint": "Attrape chaque erreur par son nom (`except FileNotFoundError:`, `PdfReadError` de pypdf), puis `sys.exit(f\"pdf.py: {path}: introuvable\")` : il écrit sur stderr et sort avec 1. Ouvre la sortie en mode \"xb\" : il refuse un fichier qui existe déjà.",
    "why": "Un programme pour les autres doit survivre à leurs erreurs. Un message clair leur dit quoi corriger ; une trace d'erreur leur dit seulement que ton programme a cassé."
   },
   {

@@ -33,7 +33,7 @@
    "text": [
     "python3 reads the whole file, then runs it from top to bottom. No separate compile step.",
     "",
-    "- python3 alone opens a prompt to try things; exit() leaves."
+    "- python3 alone opens a prompt to try things; exit() or Ctrl+D leaves. In a program, stop with sys.exit()."
    ]
   },
   {
@@ -66,7 +66,8 @@
     "A SyntaxError stops Python before anything runs.",
     "",
     "- It gives the file, the line and a ^ under the spot.",
-    "- Look there and just before: a missing : or ) is the usual cause."
+    "- Look there and just before: a missing : or ) is the usual cause.",
+    "- Python 3.10+ names what's missing (expected ':'); 3.9 (Rocky 9, macOS) only says invalid syntax."
    ]
   }
  ]

@@ -49,7 +49,7 @@ starter), say they stop being fine there.
 | YP2 | `exit()` or Ctrl+D (Ctrl+Z, Enter on Windows) leaves the prompt. | `sys.exit(…)`: `exit()` comes from the `site` module, for the prompt only. | [site constants](https://docs.python.org/3/library/constants.html#constants-added-by-the-site-module), [sys.exit](https://docs.python.org/3/library/sys.html#sys.exit) |
 | YP3 | `python3 -c '…'`: the code in single quotes, text inside it in double quotes. Several statements on one line with `;`; a block (`for`, `if`) needs a file or real newlines. | a file | [command line: -c](https://docs.python.org/3/using/cmdline.html#cmdoption-c), bash quoting (bash-style B1) |
 | YP4 | `python3 -m json.tool file.json` to look at JSON. | `json.load` (Y2) | [json.tool](https://docs.python.org/3/library/json.html#module-json.tool) |
-| YP5 | `open(…).read()` without `with`, to peek at a file once. | `with open(…) as fh:` (YC3) | [tutorial: reading and writing files](https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files) |
+| YP5 | `open(…).read()` without `with`, to peek at a file once. | `with open(…) as fh:` (YC2) | [tutorial: reading and writing files](https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files) |
 
 ## In a program
 

@@ -145,7 +145,7 @@
  {
   "id": "python-1-12",
   "level": 1,
-  "q": "A script needs the whole content of a small text file as one string. Which line reads it?",
+  "q": "At the python3 prompt, you want a quick look at a small text file, as one string. Which line reads it?",
   "choices": [
    "open(\"f\").read()",
    "read(\"f\")",
@@ -153,7 +153,7 @@
    "cat(\"f\")"
   ],
   "answer": 0,
-  "explain": "open(\"f\") opens the file and .read() returns everything as a single string. Better, write with open(\"f\") as fh: text = fh.read(): the file is closed as soon as the block ends, even after an error. pathlib offers Path(\"f\").read_text(). read, file().all and cat don't exist in Python."
+  "explain": "open(\"f\") opens the file and .read() returns everything as one string: fine for a quick look. In a script, write with open(\"f\", encoding=\"utf-8\") as fh: text = fh.read(): the file is closed when the block ends, even after an error, and the text reads the same on every machine. read, file().all and cat don't exist in Python."
  },
  {
   "id": "python-2-01",
@@ -166,7 +166,7 @@
    "Nothing more than open()"
   ],
   "answer": 0,
-  "explain": "with runs a setup and a guaranteed cleanup around its block. For a file, the cleanup is closing it: when the block ends, normally or through an error, the file is closed. Without with, an error between open() and close() leaves the file open, and written data may not be saved."
+  "explain": "with runs a setup and a guaranteed cleanup around its block. For a file, the cleanup is closing it: when the block ends, normally or through an error, the file is closed. Without with, an error between open() and close() leaves the file open, and written data may not be saved. In a script, also pass encoding=\"utf-8\": without it, the codec depends on the machine."
  },
  {
   "id": "python-2-02",
@@ -192,12 +192,12 @@
    "set"
   ],
   "answer": 0,
-  "explain": "A tuple, written (1, 2), can't be changed after creation: no append, no item replaced. Lists, dicts and sets can all be modified in place. Because a tuple never changes, it can be a dict key or go in a set; a list can't. Use it for fixed groups of values, like coordinates."
+  "explain": "A tuple, written (1, 2), can't be changed after creation: no append, no item replaced. Lists, dicts and sets can all be modified in place. A tuple of strings or numbers can be a dict key or go in a set; a list can't, nor a tuple holding a list. Use it for fixed groups of values, like coordinates."
  },
  {
   "id": "python-2-04",
   "level": 2,
-  "q": "Why use yaml.safe_load rather than yaml.load on a config file?",
+  "q": "Why use yaml.safe_load rather than yaml.load(f, Loader=yaml.Loader)?",
   "choices": [
    "load can build any Python object the file asks for",
    "safe_load is faster",
@@ -205,7 +205,7 @@
    "safe_load checks the spelling"
   ],
   "answer": 0,
-  "explain": "yaml.load can build any Python object the file describes, and building some objects runs code. So a crafted YAML file can run commands on your machine. yaml.safe_load only builds plain data: dicts, lists, strings, numbers. A config file never needs more, so always use safe_load."
+  "explain": "yaml.Loader (the default before PyYAML 5.1, still in old code) can build any Python object the file describes, and building some runs code: a crafted YAML file can run commands on your machine. safe_load only builds plain data: dicts, lists, strings, numbers. PyYAML 6 refuses yaml.load without a Loader. A config never needs more: use safe_load."
  },
  {
   "id": "python-2-05",
@@ -264,13 +264,13 @@
   "level": 2,
   "q": "A script must run an external command. Which call is safe, even with values typed by a user?",
   "choices": [
-   "subprocess.run([\"ls\", \"-l\"])",
+   "subprocess.run([\"ls\", \"-l\", user_input])",
    "os.system(\"ls -l \" + user_input)",
    "eval(\"ls -l\")",
    "exec(\"ls\")"
   ],
   "answer": 0,
-  "explain": "With a list of arguments, subprocess.run starts the program directly, with no shell in between: each item is passed as it is, even if it contains ; or $( ). os.system with a string glued to user input goes through a shell, so input like '; rm -rf ~' runs as a command: that is command injection. eval and exec run Python code, not commands."
+  "explain": "With a list, subprocess.run starts the program directly, with no shell in between: each item is passed as it is, even with ; or $( ) inside. os.system with a string glued to user input goes through a shell: input like '; rm -rf ~' runs as a command (command injection). eval and exec run Python code, not commands. A value starting with - still reads as an option: put \"--\" before it."
  },
  {
   "id": "python-2-10",
@@ -283,6 +283,6 @@
    "text=True"
   ],
   "answer": 0,
-  "explain": "subprocess.run doesn't raise an error when the command fails: it stores the exit code in result.returncode and carries on. With check=True, a non-zero exit code raises CalledProcessError and the script stops, like cmd || exit 1 in bash. Otherwise, read returncode yourself."
+  "explain": "subprocess.run doesn't raise an error when the command fails: it stores the exit code in result.returncode and carries on. With check=True, a non-zero exit code raises CalledProcessError and the script stops, like cmd || exit 1 in bash. Otherwise, read returncode yourself. (A program that isn't installed still raises FileNotFoundError.)"
  }
 ]

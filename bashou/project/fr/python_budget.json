@@ -11,13 +11,13 @@
   {
    "do": "Garde plusieurs dépenses dans une liste et affiche le total.",
    "done": "trois dépenses donnent le bon total.",
-   "hint": "Une liste de dictionnaires marche bien : `{\"amount\": 12.5, \"theme\": \"courses\", \"note\": \"pain\"}`. `sum()` additionne des nombres.",
+   "hint": "Une liste de dictionnaires marche bien : `{\"amount\": 12.5, \"theme\": \"courses\", \"note\": \"pain\"}`. `sum()` additionne des nombres. Affiche l'argent avec `f\"{total:.2f}\"` : Python affiche 0.1 + 0.2 comme 0.30000000000000004.",
    "why": "Choisir comment ranger tes données est la décision la plus importante d'un programme. Une liste de dictionnaires est simple, et elle deviendra un fichier puis un tableau web sans changer de forme."
   },
   {
    "do": "Enregistre les dépenses dans un fichier (CSV ou JSON) et recharge-les au démarrage du programme.",
    "done": "tu fermes le programme, tu le rouvres, et tes dépenses sont toujours là.",
-   "hint": "Le module json : `json.dump` écrit ta liste, `json.load` la relit. Pense au tout premier lancement, quand le fichier n'existe pas encore.",
+   "hint": "Le module json : `with open(\"budget.json\", \"w\", encoding=\"utf-8\") as fh: json.dump(expenses, fh)` écrit ta liste, `json.load` la relit. Pense au tout premier lancement, quand le fichier n'existe pas encore.",
    "why": "La mémoire d'un programme disparaît quand il s'arrête. Enregistrer dans un fichier, c'est comme ça que les programmes se souviennent, et JSON garde ta liste de dictionnaires telle quelle."
   },
   {
@@ -41,8 +41,8 @@
   {
    "do": "Fais générer cette page HTML par ton programme, à partir de tes dépenses enregistrées.",
    "done": "après avoir ajouté une dépense, recharger la page la montre.",
-   "hint": "Construis les lignes avec une boucle et une f-string, puis écris toute la page dans un fichier .html.",
-   "why": "Les programmes qui écrivent d'autres fichiers (HTML, rapports, configurations) sont partout. Celui-ci est déjà un générateur de site statique, un tout petit."
+   "hint": "Construis les lignes avec une boucle et une f-string, en passant chaque valeur par `html.escape()`, puis écris toute la page dans un fichier .html.",
+   "why": "Les programmes qui écrivent d'autres fichiers (HTML, rapports, configurations) sont partout. Celui-ci est déjà un générateur de site statique, un tout petit. Et une donnée ne doit jamais devenir du code : sans html.escape, une note qui contient <script> tournerait dans la page."
   },
   {
    "do": "Installe Flask dans un environnement virtuel et sers une page « Hello » sur http://localhost:5000. Reste sur localhost : ton budget est privé.",
@@ -53,7 +53,7 @@
   {
    "do": "Sers ton tableau de dépenses depuis Flask au lieu du fichier généré.",
    "done": "la page liste tes dépenses enregistrées.",
-   "hint": "Charge le JSON dans la fonction de ta route, et renvoie le HTML que tu construisais déjà.",
+   "hint": "Charge le JSON dans la fonction de ta route, et renvoie le HTML que tu construisais déjà. Les modèles de Flask échappent les valeurs pour toi ; une f-string non.",
    "why": "La page est maintenant fabriquée au moment où tu la demandes, donc elle est toujours à jour. C'est la différence entre une page statique et une page dynamique."
   },
   {

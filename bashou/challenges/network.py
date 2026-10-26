@@ -195,8 +195,8 @@ def sprite_setup(work, rng):
     starter(work, "hosts.txt", [
         _("ipaddress knows networks: address in net is True when the address is inside it."),
         _("Your step: instead of printing each address, add 1 to count when it's inside the network."),
-    ], f'import ipaddress\n\nnet = ipaddress.ip_network("{net}")\ncount = 0\nfor line in open("hosts.txt"):\n'
-       '    address = ipaddress.ip_address(line.strip())\n    print(address)\nprint(count, "inside", net)\n')
+    ], f'import ipaddress\n\nnet = ipaddress.ip_network("{net}")\ncount = 0\nwith open("hosts.txt", encoding="utf-8") as fh:\n'
+       '    for line in fh:\n        address = ipaddress.ip_address(line.strip())\n        print(address)\nprint(count, "inside", net)\n')
     return {"args": {"net": str(net)}, "answer": sum(h in net for h in hosts)}
 
 
@@ -213,7 +213,7 @@ def serpent_setup(work, rng):
         _("Your step: it prints each address as written in the file. Print ipaddress.ip_address(...) "
           "instead: Python always writes an address in its shortest form, so the twin shows up twice. "
           "Then python3 solve.py | sort | uniq -d keeps only that one."),
-    ], 'import ipaddress\n\nfor line in open("addrs.txt"):\n    print(line.strip())\n')
+    ], 'import ipaddress\n\nwith open("addrs.txt", encoding="utf-8") as fh:\n    for line in fh:\n        print(line.strip())\n')
     return {"answer": str(twin)}
 
 
@@ -392,8 +392,8 @@ ALL = [
               hints=["{net} is a /22: 1,024 addresses, four /24 blocks in a row. Near misses just outside "
                      "are the trap. Python's ipaddress module knows the exact limits, "
                      "and so does ipcalc {net} if it's installed.",
-                     "Try: python3 -c \"import ipaddress as i; n = i.ip_network('{net}'); "
-                     "print(sum(i.ip_address(l.strip()) in n for l in open('hosts.txt')))\""],
+                     "Try: python3 -c 'import ipaddress as i; n = i.ip_network(\"{net}\"); "
+                     "print(sum(i.ip_address(line.strip()) in n for line in open(\"hosts.txt\")))'"],
               setup=sprite_setup, requires=["python3"], **NET),
     Challenge(level=2, id="route_raven", os="linux", tools=("ip",), threat="Route Raven",
               task="The Route Raven asks: a packet for {target} leaves this machine through a gateway.\n"
@@ -415,8 +415,8 @@ ALL = [
                    "solve.py is a start: run python3 solve.py, then finish it.",
               hints=["The same IPv6 address can be written many ways: leading zeros dropped, one run of zero "
                      "groups as ::. Python's ipaddress writes every one in the shortest form, then compare.",
-                     "Try: python3 -c \"import ipaddress as i; [print(i.ip_address(l.strip())) for l in open('addrs.txt')]\" "
-                     "| sort | uniq -d"],
+                     "In solve.py, replace print(line.strip()) with print(ipaddress.ip_address(line.strip())), "
+                     "then: python3 solve.py | sort | uniq -d"],
               setup=serpent_setup, requires=["python3"], after=("subnet_sprite",), **NET),
     Challenge(level=2, id="handshake_heron", threat="Handshake Heron",
               task="The Handshake Heron swallowed a connection in capture.pcap: one client sent SYN, "

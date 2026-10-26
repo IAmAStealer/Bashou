@@ -23,6 +23,7 @@ ON_PURPOSE = {
 # Text that teaches a habit the rules forbid. A line showing the mistake on purpose carries ✗ or ✘.
 BANNED = [
     (re.compile(r"(?<![\w/.-])python (?=-[cm]\b|\S+\.py\b)"), "Y1: python3, not python"),
+    (re.compile(r"`python`"), "Y1: python3, not python"),
     (re.compile(r"\bdef \w+\([^)]*=\s*(\[\]|\{\})"), "Y8: no mutable default"),
 ]
 

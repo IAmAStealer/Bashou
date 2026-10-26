@@ -22,13 +22,13 @@
   {
    "do": "Keep several expenses in a list and print the total.",
    "done": "three expenses give the right total.",
-   "hint": "A list of dictionaries works well: `{\"amount\": 12.5, \"theme\": \"food\", \"note\": \"bread\"}`. `sum()` adds numbers.",
+   "hint": "A list of dictionaries works well: `{\"amount\": 12.5, \"theme\": \"food\", \"note\": \"bread\"}`. `sum()` adds numbers. Show money with `f\"{total:.2f}\"`: Python prints 0.1 + 0.2 as 0.30000000000000004.",
    "why": "Choosing how to store your data is the most important decision in a program. A list of dictionaries is simple, and it will turn into a file and a web table without changing shape."
   },
   {
    "do": "Save the expenses to a file (CSV or JSON) and load them when the program starts.",
    "done": "you close the program, open it again, and your expenses are still there.",
-   "hint": "The json module: `json.dump` writes your list, `json.load` reads it back. Think about the very first run, when the file doesn't exist yet.",
+   "hint": "The json module: `with open(\"budget.json\", \"w\", encoding=\"utf-8\") as fh: json.dump(expenses, fh)` writes your list, `json.load` reads it back. Think about the very first run, when the file doesn't exist yet.",
    "why": "A program's memory disappears when it stops. Saving to a file is how programs remember, and JSON keeps your list of dictionaries exactly as it is."
   },
   {
@@ -52,8 +52,8 @@
   {
    "do": "Make your program generate that HTML page from your saved expenses.",
    "done": "after adding an expense, reloading the page shows it.",
-   "hint": "Build the rows with a loop and an f-string, then write the whole page to a .html file.",
-   "why": "Programs that write other files (HTML, reports, configs) are everywhere. This one is already a static website generator, a tiny one."
+   "hint": "Build the rows with a loop and an f-string, passing every value through `html.escape()`, then write the whole page to a .html file.",
+   "why": "Programs that write other files (HTML, reports, configs) are everywhere. This one is already a static website generator, a tiny one. And data must never become code: without html.escape, a note holding <script> would run in the page."
   },
   {
    "do": "Install Flask in a virtual environment and serve a \"Hello\" page on http://localhost:5000. Keep it on localhost: your budget is private.",
@@ -64,7 +64,7 @@
   {
    "do": "Serve your expenses table from Flask instead of the generated file.",
    "done": "the page lists your saved expenses.",
-   "hint": "Load the JSON in the function of your route, and return the HTML you were already building.",
+   "hint": "Load the JSON in the function of your route, and return the HTML you were already building. Flask's templates escape values for you; an f-string doesn't.",
    "why": "The page is now made at the moment you ask for it, so it's always up to date. That's the difference between a static page and a dynamic one."
   },
   {

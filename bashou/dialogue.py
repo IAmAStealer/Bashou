@@ -82,7 +82,7 @@ DISCOVER = {
     "|": ["Pipes chain commands: `ls | wc -l` counts the files here."],
     "find": ["`find . -name '*.log'` looks for files in every folder below."],
     "ps": ["`ps aux` lists every running process with its PID."],
-    "python3": ["`python3 -c \"print(2 ** 10)\"` runs one line of Python, right from bash.",
+    "python3": ["`python3 -c 'print(2 ** 10)'` runs one line of Python, right from bash.",
                 "Python reads JSON too: `python3 -m json.tool data.json` prints it neatly."],
     "gcc": ["`gcc hello.c -o hello && ./hello` builds a C program and runs it."],
     "gdb": ["A crash? `gcc -g prog.c -o prog && gdb -q ./prog`, then run and bt: gdb shows the line that died.",

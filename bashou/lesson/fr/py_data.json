@@ -20,7 +20,7 @@
     "JSON est du texte qui contient des dicts et des listes. json.load transforme un fichier en objets Python : pas de lecture à l'œil.",
     "",
     "- Chaque [ ] descend d'un niveau : c['database'] est un dict, ['port'] une valeur dedans.",
-    "- >>> est l'invite de python3. Les mêmes lignes marchent dans un script."
+    "- >>> est l'invite de python3. Dans un script : with open('config.json', encoding='utf-8') as fh: c = json.load(fh), puis print(c['database']['port']). Un programme n'affiche rien sans print."
    ]
   },
   {
@@ -52,7 +52,7 @@
     " os.system(\"ping -c1 \" + host)",
     "   le shell lance : ping -c1 web1; rm -rf ~  ✗",
     "",
-    " subprocess.run([\"ping\", \"-c1\", host])",
+    " subprocess.run([\"ping\", \"-c1\", host], check=True)",
     "   ping reçoit 1 argument : web1; rm -rf ~  ✔"
    ],
    "point": 3,
@@ -64,7 +64,8 @@
     "os.system donne une chaîne entière à un shell. Si des données extérieures y arrivent, les ; | $( ) qu'elles contiennent deviennent des commandes.",
     "",
     "- subprocess.run avec une liste saute le shell : chaque élément est un argument, quoi qu'il contienne.",
-    "- La règle : ne construis jamais une commande en collant des chaînes avec des données d'un fichier ou d'un utilisateur."
+    "- La règle : ne construis jamais une commande en collant des chaînes avec des données d'un fichier ou d'un utilisateur.",
+    "- check=True arrête le script quand ping échoue."
    ]
   }
  ]

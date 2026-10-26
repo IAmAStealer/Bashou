@@ -145,7 +145,7 @@
  {
   "id": "python-1-12",
   "level": 1,
-  "q": "Un script a besoin de tout le contenu d'un petit fichier texte en une chaîne. Quelle ligne le lit ?",
+  "q": "À l'invite de python3, tu veux jeter un œil à un petit fichier texte, en une chaîne. Quelle ligne le lit ?",
   "choices": [
    "open(\"f\").read()",
    "read(\"f\")",
@@ -153,7 +153,7 @@
    "cat(\"f\")"
   ],
   "answer": 0,
-  "explain": "open(\"f\") ouvre le fichier et .read() renvoie tout en une seule chaîne. Mieux, écris with open(\"f\") as fh: texte = fh.read() : le fichier est fermé dès la fin du bloc, même après une erreur. pathlib propose Path(\"f\").read_text(). read, file().all et cat n'existent pas en Python."
+  "explain": "open(\"f\") ouvre le fichier et .read() renvoie tout en une seule chaîne : bien pour un coup d'œil. Dans un script, écris with open(\"f\", encoding=\"utf-8\") as fh: texte = fh.read() : le fichier est fermé à la fin du bloc, même après une erreur, et le texte se lit pareil sur toute machine. read, file().all et cat n'existent pas en Python."
  },
  {
   "id": "python-2-01",
@@ -166,7 +166,7 @@
    "Rien de plus que open()"
   ],
   "answer": 0,
-  "explain": "with lance une préparation et un nettoyage garanti autour de son bloc. Pour un fichier, le nettoyage est la fermeture : quand le bloc se termine, normalement ou par une erreur, le fichier est fermé. Sans with, une erreur entre open() et close() laisse le fichier ouvert, et des données écrites peuvent ne pas être enregistrées."
+  "explain": "with lance une préparation et un nettoyage garanti autour de son bloc. Pour un fichier, le nettoyage est la fermeture : quand le bloc se termine, normalement ou par une erreur, le fichier est fermé. Sans with, une erreur entre open() et close() laisse le fichier ouvert, et des données écrites peuvent se perdre. Dans un script, ajoute encoding=\"utf-8\" : sinon le codage dépend de la machine."
  },
  {
   "id": "python-2-02",
@@ -192,12 +192,12 @@
    "set"
   ],
   "answer": 0,
-  "explain": "Un tuple, écrit (1, 2), ne peut pas changer après sa création : pas d'append, pas d'élément remplacé. Les listes, dicts et sets se modifient tous sur place. Comme un tuple ne change jamais, il peut servir de clé de dict ou aller dans un set ; une liste non. Utilise-le pour des groupes fixes de valeurs, comme des coordonnées."
+  "explain": "Un tuple, écrit (1, 2), ne peut pas changer après sa création : pas d'append, pas d'élément remplacé. Les listes, dicts et sets se modifient tous sur place. Un tuple de chaînes ou de nombres peut servir de clé de dict ou aller dans un set ; une liste non, ni un tuple qui contient une liste. Utilise-le pour des groupes fixes de valeurs, comme des coordonnées."
  },
  {
   "id": "python-2-04",
   "level": 2,
-  "q": "Pourquoi yaml.safe_load plutôt que yaml.load sur un fichier de config ?",
+  "q": "Pourquoi yaml.safe_load plutôt que yaml.load(f, Loader=yaml.Loader) ?",
   "choices": [
    "load crée n'importe quel objet Python demandé",
    "safe_load est plus rapide",
@@ -205,7 +205,7 @@
    "safe_load vérifie l'orthographe"
   ],
   "answer": 0,
-  "explain": "yaml.load peut construire n'importe quel objet Python que décrit le fichier, et construire certains objets lance du code. Un fichier YAML piégé peut donc lancer des commandes sur ta machine. yaml.safe_load ne construit que des données simples : dicts, listes, chaînes, nombres. Un fichier de config n'a jamais besoin de plus : utilise toujours safe_load."
+  "explain": "yaml.Loader (le défaut avant PyYAML 5.1, encore dans du vieux code) construit n'importe quel objet Python que décrit le fichier, et certains lancent du code : un YAML piégé peut lancer des commandes chez toi. safe_load ne construit que des données simples : dicts, listes, chaînes, nombres. PyYAML 6 refuse yaml.load sans Loader. Une config n'a pas besoin de plus."
  },
  {
   "id": "python-2-05",
@@ -264,13 +264,13 @@
   "level": 2,
   "q": "Un script doit lancer une commande externe. Quel appel est sûr, même avec des valeurs tapées par un utilisateur ?",
   "choices": [
-   "subprocess.run([\"ls\", \"-l\"])",
+   "subprocess.run([\"ls\", \"-l\", user_input])",
    "os.system(\"ls -l \" + user_input)",
    "eval(\"ls -l\")",
    "exec(\"ls\")"
   ],
   "answer": 0,
-  "explain": "Avec une liste d'arguments, subprocess.run lance le programme directement, sans shell au milieu : chaque élément est passé tel quel, même s'il contient ; ou $( ). os.system avec une chaîne collée à une saisie passe par un shell : une saisie comme '; rm -rf ~' tourne comme une commande, c'est l'injection de commande. eval et exec lancent du code Python, pas des commandes."
+  "explain": "Avec une liste, subprocess.run lance le programme directement, sans shell au milieu : chaque élément passe tel quel, même avec ; ou $( ) dedans. os.system avec une saisie collée passe par un shell : '; rm -rf ~' tourne comme une commande (injection de commande). eval et exec lancent du code Python, pas des commandes. Une valeur qui commence par - reste lue comme une option : mets \"--\" avant."
  },
  {
   "id": "python-2-10",
@@ -283,6 +283,6 @@
    "text=True"
   ],
   "answer": 0,
-  "explain": "subprocess.run ne lève pas d'erreur quand la commande échoue : il range le code de retour dans result.returncode et continue. Avec check=True, un code non nul lève CalledProcessError et le script s'arrête, comme cmd || exit 1 en bash. Sinon, lis returncode toi-même."
+  "explain": "subprocess.run ne lève pas d'erreur quand la commande échoue : il range le code de retour dans result.returncode et continue. Avec check=True, un code non nul lève CalledProcessError et le script s'arrête, comme cmd || exit 1 en bash. Sinon, lis returncode toi-même. (Un programme absent lève quand même FileNotFoundError.)"
  }
 ]

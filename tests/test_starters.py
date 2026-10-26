@@ -18,13 +18,13 @@ FINISH = {
                   lambda out, m: str(m["answer"]) in out.split()),
     "base64_banshee": ("print(text)", "print(base64.b64decode(text).decode())",
                        lambda out, m: m["answer"] in out),
-    "percent_poltergeist": ("    print(line, end=\"\")", "    print(urllib.parse.unquote(line), end=\"\")",
+    "percent_poltergeist": ("        print(line, end=\"\")", "        print(urllib.parse.unquote(line), end=\"\")",
                             lambda out, m: "/etc/" + m["answer"] in out),
     "token_trickster": ("print(payload)", "print(base64.urlsafe_b64decode(payload + \"==\"))",
                         lambda out, m: m["answer"] in out),
-    "subnet_sprite": ("    print(address)", "    count += address in net",
+    "subnet_sprite": ("        print(address)", "        count += address in net",
                       lambda out, m: f"{m['answer']} inside" in out),
-    "six_serpent": ("    print(line.strip())", "    print(ipaddress.ip_address(line.strip()))",
+    "six_serpent": ("        print(line.strip())", "        print(ipaddress.ip_address(line.strip()))",
                     lambda out, m: out.split().count(m["answer"]) == 2),
 }
 

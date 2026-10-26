@@ -229,7 +229,7 @@ def count_levels(lines):
 
 
 if __name__ == "__main__":
-    with open("app.log") as fh:
+    with open("app.log", encoding="utf-8") as fh:
         print(count_levels(fh))
 '''
 
@@ -303,7 +303,7 @@ def total(tree):
 
 if __name__ == "__main__":
     import json
-    with open("tree.json") as fh:
+    with open("tree.json", encoding="utf-8") as fh:
         print(total(json.load(fh)))
 '''
 
@@ -349,7 +349,7 @@ def json_setup(work, rng):
         _("json.load turns the file into dicts: sections inside sections, like in the file."),
         _("Your step: it prints the names at the top. Go down one level at a time, config[\"database\"] "
           "first, until you print the port."),
-    ], 'import json\n\nwith open("config.json") as f:\n    config = json.load(f)\n\nprint(config.keys())\n')
+    ], 'import json\n\nwith open("config.json", encoding="utf-8") as f:\n    config = json.load(f)\n\nprint(config.keys())\n')
     return {"answer": ports[2]}
 
 
@@ -360,7 +360,7 @@ def b64_setup(work, rng):
     starter(work, "secret.txt", [
         _("Your step: it prints the text still encoded. base64.b64decode(text) undoes base64 and gives "
           "bytes; .decode() turns those bytes into text you can read."),
-    ], 'import base64\n\ntext = open("secret.txt").read()\nprint(text)\n')
+    ], 'import base64\n\nwith open("secret.txt", encoding="utf-8") as fh:\n    text = fh.read()\nprint(text)\n')
     return {"answer": word}
 
 
@@ -380,7 +380,7 @@ def url_setup(work, rng):
     starter(work, "access.log", [
         _("Your step: it prints each line as it is, %XX codes and all. urllib.parse.unquote(line) turns "
           "them back into characters. Then look for /etc in what it prints."),
-    ], 'import urllib.parse\n\nfor line in open("access.log"):\n    print(line, end="")\n')
+    ], 'import urllib.parse\n\nwith open("access.log", encoding="utf-8") as fh:\n    for line in fh:\n        print(line, end="")\n')
     return {"answer": target}
 
 
@@ -391,7 +391,7 @@ import os
 
 
 def main():
-    with open("hosts.txt") as fh:
+    with open("hosts.txt", encoding="utf-8") as fh:
         for host in fh.read().split("\\n"):
             if host:
                 os.system("echo checking " + host)
@@ -442,7 +442,7 @@ def jwt_setup(work, rng):
         _("It already splits the token at its dots: header, payload, signature."),
         _("Your step: decode the payload. It's base64url without its = padding: "
           "base64.urlsafe_b64decode(payload + \"==\") puts the padding back and decodes it."),
-    ], 'import base64\n\ntoken = open("token.txt").read().strip()\n'
+    ], 'import base64\n\nwith open("token.txt", encoding="utf-8") as fh:\n    token = fh.read().strip()\n'
        'header, payload, signature = token.split(".")\nprint(payload)\n')
     return {"answer": user}
 
@@ -658,21 +658,21 @@ ALL = [
                    "Which port does the database use? Answer with: answer <port>\n"
                    "solve.py is a start: run python3 solve.py, then finish it.",
               hints=["python3 -c runs one line of Python. json.load turns the file into dicts.",
-                     "Try: python3 -c \"import json; print(json.load(open('config.json'))['database']['port'])\""],
+                     "Try: python3 -c 'import json; print(json.load(open(\"config.json\"))[\"database\"][\"port\"])'"],
               setup=json_setup),
     Challenge(level=2, id="base64_banshee", pet="snake", threat="Base64 Banshee", **PY,
               task="The Base64 Banshee wails in secret.txt: it's base64, not a secret code.\n"
                    "Decode it with python3. What is the vault word?\n"
                    "solve.py is a start: run python3 solve.py, then finish it.",
               hints=["base64 is an encoding, anyone can undo it.",
-                     "Try: python3 -c \"import base64; print(base64.b64decode(open('secret.txt').read()).decode())\""],
+                     "Try: python3 -c 'import base64; print(base64.b64decode(open(\"secret.txt\").read()).decode())'"],
               setup=b64_setup),
     Challenge(level=2, id="percent_poltergeist", pet="snake", threat="Percent Poltergeist", **PY,
               task="The Percent Poltergeist hides an attack in access.log behind %XX codes.\n"
                    "Decode the log with python3. Which file under /etc was the attacker after?\n"
                    "solve.py is a start: run python3 solve.py, then finish it.",
               hints=["urllib.parse.unquote turns the %XX codes back into characters: %2e%2e%2f becomes ../",
-                     "Try: python3 -c \"import urllib.parse; print(urllib.parse.unquote(open('access.log').read()))\""
+                     "Try: python3 -c 'import urllib.parse; print(urllib.parse.unquote(open(\"access.log\").read()))'"
                      " | grep etc"],
               setup=url_setup, verify=url_verify),
     Challenge(level=3, id="injection_imp", fix=True, pet="snake", threat="Injection Imp", after=("list_leech",), **PY,
@@ -680,15 +680,15 @@ ALL = [
                    "Fix check_hosts.py (its first lines say what it must do). Run it: python3 check_hosts.py\n"
                    "When it works, type: verify",
               hints=["os.system hands the whole string to a shell, so ; $( ) | in the data become commands.",
-                     "Try: subprocess.run(['echo', 'checking', host]) (import subprocess), or just print."],
+                     "Try: subprocess.run(['echo', 'checking', host], check=True) (import subprocess), or just print."],
               setup=inject_setup, verify=inject_verify),
     Challenge(level=3, id="token_trickster", pet="snake", threat="Token Trickster", after=("base64_banshee",), **PY,
               task="The Token Trickster flashes a JWT in token.txt. Signed is not secret: read it.\n"
                    "Which user (sub) is the token for? Decode it with python3.\n"
                    "solve.py is a start: run python3 solve.py, then finish it.",
               hints=["A JWT is header.payload.signature, each part base64url without padding.",
-                     "Try: python3 -c \"import base64; p = open('token.txt').read().split('.')[1]; "
-                     "print(base64.urlsafe_b64decode(p + '=='))\""],
+                     "Try: python3 -c 'import base64; p = open(\"token.txt\").read().split(\".\")[1]; "
+                     "print(base64.urlsafe_b64decode(p + \"==\").decode())'"],
               setup=jwt_setup),
     Challenge(level=2, id="leak_lurker", fix=True, works=lambda: bool(sanitizer()) and leaks(), pet="beaver", threat="Leak Lurker", **C,
               task="The Leak Lurker feeds on memory nobody frees in shout.c.\n"

@@ -15,7 +15,7 @@
    "text": [
     "python3 lit tout le fichier, puis l'exécute de haut en bas. Pas d'étape de compilation à part.",
     "",
-    "- python3 tout seul ouvre une invite pour essayer ; exit() en sort."
+    "- python3 tout seul ouvre une invite pour essayer ; exit() ou Ctrl+D en sort. Dans un programme, arrête avec sys.exit()."
    ]
   },
   {
@@ -48,7 +48,8 @@
     "Une SyntaxError arrête Python avant que quoi que ce soit ne tourne.",
     "",
     "- Elle donne le fichier, la ligne et un ^ sous l'endroit.",
-    "- Regarde là et juste avant : un : ou une ) oubliés sont la cause habituelle."
+    "- Regarde là et juste avant : un : ou une ) oubliés sont la cause habituelle.",
+    "- Python 3.10+ nomme ce qui manque (expected ':') ; 3.9 (Rocky 9, macOS) dit seulement invalid syntax."
    ]
   }
  ]

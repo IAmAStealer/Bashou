@@ -113,7 +113,8 @@
     "",
     "- .upper() doesn't change \"sam\": it makes a new string.",
     "- So you must keep the result: name = name.upper().",
-    "- Lists and dicts can change in place: that's where shared labels surprise you."
+    "- Lists and dicts can change in place: that's where shared labels surprise you.",
+    "- Tuples too, but a list inside a tuple can still change."
    ]
   }
  ]

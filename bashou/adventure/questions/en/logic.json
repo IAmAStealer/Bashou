@@ -23,7 +23,7 @@
    "An error"
   ],
   "answer": 0,
-  "explain": "b = a copies the value a holds at that moment, 1, into b. The two variables then live separately: a = 5 changes a only, and b still holds 1. Careful: for lists in Python, b = a doesn't copy the list, both names share the same one."
+  "explain": "b = a makes b hold what a holds at that moment, 1. Then a = 5 gives a a new value: b still holds 1. In Python, = never copies: b = a puts a second name on the same object. A number can't change, but a list can: xs.append through one name shows through the other."
  },
  {
   "id": "logic-1-03",
