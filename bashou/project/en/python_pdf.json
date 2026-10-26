@@ -61,7 +61,7 @@
    "why": "Ranges are a classic source of off-by-one mistakes. Testing with a range you can check by eye is how you catch them."
   },
   {
-   "do": "Let the user choose from the command line, without editing the code: `python pdf.py merge a.pdf b.pdf out.pdf` and `python pdf.py split a.pdf`.",
+   "do": "Let the user choose from the command line, without editing the code: `python3 pdf.py merge a.pdf b.pdf out.pdf` and `python3 pdf.py split a.pdf`.",
    "done": "both commands work, and a wrong command prints how to use the program.",
    "hint": "`sys.argv` holds the words typed after `python`; the `argparse` module does the same with a nicer help.",
    "why": "Arguments turn a script you edit into a tool you use. It's the line between \"my code\" and \"my program\"."

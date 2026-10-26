@@ -51,7 +51,7 @@
    "why": "Les plages sont une source classique d'erreurs d'un cran (off-by-one). Tester avec une plage que tu peux vérifier à l'œil, c'est comme ça qu'on les attrape."
   },
   {
-   "do": "Laisse l'utilisateur choisir depuis la ligne de commande, sans modifier le code : `python pdf.py merge a.pdf b.pdf out.pdf` et `python pdf.py split a.pdf`.",
+   "do": "Laisse l'utilisateur choisir depuis la ligne de commande, sans modifier le code : `python3 pdf.py merge a.pdf b.pdf out.pdf` et `python3 pdf.py split a.pdf`.",
    "done": "les deux commandes fonctionnent, et une commande inconnue affiche comment utiliser le programme.",
    "hint": "`sys.argv` contient les mots tapés après `python` ; le module `argparse` fait la même chose avec une aide plus jolie.",
    "why": "Les arguments transforment un script qu'on modifie en un outil qu'on utilise. C'est la frontière entre « mon code » et « mon programme »."
