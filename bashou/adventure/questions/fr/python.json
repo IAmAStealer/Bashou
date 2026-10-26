@@ -264,13 +264,13 @@
   "level": 2,
   "q": "Un script doit lancer une commande externe. Quel appel est sûr, même avec des valeurs tapées par un utilisateur ?",
   "choices": [
-   "subprocess.run([\"ls\", \"-l\", user_input])",
-   "os.system(\"ls -l \" + user_input)",
-   "eval(\"ls -l\")",
+   "subprocess.run([\"ls\", \"-l\", \"--\", user_input], check=True)",
+   "os.system(f\"ls -l {user_input}\")",
+   "subprocess.run(f\"ls -l {user_input}\", shell=True)",
    "exec(\"ls\")"
   ],
   "answer": 0,
-  "explain": "Avec une liste, subprocess.run lance le programme directement, sans shell au milieu : chaque élément passe tel quel, même avec ; ou $( ) dedans. os.system avec une saisie collée passe par un shell : '; rm -rf ~' tourne comme une commande (injection de commande). eval et exec lancent du code Python, pas des commandes. Une valeur qui commence par - reste lue comme une option : mets \"--\" avant."
+  "explain": "Avec une liste, subprocess.run lance le programme sans shell au milieu : chaque élément passe tel quel, même avec ; ou $( ) dedans. os.system et shell=True passent par un shell : une saisie comme '; rm -rf ~' tourne comme une commande (injection de commande). exec lance du code Python, pas des commandes. \"--\" clôt les options : une valeur qui commence par - reste un nom de fichier."
  },
  {
   "id": "python-2-10",

@@ -58,7 +58,7 @@
   {
    "do": "Look up what EXIF is, and read a photo's EXIF data to find the date it was taken.",
    "done": "your program prints the date of one photo.",
-   "hint": "`exif = Image.open(path).getexif()` gives a dictionary-like object. DateTimeOriginal sits in its Exif part: `exif.get_ifd(0x8769).get(36867)`; DateTime (306) is in `exif` itself.",
+   "hint": "`with Image.open(path) as im: exif = im.getexif()` gives a dictionary-like object. DateTimeOriginal sits in its Exif part: `exif.get_ifd(0x8769).get(36867)`; DateTime (306) is in `exif` itself.",
    "why": "EXIF is information the camera writes inside the photo: date, camera model, sometimes the place. Reading it means your program knows what the file name doesn't say."
   },
   {

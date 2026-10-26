@@ -99,7 +99,7 @@
     "- .upper() ne modifie pas \"sam\" : elle fabrique une nouvelle chaîne.",
     "- Il faut donc garder le résultat : name = name.upper().",
     "- Les listes et les dicts peuvent changer sur place : c'est là que les étiquettes partagées te surprennent.",
-    "- Les tuples aussi, mais une liste dans un tuple peut encore changer."
+    "- Un tuple ne change jamais, mais une liste dedans le peut : t = ([1],) puis t[0].append(2) marche."
    ]
   }
  ]

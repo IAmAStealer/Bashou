@@ -69,7 +69,7 @@
   {
    "do": "Handle mistakes: a missing file, a file that isn't a PDF, a page number that doesn't exist, and an output file that already exists (don't overwrite it).",
    "done": "each mistake prints a clear message instead of a crash, and no file is ever overwritten.",
-   "hint": "Catch each error by name (`except FileNotFoundError:`, pypdf's `PdfReadError`), then `sys.exit(f\"pdf.py: {path}: not found\")`: it prints to stderr and exits with 1. Open the output with mode \"xb\": it refuses a file that already exists.",
+   "hint": "Catch each error by name (`except FileNotFoundError:`, `FileExistsError`, `IndexError`, `pypdf.errors.PdfReadError`), then `sys.exit(f\"pdf.py: {path}: not found\")`: it prints to stderr and exits with 1. Open the output with mode \"xb\": it raises FileExistsError instead of overwriting.",
    "why": "A program for other people must survive their mistakes. A clear message tells them what to fix; a traceback only tells them your program broke."
   },
   {

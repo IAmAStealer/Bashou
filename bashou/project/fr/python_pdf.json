@@ -59,7 +59,7 @@
   {
    "do": "Gère les erreurs : un fichier absent, un fichier qui n'est pas un PDF, un numéro de page qui n'existe pas, et un fichier de sortie qui existe déjà (ne l'écrase pas).",
    "done": "chaque erreur affiche un message clair au lieu de planter, et aucun fichier n'est jamais écrasé.",
-   "hint": "Attrape chaque erreur par son nom (`except FileNotFoundError:`, `PdfReadError` de pypdf), puis `sys.exit(f\"pdf.py: {path}: introuvable\")` : il écrit sur stderr et sort avec 1. Ouvre la sortie en mode \"xb\" : il refuse un fichier qui existe déjà.",
+   "hint": "Attrape chaque erreur par son nom (`except FileNotFoundError:`, `FileExistsError`, `IndexError`, `pypdf.errors.PdfReadError`), puis `sys.exit(f\"pdf.py: {path}: introuvable\")` : il écrit sur stderr et sort avec 1. Ouvre la sortie en mode \"xb\" : il lève FileExistsError au lieu d'écraser.",
    "why": "Un programme pour les autres doit survivre à leurs erreurs. Un message clair leur dit quoi corriger ; une trace d'erreur leur dit seulement que ton programme a cassé."
   },
   {

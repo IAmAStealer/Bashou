@@ -41,7 +41,7 @@
   {
    "do": "Fais générer cette page HTML par ton programme, à partir de tes dépenses enregistrées.",
    "done": "après avoir ajouté une dépense, recharger la page la montre.",
-   "hint": "Construis les lignes avec une boucle et une f-string, en passant chaque valeur par `html.escape()`, puis écris toute la page dans un fichier .html.",
+   "hint": "Construis les lignes avec une boucle et une f-string, en passant chaque texte (thème, note) par `html.escape()` ; mets le montant en forme avec `f\"{amount:.2f}\"`. Puis écris toute la page dans un fichier .html.",
    "why": "Les programmes qui écrivent d'autres fichiers (HTML, rapports, configurations) sont partout. Celui-ci est déjà un générateur de site statique, un tout petit. Et une donnée ne doit jamais devenir du code : sans html.escape, une note qui contient <script> tournerait dans la page."
   },
   {

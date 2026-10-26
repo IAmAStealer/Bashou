@@ -23,7 +23,7 @@
    "An error"
   ],
   "answer": 0,
-  "explain": "b = a makes b hold what a holds at that moment, 1. Then a = 5 gives a a new value: b still holds 1. In Python, = never copies: b = a puts a second name on the same object. A number can't change, but a list can: xs.append through one name shows through the other."
+  "explain": "b = a makes b hold what a holds at that moment, 1. Then a = 5 gives a a new value: b still holds 1. In Python, = never copies: b = a puts a second name on the same object. A number can't change, but a list can: if a is a list, a.append(9) shows through b too."
  },
  {
   "id": "logic-1-03",

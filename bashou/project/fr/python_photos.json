@@ -47,7 +47,7 @@
   {
    "do": "Cherche ce qu'est l'EXIF, et lis les données EXIF d'une photo pour trouver sa date de prise de vue.",
    "done": "ton programme affiche la date d'une photo.",
-   "hint": "`exif = Image.open(path).getexif()` donne un objet qui ressemble à un dictionnaire. DateTimeOriginal est dans sa partie Exif : `exif.get_ifd(0x8769).get(36867)` ; DateTime (306) est dans `exif` lui-même.",
+   "hint": "`with Image.open(path) as im: exif = im.getexif()` donne un objet qui ressemble à un dictionnaire. DateTimeOriginal est dans sa partie Exif : `exif.get_ifd(0x8769).get(36867)` ; DateTime (306) est dans `exif` lui-même.",
    "why": "L'EXIF, ce sont des informations que l'appareil écrit dans la photo : date, modèle, parfois le lieu. Les lire, c'est savoir ce que le nom du fichier ne dit pas."
   },
   {

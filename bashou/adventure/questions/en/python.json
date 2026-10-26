@@ -264,13 +264,13 @@
   "level": 2,
   "q": "A script must run an external command. Which call is safe, even with values typed by a user?",
   "choices": [
-   "subprocess.run([\"ls\", \"-l\", user_input])",
-   "os.system(\"ls -l \" + user_input)",
-   "eval(\"ls -l\")",
+   "subprocess.run([\"ls\", \"-l\", \"--\", user_input], check=True)",
+   "os.system(f\"ls -l {user_input}\")",
+   "subprocess.run(f\"ls -l {user_input}\", shell=True)",
    "exec(\"ls\")"
   ],
   "answer": 0,
-  "explain": "With a list, subprocess.run starts the program directly, with no shell in between: each item is passed as it is, even with ; or $( ) inside. os.system with a string glued to user input goes through a shell: input like '; rm -rf ~' runs as a command (command injection). eval and exec run Python code, not commands. A value starting with - still reads as an option: put \"--\" before it."
+  "explain": "With a list, subprocess.run starts the program with no shell in between: each item is passed as it is, even with ; or $( ) inside. os.system and shell=True go through a shell: input like '; rm -rf ~' runs as a command (command injection). exec runs Python code, not commands. \"--\" ends the options: a value starting with - stays a file name."
  },
  {
   "id": "python-2-10",

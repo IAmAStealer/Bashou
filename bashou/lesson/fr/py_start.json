@@ -49,7 +49,7 @@
     "",
     "- Elle donne le fichier, la ligne et un ^ sous l'endroit.",
     "- Regarde là et juste avant : un : ou une ) oubliés sont la cause habituelle.",
-    "- Python 3.10+ nomme ce qui manque (expected ':') ; 3.9 (Rocky 9, macOS) dit seulement invalid syntax."
+    "- Python 3.10+ nomme ce qui manque (expected ':'). 3.9 (Rocky 9, macOS) dit souvent juste invalid syntax ou unexpected EOF while parsing, parfois en montrant la ligne suivante."
    ]
   }
  ]

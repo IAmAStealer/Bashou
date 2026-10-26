@@ -67,7 +67,7 @@
     "",
     "- It gives the file, the line and a ^ under the spot.",
     "- Look there and just before: a missing : or ) is the usual cause.",
-    "- Python 3.10+ names what's missing (expected ':'); 3.9 (Rocky 9, macOS) only says invalid syntax."
+    "- Python 3.10+ names what's missing (expected ':'). 3.9 (Rocky 9, macOS) often says just invalid syntax or unexpected EOF while parsing, sometimes pointing at the next line."
    ]
   }
  ]

@@ -23,7 +23,7 @@
    "Une erreur"
   ],
   "answer": 0,
-  "explain": "b = a donne à b ce que contient a à ce moment-là, 1. Puis a = 5 donne une nouvelle valeur à a : b vaut toujours 1. En Python, = ne copie jamais : b = a met un deuxième nom sur le même objet. Un nombre ne change pas, mais une liste oui : xs.append par un nom se voit par l'autre."
+  "explain": "b = a donne à b ce que contient a à ce moment-là, 1. Puis a = 5 donne une nouvelle valeur à a : b vaut toujours 1. En Python, = ne copie jamais : b = a met un deuxième nom sur le même objet. Un nombre ne change pas, mais une liste oui : si a est une liste, a.append(9) se voit aussi par b."
  },
  {
   "id": "logic-1-03",

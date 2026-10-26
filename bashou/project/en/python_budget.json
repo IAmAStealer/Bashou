@@ -52,7 +52,7 @@
   {
    "do": "Make your program generate that HTML page from your saved expenses.",
    "done": "after adding an expense, reloading the page shows it.",
-   "hint": "Build the rows with a loop and an f-string, passing every value through `html.escape()`, then write the whole page to a .html file.",
+   "hint": "Build the rows with a loop and an f-string, passing every text value (theme, note) through `html.escape()`; format the amount with `f\"{amount:.2f}\"`. Then write the whole page to a .html file.",
    "why": "Programs that write other files (HTML, reports, configs) are everywhere. This one is already a static website generator, a tiny one. And data must never become code: without html.escape, a note holding <script> would run in the page."
   },
   {
