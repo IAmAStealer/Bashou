@@ -21,7 +21,7 @@
   {
    "do": "Create a virtual environment for your project and install the pypdf library in it with pip.",
    "done": "`import pypdf` works in your program without an error.",
-   "hint": "Look up `python3 -m venv .venv`, then run `.venv/bin/pip install pypdf` (or `source .venv/bin/activate` first, then `pip install pypdf`).",
+   "hint": "`python3 -m venv .venv`, then `.venv/bin/pip install pypdf`, and run your program with `.venv/bin/python3 pdf.py`. Or `source .venv/bin/activate` first: then `pip` and `python3` are the venv's until you type `deactivate`. On Debian/Ubuntu, install python3-venv first (sudo apt install python3-venv).",
    "why": "A virtual environment keeps each project's libraries apart, so installing something for one project never breaks another. pip is how Python programmers get the libraries other people wrote."
   },
   {
@@ -62,7 +62,7 @@
   },
   {
    "do": "Let the user choose from the command line, without editing the code: `python3 pdf.py merge a.pdf b.pdf out.pdf` and `python3 pdf.py split a.pdf`.",
-   "done": "both commands work, and a wrong command prints how to use the program on stderr and exits with code 1 (argparse does both).",
+   "done": "both commands work, and a wrong command prints how to use the program on stderr and exits with code 2, the usual code for a usage error (argparse does both).",
    "hint": "`sys.argv` holds the words of the command line: `sys.argv[0]` is `pdf.py`, then `merge`, `a.pdf`…; the `argparse` module does the same with a nicer help.",
    "why": "Arguments turn a script you edit into a tool you use. It's the line between \"my code\" and \"my program\"."
   },

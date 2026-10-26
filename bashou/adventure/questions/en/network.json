@@ -617,7 +617,7 @@
    "Use http:// instead"
   ],
   "answer": 0,
-  "explain": "Your system doesn't know the company's CA, so it can't finish the chain. Give curl the CA with --cacert for one command, or install it in the trust store (update-ca-certificates on Debian, update-ca-trust on Rocky) for most programs: Firefox, Node and requests installed with pip keep their own list. -k would accept any certificate, an attacker's too; http:// sends everything in clear."
+  "explain": "Your system doesn't know the company's CA, so it can't finish the chain. Give curl the CA with --cacert for one command, or add it to the trust store (update-ca-certificates on Debian, update-ca-trust on Rocky) for most programs. Some keep their own list: requests from pip, Node from nodejs.org, Firefox on Debian. -k accepts any certificate, an attacker's too; http:// sends all in clear."
  },
  {
   "id": "network-3-14",

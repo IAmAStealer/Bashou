@@ -41,7 +41,7 @@
   {
    "do": "Lire la date des photos demande une bibliothèque : crée un environnement virtuel et installe Pillow avec pip.",
    "done": "`from PIL import Image` fonctionne dans ton programme.",
-   "hint": "`python3 -m venv .venv`, puis `.venv/bin/pip install Pillow` (le paquet s'appelle Pillow, le module PIL).",
+   "hint": "`python3 -m venv .venv`, puis `.venv/bin/pip install Pillow` (le paquet s'appelle Pillow, le module PIL), et lance ton programme avec `.venv/bin/python3`. Sur Debian/Ubuntu, installe d'abord python3-venv (sudo apt install python3-venv).",
    "why": "Personne n'écrit tout de zéro. Savoir ajouter une bibliothèque à un projet, sans toucher au reste de ton système, fait partie de chaque vrai projet."
   },
   {

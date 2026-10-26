@@ -11,7 +11,7 @@
   {
    "do": "Crée un environnement virtuel pour ton projet et installe-y la bibliothèque pypdf avec pip.",
    "done": "`import pypdf` fonctionne dans ton programme, sans erreur.",
-   "hint": "Cherche `python3 -m venv .venv`, puis lance `.venv/bin/pip install pypdf` (ou d'abord `source .venv/bin/activate`, puis `pip install pypdf`).",
+   "hint": "`python3 -m venv .venv`, puis `.venv/bin/pip install pypdf`, et lance ton programme avec `.venv/bin/python3 pdf.py`. Ou d'abord `source .venv/bin/activate` : `pip` et `python3` sont alors ceux du venv jusqu'à `deactivate`. Sur Debian/Ubuntu, installe d'abord python3-venv (sudo apt install python3-venv).",
    "why": "Un environnement virtuel sépare les bibliothèques de chaque projet : installer quelque chose pour l'un ne casse jamais l'autre. pip est la façon dont les programmeurs Python récupèrent les bibliothèques écrites par d'autres."
   },
   {
@@ -52,7 +52,7 @@
   },
   {
    "do": "Laisse l'utilisateur choisir depuis la ligne de commande, sans modifier le code : `python3 pdf.py merge a.pdf b.pdf out.pdf` et `python3 pdf.py split a.pdf`.",
-   "done": "les deux commandes fonctionnent, et une commande inconnue affiche comment utiliser le programme sur stderr et sort avec le code 1 (argparse fait les deux).",
+   "done": "les deux commandes fonctionnent, et une commande inconnue affiche comment utiliser le programme sur stderr et sort avec le code 2, le code habituel d'une erreur d'usage (argparse fait les deux).",
    "hint": "`sys.argv` contient les mots de la ligne de commande : `sys.argv[0]` vaut `pdf.py`, puis `merge`, `a.pdf`… ; le module `argparse` fait la même chose avec une aide plus jolie.",
    "why": "Les arguments transforment un script qu'on modifie en un outil qu'on utilise. C'est la frontière entre « mon code » et « mon programme »."
   },
