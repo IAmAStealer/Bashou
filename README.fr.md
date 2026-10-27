@@ -8,89 +8,14 @@
 [![Release](https://img.shields.io/github/v/release/IAmAStealer/Bashou)](https://github.com/IAmAStealer/Bashou/releases/latest)
 [![Licence : MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-Apprends les commandes Linux et les scripts bash gratuitement, dans ton propre terminal.
+**Un compagnon en pixel art dans le coin de ton terminal, qui grandit pendant que tu apprends la ligne de commande.**
+Gratuit, hors ligne, sans compte, sans IA. Le jeu est traduit en français : `bashou config language fr`.
 
-Un petit compagnon en pixel art vit dans le coin de ton terminal. Il grandit pendant que tu apprends la ligne
-de commande. Commence par bash. Ensuite, choisis : Linux, systemd, les paquets, gpg et pass, SQL, la CI/CD,
-Python, C ou Rust. Lance des commandes, essaie de nouveaux outils, et rencontre de nouveaux compagnons en chemin.
-
-Le jeu est traduit en français : `bashou config language fr`.
-
-![Une petite poussière d'étoile en pixel art dans le coin du terminal, avec une astuce dans sa bulle, au-dessus
-d'une explication `bashou learn` d'une commande tar](doc/img/prompt.svg)
-
-## Apprendre le terminal sans demander à une IA
-
-Bashou t'apprend dans ton vrai terminal, pendant que tu travailles. Il marche hors ligne : pas de compte, pas
-de modèle d'IA, pas de jetons dépensés pour savoir ce que fait une commande. Il ne te gêne pas : un seul
-compagnon pour tous tes terminaux, et il ne dessine jamais par-dessus ton texte.
-
-- **`bashou learn <commande>`** démonte une commande et explique chaque morceau : la commande, chaque option,
-  les arguments, les pipes et les redirections (88 commandes, de `ls` à `tar`, `awk`, `gpg` et `kubectl`).
-  Sans commande, il explique la dernière que ton compagnon t'a suggérée.
-- **Ton compagnon donne des astuces** en chemin (Ctrl+R, `cd -`, `du -sh *`…) et repère les outils que tu
-  n'as pas encore essayés.
-- **304 succès** récompensent de vraies compétences : un pipe de 3 commandes, `find -exec`, `sed -i`,
-  `git bisect`, `tar -tf`…
-- **Des menaces** apparaissent de temps en temps. `bashou fight` ouvre un shell bac à sable où tu les bats avec
-  le bon outil : `grep` contre l'Hydre des logs, `awk` contre le Golem comptable. Ça commence par les premiers
-  pas (une option à trouver dans `--help`, une faute à corriger dans ton éditeur, des fichiers à ranger) et ça
-  monte jusqu'aux droits Linux, aux services et aux conflits de fusion git. Une commande réussie avec le bon
-  outil touche l'ennemi ; les autres te coûtent un cœur. Les combats de code te donnent un petit fichier Python
-  ou C cassé à réparer (un `;` oublié, une boucle sans fin, une fuite de mémoire, une injection shell) ; les
-  combats de scripts te donnent un script bash bâti sur un petit modèle, avec une habitude qui va au prompt et
-  devient un bug dans un script (la sortie de `ls` dans une boucle, un nom qui commence par `-`, `local x=$(cmd)`,
-  `echo` sur des données, un fichier temporaire oublié) : ta correction ne gagne que si le script remarche sur
-  les fichiers piégés de Bashou ; les
-  combats de paquets interrogent ta propre machine avec `apt`, `dpkg` ou `rpm`, ou te font réparer un fichier
-  de dépôt ; les combats CI/CD te donnent un fichier GitHub Actions ou GitLab CI à réparer ; les combats SQL
-  te donnent une base SQLite à interroger et à réparer. Les combats de secrets apprennent `gpg` et `pass`, avec
-  leur propre clé et leur propre coffre d'entraînement : les tiens ne sont jamais touchés. Les combats réseau
-  lisent tes adresses et tes routes avec `ip`, trouvent un service avec `ss`, et lisent des captures avec
-  `tcpdump -r` ; rien ne sort de ta machine.
-  Les combats gagnés reviennent après 1, 7 et 30 jours (répétition espacée), pour que ce que tu as appris reste.
-- **`bashou lesson`** : la bibliothèque de la Chouette sage. Des leçons avec des dessins qui se complètent page
-  après page (la pile et le tas, où va la sortie, les permissions, `$( )`…), sur un parcours : chacune s'ouvre
-  quand tu as réussi les précédentes, en gagnant un combat ou un succès. Ton éditeur, c'est toi qui le
-  choisis, nano ou vi.
-- **`bashou project`** : tu veux pratiquer un langage mais tu ne sais pas *quoi* programmer ? 13 vrais projets
-  en Python, Shell, C et Rust, du très facile au difficile : fusionner des PDF, trier tes photos par date, un
-  script de sauvegarde, un minuteur Pomodoro… Une petite étape à la fois : chaque étape dit quoi faire et
-  quand c'est fini, jamais comment, avec un indice si tu bloques.
-- **`bashou spot`** : un jeu rapide. Une chaîne apparaît : une adresse IPv6, une MAC, un hachage, du base64, un
-  JWT, une regex, une ligne de Python ou de SQL… Dis ce que c'est avec les flèches, de plus en plus vite, en
-  25 secondes ; 5 erreurs terminent la partie.
-- **`bashou arena`** : viens te battre quand tu veux. Un combat chronométré, ou une enquête de sécurité sans
-  chrono (un fichier caché, une porte dérobée dans cron, un binaire SUID).
-- **`bashou adventure`** : une balade à travers 13 thèmes (logique de code, bash au prompt, scripts bash, Linux avec systemd, Python, Rust,
-  C, Debian, Rocky Linux, CI/CD, SQL, réseaux, outils d'IA) avec 465 questions sur ce qui tourne mal et ce qu'il faut
-  vérifier en premier, des boss, et des coffres qui s'ouvrent avec de vraies commandes.
-
-![bashou fight : une Planète et ses cœurs face à l'Hydre des logs, la tâche dans une bulle, et le shell de
-l'arène en dessous](doc/img/duel.svg)
-
-## Découvre les compagnons
-
-Choisis un compagnon de départ : Poussière, Graine ou Caillou. Il grandit jusqu'au niveau 20 et change de
-forme en chemin. Ce qu'il devient, c'est à toi de le découvrir.
-
-32 autres compagnons se cachent dans ton terminal. Chacun vient de ce qu'il représente : une Gouttelette après
-tes 10 premières commandes, un codeur de nuit pour tes premiers programmes, un champignon pour tes propres
-scripts, d'autres pour un nouvel outil assez utilisé, un long pipe, un combat perdu ou gagné, une balade dans
-l'aventure… Le tableau des compagnons ne montre que leur silhouette tant que tu ne les as pas rencontrés.
-
-![Les trois compagnons de départ, Poussière, Graine et Caillou, puis trois des premiers compagnons à
-rencontrer](doc/img/pets.svg)
-
-## Montre ton compagnon
-
-**`bashou share`** affiche un QR code dans ton terminal. Scanne-le, et ton téléphone dessine une bannière de ton
-compagnon, de sa famille et de ta progression, avec un bouton pour l'envoyer sur Signal, WhatsApp ou ailleurs.
-La première fois, il te demande un pseudo à afficher à la place de ton vrai nom.
-
-Avant le QR code, Bashou liste exactement ce que contient la carte : pas de commandes, de fichiers, de noms
-de machines ni de dates. La progression voyage dans le lien, après le `#`, une partie que les navigateurs
-n'envoient jamais à un serveur.
+| Un compagnon qui donne des astuces, et `bashou learn` | Des combats dans un shell bac à sable |
+|---|---|
+| ![Une petite poussière d'étoile en pixel art dans le coin du terminal, avec une astuce dans sa bulle, au-dessus d'une explication `bashou learn` d'une commande tar](doc/img/prompt.svg) | ![bashou fight : une Planète et ses cœurs face à l'Hydre des logs, la tâche dans une bulle, et le shell de l'arène en dessous](doc/img/duel.svg) |
+| **Des compagnons à trouver** | **Une bannière à partager** |
+| ![Les trois compagnons de départ, Poussière, Graine et Caillou, puis trois des premiers compagnons à rencontrer](doc/img/pets.svg) | ![Une bannière Bashou : le Satellite d'IAmAStealer, niveau 12, les dix formes de la famille Paquet, ses succès, ses compagnons et ses compétences](doc/img/share.png) |
 
 ## Installer
 
@@ -119,6 +44,60 @@ Pas de compagnon sur Debian ou Ubuntu ? Lance `bashou on` une fois : ça ajoute 
 Les mises à jour arrivent avec `apt upgrade` ou `dnf upgrade`.
 
 **macOS**, **tout autre Linux**, zsh seul, ou git pour suivre le code au fur et à mesure : voir [INSTALL.fr.md](INSTALL.fr.md).
+
+## Ce que tu peux faire
+
+Commence par bash. Ensuite, choisis : Linux, les paquets, gpg et pass, SQL, la CI/CD, Python, C ou Rust.
+Bashou vit dans ton vrai terminal, pendant que tu travailles : un seul compagnon pour tous tes terminaux, et il ne dessine jamais par-dessus ton texte.
+
+| Commande | Ce qu'elle fait |
+|---|---|
+| `bashou learn <commande>` | Démonte une commande et explique chaque morceau : options, arguments, pipes, redirections (88 commandes, de `ls` à `tar`, `awk`, `gpg` et `kubectl`) |
+| *(ton compagnon)* | Donne des astuces en chemin (Ctrl+R, `cd -`, `du -sh *`…) et repère les outils que tu n'as pas encore essayés |
+| *(succès)* | **304 succès** récompensent de vraies compétences : un pipe de 3 commandes, `find -exec`, `sed -i`, `git bisect`… |
+| `bashou fight` | Des menaces apparaissent de temps en temps : bats-les dans un shell bac à sable avec le bon outil, `grep` contre l'Hydre des logs, `awk` contre le Golem comptable |
+| `bashou lesson` | La bibliothèque de la Chouette sage : des leçons avec des dessins qui se complètent page après page, sur un parcours qui s'ouvre quand tu réussis |
+| `bashou project` | 13 vrais projets en Python, Shell, C et Rust (fusionner des PDF, trier des photos, un script de sauvegarde…), un petit pas à la fois |
+| `bashou spot` | Jeu rapide : une IPv6, un hash, du base64, un JWT… dis ce que c'est, de plus en plus vite |
+| `bashou arena` | Un combat chronométré, ou une enquête de sécurité (un fichier caché, une porte dérobée dans cron, un binaire SUID) |
+| `bashou adventure` | Une balade à travers 13 thèmes avec 469 questions sur ce qui tourne mal et ce qu'il faut vérifier en premier, des boss et des coffres |
+| `bashou share` | Un QR code : ton téléphone dessine une bannière de ton compagnon et de ta progression, à envoyer où tu veux |
+
+<details>
+<summary><b>Plus sur les combats</b></summary>
+
+Ça commence par les premiers pas (une option à trouver dans `--help`, une faute à corriger dans ton
+éditeur, des fichiers à ranger) et ça monte jusqu'aux droits Linux, aux services et aux conflits de fusion
+git. Une commande réussie avec le bon outil touche l'ennemi ; les autres te coûtent un cœur.
+
+- **Combats de code** : un petit fichier Python, C ou Rust cassé à réparer (un `;` oublié, une boucle sans
+  fin, une fuite de mémoire, une injection shell).
+- **Combats de scripts** : un script bash avec une habitude qui va au prompt et devient un bug dans un script
+  (la sortie de `ls` dans une boucle, un nom qui commence par `-`, `local x=$(cmd)`, `echo` sur des données,
+  un fichier temporaire oublié) : ta correction ne gagne que si le script remarche sur les fichiers piégés de Bashou.
+- **Combats de paquets** : interroge ta propre machine avec `apt`, `dpkg` ou `rpm`, ou répare un fichier de dépôt.
+- **Combats CI/CD** : un fichier GitHub Actions ou GitLab CI à réparer.
+- **Combats SQL** : une base SQLite à interroger et à réparer.
+- **Combats de secrets** : `gpg` et `pass`, avec leur propre clé et leur propre coffre d'entraînement : les tiens ne sont jamais touchés.
+- **Combats réseau** : tes adresses et tes routes avec `ip`, un service avec `ss`, des captures avec
+  `tcpdump -r` ; rien ne sort de ta machine.
+
+Les combats gagnés reviennent après 1, 7 et 30 jours (répétition espacée), pour que ce que tu as appris reste.
+Dans un combat, `lesson` ouvre la leçon qui l'explique.
+
+</details>
+
+## Les compagnons
+
+Choisis un compagnon de départ : Poussière, Graine ou Caillou. Il grandit jusqu'au niveau 20 et change de
+forme en chemin. 32 autres compagnons se cachent dans ton terminal, chacun selon ce qu'il représente : une
+Gouttelette après tes 10 premières commandes, un codeur de nuit pour tes premiers programmes, un champignon
+pour tes propres scripts… Le tableau des compagnons ne montre que leur silhouette tant que tu ne les as pas
+rencontrés.
+
+**`bashou share`** liste exactement ce que contient la bannière avant le QR code : pas de commandes, de
+fichiers, de noms de machines ni de dates. La progression voyage dans le lien, après le `#`, une partie que
+les navigateurs n'envoient jamais à un serveur. La première fois, il te demande un pseudo.
 
 ## Quoi de neuf
 
