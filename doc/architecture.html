@@ -91,7 +91,7 @@ svg .fill-game { fill: var(--c-game); } svg .fill-muted { fill: var(--muted); }
 <nav>
   <a href="#runtime">Runtime</a><a href="#tree">Tree</a><a href="#core">Core</a><a href="#commands">Commands</a>
   <a href="#games">Games</a><a href="#data">Data</a><a href="#save">Save</a><a href="#rules">Rules</a><a href="#transfer">Export</a>
-  <a href="#tests">Tests &amp; CI</a><a href="#docs">Docs</a>
+  <a href="#tests">Tests &amp; CI</a><a href="#docs">Docs</a><a href="#quality">Quality</a>
 </nav>
 
 <h2 id="runtime">1. How a command reaches the pet</h2>
@@ -224,7 +224,7 @@ svg .fill-game { fill: var(--c-game); } svg .fill-muted { fill: var(--muted); }
 │   ├── *.py                  core and commands (sections 3 and 4)
 │   ├── adventure/            `bashou adventure`: game, world, scene, sprites, quiz, lessons
 │   │   └── questions/{en,fr}/  13 topic question banks (JSON)
-│   ├── challenges/           arena fights, one file per topic (25 files)
+│   ├── challenges/           arena fights, one file per topic (27 files)
 │   ├── lesson/               `bashou lesson`: library + reader, owl.json
 │   │   └── {en,fr}/          56 lessons (JSON) per language
 │   ├── project/              `bashou project`: step-by-step programs, {en,fr}/ 13 each
@@ -295,8 +295,8 @@ svg .fill-game { fill: var(--c-game); } svg .fill-muted { fill: var(--muted); }
 </table></div>
 <h3>Arena (<code>bashou/challenges/</code>)</h3>
 <p><code>challenges/__init__.py</code> is the challenge bank; each other file is a topic (basics, everyday, grep, sed, awk,
-find, pipe, ps, uniq, scripting, logic, system, packages, repos, network, secrets, sql, git, cicd, code, debug, rust,
-security) plus <code>trials.py</code> for the adventure chests. <code>fight.py</code> runs the sandbox sub-shell,
+find, pipe, ps, uniq, scripting, logic, system, packages, repos, network, certs, secrets, sql, git, cicd, code, debug, rust,
+security, shellscript, whose <code>template.sh</code> is the script fights' starter) plus <code>trials.py</code> for the adventure chests. <code>fight.py</code> runs the sandbox sub-shell,
 <code>duel.py</code> draws the fight, <code>enemies/*.json</code> holds the foes.</p>
 
 <h2 id="data">6. Data files</h2>
@@ -452,6 +452,8 @@ security) plus <code>trials.py</code> for the adventure chests. <code>fight.py</
 <tr><td><code>tests/watchdog.py</code></td><td>Runs the tests and stops a test stuck for 3 minutes, showing where it waits.</td></tr>
 <tr><td><code>tools/package.py</code></td><td>Builds .deb/.rpm and the signed apt + dnf repositories on GitHub Pages.</td></tr>
 <tr><td><code>tools/screenshot.py</code>, <code>lesson_preview.py</code></td><td>README SVGs; lessons as 80×24 text.</td></tr>
+<tr><td><code>tools/changelog.py</code>, <code>install-macos.sh</code></td><td>Release notes from commit subjects; macOS install (Homebrew tap).</td></tr>
+<tr><td><code>tests/test_*_style.py</code></td><td>The machine-checkable part of the style rules (section 12).</td></tr>
 <tr><td><code>.github/workflows/</code></td><td><code>ci.yml</code> (tests, Bandit, ShellCheck, Gitleaks, packages install), <code>codeql.yml</code>, <code>scorecard.yml</code>, <code>packages.yml</code>, <code>release.yml</code>.</td></tr>
 </table></div>
 
@@ -460,13 +462,61 @@ security) plus <code>trials.py</code> for the adventure chests. <code>fight.py</
 <tr><th>File</th><th>For</th></tr>
 <tr><td><code>README.md</code>, <code>README.fr.md</code></td><td>Players: install and play.</td></tr>
 <tr><td><code>doc/GUIDE.md</code></td><td>Player guide.</td></tr>
-<tr><td><code>doc/contributing/*.md</code></td><td>Contributors: curriculum, lessons, questions, projects, pixel art, translations, security challenges, packaging.</td></tr>
+<tr><td><code>doc/contributing/*.md</code></td><td>Contributors: curriculum, lessons, questions, projects, pixel art, translations, security challenges, packaging, and the style rules (bash, sql, certs, python).</td></tr>
 <tr><td><code>.github/CONTRIBUTING.md</code></td><td>How to contribute.</td></tr>
 <tr><td><code>doc/site/</code></td><td>The share page (HTML/CSS/JS).</td></tr>
 <tr><td><code>CHANGELOG.md</code></td><td>Release notes.</td></tr>
+<tr><td><code>.claude/agents/*.md</code></td><td>Judge agents for maintainers (section 12).</td></tr>
 </table></div>
 
-<footer>Generated 2026-10-17 from the repository layout and import graph.</footer>
+<h2 id="quality">12. Quality: style rules and judges</h2>
+<p>Each skill whose code players see has written rules, an agent that judges new content against them,
+and a test that enforces what a machine can check. Ansible has none: the owner reviews it.</p>
+<figure class="diagram">
+<svg viewBox="0 0 980 300" role="img" aria-label="Quality pipeline: each skill has a style file of rules with sources; a judge agent reads it after each change and reports, a style test encodes it and fails the suite; both point back to what players see">
+  <defs>
+    <marker id="ar5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" class="fill-muted"/></marker>
+  </defs>
+  <rect class="node k-game" x="10" y="110" width="220" height="80" rx="6"/>
+  <text class="head" x="120" y="132" text-anchor="middle">What players see</text>
+  <text class="small" x="120" y="149" text-anchor="middle">lessons · questions · fights</text>
+  <text class="small" x="120" y="166" text-anchor="middle">hints · starter files · projects</text>
+  <rect class="node k-data" x="310" y="110" width="240" height="80" rx="6"/>
+  <text class="mono" x="430" y="132" text-anchor="middle">doc/contributing/&lt;skill&gt;-style.md</text>
+  <text class="small" x="430" y="149" text-anchor="middle">rules with ids + official source</text>
+  <text class="small" x="430" y="166" text-anchor="middle">at the prompt vs in a program</text>
+  <rect class="node k-run" x="630" y="20" width="340" height="80" rx="6"/>
+  <text class="mono" x="800" y="42" text-anchor="middle">.claude/agents/&lt;skill&gt;-judge.md</text>
+  <text class="small" x="800" y="59" text-anchor="middle">after each change (CLAUDE.md) · manual</text>
+  <text class="small" x="800" y="76" text-anchor="middle">runs the code it shows · reports, never edits</text>
+  <rect class="node k-shell" x="630" y="200" width="340" height="80" rx="6"/>
+  <text class="mono" x="800" y="222" text-anchor="middle">tests/test_&lt;skill&gt;_style.py</text>
+  <text class="small" x="800" y="239" text-anchor="middle">every test run, pre-push, CI · automatic</text>
+  <text class="small" x="800" y="256" text-anchor="middle">runs/parses samples · bans forbidden forms</text>
+  <line class="msg" x1="550" y1="135" x2="626" y2="80" marker-end="url(#ar5)"/>
+  <text class="small" x="596" y="100" text-anchor="end">read by</text>
+  <line class="msg" x1="550" y1="165" x2="626" y2="220" marker-end="url(#ar5)"/>
+  <text class="small" x="596" y="210" text-anchor="end">encoded in</text>
+  <polyline class="msg" points="630,40 120,40 120,106" stroke-dasharray="5 4" marker-end="url(#ar5)"/>
+  <text class="small" x="375" y="32" text-anchor="middle">report: FIX / CHANGE / MISSING, fixed by hand</text>
+  <polyline class="msg bad" points="630,260 120,260 120,194" marker-end="url(#ar5)"/>
+  <text class="small" x="375" y="276" text-anchor="middle">a broken rule fails the suite</text>
+</svg>
+<figcaption>Solid arrow: enforced (the suite fails). Dashed: a report a person acts on. CLAUDE.md says which judge to run after which change.</figcaption>
+</figure>
+<div class="table-wrap"><table>
+<tr><th>Skill</th><th>Rules</th><th>Judge</th><th>Test</th></tr>
+<tr><td>bash, script</td><td><code>bash-style.md</code></td><td><code>bash-judge</code></td><td><code>test_bash_style.py</code>, <code>test_script_skill.py</code></td></tr>
+<tr><td>sql</td><td><code>sql-style.md</code></td><td><code>sql-judge</code></td><td><code>test_sql_style.py</code> (runs each statement on the fight tables)</td></tr>
+<tr><td>certificates</td><td><code>certs-style.md</code></td><td><code>certs-judge</code></td><td><code>test_certs.py</code></td></tr>
+<tr><td>python</td><td><code>python-style.md</code></td><td><code>python-judge</code></td><td><code>test_python_style.py</code> (Python 3.9 grammar)</td></tr>
+<tr><td>lesson drawings</td><td><code>lessons.md</code></td><td><code>scheme-judge</code></td><td>&ndash;</td></tr>
+<tr><td>pull requests</td><td><code>.github/CONTRIBUTING.md</code></td><td><code>pr-reviewer</code></td><td>&ndash;</td></tr>
+</table></div>
+<p>Still to do (doc/PLAN.md): linux, systemd, debian, rocky, c, rust, logic, cicd, network outside certs, ai, git.</p>
+
+<footer>Generated 2026-10-27 from the repository layout and import graph.</footer>
 </main>
 </body>
 </html>
