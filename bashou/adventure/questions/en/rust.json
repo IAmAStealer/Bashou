@@ -310,5 +310,31 @@
   ],
   "answer": 0,
   "explain": "cargo audit reads Cargo.lock and compares each exact dependency version with the RustSec database of known vulnerabilities, then lists the ones affected and the fixed version. Install it once with cargo install cargo-audit, and run it in CI so a new advisory shows up without you having to think about it."
+ },
+ {
+  "id": "rust-1-15",
+  "level": 1,
+  "q": "let a = String::from(\"log\"); let b = a; then println!(\"{}\", a);. Why does rustc refuse?",
+  "choices": [
+   "The String moved to b: a doesn't own it anymore",
+   "a and b can't hold the same text",
+   "println! can't print a String",
+   "b must be declared mut"
+  ],
+  "answer": 0,
+  "explain": "Each value has one owner. let b = a; moves the String to b, so a can't be used anymore: rustc says borrow of moved value. Numbers would be copied instead. To keep both, lend it (let b = &a;) or make a real copy (let b = a.clone();), which costs memory."
+ },
+ {
+  "id": "rust-2-11",
+  "level": 2,
+  "q": "let first = &v[0]; then v.push(4); then println!(\"{}\", first);. Why does rustc refuse?",
+  "choices": [
+   "push may move the items while first points at them",
+   "A Vec can't grow after it's created",
+   "first must be declared mut",
+   "v[0] doesn't exist yet"
+  ],
+  "answer": 0,
+  "explain": "first borrows v to read it, and push needs to change v: Rust allows many readers or one writer, never both at once. push may move the items to a bigger place in memory, and first would point at the old one. Use first before the push, or copy the value: let first = v[0];"
  }
 ]

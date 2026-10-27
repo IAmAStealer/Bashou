@@ -42,7 +42,7 @@ A topic is complete when it has all four: questions, a lesson, one or more fight
   wildcards → variables; variables + wildcards → bash_zsh
 - Bash: reading → streams; reading → grep → regex; streams + grep → pipes → text_tools;
   regex + text_tools → awk_sed; wildcards → find; variables → logic; logic + streams → quotes →
-  scripts → loops; scripts → substitution; scripts → git
+  scripts → loops; scripts → substitution; scripts → git → git_fix
 - Bash scripts (skill `script`, owner 2026-10-22: bash at the prompt and bash in scripts are two jobs):
   quotes → scripts → prompt_script → script_errors → script_files → script_data;
   script_errors → script_cleanup
@@ -55,7 +55,7 @@ A topic is complete when it has all four: questions, a lesson, one or more fight
 - Logic: variables → logic
 - Python: scripts + loops + logic → py_start → py_flow → py_names; py_names + pipes → py_data
 - C: computer + scripts + logic → compilation → gcc_use → stack_heap → pointers → debugger
-- Rust: stack_heap → rust_vars
+- Rust: stack_heap → rust_vars → rust_own
 - SQL: text_tools → sql_select → sql_write → sql_join
 - CI/CD: git + scripts + pass → pipeline
 
@@ -83,7 +83,8 @@ paths above.
 7. `variables` — shell variables, $( ), export
 7. `bash_zsh` — where zsh reads a line differently: word splitting, patterns that match nothing, arrays
    from 1, and the first line of a script that picks its shell (0.9.0) · Index Imp
-8. `git` — commits and branches · Commit Crowd, Branch Bramble, Conflict Chimera
+8. `git` — commits and branches · Commit Crowd, Branch Bramble
+9. `git_fix` — merge conflicts, stash, restore, revert vs reset · Conflict Chimera, Revert Revenant
 
 ### Bash (text tools)
 
@@ -158,6 +159,8 @@ input. Rules: [bash-style.md](bash-style.md).
 
 1. `rust_vars` — let, mut, shadowing, integer types, const · Mut Marmot, Const Condor, Shadow Shade,
    Byte Basilisk
+2. `rust_own` — ownership, moves, borrowing with & and &mut (opens once rust_vars is mastered)
+   · Borrow Badger, Vector Viper
 
 ### SQL
 

@@ -1,0 +1,51 @@
+{
+ "name": "Vector Viper",
+ "palette": {
+  "a": "#0e1a10",
+  "v": "#58b858",
+  "V": "#2e7a36",
+  "y": "#e8d870",
+  "w": "#ffffff",
+  "m": "#101010",
+  "r": "#e04848",
+  "b": "#c8c8dc",
+  "B": "#8888a0"
+ },
+ "base": [
+  "......aaaaa......",
+  ".....avvvvva.....",
+  "....avwmvwmva....",
+  "....avvvvvvva....",
+  ".....aVvvvVa.rr..",
+  "..bb..avvva..r...",
+  "..bB.avyyyva..bb.",
+  "..bBavvVVVvva.Bb.",
+  "..bBavyyyyyva.Bb.",
+  "..bBaVvvvvvVa.Bb.",
+  "..bb.aVVVVVa..bb.",
+  "......aaaaa......"
+ ],
+ "poses": {
+  "inhale": {
+   "7": "----a-------a----",
+   "8": "----a-------a----"
+  },
+  "closed": {
+   "2": "------aa--aa-----"
+  },
+  "left": {
+   "2": "------mw--mw-----"
+  },
+  "right": {
+   "2": "------wm--wm-----"
+  },
+  "fidget": {
+   "4": "-------------.r..",
+   "5": "-------------rr.."
+  }
+ },
+ "particles": [
+  0,
+  1
+ ]
+}

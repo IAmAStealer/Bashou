@@ -1,0 +1,88 @@
+{
+ "title": "Rust : propriété et emprunt",
+ "summary": "Chaque valeur a un seul propriétaire ; la déplacer, la prêter avec & ou &mut, et pourquoi rustc refuse certains prêts.",
+ "pages": [
+  {
+   "scheme": [
+    " {",
+    "   let s = String::from(\"hi\");  s la possède",
+    "   println!(\"{}\", s);",
+    " }                              fin de s : le",
+    "                                texte est libéré"
+   ],
+   "point": 3,
+   "mark": [
+    "}"
+   ],
+   "text": [
+    "En Rust, chaque valeur a un seul propriétaire, en général une variable. Quand le bloc du propriétaire se termine, à son }, la valeur est libérée (drop).",
+    "",
+    "- Pas de ramasse-miettes, et pas de free() à oublier : rustc place le nettoyage pour toi.",
+    "- C'est ainsi que Rust évite les use-after-free et doubles free du C, et la plupart des fuites."
+   ]
+  },
+  {
+   "scheme": [
+    " let a = String::from(\"log\");",
+    " let b = a;           le texte passe à b",
+    "  a  (déplacé)          tas",
+    "  b  ptr ─────────────▶ \"log\"",
+    " println!(\"{}\", a);   error[E0382]: borrow",
+    "                      of moved value: `a`"
+   ],
+   "point": 1,
+   "mark": [
+    "let b = a;"
+   ],
+   "text": [
+    "Affecter une String, ou la passer à une fonction, la déplace : la nouvelle variable en est maintenant propriétaire.",
+    "",
+    "- L'ancien nom ne peut plus servir : rustc s'arrête sur borrow of moved value.",
+    "- Les nombres et les booléens sont copiés à la place (ils sont Copy) : les deux noms marchent.",
+    "- Besoin de deux vraies copies ? a.clone() en fait une, et coûte de la mémoire."
+   ]
+  },
+  {
+   "scheme": [
+    " fn count(text: &str) -> usize { … }",
+    "",
+    " let line = String::from(\"ok ok\");",
+    " count(&line);   la prête",
+    " count(&line);   line la possède toujours"
+   ],
+   "point": 3,
+   "mark": [
+    "&line"
+   ],
+   "text": [
+    "& prête une valeur sans la déplacer : une référence, qu'on appelle aussi un emprunt.",
+    "",
+    "- La fonction la lit, le propriétaire la garde, et tu peux rappeler la fonction.",
+    "- Une fonction qui ne fait que lire prend &str (du texte) ou &T, pas String.",
+    "- Un emprunt ne peut pas durer plus longtemps que le propriétaire : rustc le vérifie, donc pas de pointeur dans le vide."
+   ]
+  },
+  {
+   "scheme": [
+    " let mut v = vec![1, 2];",
+    " let first = &v[0];     & : lit v",
+    " v.push(3);             push a besoin de &mut v",
+    " println!(\"{}\", first); first sert encore",
+    " error[E0502]: cannot borrow `v` as mutable",
+    "   because it is also borrowed as immutable"
+   ],
+   "point": 2,
+   "mark": [
+    "v.push(3);"
+   ],
+   "text": [
+    "&mut prête une valeur pour la modifier. À chaque instant, tu as plusieurs & ou un seul &mut, jamais les deux.",
+    "",
+    "- Ici, push peut déplacer les éléments vers une place plus grande : first pointerait vers de la mémoire libérée.",
+    "- Le prêt & dure jusqu'au dernier usage de first : le println.",
+    "- Correction : utilise first avant le push, ou copie le nombre : let first = v[0];",
+    "- La même règle empêche deux threads de modifier une valeur en même temps."
+   ]
+  }
+ ]
+}

@@ -269,3 +269,28 @@ class LessonQuizTest(unittest.TestCase):
         text = " ".join(render.strip(t) for r, c, t in reader.warmup_screen(
             BY_ID["grep"], quiz_, len(quiz_), 0, None, 100, 40, final=True, need=lesson.quiz_pass(s, BY_ID["grep"])))
         self.assertIn("3 right answers", text)
+
+
+class GitAndRustLessonsTest(unittest.TestCase):
+    """Owner, 2026-10-27 (option B): the thin sections grow, Git and Rust first."""
+
+    def test_git_has_a_second_lesson_on_conflicts_stash_and_undo(self):
+        fix = BY_ID["git_fix"]
+        self.assertEqual(reader.section(fix), "git")
+        self.assertEqual(fix["after"], ["git"])
+        self.assertEqual(set(fix["fights"]), {"conflict_chimera", "revert_revenant"})
+        self.assertIn("achievement stasher", fix["masters"])
+        self.assertNotIn("conflict_chimera", BY_ID["git"]["fights"])          # taught in git_fix now
+        self.assertNotIn("stasher", " ".join(BY_ID["git"]["masters"]))
+
+    def test_rust_has_a_lesson_on_ownership_and_borrowing(self):
+        own = BY_ID["rust_own"]
+        self.assertEqual((own["skill"], own["after"], own.get("opens")), ("rust", ["rust_vars"], "mastered"))
+        self.assertEqual(set(own["fights"]), {"borrow_badger", "vector_viper"})
+        self.assertEqual(reader.group(own), "Rust")
+
+    def test_the_new_fights_exist_with_their_sprites(self):
+        for fid in ("revert_revenant", "borrow_badger", "vector_viper"):
+            with self.subTest(fid):
+                self.assertIn(fid, challenges.BY_ID)
+                self.assertTrue((Path(lesson.HERE).parent / "enemies" / f"{fid}.json").exists())

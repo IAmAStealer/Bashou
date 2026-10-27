@@ -1,0 +1,51 @@
+{
+ "name": "Borrow Badger",
+ "palette": {
+  "a": "#14141a",
+  "k": "#3a3a44",
+  "W": "#f0f0f0",
+  "g": "#8a8a96",
+  "G": "#5c5c68",
+  "w": "#ffffff",
+  "m": "#101010",
+  "y": "#f0a030",
+  "Y": "#b06810"
+ },
+ "base": [
+  "...aa.......aa...",
+  "..akka.....akka..",
+  "..akkWWWWWWWkka..",
+  ".akkkkWWWWWkkkka.",
+  ".akwmkkWWWkkwmka.",
+  ".akkkkWWmWWkkkka.",
+  "..akkkWWWWWkkka..",
+  "..aggggggggggga..",
+  ".agggggggggaayya.",
+  ".aGgggggggggayYya",
+  "..aGGgggggGGaaya.",
+  "...aaa.....aaa..."
+ ],
+ "poses": {
+  "inhale": {
+   "7": "-a-------------a-",
+   "8": "a----------------"
+  },
+  "closed": {
+   "4": "---kk-------kk---"
+  },
+  "left": {
+   "4": "---mw-------mw---"
+  },
+  "right": {
+   "4": "---wm-------wm---"
+  },
+  "fidget": {
+   "8": "-----------yaa---",
+   "9": "------------yYa--"
+  }
+ },
+ "particles": [
+  0,
+  6
+ ]
+}

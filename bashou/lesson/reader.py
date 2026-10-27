@@ -112,8 +112,8 @@ def page_screen(lesson, n, cols, lines, breath=False, blink=False):
 
 
 def section(lesson):
-    """The library section of a lesson: its first skill, "git" for git (no skill, open to all), else "first"."""
-    return next(iter(skills_of(lesson)), "git" if lesson["id"] == "git" else "first")
+    """The library section of a lesson: its first skill, "git" for the git lessons (no skill, open to all), else "first"."""
+    return next(iter(skills_of(lesson)), "git" if lesson["id"].split("_")[0] == "git" else "first")
 
 
 SECTIONS = ["first", "git", *skills.SKILLS]           # the order of the whole library

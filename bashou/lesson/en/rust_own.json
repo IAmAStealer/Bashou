@@ -1,0 +1,115 @@
+{
+ "id": "rust_own",
+ "order": 405,
+ "skill": "rust",
+ "after": [
+  "rust_vars"
+ ],
+ "opens": "mastered",
+ "masters": [
+  "won borrow_badger",
+  "won vector_viper"
+ ],
+ "questions": [
+  "rust-1-15",
+  "rust-2-01",
+  "rust-1-03",
+  "rust-1-06",
+  "rust-2-03",
+  "rust-2-11"
+ ],
+ "recall": [
+  "rust-1-15",
+  "rust-2-01"
+ ],
+ "fights": [
+  "borrow_badger",
+  "vector_viper"
+ ],
+ "title": "Rust: ownership and borrowing",
+ "summary": "Each value has one owner; moving it, lending it with & or &mut, and why rustc refuses some loans.",
+ "pages": [
+  {
+   "scheme": [
+    " {",
+    "   let s = String::from(\"hi\");  s owns it",
+    "   println!(\"{}\", s);",
+    " }                              s ends: the",
+    "                                text is freed"
+   ],
+   "point": 3,
+   "mark": [
+    "}"
+   ],
+   "text": [
+    "Every value in Rust has one owner, usually a variable. When the owner's block ends, at its }, the value is freed (dropped).",
+    "",
+    "- No garbage collector, and no free() to forget: rustc places the cleanup for you.",
+    "- That's how Rust avoids the use-after-free and double-free bugs of C, and most leaks."
+   ]
+  },
+  {
+   "scheme": [
+    " let a = String::from(\"log\");",
+    " let b = a;           the text moves to b",
+    "  a  (moved)            heap",
+    "  b  ptr ─────────────▶ \"log\"",
+    " println!(\"{}\", a);   error[E0382]: borrow",
+    "                      of moved value: `a`"
+   ],
+   "point": 1,
+   "mark": [
+    "let b = a;"
+   ],
+   "text": [
+    "Assigning a String, or passing it to a function, moves it: the new variable is the owner now.",
+    "",
+    "- The old name can't be used anymore: rustc stops at borrow of moved value.",
+    "- Numbers and bools are copied instead (they are Copy): both names keep working.",
+    "- Need two real copies? a.clone() makes one, and costs memory."
+   ]
+  },
+  {
+   "scheme": [
+    " fn count(text: &str) -> usize { … }",
+    "",
+    " let line = String::from(\"ok ok\");",
+    " count(&line);   lends it",
+    " count(&line);   line still owns it"
+   ],
+   "point": 3,
+   "mark": [
+    "&line"
+   ],
+   "text": [
+    "& lends a value without moving it: a reference, also called a borrow.",
+    "",
+    "- The function reads it, the owner keeps it, and you can call it again.",
+    "- A function that only reads takes &str (text) or &T, not String.",
+    "- A borrow can't outlive the owner: rustc checks it, so no dangling pointer."
+   ]
+  },
+  {
+   "scheme": [
+    " let mut v = vec![1, 2];",
+    " let first = &v[0];     & : reads v",
+    " v.push(3);             push needs &mut v",
+    " println!(\"{}\", first); first still in use",
+    " error[E0502]: cannot borrow `v` as mutable",
+    "   because it is also borrowed as immutable"
+   ],
+   "point": 2,
+   "mark": [
+    "v.push(3);"
+   ],
+   "text": [
+    "&mut lends a value to change it. At any moment you get many & or one &mut, never both.",
+    "",
+    "- Here push may move the items to a bigger place: first would point at freed memory.",
+    "- The & loan lasts until first's last use: the println.",
+    "- Fix: use first before the push, or copy the number: let first = v[0];",
+    "- The same rule stops two threads from changing one value at once."
+   ]
+  }
+ ]
+}

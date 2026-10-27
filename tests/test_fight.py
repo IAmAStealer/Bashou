@@ -141,6 +141,7 @@ SOLUTIONS = {
     # git fights, in their own small repository
     "commit_crowd": ("git add notes.txt && git commit -qm 'Add milk'", None),
     "branch_bramble": ("git switch -c {x} && git add idea.txt && git commit -qm 'An idea'", r"branch named (\S+),"),
+    "revert_revenant": ("git revert --no-edit HEAD~1", None),
     "conflict_chimera": ("printf 'Starter: soup\\nDessert: apple pie\\nDessert: chocolate cake\\n' > menu.txt"
                          " && git add menu.txt && git commit -q --no-edit", None),
     "trial_first_commit": ("git add map.txt && git commit -qm 'Add the map'", None),
@@ -155,6 +156,9 @@ SOLUTIONS = {
                      " guess.rs", None),
     "byte_basilisk": ("sed -i 's/let mut total: u8 = 0;/let mut total: u32 = 0;/; s/total += r;/total += r as u32;/'"
                       " temps.rs", None),
+    "borrow_badger": ("sed -i 's/fn shout(text: String)/fn shout(text: \\&str)/; s/shout(name)/shout(\\&name)/' shout.rs",
+                      None),
+    "vector_viper": ("sed -i 's/let first = &temps\\[0\\];/let first = temps[0];/' first.rs", None),
     # package fights (Debian here; Red Hat through a fake rpm, see PackageFightTest)
     "version_vole": ("dpkg-query -W -f '${{Version}}' {x}", r"version of (\S+) is installed"),
     "candidate_crow": ("apt-cache policy {x} | awk '/Candidate:/ {{print $2}}'", r"version of (\S+) would"),
@@ -309,6 +313,9 @@ WRONG_MOVES = [("index_imp", "zsh pick.sh"), ("flag_phantom", "sort sizes.txt | 
          ("commit_crowd", "git add . && git commit -qm all"), ("unit_imp", "true"),
          ("branch_bramble", "git add idea.txt && git commit -qm idea"),
          ("conflict_chimera", "git add menu.txt && git commit -q --no-edit"),
+         ("revert_revenant", "git reset -q --hard HEAD~2"),                     # rewrites shared history
+         ("revert_revenant", "sed -i 's/Salt/Sugar/' recipe.txt"),              # fixed, never committed
+         ("revert_revenant", "sed -i 's/Salt/Sugar/' recipe.txt && git commit -qam fix"),  # by hand: which commit?
          # script fights: doing the job by hand, or a fix that only works on the folder you see, loses
          ("dash_demon", "mkdir -p inbox/trash && mv -- inbox/*.tmp inbox/trash/"),
          ("nomatch_nymph", "touch albums/winter/x.jpg"),

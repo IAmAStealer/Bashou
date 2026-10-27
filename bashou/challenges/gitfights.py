@@ -150,7 +150,51 @@ CONFLICT_CHIMERA = Challenge(
     setup=conflict_setup, verify=conflict_verify,
 )
 
-ALL = [COMMIT_CROWD, BRANCH_BRAMBLE, CONFLICT_CHIMERA]
+
+# --- Revert Revenant: undo a shared commit without rewriting history ---------------------------------
+
+def revenant_setup(work, rng):
+    repo(work)
+    grams = rng.choice((100, 150, 200))
+    (work / "recipe.txt").write_text(f"Flour: 250 g\nSugar: {grams} g\n")
+    commit(work, "Recipe", "recipe.txt")
+    (work / "recipe.txt").write_text(f"Flour: 250 g\nSalt: {grams} g\n")
+    commit(work, "Tweak the recipe", "recipe.txt")
+    bad = (git(work, "rev-parse", "HEAD") or "").strip()
+    (work / "notes.txt").write_text("Bake 30 minutes at 180 degrees.\n")
+    commit(work, "Add baking notes", "notes.txt")
+    return {"shared": (git(work, "rev-parse", "HEAD") or "").strip(), "bad": bad, "grams": grams}
+
+
+def revenant_verify(work, meta, value):
+    """The shared commits are all still in the history (nothing rewritten), a revert of the bad one puts
+    the sugar back (a fix by hand would hide which commit it undoes), the notes stay, nothing uncommitted."""
+    kept = subprocess.run(["git", "merge-base", "--is-ancestor", meta["shared"], "HEAD"], cwd=work,
+                          capture_output=True).returncode == 0 if meta.get("shared") else False
+    count = git(work, "rev-list", "--count", "HEAD")
+    recipe = git(work, "show", "HEAD:recipe.txt") or ""
+    files = (git(work, "ls-tree", "--name-only", "HEAD") or "").split()
+    reverts = f"This reverts commit {meta.get('bad')}" in (git(work, "log", "-1", "--format=%B") or "")
+    return (kept and reverts and (count or "").strip() == "4" and f"Sugar: {meta['grams']} g" in recipe and "Salt" not in recipe
+            and "notes.txt" in files and git(work, "status", "--porcelain") == "")
+
+
+REVERT_REVENANT = Challenge(
+    level=2, id="revert_revenant", pet="beaver", tools=("git",), threat="Revert Revenant", requires=["git"],
+    fix=True, after=("branch_bramble",),
+    task="The Revert Revenant slipped a bad commit into main: \"Tweak the recipe\" put salt where the sugar "
+         "was. Everyone already pulled main, and a good commit came after it.\nUndo the bad commit without "
+         "rewriting the history. Then: verify",
+    help="Here, look at git revert --help: it undoes a commit with a new one.",
+    hints=["git log --oneline shows the history, newest first: find the bad commit. git reset would remove "
+           "commits from main, and everyone who pulled them would be out of step. git revert adds a new "
+           "commit that does the opposite of the bad one, so the history only grows.",
+           "Try: git log --oneline, then git revert --no-edit followed by the bad commit's hash (here also "
+           "HEAD~1, the commit before the newest one)."],
+    setup=revenant_setup, verify=revenant_verify,
+)
+
+ALL = [COMMIT_CROWD, BRANCH_BRAMBLE, CONFLICT_CHIMERA, REVERT_REVENANT]
 
 
 # --- the chest after the road lesson "git" ----------------------------------------------------------

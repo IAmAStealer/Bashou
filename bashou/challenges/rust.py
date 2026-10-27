@@ -1,4 +1,5 @@
-"""Rust fights (owner, 2026-09-23): first steps with variables, only where rustc is installed.
+"""Rust fights (owner, 2026-09-23): first steps with variables, then ownership and borrowing, only where
+rustc is installed.
 
 One file, built with `rustc` (no cargo project needed). Like the C fights, the file starts with a
 comment saying what it must print, how to run it and where to find help (the fight's lesson); Bashou
@@ -12,7 +13,7 @@ from . import Challenge
 from .code import NAMES, run
 from ..i18n import _
 
-PROGRAMS = {"counter", "points", "guess", "temps"}      # what the fights build (./counter is "counter")
+PROGRAMS = {"counter", "points", "guess", "temps", "shout", "first"}      # what the fights build (./counter is "counter")
 
 
 def header(lines):
@@ -130,6 +131,51 @@ def temps_setup(work, rng):
     return {"expected": f"{sum(readings) // 4}\n"}
 
 
+SHOUT_CODE = '''
+fn shout(text: String) -> String {{
+    text.to_uppercase()
+}}
+
+fn main() {{
+    let name = String::from("{name}");
+    let loud = shout(name);
+    println!("{{}} -> {{}}", name, loud);
+}}
+'''
+
+
+def shout_setup(work, rng):
+    name = rng.choice(("sam", "ada", "kim", "alex", "noor"))
+    write(work, "shout.rs", [
+        _("Fight: shout takes name for good, and main can't print it anymore. Lend it instead."),
+        _("Wanted: the name, then the name in capitals, like: sam -> SAM"),
+        _("Run it:") + " rustc shout.rs && ./shout",
+        _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
+    ], SHOUT_CODE.format(name=name))
+    return {"expected": f"{name} -> {name.upper()}\n"}
+
+
+FIRST_CODE = '''
+fn main() {{
+    let mut temps = vec![{a}, {b}];
+    let first = &temps[0];
+    temps.push({c});
+    println!("first {{}} of {{}}", first, temps.len());
+}}
+'''
+
+
+def first_setup(work, rng):
+    a, b, c = (rng.randint(-5, 30) for _i in range(3))
+    write(work, "first.rs", [
+        _("Fight: first still points into temps when push changes it. rustc refuses."),
+        _("Wanted: the first reading and how many there are, like: first 12 of 3"),
+        _("Run it:") + " rustc first.rs && ./first",
+        _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
+    ], FIRST_CODE.format(a=a, b=b, c=c))
+    return {"expected": f"first {a} of 3\n"}
+
+
 RUST = dict(tools=("rustc", "cargo"), uses=rust_used, requires=["rustc"], skill="rust")
 
 ALL = [
@@ -162,4 +208,21 @@ ALL = [
               hints=["The readings fit in a u8, their sum doesn't. Give the total a bigger type.",
                      "Write: let mut total: u32 = 0; and total += r as u32;"],
               setup=temps_setup, verify=rust_output("temps.rs")),
+    Challenge(level=2, id="borrow_badger", fix=True, pet="beaver", threat="Borrow Badger", after=("mut_marmot",), **RUST,
+              task="The Borrow Badger let shout take the name away in shout.rs: main can't print it anymore.\n"
+                   "Fix shout.rs (its first lines say what it must do). Run it: rustc shout.rs && ./shout\n"
+                   "When it works, type: verify",
+              hints=["rustc says borrow of moved value: name. Passing a String to a function moves it: the "
+                     "function owns it now. A function that only reads text can borrow it with & instead.",
+                     "Write: fn shout(text: &str) -> String, and call it with shout(&name)."],
+              setup=shout_setup, verify=rust_output("shout.rs")),
+    Challenge(level=2, id="vector_viper", fix=True, pet="beaver", threat="Vector Viper", after=("borrow_badger",), **RUST,
+              task="The Vector Viper coils around temps in first.rs: first borrows it while push changes it.\n"
+                   "Fix first.rs (its first lines say what it must do). Run it: rustc first.rs && ./first\n"
+                   "When it works, type: verify",
+              hints=["push may move the items to a bigger place in memory, and first would point at the old one. "
+                     "Rust allows many readers or one writer, never both at once. A number is Copy: take a copy "
+                     "instead of borrowing it.",
+                     "Write: let first = temps[0]; (no &), or do the push before let first."],
+              setup=first_setup, verify=rust_output("first.rs")),
 ]

@@ -1,0 +1,49 @@
+{
+ "name": "Revert Revenant",
+ "palette": {
+  "a": "#1a2030",
+  "g": "#d0dcec",
+  "G": "#8898b8",
+  "w": "#ffffff",
+  "m": "#101010",
+  "y": "#f0c040",
+  "Y": "#b08820"
+ },
+ "base": [
+  "......aaaaa......",
+  ".yy..aggggga.....",
+  "yYya.agwmgwma....",
+  "y..aagggggggga...",
+  "y...aggggmmgga...",
+  "Yy..agggggggGa...",
+  ".Yyyaggggggggga..",
+  "....aGgggggggGa..",
+  "....aGGgggggGGa..",
+  ".....aGaGaGaGa...",
+  "......a.a.a.a....",
+  "................."
+ ],
+ "poses": {
+  "inhale": {
+   "6": "---------------a-",
+   "7": "--------------a--"
+  },
+  "closed": {
+   "2": "-------aa-aa-----"
+  },
+  "left": {
+   "2": "-------mw-mw-----"
+  },
+  "right": {
+   "2": "--------wm-wm----"
+  },
+  "fidget": {
+   "9": "-----a.a.a.a.a---",
+   "10": "------.a.a.a.a---"
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

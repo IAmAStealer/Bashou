@@ -65,7 +65,7 @@ it never draws over your text.
   investigation with no clock (a hidden file, a cron backdoor, a SUID binary). Lose, and the arena
   closes for an hour.
 - **`bashou adventure`**: a walk through 13 topics (coding logic, bash at the prompt, bash scripts, Linux with systemd, Python, Rust,
-  C, Debian, Rocky Linux, CI/CD, SQL, networks, AI tools) with 460 questions about what goes wrong and what to check first, bosses, and
+  C, Debian, Rocky Linux, CI/CD, SQL, networks, AI tools) with 465 questions about what goes wrong and what to check first, bosses, and
   chests that open with real commands.
 
 ![bashou fight: a Planet and its hearts face the Log Hydra, the task in a bubble, and the arena

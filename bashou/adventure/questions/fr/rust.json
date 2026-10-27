@@ -310,5 +310,31 @@
   ],
   "answer": 0,
   "explain": "cargo audit lit Cargo.lock et compare chaque version exacte de dépendance à la base RustSec des failles connues, puis liste celles qui sont touchées et la version corrigée. Installe-le une fois avec cargo install cargo-audit, et lance-le en CI : une nouvelle alerte apparaît sans que tu aies à y penser."
+ },
+ {
+  "id": "rust-1-15",
+  "level": 1,
+  "q": "let a = String::from(\"log\"); let b = a; puis println!(\"{}\", a);. Pourquoi rustc refuse-t-il ?",
+  "choices": [
+   "La String est passée à b : a ne la possède plus",
+   "a et b ne peuvent pas avoir le même texte",
+   "println! ne sait pas afficher une String",
+   "b doit être déclaré mut"
+  ],
+  "answer": 0,
+  "explain": "Chaque valeur a un seul propriétaire. let b = a; déplace la String vers b : a ne peut plus servir, rustc dit borrow of moved value. Des nombres seraient copiés à la place. Pour garder les deux, prête-la (let b = &a;) ou fais une vraie copie (let b = a.clone();), qui coûte de la mémoire."
+ },
+ {
+  "id": "rust-2-11",
+  "level": 2,
+  "q": "let first = &v[0]; puis v.push(4); puis println!(\"{}\", first);. Pourquoi rustc refuse-t-il ?",
+  "choices": [
+   "push peut déplacer ce que first pointe",
+   "Un Vec ne peut pas grandir après sa création",
+   "first doit être déclaré mut",
+   "v[0] n'existe pas encore"
+  ],
+  "answer": 0,
+  "explain": "first emprunte v pour le lire, et push doit modifier v : Rust permet plusieurs lecteurs ou un seul écrivain, jamais les deux à la fois. push peut déplacer les éléments vers une place plus grande, et first pointerait vers l'ancienne. Utilise first avant le push, ou copie la valeur : let first = v[0];"
  }
 ]

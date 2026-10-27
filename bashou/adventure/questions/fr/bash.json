@@ -856,5 +856,44 @@
   ],
   "answer": 0,
   "explain": "Sans -i, sed affiche le texte modifié et laisse le fichier tel quel : tu vérifies que seuls les bons mots changent. -i écrit la modification dans le fichier lui-même, sans retour en arrière, sauf avec un suffixe : sed -i.bak garde config.txt.bak, sur Linux comme sur macOS. Sur macOS, -i seul veut un suffixe, même vide : sed -i ''."
+ },
+ {
+  "id": "bash-1-42",
+  "level": 1,
+  "q": "Tu es au milieu d'un changement quand une correction urgente arrive. Ton changement n'est pas prêt pour un commit. Qu'est-ce qui le met de côté ?",
+  "choices": [
+   "git stash, puis git stash pop plus tard",
+   "git restore . pour nettoyer",
+   "git reset --hard",
+   "git switch main, corriger, puis revenir"
+  ],
+  "answer": 0,
+  "explain": "git stash met de côté tes changements pas encore commités et laisse un arbre propre : tu peux changer de branche et corriger le bug. git stash pop ramène ton travail ; ajoute -u si tu as créé des fichiers. git restore . jette les changements pas encore ajoutés, git reset --hard tous, pour de bon. git switch seul les emmène sur l'autre branche."
+ },
+ {
+  "id": "bash-1-43",
+  "level": 1,
+  "q": "Tu as fait git add secrets.env par erreur, sans git commit depuis. Comment le sortir du prochain commit en gardant le fichier ?",
+  "choices": [
+   "git restore --staged secrets.env",
+   "git restore secrets.env",
+   "rm secrets.env",
+   "git commit, puis le supprimer"
+  ],
+  "answer": 0,
+  "explain": "--staged retire le fichier de ce que contiendra le prochain commit, et le laisse sur le disque. git restore seul agit sur le contenu du fichier, pas sur ce qui est préparé. Commiter d'abord mettrait le secret dans l'historique pour de bon. Dans un dépôt neuf, sans aucun commit, c'est git rm --cached secrets.env. Puis ajoute-le à .gitignore."
+ },
+ {
+  "id": "bash-2-26",
+  "level": 2,
+  "q": "Un mauvais commit est sur main, et ton équipe l'a déjà récupéré. Comment l'annuler ?",
+  "choices": [
+   "git revert : un nouveau commit l'annule",
+   "git reset --hard avant lui, puis push --force",
+   "git commit --amend",
+   "git restore sur les fichiers changés"
+  ],
+  "answer": 0,
+  "explain": "git revert ajoute un nouveau commit qui fait l'inverse : l'historique ne fait que grandir et tout le monde peut refaire pull. reset avec push --force réécrit un historique que les autres ont déjà : leur prochain pull échoue ou ramène le mauvais commit. --amend réécrit aussi l'historique, et ne remplace que le dernier commit, qui n'est peut-être pas le mauvais."
  }
 ]

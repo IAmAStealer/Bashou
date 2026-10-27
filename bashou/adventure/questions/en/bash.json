@@ -856,5 +856,44 @@
   ],
   "answer": 0,
   "explain": "Without -i, sed prints the edited text and leaves the file as it is: you can check that only the right words change. -i writes the change into the file itself, with no undo, unless you give a suffix: sed -i.bak keeps config.txt.bak, on Linux and macOS alike. On macOS, plain -i needs a suffix, even an empty one: sed -i ''."
+ },
+ {
+  "id": "bash-1-42",
+  "level": 1,
+  "q": "You're halfway through a change when an urgent fix comes in. Your change isn't ready to commit. What sets it aside?",
+  "choices": [
+   "git stash, then git stash pop later",
+   "git restore . to clean up",
+   "git reset --hard",
+   "git switch main, fix it, then come back"
+  ],
+  "answer": 0,
+  "explain": "git stash puts your uncommitted changes aside and leaves a clean tree: you can switch branches and fix the bug. git stash pop brings your work back; add -u if you made new files. git restore . throws away the changes you haven't added, git reset --hard all of them, for good. git switch alone carries them to the other branch."
+ },
+ {
+  "id": "bash-1-43",
+  "level": 1,
+  "q": "You ran git add secrets.env by mistake, and haven't run git commit since. How do you take it out of the next commit and keep the file?",
+  "choices": [
+   "git restore --staged secrets.env",
+   "git restore secrets.env",
+   "rm secrets.env",
+   "git commit, then delete it"
+  ],
+  "answer": 0,
+  "explain": "--staged takes the file out of what the next commit will hold, and leaves it on disk. Plain git restore works on the file's content, not on what is staged. Committing first would put the secret in the history for good. In a new repo with no commit at all, use git rm --cached secrets.env. Then add it to .gitignore."
+ },
+ {
+  "id": "bash-2-26",
+  "level": 2,
+  "q": "A bad commit is on main, and your team already pulled it. How do you undo it?",
+  "choices": [
+   "git revert it: a new commit undoes it",
+   "git reset --hard before it, then push --force",
+   "git commit --amend",
+   "git restore the files it changed"
+  ],
+  "answer": 0,
+  "explain": "git revert adds a new commit that does the opposite, so the history only grows and everyone can pull again. reset with push --force rewrites a history others already have: their next pull fails or brings the bad commit back. --amend rewrites history too, and only replaces the newest commit, which may not be the bad one."
  }
 ]
