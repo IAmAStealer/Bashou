@@ -375,7 +375,7 @@ class SetupTest(unittest.TestCase):
 
 class DocsTest(unittest.TestCase):
     def test_the_readme_says_how_to_install_on_a_mac(self):
-        for name in ("README.md", "README.fr.md"):
+        for name in ("INSTALL.md", "INSTALL.fr.md"):
             text = (ROOT / name).read_text()
             with self.subTest(name):
                 self.assertIn("macOS", text)
@@ -385,6 +385,21 @@ class DocsTest(unittest.TestCase):
         self.assertIn("xcode-select --install", script)
         self.assertIn('clone --quiet --branch "$tag" "$repo" "$dir"', script)
         self.assertIn("BASHOU_SHELL=zsh python3 -m bashou setup", script)
+
+    def test_the_readme_shows_pictures_before_install_and_sends_the_rest_to_install_md(self):
+        """Owner (2026-10-27): a more appealing README, apt + dnf only, the other ways in INSTALL.md."""
+        for readme, install, heading in (("README.md", "INSTALL.md", "## Install\n"),
+                                         ("README.fr.md", "INSTALL.fr.md", "## Installer\n")):
+            text = (ROOT / readme).read_text()
+            with self.subTest(readme):
+                self.assertLess(text.rindex("](doc/img/"), text.index(heading))
+                section = text[text.index(heading):text.index("\n## ", text.index(heading) + 1)]
+                self.assertIn("apt install bashou", section)
+                self.assertIn("dnf install bashou", section)
+                self.assertNotIn("git clone", section)
+                self.assertNotIn("brew install", section)
+                self.assertIn(f"]({install})", section)
+                self.assertIn("git clone", (ROOT / install).read_text())
 
     def test_ci_runs_the_tests_on_a_mac(self):
         text = (ROOT / ".github/workflows/ci.yml").read_text()

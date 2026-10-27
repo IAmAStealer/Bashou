@@ -474,10 +474,7 @@ security, shellscript, whose <code>template.sh</code> is the script fights' star
 and a test that enforces what a machine can check. Ansible has none: the owner reviews it.</p>
 <figure class="diagram">
 <svg viewBox="0 0 980 300" role="img" aria-label="Quality pipeline: each skill has a style file of rules with sources; a judge agent reads it after each change and reports, a style test encodes it and fails the suite; both point back to what players see">
-  <defs>
-    <marker id="ar5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" class="fill-muted"/></marker>
-  </defs>
+  <defs><marker id="arr1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="fill-muted"/></marker></defs>
   <rect class="node k-game" x="10" y="110" width="220" height="80" rx="6"/>
   <text class="head" x="120" y="132" text-anchor="middle">What players see</text>
   <text class="small" x="120" y="149" text-anchor="middle">lessons · questions · fights</text>
@@ -494,14 +491,14 @@ and a test that enforces what a machine can check. Ansible has none: the owner r
   <text class="mono" x="800" y="222" text-anchor="middle">tests/test_&lt;skill&gt;_style.py</text>
   <text class="small" x="800" y="239" text-anchor="middle">every test run, pre-push, CI · automatic</text>
   <text class="small" x="800" y="256" text-anchor="middle">runs/parses samples · bans forbidden forms</text>
-  <line class="msg" x1="550" y1="135" x2="626" y2="80" marker-end="url(#ar5)"/>
+  <polyline class="msg" points="550,135 626,80" marker-end="url(#arr1)"/>
   <text class="small" x="596" y="100" text-anchor="end">read by</text>
-  <line class="msg" x1="550" y1="165" x2="626" y2="220" marker-end="url(#ar5)"/>
+  <polyline class="msg" points="550,165 626,220" marker-end="url(#arr1)"/>
   <text class="small" x="596" y="210" text-anchor="end">encoded in</text>
-  <polyline class="msg" points="630,40 120,40 120,106" stroke-dasharray="5 4" marker-end="url(#ar5)"/>
-  <text class="small" x="375" y="32" text-anchor="middle">report: FIX / CHANGE / MISSING, fixed by hand</text>
-  <polyline class="msg bad" points="630,260 120,260 120,194" marker-end="url(#ar5)"/>
-  <text class="small" x="375" y="276" text-anchor="middle">a broken rule fails the suite</text>
+  <polyline class="msg" points="630,40 120,40 120,106" stroke-dasharray="5 4" marker-end="url(#arr1)"/>
+  <text class="small" x="375" y="34" text-anchor="middle">report: FIX / CHANGE / MISSING, fixed by hand</text>
+  <polyline class="msg bad" points="630,260 120,260 120,194" marker-end="url(#arr1)"/>
+  <text class="small" x="375" y="282" text-anchor="middle">a broken rule fails the suite</text>
 </svg>
 <figcaption>Solid arrow: enforced (the suite fails). Dashed: a report a person acts on. CLAUDE.md says which judge to run after which change.</figcaption>
 </figure>

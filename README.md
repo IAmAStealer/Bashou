@@ -17,90 +17,6 @@ Run commands, try new tools, and collect new pets along the way.
 ![A small pixel-art stardust in the corner of the terminal, with a tip in its speech bubble, above
 a `bashou learn` explanation of a tar command](doc/img/prompt.svg)
 
-## Install
-
-Bashou has its own signed repositories: install it once, and it updates with the rest of your system.
-
-**Debian, Ubuntu** (apt):
-
-```bash
-sudo mkdir -p -m 755 /etc/apt/keyrings
-sudo curl -fsSLo /etc/apt/keyrings/bashou.asc https://iamastealer.github.io/Bashou/bashou.asc
-printf '%s\n' 'Types: deb' 'URIs: https://iamastealer.github.io/Bashou/deb/' 'Suites: ./' \
-  'Signed-By: /etc/apt/keyrings/bashou.asc' | sudo tee /etc/apt/sources.list.d/bashou.sources
-sudo apt update && sudo apt install bashou
-```
-
-**Rocky, Alma, RHEL, Fedora** (dnf):
-
-```bash
-sudo curl -fsSLo /etc/yum.repos.d/bashou.repo https://iamastealer.github.io/Bashou/bashou.repo
-sudo dnf install bashou
-```
-
-Open a new terminal: your pet is there. Every user gets one, except root.
-`bashou off` hides it, in new terminals too. `bashou on` brings it back.
-No pet on Debian or Ubuntu? Run `bashou on` once: it adds one line to your `~/.bashrc` (to your `~/.zshrc` if you type it in zsh).
-Updates come with `apt upgrade` or `dnf upgrade`.
-
-**Any other Linux**, or to follow the code as it's written, with git:
-
-```bash
-git clone https://github.com/IAmAStealer/Bashou.git ~/.bashou && echo 'source ~/.bashou/bashou.bash' >> ~/.bashrc && source ~/.bashrc
-```
-
-You need bash and python3. Most Linux systems already have them.
-Your terminal runs zsh? Bashou works there too: fights then happen in zsh, and the lessons say where zsh
-reads a line differently. Bashou adds itself to `~/.zshrc` the first time it starts in bash, and says so.
-Only zsh on this machine? Load `bashou.zsh` from your `~/.zshrc`:
-
-```bash
-echo 'source ~/.bashou/bashou.zsh' >> ~/.zshrc && source ~/.zshrc
-```
-
-**macOS**, with [Homebrew](https://brew.sh): Bashou runs in zsh, the Mac's own shell.
-
-```bash
-brew install iamastealer/bashou/bashou
-bashou on
-```
-
-The first line adds Bashou's tap (a small repository with the recipe brew follows) and installs it. The
-second one adds one line to your `~/.zshrc`, so the pet comes in every new terminal. `brew upgrade` updates
-it with your other tools; `bashou update` reminds you of that.
-On a Mac, the questions and lessons are about macOS: Linux-only ones (systemd, apt, dnf, `ip`, `ss`) are left
-out. Do you also work on Linux servers? `bashou config os both` brings them back.
-macOS's own bash is too old for Bashou (it needs 4.4): use zsh, or a newer bash (`brew install bash`).
-Used the test installer (`install-macos.sh`)? Remove the line `source ~/.bashou/bashou.zsh` from your
-`~/.zshrc` and the `~/.bashou` folder first. Your pets and progress stay: they live in `~/.local/share/bashou`.
-
-Installed with git on Debian or Red Hat, and want the repository instead? Run `bashou update --packages`.
-It shows every command it will run, asks you, then moves you over. Your pets and progress are kept.
-
-## What's new
-
-**0.10.6**
-- **Certificates**: six lessons and ten fights, from reading a certificate to running your own CA and
-  revoking one, and a new pet, the Seal, that grows with them.
-- SQL lessons and questions corrected and checked statement by statement.
-
-**0.10.5**
-- **Bash scripts** are a skill of their own, with eight fights that run your fixed script on hostile files.
-
-**0.10.4**
-- Fled a fight? Your pet stops reminding you of it; the threat still waits for `bashou fight` until midnight.
-- Gary has his real colors: yellow-green eyes with red pupils and a green belly.
-
-**0.10.3**
-- **Threats wait all day**: a fight now waits until midnight and your pet repeats its warning every half
-  hour, so you don't miss it. Experienced players get up to 2 threats a day.
-- Homebrew installs run on Homebrew's own Python 3.15.
-
-**0.10.2**
-- An opened chest stays opened, and the same chest never comes twice in one run of an adventure path.
-
-Every change, release by release: [CHANGELOG.md](CHANGELOG.md).
-
 ## Learn the terminal without asking an AI
 
 Bashou teaches in your real terminal, while you work. It runs offline: no account, no AI model, no
@@ -184,6 +100,58 @@ Before the QR code, Bashou lists exactly what the card holds: no commands, files
 dates. The progress travels inside the link, after the `#`, a part browsers never send to a server:
 the page draws the banner on your phone and keeps nothing.
 
+## Install
+
+Bashou has its own signed repositories: install it once, and it updates with the rest of your system.
+
+**Debian, Ubuntu** (apt):
+
+```bash
+sudo mkdir -p -m 755 /etc/apt/keyrings
+sudo curl -fsSLo /etc/apt/keyrings/bashou.asc https://iamastealer.github.io/Bashou/bashou.asc
+printf '%s\n' 'Types: deb' 'URIs: https://iamastealer.github.io/Bashou/deb/' 'Suites: ./' \
+  'Signed-By: /etc/apt/keyrings/bashou.asc' | sudo tee /etc/apt/sources.list.d/bashou.sources
+sudo apt update && sudo apt install bashou
+```
+
+**Rocky, Alma, RHEL, Fedora** (dnf):
+
+```bash
+sudo curl -fsSLo /etc/yum.repos.d/bashou.repo https://iamastealer.github.io/Bashou/bashou.repo
+sudo dnf install bashou
+```
+
+Open a new terminal: your pet is there. Every user gets one, except root.
+`bashou off` hides it, in new terminals too. `bashou on` brings it back.
+No pet on Debian or Ubuntu? Run `bashou on` once: it adds one line to your `~/.bashrc` (to your `~/.zshrc` if you type it in zsh).
+Updates come with `apt upgrade` or `dnf upgrade`.
+
+**macOS**, **any other Linux**, zsh only, or git to follow the code as it's written: see [INSTALL.md](INSTALL.md).
+
+## What's new
+
+**0.10.6**
+- **Certificates**: six lessons and ten fights, from reading a certificate to running your own CA and
+  revoking one, and a new pet, the Seal, that grows with them.
+- SQL lessons and questions corrected and checked statement by statement.
+
+**0.10.5**
+- **Bash scripts** are a skill of their own, with eight fights that run your fixed script on hostile files.
+
+**0.10.4**
+- Fled a fight? Your pet stops reminding you of it; the threat still waits for `bashou fight` until midnight.
+- Gary has his real colors: yellow-green eyes with red pupils and a green belly.
+
+**0.10.3**
+- **Threats wait all day**: a fight now waits until midnight and your pet repeats its warning every half
+  hour, so you don't miss it. Experienced players get up to 2 threats a day.
+- Homebrew installs run on Homebrew's own Python 3.15.
+
+**0.10.2**
+- An opened chest stays opened, and the same chest never comes twice in one run of an adventure path.
+
+Every change, release by release: [CHANGELOG.md](CHANGELOG.md).
+
 ## Play on two computers
 
 **`bashou export`** writes your progress in a small text file, `bashou-save-DATE.txt`, in the folder you
@@ -220,11 +188,7 @@ bashou update   # get the new version (your pet tells you when there is one; apt
 Installed as a package: `sudo apt remove bashou` or `sudo dnf remove bashou`, then remove the
 `source /usr/share/bashou/bashou.bash` line from `~/.bashrc` (and the `bashou.zsh` one from `~/.zshrc`).
 
-Installed with git:
-
-```bash
-sed -i '/\.bashou\/bashou\.bash/d' ~/.bashrc; sed -i '/\.bashou\/bashou\.zsh/d' ~/.zshrc 2>/dev/null; rm -rf ~/.bashou
-```
+Installed with git or Homebrew: see [INSTALL.md](INSTALL.md#uninstall).
 
 Your progress stays in `~/.local/share/bashou` (delete it too to forget everything).
 

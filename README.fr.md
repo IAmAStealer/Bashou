@@ -19,92 +19,6 @@ Le jeu est traduit en français : `bashou config language fr`.
 ![Une petite poussière d'étoile en pixel art dans le coin du terminal, avec une astuce dans sa bulle, au-dessus
 d'une explication `bashou learn` d'une commande tar](doc/img/prompt.svg)
 
-## Installer
-
-Bashou a ses propres dépôts signés : installe-le une fois, et il se met à jour avec le reste de ton système.
-
-**Debian, Ubuntu** (apt) :
-
-```bash
-sudo mkdir -p -m 755 /etc/apt/keyrings
-sudo curl -fsSLo /etc/apt/keyrings/bashou.asc https://iamastealer.github.io/Bashou/bashou.asc
-printf '%s\n' 'Types: deb' 'URIs: https://iamastealer.github.io/Bashou/deb/' 'Suites: ./' \
-  'Signed-By: /etc/apt/keyrings/bashou.asc' | sudo tee /etc/apt/sources.list.d/bashou.sources
-sudo apt update && sudo apt install bashou
-```
-
-**Rocky, Alma, RHEL, Fedora** (dnf) :
-
-```bash
-sudo curl -fsSLo /etc/yum.repos.d/bashou.repo https://iamastealer.github.io/Bashou/bashou.repo
-sudo dnf install bashou
-```
-
-Ouvre un nouveau terminal : ton compagnon est là. Chaque utilisateur a le sien, sauf root.
-`bashou off` le cache, aussi dans les nouveaux terminaux. `bashou on` le fait revenir.
-Pas de compagnon sur Debian ou Ubuntu ? Lance `bashou on` une fois : ça ajoute une ligne à ton `~/.bashrc` (à ton `~/.zshrc` si tu le tapes dans zsh).
-Les mises à jour arrivent avec `apt upgrade` ou `dnf upgrade`.
-
-**Tout autre Linux**, ou pour suivre le code au fur et à mesure, avec git :
-
-```bash
-git clone https://github.com/IAmAStealer/Bashou.git ~/.bashou && echo 'source ~/.bashou/bashou.bash' >> ~/.bashrc && source ~/.bashrc
-```
-
-Il te faut bash et python3. La plupart des Linux les ont déjà.
-Ton terminal tourne avec zsh ? Bashou y marche aussi : les combats se passent alors dans zsh, et les leçons
-disent où zsh lit une ligne autrement. Bashou s'ajoute à `~/.zshrc` la première fois qu'il démarre dans bash,
-et le dit. Seulement zsh sur cette machine ? Charge `bashou.zsh` depuis ton `~/.zshrc` :
-
-```bash
-echo 'source ~/.bashou/bashou.zsh' >> ~/.zshrc && source ~/.zshrc
-```
-
-**macOS**, avec [Homebrew](https://brew.sh) : Bashou tourne dans zsh, le shell du Mac.
-
-```bash
-brew install iamastealer/bashou/bashou
-bashou on
-```
-
-La première ligne ajoute le tap de Bashou (un petit dépôt avec la recette que suit brew) et l'installe. La
-deuxième ajoute une ligne à ton `~/.zshrc`, pour que ton compagnon vienne dans chaque nouveau terminal.
-`brew upgrade` le met à jour avec tes autres outils ; `bashou update` te le rappelle.
-Sur un Mac, les questions et les leçons parlent de macOS : celles propres à Linux (systemd, apt, dnf, `ip`,
-`ss`) sont mises de côté. Tu travailles aussi sur des serveurs Linux ? `bashou config os both` les ramène.
-Le bash fourni avec macOS est trop vieux pour Bashou (il faut la 4.4) : utilise zsh, ou un bash récent
-(`brew install bash`).
-Tu as utilisé l'installeur de test (`install-macos.sh`) ? Retire d'abord la ligne `source ~/.bashou/bashou.zsh`
-de ton `~/.zshrc` et le dossier `~/.bashou`. Tes compagnons et ta progression restent : ils sont dans
-`~/.local/share/bashou`.
-
-## Quoi de neuf
-
-**0.10.6**
-- **Certificats** : six leçons et dix combats, de la lecture d'un certificat jusqu'à ta propre CA et la
-  révocation, et un nouveau compagnon, le Phoque, qui grandit avec eux.
-- Les leçons et questions SQL corrigées et vérifiées requête par requête.
-
-**0.10.5**
-- **Les scripts bash** deviennent une compétence à part, avec huit combats qui lancent ton script corrigé
-  sur des fichiers piégés.
-
-**0.10.4**
-- Tu as fui un combat ? Ton compagnon arrête de te le rappeler ; la menace t'attend quand même avec
-  `bashou fight` jusqu'à minuit.
-- Gary a ses vraies couleurs : des yeux jaune-vert aux pupilles rouges et un ventre vert.
-
-**0.10.3**
-- **Les menaces attendent toute la journée** : un combat attend jusqu'à minuit et ton compagnon répète son
-  avertissement toutes les demi-heures, pour que tu ne le rates pas. Les joueurs expérimentés ont jusqu'à
-  2 menaces par jour.
-- Avec Homebrew, Bashou tourne sur le Python 3.15 de Homebrew.
-
-**0.10.2**
-- Un coffre ouvert reste ouvert, et le même coffre ne revient jamais deux fois dans une partie d'un chemin d'aventure.
-
-Tous les changements, version par version (en anglais) : [CHANGELOG.md](CHANGELOG.md).
-
 ## Apprendre le terminal sans demander à une IA
 
 Bashou t'apprend dans ton vrai terminal, pendant que tu travailles. Il marche hors ligne : pas de compte, pas
@@ -178,6 +92,61 @@ Avant le QR code, Bashou liste exactement ce que contient la carte : pas de comm
 de machines ni de dates. La progression voyage dans le lien, après le `#`, une partie que les navigateurs
 n'envoient jamais à un serveur.
 
+## Installer
+
+Bashou a ses propres dépôts signés : installe-le une fois, et il se met à jour avec le reste de ton système.
+
+**Debian, Ubuntu** (apt) :
+
+```bash
+sudo mkdir -p -m 755 /etc/apt/keyrings
+sudo curl -fsSLo /etc/apt/keyrings/bashou.asc https://iamastealer.github.io/Bashou/bashou.asc
+printf '%s\n' 'Types: deb' 'URIs: https://iamastealer.github.io/Bashou/deb/' 'Suites: ./' \
+  'Signed-By: /etc/apt/keyrings/bashou.asc' | sudo tee /etc/apt/sources.list.d/bashou.sources
+sudo apt update && sudo apt install bashou
+```
+
+**Rocky, Alma, RHEL, Fedora** (dnf) :
+
+```bash
+sudo curl -fsSLo /etc/yum.repos.d/bashou.repo https://iamastealer.github.io/Bashou/bashou.repo
+sudo dnf install bashou
+```
+
+Ouvre un nouveau terminal : ton compagnon est là. Chaque utilisateur a le sien, sauf root.
+`bashou off` le cache, aussi dans les nouveaux terminaux. `bashou on` le fait revenir.
+Pas de compagnon sur Debian ou Ubuntu ? Lance `bashou on` une fois : ça ajoute une ligne à ton `~/.bashrc` (à ton `~/.zshrc` si tu le tapes dans zsh).
+Les mises à jour arrivent avec `apt upgrade` ou `dnf upgrade`.
+
+**macOS**, **tout autre Linux**, zsh seul, ou git pour suivre le code au fur et à mesure : voir [INSTALL.fr.md](INSTALL.fr.md).
+
+## Quoi de neuf
+
+**0.10.6**
+- **Certificats** : six leçons et dix combats, de la lecture d'un certificat jusqu'à ta propre CA et la
+  révocation, et un nouveau compagnon, le Phoque, qui grandit avec eux.
+- Les leçons et questions SQL corrigées et vérifiées requête par requête.
+
+**0.10.5**
+- **Les scripts bash** deviennent une compétence à part, avec huit combats qui lancent ton script corrigé
+  sur des fichiers piégés.
+
+**0.10.4**
+- Tu as fui un combat ? Ton compagnon arrête de te le rappeler ; la menace t'attend quand même avec
+  `bashou fight` jusqu'à minuit.
+- Gary a ses vraies couleurs : des yeux jaune-vert aux pupilles rouges et un ventre vert.
+
+**0.10.3**
+- **Les menaces attendent toute la journée** : un combat attend jusqu'à minuit et ton compagnon répète son
+  avertissement toutes les demi-heures, pour que tu ne le rates pas. Les joueurs expérimentés ont jusqu'à
+  2 menaces par jour.
+- Avec Homebrew, Bashou tourne sur le Python 3.15 de Homebrew.
+
+**0.10.2**
+- Un coffre ouvert reste ouvert, et le même coffre ne revient jamais deux fois dans une partie d'un chemin d'aventure.
+
+Tous les changements, version par version (en anglais) : [CHANGELOG.md](CHANGELOG.md).
+
 ## Joue sur deux ordinateurs
 
 **`bashou export`** écrit ta progression dans un petit fichier texte, `bashou-save-DATE.txt`, dans le
@@ -215,11 +184,7 @@ bashou update                # prendre la nouvelle version (apt ou dnf pour les 
 Installé en paquet : `sudo apt remove bashou` ou `sudo dnf remove bashou`, puis enlève la ligne
 `source /usr/share/bashou/bashou.bash` de `~/.bashrc` si tu l'avais ajoutée (et la ligne `bashou.zsh` de `~/.zshrc`).
 
-Installé avec git :
-
-```bash
-sed -i '/\.bashou\/bashou\.bash/d' ~/.bashrc; sed -i '/\.bashou\/bashou\.zsh/d' ~/.zshrc 2>/dev/null; rm -rf ~/.bashou
-```
+Installé avec git ou Homebrew : voir [INSTALL.fr.md](INSTALL.fr.md#désinstaller).
 
 Ta progression reste dans `~/.local/share/bashou` (supprime-le aussi pour tout oublier).
 

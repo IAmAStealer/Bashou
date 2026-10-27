@@ -4,7 +4,7 @@ doc/JOURNAL.md
 doc/PLAN.md
 .idea
 bug_report
-bug_report
 *.swp
 .*.swp
 .claude/agents/pr-reviewer.md
+.rtk/
