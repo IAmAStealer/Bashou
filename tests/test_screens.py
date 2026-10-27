@@ -166,7 +166,7 @@ class ScreensTest(unittest.TestCase):
                 lib = reader.Library(lessons)
                 t = Term(cols, rows)
                 t.write(printed(lib.draw))
-                self.check("library", size, t, lessons[0]["title"])
+                self.check("library", size, t, lib.lessons[0]["title"][:20])     # the first lesson of your path
                 lib = reader.Library(lessons, lessons[0]["id"])
                 t = Term(cols, rows)
                 t.write(printed(lib.draw))

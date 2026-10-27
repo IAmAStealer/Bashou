@@ -5,6 +5,7 @@
  "after": [
   "reading"
  ],
+ "opens": "read",
  "masters": [
   "achievement merge | won stderr_stalker"
  ],

@@ -130,7 +130,7 @@ input. Rules: [bash-style.md](bash-style.md).
 2. `repos` — sources files, .repo files, asking apt and dnf ·
    Candidate Crow, Mirror Mimic, Repo Revenant, Enabled Ettin
 
-### systemd
+### systemd (in the Linux skill, Linux only)
 
 1. `services` — a service's life · Unit Imp
 

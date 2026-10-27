@@ -2,6 +2,7 @@
  {
   "id": "systemd-1-01",
   "level": 1,
+  "os": "linux",
   "q": "Tu as installé un serveur web et veux qu'il tourne tout de suite. Quelle commande démarre un service ?",
   "choices": [
    "systemctl start nom",
@@ -15,6 +16,7 @@
  {
   "id": "systemd-1-02",
   "level": 1,
+  "os": "linux",
   "q": "Après un redémarrage, ton service est de nouveau éteint. Quelle commande le fait démarrer à chaque démarrage ?",
   "choices": [
    "systemctl enable nom",
@@ -28,6 +30,7 @@
  {
   "id": "systemd-1-03",
   "level": 1,
+  "os": "linux",
   "q": "Comment voir si un service tourne, avec ses dernières lignes de journal ?",
   "choices": [
    "systemctl status nom",
@@ -41,6 +44,7 @@
  {
   "id": "systemd-1-04",
   "level": 1,
+  "os": "linux",
   "q": "Tu as écrit ton propre fichier myapp.service. Où le mets-tu ?",
   "choices": [
    "/etc/systemd/system/",
@@ -54,6 +58,7 @@
  {
   "id": "systemd-1-05",
   "level": 1,
+  "os": "linux",
   "q": "Pourquoi lancer un service avec son propre utilisateur (User=app) plutôt qu'en root ?",
   "choices": [
    "S'il est piraté, l'intrus n'a que les droits de ce compte",
@@ -67,6 +72,7 @@
  {
   "id": "systemd-1-06",
   "level": 1,
+  "os": "linux",
   "q": "Tu viens de modifier un fichier d'unité. Que lances-tu avant de redémarrer le service ?",
   "choices": [
    "systemctl daemon-reload",
@@ -80,6 +86,7 @@
  {
   "id": "systemd-1-07",
   "level": 1,
+  "os": "linux",
   "q": "Un service échoue et tu ne veux que ses messages. Comment lire les journaux d'un seul service ?",
   "choices": [
    "journalctl -u nom",
@@ -93,6 +100,7 @@
  {
   "id": "systemd-1-08",
   "level": 1,
+  "os": "linux",
   "q": "Après un redémarrage, quelque chose semble cassé. Quelle commande liste les unités en échec ?",
   "choices": [
    "systemctl --failed",
@@ -106,6 +114,7 @@
  {
   "id": "systemd-1-09",
   "level": 1,
+  "os": "linux",
   "q": "Tu ne veux plus qu'un service démarre au boot. Que fait exactement `systemctl disable nom` ?",
   "choices": [
    "Il l'empêche de démarrer au boot, sans l'arrêter maintenant",
@@ -119,6 +128,7 @@
  {
   "id": "systemd-1-10",
   "level": 1,
+  "os": "linux",
   "q": "Un service ne se comporte pas comme le dit son fichier d'unité. Quelle commande montre le fichier que systemd utilise vraiment ?",
   "choices": [
    "systemctl cat nom",
@@ -132,6 +142,7 @@
  {
   "id": "systemd-2-01",
   "level": 2,
+  "os": "linux",
   "q": "Dans un fichier .service, quelle section contient ExecStart, la commande qui lance le programme ?",
   "choices": [
    "[Service]",
@@ -145,6 +156,7 @@
  {
   "id": "systemd-2-02",
   "level": 2,
+  "os": "linux",
   "q": "Que veut dire WantedBy=multi-user.target dans [Install] ?",
   "choices": [
    "`enable` l'accroche au démarrage normal",
@@ -158,6 +170,7 @@
  {
   "id": "systemd-2-03",
   "level": 2,
+  "os": "linux",
   "q": "Ton programme reste au premier plan jusqu'à ce qu'on l'arrête. Quel Type= convient à son unité ?",
   "choices": [
    "Type=simple",
@@ -171,6 +184,7 @@
  {
   "id": "systemd-2-04",
   "level": 2,
+  "os": "linux",
   "q": "Un script tourne une fois et se termine, mais l'unité doit rester « faite ». Qu'écris-tu ?",
   "choices": [
    "Type=oneshot avec RemainAfterExit=yes",
@@ -184,6 +198,7 @@
  {
   "id": "systemd-2-05",
   "level": 2,
+  "os": "linux",
   "q": "Tu ajoutes Restart=on-failure à un service. Qu'est-ce que ça fait ?",
   "choices": [
    "Il redémarre le service seulement s'il sort en erreur",
@@ -197,6 +212,7 @@
  {
   "id": "systemd-2-06",
   "level": 2,
+  "os": "linux",
   "q": "Ton service a besoin du réseau, et After=network-online.target seul n'aide pas. Pourquoi ?",
   "choices": [
    "After= ne fait qu'ordonner ; Wants= entraîne la cible",
@@ -210,6 +226,7 @@
  {
   "id": "systemd-2-07",
   "level": 2,
+  "os": "linux",
   "q": "Où mettre le mot de passe de base de données d'un service ?",
   "choices": [
    "Un fichier root seul : EnvironmentFile= ou LoadCredential=",
@@ -223,6 +240,7 @@
  {
   "id": "systemd-2-08",
   "level": 2,
+  "os": "linux",
   "q": "Quelle commande vérifie une unité avant de s'en servir ?",
   "choices": [
    "systemd-analyze verify ./nom.service",
@@ -236,6 +254,7 @@
  {
   "id": "systemd-2-09",
   "level": 2,
+  "os": "linux",
   "q": "Tu veux changer un réglage d'une unité venue avec un paquet. Qu'est-ce qu'une surcharge drop-in ?",
   "choices": [
    "Un .conf dans /etc/systemd/system/nom.d/, quelques lignes",
@@ -249,6 +268,7 @@
  {
   "id": "systemd-2-10",
   "level": 2,
+  "os": "linux",
   "q": "Une tâche doit tourner chaque nuit à 3 h. Qu'est-ce qui remplace une tâche cron avec systemd ?",
   "choices": [
    "Une unité .timer avec OnCalendar=, activée comme un service",
@@ -262,6 +282,7 @@
  {
   "id": "systemd-1-11",
   "level": 1,
+  "os": "linux",
   "q": "Dans un fichier unit, quelle section contient ExecStart, la commande à lancer ?",
   "choices": [
    "[Service]",

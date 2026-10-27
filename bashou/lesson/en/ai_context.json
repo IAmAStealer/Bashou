@@ -5,6 +5,7 @@
  "after": [
   "command_line"
  ],
+ "opens": "read",
  "masters": [
   "answered ai_context 3"
  ],

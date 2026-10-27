@@ -5,6 +5,7 @@
  "after": [
   "stack_heap"
  ],
+ "opens": "mastered",
  "masters": [
   "won mut_marmot | tool rustc 3",
   "won shadow_shade",

@@ -5,6 +5,7 @@
  "after": [
   "sql_write"
  ],
+ "opens": "mastered",
  "masters": [
   "won join_jackal"
  ],

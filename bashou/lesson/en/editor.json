@@ -4,6 +4,7 @@
  "after": [
   "files"
  ],
+ "opens": "read",
  "masters": [
   "tool nano 1 | tool vim 1 | tool vi 1 | won typo_troll"
  ],

@@ -92,13 +92,13 @@ class QuestionsTest(unittest.TestCase):
                             r"resolvectl|free -h|/etc/fstab|/proc)\b")
 
     def test_questions_about_linux_only_commands_say_so(self):
-        """systemd, Debian and Rocky are Linux topics (their skill says so); elsewhere each question
+        """Debian and Rocky are Linux topics (their skill says so); elsewhere, systemd included, each question
         that needs a Linux-only command is tagged."""
         for path in sorted((quiz.HERE / "en").glob("*.json")):
             topic = path.stem
             for q in json.loads(path.read_text()):
                 text = q["q"] + " " + q["choices"][q["answer"]]          # the point; an aside in explain is fine
-                if skills.SKILLS[topic].os or not self.LINUX_ONLY.search(text):
+                if topic in skills.SKILLS and skills.SKILLS[topic].os or not self.LINUX_ONLY.search(text):
                     continue
                 with self.subTest(q["id"]):
                     self.assertEqual(q.get("os"), "linux", self.LINUX_ONLY.search(text).group(0))
@@ -106,17 +106,17 @@ class QuestionsTest(unittest.TestCase):
 
 class SkillsTest(unittest.TestCase):
     def test_linux_skills(self):
-        self.assertEqual({k for k, sk in skills.SKILLS.items() if sk.os == "linux"}, {"systemd", "debian", "rocky"})
+        self.assertEqual({k for k, sk in skills.SKILLS.items() if sk.os == "linux"}, {"debian", "rocky"})
 
     def test_a_mac_learns_no_linux_skill_until_asked(self):
         with on("macos"):
-            self.assertFalse(skills.wanted(MAC, "systemd"))
+            self.assertFalse(skills.wanted(MAC, "debian"))
             self.assertTrue(skills.wanted(MAC, "bash"))
             self.assertNotIn("debian", skills.picked(MAC))
             self.assertIn("debian", skills.picked({"settings": {"os": "both"}}))
-            self.assertIn("bashou config os", skills.note("systemd", MAC))
+            self.assertIn("bashou config os", skills.note("debian", MAC))
         with on("linux"):
-            self.assertTrue(skills.wanted(MAC, "systemd"))
+            self.assertTrue(skills.wanted(MAC, "debian"))
             self.assertFalse(skills.wanted({"settings": {"os": "macos"}}, "rocky"))
 
     def test_the_skills_checklist_of_a_mac_has_no_linux_skill(self):

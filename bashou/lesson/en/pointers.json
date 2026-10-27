@@ -5,6 +5,7 @@
  "after": [
   "stack_heap"
  ],
+ "opens": "mastered",
  "masters": [
   "won fencepost_fiend",
   "won overflow_ogre"

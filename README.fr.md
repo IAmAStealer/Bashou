@@ -62,7 +62,7 @@ compagnon pour tous tes terminaux, et il ne dessine jamais par-dessus ton texte.
   25 secondes ; 5 erreurs terminent la partie.
 - **`bashou arena`** : viens te battre quand tu veux. Un combat chronométré, ou une enquête de sécurité sans
   chrono (un fichier caché, une porte dérobée dans cron, un binaire SUID).
-- **`bashou adventure`** : une balade à travers 14 thèmes (logique de code, bash au prompt, scripts bash, Linux, systemd, Python, Rust,
+- **`bashou adventure`** : une balade à travers 13 thèmes (logique de code, bash au prompt, scripts bash, Linux avec systemd, Python, Rust,
   C, Debian, Rocky Linux, CI/CD, SQL, réseaux, outils d'IA) avec 444 questions sur ce qui tourne mal et ce qu'il faut
   vérifier en premier, des boss, et des coffres qui s'ouvrent avec de vraies commandes.
 

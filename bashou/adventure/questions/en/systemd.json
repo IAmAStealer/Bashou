@@ -2,6 +2,7 @@
  {
   "id": "systemd-1-01",
   "level": 1,
+  "os": "linux",
   "q": "You installed a web server and want it running right now. Which command starts a service?",
   "choices": [
    "systemctl start name",
@@ -15,6 +16,7 @@
  {
   "id": "systemd-1-02",
   "level": 1,
+  "os": "linux",
   "q": "After a reboot your service is off again. Which command makes it start at every boot?",
   "choices": [
    "systemctl enable name",
@@ -28,6 +30,7 @@
  {
   "id": "systemd-1-03",
   "level": 1,
+  "os": "linux",
   "q": "How do you see whether a service runs, and its last lines of log?",
   "choices": [
    "systemctl status name",
@@ -41,6 +44,7 @@
  {
   "id": "systemd-1-04",
   "level": 1,
+  "os": "linux",
   "q": "You wrote your own myapp.service file. Where do you put it?",
   "choices": [
    "/etc/systemd/system/",
@@ -54,6 +58,7 @@
  {
   "id": "systemd-1-05",
   "level": 1,
+  "os": "linux",
   "q": "Why run a service as its own user (User=app) rather than root?",
   "choices": [
    "If it gets hacked, the intruder only has that user's rights",
@@ -67,6 +72,7 @@
  {
   "id": "systemd-1-06",
   "level": 1,
+  "os": "linux",
   "q": "You just edited a unit file. What do you run before restarting the service?",
   "choices": [
    "systemctl daemon-reload",
@@ -80,6 +86,7 @@
  {
   "id": "systemd-1-07",
   "level": 1,
+  "os": "linux",
   "q": "A service fails and you want only its messages. How do you read one service's logs?",
   "choices": [
    "journalctl -u name",
@@ -93,6 +100,7 @@
  {
   "id": "systemd-1-08",
   "level": 1,
+  "os": "linux",
   "q": "After a reboot something seems broken. Which command lists the units that failed?",
   "choices": [
    "systemctl --failed",
@@ -106,6 +114,7 @@
  {
   "id": "systemd-1-09",
   "level": 1,
+  "os": "linux",
   "q": "You no longer want a service to start at boot. What exactly does `systemctl disable name` do?",
   "choices": [
    "It stops it from starting at boot, without stopping it now",
@@ -119,6 +128,7 @@
  {
   "id": "systemd-1-10",
   "level": 1,
+  "os": "linux",
   "q": "A service doesn't behave as its unit file says. Which command shows the unit file systemd really uses?",
   "choices": [
    "systemctl cat name",
@@ -132,6 +142,7 @@
  {
   "id": "systemd-2-01",
   "level": 2,
+  "os": "linux",
   "q": "In a .service file, which section holds ExecStart, the command that runs the program?",
   "choices": [
    "[Service]",
@@ -145,6 +156,7 @@
  {
   "id": "systemd-2-02",
   "level": 2,
+  "os": "linux",
   "q": "What does WantedBy=multi-user.target in [Install] mean?",
   "choices": [
    "`enable` links it into the normal boot",
@@ -158,6 +170,7 @@
  {
   "id": "systemd-2-03",
   "level": 2,
+  "os": "linux",
   "q": "Your program keeps running in the foreground until it's stopped. Which Type= fits its unit?",
   "choices": [
    "Type=simple",
@@ -171,6 +184,7 @@
  {
   "id": "systemd-2-04",
   "level": 2,
+  "os": "linux",
   "q": "A script runs once and exits, but the unit should count as done. What do you write?",
   "choices": [
    "Type=oneshot with RemainAfterExit=yes",
@@ -184,6 +198,7 @@
  {
   "id": "systemd-2-05",
   "level": 2,
+  "os": "linux",
   "q": "You add Restart=on-failure to a service. What does it do?",
   "choices": [
    "It restarts the service only when it exits with an error",
@@ -197,6 +212,7 @@
  {
   "id": "systemd-2-06",
   "level": 2,
+  "os": "linux",
   "q": "Your service needs the network, and After=network-online.target alone doesn't help. Why?",
   "choices": [
    "After= only orders; Wants= is what pulls the target in",
@@ -210,6 +226,7 @@
  {
   "id": "systemd-2-07",
   "level": 2,
+  "os": "linux",
   "q": "Where should a service's database password go?",
   "choices": [
    "A root-only file: EnvironmentFile= or LoadCredential=",
@@ -223,6 +240,7 @@
  {
   "id": "systemd-2-08",
   "level": 2,
+  "os": "linux",
   "q": "Which command checks a unit file for mistakes before you use it?",
   "choices": [
    "systemd-analyze verify ./name.service",
@@ -236,6 +254,7 @@
  {
   "id": "systemd-2-09",
   "level": 2,
+  "os": "linux",
   "q": "You want to change one setting of a unit that came with a package. What is a drop-in override?",
   "choices": [
    "A .conf in /etc/systemd/system/name.d/, changing a few lines",
@@ -249,6 +268,7 @@
  {
   "id": "systemd-2-10",
   "level": 2,
+  "os": "linux",
   "q": "A job should run every night at 3:00. What replaces a cron job in systemd?",
   "choices": [
    "A .timer unit with OnCalendar=, enabled like a service",
@@ -262,6 +282,7 @@
  {
   "id": "systemd-1-11",
   "level": 1,
+  "os": "linux",
   "q": "In a unit file, which section holds ExecStart, the command to run?",
   "choices": [
    "[Service]",

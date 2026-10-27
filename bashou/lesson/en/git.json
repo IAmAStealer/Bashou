@@ -4,6 +4,7 @@
  "after": [
   "scripts"
  ],
+ "opens": "read",
  "masters": [
   "achievement brancher | tool git 3 | won commit_crowd | won branch_bramble | won conflict_chimera",
   "achievement stasher"

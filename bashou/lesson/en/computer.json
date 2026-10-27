@@ -4,6 +4,7 @@
  "after": [
   "command_line"
  ],
+ "opens": "read",
  "masters": [
   "achievement memory | achievement disk",
   "achievement census | tool nproc 1 | won core_counter"

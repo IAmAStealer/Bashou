@@ -5,6 +5,7 @@
  "after": [
   "gcc_use"
  ],
+ "opens": "mastered",
  "masters": [
   "won leak_lurker",
   "won stack_specter"

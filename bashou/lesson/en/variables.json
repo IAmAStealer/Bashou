@@ -4,6 +4,7 @@
  "after": [
   "wildcards"
  ],
+ "opens": "read",
  "masters": [
   "achievement capture",
   "achievement loop"

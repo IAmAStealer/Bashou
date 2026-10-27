@@ -4,6 +4,7 @@
  "after": [
   "editor"
  ],
+ "opens": "read",
  "masters": [
   "tool less 1",
   "tool tail 1"

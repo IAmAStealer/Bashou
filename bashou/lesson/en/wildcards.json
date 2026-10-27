@@ -4,6 +4,7 @@
  "after": [
   "reading"
  ],
+ "opens": "read",
  "masters": [
   "fights 3 | won glob_goblin"
  ],

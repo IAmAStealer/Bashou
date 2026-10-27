@@ -5,6 +5,7 @@
   "variables",
   "wildcards"
  ],
+ "opens": "read",
  "masters": [
   "won index_imp"
  ],

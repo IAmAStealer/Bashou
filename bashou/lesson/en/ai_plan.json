@@ -5,6 +5,7 @@
  "after": [
   "ai_context"
  ],
+ "opens": "read",
  "masters": [
   "answered ai_plan 3"
  ],

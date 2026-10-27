@@ -135,8 +135,7 @@ class UnlockTest(unittest.TestCase):
         helper = BY_ID["help"]
         self.assertFalse(lesson.unlocked(s, helper))
         self.assertEqual(reader.how_to_unlock(s, helper),
-                         "practice “Reading a command line”: earn “Exit code”, or earn 3 achievements in all (0/3)"
-                         " (or meet the Flag Phantom in a fight)")
+                         "read “Reading a command line” (or meet the Flag Phantom in a fight)")   # an easy one
         s["commands"] = 10 ** 6                                  # counters alone open nothing now
         self.assertFalse(lesson.unlocked(s, helper))
         s["achievements"].append("exit_code")                    # no need to read command_line first
@@ -171,7 +170,7 @@ class UnlockTest(unittest.TestCase):
         self.assertFalse(lesson.passed(s, help_))
         progress.record(s, 0, "man ls", "2026-10-01", 12)
         self.assertTrue(lesson.passed(s, help_))
-        self.assertIn("use man once", reader.how_to_unlock(state.default(), BY_ID["paths"]))
+        self.assertIn("use man once", " ".join(reader.ways_to_pass(state.default(), help_)))
 
     def test_a_command_inside_a_pipe_counts_for_its_lesson(self):
         """Owner: someone who uses grep mostly inside pipes knows it too."""
@@ -187,7 +186,9 @@ class UnlockTest(unittest.TestCase):
         s = state.default()
         heap = BY_ID["stack_heap"]
         self.assertEqual(lesson.status(s, heap), "locked")
-        s["challenges"].append("linker_lynx")                   # gcc_use passed
+        s["challenges"].append("linker_lynx")                   # gcc_use passed: not enough for a hard one
+        self.assertEqual(lesson.status(s, heap), "locked")
+        s["challenges"].append("warning_wraith")                # gcc_use mastered
         self.assertEqual(lesson.status(s, heap), "next")
         self.assertEqual(reader.missing(s, heap["masters"]),
                          "beat the Leak Lurker in a fight · beat the Stack Specter in a fight")
@@ -235,7 +236,7 @@ class UnlockTest(unittest.TestCase):
 
     def test_every_lesson_can_be_unlocked(self):
         s = state.default()
-        s.update(achievements=[a.id for a in achievements.ALL])
+        s.update(achievements=[a.id for a in achievements.ALL], challenges=list(challenges.BY_ID))
         self.assertEqual([le["id"] for le in LESSONS if not lesson.unlocked(s, le)], [])
 
     def test_only_the_skills_you_learn(self):
@@ -273,14 +274,21 @@ class ReaderTest(unittest.TestCase):
             lib.key("enter")
         self.assertIsNone(lib.lesson)
         self.assertEqual(state.load()["lessons"]["read"], ["command_line"])
-        self.assertFalse(lesson.unlocked(state.load(), BY_ID["paths"]))       # reading opens nothing
+        self.assertTrue(lesson.unlocked(state.load(), BY_ID["help"]))         # an easy one opens on reading
+        self.assertFalse(lesson.unlocked(state.load(), BY_ID["paths"]))
         # bug report: "I finished the lesson but the next one still said after it". Say so when it's done.
-        self.assertIn("Reading isn't enough to open “Help yourself”", lib.message)
+        with state.locked() as s:
+            s["lessons"]["opened"].append("streams")
+        lib = reader.Library(LESSONS, "streams")
+        for _ in BY_ID["streams"]["pages"]:
+            lib.key("enter")
+        while lib.quiz:                                                  # the end quiz
+            lib.key("quit")
+        self.assertIn("Reading isn't enough to open “Quotes”", lib.message)
         self.assertIn("practice this one first", lib.message)
-        self.assertIn("earn 3 achievements in all", lib.message)
+        self.assertIn("earn 21 achievements in all", lib.message)
         screen = " ".join(render.strip(t) for r, c, t in lib.list_screen(100, 40))
-        self.assertIn("Sparklings", screen)                         # the long message isn't cut
-        self.assertIn("practice this one first", screen)
+        self.assertIn("practice this one first", screen)                # the long message isn't cut
 
     def test_a_lesson_already_practiced_says_practice_to_master(self):
         s = state.load()
@@ -296,14 +304,14 @@ class ReaderTest(unittest.TestCase):
         """Bug report: players didn't understand why lessons were locked. Each locked row names the
         lesson it waits for; the selected one explains, and points to an open lesson to start with."""
         lib = reader.Library(LESSONS)
-        lib.pos = next(i for i, le in enumerate(lib.lessons) if le["id"] == "files")
+        lib.go("files")
         text = [render.strip(t) for r, c, t in lib.list_screen(100, 50)]
         self.assertTrue(any("🔒 Files: make, copy, move, delete" in t and t.rstrip().endswith("after The file tree and paths")
                             for t in text))
         info = " ".join(text)
         self.assertIn("builds on “The file tree and paths”", info)
         self.assertIn("Start with “Reading a command line”", info)
-        self.assertIn("• earn 9 achievements in all (0/9)", info)
+        self.assertIn("Read “The file tree and paths” to the end.", info)
         self.assertIn("Shortcut: meeting the Clutter Critter", info)
 
     def test_a_locked_row_fits_a_narrow_terminal(self):
@@ -315,7 +323,7 @@ class ReaderTest(unittest.TestCase):
 
     def test_enter_on_a_locked_lesson_goes_to_the_one_to_practice(self):
         lib = reader.Library(LESSONS)
-        lib.pos = next(i for i, le in enumerate(lib.lessons) if le["id"] == "disk")
+        lib.go("disk")
         lib.key("enter")
         self.assertIsNone(lib.lesson)
         self.assertEqual(lib.lessons[lib.pos]["id"], "command_line")
@@ -323,7 +331,7 @@ class ReaderTest(unittest.TestCase):
         with state.locked() as s:
             s["achievements"] = ["exit_code", "shortcut"]                 # paths passed: files is open
         lib = reader.Library(LESSONS)
-        lib.pos = next(i for i, le in enumerate(lib.lessons) if le["id"] == "disk")
+        lib.go("disk")
         self.assertEqual(lesson.first_open(state.load(), BY_ID["disk"])["id"], "files")
         lib.key("enter")
         self.assertEqual(lib.lessons[lib.pos]["id"], "files")
@@ -335,7 +343,7 @@ class ReaderTest(unittest.TestCase):
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
             reader.print_list(state.default(), LESSONS)
-        self.assertIn("🔒 The file tree and paths · after Help yourself · practice “Help yourself", out.getvalue())
+        self.assertIn("🔒 The file tree and paths · after Help yourself · read “Help yourself", out.getvalue())
 
     def test_the_cursor_starts_on_the_next_step(self):
         with state.locked() as s:

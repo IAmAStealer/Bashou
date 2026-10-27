@@ -172,7 +172,7 @@ def unit_verify(work, meta, value):
 
 
 UNIT_IMP = Challenge(
-    level=1, id="unit_imp", pet="bee", tools=EDITORS, threat="Unit Imp", requires=["sed"], skill="systemd", fix=True,
+    level=1, id="unit_imp", pet="bee", tools=EDITORS, threat="Unit Imp", requires=["sed"], skill="linux", os="linux", fix=True,
     task="The Unit Imp swapped two lines of {unit}: systemd would refuse to start it.\nPut each line back in "
          "its section. Then: verify",
     hints=["A unit file has sections in [brackets]. [Unit] describes it, [Service] says how to run it "

@@ -4,6 +4,7 @@
  "after": [
   "command_line"
  ],
+ "opens": "read",
  "masters": [
   "tool man 1 | won flag_phantom"
  ],

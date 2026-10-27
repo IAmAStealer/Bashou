@@ -5,6 +5,7 @@
  "after": [
   "certs_admin"
  ],
+ "opens": "mastered",
  "tools": [
   "openssl"
  ],

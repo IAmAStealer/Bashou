@@ -9,8 +9,9 @@ Questions may be about tools the player hasn't installed yet: that's how they di
 ## Where
 
 `bashou/adventure/questions/en/<topic>.json`. Topics: `bash`, `linux`, `python`, `rust`, `c`,
-`debian`, `rocky`, `cicd`, `systemd`, `sql`, `network`, `logic` (coding logic for beginners, in short Python-like
-pseudocode), `ai` (piloting AI coding tools, vendor-neutral). Translations go in `questions/<lang>/<topic>.json` (same ids, levels and
+`debian`, `rocky`, `cicd`, `sql`, `network`, `logic` (coding logic for beginners, in short Python-like
+pseudocode), `ai` (piloting AI coding tools, vendor-neutral). The `linux` topic also asks `systemd.json` (each of its questions has
+`"os": "linux"`). Translations go in `questions/<lang>/<topic>.json` (same ids, levels and
 answer positions); a missing translation falls back to English. See [translations.md](translations.md).
 
 ```json

@@ -5,6 +5,7 @@
  "after": [
   "wildcards"
  ],
+ "opens": "read",
  "tools": [
   "find"
  ],

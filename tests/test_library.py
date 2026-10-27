@@ -1,0 +1,206 @@
+"""Owner bug report, 2026-10-27: sections came twice, nothing was locked anymore, git sat in First steps,
+systemd was a skill of its own. Now: each section once, a lock level per lesson, a short path view first
+(`f` for the whole library), systemd inside Linux."""
+
+import tempfile
+import unittest
+from pathlib import Path
+
+from bashou import achievements, challenges, lesson, render, skills, state
+from bashou.adventure import quiz, world
+from bashou.lesson import reader
+
+LESSONS = lesson.load("en")
+BY_ID = {le["id"]: le for le in LESSONS}
+
+
+class Saved(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.saved = state.DATA, state.STATE
+        state.DATA = Path(self.tmp.name)
+        state.STATE = state.DATA / "state.json"
+
+    def tearDown(self):
+        state.DATA, state.STATE = self.saved
+        self.tmp.cleanup()
+
+    def headers(self, lib, lines=400):
+        return [render.strip(t) for r, c, t in lib.list_screen(100, lines) if c == 2 and r > 3]
+
+
+class SectionTest(Saved):
+    def full(self):
+        with state.locked() as s:
+            s["skills"] = "all"
+        lib = reader.Library(LESSONS)
+        lib.key("f")
+        self.assertTrue(lib.full)
+        return lib
+
+    def test_each_section_shows_once(self):
+        lib = self.full()
+        names = [reader.group(le) for le in lib.lessons]
+        runs = [n for i, n in enumerate(names) if i == 0 or names[i - 1] != n]
+        self.assertEqual(len(runs), len(set(runs)), runs)
+
+    def test_first_steps_then_git_then_the_skills(self):
+        lib = self.full()
+        runs = []
+        for le in lib.lessons:
+            if not runs or runs[-1] != reader.section(le):
+                runs.append(reader.section(le))
+        self.assertEqual(runs[:2], ["first", "git"])
+        self.assertEqual(runs[2:], [k for k in skills.SKILLS if k in runs])
+
+    def test_git_has_its_own_section(self):
+        self.assertEqual(reader.group(BY_ID["git"]), "Git")
+        self.assertNotIn("skill", BY_ID["git"])                  # open to every player
+
+    def test_inside_a_section_lessons_keep_their_order(self):
+        lib = self.full()
+        for key in {reader.section(le) for le in lib.lessons}:
+            orders = [le["order"] for le in lib.lessons if reader.section(le) == key]
+            self.assertEqual(orders, sorted(orders), key)
+
+
+class LockLevelTest(unittest.TestCase):
+    def test_levels_are_known(self):
+        for le in LESSONS:
+            self.assertIn(le.get("opens", "passed"), ("read", "passed", "mastered"), le["id"])
+
+    def test_the_first_steps_open_once_read(self):
+        s = state.default()
+        self.assertFalse(lesson.unlocked(s, BY_ID["help"]))
+        s["lessons"]["read"].append("command_line")
+        self.assertTrue(lesson.unlocked(s, BY_ID["help"]))
+        self.assertEqual(reader.how_to_unlock(state.default(), BY_ID["help"]).split(" (")[0],
+                         "read “Reading a command line”")
+
+    def test_a_read_lesson_also_opens_when_the_one_before_is_passed(self):
+        s = state.default()
+        s["achievements"].append("exit_code")                  # command_line passed, not read
+        self.assertTrue(lesson.unlocked(s, BY_ID["help"]))
+
+    def test_hard_lessons_wait_for_mastery_not_for_a_count(self):
+        """46 achievements opened 60 of 67 lessons on the owner's save."""
+        s = state.default()
+        s["achievements"] = [a.id for a in achievements.ALL]
+        for hard in ("pointers", "debugger", "certs_ca", "awk_sed", "sql_join"):
+            with self.subTest(hard):
+                self.assertEqual(BY_ID[hard].get("opens"), "mastered")
+                self.assertFalse(lesson.unlocked(s, BY_ID[hard]))
+        s["challenges"] += ["leak_lurker", "stack_specter"]     # stack_heap mastered
+        self.assertTrue(lesson.unlocked(s, BY_ID["pointers"]))
+
+    def test_a_locked_hard_lesson_says_master(self):
+        s = state.default()
+        s["challenges"].append("leak_lurker")
+        self.assertIn("master “The stack and the heap”: beat the Stack Specter in a fight",
+                      reader.how_to_unlock(s, BY_ID["pointers"]).replace(BY_ID["stack_heap"]["title"],
+                                                                         "The stack and the heap"))
+        text = " ".join(p for p, _c in reader.unlock_lines(s, BY_ID["pointers"], 100))
+        self.assertIn("mastered", text)
+
+    def test_the_count_still_passes_a_normal_lesson(self):
+        s = state.default()
+        s["achievements"] = [a.id for a in achievements.ALL]
+        self.assertNotIn("opens", BY_ID["regex"])
+        self.assertTrue(lesson.unlocked(s, BY_ID["regex"]))
+
+    def test_the_owners_save_has_locks_again(self):
+        s = state.default()
+        s["achievements"] = [a.id for a in achievements.ALL][:46]
+        locked = [le for le in lesson.shown(s, LESSONS) if lesson.status(s, le) == "locked"]
+        self.assertGreaterEqual(len(locked), 10)
+
+
+class PathTest(Saved):
+    def test_the_library_opens_on_your_path(self):
+        lib = reader.Library(LESSONS)
+        self.assertFalse(lib.full)
+        self.assertLessEqual(len(lib.lessons), reader.PATH)
+        self.assertEqual(lib.lessons[0]["id"], "command_line")
+        self.assertTrue(any(lesson.status(lib.s, le) == "locked" for le in lib.lessons), "what comes next shows")
+        screen = " ".join(render.strip(t) for r, c, t in lib.list_screen(100, 40))
+        self.assertIn("First steps", screen)                     # each row names its section
+        self.assertIn("f: whole library", screen)
+
+    def test_f_toggles_the_whole_library(self):
+        lib = reader.Library(LESSONS)
+        at = lib.lessons[lib.pos]["id"]
+        lib.key("f")
+        self.assertTrue(lib.full)
+        self.assertEqual(len(lib.lessons), len(lesson.shown(lib.s, lib.all)))
+        self.assertEqual(lib.lessons[lib.pos]["id"], at)         # the cursor stays on its lesson
+        screen = " ".join(render.strip(t) for r, c, t in lib.list_screen(100, 40))
+        self.assertIn("f: your path", screen)
+        lib.key("f")
+        self.assertFalse(lib.full)
+
+    def test_the_path_skips_mastered_lessons_and_unread_come_first(self):
+        with state.locked() as s:
+            s["achievements"] = ["exit_code"]
+            s["commands"] = 600
+            s["lessons"]["read"] = ["command_line", "help"]
+        lib = reader.Library(LESSONS)
+        ids = [le["id"] for le in lib.lessons]
+        self.assertNotIn("command_line", ids)                    # mastered
+        open_ = [i for i in ids if lesson.status(lib.s, BY_ID[i]) == "next"]
+        self.assertEqual(open_[-1], "help", "read ones after the unread ones")
+
+    def test_a_lesson_off_the_path_opens_the_whole_library(self):
+        with state.locked() as s:
+            s["lessons"]["opened"] = list(BY_ID)                # all open: the path holds the first ones
+        lib = reader.Library(LESSONS, "certs_revoke")
+        self.assertTrue(lib.full)
+        self.assertEqual(lib.lessons[lib.pos]["id"], "certs_revoke")
+        self.assertEqual(lib.lesson["id"], "certs_revoke")
+
+    def test_enter_on_a_locked_lesson_goes_to_the_one_to_practice_in_both_views(self):
+        lib = reader.Library(LESSONS)
+        lib.key("f")
+        lib.pos = next(i for i, le in enumerate(lib.lessons) if le["id"] == "disk")
+        lib.key("f")                                             # back to the path, disk isn't on it
+        lib.key("f")
+        lib.pos = next(i for i, le in enumerate(lib.lessons) if le["id"] == "disk")
+        lib.key("enter")
+        self.assertEqual(lib.lessons[lib.pos]["id"], "command_line")
+
+
+class SystemdInLinuxTest(unittest.TestCase):
+    def test_no_systemd_skill_or_topic(self):
+        self.assertNotIn("systemd", skills.SKILLS)
+        self.assertNotIn("systemd", world.TOPICS)
+
+    def test_the_services_lesson_is_linux_for_linux(self):
+        le = BY_ID["services"]
+        self.assertEqual((le["skill"], le.get("os")), ("linux", "linux"))
+        self.assertEqual(reader.group(le), "Linux")
+
+    def test_the_unit_imp_fights_for_linux_on_linux(self):
+        ch = challenges.BY_ID["unit_imp"]
+        self.assertEqual((ch.skill, ch.os), ("linux", "linux"))
+
+    def test_the_linux_topic_asks_the_systemd_questions_on_linux_only(self):
+        ids = {q["id"] for q in quiz.bank("linux")}
+        self.assertIn("systemd-1-01", ids)
+        self.assertNotIn("systemd-1-01", {q["id"] for q in quiz.for_os(quiz.bank("linux"), {"macos"})})
+        self.assertIn("systemd-1-01", {q["id"] for q in quiz.for_os(quiz.bank("linux", "fr"), {"linux"})})
+
+    def test_a_save_that_learned_systemd_learns_linux(self):
+        s = state.default()
+        s["version"] = 8
+        s["skills"] = ["bash", "systemd"]
+        s["adventure"] = {"topic": "systemd", "levels": {"systemd": 3, "linux": 2},
+                          "bosses": [{"topic": "systemd"}, {"topic": "bash"}]}
+        state.migrate(s)
+        self.assertEqual(s["skills"], ["bash", "linux"])
+        self.assertEqual(s["adventure"]["topic"], "linux")
+        self.assertEqual(s["adventure"]["levels"], {"linux": 3})
+        self.assertEqual([b["topic"] for b in s["adventure"]["bosses"]], ["linux", "bash"])
+        s = state.default()
+        s["version"] = 8
+        s["skills"] = ["linux", "systemd"]
+        state.migrate(s)
+        self.assertEqual(s["skills"], ["linux"])

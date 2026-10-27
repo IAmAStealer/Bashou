@@ -8,13 +8,19 @@ from .. import i18n, skills
 HERE = Path(__file__).resolve().parent / "questions"
 
 
+MORE = {"linux": ("systemd",)}    # banks a topic also asks (owner, 2026-10-27: systemd is part of Linux)
+
+
 def bank(topic, lang=None):
     """Questions of a topic in your language, or in English when there's no translation yet."""
-    for code in (lang or i18n.language(), "en"):
-        path = HERE / code / f"{topic}.json"
-        if path.exists():
-            return json.loads(path.read_text())
-    return []
+    found = []
+    for name in (topic, *MORE.get(topic, ())):
+        for code in (lang or i18n.language(), "en"):
+            path = HERE / code / f"{name}.json"
+            if path.exists():
+                found += json.loads(path.read_text())
+                break
+    return found
 
 
 def for_os(questions, systems):

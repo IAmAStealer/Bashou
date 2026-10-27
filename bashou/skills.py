@@ -25,10 +25,9 @@ SKILLS = {
     "bash": Skill("Bash at the prompt: grep, sed, awk, find, pipes", uses=(
         ("git", "the git fights: commits, branches and merge conflicts, in a real repository"),)),
     "script": Skill("Bash scripts: errors, file names, data, cleanup"),
-    "linux": Skill("Linux: files, users, permissions, processes", uses=(
+    "linux": Skill("Linux: files, users, permissions, processes, systemd", uses=(
         ("gpg", "the key fights: lock a file with a passphrase, sign it, check a signature"),
         ("pass", "the password store fights: keep secrets out of your scripts"))),
-    "systemd": Skill("systemd: services, timers, logs", os="linux"),
     "debian": Skill("Debian and Ubuntu: apt, dpkg, repositories", os="linux"),
     "rocky": Skill("Rocky and Red Hat: dnf, rpm, repositories", os="linux"),
     "python": Skill("Python: small scripts to fix", needs="python3", uses=(

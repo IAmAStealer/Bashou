@@ -5,6 +5,7 @@
  "after": [
   "files"
  ],
+ "opens": "read",
  "masters": [
   "achievement owner | achievement tight | won group_gremlin",
   "tool sudo 1"

@@ -5,6 +5,7 @@
  "after": [
   "files"
  ],
+ "opens": "read",
  "masters": [
   "achievement disk | tool df 3 | tool du 3 | won bloat_blob",
   "achievement sizer"

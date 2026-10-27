@@ -167,11 +167,22 @@ def passed(s, lesson):
             or len(earned) >= to_pass(lesson))
 
 
+def cleared(s, before, opens):
+    """Is a lesson of `after` behind you, for a lesson whose lock level is `opens` (owner, 2026-10-27:
+    it depends on difficulty)? "read": read or passed; "mastered": mastered, the count doesn't help;
+    otherwise passed."""
+    if opens == "read":
+        return before["id"] in read(s) or passed(s, before)
+    if opens == "mastered":
+        return mastered(s, before)
+    return passed(s, before)
+
+
 def waiting_for(s, lesson):
-    """The lessons of `after` still to pass. One of a skill you don't learn doesn't count."""
+    """The lessons of `after` still to clear. One of a skill you don't learn doesn't count."""
     lessons = by_id()
     return [lessons[p] for p in lesson.get("after", [])
-            if not passed(s, lessons[p])
+            if not cleared(s, lessons[p], lesson.get("opens"))
             and (not skills_of(lessons[p]) or any(skills.wanted(s, k) for k in skills_of(lessons[p])))]
 
 

@@ -6,6 +6,7 @@
   "regex",
   "text_tools"
  ],
+ "opens": "mastered",
  "tools": [
   "awk",
   "sed"

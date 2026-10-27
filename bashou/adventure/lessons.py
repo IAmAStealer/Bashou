@@ -98,7 +98,7 @@ LESSONS = [
         ("tar packs many files into one, gzip squeezes it: a .tar.gz. -c creates, -t lists, -x unpacks, z for "
          "gzip, f for the archive's name, and -C picks the folder to unpack into.", "tar -xzf backup.tar.gz -C restore/"),
     ]},
-    {"id": "services", "tool": "systemctl", "topics": ("systemd",), "title": "Services and unit files", "pages": [
+    {"id": "services", "tool": "systemctl", "topics": ("linux",), "title": "Services and unit files", "pages": [
         ("A service is a program that runs in the background, started by systemd. systemctl status NAME says "
          "if it runs, since when, and its last log lines.", "systemctl status cron"),
         ("Each service is described by a unit file, in sections: [Unit] says what it is, [Service] how to run it "

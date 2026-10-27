@@ -4,6 +4,7 @@
  "after": [
   "help"
  ],
+ "opens": "read",
  "masters": [
   "achievement builder | tool cd 1 | tool pwd 1",
   "achievement shortcut"

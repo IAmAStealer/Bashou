@@ -16,7 +16,7 @@ from . import achievements, creatures, i18n
 DATA = Path(os.environ.get("BASHOU_DATA", Path.home() / ".local/share/bashou"))
 CACHE = Path(os.environ.get("BASHOU_CACHE", Path.home() / ".cache/bashou"))
 STATE = DATA / "state.json"
-SAVE_VERSION = 8        # bump with a step in migrate() whenever the save's shape changes
+SAVE_VERSION = 9        # bump with a step in migrate() whenever the save's shape changes
 
 
 @dataclass(frozen=True)
@@ -467,6 +467,28 @@ def migrate_snail_forms(state):
             e["from"], e["to"] = new(e.get("who"), e.get("from")), new(e.get("who"), e.get("to"))
 
 
+def migrate_systemd_skill(state):
+    """Version 9 (owner, 2026-10-27): systemd is part of Linux, no skill or adventure topic of its own.
+    Who learned systemd learns Linux; the adventure's systemd road, level and bosses become Linux ones."""
+    picks = state.get("skills")
+    if isinstance(picks, list) and "systemd" in picks:
+        at = picks.index("systemd")
+        picks.remove("systemd")
+        if "linux" not in picks:
+            picks.insert(at, "linux")
+    adv = state.get("adventure")
+    if not isinstance(adv, dict):
+        return
+    if adv.get("topic") == "systemd":
+        adv["topic"] = "linux"
+    levels = adv.get("levels")
+    if isinstance(levels, dict) and "systemd" in levels:
+        levels["linux"] = max(levels.pop("systemd"), levels.get("linux", 0))
+    for boss in adv.get("bosses", []):
+        if isinstance(boss, dict) and boss.get("topic") == "systemd":
+            boss["topic"] = "linux"
+
+
 def version_of(saved):
     """The version a save was written with (the first ones had none; a damaged one counts as those)."""
     version = saved.get("version", 1)
@@ -484,6 +506,7 @@ MIGRATIONS = [
     (lambda saved: "win_times" not in saved, migrate_win_times),   # version 5
     (lambda saved: version_of(saved) < 6, migrate_families),       # version 6
     (lambda saved: version_of(saved) < 7, migrate_script_skill),   # version 7
+    (lambda saved: version_of(saved) < 9, migrate_systemd_skill),  # version 9
 ]
 # Numbers in looks, starter_best, ladder_best and evolving (int in FIELDS) are forms saved before
 # version 4, turned into sprite ids by migrate_form_ids.

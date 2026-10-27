@@ -5,6 +5,7 @@
  "after": [
   "script_errors"
  ],
+ "opens": "mastered",
  "tools": [
   "bash"
  ],

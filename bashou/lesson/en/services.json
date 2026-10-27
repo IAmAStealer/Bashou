@@ -1,7 +1,8 @@
 {
  "id": "services",
  "order": 300,
- "skill": "systemd",
+ "skill": "linux",
+ "os": "linux",
  "after": [
   "processes",
   "streams"

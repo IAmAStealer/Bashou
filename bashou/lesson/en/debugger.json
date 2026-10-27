@@ -5,6 +5,7 @@
  "after": [
   "pointers"
  ],
+ "opens": "mastered",
  "tools": [
   "gdb"
  ],

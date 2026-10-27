@@ -114,7 +114,7 @@ class AnsweredTest(unittest.TestCase):
     def test_old_saves_have_no_right_answers(self):
         s = state.read('{"version": 6, "lessons": {"read": ["command_line"]}}')
         self.assertEqual(s["lessons"]["right"], [])
-        self.assertEqual(state.SAVE_VERSION, 8)                       # a new list with a default: no migration (7: scripts skill, 8: snail forms)
+        self.assertEqual(state.SAVE_VERSION, 9)                       # a new list with a default: no migration (7: scripts skill, 8: snail forms, 9: systemd in linux)
 
 
 class AdventureTest(Saved):

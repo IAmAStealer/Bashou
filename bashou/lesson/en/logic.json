@@ -5,6 +5,7 @@
  "after": [
   "variables"
  ],
+ "opens": "read",
  "masters": [
   "won negation_gnome",
   "won coin_wraith"

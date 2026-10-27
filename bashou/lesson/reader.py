@@ -12,8 +12,8 @@ import sys
 from .. import achievements, challenges, creatures, progress, render, skills, state, terminal
 from ..adventure import quiz
 from ..i18n import _
-from . import (HERE, answered, by_id, first_open, load, met, own, passed, progress_of, read, record_right, right, shown,
-               skills_of, status, to_pass, unlocked, waiting_for)
+from . import (HERE, answered, by_id, depths, first_open, load, mastered, met, own, passed, progress_of, read,
+               record_right, right, shown, skills_of, status, to_pass, unlocked, waiting_for)
 from ..render import ESC, BOLD, DIM, RESET, REV, GOOD, BAD
 
 ACCENT = f"{ESC}[38;2;240;200;110m"
@@ -21,7 +21,7 @@ CMD = f"{ESC}[38;2;130;210;120m"
 TITLE = f"{ESC}[38;2;150;190;230m"
 NEXT = f"{ESC}[38;2;120;220;150m"            # the lessons that make you progress now
 LEADER = f"{ESC}[38;2;122;86;52m"            # the owl's outline brown: the dotted line is its gesture
-KEYS = {" ": "right"}            # besides terminal.NAMES
+KEYS = {" ": "right", "f": "f", "F": "f"}     # besides terminal.NAMES; f: path or whole library
 OWL = creatures.load(HERE / "owl.json")
 WING = 3                      # terminal line of the owl's wing tip (its first column)
 TOP = 3                       # first line of a scheme, under the title and a blank line
@@ -111,9 +111,39 @@ def page_screen(lesson, n, cols, lines, breath=False, blink=False):
     return out
 
 
+def section(lesson):
+    """The library section of a lesson: its first skill, "git" for git (no skill, open to all), else "first"."""
+    return next(iter(skills_of(lesson)), "git" if lesson["id"] == "git" else "first")
+
+
+SECTIONS = ["first", "git", *skills.SKILLS]           # the order of the whole library
+
+
 def group(lesson):
-    skill = next(iter(skills_of(lesson)), None)
-    return _(skills.SKILLS[skill].text).split(":")[0] if skill else _("First steps")
+    key = section(lesson)
+    return {"first": _("First steps"), "git": _("Git")}.get(key) or _(skills.SKILLS[key].text).split(":")[0]
+
+
+def by_section(lessons):
+    """Each section once, in SECTIONS order, its lessons in their own order (the path still crosses them)."""
+    return sorted(lessons, key=lambda le: (SECTIONS.index(section(le)), le["order"]))
+
+
+PATH = 10            # lessons on your path, the library's first view (owner: or we lose people in lessons)
+AHEAD = 2            # of them, locked ones at least, when there are: what opens next
+
+
+def path(s, lessons):
+    """Your next lessons: the open ones not mastered, unread first, nearest the start first, then a few
+    locked ones to show what's ahead."""
+    depth = depths()
+    rank = lambda le: (le["id"] in read(s), depth.get(le["id"], 1), le["order"])
+    open_ = sorted((le for le in lessons if status(s, le) == "next"), key=rank)
+    locked = sorted((le for le in lessons if status(s, le) == "locked"),     # the nearest to open first
+                    key=lambda le: (sum(not unlocked(s, b) for b in waiting_for(s, le)), *rank(le)))
+    keep = max(PATH - AHEAD, PATH - len(locked))
+    found = open_[:keep]
+    return found + locked[:PATH - len(found)]
 
 
 def for_shell(lessons, shell):
@@ -231,7 +261,8 @@ class Library:
                                     skills.oses(self.s))
         self.quiz, self.choice, self.chosen = [], 0, None     # the warm-up or the end quiz, while it's on
         self.final = False                                    # the quiz is the end quiz
-        self.lessons = shown(self.s, lessons)
+        self.full = False              # the whole library, or only your path (the first view)
+        self.lessons = self.view()
         self.pos = 0
         self.lesson = None             # the lesson being read, or None on the list
         self.page = 0
@@ -239,12 +270,37 @@ class Library:
         self.breath = self.blink = False
         self.pos = self.next_step()
         if open_id:
-            found = next((i for i, le in enumerate(self.lessons) if le["id"] == open_id), None)
-            if found is None:
+            if not self.go(open_id):
                 self.message = _("No lesson called {name}.").format(name=open_id)
             else:
-                self.pos = found
                 self.open()
+
+    def all_shown(self):
+        return shown(self.s, self.all)
+
+    def view(self):
+        """The rows of the list: your path, or every lesson, section by section. Never empty: once all
+        is mastered, the path shows the whole library."""
+        lessons = self.all_shown()
+        return by_section(lessons) if self.full else path(self.s, lessons) or by_section(lessons)
+
+    def go(self, lesson_id):
+        """Put the cursor on a lesson, in the whole library if it isn't on your path. False if there's none."""
+        if all(le["id"] != lesson_id for le in self.lessons) and not self.full:
+            self.full = True
+            self.lessons = self.view()
+        found = next((i for i, le in enumerate(self.lessons) if le["id"] == lesson_id), None)
+        if found is not None:
+            self.pos = found
+        return found is not None
+
+    def toggle(self):
+        at = self.lessons[self.pos]["id"]
+        self.full = not self.full
+        self.lessons = self.view()
+        self.pos = next((i for i, le in enumerate(self.lessons) if le["id"] == at), None)
+        if self.pos is None:
+            self.pos = self.next_step()
 
     def next_step(self, default=0):
         """Where the cursor goes: a lesson that makes you progress, new or unread ones first."""
@@ -256,9 +312,12 @@ class Library:
         return unlocked(self.s, le) and le["id"] not in progress_of(self.s)["opened"]
 
     def list_screen(self, cols, lines):
-        done = sum(le["id"] in read(self.s) for le in self.lessons)
-        head = render.heading("🦉 " + _("The Sage Owl's library"),
-                              _("{n}/{total} read · ↑↓ Enter: open · q: quit").format(n=done, total=len(self.lessons)), cols - 1)
+        every = self.all_shown()
+        done = sum(le["id"] in read(self.s) for le in every)
+        keys = _("{n}/{total} read · ↑↓ Enter: open · f: your path · q: quit") if self.full \
+            else _("{n}/{total} read · ↑↓ Enter: open · f: whole library · q: quit")
+        head = render.heading("🦉 " + (_("The Sage Owl's library") if self.full else _("Your path in the library")),
+                              keys.format(n=done, total=len(every)), cols - 1)
         out = [(1 + k, 2, TITLE + line) for k, line in enumerate(head)]
         top = len(head) - 1                                 # the keys took a line of their own (portrait)
         out.append((2 + top, 2, NEXT + "■ " + _("your next step") + f"{RESET}  ■ " + _("mastered") + f"  {DIM}🔒 "
@@ -267,7 +326,7 @@ class Library:
         align = 2 + max((render.width(f" 🔒 {le['title']} ") for le in self.lessons), default=0)
         avail = cols - 4 - 1
         for i, le in enumerate(self.lessons):
-            if group(le) != last:
+            if self.full and group(le) != last:
                 last = group(le)
                 rows.append((None, f"{BOLD}{last}{RESET}"))
             st = status(self.s, le)
@@ -276,7 +335,9 @@ class Library:
             new = f"  {ACCENT}" + _("new") + RESET if self.is_new(le) else ""
             text = f" {mark} {le['title']} "
             if st == "locked":
-                new = tail(text, after(self.s, le), align, avail)
+                new = tail(text, after(self.s, le) if self.full else f"{group(le)} · {after(self.s, le)}", align, avail)
+            elif not self.full:                       # the path mixes sections: each row names its own
+                new = tail(text, group(le), align, avail) + new
             rows.append((i, (REV if i == self.pos else "") + style + text + RESET + new))
         le = self.lessons[self.pos]
         st = status(self.s, le)
@@ -311,11 +372,10 @@ class Library:
         le = self.lessons[self.pos]
         if not unlocked(self.s, le):
             start = first_open(self.s, le)
-            at = next((i for i, other in enumerate(self.lessons) if start and other["id"] == start["id"]), None)
-            if at is None:
+            if not (start and self.go(start["id"])):
                 self.message = _("Not yet. To unlock it: {how}").format(how=how_to_unlock(self.s, le))
                 return
-            self.pos = at
+            at = self.pos
             self.message = _("“{title}” isn't open yet: lessons follow each other. The cursor moved to "
                              "“{start}”, the open lesson to practice first.").format(
                 title=short(le["title"]), start=short(self.lessons[at]["title"]))
@@ -344,17 +404,26 @@ class Library:
             else:
                 p["page"][le["id"]] = self.page
         self.s = state.load()
-        self.lessons = shown(self.s, self.all)
+        self.lessons = self.view()
+        self.pos = next((i for i, other in enumerate(self.lessons) if other["id"] == le["id"]), None)
+        if self.pos is None:                           # off the path now: on to the next step
+            self.pos = self.next_step()
         self.lesson = None
         if finished:
             self.message = _("Lesson done: “{title}”.").format(title=le["title"])
-            waiting = [w for w in self.lessons if le["id"] in w.get("after", []) and not unlocked(self.s, w)]
+            waiting = [w for w in self.all_shown() if le["id"] in w.get("after", []) and not unlocked(self.s, w)]
+            hard = [w for w in waiting if w.get("opens") == "mastered"]
+            waiting = [w for w in waiting if w not in hard]
             if waiting and not passed(self.s, le):     # bug report: players thought reading opens the next one
                 ways = ways_to_pass(self.s, le)
                 self.message += " " + _("Reading isn't enough to open {lessons}: practice this one first. "
                                         "Any one is enough: {ways}.").format(
                     lessons=_(" and ").join(_("“{name}”").format(name=short(w["title"])) for w in waiting),
                     ways=", ".join(ways[:-1]) + _(", or ") + ways[-1] if len(ways) > 1 else ways[0])
+            elif hard and not mastered(self.s, le):
+                self.message += " " + _("{lessons} opens once you have mastered this one: {how}.").format(
+                    lessons=_(" and ").join(_("“{name}”").format(name=short(w["title"])) for w in hard),
+                    how=missing(self.s, le["masters"]))
             elif status(self.s, le) == "next":
                 self.message += " " + _("Now practice it: fights and achievements make it mastered.")
             if notes:
@@ -412,6 +481,8 @@ class Library:
         elif k in ("enter", "right"):
             self.open()
             return True
+        elif k == "f":
+            self.toggle()
         elif k == "quit":
             return False
         self.message = ""
@@ -446,9 +517,10 @@ class Library:
                     self.blink = random.random() < 0.15
                 for k in keys:
                     running = running and self.key(terminal.name(k, KEYS))
-        done = sum(le["id"] in read(self.s) for le in self.lessons)
+        every = self.all_shown()
+        done = sum(le["id"] in read(self.s) for le in every)
         print("  🦉 " + _("{n}/{total} lessons read. `bashou lesson` opens the library again.").format(
-            n=done, total=len(self.lessons)))
+            n=done, total=len(every)))
         return 0
 
 
@@ -545,12 +617,20 @@ def shortcut(lesson):
 
 def how_to_unlock(s, lesson):
     """The lessons still to practice before this one, and the ways to get through each, on one line:
-    "practice “Paths”: win one of its fights, earn “Builder”, or earn 6 achievements in all (2/6)"."""
+    "practice “Paths”: win one of its fights, earn “Builder”, or earn 6 achievements in all (2/6)".
+    An easy lesson asks to read the one before, a hard one to master it."""
     names = titles()
     parts = []
     for before in waiting_for(s, lesson):
+        name = names.get(before["id"], before["title"])
+        if lesson.get("opens") == "read":
+            parts.append(_("read “{lesson}”").format(lesson=name))
+            continue
+        if lesson.get("opens") == "mastered":
+            parts.append(_("master “{lesson}”: {how}").format(lesson=name, how=missing(s, before["masters"])))
+            continue
         ways = ways_to_pass(s, before)
-        parts.append(_("practice “{lesson}”: {ways}").format(lesson=names.get(before["id"], before["title"]),
+        parts.append(_("practice “{lesson}”: {ways}").format(lesson=name,
                                                             ways=", ".join(ways[:-1]) + _(", or ") + ways[-1]
                                                             if len(ways) > 1 else ways[0]))
     text = " · ".join(parts)
@@ -567,12 +647,26 @@ def unlock_lines(s, lesson, width):
     names = titles()
     quoted = lambda le: _("“{name}”").format(name=short(names.get(le["id"], le["title"])))
     befores = waiting_for(s, lesson)
-    lines = [(part, ACCENT) for part in render.wrap(
-        _("🔒 {title} builds on {lessons}. Lessons follow each other: this one opens once you have "
-          "practiced what comes before.").format(title=short(lesson["title"]),
-                                                  lessons=_(" and ").join(quoted(b) for b in befores)), width, 4)]
+    opens = lesson.get("opens")
+    why = {"read": _("🔒 {title} builds on {lessons}. Lessons follow each other: this one opens once you have "
+                     "read what comes before."),
+           "mastered": _("🔒 {title} builds on {lessons}. It's a hard one: it opens once you have mastered "
+                         "what comes before.")}.get(opens, _(
+               "🔒 {title} builds on {lessons}. Lessons follow each other: this one opens once you have "
+               "practiced what comes before."))
+    lines = [(part, ACCENT) for part in render.wrap(why.format(
+        title=short(lesson["title"]), lessons=_(" and ").join(quoted(b) for b in befores)), width, 4)]
     ways = []
     for before in befores:
+        if opens == "read":
+            ways += [(part, "") for part in render.wrap(
+                _("Read {lesson} to the end.").format(lesson=quoted(before)), width, 2)]
+            continue
+        if opens == "mastered":
+            ways += [(part, "") for part in render.wrap(
+                _("To master {lesson}: {how}.").format(lesson=quoted(before), how=missing(s, before["masters"])),
+                width, 2)]
+            continue
         ways += [(part, "") for part in render.wrap(
             _("To practice {lesson}, any one of these is enough:").format(lesson=quoted(before)), width, 2)]
         ways += [(part, "") for part in text_lines(["- " + way for way in ways_to_pass(s, before)], width)]
