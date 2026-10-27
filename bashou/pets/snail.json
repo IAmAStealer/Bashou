@@ -1,51 +1,60 @@
 {
- "name": "Snail",
- "next": "gary",
+ "name": "Groundbreaker",
+ "next": "bricklayer",
  "next_at": {"achievements": 5},
  "palette": {
+  "o": "#3f4424",
+  "g": "#8f9c4e",
+  "G": "#6a7338",
+  "l": "#cdd294",
+  "w": "#f3f1e2",
+  "m": "#1c1c1c",
+  "p": "#e3937e",
+  "y": "#ffe680",
+  "Y": "#f5c518",
+  "H": "#b88a10",
+  "V": "#f2e83a",
+  "v": "#bfb424",
+  "R": "#c8d0d8",
   "a": "#784628",
   "S": "#c88c50",
-  "s": "#ebbe78",
-  "b": "#afcd7d",
-  "m": "#191919",
-  "p": "#ffa0aa"
+  "s": "#ebbe78"
  },
  "base": [
-  ".................",
-  "............m.m..",
-  "............b.b..",
-  "....aaaaa...b.b..",
-  "..aaSSSSSaa.bbbb.",
-  ".aSSsaaasSa.bmbb.",
-  ".aSsaSSasSa.bbpb.",
-  ".aSsaaSsSSa.bbbb.",
-  ".aSSsssSSa..bbb..",
-  "..aaSSSaa.bbbbb..",
-  "bbbbbbbbbbbbbbb..",
-  ".bbbbbbbbbbbbb..."
+  "..........yyy....",
+  ".........yYYYH...",
+  "........HHHHHH...",
+  ".........ww.ww...",
+  ".........wm.mw...",
+  ".........ogggo...",
+  ".........opmpo...",
+  "...sS....VRVgo...",
+  ".aaaaaa..VRVgo...",
+  "aSsSaSsa.vRvgo...",
+  "oGaaaaaGglllggo..",
+  ".oGGGGGGGGGGGGo.."
  ],
  "poses": {
   "inhale": {
-   "2": "-----aaa---------",
-   "3": "-----SSS---------"
+   "5": "........ogggggo.."
   },
   "closed": {
-   "1": "------------.-.--",
-   "5": "-------------b---"
+   "3": "---------oo-oo---",
+   "4": "---------GG-GG---"
   },
   "left": {
-   "1": "-----------m.m.--"
+   "4": "---------mw.mw---"
   },
   "right": {
-   "1": "------------.m.m-"
+   "4": "---------wm.wm---"
   },
   "fidget": {
-   "1": "------------.-.--",
-   "2": "------------m-m--"
+   "6": "...sS....opmpo...",
+   "7": ".........VRVgo..."
   }
  },
  "particles": [
   0,
-  2
+  0
  ]
 }

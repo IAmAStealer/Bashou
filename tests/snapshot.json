@@ -597,47 +597,47 @@
    ],
    [
     2,
-    "Snail",
+    "Groundbreaker",
     "★★☆☆☆"
    ],
    [
     2,
-    "Snail",
+    "Groundbreaker",
     "★★☆☆☆"
    ],
    [
     3,
-    "Gary",
+    "Bricklayer",
     "★★★☆☆"
    ],
    [
     3,
-    "Gary",
+    "Bricklayer",
     "★★★☆☆"
    ],
    [
     3,
-    "Gary",
+    "Bricklayer",
     "★★★☆☆"
    ],
    [
     4,
-    "Knight snail",
+    "Shell painter",
     "★★★★☆"
    ],
    [
     4,
-    "Knight snail",
+    "Shell painter",
     "★★★★☆"
    ],
    [
     4,
-    "Knight snail",
+    "Shell painter",
     "★★★★☆"
    ],
    [
     5,
-    "Ammonite",
+    "Gary",
     "★★★★★"
    ]
   ],
@@ -3842,23 +3842,23 @@
     "forms": [
      "slug",
      "snail",
-     "gary",
-     "knight_snail",
-     "ammonite"
+     "bricklayer",
+     "shell_painter",
+     "gary"
     ],
     "en": [
      "Slug",
-     "Snail",
-     "Gary",
-     "Knight snail",
-     "Ammonite"
+     "Groundbreaker",
+     "Bricklayer",
+     "Shell painter",
+     "Gary"
     ],
     "fr": [
      "Limace",
-     "Escargot",
-     "Gary",
-     "Escargot preux",
-     "Ammonite"
+     "Terrassier",
+     "Maçon",
+     "Peintre",
+     "Gary"
     ]
    },
    "beaver": {
@@ -6708,26 +6708,110 @@
    },
    "snail": {
     "palette": {
+     "o": "#3f4424",
+     "g": "#8f9c4e",
+     "G": "#6a7338",
+     "l": "#cdd294",
+     "w": "#f3f1e2",
+     "m": "#1c1c1c",
+     "p": "#e3937e",
+     "y": "#ffe680",
+     "Y": "#f5c518",
+     "H": "#b88a10",
+     "V": "#f2e83a",
+     "v": "#bfb424",
+     "R": "#c8d0d8",
+     "a": "#784628",
+     "S": "#c88c50",
+     "s": "#ebbe78"
+    },
+    "base": [
+     "..........yyy....",
+     ".........yYYYH...",
+     "........HHHHHH...",
+     ".........ww.ww...",
+     ".........wm.mw...",
+     ".........ogggo...",
+     ".........opmpo...",
+     "...sS....VRVgo...",
+     ".aaaaaa..VRVgo...",
+     "aSsSaSsa.vRvgo...",
+     "oGaaaaaGglllggo..",
+     ".oGGGGGGGGGGGGo.."
+    ]
+   },
+   "bricklayer": {
+    "palette": {
+     "o": "#3f4424",
+     "g": "#8f9c4e",
+     "G": "#6a7338",
+     "l": "#cdd294",
+     "w": "#f3f1e2",
+     "m": "#1c1c1c",
+     "p": "#e3937e",
+     "y": "#ffe680",
+     "Y": "#f5c518",
+     "H": "#b88a10",
+     "V": "#f2e83a",
+     "v": "#bfb424",
+     "R": "#c8d0d8",
      "a": "#784628",
      "S": "#c88c50",
      "s": "#ebbe78",
-     "b": "#afcd7d",
-     "m": "#191919",
-     "p": "#ffa0aa"
+     "k": "#5c636b",
+     "K": "#b8c0c8",
+     "h": "#9a6634"
     },
     "base": [
-     ".................",
-     "............m.m..",
-     "............b.b..",
-     "....aaaaa...b.b..",
-     "..aaSSSSSaa.bbbb.",
-     ".aSSsaaasSa.bmbb.",
-     ".aSsaSSasSa.bbpb.",
-     ".aSsaaSsSSa.bbbb.",
-     ".aSSsssSSa..bbb..",
-     "..aaSSSaa.bbbbb..",
-     "bbbbbbbbbbbbbbb..",
-     ".bbbbbbbbbbbbb..."
+     "..........yyy....",
+     ".........yYYYH...",
+     "........HHHHHH...",
+     ".........ww.wwkKK",
+     "..aa.....wm.mwkkk",
+     ".aSsa.sS.ogggo.h.",
+     "aSsaSa...opmpo.h.",
+     "aSaSsaa..VRVgo.h.",
+     "aSsaSSsa.VRVgo.h.",
+     "aSSsaSsa.vRvgo.h.",
+     "oGaaaaaGglllggoh.",
+     ".oGGGGGGGGGGGGo.."
+    ]
+   },
+   "shell_painter": {
+    "palette": {
+     "o": "#3f4424",
+     "g": "#8f9c4e",
+     "G": "#6a7338",
+     "l": "#cdd294",
+     "w": "#f3f1e2",
+     "m": "#1c1c1c",
+     "p": "#e3937e",
+     "y": "#ffe680",
+     "Y": "#f5c518",
+     "H": "#b88a10",
+     "V": "#f2e83a",
+     "v": "#bfb424",
+     "R": "#c8d0d8",
+     "a": "#784628",
+     "S": "#c88c50",
+     "s": "#ebbe78",
+     "A": "#a03050",
+     "P": "#f080a0",
+     "Q": "#c04070"
+    },
+    "base": [
+     ".............yyy.",
+     "............yYYYH",
+     "....aaaaa..HHHHHH",
+     "..AAPPSSSaa.ww.ww",
+     ".APPQaaasSa.wm.mw",
+     ".APQAPPasSa.ogggo",
+     ".APQAAPsSSa.opmpo",
+     ".AQPPQQSSa..VRVgo",
+     "..AAPPQaa...VRVgo",
+     "..P..P......vRvgo",
+     "oGGGGGGGGGglllgo.",
+     ".oGGGGGGGGGGGGo.."
     ]
    },
    "gary": {
@@ -6757,61 +6841,6 @@
      "..aaSSSaa.bbbbb..",
      "BBbbbbbbbbbbbbb..",
      ".GGgglllllggggG.."
-    ]
-   },
-   "knight_snail": {
-    "palette": {
-     "a": "#4a4a58",
-     "S": "#b8c0cc",
-     "s": "#7a8290",
-     "g": "#e0b040",
-     "b": "#8ab0d0",
-     "B": "#6a90b0",
-     "k": "#3a3a48",
-     "A": "#c8d0dc",
-     "v": "#191919",
-     "r": "#d03030",
-     "w": "#ffffff"
-    },
-    "base": [
-     "..........rrr....",
-     "..........kAAk...",
-     "....aaaaa.kAAAk..",
-     "..aaSSSSSaakvvvk.",
-     ".aSSsgggsSakAAAk.",
-     ".aSsgSSSgsSakAAk.",
-     ".aSsgSgSgsSabbbb.",
-     ".aSSgggSsSa.bbbb.",
-     ".aSSsssSSa..bbb..",
-     "..aaSSSaa.bbbbb..",
-     "BBbbbbbbbbbbbbb..",
-     ".BBbbbbbbbbbbb..."
-    ]
-   },
-   "ammonite": {
-    "palette": {
-     "a": "#6a4428",
-     "S": "#e8d2a6",
-     "s": "#b88a5a",
-     "g": "#8a5a34",
-     "t": "#d07a5a",
-     "T": "#a0503a",
-     "m": "#191919",
-     "w": "#ffffff"
-    },
-    "base": [
-     "....aaaaaa.......",
-     "..aaSgSSgSaa.....",
-     ".aSgSSSSSSgSa....",
-     ".aSSaaaaaSSSa....",
-     "aSgasssssaSgSa...",
-     "aSSasaaasaSSSa...",
-     "aSSasaSasaSSStwm.",
-     "aSgSasssaSgSttttt",
-     ".aSSSaaaSSSattTtT",
-     ".aSgSSgSSgSattTt.",
-     "..aaSSSSSaa.t.t.t",
-     "....aaaaa........"
     ]
    },
    "kit": {
@@ -9509,7 +9538,6 @@
   "All aboard! Next stop: your home folder.",
   "All trades",
   "Amethyst golem",
-  "Ammonite",
   "An HTML comment starts with `<!--` and ends with `-->`. The browser hides it, but the source shows it.",
   "An array of count items goes from 0 to count - 1. Compare the two loops.",
   "An intruder changed one file of the website in site/ a few minutes ago.\nEvery other file is weeks old. Which file was changed?",
@@ -9590,6 +9618,7 @@
   "Brancher",
   "Breaking change! Ha, I broke out of the changelog.",
   "Breakpoint Beetle",
+  "Bricklayer",
   "Bright and curious. A speck of dust with big dreams.",
   "Brood",
   "Brook",
@@ -9903,6 +9932,7 @@
   "Grass, hills, dungeons… `bashou adventure` is waiting for us.",
   "Gravel",
   "Gremlin",
+  "Groundbreaker",
   "Group Gremlin",
   "Group identical names with sort, count each group with uniq -c, then sort those counts with sort -rn: the biggest comes first.",
   "Groups of 8-4-4-4-12 hex digits, and the third starts with 4? A UUID, version 4.",
@@ -10085,7 +10115,6 @@
   "King slime",
   "Kit",
   "Kitsune",
-  "Knight snail",
   "Knocked out! The {threat} wins this time.",
   "Knocker",
   "Knot Eel",
@@ -10536,6 +10565,7 @@
   "Sharing is the best part of free software.",
   "Sharp eyes",
   "Shebang Shade",
+  "Shell painter",
   "Shell smith",
   "Shh. I'm reading.",
   "Shopping planner",

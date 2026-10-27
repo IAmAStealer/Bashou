@@ -105,5 +105,51 @@ class SaveTest(unittest.TestCase):
         self.assertEqual(progress.reached(s, "frog"), 2)
 
 
+class SnailTest(unittest.TestCase):
+    """Owner (2026-10-27): the slug builds its shell in three phases (Groundbreaker, Bricklayer, Shell painter)
+    and Gary comes last; the Knight snail and the Ammonite left the family."""
+    FORMS = ["slug", "snail", "bricklayer", "shell_painter", "gary"]
+
+    def test_the_slug_builds_its_shell_then_becomes_gary(self):
+        self.assertEqual(list(creatures.forms("snail")), self.FORMS)
+        self.assertNotIn("knight_snail", creatures.PETS)
+        self.assertNotIn("ammonite", creatures.PETS)
+
+    def test_the_builders_wear_the_same_hat_and_jacket(self):
+        builders = [creatures.PETS[p] for p in self.FORMS[1:4]]
+        for key in "yYHVvR":
+            self.assertEqual({b.palette[key] for b in builders}, {builders[0].palette[key]}, key)
+
+    def saved(self, **fields):
+        s = state.default()
+        s["version"] = 7
+        s["pets"].append("snail")
+        s.update(fields)
+        state.migrate(s, dict(s))
+        return s
+
+    def test_a_save_keeps_its_place_in_the_chain(self):
+        """Forms are saved as sprite ids: the old 3rd, 4th and 5th forms become the new ones at the same place."""
+        for old, new in (("snail", "snail"), ("gary", "bricklayer"), ("knight_snail", "shell_painter"),
+                         ("ammonite", "gary")):
+            with self.subTest(old):
+                s = self.saved(ladder_best={"snail": old}, looks={"snail": old})
+                self.assertEqual(s["ladder_best"]["snail"], new)
+                self.assertEqual(s["looks"]["snail"], new)
+
+    def test_an_evolution_on_its_way_keeps_its_places(self):
+        s = self.saved(ladder_best={"snail": "ammonite"},
+                       evolving=[{"who": "snail", "from": "knight_snail", "to": "ammonite"}])
+        self.assertEqual([(e["from"], e["to"]) for e in s["evolving"] if e["who"] == "snail"],
+                         [("shell_painter", "gary")])
+
+    def test_a_new_save_with_gary_keeps_gary(self):
+        s = state.default()
+        s["pets"].append("snail")
+        s["ladder_best"] = {"snail": "gary"}
+        state.migrate(s, dict(s))
+        self.assertEqual(s["ladder_best"]["snail"], "gary")
+
+
 if __name__ == "__main__":
     unittest.main()

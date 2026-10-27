@@ -16,7 +16,7 @@ from . import achievements, creatures, i18n
 DATA = Path(os.environ.get("BASHOU_DATA", Path.home() / ".local/share/bashou"))
 CACHE = Path(os.environ.get("BASHOU_CACHE", Path.home() / ".cache/bashou"))
 STATE = DATA / "state.json"
-SAVE_VERSION = 7        # bump with a step in migrate() whenever the save's shape changes
+SAVE_VERSION = 8        # bump with a step in migrate() whenever the save's shape changes
 
 
 @dataclass(frozen=True)
@@ -449,6 +449,24 @@ def migrate_script_skill(state):
         picks.insert(picks.index("bash") + 1, "script")
 
 
+# Version 8 (owner, 2026-10-27): the slug builds its shell in three phases and Gary comes last. Old snail
+# forms move to the new form at the same place in the chain; the Knight snail and the Ammonite are gone.
+SNAIL_PLACES = {"gary": "bricklayer", "knight_snail": "shell_painter", "ammonite": "gary"}
+
+
+def migrate_snail_forms(state):
+    """Runs before migrate_form_ids, which drops sprite ids the game no longer has."""
+    def new(who, sprite):
+        return SNAIL_PLACES.get(sprite, sprite) if who == "snail" else sprite
+
+    for field in ("ladder_best", "looks"):
+        if isinstance(state.get(field), dict):
+            state[field] = {who: new(who, sprite) for who, sprite in state[field].items()}
+    for e in state.get("evolving", []):
+        if isinstance(e, dict):
+            e["from"], e["to"] = new(e.get("who"), e.get("from")), new(e.get("who"), e.get("to"))
+
+
 def version_of(saved):
     """The version a save was written with (the first ones had none; a damaged one counts as those)."""
     version = saved.get("version", 1)
@@ -461,6 +479,7 @@ MIGRATIONS = [
     (lambda saved: "ladder_best" not in saved, migrate_slime),
     (lambda saved: "ladder_best" in saved and version_of(saved) < 3, migrate_slime_ladder),
     (lambda saved: "reviews" not in saved, migrate_reviews),
+    (lambda saved: 4 <= version_of(saved) < 8, migrate_snail_forms),   # version 8, before the next step
     (lambda saved: True, migrate_form_ids),        # version 4; also a number written by hand since
     (lambda saved: "win_times" not in saved, migrate_win_times),   # version 5
     (lambda saved: version_of(saved) < 6, migrate_families),       # version 6
