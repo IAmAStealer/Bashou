@@ -10,6 +10,15 @@
   "won negation_gnome",
   "won coin_wraith"
  ],
+ "questions": [
+  "logic-2-11",
+  "logic-2-12",
+  "logic-2-13",
+  "logic-1-05",
+  "logic-1-07",
+  "logic-2-07",
+  "logic-2-08"
+ ],
  "recall": [
   "logic-2-11",
   "logic-2-12",

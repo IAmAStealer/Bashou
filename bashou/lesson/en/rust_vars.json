@@ -11,6 +11,13 @@
   "won shadow_shade",
   "won byte_basilisk"
  ],
+ "questions": [
+  "rust-1-02",
+  "rust-1-11",
+  "rust-1-13",
+  "rust-1-12",
+  "rust-1-14"
+ ],
  "recall": [
   "rust-1-02",
   "rust-1-11",

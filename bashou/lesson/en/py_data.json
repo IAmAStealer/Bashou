@@ -15,6 +15,12 @@
   "won base64_banshee",
   "won injection_imp"
  ],
+ "questions": [
+  "python-1-02",
+  "python-2-09",
+  "python-2-10",
+  "python-2-04"
+ ],
  "recall": [
   "python-1-02",
   "python-2-09"

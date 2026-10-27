@@ -8,6 +8,11 @@
  "masters": [
   "tool man 1 | won flag_phantom"
  ],
+ "questions": [
+  "bash-1-08",
+  "bash-1-22",
+  "bash-1-32"
+ ],
  "recall": [
   "bash-1-08"
  ],

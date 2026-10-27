@@ -12,6 +12,12 @@
   "achievement dry_run | achievement xray | won shebang_shade",
   "achievement exit_code"
  ],
+ "questions": [
+  "bash-2-08",
+  "script-1-01",
+  "script-1-02",
+  "script-1-08"
+ ],
  "recall": [
   "bash-2-08",
   "script-1-01",

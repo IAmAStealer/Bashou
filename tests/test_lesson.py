@@ -272,6 +272,9 @@ class ReaderTest(unittest.TestCase):
         self.assertEqual(lib.lesson["id"], "command_line")
         for _ in BY_ID["command_line"]["pages"]:
             lib.key("enter")
+        self.assertTrue(lib.quiz)                                        # every lesson ends on its quiz
+        while lib.quiz:
+            lib.key("quit")
         self.assertIsNone(lib.lesson)
         self.assertEqual(state.load()["lessons"]["read"], ["command_line"])
         self.assertTrue(lesson.unlocked(state.load(), BY_ID["help"]))         # an easy one opens on reading

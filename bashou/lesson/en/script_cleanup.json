@@ -12,6 +12,13 @@
  "masters": [
   "won trap_troll"
  ],
+ "questions": [
+  "bash-2-09",
+  "bash-2-10",
+  "script-2-08",
+  "script-3-04",
+  "script-1-07"
+ ],
  "recall": [
   "bash-2-09",
   "bash-2-10",

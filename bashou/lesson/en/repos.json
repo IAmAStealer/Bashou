@@ -17,6 +17,12 @@
   "won candidate_crow | won enabled_ettin",
   "won mirror_mimic | won repo_revenant"
  ],
+ "questions": [
+  "debian-1-04",
+  "rocky-1-05",
+  "debian-3-01",
+  "rocky-3-06"
+ ],
  "recall": [
   "debian-1-04",
   "rocky-1-05",

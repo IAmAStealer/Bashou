@@ -9,6 +9,11 @@
   "achievement capture",
   "achievement loop"
  ],
+ "questions": [
+  "bash-2-02",
+  "bash-1-35",
+  "bash-1-36"
+ ],
  "recall": [
   "bash-2-02"
  ],

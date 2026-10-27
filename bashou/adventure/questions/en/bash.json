@@ -700,5 +700,161 @@
   ],
   "answer": 0,
   "explain": "bash numbers the items of an array from 0, so [1] is the second item, green. zsh numbers them from 1, so [1] is the first item, red. In a script that starts with #!/usr/bin/env bash, count from 0, because bash runs it."
+ },
+ {
+  "id": "bash-1-32",
+  "level": 1,
+  "q": "You need a tool that compresses files, but you don't know its name. What helps you find it?",
+  "choices": [
+   "man -k compress",
+   "compress --help",
+   "cat /usr/bin",
+   "history | grep compress"
+  ],
+  "answer": 0,
+  "explain": "man -k (also called apropos) searches the names and one-line descriptions of every manual installed, so it finds tools by what they do, not by their name. compress --help only works if a tool is called compress. Once you have a name, its --help or man page tells you how to use it. If it finds nothing, the index isn't built yet: sudo mandb on Linux."
+ },
+ {
+  "id": "bash-1-33",
+  "level": 1,
+  "q": "app.log has 50,000 lines. You want to scroll through it and search for the word timeout. Which tool fits?",
+  "choices": [
+   "less app.log, then /timeout",
+   "cat app.log",
+   "head app.log",
+   "echo app.log"
+  ],
+  "answer": 0,
+  "explain": "less shows a long file one screen at a time: arrows scroll, /timeout searches, n jumps to the next match and q quits. cat prints all 50,000 lines at once, so they scroll past too fast to read. head only shows the first 10 lines."
+ },
+ {
+  "id": "bash-1-34",
+  "level": 1,
+  "q": "A program writes its newest messages at the end of app.log. Which command shows the last 20 lines?",
+  "choices": [
+   "tail -n 20 app.log",
+   "head -n 20 app.log",
+   "grep 20 app.log",
+   "cat app.log 20"
+  ],
+  "answer": 0,
+  "explain": "tail shows the end of a file, and -n 20 asks for 20 lines instead of the usual 10. The end of a log is where the newest messages are, so tail is the tool you use most on logs. head shows the start, the oldest lines. grep 20 would look for the text 20."
+ },
+ {
+  "id": "bash-1-35",
+  "level": 1,
+  "q": "You type name = sam at the prompt, and the shell answers: name: command not found. Why?",
+  "choices": [
+   "With spaces, the shell runs a command called name",
+   "Variables must be in capitals",
+   "sam must be in quotes",
+   "name is a reserved word"
+  ],
+  "answer": 0,
+  "explain": "The shell cuts the line at each space, and the first word is the command: here a program called name, given = and sam as arguments. A variable is set with no spaces around the =: name=sam. Then $name reads it back."
+ },
+ {
+  "id": "bash-1-36",
+  "level": 1,
+  "q": "You set region=eu at the prompt, then run ./deploy.sh, which reads $region. Inside the script it's empty. Why?",
+  "choices": [
+   "A plain variable stays in your shell: export it",
+   "The script must be run with sudo",
+   "Variables are wiped after each command",
+   "region is too short a name"
+  ],
+  "answer": 0,
+  "explain": "A variable you set stays in your shell. The programs you start, like a script, only get the environment variables: export region=eu hands it on. You can also give it for one run only: region=eu ./deploy.sh. $HOME and $PATH reach every program because they are exported."
+ },
+ {
+  "id": "bash-1-37",
+  "level": 1,
+  "q": "What does echo 'Home: $HOME' print, with single quotes?",
+  "choices": [
+   "Home: $HOME, exactly as written",
+   "Home: /home/sam, your home folder",
+   "Nothing: the quotes hide it",
+   "An error: $ needs double quotes"
+  ],
+  "answer": 0,
+  "explain": "Between single quotes, nothing is replaced: you get the text exactly as written. Double quotes still replace $variables and $( ): echo \"Home: $HOME\" prints your home folder. Use single quotes when a program has its own special characters, like a grep pattern."
+ },
+ {
+  "id": "bash-1-38",
+  "level": 1,
+  "q": "app.log is full of DEBUG lines that hide everything else. Which command shows all the lines except those?",
+  "choices": [
+   "grep -v DEBUG app.log",
+   "grep DEBUG app.log",
+   "grep -c DEBUG app.log",
+   "grep -i DEBUG app.log"
+  ],
+  "answer": 0,
+  "explain": "-v turns grep around: it prints the lines that do NOT contain DEBUG. grep DEBUG would show only the noise, -c only counts it, and -i only ignores upper or lower case. grep only reads the file, so you can filter as often as you like."
+ },
+ {
+  "id": "bash-1-39",
+  "level": 1,
+  "q": "You need every file under config/ that mentions db_host, with the line number. Which command?",
+  "choices": [
+   "grep -rn db_host config/",
+   "grep db_host config/",
+   "find config/ db_host",
+   "ls -R config/ | grep db_host"
+  ],
+  "answer": 0,
+  "explain": "-r makes grep search every file in the folder and below, and -n adds the line number after the file name, so you can open the right spot. Without -r, grep doesn't look inside a folder (GNU grep says: Is a directory). ls -R | grep would only search the file names, not what they contain."
+ },
+ {
+  "id": "bash-1-40",
+  "level": 1,
+  "q": "What does tar -czf site.tar.gz site/ do?",
+  "choices": [
+   "Packs site/ into one compressed file, site.tar.gz",
+   "Unpacks site.tar.gz into site/",
+   "Lists what site.tar.gz holds",
+   "Deletes site/ once it is saved"
+  ],
+  "answer": 0,
+  "explain": "Read the letters as a sentence: c create, z compress with gzip, f into this file, whose name comes right after. So it packs the whole site/ folder into site.tar.gz and leaves site/ as it was. To list an archive, use t instead of c; to extract it, x."
+ },
+ {
+  "id": "bash-1-41",
+  "level": 1,
+  "q": "find . -name 'logs*' prints folders as well as files. How do you keep only the files?",
+  "choices": [
+   "Add -type f",
+   "Add -type d",
+   "Remove the quotes",
+   "Add | grep -v /"
+  ],
+  "answer": 0,
+  "explain": "-type f keeps regular files and -type d keeps directories (folders). find's tests add up: a path is printed only when it passes all of them, here a name starting with logs AND being a file. grep -v / would drop every result, since each path has a / in it. The quotes stay: without them, the shell would expand logs* against the current folder before find sees it."
+ },
+ {
+  "id": "bash-2-24",
+  "level": 2,
+  "q": "A line of pets.txt says: cat and cat. What does sed 's/cat/dog/' pets.txt print for it?",
+  "choices": [
+   "dog and cat",
+   "dog and dog",
+   "cat and cat",
+   "Nothing: sed changed the file"
+  ],
+  "answer": 0,
+  "explain": "Without g at the end, s/old/new/ only replaces the first match of each line. s/cat/dog/g would give dog and dog. sed prints the result and leaves pets.txt alone: only -i would change the file itself."
+ },
+ {
+  "id": "bash-2-25",
+  "level": 2,
+  "q": "You want to fix a typo in config.txt with sed -i. Why run the same sed once without -i first?",
+  "choices": [
+   "You see the result, and the file isn't changed yet",
+   "Without -i, sed checks the syntax only",
+   "sed -i needs a first run to work",
+   "It makes a backup of the file"
+  ],
+  "answer": 0,
+  "explain": "Without -i, sed prints the edited text and leaves the file as it is: you can check that only the right words change. -i writes the change into the file itself, with no undo, unless you give a suffix: sed -i.bak keeps config.txt.bak, on Linux and macOS alike. On macOS, plain -i needs a suffix, even an empty one: sed -i ''."
  }
 ]

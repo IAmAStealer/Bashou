@@ -11,6 +11,12 @@
  "masters": [
   "won six_serpent"
  ],
+ "questions": [
+  "network-2-04",
+  "network-2-05",
+  "network-2-06",
+  "network-3-02"
+ ],
  "recall": [
   "network-2-04",
   "network-2-05"

@@ -16,6 +16,11 @@
   "won column_crab",
   "won peak_harpy"
  ],
+ "questions": [
+  "bash-1-13",
+  "bash-1-14",
+  "bash-2-11"
+ ],
  "recall": [
   "bash-1-13",
   "bash-1-14"

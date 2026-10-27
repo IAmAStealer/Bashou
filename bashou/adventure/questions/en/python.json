@@ -284,5 +284,31 @@
   ],
   "answer": 0,
   "explain": "subprocess.run doesn't raise an error when the command fails: it stores the exit code in result.returncode and carries on. With check=True, a non-zero exit code raises CalledProcessError and the script stops, like cmd || exit 1 in bash. Otherwise, read returncode yourself. (A program that isn't installed still raises FileNotFoundError.)"
+ },
+ {
+  "id": "python-1-13",
+  "level": 1,
+  "q": "hosts = ['web'], then backup = hosts, then hosts.append('db'). What does print(backup) show?",
+  "choices": [
+   "['web', 'db']",
+   "['web']",
+   "[]",
+   "An error: backup was never filled"
+  ],
+  "answer": 0,
+  "explain": "= doesn't copy: it sticks a second name on the same list. hosts and backup are two labels on one object, so a change through one name shows through the other. To get a real second list, ask for a copy: backup = hosts.copy()."
+ },
+ {
+  "id": "python-1-14",
+  "level": 1,
+  "q": "name = 'sam', then name.upper(), then print(name). What prints?",
+  "choices": [
+   "sam",
+   "SAM",
+   "None",
+   "An error: upper needs an argument"
+  ],
+  "answer": 0,
+  "explain": "A string can never change. .upper() doesn't touch 'sam': it builds a new string, 'SAM', and nobody keeps it. At the >>> prompt you'd see 'SAM' echoed, yet name is still 'sam'. Keep the result to use it: name = name.upper(). Lists and dicts are different: they can change in place."
  }
 ]

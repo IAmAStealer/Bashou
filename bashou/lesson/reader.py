@@ -13,7 +13,7 @@ from .. import achievements, challenges, creatures, progress, render, skills, st
 from ..adventure import quiz
 from ..i18n import _
 from . import (HERE, answered, by_id, depths, first_open, load, mastered, met, own, passed, progress_of, read,
-               record_right, right, shown, skills_of, status, to_pass, unlocked, waiting_for)
+               quiz_pass, record_right, right, shown, skills_of, status, to_pass, unlocked, waiting_for)
 from ..render import ESC, BOLD, DIM, RESET, REV, GOOD, BAD
 
 ACCENT = f"{ESC}[38;2;240;200;110m"
@@ -210,9 +210,9 @@ def end_quiz(s, lesson, rng=None):
     return questions(s, [q for q in lesson.get("questions", []) if q not in done], END_QUIZ, rng or random.Random())
 
 
-def warmup_screen(lesson, questions, total, pos, chosen, cols, lines, final=False):
+def warmup_screen(lesson, questions, total, pos, chosen, cols, lines, final=False, need=None):
     """(row, col, text) pieces: the question, its choices, and once answered, the explanation. `final`:
-    the quiz at the end of the lesson instead of the warm-up."""
+    the quiz at the end of the lesson instead of the warm-up; `need`: the right answers that pass it."""
     q = questions[0]
     width = min(cols - 4, 76)
     head = "🦉 " + (_("Quiz: “{title}”") if final else _("Warm-up before “{title}”")).format(title=lesson["title"]) \
@@ -221,7 +221,7 @@ def warmup_screen(lesson, questions, total, pos, chosen, cols, lines, final=Fals
     row = len(out) + 2
     why = _("Show what you understood: {n} right answers to this lesson's questions pass it, here or "
             "in the adventure.").format(n=next((c.split()[2] for c in lesson.get("masters", [])
-                                               if c.startswith("answered ")), END_QUIZ)) if final \
+                                               if c.startswith("answered ")), need or END_QUIZ)) if final \
         else _("What you learned just before: does it still come back?")
     for part in render.wrap(why, width, 2):
         out.append((row, 2, DIM + part + RESET))
@@ -492,7 +492,8 @@ class Library:
 
     def screen(self, cols, lines):
         if self.lesson and self.quiz:
-            return warmup_screen(self.lesson, self.quiz, self.quiz_total, self.choice, self.chosen, cols, lines, self.final)
+            return warmup_screen(self.lesson, self.quiz, self.quiz_total, self.choice, self.chosen, cols, lines, self.final,
+                                 quiz_pass(self.s, self.lesson))
         if self.lesson:
             return page_screen(self.lesson, self.page, cols, lines, self.breath, self.blink)
         return self.list_screen(cols, lines)

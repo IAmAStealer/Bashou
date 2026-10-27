@@ -14,6 +14,12 @@
   "won resolver_rook | tool dig 3 | tool host 3 | tool nslookup 3",
   "won nxdomain_nixie"
  ],
+ "questions": [
+  "network-2-09",
+  "network-3-01",
+  "network-3-06",
+  "network-3-08"
+ ],
  "recall": [
   "network-2-09",
   "network-3-01"

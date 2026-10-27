@@ -12,6 +12,14 @@
   "achievement headers | tool curl 1 | tool ping 1 | won header_hound",
   "achievement resolver"
  ],
+ "questions": [
+  "network-1-01",
+  "network-1-02",
+  "network-1-04",
+  "network-1-03",
+  "network-1-12",
+  "network-1-09"
+ ],
  "recall": [
   "network-1-01",
   "network-1-02",

@@ -12,6 +12,13 @@
   "won masked_mole",
   "won errexit_eel"
  ],
+ "questions": [
+  "bash-2-04",
+  "bash-2-20",
+  "script-2-02",
+  "script-2-03",
+  "script-3-01"
+ ],
  "recall": [
   "bash-2-04",
   "bash-2-20",

@@ -10,6 +10,11 @@
   "won needle_gnat | tool grep 3",
   "achievement digger"
  ],
+ "questions": [
+  "bash-1-06",
+  "bash-1-38",
+  "bash-1-39"
+ ],
  "recall": [
   "bash-1-06"
  ],

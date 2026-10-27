@@ -8,6 +8,11 @@
  "masters": [
   "tool nano 1 | tool vim 1 | tool vi 1 | won typo_troll"
  ],
+ "questions": [
+  "bash-1-15",
+  "bash-1-16",
+  "bash-1-23"
+ ],
  "recall": [
   "bash-1-15",
   "bash-1-16"

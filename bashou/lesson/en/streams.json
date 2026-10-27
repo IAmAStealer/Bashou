@@ -9,6 +9,13 @@
  "masters": [
   "achievement merge | won stderr_stalker"
  ],
+ "questions": [
+  "bash-1-12",
+  "bash-1-05",
+  "bash-2-01",
+  "bash-1-26",
+  "script-3-08"
+ ],
  "recall": [
   "bash-1-12",
   "bash-1-05",

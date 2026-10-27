@@ -563,5 +563,31 @@
   ],
   "answer": 0,
   "explain": "tar unpacks into the folder you're in, unless -C names another one (it must exist). -x unpacks, -z because it's gzip, -f names the archive. To look inside first without unpacking anything: tar -tzf backup.tar.gz."
+ },
+ {
+  "id": "linux-1-21",
+  "level": 1,
+  "q": "You start a long copy with cp big.iso /mnt/usb/ &. What does the & at the end do?",
+  "choices": [
+   "Runs it in the background: you get the prompt back",
+   "Copies faster, on two cores",
+   "Runs it as root",
+   "Keeps it running after you log out"
+  ],
+  "answer": 0,
+  "explain": "A command ending with & runs in the background: the shell gives you the prompt back at once, and jobs lists what still runs. It is still a child of your shell, so closing the terminal usually stops it too. It doesn't make the copy faster or give it more rights. fg brings it back to the front."
+ },
+ {
+  "id": "linux-1-22",
+  "level": 1,
+  "q": "The power goes off while you edit a document you haven't saved. Why is the latest text lost?",
+  "choices": [
+   "It was only in RAM, which empties without power",
+   "The disk erases itself at power off",
+   "The CPU deletes unsaved files",
+   "It is in the trash, waiting"
+  ],
+  "answer": 0,
+  "explain": "A program and the data it works on live in RAM while it runs. RAM needs power: when it goes off, RAM is empty. The disk keeps what was written to it, and saving means writing to it. The trash only holds files you deleted. Save often, and an editor's autosave does it for you."
  }
 ]

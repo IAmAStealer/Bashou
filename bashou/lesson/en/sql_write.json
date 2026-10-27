@@ -13,6 +13,16 @@
   "won insert_imp",
   "won update_urchin"
  ],
+ "questions": [
+  "sql-1-07",
+  "sql-1-08",
+  "sql-1-09",
+  "sql-1-10",
+  "sql-2-04",
+  "sql-2-05",
+  "sql-2-06",
+  "sql-1-01"
+ ],
  "recall": [
   "sql-1-07",
   "sql-1-08",

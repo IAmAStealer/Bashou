@@ -185,7 +185,9 @@ class EndQuizTest(Saved):
         self.read_to_the_end(lib)
         self.assertEqual([q["id"] for q in lib.quiz], BY_ID["ai_context"]["questions"][-1:])
 
-    def test_a_lesson_without_questions_has_no_quiz(self):
+    def test_a_lesson_whose_questions_are_all_answered_has_no_quiz(self):
+        with state.locked() as s:
+            s["lessons"]["right"] = list(BY_ID["command_line"]["questions"])
         lib = reader.Library(LESSONS, "command_line")
         lib.quiz = []
         self.read_to_the_end(lib)

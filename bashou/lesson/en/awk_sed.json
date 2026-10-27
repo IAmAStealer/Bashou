@@ -15,6 +15,11 @@
   "won field_wasp | won awk_golem | tool awk 3 | tool sed 3",
   "won verse_viper | won sed_serpent"
  ],
+ "questions": [
+  "bash-1-19",
+  "bash-2-24",
+  "bash-2-25"
+ ],
  "recall": [
   "bash-1-19"
  ],

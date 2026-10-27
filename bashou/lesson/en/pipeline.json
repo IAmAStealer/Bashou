@@ -11,6 +11,16 @@
   "won stage_specter",
   "won needs_newt"
  ],
+ "questions": [
+  "cicd-1-10",
+  "cicd-1-12",
+  "cicd-2-11",
+  "cicd-1-11",
+  "cicd-2-12",
+  "cicd-2-13",
+  "cicd-1-06",
+  "cicd-1-07"
+ ],
  "recall": [
   "cicd-1-10",
   "cicd-1-12",

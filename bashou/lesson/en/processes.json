@@ -14,6 +14,11 @@
   "achievement signal",
   "won ps_phantom"
  ],
+ "questions": [
+  "linux-1-04",
+  "linux-1-11",
+  "linux-1-21"
+ ],
  "recall": [
   "linux-1-04",
   "linux-1-11"

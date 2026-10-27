@@ -8,6 +8,12 @@
  "masters": [
   "fights 3 | won glob_goblin"
  ],
+ "questions": [
+  "bash-1-11",
+  "bash-1-25",
+  "bash-1-29",
+  "bash-1-03"
+ ],
  "recall": [
   "bash-1-11"
  ],

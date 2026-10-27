@@ -13,6 +13,12 @@
   "won loop_lich",
   "won ouroboros"
  ],
+ "questions": [
+  "python-1-11",
+  "python-2-08",
+  "logic-2-06",
+  "logic-2-01"
+ ],
  "recall": [
   "python-1-11",
   "python-2-08"

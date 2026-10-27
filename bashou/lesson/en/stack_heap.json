@@ -10,6 +10,11 @@
   "won leak_lurker",
   "won stack_specter"
  ],
+ "questions": [
+  "c-1-07",
+  "c-1-01",
+  "c-2-02"
+ ],
  "recall": [
   "c-1-07",
   "c-1-01"

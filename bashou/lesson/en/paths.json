@@ -9,6 +9,12 @@
   "achievement builder | tool cd 1 | tool pwd 1",
   "achievement shortcut"
  ],
+ "questions": [
+  "bash-1-01",
+  "bash-1-03",
+  "linux-1-01",
+  "linux-1-02"
+ ],
  "recall": [
   "bash-1-01",
   "bash-1-03"

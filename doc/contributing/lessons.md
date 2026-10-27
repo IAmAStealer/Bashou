@@ -48,9 +48,12 @@ No code needed: a lesson is one JSON file.
   `a | b` holds when one side does. Conditions: `commands N`, `tool NAME N` (used N times),
   `won FIGHT_ID`, `fights N` (won), `achievement ID`, `answered LESSON_ID N` (N of the lesson's
   `questions` answered right).
-- `questions` (optional): ids of adventure questions that belong to this lesson. With an `answered`
-  condition, the lesson ends on a quiz of those not answered right yet, and right answers in the
-  adventure count too: the way to pass a lesson with no fights (AI tools).
+- `questions`: ids of adventure questions about this lesson, at least 3, its `recall` ones included (a
+  test checks it; write new questions when the banks don't have enough). The lesson ends on a quiz of
+  those not answered right yet. 3 right answers, here or in the adventure, pass it (only those shown on
+  the player's systems count, so fewer when a Mac hides Linux-only ones): the lessons after it open,
+  unless they wait for mastery. Answers never master it, except with an `answered` condition in
+  `masters` (AI tools, which have no fights).
 - `recall`: ids of adventure questions about this lesson (`bashou/adventure/questions`). The first
   time a lesson opens, the library asks 2 of the `recall` questions of the lessons before it: a
   warm-up on the bricks it builds on.

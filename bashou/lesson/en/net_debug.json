@@ -16,6 +16,12 @@
   "won refused_revenant | tool tcpdump 3",
   "won established_ettin"
  ],
+ "questions": [
+  "network-1-11",
+  "network-2-11",
+  "network-1-08",
+  "network-3-12"
+ ],
  "recall": [
   "network-1-11",
   "network-2-11"

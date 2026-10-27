@@ -563,5 +563,31 @@
   ],
   "answer": 0,
   "explain": "tar dépaquette dans le dossier où tu es, sauf si -C en nomme un autre (il doit exister). -x dépaquette, -z parce que c'est du gzip, -f nomme l'archive. Pour regarder dedans d'abord sans rien dépaqueter : tar -tzf backup.tar.gz."
+ },
+ {
+  "id": "linux-1-21",
+  "level": 1,
+  "q": "Tu lances une longue copie avec cp big.iso /mnt/usb/ &. Que fait le & à la fin ?",
+  "choices": [
+   "La lance en arrière-plan : tu récupères l'invite",
+   "Copie plus vite, sur deux cœurs",
+   "La lance en tant que root",
+   "La garde en vie après ta déconnexion"
+  ],
+  "answer": 0,
+  "explain": "Une commande qui finit par & tourne en arrière-plan : le shell te rend l'invite tout de suite, et jobs liste ce qui tourne encore. Elle reste un enfant de ton shell : fermer le terminal l'arrête en général aussi. Ça ne rend pas la copie plus rapide et ne lui donne pas plus de droits. fg la ramène au premier plan."
+ },
+ {
+  "id": "linux-1-22",
+  "level": 1,
+  "q": "Le courant coupe pendant que tu modifies un document pas encore enregistré. Pourquoi le dernier texte est-il perdu ?",
+  "choices": [
+   "Il n'était qu'en RAM, qui se vide sans courant",
+   "Le disque s'efface à l'arrêt",
+   "Le processeur supprime les fichiers non enregistrés",
+   "Il est dans la corbeille, en attente"
+  ],
+  "answer": 0,
+  "explain": "Un programme et les données qu'il manipule vivent en RAM pendant qu'il tourne. La RAM a besoin de courant : quand il coupe, elle est vide. Le disque garde ce qu'on y a écrit, et enregistrer veut dire y écrire. La corbeille ne garde que les fichiers supprimés. Enregistre souvent ; la sauvegarde automatique d'un éditeur le fait pour toi."
  }
 ]

@@ -217,3 +217,55 @@ class SystemdInLinuxTest(unittest.TestCase):
         s["skills"] = ["linux", "systemd"]
         state.migrate(s)
         self.assertEqual(s["skills"], ["linux"])
+
+
+class LessonQuizTest(unittest.TestCase):
+    """Owner, 2026-10-27 (option A): every lesson gets its own questions, so it ends on a quiz and right
+    answers, at its end or in the adventure, pass it (open what comes next). They never master it."""
+
+    def test_every_lesson_has_its_own_questions(self):
+        en = {q["id"] for topic in world.TOPICS for q in quiz.bank(topic, "en")}
+        fr = {q["id"] for topic in world.TOPICS for q in quiz.bank(topic, "fr")}
+        for le in LESSONS:
+            with self.subTest(le["id"]):
+                own = le.get("questions", [])
+                self.assertGreaterEqual(len(own), 3)
+                self.assertLessEqual(set(own), en)
+                self.assertLessEqual(set(own), fr)                    # translated too
+                self.assertLessEqual(set(le["recall"]), set(own))     # its warm-up questions are its own
+
+    def right(self, s, ids):
+        s.setdefault("lessons", {}).setdefault("right", []).extend(ids)
+
+    def test_three_right_answers_pass_a_lesson_not_master_it(self):
+        s = state.default()
+        grep = BY_ID["grep"]
+        self.assertFalse(lesson.passed(s, grep))
+        self.right(s, grep["questions"][:2])
+        self.assertFalse(lesson.passed(s, grep))
+        self.right(s, grep["questions"][2:3])
+        self.assertTrue(lesson.passed(s, grep))
+        self.assertFalse(lesson.mastered(s, grep))
+
+    def test_on_a_mac_the_questions_you_are_shown_are_enough(self):
+        s = state.default()
+        s.setdefault("settings", {})["os"] = "macos"
+        computer = BY_ID["computer"]
+        mine = [q for q in computer["questions"] if not lesson.question_os().get(q)]
+        self.assertEqual(lesson.quiz_pass(s, computer), min(3, len(mine)))
+        self.right(s, mine[:lesson.quiz_pass(s, computer)])
+        self.assertTrue(lesson.passed(s, computer))
+
+    def test_answers_dont_open_a_lesson_that_waits_for_mastery(self):
+        s = state.default()
+        self.right(s, BY_ID["stack_heap"]["questions"])
+        self.assertTrue(lesson.passed(s, BY_ID["stack_heap"]))
+        self.assertFalse(lesson.unlocked(s, BY_ID["pointers"]))
+
+    def test_a_lesson_ends_on_its_quiz_and_says_how_many_pass_it(self):
+        s = state.default()
+        quiz_ = reader.end_quiz(s, BY_ID["grep"])
+        self.assertTrue(quiz_)
+        text = " ".join(render.strip(t) for r, c, t in reader.warmup_screen(
+            BY_ID["grep"], quiz_, len(quiz_), 0, None, 100, 40, final=True, need=lesson.quiz_pass(s, BY_ID["grep"])))
+        self.assertIn("3 right answers", text)

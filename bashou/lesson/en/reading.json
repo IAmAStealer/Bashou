@@ -9,6 +9,11 @@
   "tool less 1",
   "tool tail 1"
  ],
+ "questions": [
+  "linux-1-12",
+  "bash-1-33",
+  "bash-1-34"
+ ],
  "recall": [
   "linux-1-12"
  ],

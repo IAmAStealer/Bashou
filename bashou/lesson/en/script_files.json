@@ -12,6 +12,14 @@
   "won dash_demon | won nomatch_nymph",
   "won newline_nixie | won stdin_siren"
  ],
+ "questions": [
+  "bash-2-03",
+  "bash-2-05",
+  "script-2-04",
+  "script-2-05",
+  "script-3-02",
+  "script-1-06"
+ ],
  "recall": [
   "bash-2-03",
   "bash-2-05",

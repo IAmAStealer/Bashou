@@ -9,6 +9,13 @@
   "achievement octal | tool chmod 3 | won padlock_pest",
   "achievement symbolic"
  ],
+ "questions": [
+  "linux-1-08",
+  "linux-1-09",
+  "bash-2-08",
+  "linux-1-18",
+  "bash-1-28"
+ ],
  "recall": [
   "linux-1-08",
   "linux-1-09",

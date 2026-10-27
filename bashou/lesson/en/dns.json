@@ -11,6 +11,12 @@
  "masters": [
   "achievement resolver"
  ],
+ "questions": [
+  "network-1-06",
+  "network-1-07",
+  "network-2-07",
+  "network-2-08"
+ ],
  "recall": [
   "network-1-06",
   "network-1-07"

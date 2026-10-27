@@ -151,6 +151,24 @@ def to_pass(lesson):
     return PER_DEPTH * depths().get(lesson["id"], 1)
 
 
+QUIZ_PASS = 3       # right answers to a lesson's own questions that pass it (owner, 2026-10-27)
+
+
+@functools.lru_cache(maxsize=1)
+def question_os():
+    """{question id: its "os" or None}, for every adventure question (read once)."""
+    from ..adventure import quiz, world
+    return {q["id"]: q.get("os") for topic in world.TOPICS for q in quiz.bank(topic, "en")}
+
+
+def quiz_pass(s, lesson):
+    """How many right answers to its own questions pass this lesson: QUIZ_PASS, or all of those shown on
+    your systems when there are fewer (a Mac doesn't see the Linux-only ones). 0: no quiz passes it."""
+    systems = skills.oses(s)
+    return min(QUIZ_PASS, sum(skills.shows({"os": question_os().get(q)}, systems)
+                              for q in lesson.get("questions", [])))
+
+
 def own(lesson, kind):
     """The conditions of one kind ("achievement", "tool") among the lesson's masters, as split words."""
     return [c.split() for cond in lesson.get("masters", []) for c in cond.split("|") if c.split()[0] == kind]
@@ -159,9 +177,11 @@ def own(lesson, kind):
 def passed(s, lesson):
     """You're through this lesson, and the ones after it may open: one of its fights won, one of the
     achievements it prepares for earned, one of its commands used with success (see tool_uses), enough
-    of its questions answered right, or enough achievements in all (3 per step of depth)."""
+    of its questions answered right (its "answered" master, or quiz_pass), or enough achievements in all (3 per step of depth)."""
     earned = s["achievements"]
+    need = quiz_pass(s, lesson)
     return (bool(set(lesson.get("fights", [])) & set(s["challenges"]))
+            or (need and len(set(right(s)) & set(lesson["questions"])) >= need)
             or any(a in earned for _, a in own(lesson, "achievement"))
             or any(met(s, " ".join(t)) for t in own(lesson, "tool") + own(lesson, "answered"))
             or len(earned) >= to_pass(lesson))

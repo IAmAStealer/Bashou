@@ -9,6 +9,11 @@
  "masters": [
   "won index_imp"
  ],
+ "questions": [
+  "bash-2-21",
+  "bash-2-22",
+  "bash-2-23"
+ ],
  "recall": [
   "bash-2-21"
  ],

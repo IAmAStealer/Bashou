@@ -12,6 +12,15 @@
   "won address_adder | tool ip 1",
   "won subnet_sprite"
  ],
+ "questions": [
+  "network-2-01",
+  "network-2-03",
+  "network-2-02",
+  "network-1-05",
+  "network-1-10",
+  "network-3-09",
+  "network-3-10"
+ ],
  "recall": [
   "network-2-01",
   "network-2-03"

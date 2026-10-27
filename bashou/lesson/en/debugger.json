@@ -13,6 +13,12 @@
   "won segfault_salamander | tool gdb 3",
   "won breakpoint_beetle"
  ],
+ "questions": [
+  "c-2-13",
+  "c-2-14",
+  "c-3-01",
+  "c-3-02"
+ ],
  "recall": [
   "c-2-13",
   "c-2-14"

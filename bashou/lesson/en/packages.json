@@ -13,6 +13,15 @@
   "won version_vole | won release_raven | tool apt 3 | tool dnf 3 | tool dpkg 3 | tool rpm 3",
   "won stowaway_stoat | won census_centipede"
  ],
+ "questions": [
+  "debian-1-01",
+  "rocky-1-01",
+  "debian-2-06",
+  "debian-3-03",
+  "debian-1-10",
+  "debian-3-06",
+  "rocky-2-08"
+ ],
  "recall": [
   "debian-1-01",
   "rocky-1-01",

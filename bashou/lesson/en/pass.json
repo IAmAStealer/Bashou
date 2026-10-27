@@ -13,6 +13,11 @@
   "won vault_vole | tool pass 3",
   "won cleartext_cricket"
  ],
+ "questions": [
+  "linux-1-14",
+  "linux-1-15",
+  "linux-2-13"
+ ],
  "recall": [
   "linux-1-14",
   "linux-1-15"

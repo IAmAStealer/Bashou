@@ -9,6 +9,12 @@
   "achievement brancher | tool git 3 | won commit_crowd | won branch_bramble | won conflict_chimera",
   "achievement stasher"
  ],
+ "questions": [
+  "bash-1-21",
+  "bash-2-14",
+  "bash-1-30",
+  "bash-1-31"
+ ],
  "recall": [
   "bash-1-21",
   "bash-2-14"

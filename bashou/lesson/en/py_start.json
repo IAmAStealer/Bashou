@@ -10,6 +10,11 @@
  "masters": [
   "won colon_cobra | tool python3 3"
  ],
+ "questions": [
+  "python-1-05",
+  "python-1-07",
+  "python-1-01"
+ ],
  "recall": [
   "python-1-05",
   "python-1-07"

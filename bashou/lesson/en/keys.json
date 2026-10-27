@@ -9,6 +9,11 @@
   "won forger_ferret | tool gpg 3 | tool ssh-keygen 3",
   "achievement keymaker"
  ],
+ "questions": [
+  "linux-2-12",
+  "linux-2-11",
+  "linux-1-13"
+ ],
  "recall": [
   "linux-2-12",
   "linux-2-11"

@@ -10,6 +10,11 @@
   "achievement owner | achievement tight | won group_gremlin",
   "tool sudo 1"
  ],
+ "questions": [
+  "linux-1-03",
+  "linux-3-07",
+  "linux-1-17"
+ ],
  "recall": [
   "linux-1-03",
   "linux-3-07"

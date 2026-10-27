@@ -12,6 +12,11 @@
  "masters": [
   "won find_wraith | tool find 3"
  ],
+ "questions": [
+  "bash-1-18",
+  "bash-2-13",
+  "bash-1-41"
+ ],
  "recall": [
   "bash-1-18",
   "bash-2-13"

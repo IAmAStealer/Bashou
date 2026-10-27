@@ -11,6 +11,11 @@
  "masters": [
   "won echo_echidna"
  ],
+ "questions": [
+  "script-2-06",
+  "script-2-07",
+  "script-3-03"
+ ],
  "recall": [
   "script-2-06",
   "script-2-07",

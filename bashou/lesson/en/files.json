@@ -9,6 +9,11 @@
   "achievement builder | tool mkdir 1",
   "achievement copycat | tool mv 1 | won clutter_critter"
  ],
+ "questions": [
+  "bash-1-04",
+  "bash-1-11",
+  "bash-1-24"
+ ],
  "recall": [
   "bash-1-04",
   "bash-1-11"

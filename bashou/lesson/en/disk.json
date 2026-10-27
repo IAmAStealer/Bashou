@@ -10,6 +10,12 @@
   "achievement disk | tool df 3 | tool du 3 | won bloat_blob",
   "achievement sizer"
  ],
+ "questions": [
+  "linux-1-06",
+  "linux-2-06",
+  "linux-2-07",
+  "linux-1-19"
+ ],
  "recall": [
   "linux-1-06",
   "linux-2-06"

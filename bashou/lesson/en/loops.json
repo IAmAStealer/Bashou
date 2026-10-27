@@ -9,6 +9,11 @@
   "achievement loop | won rename_rat",
   "achievement reader"
  ],
+ "questions": [
+  "bash-2-03",
+  "bash-2-05",
+  "script-2-05"
+ ],
  "recall": [
   "bash-2-03",
   "bash-2-05"

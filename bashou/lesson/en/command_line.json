@@ -5,6 +5,11 @@
   "achievement exit_code",
   "commands 500"
  ],
+ "questions": [
+  "bash-1-09",
+  "bash-2-06",
+  "bash-1-27"
+ ],
  "recall": [
   "bash-1-09"
  ],

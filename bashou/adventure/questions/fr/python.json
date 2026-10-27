@@ -284,5 +284,31 @@
   ],
   "answer": 0,
   "explain": "subprocess.run ne lève pas d'erreur quand la commande échoue : il range le code de retour dans result.returncode et continue. Avec check=True, un code non nul lève CalledProcessError et le script s'arrête, comme cmd || exit 1 en bash. Sinon, lis returncode toi-même. (Un programme absent lève quand même FileNotFoundError.)"
+ },
+ {
+  "id": "python-1-13",
+  "level": 1,
+  "q": "hosts = ['web'], puis backup = hosts, puis hosts.append('db'). Qu'affiche print(backup) ?",
+  "choices": [
+   "['web', 'db']",
+   "['web']",
+   "[]",
+   "Une erreur : backup n'a jamais été rempli"
+  ],
+  "answer": 0,
+  "explain": "= ne copie rien : il colle un deuxième nom sur la même liste. hosts et backup sont deux étiquettes sur un seul objet : un changement par un nom se voit par l'autre. Pour avoir vraiment une deuxième liste, demande une copie : backup = hosts.copy()."
+ },
+ {
+  "id": "python-1-14",
+  "level": 1,
+  "q": "name = 'sam', puis name.upper(), puis print(name). Qu'est-ce qui s'affiche ?",
+  "choices": [
+   "sam",
+   "SAM",
+   "None",
+   "Une erreur : upper veut un argument"
+  ],
+  "answer": 0,
+  "explain": "Une chaîne ne change jamais. .upper() ne touche pas à 'sam' : il fabrique une nouvelle chaîne, 'SAM', et personne ne la garde. À l'invite >>>, tu verrais 'SAM' s'afficher, mais name vaut toujours 'sam'. Garde le résultat pour t'en servir : name = name.upper(). Les listes et les dicts sont différents : eux peuvent changer sur place."
  }
 ]

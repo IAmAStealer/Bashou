@@ -9,6 +9,12 @@
   "achievement memory | achievement disk",
   "achievement census | tool nproc 1 | won core_counter"
  ],
+ "questions": [
+  "linux-1-07",
+  "linux-1-04",
+  "linux-1-16",
+  "linux-1-22"
+ ],
  "recall": [
   "linux-1-07",
   "linux-1-04"

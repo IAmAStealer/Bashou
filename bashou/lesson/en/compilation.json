@@ -11,6 +11,11 @@
   "won semicolon_slug | tool gcc 3",
   "won fencepost_fiend | won leak_lurker | won stack_specter"
  ],
+ "questions": [
+  "c-1-03",
+  "c-1-02",
+  "c-2-11"
+ ],
  "recall": [
   "c-1-03",
   "c-1-02"

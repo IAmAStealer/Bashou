@@ -8,6 +8,11 @@
  "masters": [
   "achievement regex | won pattern_pixie"
  ],
+ "questions": [
+  "bash-1-17",
+  "bash-2-12",
+  "bash-2-15"
+ ],
  "recall": [
   "bash-1-17",
   "bash-2-12"

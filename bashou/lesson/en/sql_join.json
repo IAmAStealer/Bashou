@@ -9,6 +9,12 @@
  "masters": [
   "won join_jackal"
  ],
+ "questions": [
+  "sql-2-01",
+  "sql-2-02",
+  "sql-2-03",
+  "sql-1-11"
+ ],
  "recall": [
   "sql-2-01"
  ],

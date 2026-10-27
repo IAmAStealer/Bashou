@@ -8,6 +8,13 @@
  "masters": [
   "won query_quokka | tool sqlite3 3"
  ],
+ "questions": [
+  "sql-1-04",
+  "sql-1-05",
+  "sql-1-06",
+  "sql-1-13",
+  "sql-1-03"
+ ],
  "recall": [
   "sql-1-04",
   "sql-1-05"

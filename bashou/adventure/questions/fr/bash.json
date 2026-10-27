@@ -700,5 +700,161 @@
   ],
   "answer": 0,
   "explain": "bash numérote les éléments d'un tableau à partir de 0 : [1] est le deuxième, green. zsh les numérote à partir de 1 : [1] est le premier, red. Dans un script qui commence par #!/usr/bin/env bash, compte depuis 0, car c'est bash qui le lance."
+ },
+ {
+  "id": "bash-1-32",
+  "level": 1,
+  "q": "Il te faut un outil qui compresse des fichiers, mais tu ne connais pas son nom. Qu'est-ce qui t'aide à le trouver ?",
+  "choices": [
+   "man -k compress",
+   "compress --help",
+   "cat /usr/bin",
+   "history | grep compress"
+  ],
+  "answer": 0,
+  "explain": "man -k (alias apropos) cherche dans les noms et les descriptions d'une ligne de tous les manuels installés : il trouve un outil d'après ce qu'il fait, pas d'après son nom. compress --help ne marche que si un outil s'appelle compress. Une fois le nom trouvé, son --help ou sa page de man explique comment s'en servir. S'il ne trouve rien, l'index n'est pas encore construit : sudo mandb sous Linux."
+ },
+ {
+  "id": "bash-1-33",
+  "level": 1,
+  "q": "app.log fait 50 000 lignes. Tu veux t'y promener et chercher le mot timeout. Quel outil convient ?",
+  "choices": [
+   "less app.log, puis /timeout",
+   "cat app.log",
+   "head app.log",
+   "echo app.log"
+  ],
+  "answer": 0,
+  "explain": "less montre un long fichier un écran à la fois : les flèches font défiler, /timeout cherche, n saute au résultat suivant et q quitte. cat affiche les 50 000 lignes d'un coup : elles défilent trop vite pour être lues. head ne montre que les 10 premières lignes."
+ },
+ {
+  "id": "bash-1-34",
+  "level": 1,
+  "q": "Un programme écrit ses messages les plus récents à la fin de app.log. Quelle commande montre les 20 dernières lignes ?",
+  "choices": [
+   "tail -n 20 app.log",
+   "head -n 20 app.log",
+   "grep 20 app.log",
+   "cat app.log 20"
+  ],
+  "answer": 0,
+  "explain": "tail montre la fin d'un fichier, et -n 20 demande 20 lignes au lieu des 10 habituelles. La fin d'un journal, c'est là que sont les messages les plus récents : tail est l'outil que tu utiliseras le plus sur les logs. head montre le début, les lignes les plus anciennes. grep 20 chercherait le texte 20."
+ },
+ {
+  "id": "bash-1-35",
+  "level": 1,
+  "q": "Tu tapes name = sam à l'invite, et le shell répond : name: command not found. Pourquoi ?",
+  "choices": [
+   "Avec les espaces, le shell lance une commande name",
+   "Les variables doivent être en majuscules",
+   "sam doit être entre guillemets",
+   "name est un mot réservé"
+  ],
+  "answer": 0,
+  "explain": "Le shell coupe la ligne à chaque espace, et le premier mot est la commande : ici un programme appelé name, avec = et sam comme arguments. Une variable se pose sans espace autour du = : name=sam. Ensuite, $name la relit."
+ },
+ {
+  "id": "bash-1-36",
+  "level": 1,
+  "q": "Tu poses region=eu à l'invite, puis tu lances ./deploy.sh, qui lit $region. Dans le script, elle est vide. Pourquoi ?",
+  "choices": [
+   "Une simple variable reste dans ton shell : exporte-la",
+   "Il faut lancer le script avec sudo",
+   "Les variables s'effacent après chaque commande",
+   "region est un nom trop court"
+  ],
+  "answer": 0,
+  "explain": "Une variable que tu poses reste dans ton shell. Les programmes que tu lances, comme un script, ne reçoivent que les variables d'environnement : export region=eu la transmet. Tu peux aussi la donner pour un seul lancement : region=eu ./deploy.sh. $HOME et $PATH arrivent dans tous les programmes parce qu'elles sont exportées."
+ },
+ {
+  "id": "bash-1-37",
+  "level": 1,
+  "q": "Qu'affiche echo 'Home: $HOME', avec des guillemets simples ?",
+  "choices": [
+   "Home: $HOME, tel quel",
+   "Home: /home/sam, ton dossier personnel",
+   "Rien : les guillemets le cachent",
+   "Une erreur : $ veut des guillemets doubles"
+  ],
+  "answer": 0,
+  "explain": "Entre guillemets simples, rien n'est remplacé : tu obtiens le texte exactement comme il est écrit. Les guillemets doubles remplacent encore les $variables et les $( ) : echo \"Home: $HOME\" affiche ton dossier personnel. Prends les guillemets simples quand un programme a ses propres caractères spéciaux, comme un motif de grep."
+ },
+ {
+  "id": "bash-1-38",
+  "level": 1,
+  "q": "app.log est plein de lignes DEBUG qui cachent tout le reste. Quelle commande montre toutes les lignes sauf celles-là ?",
+  "choices": [
+   "grep -v DEBUG app.log",
+   "grep DEBUG app.log",
+   "grep -c DEBUG app.log",
+   "grep -i DEBUG app.log"
+  ],
+  "answer": 0,
+  "explain": "-v inverse grep : il affiche les lignes qui ne contiennent PAS DEBUG. grep DEBUG ne montrerait que le bruit, -c ne fait que le compter, et -i ignore seulement les majuscules. grep ne fait que lire le fichier : tu peux filtrer autant que tu veux."
+ },
+ {
+  "id": "bash-1-39",
+  "level": 1,
+  "q": "Il te faut chaque fichier sous config/ qui parle de db_host, avec le numéro de ligne. Quelle commande ?",
+  "choices": [
+   "grep -rn db_host config/",
+   "grep db_host config/",
+   "find config/ db_host",
+   "ls -R config/ | grep db_host"
+  ],
+  "answer": 0,
+  "explain": "-r fait chercher grep dans tous les fichiers du dossier et en dessous, et -n ajoute le numéro de ligne après le nom du fichier : tu peux ouvrir le bon endroit. Sans -r, grep ne regarde pas dans un dossier (GNU grep dit : Is a directory). ls -R | grep ne chercherait que dans les noms des fichiers, pas dans leur contenu."
+ },
+ {
+  "id": "bash-1-40",
+  "level": 1,
+  "q": "Que fait tar -czf site.tar.gz site/ ?",
+  "choices": [
+   "Range site/ dans un seul fichier compressé, site.tar.gz",
+   "Déballe site.tar.gz dans site/",
+   "Liste ce que contient site.tar.gz",
+   "Supprime site/ une fois sauvé"
+  ],
+  "answer": 0,
+  "explain": "Lis les lettres comme une phrase : c créer, z compresser avec gzip, f dans ce fichier, dont le nom suit juste après. Il range donc tout le dossier site/ dans site.tar.gz et laisse site/ tel quel. Pour lister une archive, t au lieu de c ; pour l'extraire, x."
+ },
+ {
+  "id": "bash-1-41",
+  "level": 1,
+  "q": "find . -name 'logs*' affiche des dossiers en plus des fichiers. Comment ne garder que les fichiers ?",
+  "choices": [
+   "Ajouter -type f",
+   "Ajouter -type d",
+   "Enlever les guillemets",
+   "Ajouter | grep -v /"
+  ],
+  "answer": 0,
+  "explain": "-type f garde les fichiers ordinaires et -type d les répertoires (dossiers). Les tests de find s'additionnent : un chemin n'est affiché que s'il les passe tous, ici un nom qui commence par logs ET un fichier. grep -v / enlèverait tous les résultats, car chaque chemin contient un /. Les guillemets restent : sans eux, le shell remplacerait logs* par les noms du dossier courant avant find."
+ },
+ {
+  "id": "bash-2-24",
+  "level": 2,
+  "q": "Une ligne de pets.txt dit : cat and cat. Qu'affiche sed 's/cat/dog/' pets.txt pour elle ?",
+  "choices": [
+   "dog and cat",
+   "dog and dog",
+   "cat and cat",
+   "Rien : sed a modifié le fichier"
+  ],
+  "answer": 0,
+  "explain": "Sans g à la fin, s/ancien/nouveau/ ne remplace que la première occurrence de chaque ligne. s/cat/dog/g donnerait dog and dog. sed affiche le résultat et laisse pets.txt tranquille : seul -i modifierait le fichier lui-même."
+ },
+ {
+  "id": "bash-2-25",
+  "level": 2,
+  "q": "Tu veux corriger une faute dans config.txt avec sed -i. Pourquoi lancer d'abord le même sed sans -i ?",
+  "choices": [
+   "Tu vois le résultat, et le fichier n'a pas encore changé",
+   "Sans -i, sed vérifie seulement la syntaxe",
+   "sed -i a besoin d'un premier passage",
+   "Ça fait une copie de sauvegarde"
+  ],
+  "answer": 0,
+  "explain": "Sans -i, sed affiche le texte modifié et laisse le fichier tel quel : tu vérifies que seuls les bons mots changent. -i écrit la modification dans le fichier lui-même, sans retour en arrière, sauf avec un suffixe : sed -i.bak garde config.txt.bak, sur Linux comme sur macOS. Sur macOS, -i seul veut un suffixe, même vide : sed -i ''."
  }
 ]

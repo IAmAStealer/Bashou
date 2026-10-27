@@ -12,6 +12,16 @@
   "achievement logbook",
   "achievement reload"
  ],
+ "questions": [
+  "systemd-1-01",
+  "systemd-1-02",
+  "systemd-1-03",
+  "systemd-1-06",
+  "systemd-1-07",
+  "systemd-2-05",
+  "systemd-2-02",
+  "systemd-1-05"
+ ],
  "recall": [
   "systemd-1-01",
   "systemd-1-02",

@@ -10,6 +10,11 @@
   "achievement plumber",
   "achievement tally"
  ],
+ "questions": [
+  "bash-2-11",
+  "bash-1-06",
+  "bash-1-13"
+ ],
  "recall": [
   "bash-2-11",
   "bash-1-06"

@@ -12,6 +12,14 @@
   "won loopback_lurker | tool ss 3",
   "won handshake_heron"
  ],
+ "questions": [
+  "network-2-10",
+  "network-2-11",
+  "network-2-12",
+  "network-2-13",
+  "network-3-04",
+  "network-3-07"
+ ],
  "recall": [
   "network-2-10",
   "network-2-11"
