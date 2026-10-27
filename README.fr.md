@@ -122,6 +122,11 @@ Les mises à jour arrivent avec `apt upgrade` ou `dnf upgrade`.
 
 ## Quoi de neuf
 
+**0.11.0**
+- **Ton chemin dans la bibliothèque** : les leçons à suivre ensuite d'abord (`f` les montre toutes), et
+  les leçons difficiles attendent que tu maîtrises celles d'avant.
+- systemd fait partie de Linux, et la famille Escargot est redessinée en limace qui construit sa coquille.
+
 **0.10.6**
 - **Certificats** : six leçons et dix combats, de la lecture d'un certificat jusqu'à ta propre CA et la
   révocation, et un nouveau compagnon, le Phoque, qui grandit avec eux.
@@ -141,9 +146,6 @@ Les mises à jour arrivent avec `apt upgrade` ou `dnf upgrade`.
   avertissement toutes les demi-heures, pour que tu ne le rates pas. Les joueurs expérimentés ont jusqu'à
   2 menaces par jour.
 - Avec Homebrew, Bashou tourne sur le Python 3.15 de Homebrew.
-
-**0.10.2**
-- Un coffre ouvert reste ouvert, et le même coffre ne revient jamais deux fois dans une partie d'un chemin d'aventure.
 
 Tous les changements, version par version (en anglais) : [CHANGELOG.md](CHANGELOG.md).
 

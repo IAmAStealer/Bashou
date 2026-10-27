@@ -3,6 +3,24 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.11.0 — 2026-10-27
+
+### Changes
+
+- The lesson library opens on your path: the ten lessons to take next, each with its section, and the locked ones about to open. Press `f` for the whole library, where each section now shows once (git has its own).
+- Lessons open by difficulty: the first steps open once you've read the lesson before, most lessons once you've practiced it, and hard ones (C pointers, gdb, Rust, awk and sed, SQL joins, running a CA…) only once you've mastered what comes before.
+- systemd is part of the Linux skill now, Linux only, with its lesson, fight and questions. If you had picked systemd, you now learn Linux; your adventure on the systemd road goes on on the Linux one.
+- The Snail family is redrawn: a slug builds its shell in a hard hat and hi-vis jacket, brick by brick, until it becomes Gary. Your snail keeps its place in the chain.
+- The Snakelet is redrawn as a round-headed baby snake with big eyes.
+- Python lessons, questions, fights and projects were reviewed against the official Python docs: files opened with `with` and an encoding, true facts for Python 3.9, programs run inside their virtual environment, safer hints.
+- Keys you type right after Enter, or a half-typed command on a Mac, are no longer lost while the pet makes its room, and Ctrl+C there leaves the terminal as it was.
+- In `bashou spot`, the answers beside a long string stay inside an 80-column terminal.
+- A progress file exported with an older Bashou can't be imported any more: update Bashou on both computers, then export again.
+
+### Breaking changes
+
+- Breaking change: a pony was told it had to master the lesson before, galloped off to find a teacher and never came back. Bring it home with `bashou pony hoof`.
+
 ## v0.10.6 — 2026-10-25
 
 ### Changes

@@ -130,6 +130,11 @@ Updates come with `apt upgrade` or `dnf upgrade`.
 
 ## What's new
 
+**0.11.0**
+- **Your path in the library**: the lessons to take next come first (`f` shows them all), and hard
+  lessons wait until you master the ones before.
+- systemd is part of Linux, and the Snail family is redrawn as a slug building its shell.
+
 **0.10.6**
 - **Certificates**: six lessons and ten fights, from reading a certificate to running your own CA and
   revoking one, and a new pet, the Seal, that grows with them.
@@ -146,9 +151,6 @@ Updates come with `apt upgrade` or `dnf upgrade`.
 - **Threats wait all day**: a fight now waits until midnight and your pet repeats its warning every half
   hour, so you don't miss it. Experienced players get up to 2 threats a day.
 - Homebrew installs run on Homebrew's own Python 3.15.
-
-**0.10.2**
-- An opened chest stays opened, and the same chest never comes twice in one run of an adventure path.
 
 Every change, release by release: [CHANGELOG.md](CHANGELOG.md).
 
