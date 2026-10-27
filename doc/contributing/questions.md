@@ -54,6 +54,9 @@ answer positions); a missing translation falls back to English. See [translation
   for their mode (the prompt in `bash`, scripts in `script`); wrong choices may be wrong on purpose.
 - SQL questions follow [sql-style.md](sql-style.md): a full statement in the right answer or the
   explanation runs on the fight tables (`tests/test_sql_style.py`).
+- Python questions follow [python-style.md](python-style.md): true for Python 3.9 (the oldest we
+  support), `python3` never `python`, files opened with `with` and an encoding.
+- Certificate questions follow [certs-style.md](certs-style.md): never turn the check off as a fix.
 
 ## Check
 

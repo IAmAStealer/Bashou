@@ -41,7 +41,8 @@ with only `title`, `pitch` and `steps` (the same number of steps, each with any 
 ## How to write a step
 
 Text players read to learn is written in **teacher style**: clear, complete sentences for beginners,
-with the why and not only the what (see [questions.md](questions.md)).
+with the why and not only the what (see [questions.md](questions.md)). Code in a Python project
+follows [python-style.md](python-style.md) (run it with `python3`, in its virtual environment).
 
 - **`do`**: one small thing, said as an instruction. Not how: "create a folder for this year", not
   "call `os.makedirs`".

@@ -83,6 +83,9 @@ No code needed: a lesson is one JSON file.
   script (skill `script`), and a bad form shown on purpose is marked ✘.
 - **SQL**: every sample follows [sql-style.md](sql-style.md), and a page that draws a full statement
   lists it in `"sql"` (English file only), so the tests run it on the fight tables.
+- **Python** (`py_*`): every sample follows [python-style.md](python-style.md): at the `>>>` prompt
+  or in a program, true for Python 3.9.
+- **Certificates** (`certs*`): every sample follows [certs-style.md](certs-style.md).
 
 ## Check
 
