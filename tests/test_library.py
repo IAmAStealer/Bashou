@@ -124,7 +124,7 @@ class PathTest(Saved):
         self.assertTrue(any(lesson.status(lib.s, le) == "locked" for le in lib.lessons), "what comes next shows")
         screen = " ".join(render.strip(t) for r, c, t in lib.list_screen(100, 40))
         self.assertIn("First steps", screen)                     # each row names its section
-        self.assertIn("f: whole library", screen)
+        self.assertIn("[f] switch", screen)
 
     def test_f_toggles_the_whole_library(self):
         lib = reader.Library(LESSONS)
@@ -134,9 +134,22 @@ class PathTest(Saved):
         self.assertEqual(len(lib.lessons), len(lesson.shown(lib.s, lib.all)))
         self.assertEqual(lib.lessons[lib.pos]["id"], at)         # the cursor stays on its lesson
         screen = " ".join(render.strip(t) for r, c, t in lib.list_screen(100, 40))
-        self.assertIn("f: your path", screen)
+        self.assertIn("[f] switch", screen)
         lib.key("f")
         self.assertFalse(lib.full)
+
+    def test_the_two_views_show_as_tabs_the_current_one_lit(self):
+        """Owner, 2026-10-27: f must stand out, and the player must see which view is on."""
+        lib = reader.Library(LESSONS)
+        for full, on, off in ((False, "Your path", "Whole library"), (True, "Whole library", "Your path")):
+            if lib.full != full:
+                lib.key("f")
+            tabs = next(t for r, c, t in lib.list_screen(100, 40) if "[f]" in t)
+            self.assertIn(render.REV + reader.ACCENT + f" {on} ", tabs)
+            self.assertIn(render.DIM + f" {off} ", tabs)
+            self.assertIn(reader.ACCENT + render.BOLD + "[f]", tabs)
+            keys = " ".join(t for r, c, t in lib.list_screen(100, 40) if "q: quit" in t)
+            self.assertNotIn("f:", keys)                         # f lives on the tabs line only
 
     def test_the_path_skips_mastered_lessons_and_unread_come_first(self):
         with state.locked() as s:

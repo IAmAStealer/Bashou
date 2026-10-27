@@ -314,12 +314,14 @@ class Library:
     def list_screen(self, cols, lines):
         every = self.all_shown()
         done = sum(le["id"] in read(self.s) for le in every)
-        keys = _("{n}/{total} read · ↑↓ Enter: open · f: your path · q: quit") if self.full \
-            else _("{n}/{total} read · ↑↓ Enter: open · f: whole library · q: quit")
+        keys = _("{n}/{total} read · ↑↓ Enter: open · q: quit")
         head = render.heading("🦉 " + (_("The Sage Owl's library") if self.full else _("Your path in the library")),
                               keys.format(n=done, total=len(every)), cols - 1)
         out = [(1 + k, 2, TITLE + line) for k, line in enumerate(head)]
-        top = len(head) - 1                                 # the keys took a line of their own (portrait)
+        top = len(head)                                     # the keys may take a line of their own (portrait)
+        views = [(_("Your path"), not self.full), (_("Whole library"), self.full)]    # owner: f must stand out
+        out.append((1 + top, 2, " ".join((REV + ACCENT if on else DIM) + f" {name} " + RESET for name, on in views)
+                    + f"  {ACCENT}{BOLD}[f]{RESET} " + _("switch")))
         out.append((2 + top, 2, NEXT + "■ " + _("your next step") + f"{RESET}  ■ " + _("mastered") + f"  {DIM}🔒 "
                     + _("waits for another lesson") + RESET))
         rows, last = [], None
