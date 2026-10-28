@@ -96,7 +96,7 @@
     " ✗ Name or service not known   step 4: DNS",
     " ✗ Network is unreachable      step 3: no route",
     " ✗ Connection timed out        a firewall, or down",
-    " ✗ No route to host            rejected, or off on the LAN",
+    " ✗ No route to host            reject, or host off",
     " ✗ Connection refused          step 5: no listener",
     " ✗ certificate / 404 / 500     step 6: the app"
    ],

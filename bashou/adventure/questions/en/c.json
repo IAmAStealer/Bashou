@@ -127,7 +127,7 @@
    "-O2"
   ],
   "answer": 0,
-  "explain": "-Wall turns on the common warnings: a variable used before it gets a value, a wrong printf format. -Wextra adds more, like a comparison that is always true. A warning is often a real bug, so fix them all. -O2 is about speed, not warnings."
+  "explain": "-Wall turns on the common warnings: a variable used before it gets a value, a wrong printf format. -Wextra adds more, like an unsigned value compared with >= 0 (always true). A warning is often a real bug, so fix them all. -O2 is about speed, not warnings."
  },
  {
   "id": "c-2-01",

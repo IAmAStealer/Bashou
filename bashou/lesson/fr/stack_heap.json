@@ -169,8 +169,8 @@
     "- Un programme qui fuit un peu à chaque requête grossit jusqu'à ce que le système le tue.",
     "- La règle : chaque malloc a exactement un free.",
     "",
-    "$ gcc -Wall -g -fsanitize=address prog.c -o prog && ./prog",
-    "- ASan trouve les fuites sous Linux ; sur Mac : leaks --atExit -- ./prog"
+    "$ gcc -Wall -g -fsanitize=address,undefined prog.c -o prog && ./prog",
+    "- ASan trouve les fuites sous Linux ; sur Mac, compile sans -fsanitize et lance : leaks -atExit -- ./prog"
    ]
   },
   {

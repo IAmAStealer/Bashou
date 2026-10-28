@@ -193,8 +193,8 @@
     "- A program that leaks a little on each request grows until the system kills it.",
     "- The rule: every malloc has exactly one free.",
     "",
-    "$ gcc -Wall -g -fsanitize=address prog.c -o prog && ./prog",
-    "- ASan finds leaks on Linux; on a Mac: leaks --atExit -- ./prog"
+    "$ gcc -Wall -g -fsanitize=address,undefined prog.c -o prog && ./prog",
+    "- ASan finds leaks on Linux; on a Mac, build without -fsanitize and run: leaks -atExit -- ./prog"
    ]
   },
   {

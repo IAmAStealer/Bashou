@@ -64,7 +64,7 @@
     " ✗ Name or service not known   marche 4 : DNS",
     " ✗ Network is unreachable      marche 3 : route",
     " ✗ Connection timed out        pare-feu ou éteinte",
-    " ✗ No route to host            rejet, ou éteinte (LAN)",
+    " ✗ No route to host            rejet, hôte éteint",
     " ✗ Connection refused          marche 5 : personne",
     " ✗ certificate / 404 / 500     marche 6 : l'appli"
    ],

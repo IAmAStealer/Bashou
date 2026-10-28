@@ -110,7 +110,7 @@
     "",
     "- \"undefined reference\" comes from the linker: a function is used, but no file gives its code.",
     "- Usually a .c file you forgot on the command line, or a library to add (-lm for maths).",
-    "- On a Mac, clang says: Undefined symbols for architecture arm64."
+    "- A Mac says: Undefined symbols for architecture arm64 (or x86_64)."
    ]
   },
   {

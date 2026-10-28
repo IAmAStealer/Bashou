@@ -86,7 +86,7 @@
     "",
     "- « undefined reference » vient de l'éditeur de liens : une fonction est utilisée, mais aucun fichier ne donne son code.",
     "- En général, un fichier .c oublié sur la ligne de commande, ou une bibliothèque à ajouter (-lm pour les maths).",
-    "- Sur Mac, clang dit : Undefined symbols for architecture arm64."
+    "- Un Mac dit : Undefined symbols for architecture arm64 (ou x86_64)."
    ]
   },
   {

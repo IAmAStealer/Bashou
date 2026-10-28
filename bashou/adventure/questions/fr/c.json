@@ -127,7 +127,7 @@
    "-O2"
   ],
   "answer": 0,
-  "explain": "-Wall active les avertissements courants : une variable utilisée avant d'avoir une valeur, un mauvais format de printf. -Wextra en ajoute, comme une comparaison toujours vraie. Un avertissement est souvent un vrai bug, alors corrige-les tous. -O2 concerne la vitesse, pas les avertissements."
+  "explain": "-Wall active les avertissements courants : une variable utilisée avant d'avoir une valeur, un mauvais format de printf. -Wextra en ajoute, comme un unsigned comparé avec >= 0 (toujours vrai). Un avertissement est souvent un vrai bug, alors corrige-les tous. -O2 concerne la vitesse, pas les avertissements."
  },
  {
   "id": "c-2-01",
