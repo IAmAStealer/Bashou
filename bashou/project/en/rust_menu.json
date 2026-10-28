@@ -13,7 +13,7 @@
   {
    "do": "Create the project with `cargo new menu`. Write a Recipe struct (name, servings, ingredients) and an Ingredient struct (name, quantity, unit); fill one recipe in your code and print it.",
    "done": "the recipe is printed.",
-   "hint": "A recipe holds a `Vec<Ingredient>`; quantities are `f64`.",
+   "hint": "A recipe holds a `Vec<Ingredient>`; quantities are `f64`. The crates here need a recent Rust: Debian 12's apt Rust (1.63) is too old, install it with rustup (rustup.rs).",
    "why": "Structs inside structs describe real data: a recipe has ingredients, each with its own fields."
   },
   {

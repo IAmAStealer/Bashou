@@ -45,7 +45,7 @@
     "Every value in Rust has one owner, usually a variable. When the owner's block ends, at its }, the value is freed (dropped).",
     "",
     "- No garbage collector, and no free() to forget: rustc places the cleanup for you.",
-    "- That's how Rust avoids the use-after-free and double-free bugs of C, and most leaks."
+    "- That's how Rust avoids the use-after-free and double-free bugs of C. Leaks stay possible (an Rc cycle), just rarer."
    ]
   },
   {
@@ -82,10 +82,10 @@
     "&line"
    ],
    "text": [
-    "& lends a value without moving it: a reference, also called a borrow.",
+    "& lends a value without moving it: it makes a reference, and that is called borrowing.",
     "",
     "- The function reads it, the owner keeps it, and you can call it again.",
-    "- A function that only reads takes &str (text) or &T, not String.",
+    "- A function that only reads takes &str (text), &[T] (a list) or &T, not String or Vec.",
     "- A borrow can't outlive the owner: rustc checks it, so no dangling pointer."
    ]
   },

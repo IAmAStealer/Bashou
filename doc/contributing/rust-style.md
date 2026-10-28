@@ -36,6 +36,7 @@ index), never from memory.
 | R10 | Names: `snake_case` for variables and functions, `CamelCase` for types, `SCREAMING_SNAKE_CASE` for `const` and `static`. Code laid out the way `rustfmt` does (4 spaces). | rustc warns on other names; every Rust project runs rustfmt. | [API guidelines, naming](https://rust-lang.github.io/api-guidelines/naming.html), [style guide](https://doc.rust-lang.org/style-guide/) |
 | R11 | A fixed file (and a right answer's code) builds with no warning. | A warning left in teaches to ignore warnings. | [rustc lints](https://doc.rust-lang.org/rustc/lints/index.html) |
 | R12 | A feature newer than the oldest rustc in the table says what it needs ("needs Rust 1.65+"): `let … else` (1.65), `std::io::IsTerminal` (1.70), `LazyLock` (1.80)… | Debian 12 players have rustc 1.63. | [releases](https://github.com/rust-lang/rust/blob/master/RELEASES.md), [Debian rustc](https://packages.debian.org/search?keywords=rustc) |
+| R13 | A cargo project whose crates need a newer rustc than the table's oldest says so on its first step: install Rust with rustup. | Cargo before 1.84 picks the newest crate versions, not the ones that fit your rustc: on Debian 12 (cargo 0.66) `cargo add clap` gives a crate that doesn't build. | [cargo resolver: rust-version](https://doc.rust-lang.org/cargo/reference/resolver.html#rust-version), [rustup](https://rustup.rs/) |
 
 ## One file with rustc
 
@@ -51,7 +52,7 @@ Fine for a fight. When a lesson shows it, it says once that real projects use ca
 
 | Where | rustc | Note |
 |---|---|---|
-| Debian 12 (apt) | 1.63 | the oldest we support: no `let … else` |
+| Debian 12 (apt) | 1.63 | the oldest we support: no `let … else`; cargo 0.66 |
 | Debian 13 (apt) | 1.85 | edition 2024 is 1.85+ |
-| Rocky 9 (AppStream `rust`) | recent, updated in minor releases | check `rustc --version` |
+| Rocky 9 (AppStream `rust`) | 1.92 in 9.8, updated in minor releases | |
 | rustup (Mac and most learners) | latest stable | |

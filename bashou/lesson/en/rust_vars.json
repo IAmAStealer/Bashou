@@ -35,12 +35,14 @@
   {
    "scheme": [
     " let count = 0;",
-    " count += 1;       error: cannot assign twice",
+    " count += 1;",
+    " error[E0384]: cannot assign twice",
+    "   to immutable variable `count`",
     "",
     " let mut count = 0;",
     " count += 1;       fine: count is 1"
    ],
-   "point": 3,
+   "point": 5,
    "mark": [
     "mut"
    ],
@@ -49,7 +51,8 @@
     "",
     "- let: fixed. The compiler refuses any change.",
     "- let mut: this one may change.",
-    "- Why? Reading the code, you know which values move. Fewer surprises."
+    "- Why? Reading the code, you know which values move. Fewer surprises.",
+    "- Fights build one file with rustc; projects use cargo."
    ]
   },
   {
@@ -91,7 +94,8 @@
     "- A u8 holds 0 to 255. 250 + 10 doesn't fit.",
     "- In a debug build, Rust stops (panics) instead of quietly wrapping to 4.",
     "- When rustc can see both values, it refuses x + 10 before the program even runs.",
-    "- as converts: x as u32 + 10."
+    "- as converts: x as u32 + 10.",
+    "- Going down, as cuts: 300 as u8 is 44. u8::try_from checks."
    ]
   },
   {
@@ -99,7 +103,7 @@
     " const MAX_POINTS: u32 = 100_000;",
     "       ─────┬────  ─┬─",
     "            │       └─ the type: always written",
-    "            └───────── NAME in capitals, by habit"
+    "            └───────── CAPITALS, or rustc warns"
    ],
    "point": 2,
    "mark": [

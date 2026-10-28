@@ -13,7 +13,7 @@
   {
    "do": "Part 1, duplicates. COPY a folder of papers (PDFs, scans, photos of documents) into a test folder, with at least one duplicate you made on purpose.",
    "done": "the copy holds a few files, and one of them twice under two names.",
-   "hint": "`cp invoice.pdf invoice-copy.pdf` makes a duplicate you know about.",
+   "hint": "`cp invoice.pdf invoice-copy.pdf` makes a duplicate you know about. The crates here need a recent Rust: Debian 12's apt Rust (1.63) is too old, install it with rustup (rustup.rs).",
    "why": "A known duplicate is your test: if the program doesn't find it, the program is wrong."
   },
   {
@@ -55,7 +55,7 @@
   {
    "do": "Move the extra copies into a duplicates/ folder. Never delete: the user decides.",
    "done": "the folder holds one copy of each file, and the extras are in duplicates/.",
-   "hint": "`std::fs::rename` moves a file within the same disk.",
+   "hint": "`std::fs::rename` moves a file within the same disk, and replaces a file of the same name already there: check `exists()` first and add a number to the name.",
    "why": "Moving instead of deleting makes every mistake reversible. Good tools leave the final decision to people."
   },
   {

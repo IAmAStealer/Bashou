@@ -18,7 +18,7 @@
     "En Rust, chaque valeur a un seul propriétaire, en général une variable. Quand le bloc du propriétaire se termine, à son }, la valeur est libérée (drop).",
     "",
     "- Pas de ramasse-miettes, et pas de free() à oublier : rustc place le nettoyage pour toi.",
-    "- C'est ainsi que Rust évite les use-after-free et doubles free du C, et la plupart des fuites."
+    "- C'est ainsi que Rust évite les use-after-free et doubles free du C. Les fuites restent possibles (un cycle de Rc), juste plus rares."
    ]
   },
   {
@@ -55,10 +55,10 @@
     "&line"
    ],
    "text": [
-    "& prête une valeur sans la déplacer : une référence, qu'on appelle aussi un emprunt.",
+    "& prête une valeur sans la déplacer : elle crée une référence, et ça s'appelle un emprunt.",
     "",
     "- La fonction la lit, le propriétaire la garde, et tu peux rappeler la fonction.",
-    "- Une fonction qui ne fait que lire prend &str (du texte) ou &T, pas String.",
+    "- Une fonction qui ne fait que lire prend &str (du texte), &[T] (une liste) ou &T, pas String ni Vec.",
     "- Un emprunt ne peut pas durer plus longtemps que le propriétaire : rustc le vérifie, donc pas de pointeur dans le vide."
    ]
   },

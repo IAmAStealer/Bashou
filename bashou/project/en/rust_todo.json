@@ -13,7 +13,7 @@
   {
    "do": "Create the project with `cargo new todo` and run it.",
    "done": "`cargo run` prints \"Hello, world!\".",
-   "hint": "If cargo isn't installed, rustup.rs explains how to get it.",
+   "hint": "If cargo isn't installed, rustup.rs explains how to get it. The crates here need a recent Rust: Debian 12's apt Rust (1.63) is too old, install it with rustup (rustup.rs).",
    "why": "cargo creates the project, builds it and runs it. Every Rust project you'll meet uses it."
   },
   {

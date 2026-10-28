@@ -5,7 +5,7 @@
   {
    "do": "Crée le projet avec `cargo new netwatch`, et vérifie une fois si internet répond : ouvre une connexion TCP vers un serveur bien connu (par exemple 1.1.1.1 sur le port 53) avec un délai maximum.",
    "done": "le programme affiche « en ligne », et « hors ligne » quand tu coupes ton Wi-Fi.",
-   "hint": "`TcpStream::connect_timeout` de std::net, avec une `SocketAddr` et une `Duration` de 2 secondes.",
+   "hint": "`TcpStream::connect_timeout` de std::net, avec une `SocketAddr` et une `Duration` de 2 secondes. Les crates de ce projet demandent un Rust récent : celui d'apt sur Debian 12 (1.63) est trop vieux, installe-le avec rustup (rustup.rs).",
    "why": "Une connexion TCP qui s'ouvre prouve que tout le chemin marche : ton Wi-Fi, ta box, ton fournisseur. Le délai maximum empêche le programme d'attendre pour toujours quand ce n'est pas le cas."
   },
   {

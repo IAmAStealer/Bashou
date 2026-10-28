@@ -5,7 +5,7 @@
   {
    "do": "Partie 1, les doublons. COPIE un dossier de papiers (PDF, scans, photos de documents) dans un dossier de test, avec au moins un doublon fait exprès.",
    "done": "la copie contient quelques fichiers, dont un en double sous deux noms.",
-   "hint": "`cp facture.pdf facture-copie.pdf` fait un doublon que tu connais.",
+   "hint": "`cp facture.pdf facture-copie.pdf` fait un doublon que tu connais. Les crates de ce projet demandent un Rust récent : celui d'apt sur Debian 12 (1.63) est trop vieux, installe-le avec rustup (rustup.rs).",
    "why": "Un doublon connu, c'est ton test : si le programme ne le trouve pas, le programme a tort."
   },
   {
@@ -47,7 +47,7 @@
   {
    "do": "Déplace les copies en trop dans un dossier duplicates/. Ne supprime jamais : c'est l'utilisateur qui décide.",
    "done": "le dossier garde une copie de chaque fichier, et les autres sont dans duplicates/.",
-   "hint": "`std::fs::rename` déplace un fichier sur le même disque.",
+   "hint": "`std::fs::rename` déplace un fichier sur le même disque, et remplace un fichier du même nom déjà là : vérifie avec `exists()` d'abord et ajoute un numéro au nom.",
    "why": "Déplacer au lieu de supprimer rend chaque erreur réparable. Les bons outils laissent la décision finale aux gens."
   },
   {

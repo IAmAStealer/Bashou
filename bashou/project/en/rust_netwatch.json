@@ -15,7 +15,7 @@
   {
    "do": "Create the project with `cargo new netwatch`, and check once if the internet answers: open a TCP connection to a well-known server (for example 1.1.1.1 on port 53) with a timeout.",
    "done": "the program prints \"online\", and \"offline\" when you turn off your Wi-Fi.",
-   "hint": "`TcpStream::connect_timeout` from std::net, with a `SocketAddr` and a `Duration` of 2 seconds.",
+   "hint": "`TcpStream::connect_timeout` from std::net, with a `SocketAddr` and a `Duration` of 2 seconds. The crates here need a recent Rust: Debian 12's apt Rust (1.63) is too old, install it with rustup (rustup.rs).",
    "why": "A TCP connection that opens proves the whole path works: your Wi-Fi, your router, your provider. The timeout stops the program from waiting forever when it doesn't."
   },
   {

@@ -75,7 +75,7 @@
    "The address as a number"
   ],
   "answer": 0,
-  "explain": "&x creates a reference: the function borrows x to read it, and x stays yours afterwards. Passing x itself would move it: the function would own it and you couldn't use it after. Nothing to free by hand: the compiler checks the borrow ends in time."
+  "explain": "&x creates a reference: the function borrows x to read it, and x stays yours afterwards. Passing x itself would move it (a String, a Vec; a number is just copied): the function would own it and you couldn't use it after. Nothing to free by hand: the compiler checks the borrow ends in time."
  },
  {
   "id": "rust-1-07",
@@ -153,7 +153,7 @@
    "Rust ignores types on let"
   ],
   "answer": 0,
-  "explain": "Each let creates a new variable. The second one reuses the name n and hides the first: that's called shadowing. The new n can even have another type, here a number instead of text. mut can't do that: a mut variable can change its value, never its type."
+  "explain": "Each let creates a new variable. The second one reuses the name n and hides the first: that's called shadowing. The new n can even have another type, here a number instead of text. mut can't do that: a mut variable can change its value, never its type. unwrap() stops the program if the text isn't a number."
  },
  {
   "id": "rust-1-13",
@@ -171,7 +171,7 @@
  {
   "id": "rust-1-14",
   "level": 1,
-  "q": "A u8 holding 250 gets + 10 in a debug build. What happens?",
+  "q": "A u8 read from input holds 250 and gets + 10 in a debug build. What happens?",
   "choices": [
    "The program panics: attempt to add with overflow",
    "It becomes 260",
@@ -179,7 +179,7 @@
    "rustc refuses to build"
   ],
   "answer": 0,
-  "explain": "A u8 holds 0 to 255, so 250 + 10 doesn't fit. In a debug build Rust stops the program with a panic, 'attempt to add with overflow', instead of giving a wrong number. Release builds silently wrap around (to 4). Choose a bigger type (u16, u32), or checked_add, which returns None on overflow."
+  "explain": "A u8 holds 0 to 255, so 250 + 10 doesn't fit. In a debug build Rust stops the program with a panic, 'attempt to add with overflow', instead of giving a wrong number. Release builds silently wrap around (to 4). With 250 written in the code, rustc sees it and refuses to build. Choose a bigger type (u16, u32), or checked_add, which returns None on overflow."
  },
  {
   "id": "rust-2-01",
@@ -244,7 +244,7 @@
    "It turns off all checks in the file"
   ],
   "answer": 0,
-  "explain": "Inside unsafe, a few things the compiler can't check become allowed: using raw pointers, calling C code (FFI). The rest of the rules still apply. You are promising that the code is still correct. Keep these blocks tiny, and write a // SAFETY: comment explaining why, so reviewers know what to check."
+  "explain": "Inside unsafe, a few things the compiler can't check become allowed: dereferencing raw pointers, calling C code (FFI). The rest of the rules still apply. You are promising that the code is still correct. Keep these blocks tiny, and write a // SAFETY: comment explaining why, so reviewers know what to check."
  },
  {
   "id": "rust-2-06",
@@ -270,7 +270,7 @@
    "&mut T"
   ],
   "answer": 0,
-  "explain": "Arc (atomic reference count) lets several threads own the same value, and frees it when the last one is done. Mutex makes each thread take a lock before touching it, so only one changes it at a time. Rc and RefCell do the same for a single thread only, and the compiler refuses to send them to another thread."
+  "explain": "Arc (atomic reference count) lets several threads own the same value, and frees it when the last one is done. Mutex makes each thread take a lock before touching it, so only one changes it at a time. Rc and RefCell do the same for a single thread only, and the compiler refuses to send them to another thread. For a plain number, an AtomicUsize in an Arc does it without a lock."
  },
  {
   "id": "rust-2-08",

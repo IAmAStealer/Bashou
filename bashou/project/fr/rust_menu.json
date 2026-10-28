@@ -5,7 +5,7 @@
   {
    "do": "Crée le projet avec `cargo new menu`. Écris une struct Recipe (nom, nombre de personnes, ingrédients) et une struct Ingredient (nom, quantité, unité) ; remplis une recette dans ton code et affiche-la.",
    "done": "la recette est affichée.",
-   "hint": "Une recette contient un `Vec<Ingredient>` ; les quantités sont des `f64`.",
+   "hint": "Une recette contient un `Vec<Ingredient>` ; les quantités sont des `f64`. Les crates de ce projet demandent un Rust récent : celui d'apt sur Debian 12 (1.63) est trop vieux, installe-le avec rustup (rustup.rs).",
    "why": "Des structs dans des structs décrivent de vraies données : une recette a des ingrédients, chacun avec ses champs."
   },
   {
