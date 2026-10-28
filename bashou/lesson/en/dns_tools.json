@@ -50,7 +50,8 @@
     "",
     "- status: NOERROR means it worked. NXDOMAIN: no such name. SERVFAIL: the lookup broke.",
     "- ANSWER holds the records, SERVER says who answered.",
-    "- dig +short prints only the answers."
+    "- dig +short prints only the answers.",
+    "- Run it: your numbers will differ, the drawing uses example addresses."
    ]
   },
   {
@@ -86,7 +87,8 @@
     "",
     "- getent hosts shows what programs will really get.",
     "- When dig and your app disagree, look at /etc/hosts.",
-    "- With systemd-resolved, dig asks 127.0.0.53, which reads /etc/hosts too: dig @192.168.1.1 skips it."
+    "- With systemd-resolved, dig asks 127.0.0.53, which reads /etc/hosts too: dig @192.168.1.1 skips it.",
+    "- On a Mac: dscacheutil -q host -a name db.internal"
    ]
   },
   {

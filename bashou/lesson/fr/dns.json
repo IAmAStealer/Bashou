@@ -19,7 +19,8 @@
    "text": [
     "Un programme demande une adresse à la bibliothèque C. Elle regarde d'abord /etc/hosts, puis interroge un résolveur DNS : celui de ta box, de ton fournisseur, ou un que tu as choisi.",
     "",
-    "- L'ordre est fixé par la ligne hosts: de /etc/nsswitch.conf (en général files, puis dns)."
+    "- L'ordre est fixé par la ligne hosts: de /etc/nsswitch.conf (en général files, puis dns).",
+    "- Un Mac n'a pas de nsswitch.conf : dscacheutil -q host -a name example.org demande comme les programmes."
    ]
   },
   {
@@ -40,7 +41,8 @@
     "",
     "- Le dernier fait autorité : il détient les enregistrements du domaine.",
     "- Le résolveur garde chaque réponse en cache : la fois suivante, pas de descente.",
-    "$ dig +trace example.org"
+    "$ dig +trace example.org",
+    "- Ton propre dig montre les vraies adresses d'example.org, pas celles du dessin."
    ]
   },
   {

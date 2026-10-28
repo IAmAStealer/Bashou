@@ -17,7 +17,9 @@
     "- 203.0.113.10 est une adresse réservée aux exemples ; dig montre la vraie.",
     "",
     "$ dig +short example.org",
-    "$ ip addr      # tes propres adresses"
+    "$ ip addr      # tes propres adresses",
+    "$ ifconfig     # sur Mac",
+    "$ ping -c 3 example.org   # 3 essais ; sous Linux, ping tourne jusqu'à Ctrl-C"
    ]
   },
   {

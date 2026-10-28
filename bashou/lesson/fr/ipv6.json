@@ -15,7 +15,7 @@
     "L'IPv4 a manqué d'adresses : il y a plus de 4 milliards d'appareils. Les plages privées et le NAT l'ont étiré, l'IPv6 règle le problème.",
     "",
     "- Les mêmes idées qu'en IPv4 : une adresse, un préfixe, une passerelle.",
-    "- Beaucoup de réseaux donnent les deux (double pile) : le système préfère alors l'IPv6 et se rabat vite sur l'IPv4 (Happy Eyeballs)."
+    "- Beaucoup de réseaux donnent les deux (double pile) : les systèmes préfèrent IPv6 ; navigateurs et curl essaient les deux et gardent le premier qui répond (Happy Eyeballs)."
    ]
   },
   {
@@ -54,7 +54,8 @@
     "",
     "- fe80:: existe dès que l'interface est active, et ne marche que sur ce câble ou ce Wi-Fi.",
     "- La globale (qui commence souvent par 2) est celle que les autres réseaux joignent.",
-    "$ ip -6 addr"
+    "$ ip -6 addr",
+    "- Sur Mac : ifconfig | grep inet6"
    ]
   },
   {

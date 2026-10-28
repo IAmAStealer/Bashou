@@ -44,7 +44,8 @@
    "text": [
     "A program asks the C library for an address. It looks in /etc/hosts first, then asks a DNS resolver: your router's, your provider's, or one you chose.",
     "",
-    "- The order is set by the hosts: line of /etc/nsswitch.conf (usually files, then dns)."
+    "- The order is set by the hosts: line of /etc/nsswitch.conf (usually files, then dns).",
+    "- A Mac has no nsswitch.conf: dscacheutil -q host -a name example.org asks the way programs do."
    ]
   },
   {
@@ -65,7 +66,8 @@
     "",
     "- The last one is authoritative: it holds the domain's records.",
     "- The resolver keeps each answer in its cache: next time, no walk.",
-    "$ dig +trace example.org"
+    "$ dig +trace example.org",
+    "- Your own dig shows example.org's real addresses, not the drawing's."
    ]
   },
   {

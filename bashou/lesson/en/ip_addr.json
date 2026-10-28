@@ -120,7 +120,8 @@
     "",
     "- The default route names that gateway. No default route: no internet.",
     "- ip route get asks which route an address would take, without sending anything.",
-    "$ ip route get 1.1.1.1"
+    "$ ip route get 1.1.1.1",
+    "- On a Mac: netstat -rn, route -n get 1.1.1.1"
    ]
   }
  ]

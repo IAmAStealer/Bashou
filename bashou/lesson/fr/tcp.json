@@ -59,7 +59,7 @@
     "ss liste les sockets : -t TCP, -a tous les états, -n des nombres (ses colonnes Recv-Q et Send-Q sont coupées ici).",
     "",
     "- LISTEN : un serveur qui attend. ESTAB : une connexion ouverte. TIME-WAIT : tout juste fermée, gardée un moment.",
-    "- ss -tln ne montre que ceux en écoute ; ajoute -p pour voir le programme."
+    "- ss -tln montre seulement ceux qui écoutent ; ajoute -p (avec sudo) pour voir le programme."
    ]
   },
   {
@@ -78,7 +78,8 @@
     "Les deux échecs classiques racontent des histoires différentes.",
     "",
     "- Refused revient aussitôt : la machine est là, le port est fermé. Vérifie que le serveur a démarré, et sur quelle adresse.",
-    "- Timed out prend du temps, jusqu'à deux minutes environ : rien ne répond. Regarde les pare-feux et les routes."
+    "- Timed out prend du temps, jusqu'à deux minutes environ : rien ne répond. Regarde les pare-feux et les routes.",
+    "- No route to host veut souvent dire un pare-feu qui rejette, pas un problème de route."
    ]
   }
  ]

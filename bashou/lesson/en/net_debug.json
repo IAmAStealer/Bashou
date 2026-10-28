@@ -50,7 +50,8 @@
    "text": [
     "\"The network is down\" says nothing. Climb from the bottom: each step needs the one below.",
     "",
-    "- One command per step. The first step that fails is where to look."
+    "- One command per step. The first step that fails is where to look.",
+    "- On a Mac: ifconfig, route -n get <address>, dscacheutil -q host -a name host."
    ]
   },
   {
@@ -70,7 +71,7 @@
    "text": [
     "Example: the address answers, the name doesn't. The network is fine, DNS isn't.",
     "",
-    "- Next: resolvectl status, dig host, /etc/hosts, a typo in the name."
+    "- Next: getent hosts host (what ping sees), resolvectl status, dig host, /etc/hosts, a typo in the name."
    ]
   },
   {
@@ -87,7 +88,7 @@
    "text": [
     "Another: the name and the route work, the port refuses. The machine is up; the service isn't listening there.",
     "",
-    "- On the server: ss -tlnp. Is it running? On 127.0.0.1 only? On another port?"
+    "- On the server: sudo ss -tlnp. Is it running? On 127.0.0.1 only? On another port?"
    ]
   },
   {
@@ -95,6 +96,7 @@
     " ✗ Name or service not known   step 4: DNS",
     " ✗ Network is unreachable      step 3: no route",
     " ✗ Connection timed out        a firewall, or down",
+    " ✗ No route to host           a firewall rejecting",
     " ✗ Connection refused          step 5: no listener",
     " ✗ certificate / 404 / 500     step 6: the app"
    ],

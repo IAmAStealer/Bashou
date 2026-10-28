@@ -89,7 +89,8 @@
     "",
     "- La route par défaut nomme cette passerelle. Pas de route par défaut : pas d'internet.",
     "- ip route get demande quelle route prendrait une adresse, sans rien envoyer.",
-    "$ ip route get 1.1.1.1"
+    "$ ip route get 1.1.1.1",
+    "- Sur Mac : netstat -rn, route -n get 1.1.1.1"
    ]
   }
  ]

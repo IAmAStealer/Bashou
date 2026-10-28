@@ -18,7 +18,8 @@
    "text": [
     "« Le réseau est en panne » ne dit rien. Monte depuis le bas : chaque marche a besoin de celle du dessous.",
     "",
-    "- Une commande par marche. La première qui échoue, c'est là qu'il faut chercher."
+    "- Une commande par marche. La première qui échoue, c'est là qu'il faut chercher.",
+    "- Sur Mac : ifconfig, route -n get <adresse>, dscacheutil -q host -a name hôte."
    ]
   },
   {
@@ -38,7 +39,7 @@
    "text": [
     "Exemple : l'adresse répond, le nom non. Le réseau va bien, le DNS non.",
     "",
-    "- Ensuite : resolvectl status, dig host, /etc/hosts, une faute dans le nom."
+    "- Ensuite : getent hosts hôte (ce que voit ping), resolvectl status, dig hôte, /etc/hosts, une faute dans le nom."
    ]
   },
   {
@@ -55,7 +56,7 @@
    "text": [
     "Autre cas : le nom et la route marchent, le port refuse. La machine est là ; le service n'écoute pas à cet endroit.",
     "",
-    "- Sur le serveur : ss -tlnp. Est-il lancé ? Sur 127.0.0.1 seulement ? Sur un autre port ?"
+    "- Sur le serveur : sudo ss -tlnp. Est-il lancé ? Sur 127.0.0.1 seulement ? Sur un autre port ?"
    ]
   },
   {
@@ -63,6 +64,7 @@
     " ✗ Name or service not known   marche 4 : DNS",
     " ✗ Network is unreachable      marche 3 : route",
     " ✗ Connection timed out        pare-feu ou éteinte",
+    " ✗ No route to host           un pare-feu rejette",
     " ✗ Connection refused          marche 5 : personne",
     " ✗ certificate / 404 / 500     marche 6 : l'appli"
    ],

@@ -46,7 +46,9 @@
     "- 203.0.113.10 is an address kept for examples; dig shows the real one.",
     "",
     "$ dig +short example.org",
-    "$ ip addr      # your own addresses"
+    "$ ip addr      # your own addresses",
+    "$ ifconfig     # on a Mac",
+    "$ ping -c 3 example.org   # 3 tries; on Linux, ping runs until Ctrl-C"
    ]
   },
   {

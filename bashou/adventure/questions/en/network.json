@@ -94,6 +94,7 @@
  {
   "id": "network-1-08",
   "level": 1,
+  "os": "linux",
   "q": "ping 192.0.2.10 gets replies, but ping server.example gets \"Name or service not known\". What's broken?",
   "choices": [
    "Name resolution (DNS), not the network",
@@ -102,7 +103,7 @@
    "ping itself"
   ],
   "answer": 0,
-  "explain": "Replies from the address prove the path works. The name fails before ping sends anything: the machine couldn't turn it into an address. Look at DNS: /etc/resolv.conf, resolvectl status, dig server.example, or a typo in the name."
+  "explain": "Replies from the address prove the path works. The name fails before ping sends anything: the machine couldn't turn it into an address. Look at DNS: getent hosts server.example (what ping sees), resolvectl status, dig server.example, or a typo in the name."
  },
  {
   "id": "network-1-09",
@@ -267,6 +268,7 @@
  {
   "id": "network-2-09",
   "level": 2,
+  "os": "linux",
   "q": "/etc/hosts says 10.0.0.9 db.internal, but dig db.internal returns 10.0.0.5. Which one will ping db.internal use?",
   "choices": [
    "10.0.0.9: programs follow /etc/nsswitch.conf, files first",
@@ -275,7 +277,7 @@
    "Neither: it's an error"
   ],
   "answer": 0,
-  "explain": "Programs resolve names through the C library, which follows the hosts: line of /etc/nsswitch.conf, usually files before dns: /etc/hosts wins. dig ignores all that and asks DNS directly. getent hosts db.internal shows what programs will really get."
+  "explain": "Programs resolve names through the C library, which follows the hosts: line of /etc/nsswitch.conf, usually files before dns: /etc/hosts wins. dig skips nsswitch and asks the DNS server in resolv.conf (with systemd-resolved, that stub reads /etc/hosts too). getent hosts db.internal shows what programs will really get."
  },
  {
   "id": "network-2-10",

@@ -21,7 +21,8 @@
     "",
     "- status: NOERROR veut dire que ça a marché. NXDOMAIN : ce nom n'existe pas. SERVFAIL : la recherche a échoué.",
     "- ANSWER contient les enregistrements, SERVER dit qui a répondu.",
-    "- dig +short n'affiche que les réponses."
+    "- dig +short n'affiche que les réponses.",
+    "- Lance-le : tes nombres seront différents, le dessin utilise des adresses d'exemple."
    ]
   },
   {
@@ -57,7 +58,8 @@
     "",
     "- getent hosts montre ce que les programmes obtiendront vraiment.",
     "- Quand dig et ton appli ne sont pas d'accord, regarde /etc/hosts.",
-    "- Avec systemd-resolved, dig interroge 127.0.0.53, qui lit aussi /etc/hosts : dig @192.168.1.1 l'évite."
+    "- Avec systemd-resolved, dig interroge 127.0.0.53, qui lit aussi /etc/hosts : dig @192.168.1.1 l'évite.",
+    "- Sur Mac : dscacheutil -q host -a name db.internal"
    ]
   },
   {

@@ -89,7 +89,7 @@
     "ss lists the sockets: -t TCP, -a all states, -n numbers (its Recv-Q and Send-Q columns are cut here).",
     "",
     "- LISTEN: a server waiting. ESTAB: an open connection. TIME-WAIT: just closed, kept a moment.",
-    "- ss -tln shows only the listening ones; add -p to see the program."
+    "- ss -tln shows only the listening ones; add -p (with sudo) to see the program."
    ]
   },
   {
@@ -108,7 +108,8 @@
     "The two classic failures tell different stories.",
     "",
     "- Refused comes back at once: the machine is there, the port is closed. Check the server started, and on which address.",
-    "- Timed out takes long, up to about two minutes: nothing answers. Look at firewalls and routes."
+    "- Timed out takes long, up to about two minutes: nothing answers. Look at firewalls and routes.",
+    "- No route to host often means a firewall that rejects, not a route problem."
    ]
   }
  ]

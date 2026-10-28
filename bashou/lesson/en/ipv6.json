@@ -40,7 +40,7 @@
     "IPv4 ran out of addresses: there are more devices than 4 billion. Private ranges and NAT stretched it, IPv6 fixes it.",
     "",
     "- Same ideas as IPv4: an address, a prefix, a gateway.",
-    "- Many networks give both (dual stack): systems then prefer IPv6 and fall back quickly to IPv4 (Happy Eyeballs)."
+    "- Many networks give both (dual stack): systems prefer IPv6; browsers and curl try both and keep whichever connects first (Happy Eyeballs)."
    ]
   },
   {
@@ -79,7 +79,8 @@
     "",
     "- fe80:: exists as soon as the interface is up, and works only on that cable or Wi-Fi.",
     "- The global one (often starting with 2) is the one other networks reach.",
-    "$ ip -6 addr"
+    "$ ip -6 addr",
+    "- On a Mac: ifconfig | grep inet6"
    ]
   },
   {
