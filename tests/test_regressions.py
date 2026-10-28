@@ -48,6 +48,7 @@ class ArenaBugs(unittest.TestCase):
                     "pipe_eel": "|"}
         expected.update({ch.id: "gcc" if "gcc" in ch.tools else "python3" for ch in challenges.code.ALL})
         expected.update({ch.id: "apt" if "apt" in ch.tools else "rpm" for ch in challenges.packages.ALL})
+        expected.update(stowaway_stoat="dpkg", autoremove_adder="apt-mark")   # the command their answer needs
         expected.update({ch.id: "rustc" for ch in challenges.rust.ALL})
         expected.update({ch.id: ch.tools[0] for m in (challenges.everyday, challenges.scripting, challenges.system,
                                                      challenges.gitfights) for ch in m.ALL})
@@ -963,3 +964,13 @@ class CommandCleanupTest(TempState):
     def test_cleartext_cricket_needs_sha256sum(self):
         """bash-judge: deploy.sh checks the password with sha256sum, which a Mac without coreutils lacks."""
         self.assertIn("sha256sum", challenges.BY_ID["cleartext_cricket"].requires)
+
+    def test_package_fights_name_the_command_their_hints_use(self):
+        """Owner (2026-10-28): the Stowaway Stoat said "use apt to fight it" while the answer is dpkg -S. A package
+        fight's `tool` (shown as "Use X to fight it") must be the command its last hint runs (an editor fight
+        names the editor, which hints don't need to repeat)."""
+        from bashou.challenges.repos import EDITORS
+        for c in challenges.ALL:
+            if c.skill in ("debian", "rocky") and c.hints and c.tool not in EDITORS:
+                with self.subTest(fight=c.id):
+                    self.assertRegex(c.hints[-1], r"(?<![\w-])" + re.escape(c.tool) + r"(?![\w-])")

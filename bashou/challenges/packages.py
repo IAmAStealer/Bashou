@@ -162,14 +162,14 @@ ALL = [
                      "apt policy name shows Installed and Candidate.",
                      "Try: apt policy {pkg}   (the Candidate: line)"],
               setup=candidate_setup, verify=version_verify),
-    Challenge(level=2, id="stowaway_stoat", pet="ant", tools=APT, skill="debian", requires=["dpkg"],
+    Challenge(level=2, id="stowaway_stoat", pet="ant", tools=("dpkg", "dpkg-query", "apt", "apt-cache"), skill="debian", requires=["dpkg"],
               threat="Stowaway Stoat",
               task="The Stowaway Stoat asks: which package put {path} on this machine?\n"
                    "A file nobody owns in /usr/bin would be suspicious. Answer with the package name.",
               hints=["dpkg knows which package installed each file: dpkg -S path searches it.",
                      "Try: dpkg -S {path}"],
               setup=owner_setup),
-    Challenge(level=2, id="autoremove_adder", pet="ant", tools=APT + ("apt-mark",), skill="debian",
+    Challenge(level=2, id="autoremove_adder", pet="ant", tools=("apt-mark",) + APT, skill="debian",
               requires=["apt-mark"], threat="Autoremove Adder",
               task="The Autoremove Adder eats packages nobody asked for. Is {pkg} marked manual or auto?\n"
                    "(auto = pulled in as a dependency: apt autoremove may take it.) answer manual, or answer auto",
