@@ -1,44 +1,48 @@
 {
  "name": "Resolver Rook",
  "palette": {
-  "a": "#3a3a44",
-  "o": "#a8a8b8",
+  "a": "#3a3a4c",
+  "d": "#4f4e66",
+  "s": "#727189",
+  "o": "#9d9cad",
+  "l": "#c6c5cc",
+  "h": "#efede4",
   "w": "#f4f4f8",
   "m": "#191919"
  },
  "base": [
-  "..aaa.aaa.aaa....",
-  "..aoa.aoa.aoa....",
-  "..aoaaaoaaaoa....",
-  "..aoooooooooa....",
-  "...aoooooooa.....",
-  "...aowmowmoa.....",
-  "...aoooooooa.....",
-  "...aoooooooa.....",
-  "...aoooooooa.....",
-  "..aoooooooooa....",
-  ".aoooooooooooa...",
-  ".aaaaaaaaaaaaa..."
+  "..aaaa.aaa.aaaa..",
+  "..alla.aoa.adsa..",
+  "..allhalooasdsa..",
+  "..allhlloossdsa..",
+  "...aaaaaaaaaaa...",
+  "....alhloodsa....",
+  "....alwmowmsa....",
+  "....alhloodsa....",
+  "...alhhloosdsa...",
+  "..allhlloossdsa..",
+  ".allhhlloossddsa.",
+  ".aaaaaaaaaaaaaaa."
  ],
  "poses": {
   "inhale": {
-   "4": "--a---------a----"
+   "7": "----a-------a----"
   },
   "closed": {
-   "5": "------o--o-------"
+   "6": "------o--o-------"
   },
   "left": {
-   "5": "-----mw-mw-------"
+   "6": "------mw-mw------"
   },
   "right": {
-   "5": "-----wm-wm-------"
+   "6": "------wm-wm------"
   },
   "fidget": {
-   "0": "--.---------.----"
+   "0": "--.-----------.--"
   }
  },
  "particles": [
-  0,
+  2,
   14
  ]
 }

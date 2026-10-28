@@ -171,3 +171,20 @@ python3 -m bashou.art check                      # size, colors, transparency, m
 
 Then open a pull request with your files and a screenshot of `show` in your terminal. CI runs
 `check` too, so a mistake shows up right away on the pull request, with what to fix.
+
+## 3. Light and shading (every sprite)
+
+Owner, 2026-10-28: "lighting could improve a lot". These rules make a small sprite read as a solid
+object instead of a flat sticker. They hold for the 17 × 12 sprites and the PNGs alike.
+
+| Rule | How, in pixels | Source |
+|---|---|---|
+| One light, from the top left | Every sprite is lit from the top left. Highlights go on the faces that look up and left, shadows on the faces that look down and right. Never two light directions in one sprite. | [pixnote: shading](https://pixnote.net/en/learn/shading) |
+| Few tones | 17 × 12: a base and one shadow, plus a highlight on what matters (signature feature, eyes). Up to 5 tones (highlight, light, base, shadow, deep shadow) only on a big, round shape. | [pixnote: shading](https://pixnote.net/en/learn/shading) |
+| Round shapes follow the form | A cylinder (a tower, a bottle, a neck): vertical bands, the same in every row: light at the left edge, a highlight about a quarter in, the base in the middle, shadow, the darkest band near the right edge, then one lighter column at the very edge (light bounced back from around it). Place the bands by the position in the row's width, not by hand, so they stay vertical when the width changes. A sphere: the same, in rings around a highlight up and left. | [Mallory: shading the sphere](https://marksbymallory.substack.com/p/shading-the-sphere), [BYU: shading cylinders](https://www.designreview.byu.edu/collections/learn-to-sketch-shading-and-shadowing-cylinders) |
+| No pillow shading | Don't darken all around the outline with the center brightest: the light then comes from nowhere. Ask "where is the light?" for every shadow. | [pixnote: shading](https://pixnote.net/en/learn/shading) |
+| Shift the hue, not only the lightness | Each step toward the shadow turns the hue a little (about 10 to 20°) toward blue or purple, each step toward the light toward yellow; a highlight is near-white and warm. Saturation peaks in the middle tones, lower at both ends. A ramp that only darkens looks flat and muddy. | [Slynyrd: color palettes](https://www.slynyrd.com/blog/2018/1/10/pixelblog-1-color-palettes), [pixnote: color](https://pixnote.net/en/learn/color-palette) |
+| Outlines in a dark shade of the object | Not pure black (it vanishes on a black terminal, rule above). At 32 px and up, the outline may be lighter on the lit side (sel-out). | [pixnote: shading](https://pixnote.net/en/learn/shading) |
+
+The Resolver Rook (`bashou/enemies/resolver_rook.json`) is the worked example of a cylinder: the
+crown, neck and base each get the same bands, computed from their width.
