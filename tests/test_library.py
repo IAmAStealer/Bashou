@@ -294,3 +294,22 @@ class GitAndRustLessonsTest(unittest.TestCase):
             with self.subTest(fid):
                 self.assertIn(fid, challenges.BY_ID)
                 self.assertTrue((Path(lesson.HERE).parent / "enemies" / f"{fid}.json").exists())
+
+
+class PythonAndSqlLessonsTest(unittest.TestCase):
+    """Option B, next thin sections: Python errors and exit codes, SQL's NULL."""
+
+    def test_python_has_a_lesson_on_errors_and_exit_codes(self):
+        le = BY_ID["py_errors"]
+        self.assertEqual((le["skill"], le["after"], le["fights"]), ("python", ["py_flow"], ["except_eel"]))
+
+    def test_sql_has_a_lesson_on_null(self):
+        le = BY_ID["sql_null"]
+        self.assertEqual((le["skill"], le["after"], le["fights"]), ("sql", ["sql_write"], ["null_newt"]))
+        self.assertTrue(any(p.get("sql") for p in le["pages"]))             # its statements run in the tests
+
+    def test_the_new_fights_exist_with_their_sprites(self):
+        for fid in ("except_eel", "null_newt"):
+            with self.subTest(fid):
+                self.assertIn(fid, challenges.BY_ID)
+                self.assertTrue((Path(lesson.HERE).parent / "enemies" / f"{fid}.json").exists())

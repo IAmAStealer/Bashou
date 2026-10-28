@@ -310,5 +310,31 @@
   ],
   "answer": 0,
   "explain": "A string can never change. .upper() doesn't touch 'sam': it builds a new string, 'SAM', and nobody keeps it. At the >>> prompt you'd see 'SAM' echoed, yet name is still 'sam'. Keep the result to use it: name = name.upper(). Lists and dicts are different: they can change in place."
+ },
+ {
+  "id": "python-2-11",
+  "level": 2,
+  "q": "A script stops with a long traceback full of file names and lines. Where do you start reading?",
+  "choices": [
+   "The last line: the kind of error, and why",
+   "The first line: Traceback (most recent call last)",
+   "The longest line in the middle",
+   "Nowhere: run it again until it works"
+  ],
+  "answer": 0,
+  "explain": "The last line names the error and its reason, like FileNotFoundError: … 'nope.txt'. Above it, the calls are listed with the newest last: the last File line is where it broke. It may be inside a module of Python, so look for the lowest File line that is in your own file: that's usually where to fix."
+ },
+ {
+  "id": "python-1-15",
+  "level": 1,
+  "q": "A cron job runs a script that ends with try: … except: print(0). Tonight its input file is missing. What does cron see?",
+  "choices": [
+   "A 0 and exit status 0: all looks fine",
+   "Exit status 1 and the error",
+   "A traceback in its mail",
+   "Nothing: the script never ran"
+  ],
+  "answer": 0,
+  "explain": "The bare except: catches the error and prints 0, and the script ends normally, with status 0: cron believes it worked, and nobody learns that the file is missing. Catch only the error you expect, print a message to stderr and end with sys.exit(1)."
  }
 ]

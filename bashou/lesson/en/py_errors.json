@@ -1,0 +1,94 @@
+{
+ "id": "py_errors",
+ "order": 375,
+ "skill": "python",
+ "after": [
+  "py_flow"
+ ],
+ "masters": [
+  "won except_eel"
+ ],
+ "questions": [
+  "python-2-11",
+  "python-1-15",
+  "python-1-01",
+  "python-2-05"
+ ],
+ "recall": [
+  "python-2-11",
+  "python-1-15"
+ ],
+ "fights": [
+  "except_eel"
+ ],
+ "title": "Python: errors and exit codes",
+ "summary": "Read a traceback from the bottom, catch only the error you expect, and tell the shell when a script failed.",
+ "pages": [
+  {
+   "scheme": [
+    " Traceback (most recent call last):",
+    "   File \"/tmp/count.py\", line 9, in <module>",
+    "     print(count_lines(sys.argv[1]))",
+    "   File \"/tmp/count.py\", line 5, in count_lines",
+    "     with open(path, encoding=\"utf-8\") as fh:",
+    " FileNotFoundError: [Errno 2] No such file",
+    "   or directory: 'nope.txt'"
+   ],
+   "point": 5,
+   "mark": [
+    "FileNotFoundError"
+   ],
+   "text": [
+    "When Python stops on an error, it prints a traceback. Read it from the bottom.",
+    "",
+    "- The last line names the kind of error, and why.",
+    "- Above it, the chain of calls, the newest last, each with its file and line.",
+    "- Start at the lowest line that is in your own file.",
+    "- Python 3.11 and newer also draw ^^^ under the part that failed."
+   ]
+  },
+  {
+   "scheme": [
+    " try:",
+    "     with open(\"cfg.json\", encoding=\"utf-8\") as f:",
+    "         settings = json.load(f)",
+    " except FileNotFoundError:",
+    "     settings = {}"
+   ],
+   "point": 3,
+   "mark": [
+    "FileNotFoundError"
+   ],
+   "text": [
+    "try runs code that may fail; except catches one kind of error and decides what to do: here, no settings file means the default settings.",
+    "",
+    "- Name the error you expect: FileNotFoundError, KeyError, ValueError.",
+    "- ✘ A bare except: catches everything, even your typos and Ctrl+C: bugs hide behind it.",
+    "- An error you didn't expect should stop the script, loudly."
+   ]
+  },
+  {
+   "scheme": [
+    " except OSError as err:",
+    "     print(err, file=sys.stderr)",
+    "     sys.exit(1)",
+    "",
+    " $ python3 count.py nope.txt; echo $?",
+    " [Errno 2] No such file or directory: 'nope.txt'",
+    " 1"
+   ],
+   "point": 2,
+   "mark": [
+    "sys.exit(1)"
+   ],
+   "text": [
+    "A script that fails must say so to whoever runs it: you, cron, a CI job.",
+    "",
+    "- The message goes to stderr (file=sys.stderr), not into the output.",
+    "- OSError catches every way opening can fail: missing file, no permission, a folder.",
+    "- sys.exit(1) ends with status 1: the shell's && and if see the failure.",
+    "- An error nobody catches also ends with status 1, and a traceback. Catching it only to print 0 hides it."
+   ]
+  }
+ ]
+}

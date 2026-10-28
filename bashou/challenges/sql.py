@@ -97,6 +97,16 @@ def join_setup(work, rng):
     return {"args": {"name": name}, "answer": str(total)}
 
 
+# --- NULL: how many customers have no city ------------------------------------------------------
+
+def null_setup(work, rng):
+    _products, people = make_shop(work, rng)
+    gone = rng.sample(range(1, len(people) + 1), rng.randint(2, 3))
+    with contextlib.closing(sqlite3.connect(work / "shop.db")) as db, db:
+        db.executemany("UPDATE customers SET city = ? WHERE id = ?", [(None, i) for i in gone])
+    return {"answer": str(len(gone))}
+
+
 # --- CREATE TABLE ----------------------------------------------------------------------------------
 
 def create_setup(work, rng):
@@ -271,6 +281,14 @@ ALL = [
                      "production accident. Run a SELECT with the same WHERE first to see what you're about to change.",
                      "UPDATE products SET price = {price} WHERE name = '{item}';"],
               setup=update_setup, verify=update_verify),
+    Challenge(level=2, id="null_newt", threat="Null Newt", **SQL, after=("query_quokka",),
+              task="The Null Newt ate some cities in shop.db: a few customers have no city at all (NULL).\n"
+                   "How many customers have no city? answer <number>",
+              hints=["NULL means no value. A comparison like = or != with NULL gives NULL, never true: WHERE city = NULL "
+                     "keeps no row at all, so the count would be 0. IS NULL is the test that works.",
+                     "SELECT COUNT(*) FROM customers WHERE city IS NULL;"],
+              help="Look for how to open a database file, and how to pass SQL on the command line.",
+              setup=null_setup),
     Challenge(level=2, id="join_jackal", threat="Join Jackal", **SQL, after=("query_quokka",),
               task="The Join Jackal split shop.db: the orders only keep a customer's number (customer_id), the "
                    "names are in customers.\nHow much did {name} spend in total? answer <number>",

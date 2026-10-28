@@ -1,0 +1,88 @@
+{
+ "id": "sql_null",
+ "order": 425,
+ "skill": "sql",
+ "after": [
+  "sql_write"
+ ],
+ "masters": [
+  "won null_newt"
+ ],
+ "questions": [
+  "sql-1-14",
+  "sql-2-10",
+  "sql-2-11"
+ ],
+ "recall": [
+  "sql-1-14",
+  "sql-2-10"
+ ],
+ "fights": [
+  "null_newt"
+ ],
+ "title": "SQL: NULL, the missing value",
+ "summary": "What NULL means, why = NULL never matches, and how COUNT and COALESCE treat it.",
+ "pages": [
+  {
+   "scheme": [
+    " name    city",
+    " Ada     Lyon",
+    " Ken     NULL     no city known",
+    " Grace   ''       a city, written empty"
+   ],
+   "point": 2,
+   "mark": [
+    "NULL"
+   ],
+   "text": [
+    "NULL means there is no value: unknown, or never given. It is not 0, and not the empty text ''.",
+    "",
+    "- A column left out of an INSERT gets NULL, unless it has a default (an INTEGER PRIMARY KEY gets the next number, a NOT NULL column refuses the row).",
+    "- sqlite3 shows NULL as an empty cell: the shell command .nullvalue NULL (no ;) makes it visible."
+   ]
+  },
+  {
+   "scheme": [
+    " WHERE city = NULL         no row, ever",
+    " WHERE city != 'Lyon'      skips Ken too",
+    " WHERE city IS NULL        Ken",
+    " WHERE city IS NOT NULL    Ada, Grace"
+   ],
+   "point": 2,
+   "mark": [
+    "IS NULL"
+   ],
+   "text": [
+    "A comparison like =, != or < with NULL gives NULL, not true (even NULL = NULL), so WHERE keeps no row.",
+    "",
+    "- city = NULL matches nothing, and city != 'Lyon' skips the NULL rows too.",
+    "- IS NULL and IS NOT NULL are the tests that work."
+   ]
+  },
+  {
+   "scheme": [
+    " SELECT COUNT(*), COUNT(city)",
+    "   FROM customers;",
+    " 6|4          COUNT(city) skips the NULLs",
+    "",
+    " SELECT name, COALESCE(city, 'unknown')",
+    "   FROM customers;"
+   ],
+   "point": 2,
+   "mark": [
+    "COUNT(city)"
+   ],
+   "text": [
+    "Aggregate functions (COUNT, SUM, AVG, MIN, MAX) skip NULL. Other functions and arithmetic give NULL back: price + NULL is NULL.",
+    "",
+    "- COUNT(*) counts rows; COUNT(city) only the rows where city has a value. AVG divides by the values it found.",
+    "- If every value is NULL, SUM gives NULL, not 0: COALESCE(SUM(total), 0) gives 0.",
+    "- COALESCE(city, 'unknown') gives the first value that isn't NULL. An empty '' stays empty."
+   ],
+   "sql": [
+    "SELECT COUNT(*), COUNT(city) FROM customers;",
+    "SELECT name, COALESCE(city, 'unknown') FROM customers;"
+   ]
+  }
+ ]
+}

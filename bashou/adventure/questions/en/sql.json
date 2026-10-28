@@ -297,5 +297,31 @@
   ],
   "answer": 0,
   "explain": "NULL means unknown or missing. It's not 0 and not '': it's nothing. Comparisons with = don't match it, even NULL = NULL; you test it with IS NULL. COUNT(col) skips NULLs, while COUNT(*) counts every row."
+ },
+ {
+  "id": "sql-1-14",
+  "level": 1,
+  "q": "SELECT name FROM customers WHERE city = NULL; returns no rows, yet some customers have no city. Why?",
+  "choices": [
+   "= NULL is never true: write city IS NULL",
+   "Those customers were deleted",
+   "NULL must be written 'NULL', in quotes",
+   "WHERE can't read the city column"
+  ],
+  "answer": 0,
+  "explain": "NULL means no value, so comparing anything with it gives NULL, which WHERE treats as not true: = NULL keeps no row, ever. IS NULL is the test made for it. 'NULL' in quotes would be the text NULL, a real value, which is something else."
+ },
+ {
+  "id": "sql-2-11",
+  "level": 2,
+  "q": "customers has 6 rows, and 2 of them have no city (NULL). What do COUNT(*) and COUNT(city) give?",
+  "choices": [
+   "6 and 4",
+   "6 and 6",
+   "4 and 4",
+   "6 and 2"
+  ],
+  "answer": 0,
+  "explain": "COUNT(*) counts rows, whatever they hold: 6. COUNT(city) counts only the rows where city has a value, so the 2 NULLs are skipped: 4. SUM and AVG skip NULL the same way, so an average is over the values found, not over every row. (If every value is NULL, SUM gives NULL, not 0.)"
  }
 ]

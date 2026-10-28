@@ -53,10 +53,10 @@ A topic is complete when it has all four: questions, a lesson, one or more fight
 - Network: processes → network → ip_addr → ipv6; ip_addr → dns → dns_tools; ip_addr → tcp;
   dns_tools + tcp → net_debug; keys + net_debug → certs → certs_tools → certs_admin → certs_ca → certs_cnf → certs_revoke
 - Logic: variables → logic
-- Python: scripts + loops + logic → py_start → py_flow → py_names; py_names + pipes → py_data
+- Python: scripts + loops + logic → py_start → py_flow → py_names; py_flow → py_errors; py_names + pipes → py_data
 - C: computer + scripts + logic → compilation → gcc_use → stack_heap → pointers → debugger
 - Rust: stack_heap → rust_vars → rust_own
-- SQL: text_tools → sql_select → sql_write → sql_join
+- SQL: text_tools → sql_select → sql_write → sql_join; sql_write → sql_null
 - CI/CD: git + scripts + pass → pipeline
 
 ## Warm-up
@@ -152,7 +152,8 @@ input. Rules: [bash-style.md](bash-style.md).
 1. `py_start` — first script, blocks, SyntaxError · Colon Cobra
 2. `py_flow` — loops, dicts, recursion · Dict Djinn, Loop Lich, Ouroboros
 3. `py_names` — names and objects · List Leech
-4. `py_data` — JSON, encodings, injection · JSON Jinn, Base64 Banshee, Percent Poltergeist,
+4. `py_errors` — tracebacks, except, stderr and exit codes · Except Eel
+5. `py_data` — JSON, encodings, injection · JSON Jinn, Base64 Banshee, Percent Poltergeist,
    Token Trickster, Injection Imp
 
 ### Rust
@@ -166,7 +167,8 @@ input. Rules: [bash-style.md](bash-style.md).
 
 1. `sql_select` · Query Quokka
 2. `sql_write` — CREATE, INSERT, UPDATE, upsert · Table Troll, Insert Imp, Update Urchin, Upsert Unicorn
-3. `sql_join` · Join Jackal
+3. `sql_null` — NULL, IS NULL, COUNT and COALESCE · Null Newt
+4. `sql_join` · Join Jackal
 
 ### Network
 

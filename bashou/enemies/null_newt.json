@@ -1,0 +1,48 @@
+{
+ "name": "Null Newt",
+ "palette": {
+  "a": "#1a1408",
+  "n": "#e88830",
+  "N": "#b05818",
+  "s": "#f8d090",
+  "k": "#402818",
+  "w": "#ffffff",
+  "m": "#101010"
+ },
+ "base": [
+  ".................",
+  ".....aaaaa.......",
+  "....annnnna......",
+  "...anwmnwmna.....",
+  "...annnnnnna.....",
+  "....asssssa......",
+  "...annnnnnna.....",
+  "aa.ankknnnna.aa..",
+  ".aanknnkknnnaa...",
+  "...annkknnNa.....",
+  "..aNa.aNNa.aNa...",
+  "..aa...aa...aa..."
+ ],
+ "poses": {
+  "inhale": {
+   "6": "--annnnnnnnna----"
+  },
+  "closed": {
+   "3": "-----nn-nn-------"
+  },
+  "left": {
+   "3": "-----mw-mw-------"
+  },
+  "right": {
+   "3": "-----wm-wm-------"
+  },
+  "fidget": {
+   "7": "a--------------a.",
+   "8": "aa-------------.."
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

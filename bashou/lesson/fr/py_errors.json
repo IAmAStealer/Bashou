@@ -1,0 +1,72 @@
+{
+ "title": "Python : erreurs et codes de sortie",
+ "summary": "Lire un traceback par le bas, n'attraper que l'erreur attendue, et dire au shell quand un script a échoué.",
+ "pages": [
+  {
+   "scheme": [
+    " Traceback (most recent call last):",
+    "   File \"/tmp/count.py\", line 9, in <module>",
+    "     print(count_lines(sys.argv[1]))",
+    "   File \"/tmp/count.py\", line 5, in count_lines",
+    "     with open(path, encoding=\"utf-8\") as fh:",
+    " FileNotFoundError: [Errno 2] No such file",
+    "   or directory: 'nope.txt'"
+   ],
+   "point": 5,
+   "mark": [
+    "FileNotFoundError"
+   ],
+   "text": [
+    "Quand Python s'arrête sur une erreur, il affiche un traceback. Lis-le par le bas.",
+    "",
+    "- La dernière ligne nomme le type d'erreur, et pourquoi.",
+    "- Au-dessus, la chaîne des appels, le plus récent en dernier, chacun avec son fichier et sa ligne.",
+    "- Commence à la ligne la plus basse qui est dans ton propre fichier.",
+    "- Python 3.11 et plus récent soulignent aussi avec des ^^^ la partie qui a échoué."
+   ]
+  },
+  {
+   "scheme": [
+    " try:",
+    "     with open(\"cfg.json\", encoding=\"utf-8\") as f:",
+    "         settings = json.load(f)",
+    " except FileNotFoundError:",
+    "     settings = {}"
+   ],
+   "point": 3,
+   "mark": [
+    "FileNotFoundError"
+   ],
+   "text": [
+    "try lance du code qui peut échouer ; except attrape un type d'erreur et décide quoi faire : ici, pas de fichier de réglages veut dire les réglages par défaut.",
+    "",
+    "- Nomme l'erreur que tu attends : FileNotFoundError, KeyError, ValueError.",
+    "- ✘ Un except: nu attrape tout, même tes fautes de frappe et Ctrl+C : les bugs se cachent derrière.",
+    "- Une erreur que tu n'attendais pas doit arrêter le script, bruyamment."
+   ]
+  },
+  {
+   "scheme": [
+    " except OSError as err:",
+    "     print(err, file=sys.stderr)",
+    "     sys.exit(1)",
+    "",
+    " $ python3 count.py nope.txt; echo $?",
+    " [Errno 2] No such file or directory: 'nope.txt'",
+    " 1"
+   ],
+   "point": 2,
+   "mark": [
+    "sys.exit(1)"
+   ],
+   "text": [
+    "Un script qui échoue doit le dire à qui le lance : toi, cron, une tâche de CI.",
+    "",
+    "- Le message va sur stderr (file=sys.stderr), pas dans la sortie.",
+    "- OSError attrape toutes les façons dont open peut échouer : fichier absent, pas le droit, un dossier.",
+    "- sys.exit(1) finit avec le code 1 : les && et if du shell voient l'échec.",
+    "- Une erreur que personne n'attrape finit aussi avec le code 1, et un traceback. L'attraper seulement pour afficher 0 la cache."
+   ]
+  }
+ ]
+}

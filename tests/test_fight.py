@@ -175,6 +175,10 @@ SOLUTIONS = {
     "needs_newt": ("sed -i \"/^  deploy:/a\\    needs: test\\n    if: github.ref == 'refs/heads/main'\" .github/workflows/ci.yml", None),
     "manual_mole": ("printf '%s\\n' '  rules:' '    - if: $CI_COMMIT_BRANCH == \"main\"' '      when: manual' >> .gitlab-ci.yml", None),
     # SQL fights: the sqlite3 command line (CI has it)
+    "null_newt": ("sqlite3 shop.db 'SELECT COUNT(*) FROM customers WHERE city IS NULL;'", None),
+    "except_eel": ("python3 -c \"import pathlib; p = pathlib.Path('count.py'); p.write_text(p.read_text().replace("
+                   "'    except:\\n        print(0)', '    except OSError as err:\\n        print(err, file=sys.stderr)"
+                   "\\n        sys.exit(1)'))\"", None),
     "query_quokka": ("sqlite3 shop.db 'SELECT COUNT(*) FROM products WHERE price > {x};'", r"more than (\d+)"),
     "join_jackal": ("sqlite3 shop.db \"SELECT SUM(total) FROM orders JOIN customers ON orders.customer_id = customers.id "
                     "WHERE customers.name = '{x}';\"", r"did (\w+) spend"),
@@ -313,6 +317,9 @@ WRONG_MOVES = [("index_imp", "zsh pick.sh"), ("flag_phantom", "sort sizes.txt | 
          ("commit_crowd", "git add . && git commit -qm all"), ("unit_imp", "true"),
          ("branch_bramble", "git add idea.txt && git commit -qm idea"),
          ("conflict_chimera", "git add menu.txt && git commit -q --no-edit"),
+         ("except_eel", "sed -i 's/print(0)/print(0, file=sys.stderr)/' count.py"),        # still says it worked
+         ("except_eel", "sed -i 's/print(0)/raise SystemExit(0)/' count.py"),
+         ("except_eel", "sed -i 's/        print(0)/        print(sys.argv, file=sys.stderr); sys.exit(1)/' count.py"),  # bare except
          ("revert_revenant", "git reset -q --hard HEAD~2"),                     # rewrites shared history
          ("revert_revenant", "sed -i 's/Salt/Sugar/' recipe.txt"),              # fixed, never committed
          ("revert_revenant", "sed -i 's/Salt/Sugar/' recipe.txt && git commit -qam fix"),  # by hand: which commit?

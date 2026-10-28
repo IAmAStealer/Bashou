@@ -6,6 +6,7 @@ small harness, C built with AddressSanitizer when the compiler has it (leaks and
 The first level only asks to fix what stops the code from compiling.
 """
 
+import ast
 import base64
 import functools
 import json
@@ -259,6 +260,54 @@ def dict_setup(work, rng):
             want[line.split()[1]] = want.get(line.split()[1], 0) + 1
         cases.append([[ls], want])
     return {"cases": cases, "args": {"level": lines[0].split()[1]}}
+
+
+EEL_CODE = '''import sys
+
+
+def count_lines(path):
+    with open(path, encoding="utf-8") as fh:
+        return len(fh.readlines())
+
+
+if __name__ == "__main__":
+    try:
+        print(count_lines(sys.argv[1]))
+    except:
+        print(0)
+'''
+
+
+def eel_setup(work, rng):
+    write(work, "count.py", "#", [
+        _("Fight: count.py counts the lines of a file. Given a file that isn't there, it prints 0 and says it worked."),
+        _("Wanted: the count for a real file; for a missing one, a message on stderr and exit status 1."),
+        _("Run it:") + " python3 count.py notes.txt; echo $?   " + _("then:") + " python3 count.py nope.txt; echo $?",
+        _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
+    ], EEL_CODE)
+    n = rng.randint(3, 9)
+    (work / "notes.txt").write_text("".join(f"note {i}\n" for i in range(1, n + 1)), encoding="utf-8")
+    return {"lines": n}
+
+
+def eel_verify(work, meta, value):
+    """No bare except left. A real file: its count, status 0. A missing one: nothing on stdout, a message
+    on stderr, status 1 (a script that fails must say so to cron or CI)."""
+    try:
+        tree = ast.parse((work / "count.py").read_text(encoding="utf-8"))
+    except (OSError, SyntaxError, ValueError):
+        return False
+    if any(isinstance(h, ast.ExceptHandler) and (h.type is None or getattr(h.type, "id", "") == "BaseException")
+           for h in ast.walk(tree)):
+        return False                                    # the bare except is what the fight is about
+    with tempfile.TemporaryDirectory() as tmp:
+        shutil.copy(work / "count.py", tmp)
+        n = meta["lines"] + 2
+        (Path(tmp) / "list.txt").write_text("x\n" * n, encoding="utf-8")
+        good = run([sys.executable, "count.py", "list.txt"], tmp, timeout=5)
+        bad = run([sys.executable, "count.py", "missing.txt"], tmp, timeout=5)
+    return (bool(good) and good.returncode == 0 and good.stdout == f"{n}\n"
+            and bool(bad) and bad.returncode == 1 and bad.stdout == "" and bad.stderr.strip() != "")
 
 
 LOOP_CODE = '''
@@ -639,6 +688,16 @@ ALL = [
               hints=["counts[level] += 1 reads counts[level] first, and the first time it isn't there.",
                      "Try: counts[level] = counts.get(level, 0) + 1"],
               setup=dict_setup, verify=py_tests("tally.py", "count_levels")),
+    Challenge(level=2, id="except_eel", fix=True, pet="snake", threat="Except Eel", **PY,
+              task="The Except Eel slipped a bare except into count.py: a missing file prints 0, and the script "
+                   "says it worked.\nFix count.py (its first lines say what it must do). Run it: python3 count.py "
+                   "nope.txt; echo $?\nWhen it works, type: verify",
+              hints=["A bare except: catches every error, even typos and Ctrl+C, and here turns a failure into a "
+                     "fake 0 with status 0: cron would never know. Catch only the error you expect, say what "
+                     "went wrong on stderr, and end with status 1.",
+                     "Write: except OSError as err: (OSError covers a missing file, a forbidden one and a folder), "
+                     "then print(err, file=sys.stderr) and sys.exit(1)."],
+              setup=eel_setup, verify=eel_verify),
     Challenge(level=2, id="loop_lich", fix=True, pet="snake", threat="Loop Lich", **PY,
               task="The Loop Lich traps retry.py in a loop that never ends.\n"
                    "Fix retry.py (its first lines say what it must do). Run it: python3 retry.py\n"

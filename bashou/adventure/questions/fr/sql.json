@@ -297,5 +297,31 @@
   ],
   "answer": 0,
   "explain": "NULL veut dire inconnu ou absent. Ce n'est ni 0 ni '' : c'est rien. Les comparaisons avec = ne le trouvent pas, même NULL = NULL ; on le teste avec IS NULL. COUNT(col) saute les NULL, alors que COUNT(*) compte toutes les lignes."
+ },
+ {
+  "id": "sql-1-14",
+  "level": 1,
+  "q": "SELECT name FROM customers WHERE city = NULL; ne renvoie rien, alors que des clients n'ont pas de ville. Pourquoi ?",
+  "choices": [
+   "= NULL n'est jamais vrai : écris city IS NULL",
+   "Ces clients ont été supprimés",
+   "NULL s'écrit 'NULL', entre apostrophes",
+   "WHERE ne sait pas lire la colonne city"
+  ],
+  "answer": 0,
+  "explain": "NULL veut dire pas de valeur : comparer quoi que ce soit avec lui donne NULL, que WHERE traite comme pas vrai. = NULL ne garde donc jamais aucune ligne. IS NULL est le test fait pour ça. 'NULL' entre apostrophes serait le texte NULL, une vraie valeur, donc autre chose que l'absence de valeur."
+ },
+ {
+  "id": "sql-2-11",
+  "level": 2,
+  "q": "customers a 6 lignes, et 2 n'ont pas de ville (NULL). Que donnent COUNT(*) et COUNT(city) ?",
+  "choices": [
+   "6 et 4",
+   "6 et 6",
+   "4 et 4",
+   "6 et 2"
+  ],
+  "answer": 0,
+  "explain": "COUNT(*) compte les lignes, quoi qu'elles contiennent : 6. COUNT(city) ne compte que les lignes où city a une valeur : les 2 NULL sont sautés, 4. SUM et AVG sautent NULL de la même façon : une moyenne porte sur les valeurs trouvées, pas sur toutes les lignes. (Si toutes les valeurs sont NULL, SUM donne NULL, pas 0.)"
  }
 ]

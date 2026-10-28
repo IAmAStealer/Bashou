@@ -310,5 +310,31 @@
   ],
   "answer": 0,
   "explain": "Une chaîne ne change jamais. .upper() ne touche pas à 'sam' : il fabrique une nouvelle chaîne, 'SAM', et personne ne la garde. À l'invite >>>, tu verrais 'SAM' s'afficher, mais name vaut toujours 'sam'. Garde le résultat pour t'en servir : name = name.upper(). Les listes et les dicts sont différents : eux peuvent changer sur place."
+ },
+ {
+  "id": "python-2-11",
+  "level": 2,
+  "q": "Un script s'arrête avec un long traceback plein de noms de fichiers et de lignes. Par où commencer la lecture ?",
+  "choices": [
+   "La dernière ligne : le type d'erreur, et pourquoi",
+   "La première : Traceback (most recent call last)",
+   "La plus longue ligne, au milieu",
+   "Nulle part : le relancer jusqu'à ce que ça marche"
+  ],
+  "answer": 0,
+  "explain": "La dernière ligne nomme l'erreur et sa raison, comme FileNotFoundError: … 'nope.txt'. Au-dessus, les appels sont listés avec le plus récent en dernier : la dernière ligne File est là où ça a cassé. Ce peut être dans un module de Python : cherche la ligne File la plus basse qui est dans ton propre fichier, c'est en général là qu'il faut corriger."
+ },
+ {
+  "id": "python-1-15",
+  "level": 1,
+  "q": "Une tâche cron lance un script qui finit par try: … except: print(0). Ce soir, son fichier d'entrée manque. Que voit cron ?",
+  "choices": [
+   "Un 0 et le code 0 : tout a l'air bien",
+   "Le code 1 et l'erreur",
+   "Un traceback dans son mail",
+   "Rien : le script ne s'est pas lancé"
+  ],
+  "answer": 0,
+  "explain": "Le except: nu attrape l'erreur et affiche 0, et le script finit normalement, avec le code 0 : cron croit que ça a marché, et personne n'apprend que le fichier manque. N'attrape que l'erreur attendue, affiche un message sur stderr et termine par sys.exit(1)."
  }
 ]

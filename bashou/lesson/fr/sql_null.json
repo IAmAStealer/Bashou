@@ -1,0 +1,63 @@
+{
+ "title": "SQL : NULL, la valeur absente",
+ "summary": "Ce que veut dire NULL, pourquoi = NULL ne trouve jamais rien, et comment COUNT et COALESCE le traitent.",
+ "pages": [
+  {
+   "scheme": [
+    " name    city",
+    " Ada     Lyon",
+    " Ken     NULL     ville inconnue",
+    " Grace   ''       une ville, écrite vide"
+   ],
+   "point": 2,
+   "mark": [
+    "NULL"
+   ],
+   "text": [
+    "NULL veut dire qu'il n'y a pas de valeur : inconnue, ou jamais donnée. Ce n'est pas 0, ni le texte vide ''.",
+    "",
+    "- Une colonne oubliée dans un INSERT reçoit NULL, sauf si elle a une valeur par défaut (un INTEGER PRIMARY KEY prend le numéro suivant, une colonne NOT NULL refuse la ligne).",
+    "- sqlite3 affiche NULL comme une case vide : la commande du shell .nullvalue NULL (sans ;) le rend visible."
+   ]
+  },
+  {
+   "scheme": [
+    " WHERE city = NULL         aucune ligne, jamais",
+    " WHERE city != 'Lyon'      saute Ken aussi",
+    " WHERE city IS NULL        Ken",
+    " WHERE city IS NOT NULL    Ada, Grace"
+   ],
+   "point": 2,
+   "mark": [
+    "IS NULL"
+   ],
+   "text": [
+    "Une comparaison comme =, != ou < avec NULL donne NULL, pas vrai (même NULL = NULL) : WHERE ne garde aucune ligne.",
+    "",
+    "- city = NULL ne trouve rien, et city != 'Lyon' saute aussi les lignes NULL.",
+    "- IS NULL et IS NOT NULL sont les tests qui marchent."
+   ]
+  },
+  {
+   "scheme": [
+    " SELECT COUNT(*), COUNT(city)",
+    "   FROM customers;",
+    " 6|4          COUNT(city) saute les NULL",
+    "",
+    " SELECT name, COALESCE(city, 'unknown')",
+    "   FROM customers;"
+   ],
+   "point": 2,
+   "mark": [
+    "COUNT(city)"
+   ],
+   "text": [
+    "Les fonctions d'agrégat (COUNT, SUM, AVG, MIN, MAX) sautent NULL. Les autres fonctions et les calculs rendent NULL : price + NULL vaut NULL.",
+    "",
+    "- COUNT(*) compte les lignes ; COUNT(city) seulement celles où city a une valeur. AVG divise par les valeurs trouvées.",
+    "- Si toutes les valeurs sont NULL, SUM donne NULL, pas 0 : COALESCE(SUM(total), 0) donne 0.",
+    "- COALESCE(city, 'unknown') donne la première valeur qui n'est pas NULL. Un '' vide reste vide."
+   ]
+  }
+ ]
+}
