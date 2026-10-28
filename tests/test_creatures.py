@@ -3,8 +3,8 @@ import unittest
 from bashou import creatures, duel, render
 
 # Enemies whose look changes their eyes on purpose, or that wait for their art to be checked.
-ODD_LOOKS = {"conflict_chimera", "last_word_wisp", "loopback_lurker", "negation_gnome", "nxdomain_nixie", "ouroboros",
-             "resolver_rook", "shebang_shade", "token_trickster", "typo_troll", "uniq_swarm"}
+ODD_LOOKS = {"conflict_chimera", "negation_gnome", "nxdomain_nixie", "ouroboros",
+             "shebang_shade", "token_trickster", "uniq_swarm"}
 
 
 class CreaturesTest(unittest.TestCase):
