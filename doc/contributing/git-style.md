@@ -7,7 +7,7 @@ Bashou teaches git two ways, and every git sample belongs to one of them:
 - **A shared repository** (pushed, others pulled): history is shared. Undo by adding commits
   (`revert`), never by rewriting what others have.
 
-This file is the checklist for every git sample in Bashou: the `git` and `git_fix` lessons, the git
+This file is the checklist for every git sample in Bashou: the `git` lesson, the git
 questions (in `bash.json`), the git fights of `bashou/challenges/gitfights.py`, their hints and
 starter repositories. The `git-judge` agent (`.claude/agents/git-judge.md`) applies it after each
 change, `tests/test_git_style.py` checks the text, and `tests/test_fight.py` plays every git fight.

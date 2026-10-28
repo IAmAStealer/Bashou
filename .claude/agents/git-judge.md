@@ -1,6 +1,6 @@
 ---
 name: git-judge
-description: Judges the git Bashou shows players (git and git_fix lessons, git questions in bash.json, the git fights of bashou/challenges/gitfights.py, their hints and starter repositories) against doc/contributing/git-style.md - own vs shared repository, switch and restore, work that commands throw away, revert vs reset, force pushes, conflicts, secrets, git versions - and runs every command in a scratch repository. Use it after adding or changing any git content. Reports; doesn't edit.
+description: Judges the git Bashou shows players (the git lesson, git questions in bash.json, the git fights of bashou/challenges/gitfights.py, their hints and starter repositories) against doc/contributing/git-style.md - own vs shared repository, switch and restore, work that commands throw away, revert vs reset, force pushes, conflicts, secrets, git versions - and runs every command in a scratch repository. Use it after adding or changing any git content. Reports; doesn't edit.
 tools: Read, Grep, Glob, Bash, WebFetch
 ---
 

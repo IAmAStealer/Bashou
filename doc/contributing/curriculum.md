@@ -42,7 +42,7 @@ A topic is complete when it has all four: questions, a lesson, one or more fight
   wildcards → variables; variables + wildcards → bash_zsh
 - Bash: reading → streams; reading → grep → regex; streams + grep → pipes → text_tools;
   regex + text_tools → awk_sed; wildcards → find; variables → logic; logic + streams → quotes →
-  scripts → loops; scripts → substitution; scripts → git → git_fix
+  scripts → loops; scripts → substitution; scripts → git
 - Bash scripts (skill `script`, owner 2026-10-22: bash at the prompt and bash in scripts are two jobs):
   quotes → scripts → prompt_script → script_errors → script_files → script_data;
   script_errors → script_cleanup
@@ -83,8 +83,8 @@ paths above.
 7. `variables` — shell variables, $( ), export
 7. `bash_zsh` — where zsh reads a line differently: word splitting, patterns that match nothing, arrays
    from 1, and the first line of a script that picks its shell (0.9.0) · Index Imp
-8. `git` — commits and branches · Commit Crowd, Branch Bramble
-9. `git_fix` — merge conflicts, stash, restore, revert vs reset · Conflict Chimera, Revert Revenant
+8. `git` — commits, branches, merge conflicts, stash, restore, revert vs reset · Commit Crowd, Branch Bramble,
+   Conflict Chimera, Revert Revenant
 
 ### Bash (text tools)
 

@@ -6,24 +6,33 @@
  ],
  "opens": "read",
  "masters": [
-  "achievement brancher | tool git 3 | won commit_crowd | won branch_bramble"
+  "achievement brancher | tool git 3 | won commit_crowd | won branch_bramble",
+  "won conflict_chimera | won revert_revenant | achievement stasher"
  ],
  "questions": [
   "bash-1-21",
   "bash-2-14",
   "bash-1-30",
-  "bash-1-31"
+  "bash-1-31",
+  "bash-2-16",
+  "bash-2-26",
+  "bash-1-42",
+  "bash-1-43"
  ],
  "recall": [
   "bash-1-21",
-  "bash-2-14"
+  "bash-2-14",
+  "bash-2-16",
+  "bash-2-26"
  ],
  "fights": [
   "commit_crowd",
-  "branch_bramble"
+  "branch_bramble",
+  "conflict_chimera",
+  "revert_revenant"
  ],
- "title": "git: snapshots and branches",
- "summary": "What a commit is, how git add and commit work together, and what a branch really is.",
+ "title": "git: snapshots, branches and undo",
+ "summary": "What a commit and a branch are, how to settle a merge conflict, put work aside, and undo a change before or after a commit.",
  "pages": [
   {
    "scheme": [
@@ -79,6 +88,90 @@
     "",
     "- New commits go on your branch; main doesn't move.",
     "- When it works, git switch main, then git merge login-fix brings it in."
+   ]
+  },
+  {
+   "scheme": [
+    " <<<<<<< HEAD",
+    " Dessert: apple pie        your side (main)",
+    " =======",
+    " Dessert: chocolate cake   the other branch",
+    " >>>>>>> chef"
+   ],
+   "point": 2,
+   "mark": [
+    "======="
+   ],
+   "text": [
+    "When two branches change the same line, git merge can't choose: it stops and writes both sides into the file.",
+    "",
+    "- Above ======= is your side (HEAD), below it the other branch's.",
+    "- Edit the file so it reads the way you want, and delete the three marker lines.",
+    "- git add marks it as settled; git commit finishes the merge.",
+    "- Lost? git merge --abort puts everything back as it was before the merge."
+   ]
+  },
+  {
+   "scheme": [
+    " half-done work on login",
+    "      │  git stash       put it aside",
+    "      ▼",
+    " clean tree: switch, fix, commit, come back",
+    "      │  git stash pop   take it back",
+    "      ▼",
+    " half-done work on login again"
+   ],
+   "point": 1,
+   "mark": [
+    "git stash"
+   ],
+   "text": [
+    "An urgent fix comes in while your work is half done, and it isn't ready to commit.",
+    "",
+    "- git stash puts your changes aside and leaves a clean tree.",
+    "- git stash list shows what is aside; back on your branch, git stash pop brings the last one back.",
+    "- Files git doesn't track yet stay where they are: git stash -u takes them too."
+   ]
+  },
+  {
+   "scheme": [
+    " last commit (HEAD)",
+    "      │  git restore --staged notes.txt",
+    "      ▼  unstages: your file keeps the change",
+    " staged copy (git add)",
+    "      │  git restore notes.txt",
+    "      ▼  drops what you didn't git add",
+    " notes.txt on disk"
+   ],
+   "point": 1,
+   "mark": [
+    "--staged"
+   ],
+   "text": [
+    "Before a commit, git restore undoes things.",
+    "",
+    "- git restore file throws away the changes you haven't git add-ed yet, for good: read the name twice.",
+    "- git restore --staged file only unstages it: the change stays, it just won't go in the next commit.",
+    "- git status reminds you of both commands."
+   ]
+  },
+  {
+   "scheme": [
+    " a1 ◀─ b2 ◀─ c3 ◀─ main        b2 is the bad one",
+    "",
+    " git revert b2:",
+    " a1 ◀─ b2 ◀─ c3 ◀─ d4 ◀─ main  d4 undoes b2"
+   ],
+   "point": 3,
+   "mark": [
+    "d4"
+   ],
+   "text": [
+    "A commit others already pulled stays in the history. git revert makes a new commit that does the opposite.",
+    "",
+    "- The history only grows: everyone pulls again, and nothing breaks. If a later commit changed the same lines, revert stops on a conflict: settle it like a merge, git add, then git revert --continue.",
+    "- git reset moves the branch back: the commits after it leave the branch, their changes stay in your files.",
+    "- git reset --hard throws those changes away too, with your uncommitted work: keep reset for commits that never left your machine."
    ]
   }
  ]

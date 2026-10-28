@@ -274,14 +274,14 @@ class LessonQuizTest(unittest.TestCase):
 class GitAndRustLessonsTest(unittest.TestCase):
     """Owner, 2026-10-27 (option B): the thin sections grow, Git and Rust first."""
 
-    def test_git_has_a_second_lesson_on_conflicts_stash_and_undo(self):
-        fix = BY_ID["git_fix"]
-        self.assertEqual(reader.section(fix), "git")
-        self.assertEqual(fix["after"], ["git"])
-        self.assertEqual(set(fix["fights"]), {"conflict_chimera", "revert_revenant"})
-        self.assertIn("achievement stasher", fix["masters"])
-        self.assertNotIn("conflict_chimera", BY_ID["git"]["fights"])          # taught in git_fix now
-        self.assertNotIn("stasher", " ".join(BY_ID["git"]["masters"]))
+    def test_git_is_one_lesson_with_conflicts_stash_and_undo(self):
+        """Owner, 2026-10-28: git_fix went back into git, one lesson of 7 pages."""
+        git = BY_ID["git"]
+        self.assertNotIn("git_fix", BY_ID)
+        self.assertEqual(reader.section(git), "git")
+        self.assertEqual(len(git["pages"]), 7)
+        self.assertLessEqual({"commit_crowd", "branch_bramble", "conflict_chimera", "revert_revenant"}, set(git["fights"]))
+        self.assertIn("stasher", " ".join(git["masters"]))
 
     def test_rust_has_a_lesson_on_ownership_and_borrowing(self):
         own = BY_ID["rust_own"]
