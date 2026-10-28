@@ -100,3 +100,6 @@ python3 -m unittest tests.test_lesson          # widths, heights, points, condit
 With Claude Code, the `scheme-judge` agent (`.claude/agents/scheme-judge.md`) reviews a new lesson:
 is each drawing needed, true (checked on the web), and readable.
 The `bash-judge` agent (`.claude/agents/bash-judge.md`) checks the bash of any lesson, question or fight.
+The `rust-judge` agent (`.claude/agents/rust-judge.md`) does the same for Rust, against
+`doc/contributing/rust-style.md`, `c-judge` for C (`doc/contributing/c-style.md`),
+`git-judge` for git (`doc/contributing/git-style.md`).
