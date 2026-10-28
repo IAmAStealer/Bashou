@@ -105,7 +105,7 @@
    "text": [
     "A commit others already pulled stays in the history. git revert makes a new commit that does the opposite.",
     "",
-    "- The history only grows: everyone pulls again, and nothing breaks. If a later commit changed the same lines, revert stops on a conflict, settled like a merge.",
+    "- The history only grows: everyone pulls again, and nothing breaks. If a later commit changed the same lines, revert stops on a conflict: settle it like a merge, git add, then git revert --continue.",
     "- git reset moves the branch back: the commits after it leave the branch, their changes stay in your files.",
     "- git reset --hard throws those changes away too, with your uncommitted work: keep reset for commits that never left your machine."
    ]

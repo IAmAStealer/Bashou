@@ -81,7 +81,7 @@
    "text": [
     "Un commit que d'autres ont déjà récupéré reste dans l'historique. git revert fait un nouveau commit qui fait l'inverse.",
     "",
-    "- L'historique ne fait que grandir : tout le monde fait pull à nouveau, et rien ne casse. Si un commit plus récent a changé les mêmes lignes, revert s'arrête sur un conflit, à régler comme une fusion.",
+    "- L'historique ne fait que grandir : tout le monde fait pull à nouveau, et rien ne casse. Si un commit plus récent a changé les mêmes lignes, revert s'arrête sur un conflit : règle-le comme une fusion, git add, puis git revert --continue.",
     "- git reset ramène la branche en arrière : les commits d'après la quittent, leurs changements restent dans tes fichiers.",
     "- git reset --hard jette aussi ces changements, avec ton travail pas encore commité : garde reset pour des commits qui n'ont jamais quitté ta machine."
    ]

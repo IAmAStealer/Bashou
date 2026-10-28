@@ -20,7 +20,8 @@
     "Un commit est un instantané de ton projet, avec un message qui dit pourquoi.",
     "",
     "- git add choisit ce qui entre ; git commit l'enregistre.",
-    "- git status dit ce qui est modifié, préparé, ou non suivi (nouveau pour git)."
+    "- git status dit ce qui est modifié, préparé, ou non suivi (nouveau pour git).",
+    "- git diff --staged montre exactement ce que contiendra le commit : lis-le avant."
    ]
   },
   {
@@ -35,7 +36,7 @@
     "L'historique est une chaîne : chaque commit pointe vers celui d'avant.",
     "",
     "- git log --oneline la montre, le plus récent d'abord.",
-    "- Une branche n'est qu'une étiquette sur un commit. main est une branche comme une autre.",
+    "- Une branche n'est qu'une étiquette sur un commit. main (master dans certains dépôts) est une branche comme une autre.",
     "- HEAD, c'est là où tu es : il pointe vers ta branche."
    ]
   },

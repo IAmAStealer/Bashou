@@ -452,7 +452,7 @@
    "Supprimer le dossier .git"
   ],
   "answer": 0,
-  "explain": "git restore remet le fichier comme il était au dernier commit, en abandonnant les changements faits depuis. C'est pour ça qu'on peut expérimenter sans crainte dans un dépôt : git status montre ce qui a changé, git diff comment, et git restore l'annule. Le dossier .git, c'est l'historique lui-même : ne le supprime jamais."
+  "explain": "git restore remet le fichier comme git l'a gardé : la copie préparée si tu as fait git add, sinon le dernier commit. Les changements faits depuis sont perdus pour de bon. Version cassée déjà ajoutée ? git restore --staged fichier.txt d'abord, puis git restore fichier.txt. git status montre ce qui a changé, git diff comment. Le dossier .git, c'est l'historique : ne le supprime jamais."
  },
  {
   "id": "bash-1-22",
@@ -868,7 +868,7 @@
    "git switch main, corriger, puis revenir"
   ],
   "answer": 0,
-  "explain": "git stash met de côté tes changements pas encore commités et laisse un arbre propre : tu peux changer de branche et corriger le bug. git stash pop ramène ton travail ; ajoute -u si tu as créé des fichiers. git restore . jette les changements pas encore ajoutés, git reset --hard tous, pour de bon. git switch seul les emmène sur l'autre branche."
+  "explain": "git stash met de côté tes changements pas encore commités et laisse un arbre propre : tu peux changer de branche et corriger le bug. git stash pop ramène ton travail ; -u pour les nouveaux fichiers. git restore . jette les changements pas ajoutés, git reset --hard tous, pour de bon. git switch seul les emmène, ou refuse si l'autre branche a changé ces fichiers."
  },
  {
   "id": "bash-1-43",
@@ -881,7 +881,7 @@
    "git commit, puis le supprimer"
   ],
   "answer": 0,
-  "explain": "--staged retire le fichier de ce que contiendra le prochain commit, et le laisse sur le disque. git restore seul agit sur le contenu du fichier, pas sur ce qui est préparé. Commiter d'abord mettrait le secret dans l'historique pour de bon. Dans un dépôt neuf, sans aucun commit, c'est git rm --cached secrets.env. Puis ajoute-le à .gitignore."
+  "explain": "--staged retire le fichier du prochain commit et le laisse sur le disque. Commiter d'abord mettrait le secret dans l'historique : une fois poussé, le supprimer ne suffit pas, il reste dans chaque clone, donc change le secret. Dans un dépôt neuf, sans commit, c'est git rm --cached secrets.env. Puis ajoute-le à .gitignore."
  },
  {
   "id": "bash-2-26",

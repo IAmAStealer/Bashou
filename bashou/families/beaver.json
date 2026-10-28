@@ -11,9 +11,9 @@
  "voice": "*chomp*",
  "tips": [
   "`git add -p` picks changes piece by piece.",
-  "`git commit --amend` fixes the last commit.",
+  "`git commit --amend` fixes the last commit, as long as you haven't pushed it.",
   "`git diff --staged` shows what you're about to commit.",
-  "`git restore file` drops your changes."
+  "`git restore file` drops the changes you haven't added, for good."
  ],
  "personal": [
   "Commit often. A dam is built stick by stick."

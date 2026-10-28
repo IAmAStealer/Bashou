@@ -452,7 +452,7 @@
    "Delete the .git folder"
   ],
   "answer": 0,
-  "explain": "git restore puts the file back as it was in the last commit, dropping the changes you made since. It's safe to experiment in a repository for this reason: git status shows what changed, git diff shows how, and git restore undoes it. The .git folder is the history itself: never delete it."
+  "explain": "git restore puts the file back as git last saved it: the staged copy if you ran git add, the last commit otherwise. The changes since are gone for good. Staged the broken version? git restore --staged file.txt first, then git restore file.txt. git status shows what changed, git diff how. The .git folder is the history itself: never delete it."
  },
  {
   "id": "bash-1-22",
@@ -868,7 +868,7 @@
    "git switch main, fix it, then come back"
   ],
   "answer": 0,
-  "explain": "git stash puts your uncommitted changes aside and leaves a clean tree: you can switch branches and fix the bug. git stash pop brings your work back; add -u if you made new files. git restore . throws away the changes you haven't added, git reset --hard all of them, for good. git switch alone carries them to the other branch."
+  "explain": "git stash puts your uncommitted changes aside and leaves a clean tree: you can switch branches and fix the bug. git stash pop brings your work back; add -u for new files. git restore . throws away the changes you haven't added, git reset --hard all of them, for good. git switch alone carries them along, or refuses if the other branch changed those files."
  },
  {
   "id": "bash-1-43",
@@ -881,7 +881,7 @@
    "git commit, then delete it"
   ],
   "answer": 0,
-  "explain": "--staged takes the file out of what the next commit will hold, and leaves it on disk. Plain git restore works on the file's content, not on what is staged. Committing first would put the secret in the history for good. In a new repo with no commit at all, use git rm --cached secrets.env. Then add it to .gitignore."
+  "explain": "--staged takes the file out of the next commit and leaves it on disk. Committing first would put the secret in the history: once pushed, deleting it isn't enough, it stays in every clone, so change the secret. In a new repo with no commit, use git rm --cached secrets.env. Then add it to .gitignore."
  },
  {
   "id": "bash-2-26",
