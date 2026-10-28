@@ -2,6 +2,10 @@ import unittest
 
 from bashou import creatures, duel, render
 
+# Enemies whose look changes their eyes on purpose, or that wait for their art to be checked.
+ODD_LOOKS = {"conflict_chimera", "last_word_wisp", "loopback_lurker", "negation_gnome", "nxdomain_nixie", "ouroboros",
+             "resolver_rook", "shebang_shade", "token_trickster", "typo_troll", "uniq_swarm"}
+
 
 class CreaturesTest(unittest.TestCase):
     def test_sprites_render_in_every_pose_and_stage(self):
@@ -42,6 +46,21 @@ class CreaturesTest(unittest.TestCase):
             found = " ".join(creatures.problems(path))
         self.assertIn("'Z' is used but not in the palette", found)
         self.assertIn("missing pose closed", found)
+
+    def test_an_enemy_looking_aside_keeps_its_eyes(self):
+        """Looking left or right moves the pupils (m) in the whites (w), it doesn't add or wipe any (owner,
+        2026-10-28: the Vector Viper's look was shifted one column, a white pixel stayed when it blinked)."""
+        import json
+        for path in sorted((creatures.ART.parent / "enemies").glob("*.json")):
+            d = json.loads(path.read_text())
+            if path.stem in ODD_LOOKS or not {"w", "m"} <= set(d["palette"]):
+                continue
+            for pose in ("left", "right"):
+                for r, line in d["poses"][pose].items():
+                    base = d["base"][int(r)]
+                    looked = "".join(b if c == "-" else c for b, c in zip(base, line))
+                    with self.subTest(enemy=path.stem, pose=pose, row=r):
+                        self.assertEqual(sorted(c for c in base if c in "wm"), sorted(c for c in looked if c in "wm"))
 
     def test_large_sprites_are_valid_and_have_a_small_one(self):
         for path in sorted((creatures.ART / "large").glob("*.json")):

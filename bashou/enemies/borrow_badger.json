@@ -18,12 +18,12 @@
   ".akkkkWWWWWkkkka.",
   ".akwmkkWWWkkwmka.",
   ".akkkkWWmWWkkkka.",
-  "..akkkWWWWWkkka..",
-  "..aggggggggggga..",
-  ".agggggggggaayya.",
-  ".aGgggggggggayYya",
-  "..aGGgggggGGaaya.",
-  "...aaa.....aaa..."
+  "..akkkWWWWWkkaa..",
+  "..agggggggggawya.",
+  ".agggggggggayyyYa",
+  ".aGggggggggayyYYa",
+  "..aGGgggggGGaYYa.",
+  "...aaa.....aaaa.."
  ],
  "poses": {
   "inhale": {
@@ -40,8 +40,12 @@
    "4": "---wm-------wm---"
   },
   "fidget": {
-   "8": "-----------yaa---",
-   "9": "------------yYa--"
+   "6": "-----------------",
+   "7": "-------------aY.-",
+   "8": "------------aaY..",
+   "9": "-----------gaa-..",
+   "10": "-------------a-.-",
+   "11": "-----------------"
   }
  },
  "particles": [
