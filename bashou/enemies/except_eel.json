@@ -7,20 +7,24 @@
   "y": "#e8d070",
   "w": "#ffffff",
   "m": "#101010",
-  "r": "#e05050"
+  "r": "#e05050",
+  "1": "#b2e7f4",
+  "2": "#6caccc",
+  "3": "#324c7a",
+  "4": "#24325c"
  },
  "base": [
   ".................",
   "........aaaa.....",
-  ".......aeeeea....",
-  "......aewmeeea...",
-  "......aeeeerrea..",
-  ".......aEeeeea...",
+  ".......a122ea....",
+  "......a1wme33a...",
+  "......ae2eerr4a..",
+  ".......aE2ee4a...",
   "..aaa...aEeea....",
-  ".aeeea...aeea....",
-  "aeEyeea.aeEa.....",
-  "aeyaayeaaeea.....",
-  ".aeaaaeeeEa......",
+  ".a12ea...ae3a....",
+  "a1Ey3ea.a2Ea.....",
+  "a3yaay2aae3a.....",
+  ".a3aaaeeeEa......",
   "..aa..aaaa......."
  ],
  "poses": {

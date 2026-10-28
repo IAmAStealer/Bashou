@@ -188,3 +188,15 @@ object instead of a flat sticker. They hold for the 17 × 12 sprites and the PNG
 
 The Resolver Rook (`bashou/enemies/resolver_rook.json`) is the worked example of a cylinder: the
 crown, neck and base each get the same bands, computed from their width.
+
+### Materials that don't follow the one-light rule
+
+Every pixel here is fully on or off, so transparency is shown by contrast and by gaps, never by blending.
+
+| Material | How, in pixels | Source |
+|---|---|---|
+| Ghost, spirit, flame (lit from inside) | The light comes from the body itself: the brightest tone in a round core in the middle, cooler and darker toward the edges, a pale outline in a dark shade of the ghost color (not black). The bottom fades: darker, ragged, with gaps. No warm top-left highlight: it makes the body look solid. | [Clip Studio: ghost transparency](https://tips.clip-studio.com/en-us/articles/3343), [Graphixly: ghostly character](https://graphixly.com/blogs/news/creating-a-ghostly-character) |
+| Eyes on a pale body | The eyes keep the strongest contrast of the sprite: the pixels around them take a darker tone (a socket), never the core or highlight tone, or the white of the eye disappears. | Bashou (owner, 2026-10-28) |
+| Glass | Draw the outline and what's behind or inside it, not a fill. One or two sharp highlight pixels at the top left (curved on a round bulb), dark pixels at the edges for contrast. | [Health potion tutorial](https://itch.io/t/2667098/pixel-tutorial-health-potion), [Clip Studio: transparency](https://tips.clip-studio.com/en-us/articles/3384) |
+| Liquid in glass | A brighter top surface (light comes from above), a little empty space above it, the surface curved like the container. | [Health potion tutorial](https://itch.io/t/2667098/pixel-tutorial-health-potion) |
+| Water | Lighter at the surface and where it spills, darker with depth; reflections broken into short horizontal lines; a few sparkle pixels, not many. | [Slynyrd: water in motion](https://www.slynyrd.com/blog/2018/10/12/pixelblog-10-water-in-motion) |
