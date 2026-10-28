@@ -79,7 +79,7 @@
     "",
     "- Refused revient aussitôt : la machine est là, le port est fermé. Vérifie que le serveur a démarré, et sur quelle adresse.",
     "- Timed out prend du temps, jusqu'à deux minutes environ : rien ne répond. Regarde les pare-feux et les routes.",
-    "- No route to host veut souvent dire un pare-feu qui rejette, pas un problème de route."
+    "- No route to host : un pare-feu qui rejette, ou une machine de ton réseau qui ne répond pas (éteinte, mauvaise adresse)."
    ]
   }
  ]

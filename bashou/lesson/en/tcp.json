@@ -109,7 +109,7 @@
     "",
     "- Refused comes back at once: the machine is there, the port is closed. Check the server started, and on which address.",
     "- Timed out takes long, up to about two minutes: nothing answers. Look at firewalls and routes.",
-    "- No route to host often means a firewall that rejects, not a route problem."
+    "- No route to host: a firewall that rejects, or a machine on your own network that doesn't answer (off, wrong address)."
    ]
   }
  ]

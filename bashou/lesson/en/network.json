@@ -48,7 +48,7 @@
     "$ dig +short example.org",
     "$ ip addr      # your own addresses",
     "$ ifconfig     # on a Mac",
-    "$ ping -c 3 example.org   # 3 tries; on Linux, ping runs until Ctrl-C"
+    "$ ping -c 3 example.org   # 3 tries; without -c, ping runs until Ctrl-C"
    ]
   },
   {

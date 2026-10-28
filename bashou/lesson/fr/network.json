@@ -19,7 +19,7 @@
     "$ dig +short example.org",
     "$ ip addr      # tes propres adresses",
     "$ ifconfig     # sur Mac",
-    "$ ping -c 3 example.org   # 3 essais ; sous Linux, ping tourne jusqu'à Ctrl-C"
+    "$ ping -c 3 example.org   # 3 essais ; sans -c, ping tourne jusqu'à Ctrl-C"
    ]
   },
   {
