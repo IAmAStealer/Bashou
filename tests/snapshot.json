@@ -6195,6 +6195,29 @@
    },
    "snakelet": {
     "palette": {
+     "a": "#326e32",
+     "o": "#78be50",
+     "l": "#d7e68c",
+     "m": "#191919",
+     "r": "#e64650"
+    },
+    "base": [
+     ".................",
+     ".................",
+     ".................",
+     ".................",
+     "......aaaaa......",
+     ".....aoooooa.....",
+     ".....aomomoa.....",
+     ".....aoooooa.....",
+     "......aaoaa......",
+     "....aaaoooaaa....",
+     "...aollllllloa...",
+     "....aaaaaaaaa...."
+    ]
+   },
+   "snake": {
+    "palette": {
      "a": "#1d3b24",
      "d": "#3f8f3a",
      "o": "#6cc24a",
@@ -6221,30 +6244,6 @@
      ".ahdccbhhhhhhhha.",
      "aoosoooosooosoooa",
      ".abebbbbebbbebba."
-    ]
-   },
-   "snake": {
-    "palette": {
-     "a": "#326e32",
-     "o": "#78be50",
-     "l": "#d7e68c",
-     "m": "#191919",
-     "p": "#ffa0aa",
-     "r": "#e64650"
-    },
-    "base": [
-     "......aaaa.......",
-     ".....aoooooa.....",
-     "....aomoooomoa...",
-     "....aoooooooooa..",
-     ".....aopooopaa...",
-     "......aaoooaa....",
-     "....aaaoooaaaa...",
-     "...aoooooooooooa.",
-     "..aollllllllllloa",
-     "..aaoooooooooooa.",
-     ".aoooooooooooooa.",
-     "..aaaaaaaaaaaaa.."
     ]
    },
    "basilisk": {

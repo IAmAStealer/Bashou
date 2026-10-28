@@ -3,52 +3,53 @@
  "next": "basilisk",
  "next_at": {"achievements": 5},
  "palette": {
-  "a": "#326e32",
-  "o": "#78be50",
-  "l": "#d7e68c",
-  "m": "#191919",
-  "p": "#ffa0aa",
-  "r": "#e64650"
+  "a": "#1d3b24",
+  "d": "#3f8f3a",
+  "o": "#6cc24a",
+  "h": "#a6e06a",
+  "s": "#3a7d34",
+  "c": "#f3ecc4",
+  "b": "#d8c98e",
+  "m": "#2a2e33",
+  "w": "#f4f6f8",
+  "p": "#f0a0a0",
+  "r": "#e64650",
+  "e": "#b3a066"
  },
  "base": [
-  "......aaaa.......",
-  ".....aoooooa.....",
-  "....aomoooomoa...",
-  "....aoooooooooa..",
-  ".....aopooopaa...",
-  "......aaoooaa....",
-  "....aaaoooaaaa...",
-  "...aoooooooooooa.",
-  "..aollllllllllloa",
-  "..aaoooooooooooa.",
-  ".aoooooooooooooa.",
-  "..aaaaaaaaaaaaa.."
+  "...aaaaaa........",
+  "..ahhhhhha.......",
+  ".ahhoooooa.......",
+  ".aowmoowmoa......",
+  ".aommoommoa......",
+  ".apoossoopa...a..",
+  "..addddddda..aha.",
+  "...adcca.....aoa.",
+  "..adccaaaaaaaaoa.",
+  ".ahdccbhhhhhhhha.",
+  "aoosoooosooosoooa",
+  ".abebbbbebbbebba."
  ],
  "poses": {
-  "fidget": {
-   "4": "--------------rr-",
-   "5": "---------------r-"
-  },
   "inhale": {
-   "10": "a--------------oa"
+   "9": "a----------------"
   },
   "closed": {
-   "2": "------o----o-----",
-   "3": "------a----a-----"
+   "3": "---oo--oo--------",
+   "4": "---aa--aa--------"
   },
   "left": {
-   "2": "-----mo---mo-----"
+   "3": "---mw--mw--------"
   },
   "right": {
-   "2": "------om---om----"
+   "4": "---mw--mw--------"
   },
-  "tail_up": {
-   "4": "--------------rr-",
-   "5": "---------------r-"
+  "fidget": {
+   "5": "-----rr----------"
   }
  },
  "particles": [
   0,
-  13
+  14
  ]
 }
