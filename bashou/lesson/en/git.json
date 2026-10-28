@@ -44,7 +44,7 @@
     "",
     "- git add picks what goes in; git commit saves it.",
     "- git status tells you what is changed, staged, or untracked (new to git).",
-    "- git diff --staged shows exactly what the commit will hold: read it first."
+    "- git diff --staged shows exactly what the commit will change: read it first."
    ]
   },
   {

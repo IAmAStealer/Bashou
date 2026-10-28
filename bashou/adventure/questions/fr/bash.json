@@ -881,7 +881,7 @@
    "git commit, puis le supprimer"
   ],
   "answer": 0,
-  "explain": "--staged retire le fichier du prochain commit et le laisse sur le disque. Commiter d'abord mettrait le secret dans l'historique : une fois poussé, le supprimer ne suffit pas, il reste dans chaque clone, donc change le secret. Dans un dépôt neuf, sans commit, c'est git rm --cached secrets.env. Puis ajoute-le à .gitignore."
+  "explain": "--staged retire le fichier du prochain commit et le laisse sur le disque. git restore seul ne remet que ta copie du fichier : il reste préparé. Commiter d'abord mettrait le secret dans l'historique : une fois poussé, le supprimer ne suffit pas, il reste dans chaque clone, donc change le secret. Dans un dépôt neuf, sans commit, c'est git rm --cached secrets.env. Puis ajoute-le à .gitignore."
  },
  {
   "id": "bash-2-26",

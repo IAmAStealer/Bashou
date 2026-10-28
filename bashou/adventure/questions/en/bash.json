@@ -881,7 +881,7 @@
    "git commit, then delete it"
   ],
   "answer": 0,
-  "explain": "--staged takes the file out of the next commit and leaves it on disk. Committing first would put the secret in the history: once pushed, deleting it isn't enough, it stays in every clone, so change the secret. In a new repo with no commit, use git rm --cached secrets.env. Then add it to .gitignore."
+  "explain": "--staged takes the file out of the next commit and leaves it on disk. Plain git restore only resets your copy of the file: it stays staged. Committing first would put the secret in the history: once pushed, deleting it isn't enough, it stays in every clone, so change the secret. In a new repo with no commit, use git rm --cached secrets.env. Then add it to .gitignore."
  },
  {
   "id": "bash-2-26",

@@ -21,7 +21,7 @@
     "",
     "- git add choisit ce qui entre ; git commit l'enregistre.",
     "- git status dit ce qui est modifié, préparé, ou non suivi (nouveau pour git).",
-    "- git diff --staged montre exactement ce que contiendra le commit : lis-le avant."
+    "- git diff --staged montre exactement ce que le commit va changer : lis-le avant."
    ]
   },
   {
