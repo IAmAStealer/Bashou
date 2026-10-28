@@ -27,9 +27,9 @@
     " le résolveur",
     "   │ 1 ──▶ serveur racine  « demande aux .org »",
     "   │ 2 ──▶ serveur .org    « va voir example.org »",
-    "   │ 3 ──▶ example.org     « 104.20.26.136 »",
+    "   │ 3 ──▶ example.org     « 203.0.113.100 »",
     "   ▼",
-    " ton programme             104.20.26.136"
+    " ton programme             203.0.113.100"
    ],
    "point": 3,
    "mark": [
@@ -45,8 +45,8 @@
   },
   {
    "scheme": [
-    " A      example.org   104.20.26.136    IPv4",
-    " AAAA   example.org   2606:4700:…      IPv6",
+    " A      example.org   203.0.113.100    IPv4",
+    " AAAA   example.org   2001:db8::10     IPv6",
     " CNAME  www           example.org      alias",
     " MX     example.org   mail.example.org mail",
     " TXT    example.org   \"v=spf1 …\"       texte",
@@ -65,7 +65,7 @@
   },
   {
    "scheme": [
-    " example.org.  3600  IN  A  104.20.26.136",
+    " example.org.  3600  IN  A  203.0.113.100",
     "               └┬─┘",
     "   garder cette réponse 3600 s (1 heure)"
    ],

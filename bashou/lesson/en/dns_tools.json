@@ -36,7 +36,7 @@
     " $ dig example.org",
     " ;; ->>HEADER<<- opcode: QUERY, status: NOERROR",
     " ;; ANSWER SECTION:",
-    " example.org.   3600  IN  A  104.20.26.136",
+    " example.org.   3600  IN  A  203.0.113.100",
     " ;; Query time: 12 msec",
     " ;; SERVER: 192.168.1.1#53(192.168.1.1) (UDP)"
    ],

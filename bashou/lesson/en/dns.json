@@ -52,9 +52,9 @@
     " the resolver",
     "   │ 1 ──▶ root server     \"ask the .org servers\"",
     "   │ 2 ──▶ .org server     \"ask example.org's\"",
-    "   │ 3 ──▶ example.org's   \"104.20.26.136\"",
+    "   │ 3 ──▶ example.org's   \"203.0.113.100\"",
     "   ▼",
-    " your program              104.20.26.136"
+    " your program              203.0.113.100"
    ],
    "point": 3,
    "mark": [
@@ -70,8 +70,8 @@
   },
   {
    "scheme": [
-    " A      example.org   104.20.26.136    IPv4",
-    " AAAA   example.org   2606:4700:…      IPv6",
+    " A      example.org   203.0.113.100    IPv4",
+    " AAAA   example.org   2001:db8::10     IPv6",
     " CNAME  www           example.org      alias",
     " MX     example.org   mail.example.org mail",
     " TXT    example.org   \"v=spf1 …\"       text",
@@ -90,7 +90,7 @@
   },
   {
    "scheme": [
-    " example.org.  3600  IN  A  104.20.26.136",
+    " example.org.  3600  IN  A  203.0.113.100",
     "               └┬─┘",
     "   keep this answer 3600 s (1 hour)"
    ],
