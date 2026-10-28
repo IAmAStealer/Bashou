@@ -365,6 +365,88 @@ def port_answer(work, meta, value):
     return last == str(meta["answer"]) or (not last.isdigit() and service_port(last) == str(meta["answer"]))
 
 
+# --- ~/.ssh rights: what ssh and sshd refuse ----------------------------------------------------------
+
+KEYS = ["id_ed25519", "id_ecdsa", "work_ed25519", "deploy_ed25519"]
+NOT_A_KEY = ("-----BEGIN OPENSSH PRIVATE KEY-----\n"
+             "(a practice file from Bashou: not a real key, it opens nothing)\n"
+             "-----END OPENSSH PRIVATE KEY-----\n")
+
+
+def kraken_setup(work, rng):
+    key = rng.choice(KEYS)
+    ssh = work / ".ssh"
+    ssh.mkdir()
+    (ssh / key).write_text(NOT_A_KEY)
+    (ssh / f"{key}.pub").write_text(f"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBashouPracticeKeyNotReal you@laptop\n")
+    (ssh / "authorized_keys").write_text("ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBashouPracticeKeyNotReal you@laptop\n")
+    (ssh / "config").write_text("Host backup\n    HostName backup.internal\n    User you\n"
+                                f"    IdentityFile ~/.ssh/{key}\n")
+    key_mode = rng.choice([0o644, 0o664, 0o666])
+    for name, mode in ((key, key_mode), (f"{key}.pub", 0o644),
+                       ("authorized_keys", rng.choice([0o664, 0o666])), ("config", rng.choice([0o664, 0o666]))):
+        (ssh / name).chmod(mode)
+    ssh.chmod(rng.choice([0o755, 0o775, 0o777]))
+    return {"args": {"key": key, "mode": f"{key_mode:04o}"}, "key": key}
+
+
+def kraken_key(work):
+    """The private key in .ssh: the file that isn't a .pub, authorized_keys or config."""
+    found = [p.name for p in (work / ".ssh").glob("*")
+             if p.suffix != ".pub" and p.name not in ("authorized_keys", "config", "known_hosts")]
+    return found[0] if found else KEYS[0]
+
+
+def kraken_wrong(work, meta):
+    """What ssh (or sshd, for authorized_keys) still refuses, or None."""
+    ssh, key = work / ".ssh", meta["key"]
+    files = [ssh / n for n in (key, f"{key}.pub", "authorized_keys", "config")]
+    if not ssh.is_dir() or not all(f.is_file() for f in files):
+        return _("A file of .ssh is gone: the keys are still needed, only their rights change.")
+    mode = {f.name: f.stat().st_mode & 0o777 for f in [ssh] + files}
+    if mode[".ssh"] != 0o700:
+        return _(".ssh is {mode:o}: only you may get in it (700).").format(mode=mode[".ssh"])
+    if mode[key] & 0o077 or not mode[key] & 0o400:
+        return _("{key} is {mode:o}: ssh ignores a private key anyone but you can read or write (600).").format(key=key, mode=mode[key])
+    for name in (f"{key}.pub", "authorized_keys", "config"):
+        if mode[name] & 0o022 or not mode[name] & 0o400:
+            return _("{name} is {mode:o}: you must read it, and nobody else may write it.").format(name=name, mode=mode[name])
+    return None
+
+
+# --- nftables: the first rule that matches decides -----------------------------------------------------
+
+PORTS = [8080, 8443, 3000, 5432, 9090, 6443]
+WEB = "{ 80, 443 }"
+
+
+def dragon_rules(rng):
+    """(lines of rules.nft, client, port, line of the rule that blocks it)."""
+    port = rng.choice(PORTS)
+    client_net = ipaddress.ip_network(rng.choice(["198.51.100.0/24", "203.0.113.0/24"]))
+    other_net = rng.choice(["192.0.2.0/24", "10.66.0.0/16"])
+    client = str(client_net[rng.randrange(2, 250)])
+    low = port - rng.randrange(1, 60)
+    blocker = f"        ip saddr {client_net} tcp dport {low}-{port + rng.randrange(1, 60)} drop"
+    noise = [f"        ip saddr {other_net} tcp dport {port} drop",              # another network
+             f"        tcp dport {port + 1000} drop",                              # another port
+             f"        ip saddr {client_net} tcp dport 22 reject"]                 # the same network, ssh
+    rng.shuffle(noise)
+    rules = ["        tcp dport 22 accept", noise[0], f"        tcp dport {WEB} accept", noise[1], blocker,
+             noise[2], f"        tcp dport {port} accept"]
+    head = ["#!/usr/sbin/nft -f", "flush ruleset", "", "table inet filter {", "    chain input {",
+            "        type filter hook input priority filter; policy drop;",
+            "        ct state established,related accept", '        iif "lo" accept']
+    lines = head + rules + ["    }", "}"]
+    return lines, client, port, lines.index(blocker) + 1
+
+
+def dragon_setup(work, rng):
+    lines, client, port, line = dragon_rules(rng)
+    (work / "rules.nft").write_text("\n".join(lines) + "\n")
+    return {"args": {"client": client, "port": port}, "answer": line}
+
+
 # --- the fights -------------------------------------------------------------------------------------
 
 ALL = [
@@ -449,6 +531,31 @@ ALL = [
                      "Try: ss -tnH state established '( dport = :{port} )' | wc -l"],
               setup=ettin_setup, cleanup=stop, requires=["ss"], works=loopback_works,
               after=("loopback_lurker",), **NET),
+    Challenge(level=2, id="key_kraken", tools=("chmod",), threat="Key Kraken", fix=True,
+              task="The Key Kraken opened the doors of .ssh. ssh now says: \"Permissions {mode} for "
+                   "'.ssh/{key}' are too open. This private key will be ignored.\"\n"
+                   "Your private key, {key}, must be yours alone, and so must the .ssh folder. Nobody else "
+                   "may write in the other files. Keep every file. Then: verify",
+              help="Here, look at how MODE is written: u, g, o with +, - or =, or a number like 600.",
+              hints=["ls -la .ssh shows the rights. ssh refuses a private key that anyone but you can read or write, "
+                     "and a config others can write: anyone could point your logins elsewhere. sshd refuses "
+                     "authorized_keys if others can write it, the folder or your home: someone could add their key "
+                     "and log in as you. In numbers: 700 for the folder, 600 for the private key; go-w takes write "
+                     "away from group and others.",
+                     "Try: chmod 700 .ssh && chmod 600 .ssh/{key} && chmod go-w .ssh/authorized_keys .ssh/config"],
+              setup=kraken_setup, verify=lambda w, m, v: kraken_wrong(w, m) is None,
+              why=lambda w: kraken_wrong(w, {"key": kraken_key(w)}), requires=["chmod"], **NET),
+    Challenge(level=2, id="drop_dragon", tools=("grep", "cat", "nl", "less", "awk", "python3"), threat="Drop Dragon",
+              task="The Drop Dragon guards rules.nft, a server's firewall. A client from {client} to TCP port "
+                   "{port} never connects: no answer, only a timeout, although a rule accepts port {port}.\n"
+                   "Which line stops it? Answer with: answer <line number>",
+              hints=["nftables reads a chain from the top, and the first rule that matches the packet with a "
+                     "verdict (accept, drop, reject) decides: the rules below never see it. A rule matches only "
+                     "if every part matches: ip saddr is the sender's network, tcp dport the port, 8000-8099 a "
+                     "range. drop says nothing back, which is why the client waits for a timeout.",
+                     "Try: grep -n -e accept -e drop -e reject rules.nft, then read from the top: is {client} in "
+                     "the network, is {port} in the ports?"],
+              setup=dragon_setup, verify=lambda w, m, v: v.strip() == str(m["answer"]), **NET),
 ]
 
 
@@ -474,4 +581,50 @@ def trial():
 
 
 CHEST = trial()
-CHESTS = [CHEST]                  # locked chests in `bashou adventure`
+
+
+def fingerprint_setup(work, rng):
+    """A host key made for the chest; only its public half stays."""
+    key = work / "host_key"
+    subprocess.run(["ssh-keygen", "-q", "-t", "ed25519", "-N", "", "-C", "backup.internal", "-f", str(key)],
+                   check=True, capture_output=True, timeout=30)
+    key.unlink()
+    shown = subprocess.run(["ssh-keygen", "-lf", str(key.with_suffix(".pub"))], capture_output=True, text=True,
+                           check=True, timeout=30).stdout.split()
+    return {"answer": shown[1]}
+
+
+FINGERPRINT_CHEST = make(
+    "trial_ssh_fingerprint", 2, "host_key.pub is the key of the server backup.internal, sent by its admin. Before "
+    "you trust it, read its fingerprint, the short form ssh shows the first time you connect. Then: answer "
+    "<fingerprint>",
+    ["The first time you connect, ssh shows the server's fingerprint and asks: paste the one the admin gave you "
+     "(through another channel) instead of yes, and ssh compares them. ssh-keygen -l prints the fingerprint of a key file (-f names it).",
+     "Try: ssh-keygen -lf host_key.pub (the answer is the SHA256:... word)"],
+    fingerprint_setup, lambda w, m, v: m["answer"] in v.split(), requires=["ssh-keygen"], teaches=["ssh-keygen"])
+
+CHAINS = ("input", "forward", "output")
+
+
+def policy_setup(work, rng):
+    open_chain = rng.choice(CHAINS)
+    lines = ["table inet filter {"]
+    for chain in CHAINS:
+        policy = "accept" if chain == open_chain else "drop"
+        lines += [f"    chain {chain} {{", f"        type filter hook {chain} priority filter; policy {policy};",
+                  "        ct state established,related accept"]
+        if chain == "input":
+            lines += ['        iif "lo" accept', "        tcp dport 22 accept"]
+        lines += ["    }"]
+    (work / "rules.nft").write_text("\n".join(lines + ["}"]) + "\n")
+    return {"answer": open_chain}
+
+
+POLICY_CHEST = make(
+    "trial_nft_policy", 1, "This chest holds rules.nft, a firewall. One of its chains lets through every packet that "
+    "no rule matches. Which chain? Then: answer <chain>",
+    ["In nftables, a chain's policy is what happens to a packet when no rule matched: policy drop throws it away, "
+     "policy accept lets it through. Each chain has its own, on its type line; no policy written means accept.",
+     "Try: grep -e chain -e policy rules.nft"],
+    policy_setup, lambda w, m, v: v.strip() == m["answer"], requires=["grep"], teaches=["nft"])
+CHESTS = [CHEST, FINGERPRINT_CHEST, POLICY_CHEST]                  # locked chests in `bashou adventure`

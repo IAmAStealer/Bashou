@@ -1,0 +1,92 @@
+{
+ "title": "Pare-feu : qui peut entrer",
+ "summary": "Comment un pare-feu lit ses règles, pourquoi drop ressemble à un timeout, et quel pare-feu chaque système utilise.",
+ "pages": [
+  {
+   "scheme": [
+    " paquet ──▶ pare-feu ──▶ programme, port 443",
+    "              │",
+    "              └── pas permis : jeté",
+    "",
+    " Rocky    firewalld   firewall-cmd",
+    " Debian   nftables    nft",
+    " macOS    pf, et le pare-feu des applications"
+   ],
+   "point": 0,
+   "mark": [
+    "pare-feu"
+   ],
+   "text": [
+    "Un pare-feu décide, paquet par paquet, ce qui peut entrer ou sortir.",
+    "",
+    "- Sous Linux, c'est le noyau qui filtre (nftables) ; les outils ne font qu'écrire les règles.",
+    "- Rocky active firewalld. Debian installe nftables mais ne filtre rien : nftables.service est éteint, et /etc/nftables.conf laisse tout entrer tant que tu n'écris pas de règles (ufw seulement s'il est installé).",
+    "- Un exemple qui ouvre un port dit toujours sur quel système."
+   ]
+  },
+  {
+   "scheme": [
+    " chain input   policy drop",
+    "  1  tcp dport 22 accept",
+    "  2  ip saddr 203.0.113.0/24 drop",
+    "  3  tcp dport 443 accept",
+    "     rien n'a correspondu : policy drop"
+   ],
+   "point": 2,
+   "mark": [
+    "drop"
+   ],
+   "text": [
+    "Une chaîne se lit depuis le haut, et la première règle qui correspond avec un verdict décide.",
+    "",
+    "- Un paquet de 203.0.113.9 vers le port 443 s'arrête ligne 2 : la ligne 3 ne le voit jamais.",
+    "- Une règle ne correspond que si toutes ses parties correspondent : le réseau de l'expéditeur, le port.",
+    "- Quand aucune règle ne correspond, c'est la policy de la chaîne qui décide ; une chaîne sans policy accepte.",
+    "- Un accept ne termine que sa propre chaîne : la chaîne d'une autre table sur le même hook (celle de firewalld, de Docker) voit encore le paquet. Un drop est définitif."
+   ]
+  },
+  {
+   "scheme": [
+    " drop     pas de réponse  \"Connection timed out\"",
+    " reject   une réponse     \"Connection refused\"",
+    "                          ou \"No route to host\""
+   ],
+   "point": 0,
+   "mark": [
+    "drop",
+    "reject"
+   ],
+   "text": [
+    "drop jette le paquet sans rien dire ; reject répond tout de suite.",
+    "",
+    "- Un client qui attend puis abandonne (timeout) : un pare-feu qui jette, une mauvaise route, ou une machine éteinte sur un autre réseau (sur le tien, c'est No route to host).",
+    "- firewalld rejette par défaut : le client voit No route to host, alors que la machine est bien là.",
+    "- Refused peut aussi vouloir dire que rien n'écoute sur ce port : ss -tln sur le serveur le dit."
+   ]
+  },
+  {
+   "os": "linux",
+   "scheme": [
+    " $ sudo firewall-cmd --list-all",
+    " public (active)",
+    "   services: cockpit dhcpv6-client ssh",
+    "   ports: ",
+    "",
+    " $ sudo firewall-cmd --permanent \\",
+    "       --add-service=https",
+    " $ sudo firewall-cmd --reload"
+   ],
+   "point": 2,
+   "mark": [
+    "services"
+   ],
+   "text": [
+    "Sur Rocky, firewalld range les règles en zones ; --list-all montre ce que la zone active laisse entrer.",
+    "",
+    "- --add-service=https ouvre le 443 ; --add-port=8080/tcp ouvre un port qui n'a pas de nom de service.",
+    "- Sans --permanent, le changement est perdu au prochain reload ou redémarrage ; avec, --reload l'applique tout de suite.",
+    "- Sur Debian, sudo nft list ruleset montre toutes les règles ; vide veut dire que rien ne filtre."
+   ]
+  }
+ ]
+}

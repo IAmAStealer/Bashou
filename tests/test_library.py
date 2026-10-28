@@ -283,6 +283,21 @@ class GitAndRustLessonsTest(unittest.TestCase):
         self.assertLessEqual({"commit_crowd", "branch_bramble", "conflict_chimera", "revert_revenant"}, set(git["fights"]))
         self.assertIn("stasher", " ".join(git["masters"]))
 
+    def test_the_network_section_has_ssh_and_firewall(self):
+        """Owner, 2026-10-28: ssh and firewall lessons in the network section, with the Key Kraken and the Drop
+        Dragon; review the paths when lessons come in."""
+        ssh, wall = BY_ID["ssh"], BY_ID["firewall"]
+        for le, fight in ((ssh, "key_kraken"), (wall, "drop_dragon")):
+            with self.subTest(le["id"]):
+                self.assertEqual(reader.section(le), "network")
+                self.assertIn(fight, le["fights"])
+                self.assertGreaterEqual(len(le["questions"]), 3)
+        self.assertEqual(set(ssh["after"]), {"tcp", "keys"})            # the key pair is taught in keys
+        self.assertEqual(wall["after"], ["tcp"])
+        self.assertIn("firewall", BY_ID["net_debug"]["after"])            # timed out: a firewall that drops
+        self.assertLess(BY_ID["tcp"]["order"], ssh["order"])
+        self.assertLess(wall["order"], BY_ID["net_debug"]["order"])
+
     def test_rust_has_a_lesson_on_ownership_and_borrowing(self):
         own = BY_ID["rust_own"]
         self.assertEqual((own["skill"], own["after"], own.get("opens")), ("rust", ["rust_vars"], "mastered"))

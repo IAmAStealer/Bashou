@@ -828,5 +828,110 @@
   ],
   "answer": 0,
   "explain": "OCSP interrogeait la CA sur un certificat à chaque visite, donc la CA apprenait qui visite quel site. Les CRL se récupèrent en bloc et ne disent rien de toi. Depuis 2024, les CA publiques doivent publier des CRL et peuvent se passer d'OCSP ; les durées courtes font le reste."
+ },
+ {
+  "id": "network-1-20",
+  "level": 1,
+  "q": "Tu te connectes à un serveur avec une clé ssh. Quelle moitié de la paire va sur le serveur ?",
+  "choices": [
+   "La clé publique, dans ~/.ssh/authorized_keys",
+   "La clé privée, dans ~/.ssh/authorized_keys",
+   "Les deux, pour que le serveur les vérifie",
+   "Aucune : les clés ssh restent sur ton portable"
+  ],
+  "answer": 0,
+  "explain": "Le serveur garde ta clé publique dans authorized_keys et demande à ton ssh de prouver qu'il détient la clé privée qui va avec ; la clé privée ne quitte jamais ton portable. ssh-copy-id you@serveur y met la clé publique pour toi. Une clé privée copiée sur un serveur peut être volée par toute personne qui a accès à ce serveur."
+ },
+ {
+  "id": "network-1-21",
+  "level": 1,
+  "q": "Une règle de pare-feu finit par drop. Que voit le client qui a envoyé le paquet ?",
+  "choices": [
+   "Rien ne revient : il attend, puis abandonne (timeout)",
+   "Connection refused, tout de suite",
+   "Une page d'erreur du pare-feu",
+   "Le paquet part vers un autre port"
+  ],
+  "answer": 0,
+  "explain": "drop jette le paquet sans un mot : le client continue d'attendre et finit par abandonner (timeout). reject répond tout de suite : Connection refused, ou No route to host. C'est pour ça qu'un timeout fait penser à un pare-feu qui jette, une mauvaise route ou une machine éteinte sur un autre réseau, alors que refused veut dire que la machine a répondu."
+ },
+ {
+  "id": "network-2-24",
+  "level": 2,
+  "q": "ssh dit : Permissions 0644 for '/home/you/.ssh/id_ed25519' are too open. This private key will be ignored. Qu'est-ce qui répare ?",
+  "choices": [
+   "chmod 600 ~/.ssh/id_ed25519",
+   "chmod 777 ~/.ssh/id_ed25519",
+   "sudo ssh, pour lire la clé en root",
+   "Refaire une clé du même nom"
+  ],
+  "answer": 0,
+  "explain": "644 laisse tout le monde sur la machine lire ta clé privée, alors ssh refuse de s'en servir. 600 la rend à toi seul, et le dossier ~/.ssh devrait être en 700. 777 est pire : n'importe qui pourrait la lire et la modifier. La clé elle-même est bonne, seuls ses droits étaient faux."
+ },
+ {
+  "id": "network-2-25",
+  "level": 2,
+  "q": "ssh s'arrête sur REMOTE HOST IDENTIFICATION HAS CHANGED pour un serveur que tu utilises tous les jours. Que fais-tu d'abord ?",
+  "choices": [
+   "Demander à l'admin si la clé du serveur a changé",
+   "Effacer ~/.ssh/known_hosts et recommencer",
+   "Se connecter avec -o StrictHostKeyChecking=no",
+   "Refaire une paire de clés avec ssh-keygen"
+  ],
+  "answer": 0,
+  "explain": "Le serveur montre une autre clé que celle dont known_hosts se souvient. Une réinstallation la change, mais quelqu'un au milieu de la connexion aussi. Vérifie avec l'admin, par un autre moyen ; si c'est prévu, lance la ligne ssh-keygen -R que l'avertissement affiche : elle oublie seulement cette entrée. Effacer known_hosts ou sauter la vérification jette la protection pour tous les serveurs."
+ },
+ {
+  "id": "network-2-26",
+  "level": 2,
+  "q": "rules.nft dit : ligne 2, ip saddr 203.0.113.0/24 drop ; ligne 3, tcp dport 443 accept. Un paquet de 203.0.113.9 vers le port 443 ?",
+  "choices": [
+   "Jeté : la ligne 2 correspond en premier",
+   "Accepté : un accept gagne sur un drop",
+   "Accepté : la ligne 3 est plus précise",
+   "Ça dépend de la policy de la chaîne"
+  ],
+  "answer": 0,
+  "explain": "nftables lit une chaîne depuis le haut, et la première règle qui correspond avec un verdict décide : la ligne 2 correspond au réseau de l'expéditeur, donc la ligne 3 ne voit jamais le paquet. Il n'y a pas de « la règle la plus précise gagne ». La policy ne décide que pour les paquets qu'aucune règle n'a reconnus. Pour laisser ce réseau entrer sur le 443, l'accept doit être au-dessus du drop."
+ },
+ {
+  "id": "network-2-27",
+  "level": 2,
+  "q": "Sur Rocky, tu lances sudo firewall-cmd --add-service=https. Au redémarrage suivant, https est de nouveau fermé. Pourquoi ?",
+  "choices": [
+   "Sans --permanent, le changement vit jusqu'au reload",
+   "firewalld oublie toutes les règles au démarrage",
+   "https doit s'ouvrir en port 443/tcp",
+   "Le fichier du service a été effacé"
+  ],
+  "answer": 0,
+  "explain": "firewall-cmd change le pare-feu en marche, sauf si tu ajoutes --permanent, qui écrit la configuration gardée. Lance-le avec --permanent, puis sudo firewall-cmd --reload pour l'appliquer tout de suite (ou lance-le des deux façons). --list-all montre ce que la zone active laisse entrer, --list-all --permanent ce qui reviendra après un redémarrage."
+ },
+ {
+  "id": "network-3-22",
+  "level": 3,
+  "q": "Un script lance ssh -o StrictHostKeyChecking=no pour déployer sur de nouveaux serveurs. Quel est le risque ?",
+  "choices": [
+   "Il accepte toute clé : une machine au milieu reçoit tout",
+   "Aucun : la connexion reste chiffrée",
+   "La clé de déploiement est copiée sur le serveur",
+   "ssh demande un mot de passe au lieu de la clé"
+  ],
+  "answer": 0,
+  "explain": "Le chiffrement ne sert que si tu parles à la bonne machine. Sauter la vérification accepte n'importe quelle clé qui répond, donc quelqu'un au milieu peut recevoir la session et ce que le script envoie. Donne plutôt au script les clés connues des serveurs : un fichier known_hosts rempli depuis une source sûre, ou des clés signées par une autorité de certification ssh."
+ },
+ {
+  "id": "network-3-23",
+  "level": 3,
+  "os": "linux",
+  "q": "Depuis le bureau, curl vers le port 8080 du serveur finit en timeout ; sur le serveur, ss -tln montre 0.0.0.0:8080. Que vérifies-tu ?",
+  "choices": [
+   "Le pare-feu du serveur : le 8080 peut-il entrer ?",
+   "Relancer le programme : il n'écoute pas",
+   "Le faire écouter sur 127.0.0.1",
+   "Le DNS : le nom n'existe pas"
+  ],
+  "answer": 0,
+  "explain": "0.0.0.0:8080 : le programme écoute sur tous les réseaux, il va bien. Un timeout veut dire que rien n'est revenu : un pare-feu qui jette est le suspect habituel : celui du serveur (firewall-cmd --list-all sur Rocky, nft list ruleset sur Debian) ou un autre sur le chemin, puis la route. 127.0.0.1 bloquerait le bureau à coup sûr, et un nom qui n'existe pas échoue avant toute connexion."
  }
 ]

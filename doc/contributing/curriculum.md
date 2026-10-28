@@ -51,7 +51,7 @@ A topic is complete when it has all four: questions, a lesson, one or more fight
 - systemd: processes + streams → services
 - Packages: users → packages; packages + network → repos
 - Network: processes → network → ip_addr → ipv6; ip_addr → dns → dns_tools; ip_addr → tcp;
-  dns_tools + tcp → net_debug; keys + net_debug → certs → certs_tools → certs_admin → certs_ca → certs_cnf → certs_revoke
+  tcp + keys → ssh; tcp → firewall; dns_tools + tcp + firewall → net_debug; keys + net_debug → certs → certs_tools → certs_admin → certs_ca → certs_cnf → certs_revoke
 - Logic: variables → logic
 - Python: scripts + loops + logic → py_start → py_flow → py_names; py_flow → py_errors; py_names + pipes → py_data
 - C: computer + scripts + logic → compilation → gcc_use → stack_heap → pointers → debugger
@@ -178,7 +178,9 @@ input. Rules: [bash-style.md](bash-style.md).
 4. `dns` — the resolution chain, records, TTL · NXDomain Nixie
 5. `dns_tools` — dig, getent, resolvectl · Resolver Rook, NXDomain Nixie
 6. `tcp` — the handshake, ports, states · Loopback Lurker, Handshake Heron, Established Ettin
-7. `net_debug` — the troubleshooting ladder · Refused Revenant, Established Ettin, Handshake Heron
+7. `ssh` — key login, ~/.ssh config and rights, fingerprints and known_hosts · Key Kraken
+8. `firewall` — rule order, drop vs reject, firewalld, nft, pf · Drop Dragon
+9. `net_debug` — the troubleshooting ladder · Refused Revenant, Established Ettin, Handshake Heron
 8. `certs` — what a certificate says, the chain, the SAN, expiry · Expiry Elk, SAN Salamander
 9. `certs_tools` — openssl x509, s_client, verify, curl's errors · Key Kobold, Chain Chameleon
 10. `certs_admin` — CSR, private CA and trust store, renewal, key safety · Request Raccoon, Insecure Iguana

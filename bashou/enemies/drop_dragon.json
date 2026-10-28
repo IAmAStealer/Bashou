@@ -1,0 +1,57 @@
+{
+ "name": "Drop Dragon",
+ "palette": {
+  "a": "#4a1426",
+  "D": "#7c1f3a",
+  "S": "#b0303a",
+  "b": "#d84c3a",
+  "L": "#f27e4c",
+  "H": "#ffcf94",
+  "n": "#efe2c4",
+  "N": "#a8946e",
+  "e": "#ffe24a",
+  "m": "#1a0c10",
+  "t": "#fff4e0",
+  "k": "#33333f",
+  "G": "#5e606c",
+  "g": "#8a8c98",
+  "q": "#c0c2ca"
+ },
+ "base": [
+  "...........nN..nN",
+  "..........anNa.nN",
+  ".......aaaaHLaaba",
+  ".....aaHHLLbbbbSa",
+  "...aaHLLbbbbbbSDa",
+  "..aHLbbbbSSSbbSDa",
+  ".aHLbbbbbembbSSDa",
+  ".aLmbbbbbbbbSSDa.",
+  ".atmtmtmtSSDDDa..",
+  "kqqqgGkqqqgGkqqgk",
+  "kgggGGkgggGGkggGk",
+  "kkkkkkkkkkkkkkkkk"
+ ],
+ "poses": {
+  "inhale": {
+   "3": ".....aaHHLLLbbbSa",
+   "4": "...aaHLLLbbbbbSDa"
+  },
+  "closed": {
+   "6": "---------SS------"
+  },
+  "left": {
+   "6": "---------me------"
+  },
+  "right": {
+   "6": "---------em------"
+  },
+  "fidget": {
+   "8": ".atmt.t.tSSDDDa..",
+   "7": ".aLmbbbbbbbbSSDa."
+  }
+ },
+ "particles": [
+  0,
+  4
+ ]
+}

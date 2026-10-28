@@ -95,6 +95,12 @@ SOLUTIONS = {
     "nxdomain_nixie": ("id=$(tcpdump -nnr dns.pcap 2>/dev/null | awk '/NXDomain/ {{print $6}}'); "
                        "tcpdump -nnr dns.pcap 2>/dev/null | grep \" $id+ \" | awk '{{print $8}}'", None),
     "established_ettin": ("ss -tnH state established '( dport = :{x} )' | wc -l", r"127\.0\.0\.1:(\d+)"),
+    "key_kraken": ("chmod 700 .ssh && chmod 600 .ssh/{x} && chmod go-w .ssh/authorized_keys .ssh/config",
+                   r"private key, (\S+),"),
+    "drop_dragon": ("python3 " + str(Path(__file__).with_name("nft_first_match.py")) + " rules.nft {x}",
+                    r"from (\S+ to TCP port \d+)"),
+    "trial_ssh_fingerprint": ("ssh-keygen -lf host_key.pub | awk '{{print $2}}'", None),
+    "trial_nft_policy": ("awk '$1 == \"chain\" {{c = $2}} /policy accept/ {{print c}}' rules.nft", None),
     "trial_ss_ipv6": ("ss -6tlnH | awk '{{sub(/.*:/, \"\", $4); if ($4 + 0 >= 20000 && $4 + 0 < 40000) print $4}}'", None),
     "trial_gdb_line": ("gcc -g count.c -o count && gdb -q -batch -ex run -ex bt ./count 2>&1"
                        " | grep -o 'count.c:[0-9]*' | head -1 | cut -d: -f2", None),
@@ -349,6 +355,11 @@ WRONG_MOVES = [("index_imp", "zsh pick.sh"), ("flag_phantom", "sort sizes.txt | 
          ("config_cobra", "sed -i 's/digitalSignature$/keyCertSign, cRLSign/; s/^basicConstraints = CA:FALSE$/basicConstraints = CA:TRUE, pathlen:0/' lab.cnf"),
          ("revoked_reindeer", "openssl ca -batch -config ca.cnf -gencrl -out crl.pem 2>/dev/null"),
          ("chain_chameleon", "cp server.pem fullchain.pem"),
+         ("key_kraken", "chmod -R 777 .ssh"),                                   # opens it to everyone
+         ("key_kraken", "chmod 600 .ssh/*"),                                    # the folder stays open
+         ("key_kraken", "chmod 700 .ssh && chmod 644 .ssh/*"),                   # the private key readable by all
+         ("key_kraken", "rm -rf .ssh && mkdir -m 700 .ssh"),                    # the keys are gone
+         ("drop_dragon", "grep -n drop rules.nft | head -1 | cut -d: -f1"),       # the first drop isn't the one
          ("trap_troll", edit("report.sh", "tmp=/tmp/bashou-report.tmp", "tmp=$(mktemp) || exit 1") + " && "
           + edit("report.sh", "die() { printf", 'die() { rm -f -- "$tmp"; printf'))]
 

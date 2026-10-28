@@ -1,0 +1,115 @@
+{
+ "id": "ssh",
+ "order": 512,
+ "skill": "network",
+ "after": [
+  "tcp",
+  "keys"
+ ],
+ "tools": [
+  "ssh",
+  "ssh-keygen"
+ ],
+ "masters": [
+  "won key_kraken | tool ssh-keygen 3",
+  "answered ssh 3 | tool ssh 3"
+ ],
+ "questions": [
+  "network-1-20",
+  "network-2-24",
+  "network-2-25",
+  "network-3-22"
+ ],
+ "recall": [
+  "network-1-20",
+  "network-2-24"
+ ],
+ "fights": [
+  "key_kraken"
+ ],
+ "title": "ssh: log in with a key",
+ "summary": "Open a shell on another machine with a key pair, keep ~/.ssh private, and check the server is the right one.",
+ "pages": [
+  {
+   "scheme": [
+    " laptop: ~/.ssh/          backup.internal: ~/.ssh/",
+    " id_ed25519  ───ssh───▶  authorized_keys",
+    " private, stays here     your public key"
+   ],
+   "point": 1,
+   "mark": [
+    "authorized_keys"
+   ],
+   "text": [
+    "ssh opens a shell on another machine, and everything on the way is encrypted.",
+    "",
+    "- Log in with a key, not a password: ssh-keygen -t ed25519 makes the pair (the keys lesson explains how the two halves work).",
+    "- Give it a passphrase: it protects the private key if your laptop is stolen.",
+    "- ssh-copy-id you@backup.internal puts your public key in the server's authorized_keys."
+   ]
+  },
+  {
+   "scheme": [
+    " ~/.ssh/config",
+    " Host backup",
+    "     HostName backup.internal",
+    "     User you",
+    "     IdentityFile ~/.ssh/id_ed25519",
+    "",
+    " $ ssh backup"
+   ],
+   "point": 1,
+   "mark": [
+    "Host backup"
+   ],
+   "text": [
+    "~/.ssh/config gives a short name to a server, with its user and key.",
+    "",
+    "- ssh backup now means all of that; scp and rsync read the same file.",
+    "- ssh -v shows what ssh tries, key after key: the first thing to read when a login fails."
+   ]
+  },
+  {
+   "scheme": [
+    " $ ls -la ~/.ssh",
+    " drwx------  .ssh/              700",
+    " -rw-------  id_ed25519         600",
+    " -rw-r--r--  id_ed25519.pub     644",
+    " -rw-------  authorized_keys    600"
+   ],
+   "point": 2,
+   "mark": [
+    "600"
+   ],
+   "text": [
+    "ssh guards your keys, and refuses files with loose rights.",
+    "",
+    "- A private key anyone but you can read or write: \"Permissions 0644 ... are too open. This private key will be ignored.\"",
+    "- On the server, sshd ignores authorized_keys if others can write it, ~/.ssh or your home folder: someone could add their key.",
+    "- chmod 700 ~/.ssh and chmod 600 on the private key fix it."
+   ]
+  },
+  {
+   "scheme": [
+    " first time:",
+    " ED25519 key fingerprint is SHA256:Wd3k...",
+    " continue connecting (yes/no/[fingerprint])?",
+    "        │  remembered in ~/.ssh/known_hosts",
+    "        ▼",
+    " next times: same key? connect. other key?",
+    " REMOTE HOST IDENTIFICATION HAS CHANGED!"
+   ],
+   "point": 1,
+   "mark": [
+    "SHA256"
+   ],
+   "text": [
+    "The first time, ssh shows the server's fingerprint and asks you.",
+    "",
+    "- Compare it with the one the admin gives you, another way (a chat, a wiki). Better: paste it instead of yes, and ssh accepts only if it matches.",
+    "- If the key changes later, ssh stops. Ask why first: a reinstalled server, or someone in the middle. Then run the ssh-keygen -R line the warning prints: it forgets only that server's old key.",
+    "- Never skip the check with StrictHostKeyChecking=no."
+   ]
+  }
+ ]
+}

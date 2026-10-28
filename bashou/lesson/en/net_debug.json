@@ -4,7 +4,8 @@
  "skill": "network",
  "after": [
   "dns_tools",
-  "tcp"
+  "tcp",
+  "firewall"
  ],
  "tools": [
   "ping",

@@ -1,0 +1,87 @@
+{
+ "title": "ssh : se connecter avec une clé",
+ "summary": "Ouvrir un shell sur une autre machine avec une paire de clés, garder ~/.ssh privé, et vérifier que le serveur est le bon.",
+ "pages": [
+  {
+   "scheme": [
+    " portable : ~/.ssh/       backup.internal: ~/.ssh/",
+    " id_ed25519  ───ssh───▶  authorized_keys",
+    " privée, reste ici       ta clé publique"
+   ],
+   "point": 1,
+   "mark": [
+    "authorized_keys"
+   ],
+   "text": [
+    "ssh ouvre un shell sur une autre machine, et tout ce qui passe est chiffré.",
+    "",
+    "- Connecte-toi avec une clé, pas un mot de passe : ssh-keygen -t ed25519 fabrique la paire (la leçon sur les clés explique les deux moitiés).",
+    "- Donne-lui une phrase de passe : elle protège la clé privée si on te vole ton portable.",
+    "- ssh-copy-id you@backup.internal met ta clé publique dans le authorized_keys du serveur."
+   ]
+  },
+  {
+   "scheme": [
+    " ~/.ssh/config",
+    " Host backup",
+    "     HostName backup.internal",
+    "     User you",
+    "     IdentityFile ~/.ssh/id_ed25519",
+    "",
+    " $ ssh backup"
+   ],
+   "point": 1,
+   "mark": [
+    "Host backup"
+   ],
+   "text": [
+    "~/.ssh/config donne un nom court à un serveur, avec son utilisateur et sa clé.",
+    "",
+    "- ssh backup veut maintenant dire tout ça ; scp et rsync lisent le même fichier.",
+    "- ssh -v montre ce que ssh essaie, clé après clé : la première chose à lire quand une connexion échoue."
+   ]
+  },
+  {
+   "scheme": [
+    " $ ls -la ~/.ssh",
+    " drwx------  .ssh/              700",
+    " -rw-------  id_ed25519         600",
+    " -rw-r--r--  id_ed25519.pub     644",
+    " -rw-------  authorized_keys    600"
+   ],
+   "point": 2,
+   "mark": [
+    "600"
+   ],
+   "text": [
+    "ssh protège tes clés, et refuse les fichiers aux droits trop larges.",
+    "",
+    "- Une clé privée que d'autres que toi peuvent lire ou modifier : \"Permissions 0644 ... are too open. This private key will be ignored.\"",
+    "- Sur le serveur, sshd ignore authorized_keys si d'autres peuvent écrire dedans, dans ~/.ssh ou dans ton dossier personnel : quelqu'un pourrait y ajouter sa clé.",
+    "- chmod 700 ~/.ssh et chmod 600 sur la clé privée réparent ça."
+   ]
+  },
+  {
+   "scheme": [
+    " la première fois :",
+    " ED25519 key fingerprint is SHA256:Wd3k...",
+    " continue connecting (yes/no/[fingerprint])?",
+    "        │  gardée dans ~/.ssh/known_hosts",
+    "        ▼",
+    " ensuite : même clé ? connexion. autre clé ?",
+    " REMOTE HOST IDENTIFICATION HAS CHANGED!"
+   ],
+   "point": 1,
+   "mark": [
+    "SHA256"
+   ],
+   "text": [
+    "La première fois, ssh affiche l'empreinte du serveur et te demande.",
+    "",
+    "- Compare-la avec celle que donne l'admin, par un autre moyen (un chat, un wiki). Mieux : colle-la au lieu de yes, et ssh n'accepte que si elle correspond.",
+    "- Si la clé change plus tard, ssh s'arrête. Demande d'abord pourquoi : un serveur réinstallé, ou quelqu'un au milieu. Puis lance la ligne ssh-keygen -R que l'avertissement affiche : elle oublie seulement l'ancienne clé de ce serveur.",
+    "- Ne saute jamais la vérification avec StrictHostKeyChecking=no."
+   ]
+  }
+ ]
+}

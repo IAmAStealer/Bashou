@@ -828,5 +828,110 @@
   ],
   "answer": 0,
   "explain": "OCSP asked the CA about a certificate at each visit, so the CA learned who visits which site. CRLs are fetched in bulk and say nothing about you. Since 2024 public CAs must publish CRLs and may skip OCSP; short lifetimes do the rest."
+ },
+ {
+  "id": "network-1-20",
+  "level": 1,
+  "q": "You log in to a server with an ssh key. Which half of the key pair goes on the server?",
+  "choices": [
+   "The public key, in ~/.ssh/authorized_keys",
+   "The private key, in ~/.ssh/authorized_keys",
+   "Both halves, so the server can check them",
+   "Neither: ssh keys stay on your laptop"
+  ],
+  "answer": 0,
+  "explain": "The server keeps your public key in authorized_keys and asks your ssh to prove it holds the matching private key; the private key itself never leaves your laptop. ssh-copy-id you@server puts the public key there for you. A private key copied to a server is a key anyone with access to that server can steal."
+ },
+ {
+  "id": "network-1-21",
+  "level": 1,
+  "q": "A firewall rule ends with drop. What does the client that sent the packet see?",
+  "choices": [
+   "Nothing comes back: it waits, then times out",
+   "Connection refused, at once",
+   "An error page from the firewall",
+   "The packet goes to another port"
+  ],
+  "answer": 0,
+  "explain": "drop throws the packet away without a word, so the client keeps waiting and gives up with a timeout. reject answers at once: Connection refused, or No route to host. That's why a timeout points to a firewall that drops, a wrong route or a machine that's off on another network, while refused means the machine answered."
+ },
+ {
+  "id": "network-2-24",
+  "level": 2,
+  "q": "ssh says: Permissions 0644 for '/home/you/.ssh/id_ed25519' are too open. This private key will be ignored. What fixes it?",
+  "choices": [
+   "chmod 600 ~/.ssh/id_ed25519",
+   "chmod 777 ~/.ssh/id_ed25519",
+   "sudo ssh, to read the key as root",
+   "Make a new key with the same name"
+  ],
+  "answer": 0,
+  "explain": "644 lets everyone on the machine read your private key, so ssh refuses to use it. 600 makes it yours alone, and the folder ~/.ssh should be 700. 777 is worse: anyone could read and change it. The key itself is fine, only its rights were wrong."
+ },
+ {
+  "id": "network-2-25",
+  "level": 2,
+  "q": "ssh stops with REMOTE HOST IDENTIFICATION HAS CHANGED for a server you use every day. What do you do first?",
+  "choices": [
+   "Ask its admin whether the server's key changed",
+   "Delete ~/.ssh/known_hosts and connect again",
+   "Connect with -o StrictHostKeyChecking=no",
+   "Make a new key pair with ssh-keygen"
+  ],
+  "answer": 0,
+  "explain": "The server shows a different key than the one known_hosts remembers. A reinstall changes it, but so does someone in the middle of the connection. Check with the admin, another way; if it's expected, run the ssh-keygen -R line the warning prints: it forgets only that entry. Deleting known_hosts or skipping the check throws away the protection for every server."
+ },
+ {
+  "id": "network-2-26",
+  "level": 2,
+  "q": "rules.nft says: line 2, ip saddr 203.0.113.0/24 drop; line 3, tcp dport 443 accept. A packet from 203.0.113.9 to port 443?",
+  "choices": [
+   "Dropped: line 2 matches first",
+   "Accepted: an accept wins over a drop",
+   "Accepted: line 3 is more precise",
+   "It depends on the chain's policy"
+  ],
+  "answer": 0,
+  "explain": "nftables reads a chain from the top, and the first rule that matches with a verdict decides: line 2 matches the sender's network, so line 3 never sees the packet. There's no \"most precise rule wins\". The policy only decides for packets no rule matched. To let that network in on 443, the accept must come above the drop."
+ },
+ {
+  "id": "network-2-27",
+  "level": 2,
+  "q": "On Rocky, you run sudo firewall-cmd --add-service=https. After the next reboot, https is closed again. Why?",
+  "choices": [
+   "Without --permanent, the change lives only until a reload",
+   "firewalld forgets every rule at reboot",
+   "https must be opened as port 443/tcp",
+   "The service file was deleted"
+  ],
+  "answer": 0,
+  "explain": "firewall-cmd changes the running firewall unless you add --permanent, which writes the saved setup. Run it with --permanent, then sudo firewall-cmd --reload to apply it now (or run it both ways). --list-all shows what the active zone lets in, --list-all --permanent what will come back after a reboot."
+ },
+ {
+  "id": "network-3-22",
+  "level": 3,
+  "q": "A script runs ssh -o StrictHostKeyChecking=no to deploy on new servers. What is the risk?",
+  "choices": [
+   "It trusts any key, so a machine in the middle gets the login",
+   "None: the connection is still encrypted",
+   "The deploy key gets copied to the server",
+   "ssh asks for a password instead of the key"
+  ],
+  "answer": 0,
+  "explain": "Encryption only helps if you talk to the right machine. Skipping the check accepts whatever key answers, so someone in the middle can receive the session and what the script sends. Give the script the servers' known keys instead: a known_hosts file filled from a trusted source, or keys signed by an ssh certificate authority."
+ },
+ {
+  "id": "network-3-23",
+  "level": 3,
+  "os": "linux",
+  "q": "From the office, curl to the server's port 8080 times out; on the server, ss -tln shows 0.0.0.0:8080. What do you check next?",
+  "choices": [
+   "The server's firewall: is 8080 allowed in?",
+   "Restart the program: it isn't listening",
+   "Make it listen on 127.0.0.1",
+   "DNS: the name doesn't exist"
+  ],
+  "answer": 0,
+  "explain": "0.0.0.0:8080 means the program listens on every network, so the program is fine. A timeout means nothing came back: a firewall that drops is the usual suspect: the server's (firewall-cmd --list-all on Rocky, nft list ruleset on Debian) or one on the way, then the route. 127.0.0.1 would block the office for sure, and a name that doesn't exist fails before any connection."
  }
 ]

@@ -1,0 +1,119 @@
+{
+ "id": "firewall",
+ "order": 514,
+ "skill": "network",
+ "after": [
+  "tcp"
+ ],
+ "tools": [
+  "nft",
+  "firewall-cmd"
+ ],
+ "masters": [
+  "won drop_dragon",
+  "answered firewall 3 | tool firewall-cmd 3 | tool nft 3"
+ ],
+ "questions": [
+  "network-1-21",
+  "network-2-26",
+  "network-2-27",
+  "network-3-23"
+ ],
+ "recall": [
+  "network-1-21",
+  "network-2-26"
+ ],
+ "fights": [
+  "drop_dragon"
+ ],
+ "title": "Firewalls: who may come in",
+ "summary": "How a firewall reads its rules, why drop looks like a timeout, and which firewall each system uses.",
+ "pages": [
+  {
+   "scheme": [
+    " packet ──▶ firewall ──▶ program on port 443",
+    "              │",
+    "              └── not allowed: dropped",
+    "",
+    " Rocky    firewalld   firewall-cmd",
+    " Debian   nftables    nft",
+    " macOS    pf, and the application firewall"
+   ],
+   "point": 0,
+   "mark": [
+    "firewall"
+   ],
+   "text": [
+    "A firewall decides, packet by packet, what may come in or go out.",
+    "",
+    "- On Linux the kernel does the filtering (nftables); tools only write the rules.",
+    "- Rocky turns firewalld on. Debian installs nftables but filters nothing: nftables.service is off, and /etc/nftables.conf lets everything in until you write rules (ufw only if installed).",
+    "- A sample that opens a port always says on which system."
+   ]
+  },
+  {
+   "scheme": [
+    " chain input   policy drop",
+    "  1  tcp dport 22 accept",
+    "  2  ip saddr 203.0.113.0/24 drop",
+    "  3  tcp dport 443 accept",
+    "     nothing matched: policy drop"
+   ],
+   "point": 2,
+   "mark": [
+    "drop"
+   ],
+   "text": [
+    "A chain is read from the top, and the first rule that matches with a verdict decides.",
+    "",
+    "- A packet from 203.0.113.9 to port 443 stops on line 2: line 3 never sees it.",
+    "- A rule matches only if every part matches: the sender's network, the port.",
+    "- When no rule matches, the chain's policy decides; a chain with no policy accepts.",
+    "- An accept ends only its own chain: another table's chain on the same hook (firewalld's, Docker's) still sees the packet. A drop is final."
+   ]
+  },
+  {
+   "scheme": [
+    " drop     no answer    \"Connection timed out\"",
+    " reject   an answer    \"Connection refused\"",
+    "                       or \"No route to host\""
+   ],
+   "point": 0,
+   "mark": [
+    "drop",
+    "reject"
+   ],
+   "text": [
+    "drop throws the packet away and says nothing; reject answers at once.",
+    "",
+    "- A client that waits and then times out: a firewall that drops, a wrong route, or a machine that's off on another network (on yours, it's No route to host).",
+    "- firewalld rejects by default: the client sees No route to host, even though the machine is there.",
+    "- Refused can also mean nothing listens on that port: ss -tln on the server tells."
+   ]
+  },
+  {
+   "os": "linux",
+   "scheme": [
+    " $ sudo firewall-cmd --list-all",
+    " public (active)",
+    "   services: cockpit dhcpv6-client ssh",
+    "   ports: ",
+    "",
+    " $ sudo firewall-cmd --permanent \\",
+    "       --add-service=https",
+    " $ sudo firewall-cmd --reload"
+   ],
+   "point": 2,
+   "mark": [
+    "services"
+   ],
+   "text": [
+    "On Rocky, firewalld groups rules in zones; --list-all shows what the active one lets in.",
+    "",
+    "- --add-service=https opens 443; --add-port=8080/tcp opens a port that has no service name.",
+    "- Without --permanent, the change is lost at the next reload or reboot; with it, --reload applies it now.",
+    "- On Debian, sudo nft list ruleset shows every rule; empty means nothing filters."
+   ]
+  }
+ ]
+}

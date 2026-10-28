@@ -1,0 +1,55 @@
+{
+ "name": "Key Kraken",
+ "palette": {
+  "a": "#3a2352",
+  "D": "#4a3384",
+  "S": "#6c419a",
+  "b": "#9459b6",
+  "L": "#ba86d1",
+  "H": "#efcde8",
+  "w": "#fff8ee",
+  "m": "#161020",
+  "y": "#f2c447",
+  "Y": "#a8701c",
+  "h": "#fff6c0"
+ },
+ "base": [
+  ".......aaaaa.....",
+  ".....aaHHLbbbaa..",
+  "hyy.aHHLbbbbbbSa.",
+  "y.Y.aHLbbbbbbbSDa",
+  "yYY.aLwwbbbwwbSDa",
+  ".yY.aLmwbbbmwbSDa",
+  ".y..aLbbbbbbbSSDa",
+  ".yY..abbbbbbSSDa.",
+  "aSSa.aSbSbSbSbDa.",
+  ".aSSSa.Sa.Sa.Sa..",
+  "..aaa.aSa.aSa.aDa",
+  "......aa...aa..aa"
+ ],
+ "poses": {
+  "inhale": {
+   "0": "......aaaaaaa....",
+   "1": "....aaHHHLbbbaa.."
+  },
+  "closed": {
+   "4": "------SS---SS----",
+   "5": "------SS---SS----"
+  },
+  "left": {
+   "5": "------mw---mw----"
+  },
+  "right": {
+   "5": "------wm---wm----"
+  },
+  "fidget": {
+   "9": ".aSSSa.Sa.Sa..Sa.",
+   "10": "..aaa.aSa.aSa..aD",
+   "11": "......aa...aa...a"
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}

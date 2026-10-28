@@ -210,6 +210,29 @@ LESSONS = [
         ("Without -l, ss shows connections: ESTAB is open, TIME-WAIT just closed. -6 keeps IPv6 only, and filters pick "
          "a port: state established '( dport = :443 )'.", "ss -tn state established"),
     ]},
+    {"id": "ssh", "tool": "ssh-keygen", "topics": ("network",), "title": "ssh: keys and fingerprints", "pages": [
+        ("ssh opens a shell on another machine, encrypted. Log in with a key rather than a password: ssh-keygen makes "
+         "the pair, and a passphrase protects the private half if your laptop is stolen.",
+         "ssh-keygen -t ed25519"),
+        ("The public half goes on the server, into ~/.ssh/authorized_keys. ssh-copy-id puts it there for you, "
+         "asking your password one last time.", "ssh-copy-id you@backup.internal"),
+        ("ssh guards your keys: it ignores a private key anyone but you can read or write, and the server refuses "
+         "authorized_keys if others can write it, ~/.ssh or your home. ~/.ssh is 700, the private key 600.", "chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_ed25519"),
+        ("The first time, ssh shows the server's fingerprint and asks. Paste the one the admin "
+         "gave you instead of yes: ssh accepts only if it matches. ssh-keygen -l prints a key's fingerprint; ~/.ssh/known_hosts remembers it.",
+         "ssh-keygen -lf host_key.pub"),
+    ]},
+    {"id": "firewall", "tool": "nft", "topics": ("network",), "title": "Firewalls: who may come in", "pages": [
+        ("A firewall decides, packet by packet, what may come in or go out. Linux's own is nftables; Rocky drives it with "
+         "firewalld, Debian has nft but filters nothing until you write rules, a Mac has pf and the application firewall.",
+         "sudo nft list ruleset"),
+        ("A chain is read from the top: the first rule that matches with a verdict decides, accept, drop or reject. "
+         "When none matches, the chain's policy decides.", "tcp dport 22 accept"),
+        ("drop says nothing: the client waits, then times out. reject answers at once: connection refused, or No route "
+         "to host. So a timeout points to a firewall that drops, or a machine that's off on another network.", "ip saddr 203.0.113.0/24 drop"),
+        ("On Rocky, firewalld keeps zones: --list-all shows what the active one lets in. --add-service changes only the "
+         "running firewall, which a reload forgets; with --permanent it writes the saved setup, and --reload applies it.", "sudo firewall-cmd --list-all"),
+    ]},
     {"id": "certs", "tool": "openssl", "topics": ("network",), "title": "openssl: read a certificate", "pages": [
         ("A certificate ties a public key to names, until a date, and a CA signs that promise. openssl x509 reads one: "
          "-noout skips the base64 block, and you name the fields you want.", "openssl x509 -in site.pem -noout -subject -enddate"),
