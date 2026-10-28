@@ -18,7 +18,8 @@
     "Un débogueur lance ton programme pour toi, et peut l'arrêter pour montrer ce qu'il y a dedans : quelle ligne, quels appels, quelles valeurs.",
     "",
     "- Compile avec -g d'abord : gdb a besoin des numéros de ligne.",
-    "$ gcc -g prog.c -o prog && gdb -q ./prog"
+    "$ gcc -Wall -g prog.c -o prog && gdb -q ./prog",
+    "- Sur Mac : lldb ./prog, puis run et bt, les mêmes mots."
    ]
   },
   {
@@ -75,7 +76,7 @@
     " lldb            débogueur de clang, même idée",
     " VS Code, CLion  gdb/lldb derrière des boutons",
     " rr              enregistrer, rejouer à l'envers",
-    " valgrind        vérifs mémoire, sans recompiler"
+    " valgrind        vérifs mémoire (Linux seul)"
    ],
    "point": 3,
    "mark": [
@@ -85,7 +86,8 @@
     "Les mêmes idées partout : points d'arrêt, pas à pas, variables, pile d'appels.",
     "",
     "- Le débogueur d'un éditeur, c'est gdb ou lldb derrière des boutons : ce que tu apprends ici sert partout.",
-    "- Pour les bugs mémoire, -fsanitize=address est bien plus rapide que valgrind, mais demande de recompiler ; valgrind marche sur le programme tel quel."
+    "- Pour les bugs mémoire, -fsanitize=address est bien plus rapide que valgrind, mais demande de recompiler ; valgrind marche sur le programme tel quel.",
+    "- lldb : breakpoint set -n month_end, p balance : les idées de gdb, ses propres mots."
    ]
   }
  ]

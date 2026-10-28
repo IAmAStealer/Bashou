@@ -127,7 +127,7 @@
    "-O2"
   ],
   "answer": 0,
-  "explain": "-Wall turns on the common warnings: a variable used before it gets a value, a wrong printf format, a comparison that is always true. Add -Wextra for more. A warning is often a real bug, so fix them all. -O2 is about speed, not warnings."
+  "explain": "-Wall turns on the common warnings: a variable used before it gets a value, a wrong printf format. -Wextra adds more, like a comparison that is always true. A warning is often a real bug, so fix them all. -O2 is about speed, not warnings."
  },
  {
   "id": "c-2-01",
@@ -153,7 +153,7 @@
    "The memory is freed twice as fast"
   ],
   "answer": 0,
-  "explain": "The second free hands back memory that may already belong to something else: this is undefined behavior. It may crash, silently corrupt data, or even be used by an attacker. The compiler can't see it. Habit: write p = NULL; right after free(p), since free(NULL) does nothing."
+  "explain": "The second free hands back memory that may already belong to something else: this is undefined behavior. It may crash, silently corrupt data, or even be used by an attacker. The compiler can't see it. Habit: write p = NULL; right after free(p), since free(NULL) does nothing. It only protects p: another pointer to the same block still dangles."
  },
  {
   "id": "c-2-03",
@@ -205,7 +205,7 @@
    "lint"
   ],
   "answer": 0,
-  "explain": "valgrind ./prog runs the program in a checker that reports reads past an array, use after free, and leaks, with the line numbers. Another way: compile with -fsanitize=address (AddressSanitizer), which is faster. gdb shows where it crashed, not the bad access that came before."
+  "explain": "valgrind ./prog (Linux only) runs the program in a checker that reports reads past a malloc'd block, use after free and leaks, with line numbers. -fsanitize=address also catches overruns of local arrays, is faster, and works on a Mac. gdb shows where it crashed, not the bad access that came before."
  },
  {
   "id": "c-2-07",
@@ -231,7 +231,7 @@
    "Checking types"
   ],
   "answer": 0,
-  "explain": "In a big project, the same header often gets included twice through other headers, and defining the same struct twice is an error. The first time, CONFIG_H is not defined: the content is used and CONFIG_H gets defined. The second time it's skipped. #pragma once does the same in one line."
+  "explain": "In a big project, the same header often gets included twice through other headers, and defining the same struct twice is an error. The first time, CONFIG_H is not defined: the content is used and CONFIG_H gets defined. The second time it's skipped. #pragma once does the same in one line (not standard, but gcc and clang know it)."
  },
  {
   "id": "c-2-09",
@@ -244,7 +244,7 @@
    "The environment"
   ],
   "answer": 0,
-  "explain": "argv[0] is the program's name as it was typed: ./prog. The real arguments start at argv[1], here input.txt, and argc counts everything, so argc is 2. Classic bug: reading argv[1] without checking argc first, which crashes when no argument is given."
+  "explain": "argv[0] is the program's name as it was typed: ./prog. The real arguments start at argv[1], here input.txt, and argc counts everything, so argc is 2. Classic bug: reading argv[1] without checking argc first. With no argument, argv[1] is NULL: using it is undefined behavior, often a crash."
  },
  {
   "id": "c-2-10",
@@ -270,7 +270,7 @@
    "gcc needs -Wall to find it"
   ],
   "answer": 0,
-  "explain": "undefined reference comes from the linker, the last step of gcc: main.c calls mean(), but only stats.c holds its code, and gcc wasn't given it. List every .c file: gcc main.c stats.c -o app. The .h file only promises that mean() exists somewhere."
+  "explain": "undefined reference comes from the linker, the last step of gcc: main.c calls mean(), but only stats.c holds its code, and gcc wasn't given it. List every .c file: gcc main.c stats.c -o app. The .h file only promises that mean() exists somewhere. A Mac says: Undefined symbols."
  },
  {
   "id": "c-2-12",
@@ -283,7 +283,7 @@
    "-Wall is too strict: ignore it"
   ],
   "answer": 0,
-  "explain": "= stores a value, == compares. if (x = 0) puts 0 in x and the test is always false; if (x = 5) is always true. gcc builds it anyway, so without -Wall the bug is silent. Build with -Wall and treat each warning as a possible bug."
+  "explain": "= stores a value, == compares. if (x = 0) puts 0 in x and the test is always false; if (x = 5) is always true. gcc builds it anyway, so without -Wall the bug is silent (clang, the Mac's gcc, warns). Build with -Wall and treat each warning as a possible bug."
  },
  {
   "id": "c-2-13",
@@ -296,7 +296,7 @@
    "It makes the program faster"
   ],
   "answer": 0,
-  "explain": "-g adds debug information to the program: file names, line numbers, variable names. The program runs the same, but gdb (or AddressSanitizer) can now tell you the exact line: gcc -g prog.c -o prog && gdb -q ./prog, then run and bt."
+  "explain": "-g adds debug information to the program: file names, line numbers, variable names. The program runs the same, but gdb (or AddressSanitizer) can now tell you the exact line: gcc -Wall -g prog.c -o prog && gdb -q ./prog, then run and bt (lldb on a Mac)."
  },
  {
   "id": "c-2-14",
@@ -322,7 +322,7 @@
    "Run gdb as root"
   ],
   "answer": 0,
-  "explain": "-O2 lets gcc move code around and keep values only in registers, so some variables vanish and lines run out of order. For debugging, build with -Og (or -O0) and -g: the program follows your code line by line. Release builds keep -O2."
+  "explain": "-O2 lets gcc move code around and keep values only in registers, so some variables vanish and lines run out of order. For debugging, rebuild with -O0 -g (or -Og): the program follows your code line by line. Release builds keep -O2."
  },
  {
   "id": "c-3-02",

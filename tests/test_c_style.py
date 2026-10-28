@@ -40,9 +40,9 @@ class FightFileTest(unittest.TestCase):
     def test_every_c_file_a_fight_writes_is_strict_c99(self):
         seen = 0
         for c in challenges.ALL + challenges.TRIALS:
-            if c.skill != "c" or not c.available():
+            if c.skill != "c" and "gcc" not in (c.requires or []):
                 continue
-            for name, found in diagnostics(c):
+            for name, found in diagnostics(c):     # syntax only needs gcc, not gdb
                 seen += 1
                 with self.subTest(fight=c.id, file=name):
                     expected = ON_PURPOSE.get(c.id)

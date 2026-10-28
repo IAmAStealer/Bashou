@@ -23,7 +23,7 @@
     "tas"
    ],
    "text": [
-    "Un programme qui tourne reçoit sa mémoire en plusieurs parties. Deux comptent tous les jours :",
+    "Un programme qui tourne reçoit sa mémoire en morceaux (la disposition typique sous Linux). Deux comptent tous les jours :",
     "",
     "- la pile (stack), pour les variables de tes fonctions ;",
     "- le tas (heap), pour la mémoire que tu demandes toi-même."
@@ -96,7 +96,7 @@
     "Une fonction qui s'appelle elle-même empile une boîte par appel.",
     "",
     "- Sans cas de base (un cas qui se termine sans se rappeler), les boîtes s'entassent.",
-    "- La pile est petite (8 Mo par défaut sous Linux) : elle déborde et le programme plante."
+    "- La pile est petite (8 Mo par défaut sous Linux) : elle déborde, en général un plantage (une version optimisée peut boucler sans fin)."
    ]
   },
   {
@@ -143,10 +143,11 @@
     "NULL"
    ],
    "text": [
-    "free rend la mémoire à malloc, qui la réutilisera pour autre chose. Mais p garde l'ancienne adresse : un pointeur pendant (dangling).",
+    "free rend la mémoire à malloc, qui la réutilisera. Mais p garde l'ancienne adresse : un pointeur pendant.",
     "",
-    "- Se servir de p après free est un bug « use after free » : ça peut marcher, planter, ou abîmer des données.",
-    "- p = NULL juste après free fait planter une erreur tout de suite, là où tu la trouves. Et free(NULL) ne fait rien : un deuxième free est sans danger."
+    "- Se servir de p après free (« use after free ») peut marcher, planter, ou abîmer des données.",
+    "- p = NULL juste après free fait planter l'erreur tout de suite. Et free(NULL) ne fait rien.",
+    "- Ça ne protège que p : un autre pointeur vers ce bloc pend toujours."
    ]
   },
   {
@@ -168,7 +169,8 @@
     "- Un programme qui fuit un peu à chaque requête grossit jusqu'à ce que le système le tue.",
     "- La règle : chaque malloc a exactement un free.",
     "",
-    "$ gcc -g -fsanitize=address prog.c -o prog && ./prog"
+    "$ gcc -Wall -g -fsanitize=address prog.c -o prog && ./prog",
+    "- ASan trouve les fuites sous Linux ; sur Mac : leaks --atExit -- ./prog"
    ]
   },
   {

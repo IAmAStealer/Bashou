@@ -46,7 +46,8 @@
     "A debugger runs your program for you, and can stop it to show what's inside: which line, which calls, which values.",
     "",
     "- Build with -g first: gdb needs the line numbers.",
-    "$ gcc -g prog.c -o prog && gdb -q ./prog"
+    "$ gcc -Wall -g prog.c -o prog && gdb -q ./prog",
+    "- On a Mac: lldb ./prog, then run and bt, the same words."
    ]
   },
   {
@@ -103,7 +104,7 @@
     " lldb            clang's debugger, same ideas",
     " VS Code, CLion  gdb/lldb behind buttons",
     " rr              record, then replay backwards",
-    " valgrind        memory checks, no rebuild"
+    " valgrind        memory checks (Linux only)"
    ],
    "point": 3,
    "mark": [
@@ -113,7 +114,8 @@
     "The same ideas everywhere: breakpoints, steps, variables, backtrace.",
     "",
     "- An editor's debugger is gdb or lldb behind buttons: what you learn here carries over.",
-    "- For memory bugs, -fsanitize=address is much faster than valgrind, but needs a rebuild; valgrind works on the program as it is."
+    "- For memory bugs, -fsanitize=address is much faster than valgrind, but needs a rebuild; valgrind works on the program as it is.",
+    "- lldb: breakpoint set -n month_end, p balance: gdb's ideas, its own words."
    ]
   }
  ]

@@ -47,7 +47,7 @@
     "heap"
    ],
    "text": [
-    "A running program gets its memory in parts. Two of them matter every day:",
+    "A running program gets its memory in parts (a typical Linux layout). Two of them matter every day:",
     "",
     "- the stack, for the variables of your functions;",
     "- the heap, for memory you ask for yourself."
@@ -120,7 +120,7 @@
     "A function that calls itself stacks one box per call.",
     "",
     "- Without a base case (a case that returns without calling itself again), the boxes pile up.",
-    "- The stack is small (8 MB by default on Linux): it overflows and the program crashes."
+    "- The stack is small (8 MB by default on Linux): it overflows, usually a crash (an optimized build may loop forever instead)."
    ]
   },
   {
@@ -170,7 +170,8 @@
     "free gives the memory back to malloc, which will reuse it for something else. But p still holds the old address: a dangling pointer.",
     "",
     "- Using p after free is a \"use after free\" bug: it may work, crash, or corrupt data.",
-    "- p = NULL right after free makes a mistake crash at once, where you can find it. And free(NULL) does nothing, so a second free is harmless."
+    "- p = NULL right after free makes a mistake crash at once, where you can find it. And free(NULL) does nothing, so a second free is harmless.",
+    "- It only protects p: another pointer to the same block still dangles."
    ]
   },
   {
@@ -192,7 +193,8 @@
     "- A program that leaks a little on each request grows until the system kills it.",
     "- The rule: every malloc has exactly one free.",
     "",
-    "$ gcc -g -fsanitize=address prog.c -o prog && ./prog"
+    "$ gcc -Wall -g -fsanitize=address prog.c -o prog && ./prog",
+    "- ASan finds leaks on Linux; on a Mac: leaks --atExit -- ./prog"
    ]
   },
   {

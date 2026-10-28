@@ -19,7 +19,8 @@
     "",
     "- -Wall active les avertissements pour les erreurs courantes, -Wextra quelques-uns de plus.",
     "- Ici = range 100 au lieu de comparer (==) : chaque note est « perfect ».",
-    "- Compile toujours avec les avertissements, et lis-les comme des erreurs."
+    "- Compile toujours avec les avertissements, et lis-les comme des erreurs.",
+    "- clang, le gcc du Mac, prévient pour celui-là même sans -Wall."
    ]
   },
   {
@@ -37,7 +38,7 @@
    "text": [
     "Un programme en plusieurs fichiers : donne tous les .c à gcc. Il compile chacun, puis les relie.",
     "",
-    "- Oublie-en un et l'éditeur de liens dit : undefined reference to `mean'."
+    "- Oublies-en un et l'éditeur de liens dit : undefined reference to `mean' (un Mac : Undefined symbols)."
    ]
   },
   {
@@ -70,7 +71,8 @@
    ],
    "text": [
     "- Pendant que tu travailles : gcc -Wall -Wextra -g -Og -fsanitize=address,undefined.",
-    "- Pour livrer : gcc -Wall -O2."
+    "- Pour livrer : gcc -Wall -O2.",
+    "- gdb dit <optimized out> ? Recompile avec -O0 -g."
    ]
   },
   {

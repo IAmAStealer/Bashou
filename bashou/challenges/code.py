@@ -181,7 +181,7 @@ def semicolon_setup(work, rng):
         _("Input: nothing."),
         _("Wanted: it prints one line, like: hello, ada"),
         _("Run it:") + " gcc hello.c -o hello && ./hello",
-        _("Help: gcc's message names the line; the fix goes at the end of the line before."),
+        _("Help: gcc's message names the line and the column where the ; is missing."),
     ], "\n#include <stdio.h>\n\nint main(void)\n{\n"
        f"    printf(\"hello, {name}\\n\")\n    return 0;\n}}\n")
     return {"runs": [[[], "", f"hello, {name}\n"]]}
@@ -521,8 +521,10 @@ int main(void)
     char line[256];
     while (fgets(line, sizeof line, stdin)) {
         char *loud = shout(line);
-        if (!loud)
-            return 1;
+        if (!loud) {
+            perror("malloc");
+            return EXIT_FAILURE;
+        }
         fputs(loud, stdout);
     }
     return 0;
@@ -537,7 +539,7 @@ def leak_setup(work, rng):
         _("Fight: the output is right, but memory leaks: AddressSanitizer reports it at the end."),
         _("Input: lines on stdin (names.txt)."),
         _("Wanted: each line in capitals, and every malloc freed."),
-        _("Run it:") + " gcc -g -fsanitize=address shout.c -o shout && ./shout < names.txt",
+        _("Run it:") + " gcc -Wall -g -fsanitize=address,undefined shout.c -o shout && ./shout < names.txt",
         _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ], LEAK_CODE)
     runs = []
@@ -559,8 +561,10 @@ int main(int argc, char **argv)
         return 1;
     }
     int *values = malloc(count * sizeof *values);
-    if (!values)
-        return 1;
+    if (!values) {
+        perror("malloc");
+        return EXIT_FAILURE;
+    }
     for (int i = 0; i < count; i++)
         values[i] = atoi(argv[i + 1]);
     long total = 0;
@@ -577,9 +581,9 @@ def fence_setup(work, rng):
     nums = [rng.randint(1, 99) for _i in range(4)]
     write(work, "average.c", "c", [
         _("Fight: the average is wrong, or AddressSanitizer stops it: a loop reads one box too far."),
-        _("Input: whole numbers as arguments."),
+        _("Input: whole numbers >= 0 as arguments."),
         _("Wanted: their average, rounded down: ./average 2 4 9 prints 5."),
-        _("Run it:") + " gcc -g -fsanitize=address average.c -o average && ./average " + " ".join(map(str, nums)),
+        _("Run it:") + " gcc -Wall -g -fsanitize=address,undefined average.c -o average && ./average " + " ".join(map(str, nums)),
         _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ], FENCE_CODE)
     runs = []
@@ -615,7 +619,7 @@ def stack_setup(work, rng):
         _("Fight: sum_to() calls itself forever, until the stack overflows (segfault)."),
         _("Input: a number N >= 0."),
         _("Wanted: 1 + 2 + ... + N: ./sum 4 prints 10, ./sum 0 prints 0."),
-        _("Run it:") + " gcc -g sum.c -o sum && ./sum 4",
+        _("Run it:") + " gcc -Wall -g sum.c -o sum && ./sum 4",
         _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ], STACK_CODE)
     return {"runs": [[[str(n)], "", f"{n * (n + 1) // 2}\n"] for n in (0, 1, 4, rng.randint(50, 2000))]}
@@ -644,7 +648,7 @@ def overflow_setup(work, rng):
         _("Fight: a long name writes past the 8-byte buffer. In real code that is how attackers get in."),
         _("Input: a name as the only argument, of any length."),
         _("Wanted: Hello, <the whole name>! for any name, with no memory error."),
-        _("Run it:") + " gcc -g -fsanitize=address greet.c -o greet && ./greet averyveryverylongname",
+        _("Run it:") + " gcc -Wall -g -fsanitize=address,undefined greet.c -o greet && ./greet averyveryverylongname",
         _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ], OVERFLOW_CODE)
     long = "".join(rng.choice("abcdefghij") for _i in range(rng.randint(300, 2000)))
@@ -752,7 +756,7 @@ ALL = [
     Challenge(level=2, id="leak_lurker", fix=True, works=lambda: bool(sanitizer()) and leaks(), pet="beaver", threat="Leak Lurker", **C,
               task="The Leak Lurker feeds on memory nobody frees in shout.c.\n"
                    "Fix shout.c (its first lines say what it must do). "
-                   "Run it: gcc -g -fsanitize=address shout.c -o shout && ./shout < names.txt\n"
+                   "Run it: gcc -Wall -g -fsanitize=address,undefined shout.c -o shout && ./shout < names.txt\n"
                    "When it works, type: verify",
               hints=["AddressSanitizer names the line where the leaked memory was allocated. "
                      "Who should free it once it's printed?",
@@ -761,14 +765,14 @@ ALL = [
     Challenge(level=2, id="fencepost_fiend", fix=True, works=lambda: bool(sanitizer()), pet="beaver", threat="Fencepost Fiend", **C,
               task="The Fencepost Fiend moved a fence post in average.c: a loop goes one step too far.\n"
                    "Fix average.c (its first lines say what it must do). "
-                   "Run it: gcc -g -fsanitize=address average.c -o average && ./average 2 4 9\n"
+                   "Run it: gcc -Wall -g -fsanitize=address,undefined average.c -o average && ./average 2 4 9\n"
                    "When it works, type: verify",
               hints=["An array of count items goes from 0 to count - 1. Compare the two loops.",
                      "In the second loop, write i < count instead of i <= count."],
               setup=fence_setup, verify=c_tests("average.c")),
     Challenge(level=2, id="stack_specter", fix=True, pet="beaver", threat="Stack Specter", **C,
               task="The Stack Specter haunts sum.c: sum_to() never stops calling itself.\n"
-                   "Fix sum.c (its first lines say what it must do). Run it: gcc -g sum.c -o sum && ./sum 4\n"
+                   "Fix sum.c (its first lines say what it must do). Run it: gcc -Wall -g sum.c -o sum && ./sum 4\n"
                    "When it works, type: verify",
               hints=["Every recursion needs a case that returns without calling itself.",
                      "Add at the start of sum_to: if (n <= 0) return 0;"],
@@ -776,9 +780,9 @@ ALL = [
     Challenge(level=3, id="overflow_ogre", fix=True, pet="beaver", threat="Overflow Ogre", after=("leak_lurker",), **C,
               task="The Overflow Ogre stuffs long names into an 8-byte box in greet.c.\n"
                    "Fix greet.c (its first lines say what it must do). "
-                   "Run it: gcc -g -fsanitize=address greet.c -o greet && ./greet averyveryverylongname\n"
+                   "Run it: gcc -Wall -g -fsanitize=address,undefined greet.c -o greet && ./greet averyveryverylongname\n"
                    "When it works, type: verify",
               hints=["strcpy never checks the size of the target. Does the name need copying at all?",
-                     "Simplest: printf(\"Hello, %s!\\n\", argv[1]); or malloc(strlen(argv[1]) + 1) and free it."],
+                     "Simplest: delete name and strcpy, and print argv[1]: printf(\"Hello, %s!\\n\", argv[1]); Or malloc(strlen(argv[1]) + 1), check it isn't NULL, copy, print, free."],
               setup=overflow_setup, verify=c_tests("greet.c")),
 ]

@@ -135,7 +135,8 @@
     "strcpy copies until the '\\0', whatever the size of the target. A long input writes past the end, over whatever lives next to it.",
     "",
     "- That's a buffer overflow, a classic security hole.",
-    "- snprintf(name, sizeof name, \"%s\", argv[1]) stops at the size and always adds the '\\0'."
+    "- snprintf(name, sizeof name, \"%s\", argv[1]) stops at the size and always adds the '\\0'.",
+    "- A longer name is cut: if snprintf returns >= sizeof name, it didn't fit."
    ]
   }
  ]

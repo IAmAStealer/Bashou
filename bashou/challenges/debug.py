@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 
 def link_setup(work, rng):
     (work / "report.c").write_text(header("c", [
-        _("Fight: gcc report.c -o report stops with: undefined reference to `mean'."),
+        _("Fight: gcc report.c -o report stops with: undefined reference to `mean' (a Mac says: Undefined symbols)."),
         _("mean() is written in stats.c. The linker needs every file that holds a piece of the program."),
         _("Wanted: ./report 2 4 9 prints mean: 5.00"),
         _("Run it:") + " gcc report.c -o report && ./report 2 4 9",
@@ -116,7 +116,7 @@ def grade_answer(score, mark):
 def warning_setup(work, rng):
     mark = rng.randint(40, 60)
     (work / "grade.c").write_text(header("c", [
-        _("Fight: gcc builds this without a word, yet every score comes out perfect."),
+        _("Fight: gcc builds this without a word (clang, the Mac's gcc, does warn), yet every score comes out perfect."),
         _("Build it with warnings on: gcc -Wall grade.c -o grade. Read the warning, fix that line."),
         _("Wanted: 100 is perfect, {mark} or more is pass, less is fail.").format(mark=mark),
         _("Done when gcc -Wall says nothing and ./grade 100 {mark} 7 prints perfect, pass, fail.").format(mark=mark),
@@ -195,7 +195,7 @@ def crash_setup(work, rng):
         _("Fight: this program dies with 'Segmentation fault'. Don't fix it: find where it dies."),
         _("A debugger runs the program and stops right where it crashes."),
         _("Build it with -g (line numbers), run it in gdb, then ask for the backtrace: bt."),
-        _("Run it:") + " gcc -g crash.c -o crash && gdb -q ./crash",
+        _("Run it:") + " gcc -Wall -g crash.c -o crash && gdb -q ./crash",
         _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ]) + code
     (work / "crash.c").write_text(text)
@@ -238,7 +238,7 @@ def loan_setup(work, rng):
         _("Fight: what is balance when month_end() starts for month {month}? The program only prints the end.").format(
             month=month),
         _("Stop it there with a breakpoint, then print the variable."),
-        _("Run it:") + " gcc -g loan.c -o loan && gdb -q ./loan",
+        _("Run it:") + " gcc -Wall -g loan.c -o loan && gdb -q ./loan",
         _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ]) + code)
     return {"answer": str(balance), "args": {"month": month}}
@@ -266,7 +266,7 @@ ALL = [
                      "Try: gcc report.c stats.c -o report && ./report 2 4 9"],
               setup=link_setup, verify=built_runs("report")),
     Challenge(level=2, id="warning_wraith", fix=True, threat="Warning Wraith", after=("linker_lynx",), **C,
-              task="The Warning Wraith hides in grade.c: gcc builds it silently, and every score is perfect.\n"
+              task="The Warning Wraith hides in grade.c: gcc builds it silently (clang warns), and every score is perfect.\n"
                    "Build it with gcc -Wall grade.c -o grade, fix the line the warning points at, "
                    "until -Wall says nothing.\n"
                    "When it works, type: verify",
@@ -283,7 +283,7 @@ ALL = [
               hints=["gcc -g adds line numbers to the program. In gdb, run starts it; when it crashes, gdb stops "
                      "and shows where. bt (backtrace) lists the calls, the one that crashed first.",
                      "The first line of bt says the function and crash.c:LINE. That number is the answer.",
-                     "Try: gcc -g crash.c -o crash && gdb -q -batch -ex run -ex bt ./crash"],
+                     "Try: gcc -Wall -g crash.c -o crash && gdb -q -batch -ex run -ex bt ./crash"],
               setup=crash_setup),
     Challenge(level=3, id="breakpoint_beetle", threat="Breakpoint Beetle", after=("segfault_salamander",), **GDB,
               task="The Breakpoint Beetle hides a number in loan.c: it only prints the balance after a year.\n"
@@ -292,7 +292,7 @@ ALL = [
                      "call of month_end(); print balance shows the variable there.",
                      "Stop only at the right call with a condition: break month_end if month == {month}. Then "
                      "run, then print balance.",
-                     "Try: gcc -g loan.c -o loan && gdb -q -batch -ex 'break month_end if month == {month}' "
+                     "Try: gcc -Wall -g loan.c -o loan && gdb -q -batch -ex 'break month_end if month == {month}' "
                      "-ex run -ex 'print balance' ./loan"],
               setup=loan_setup),
 ]
@@ -301,7 +301,7 @@ ALL = [
 def chest_setup(work, rng):
     name = rng.choice(NAMES)
     code = ("#include <stdio.h>\n\nint count(const char *s)\n{\n    int n = 0;\n    while (*s++)\n        n++;\n"
-            "    return n;\n}\n\nint main(void)\n{\n    const char *names[] = {\"" + name + "\", 0};\n"
+            "    return n;\n}\n\nint main(void)\n{\n    const char *names[] = {\"" + name + "\", NULL};\n"
             "    for (int i = 0; i < 2; i++)\n        printf(\"%d\\n\", count(names[i]));\n    return 0;\n}\n")
     (work / "count.c").write_text(code)
     line = next(i for i, l in enumerate(code.split("\n"), 1) if "while (*s++)" in l)
@@ -311,8 +311,8 @@ def chest_setup(work, rng):
 def trial():
     return make("trial_gdb_line", 2, "count.c crashes. Build it with gcc -g, run it in gdb and ask bt: at which line "
                 "of count.c does it stop? Then: answer <line>",
-                ["gcc -g count.c -o count builds it with line numbers. In gdb: run, then bt.",
-                 "Try: gcc -g count.c -o count && gdb -q -batch -ex run -ex bt ./count"],
+                ["gcc -Wall -g count.c -o count builds it with line numbers. In gdb: run, then bt.",
+                 "Try: gcc -Wall -g count.c -o count && gdb -q -batch -ex run -ex bt ./count"],
                 chest_setup, lambda w, m, v: v.strip() == m["answer"], requires=["gcc", "gdb"], teaches=["gdb"])
 
 

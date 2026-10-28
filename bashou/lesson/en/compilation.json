@@ -68,7 +68,7 @@
     "",
     "- Steps 1 to 3 turn your file into an object file (.o): machine code with holes in it.",
     "- Step 4, the linker, fills the holes: it connects your calls to printf to the C library.",
-    "- gcc deletes hello.o at the end; gcc -c hello.c keeps it and stops before linking."
+    "- gcc writes the .o to a temporary file and deletes it; gcc -c hello.c keeps hello.o."
    ]
   },
   {
@@ -85,9 +85,10 @@
    "text": [
     "An error stops the build: no program comes out. Read the first one first, the others often follow from it.",
     "",
-    "- Go to that file, line 5, column 14. For a missing ;, gcc points just after the spot where it belongs.",
+    "- Go to that file, line 5, column 14. For a missing ;, gcc points at the spot where it belongs.",
     "- Below the message, gcc prints your line with a ^ under the exact spot.",
-    "- A warning doesn't stop the build, but it's often a real bug: build with -Wall and read them."
+    "- A warning doesn't stop the build, but it's often a real bug: build with -Wall and read them.",
+    "- On a Mac, clang says: expected ';' after expression."
    ]
   },
   {
@@ -108,7 +109,8 @@
     "A bigger program is several .c files, compiled apart, then linked together.",
     "",
     "- \"undefined reference\" comes from the linker: a function is used, but no file gives its code.",
-    "- Usually a .c file you forgot on the command line, or a library to add (-lm for maths)."
+    "- Usually a .c file you forgot on the command line, or a library to add (-lm for maths).",
+    "- On a Mac, clang says: Undefined symbols for architecture arm64."
    ]
   },
   {

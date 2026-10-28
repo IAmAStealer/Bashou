@@ -108,7 +108,8 @@
     "strcpy copie jusqu'au '\\0', quelle que soit la taille de la cible. Une entrée trop longue écrit après la fin, par-dessus ce qui vit à côté.",
     "",
     "- C'est un dépassement de tampon (buffer overflow), une faille de sécurité classique.",
-    "- snprintf(name, sizeof name, \"%s\", argv[1]) s'arrête à la taille et ajoute toujours le '\\0'."
+    "- snprintf(name, sizeof name, \"%s\", argv[1]) s'arrête à la taille et ajoute toujours le '\\0'.",
+    "- Un nom plus long est coupé : si snprintf renvoie >= sizeof name, il ne rentrait pas."
    ]
   }
  ]

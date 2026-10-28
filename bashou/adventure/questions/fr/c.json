@@ -127,7 +127,7 @@
    "-O2"
   ],
   "answer": 0,
-  "explain": "-Wall active les avertissements courants : une variable utilisée avant d'avoir une valeur, un mauvais format de printf, une comparaison toujours vraie. Ajoute -Wextra pour plus. Un avertissement est souvent un vrai bug, alors corrige-les tous. -O2 concerne la vitesse, pas les avertissements."
+  "explain": "-Wall active les avertissements courants : une variable utilisée avant d'avoir une valeur, un mauvais format de printf. -Wextra en ajoute, comme une comparaison toujours vraie. Un avertissement est souvent un vrai bug, alors corrige-les tous. -O2 concerne la vitesse, pas les avertissements."
  },
  {
   "id": "c-2-01",
@@ -153,7 +153,7 @@
    "La mémoire est libérée deux fois plus vite"
   ],
   "answer": 0,
-  "explain": "Le second free rend une mémoire qui appartient peut-être déjà à autre chose : c'est un comportement indéfini. Ça peut planter, abîmer des données en silence, ou même servir à un attaquant. Le compilateur ne le voit pas. Habitude : écris p = NULL; juste après free(p), car free(NULL) ne fait rien."
+  "explain": "Le second free rend une mémoire qui appartient peut-être déjà à autre chose : c'est un comportement indéfini. Ça peut planter, abîmer des données en silence, ou même servir à un attaquant. Le compilateur ne le voit pas. Habitude : écris p = NULL; juste après free(p), car free(NULL) ne fait rien. Ça ne protège que p : un autre pointeur vers le même bloc pend toujours."
  },
  {
   "id": "c-2-03",
@@ -205,7 +205,7 @@
    "lint"
   ],
   "answer": 0,
-  "explain": "valgrind ./prog lance le programme dans un vérificateur qui signale les lectures après un tableau, l'usage après free et les fuites, avec les numéros de ligne. Autre moyen : compiler avec -fsanitize=address (AddressSanitizer), plus rapide. gdb montre où ça a planté, pas le mauvais accès d'avant."
+  "explain": "valgrind ./prog (Linux seulement) lance le programme dans un vérificateur qui signale les lectures après un bloc de malloc, l'usage après free et les fuites, avec les lignes. -fsanitize=address voit aussi les tableaux locaux, va plus vite et marche sur Mac. gdb montre où ça a planté, pas le mauvais accès d'avant."
  },
  {
   "id": "c-2-07",
@@ -231,7 +231,7 @@
    "À vérifier les types"
   ],
   "answer": 0,
-  "explain": "Dans un gros projet, le même en-tête est souvent inclus deux fois via d'autres en-têtes, et définir deux fois la même struct est une erreur. La première fois, CONFIG_H n'est pas défini : le contenu est pris et CONFIG_H est défini. La deuxième fois, il est sauté. #pragma once fait pareil en une ligne."
+  "explain": "Dans un gros projet, le même en-tête est souvent inclus deux fois via d'autres en-têtes, et définir deux fois la même struct est une erreur. La première fois, CONFIG_H n'est pas défini : le contenu est pris et CONFIG_H est défini. La deuxième fois, il est sauté. #pragma once fait pareil en une ligne (pas standard, mais gcc et clang le connaissent)."
  },
  {
   "id": "c-2-09",
@@ -244,7 +244,7 @@
    "L'environnement"
   ],
   "answer": 0,
-  "explain": "argv[0] est le nom du programme tel qu'il a été tapé : ./prog. Les vrais arguments commencent à argv[1], ici entree.txt, et argc compte tout, donc argc vaut 2. Bug classique : lire argv[1] sans vérifier argc avant, ce qui plante quand aucun argument n'est donné."
+  "explain": "argv[0] est le nom du programme tel qu'il a été tapé : ./prog. Les vrais arguments commencent à argv[1], ici entree.txt, et argc compte tout, donc argc vaut 2. Bug classique : lire argv[1] sans vérifier argc. Sans argument, argv[1] vaut NULL : s'en servir est un comportement indéfini, souvent un plantage."
  },
  {
   "id": "c-2-10",
@@ -270,7 +270,7 @@
    "gcc a besoin de -Wall pour la trouver"
   ],
   "answer": 0,
-  "explain": "undefined reference vient de l'éditeur de liens, la dernière étape de gcc : main.c appelle mean(), mais seul stats.c contient son code, et gcc ne l'a pas reçu. Donne tous les .c : gcc main.c stats.c -o app. Le .h promet seulement que mean() existe quelque part."
+  "explain": "undefined reference vient de l'éditeur de liens, la dernière étape de gcc : main.c appelle mean(), mais seul stats.c contient son code, et gcc ne l'a pas reçu. Donne tous les .c : gcc main.c stats.c -o app. Le .h promet seulement que mean() existe quelque part. Un Mac dit : Undefined symbols."
  },
  {
   "id": "c-2-12",
@@ -283,7 +283,7 @@
    "-Wall est trop strict : ignore-le"
   ],
   "answer": 0,
-  "explain": "= range une valeur, == compare. if (x = 0) met 0 dans x et le test est toujours faux ; if (x = 5) est toujours vrai. gcc compile quand même : sans -Wall, le bug est muet. Compile avec -Wall et traite chaque avertissement comme un bug possible."
+  "explain": "= range une valeur, == compare. if (x = 0) met 0 dans x et le test est toujours faux ; if (x = 5) est toujours vrai. gcc compile quand même : sans -Wall, le bug est muet (clang, le gcc du Mac, prévient). Compile avec -Wall et traite chaque avertissement comme un bug possible."
  },
  {
   "id": "c-2-13",
@@ -296,7 +296,7 @@
    "Le programme va plus vite"
   ],
   "answer": 0,
-  "explain": "-g ajoute des infos de débogage au programme : noms de fichiers, numéros de ligne, noms de variables. Le programme tourne pareil, mais gdb (ou AddressSanitizer) peut donner la ligne exacte : gcc -g prog.c -o prog && gdb -q ./prog, puis run et bt."
+  "explain": "-g ajoute des infos de débogage au programme : noms de fichiers, numéros de ligne, noms de variables. Le programme tourne pareil, mais gdb (ou AddressSanitizer) peut donner la ligne exacte : gcc -Wall -g prog.c -o prog && gdb -q ./prog, puis run et bt (lldb sur Mac)."
  },
  {
   "id": "c-2-14",
@@ -322,7 +322,7 @@
    "Lancer gdb en root"
   ],
   "answer": 0,
-  "explain": "-O2 permet à gcc de déplacer du code et de garder des valeurs seulement dans les registres : des variables disparaissent et les lignes s'exécutent dans le désordre. Pour déboguer, compile avec -Og (ou -O0) et -g : le programme suit ton code ligne à ligne. Les versions finales gardent -O2."
+  "explain": "-O2 permet à gcc de déplacer du code et de garder des valeurs seulement dans les registres : des variables disparaissent et les lignes s'exécutent dans le désordre. Pour déboguer, recompile avec -O0 -g (ou -Og) : le programme suit ton code ligne à ligne. Les versions finales gardent -O2."
  },
  {
   "id": "c-3-02",

@@ -45,7 +45,8 @@
     "",
     "- -Wall turns on the warnings for the usual mistakes, -Wextra a few more.",
     "- Here = stores 100 instead of comparing (==): every score is \"perfect\".",
-    "- Build with warnings on, always, and read them like errors."
+    "- Build with warnings on, always, and read them like errors.",
+    "- clang, the Mac's gcc, warns about this one even without -Wall."
    ]
   },
   {
@@ -63,7 +64,7 @@
    "text": [
     "A program in several files: give gcc every .c file. It compiles each one, then links them.",
     "",
-    "- Forget one and the linker says: undefined reference to `mean'."
+    "- Forget one and the linker says: undefined reference to `mean' (a Mac: Undefined symbols)."
    ]
   },
   {
@@ -96,7 +97,8 @@
    ],
    "text": [
     "- While you work: gcc -Wall -Wextra -g -Og -fsanitize=address,undefined.",
-    "- When you ship: gcc -Wall -O2."
+    "- When you ship: gcc -Wall -O2.",
+    "- gdb says <optimized out>? Rebuild with -O0 -g."
    ]
   },
   {

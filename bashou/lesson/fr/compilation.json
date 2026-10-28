@@ -44,7 +44,7 @@
     "",
     "- Les étapes 1 à 3 changent ton fichier en fichier objet (.o) : du code machine avec des trous.",
     "- L'étape 4, l'éditeur de liens, bouche les trous : il relie tes appels à printf à la bibliothèque C.",
-    "- gcc efface hello.o à la fin ; gcc -c hello.c le garde et s'arrête avant l'édition de liens."
+    "- gcc écrit le .o dans un fichier temporaire et l'efface ; gcc -c hello.c garde hello.o."
    ]
   },
   {
@@ -61,9 +61,10 @@
    "text": [
     "Une erreur arrête la construction : aucun programme ne sort. Lis la première d'abord, les autres en découlent souvent.",
     "",
-    "- Va dans ce fichier, ligne 5, colonne 14. Pour un ; oublié, gcc pointe juste après l'endroit où il manque.",
+    "- Va dans ce fichier, ligne 5, colonne 14. Pour un ; oublié, gcc pointe l'endroit où il manque.",
     "- Sous le message, gcc affiche ta ligne avec un ^ sous l'endroit exact.",
-    "- Un avertissement (warning) n'arrête rien, mais c'est souvent un vrai bug : compile avec -Wall et lis-les."
+    "- Un avertissement (warning) n'arrête rien, mais c'est souvent un vrai bug : compile avec -Wall et lis-les.",
+    "- Sur Mac, clang dit : expected ';' after expression."
    ]
   },
   {
@@ -84,7 +85,8 @@
     "Un plus gros programme, ce sont plusieurs fichiers .c, compilés à part, puis reliés ensemble.",
     "",
     "- « undefined reference » vient de l'éditeur de liens : une fonction est utilisée, mais aucun fichier ne donne son code.",
-    "- En général, un fichier .c oublié sur la ligne de commande, ou une bibliothèque à ajouter (-lm pour les maths)."
+    "- En général, un fichier .c oublié sur la ligne de commande, ou une bibliothèque à ajouter (-lm pour les maths).",
+    "- Sur Mac, clang dit : Undefined symbols for architecture arm64."
    ]
   },
   {
