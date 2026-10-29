@@ -140,8 +140,8 @@
     "You'll visit the same few places again and again.",
     "",
     "- Something misconfigured? Look in /etc.",
-    "- Something broke? The logs in /var/log (or journalctl) often say why.",
-    "- /tmp is often emptied at reboot, not always: never keep anything important there."
+    "- Something broke? journalctl, or the files in /var/log, often say why.",
+    "- /tmp is emptied at reboot on most systems, and lives in memory since Debian 13: nothing big or important there."
    ]
   }
  ]

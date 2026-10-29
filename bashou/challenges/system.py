@@ -141,6 +141,7 @@ After=network.target
 [Service]
 WantedBy=multi-user.target
 Restart=on-failure
+User={name}
 
 [Install]
 ExecStart=/usr/bin/python3 /opt/{name}/app.py
@@ -167,6 +168,7 @@ def unit_verify(work, meta, value):
     sections = {s: dict(unit[s]) for s in unit.sections()}
     return (sections.get("Service", {}).get("ExecStart") == f"/usr/bin/python3 /opt/{meta['name']}/app.py"
             and sections.get("Service", {}).get("Restart") == "on-failure"
+            and sections.get("Service", {}).get("User") == meta["name"]
             and sections.get("Install") == {"WantedBy": "multi-user.target"}
             and sections.get("Unit", {}).get("After") == "network.target")
 

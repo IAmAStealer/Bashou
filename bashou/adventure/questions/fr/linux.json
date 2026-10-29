@@ -55,15 +55,16 @@
  {
   "id": "linux-1-05",
   "level": 1,
+  "os": "linux",
   "q": "Comment voir qui s'est connecté récemment à un serveur, et d'où ?",
   "choices": [
-   "last",
-   "whoami",
-   "id",
-   "history"
+   "last, ou journalctl -u ssh",
+   "whoami, puis id",
+   "id et groups",
+   "history | tail"
   ],
   "answer": 0,
-  "explain": "last lit l'historique des connexions : qui, depuis quelle adresse, quand, et combien de temps. who montre seulement qui est connecté maintenant. Une connexion depuis une adresse inconnue mérite qu'on regarde de plus près."
+  "explain": "last lit l'historique des connexions : qui, depuis quelle adresse, quand, combien de temps. Debian 13 a retiré last : là, journalctl -u ssh montre chaque ligne 'Accepted … from' (ou installe wtmpdb : wtmpdb last). who montre seulement qui est connecté maintenant. Une connexion depuis une adresse inconnue mérite qu'on regarde de plus près."
  },
  {
   "id": "linux-1-06",
@@ -182,7 +183,7 @@
    "/var/log/ssh.err"
   ],
   "answer": 0,
-  "explain": "Le service SSH note chaque tentative de connexion : journalctl -u ssh les montre, tout comme /var/log/auth.log sur Debian (/var/log/secure sur Rocky). Des centaines d'échecs depuis une adresse veulent dire qu'un robot devine des mots de passe. fail2ban bloque ces adresses ; n'accepter que les clés supprime l'attaque."
+  "explain": "Le service SSH note chaque tentative : journalctl -u ssh sur Debian et Ubuntu, journalctl -u sshd sur Rocky. Les fichiers texte varient : /var/log/secure sur Rocky, /var/log/auth.log sur Ubuntu (sur Debian seulement avec rsyslog, absent par défaut depuis Debian 12). Des centaines d'échecs d'une adresse : un robot devine. fail2ban le bloque ; n'accepter que les clés supprime l'attaque."
  },
  {
   "id": "linux-2-03",
@@ -203,13 +204,13 @@
   "os": "linux",
   "q": "Tu as ajouté un disque dans /etc/fstab. Comment tester avant de redémarrer ?",
   "choices": [
-   "mount -a",
+   "sudo mount -a",
    "Redémarrer pour voir",
-   "fsck /etc/fstab",
-   "systemctl restart fstab"
+   "sudo fsck /etc/fstab",
+   "sudo systemctl restart fstab"
   ],
   "answer": 0,
-  "explain": "/etc/fstab liste les disques à monter au démarrage. Une ligne fausse peut bloquer la machine au démarrage, pénible sur un serveur distant. mount -a monte tout de suite tout ce qui est listé et pas encore monté : une erreur apparaît tant que tu peux la corriger. findmnt --verify vérifie le fichier sans monter."
+  "explain": "/etc/fstab liste les disques à monter au démarrage. Une ligne fausse peut bloquer le démarrage, pénible à distance. D'abord sudo systemctl daemon-reload (systemd lit fstab aussi), sudo findmnt --verify vérifie le fichier, puis sudo mount -a monte ce qui ne l'est pas : l'erreur apparaît tant que tu peux la corriger. Nomme les disques par UUID=, et ajoute nofail pour un disque qui peut manquer."
  },
  {
   "id": "linux-2-05",
@@ -327,20 +328,20 @@
    "Un champ vide"
   ],
   "answer": 0,
-  "explain": "Une valeur qui commence par $ est une empreinte : les lettres entre les deux premiers $ nomment la méthode. $y$ = yescrypt (le défaut actuel), $6$ = SHA-512, $2b$ = bcrypt. ! ou * dans ce champ bloquent la connexion par mot de passe (le compte peut encore utiliser des clés SSH), et un champ vide veut dire aucun mot de passe : dangereux."
+  "explain": "Une valeur qui commence par $ est une empreinte : les lettres entre les deux premiers $ nomment la méthode. $y$ = yescrypt (le défaut sur Debian et Ubuntu), $6$ = SHA-512 (le défaut sur Rocky), $2b$ = bcrypt. ! ou * dans ce champ bloquent la connexion par mot de passe (le compte peut encore utiliser des clés SSH), et un champ vide veut dire aucun mot de passe : dangereux."
  },
  {
   "id": "linux-3-04",
   "level": 3,
   "q": "Tu as modifié sshd_config sur un serveur distant. Que fais-tu avant de recharger sshd ?",
   "choices": [
-   "sshd -t, et garder ta session ouverte",
-   "ssh-keygen -A",
-   "systemctl daemon-reload",
+   "sudo sshd -t, et garder ta session ouverte",
+   "sudo ssh-keygen -A",
+   "sudo systemctl daemon-reload",
    "Fermer ta session, puis te reconnecter"
   ],
   "answer": 0,
-  "explain": "sshd -t lit la config et signale toute erreur sans toucher au service en marche. Même avec un fichier valide, un mauvais réglage peut refuser ta connexion. Alors recharge, garde ta session actuelle ouverte (elle reste connectée), et essaie une nouvelle connexion depuis un autre terminal. Ne ferme l'ancienne que quand la nouvelle marche."
+  "explain": "sudo sshd -t lit la config et signale toute erreur sans toucher au service en marche. Même avec un fichier valide, un mauvais réglage peut refuser ta connexion. Alors recharge, garde ta session actuelle ouverte (elle reste connectée), et essaie une nouvelle connexion depuis un autre terminal. Ne ferme l'ancienne que quand la nouvelle marche."
  },
  {
   "id": "linux-3-05",
@@ -366,7 +367,7 @@
    "PermitEmptyPasswords no"
   ],
   "answer": 0,
-  "explain": "Avec PasswordAuthentication no, sshd n'accepte que les clés : plus de mot de passe à deviner, les robots échouent à chaque fois. Passer au port 2222 réduit seulement le bruit dans les logs ; l'attaque marche encore. Avant de basculer, vérifie dans une autre session que ta connexion par clé marche, sinon tu t'enfermes dehors."
+  "explain": "Avec PasswordAuthentication no, sshd n'accepte que les clés : plus rien à deviner. Le port 2222 réduit seulement le bruit. sshd garde la première valeur lue, et les fichiers de /etc/ssh/sshd_config.d/ passent avant : vérifie qu'aucun ne dit yes (sudo sshd -T montre la valeur utilisée). Avant, vérifie dans une autre session que ta clé marche, sinon tu t'enfermes dehors."
  },
  {
   "id": "linux-3-07",
@@ -397,7 +398,7 @@
  {
   "id": "linux-3-09",
   "level": 3,
-  "q": "Tu compiles un outil depuis ses sources sur un serveur. Pourquoi l'installer sous /usr/local et pas /usr ?",
+  "q": "Tu compiles un outil depuis ses sources sur un serveur. À quoi sert /usr/local ?",
   "choices": [
    "Les logiciels installés hors du gestionnaire de paquets",
    "Les dossiers personnels",
@@ -431,7 +432,7 @@
    "notes.txt, devenu illisible"
   ],
   "answer": 0,
-  "explain": "gpg -c écrit une copie verrouillée, notes.txt.gpg, et ne touche pas à l'original. Tant que tu n'as pas supprimé notes.txt, le secret reste lisible sur le disque. Vérifie que le .gpg s'ouvre (gpg -d notes.txt.gpg), puis supprime le fichier en clair."
+  "explain": "gpg -c écrit une copie verrouillée, notes.txt.gpg, et ne touche pas à l'original. Tant que tu n'as pas supprimé notes.txt, le secret reste lisible sur le disque. Vérifie que le .gpg s'ouvre avec la phrase dont tu te souviens : gpgconf --reload gpg-agent oublie celle en mémoire, puis gpg -d notes.txt.gpg. Ensuite supprime le fichier en clair."
  },
  {
   "id": "linux-1-14",
@@ -470,7 +471,7 @@
    "Seulement que la clé n'a pas expiré"
   ],
   "answer": 0,
-  "explain": "Une signature est faite avec la clé privée du projet ; sa clé publique la vérifie. Good signature : le fichier vient de qui détient cette clé et n'a pas été modifié. Elle ne dit rien des virus, et ne vaut que si tu as la bonne clé publique, prise sur le site du projet."
+  "explain": "Une signature est faite avec la clé privée du projet ; sa clé publique la vérifie. Good signature : le fichier vient de qui détient cette clé et n'a pas été modifié. Elle ne dit rien des virus, et ne vaut que si la clé est vraiment la leur : compare son empreinte (gpg --show-keys) avec celle que le projet publie ailleurs, pas seulement à côté du téléchargement."
  },
  {
   "id": "linux-2-12",

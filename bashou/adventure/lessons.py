@@ -100,9 +100,9 @@ LESSONS = [
     ]},
     {"id": "services", "tool": "systemctl", "topics": ("linux",), "title": "Services and unit files", "pages": [
         ("A service is a program that runs in the background, started by systemd. systemctl status NAME says "
-         "if it runs, since when, and its last log lines.", "systemctl status cron"),
+         "if it runs, since when, and its last log lines.", "systemctl status systemd-journald"),
         ("Each service is described by a unit file, in sections: [Unit] says what it is, [Service] how to run it "
-         "(ExecStart is the command), [Install] when to start it at boot (WantedBy).", "systemctl cat cron"),
+         "(ExecStart is the command), [Install] when to start it at boot (WantedBy).", "systemctl cat systemd-journald"),
         ("After you change a unit file, systemctl daemon-reload makes systemd read it again. enable starts it "
          "at every boot, --now also starts it right away.", "sudo systemctl daemon-reload; sudo systemctl enable --now app"),
     ]},
@@ -177,7 +177,8 @@ LESSONS = [
         ("A key pair has two halves: the public key you give to anyone, and the private key only you keep. What "
          "is encrypted for your public key opens only with your private key.", "gpg --full-generate-key"),
         ("It works the other way for signatures: a project signs its downloads with its private key, and you "
-         "check them with its public key. \"Good signature\": it's from them, and nothing changed since.",
+         "check them with its public key. \"Good signature\": that key signed it, and nothing changed since. It's "
+         "from them only if the key is theirs: check its fingerprint on their HTTPS site or docs.",
          "gpgv --keyring ./vendor.gpg tool.tar.gz.sig tool.tar.gz"),
         ("pass is the Unix password store: each password in its own file under ~/.password-store, encrypted with "
          "your gpg key. pass init <your key> starts it; pass generate makes a strong password; pass show prints one.",

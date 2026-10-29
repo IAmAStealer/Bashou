@@ -55,15 +55,16 @@
  {
   "id": "linux-1-05",
   "level": 1,
+  "os": "linux",
   "q": "How do you see who logged in to a server recently, and from where?",
   "choices": [
-   "last",
-   "whoami",
-   "id",
-   "history"
+   "last, or journalctl -u ssh",
+   "whoami, then id",
+   "id and groups",
+   "history | tail"
   ],
   "answer": 0,
-  "explain": "last reads the record of past logins: who, from which address, when, and for how long. who only shows who is connected right now. A login from an address you don't know is worth a closer look."
+  "explain": "last reads the record of past logins: who, from which address, when, for how long. Debian 13 removed last: there, journalctl -u ssh shows each 'Accepted … from' line (or install wtmpdb: wtmpdb last). who only shows who is connected now. A login from an address you don't know is worth a closer look."
  },
  {
   "id": "linux-1-06",
@@ -182,7 +183,7 @@
    "/var/log/ssh.err"
   ],
   "answer": 0,
-  "explain": "The SSH service logs every login attempt: journalctl -u ssh shows them, and so does /var/log/auth.log on Debian (/var/log/secure on Rocky). Hundreds of failures from one address mean a robot is guessing passwords. fail2ban blocks such addresses; allowing keys only removes the attack."
+  "explain": "The SSH service logs every login attempt: journalctl -u ssh on Debian and Ubuntu, journalctl -u sshd on Rocky. Text files differ: /var/log/secure on Rocky, /var/log/auth.log on Ubuntu (on Debian only with rsyslog, not installed by default since Debian 12). Hundreds of failures from one address mean a robot is guessing. fail2ban blocks it; keys only removes the attack."
  },
  {
   "id": "linux-2-03",
@@ -203,13 +204,13 @@
   "os": "linux",
   "q": "You added a disk to /etc/fstab. How do you test it before rebooting?",
   "choices": [
-   "mount -a",
+   "sudo mount -a",
    "Reboot and see",
-   "fsck /etc/fstab",
-   "systemctl restart fstab"
+   "sudo fsck /etc/fstab",
+   "sudo systemctl restart fstab"
   ],
   "answer": 0,
-  "explain": "/etc/fstab lists the disks to mount at boot. A wrong line can stop the machine at boot, which is painful on a remote server. mount -a mounts everything listed that isn't mounted yet, right now: a mistake shows up while you can still fix it. findmnt --verify checks the file without mounting."
+  "explain": "/etc/fstab lists the disks to mount at boot. A wrong line can stop the machine at boot, painful on a remote server. First sudo systemctl daemon-reload (systemd reads fstab too), sudo findmnt --verify checks the file, then sudo mount -a mounts what isn't mounted yet: a mistake shows while you can fix it. Name disks by UUID=, and add nofail for one that may be missing."
  },
  {
   "id": "linux-2-05",
@@ -327,20 +328,20 @@
    "An empty field"
   ],
   "answer": 0,
-  "explain": "A value starting with $ is a hash: the letters between the first two $ name the method. $y$ is yescrypt (today's default), $6$ SHA-512, $2b$ bcrypt. ! or * in that field block password login (the account may still use SSH keys), and an empty field means no password at all: dangerous."
+  "explain": "A value starting with $ is a hash: the letters between the first two $ name the method. $y$ is yescrypt (the default on Debian and Ubuntu), $6$ SHA-512 (the default on Rocky), $2b$ bcrypt. ! or * in that field block password login (the account may still use SSH keys), and an empty field means no password at all: dangerous."
  },
  {
   "id": "linux-3-04",
   "level": 3,
   "q": "You edited sshd_config on a remote server. What do you do before reloading sshd?",
   "choices": [
-   "sshd -t, and keep your current session open",
-   "ssh-keygen -A",
-   "systemctl daemon-reload",
+   "sudo sshd -t, and keep your session open",
+   "sudo ssh-keygen -A",
+   "sudo systemctl daemon-reload",
    "Close your session, then reconnect"
   ],
   "answer": 0,
-  "explain": "sshd -t reads the config and reports any error without touching the running service. Even with a valid file, a wrong setting can refuse your login. So reload, keep your current session open (it stays connected), and try a new login from another terminal. Only close the old one when the new one works."
+  "explain": "sudo sshd -t reads the config and reports any error without touching the running service. Even with a valid file, a wrong setting can refuse your login. So reload, keep your current session open (it stays connected), and try a new login from another terminal. Only close the old one when the new one works."
  },
  {
   "id": "linux-3-05",
@@ -366,7 +367,7 @@
    "PermitEmptyPasswords no"
   ],
   "answer": 0,
-  "explain": "With PasswordAuthentication no, sshd accepts only keys, so there's no password left to guess and the robots fail every time. Moving to port 2222 only reduces the noise in the logs; the attack still works. Before switching, check in another session that your key login works, or you lock yourself out."
+  "explain": "With PasswordAuthentication no, sshd accepts only keys, so there's no password left to guess and the robots fail every time. Port 2222 only reduces the noise. sshd keeps the first value it reads, and files in /etc/ssh/sshd_config.d/ come first: check none says yes (sudo sshd -T shows the value in use). Before switching, check in another session that your key login works, or you lock yourself out."
  },
  {
   "id": "linux-3-07",
@@ -397,7 +398,7 @@
  {
   "id": "linux-3-09",
   "level": 3,
-  "q": "You build a tool from source on a server. Why install it under /usr/local and not /usr?",
+  "q": "You build a tool from source on a server. What is /usr/local for?",
   "choices": [
    "Software you installed outside the package manager",
    "The user home directories",
@@ -431,7 +432,7 @@
    "notes.txt, now unreadable"
   ],
   "answer": 0,
-  "explain": "gpg -c writes a locked copy, notes.txt.gpg, and leaves the original untouched. Until you delete notes.txt, the secret is still readable on the disk. Check the .gpg opens (gpg -d notes.txt.gpg), then remove the clear file."
+  "explain": "gpg -c writes a locked copy, notes.txt.gpg, and leaves the original untouched. Until you delete notes.txt, the secret is still readable on the disk. Check the .gpg opens with the passphrase you remember: gpgconf --reload gpg-agent forgets the cached one, then gpg -d notes.txt.gpg. Then remove the clear file."
  },
  {
   "id": "linux-1-14",
@@ -470,7 +471,7 @@
    "That the key is not expired only"
   ],
   "answer": 0,
-  "explain": "A signature is made with the project's private key; its public key checks it. Good signature: the file comes from whoever holds that key and wasn't changed. It says nothing about viruses, and it's only worth something if you got the right public key, from the project's site."
+  "explain": "A signature is made with the project's private key; its public key checks it. Good signature: the file comes from whoever holds that key and wasn't changed. It says nothing about viruses, and it's only worth something if the key is really theirs: compare its fingerprint (gpg --show-keys) with the one the project publishes elsewhere, not only next to the download."
  },
  {
   "id": "linux-2-12",

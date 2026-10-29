@@ -179,7 +179,7 @@
    "Type=idle"
   ],
   "answer": 0,
-  "explain": "Type=simple, the default, is for a program that stays in the foreground: systemd starts it and follows that process. Most modern programs work this way. Type=forking is for old daemons that start a copy of themselves in the background and exit; systemd then needs PIDFile= to find the right process."
+  "explain": "Type=simple, the default, is for a program that stays in the foreground: systemd starts it and follows that process. Most modern programs work this way. Type=exec is the same, but also fails the start when the program can't even run (a wrong path). Type=forking is for old daemons that start a copy of themselves in the background and exit; add PIDFile= so systemd finds the right process."
  },
  {
   "id": "systemd-2-04",
@@ -207,7 +207,7 @@
    "It restarts it when the machine boots"
   ],
   "answer": 0,
-  "explain": "If the service crashes or exits with an error code, systemd starts it again by itself. A clean stop (exit 0, or systemctl stop) is left alone. RestartSec=5 waits 5 seconds between attempts, and StartLimitBurst= gives up after too many failures in a row, so a broken service doesn't loop forever."
+  "explain": "If the service crashes or exits with an error code, systemd starts it again by itself. A clean stop (exit 0, or systemctl stop) is left alone. RestartSec=5 waits 5 seconds between attempts. The default limit (5 starts in 10 seconds) is never reached then: to give up, set StartLimitIntervalSec=60 and StartLimitBurst=3 in [Unit]."
  },
  {
   "id": "systemd-2-06",
@@ -283,14 +283,42 @@
   "id": "systemd-1-11",
   "level": 1,
   "os": "linux",
-  "q": "In a unit file, which section holds ExecStart, the command to run?",
+  "q": "systemctl enable reads one section of a unit file to know when to start it. Which one?",
   "choices": [
-   "[Service]",
-   "[Unit]",
    "[Install]",
-   "[Exec]"
+   "[Unit]",
+   "[Service]",
+   "[Boot]"
   ],
   "answer": 0,
-  "explain": "[Unit] describes the service and its order (After=), [Service] says how to run it (ExecStart, Restart, User), [Install] says when it starts once enabled (WantedBy=multi-user.target). A line in the wrong section is ignored, or the unit won't start."
+  "explain": "[Install] is only read by enable and disable: WantedBy=multi-user.target hooks the unit to the normal boot, as a link in multi-user.target.wants/. Without [Install], enable has nothing to do and says so. [Unit] describes and orders the unit, [Service] says how to run it."
+ },
+ {
+  "id": "systemd-2-11",
+  "level": 2,
+  "os": "linux",
+  "q": "A server had trouble during the night. Which command shows only the error messages of this boot?",
+  "choices": [
+   "journalctl -b -p err",
+   "journalctl --errors-only",
+   "dmesg | grep fail",
+   "systemctl status --all"
+  ],
+  "answer": 0,
+  "explain": "-p err keeps the messages of priority err and worse (crit, alert, emerg), -b only this boot (-b -1 the boot before). Add -u name for one service. Errors only is a good first look, but the warning just before an error often says why: read around it once you know where."
+ },
+{
+  "id": "systemd-2-12",
+  "level": 2,
+  "os": "linux",
+  "q": "You wrote OnCalendar=Mon..Fri 03:00 in a timer. How do you check when it will really run?",
+  "choices": [
+   "systemd-analyze calendar 'Mon..Fri 03:00'",
+   "systemctl status cron",
+   "date -d 'Mon..Fri 03:00'",
+   "crontab -l"
+  ],
+  "answer": 0,
+  "explain": "systemd-analyze calendar reads the expression the way the timer will, shows its normalized form (Mon..Fri *-*-* 03:00:00) and the next time it elapses. A typo is caught before the night it should have run. Once the timer is on, systemctl list-timers shows the next and last run of each one."
  }
 ]

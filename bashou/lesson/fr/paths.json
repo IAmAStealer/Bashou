@@ -117,8 +117,8 @@
     "Tu reviendras sans cesse aux mêmes quelques endroits.",
     "",
     "- Quelque chose est mal configuré ? Regarde dans /etc.",
-    "- Quelque chose a cassé ? Les journaux de /var/log (ou journalctl) disent souvent pourquoi.",
-    "- /tmp est souvent vidé au redémarrage, pas toujours : n'y garde jamais rien d'important."
+    "- Quelque chose a cassé ? journalctl, ou les fichiers de /var/log, disent souvent pourquoi.",
+    "- /tmp est vidé au redémarrage sur la plupart des systèmes, et en mémoire depuis Debian 13 : rien de gros ni d'important."
    ]
   }
  ]

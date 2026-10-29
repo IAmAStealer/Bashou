@@ -60,7 +60,7 @@ Bashou runs in your real terminal, while you work: one pet for all your terminal
 | `bashou project` | 13 real projects in Python, Shell, C and Rust (merge PDFs, sort photos, a backup script…), one small step at a time |
 | `bashou spot` | Quick game: an IPv6, a hash, base64, a JWT… say what it is, faster and faster |
 | `bashou arena` | A timed fight, or a security investigation (a hidden file, a cron backdoor, a SUID binary) |
-| `bashou adventure` | A walk through 13 topics with 486 questions about what goes wrong and what to check first, bosses and chests |
+| `bashou adventure` | A walk through 13 topics with 488 questions about what goes wrong and what to check first, bosses and chests |
 | `bashou share` | A QR code: your phone draws a banner of your pet and your progress, to send anywhere |
 
 <details>

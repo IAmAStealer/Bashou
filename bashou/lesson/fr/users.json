@@ -52,6 +52,7 @@
     "",
     "- Utilise-le seulement pour la commande qui en a besoin, jamais par habitude.",
     "- sudo retient ton mot de passe quelques minutes, puis le redemande.",
+    "- Change les règles sudo seulement avec sudo visudo : il vérifie le fichier avant d'enregistrer. sudo -l liste ce que tu as le droit de lancer.",
     "- ✘ sudo echo x > /etc/f : ton shell ouvre le fichier, en ton nom. ✔ echo x | sudo tee /etc/f > /dev/null."
    ]
   }

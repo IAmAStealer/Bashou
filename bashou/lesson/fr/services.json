@@ -20,7 +20,8 @@
     "Un service est un programme que systemd fait tourner en arrière-plan pour toi : un serveur web, une base de données.",
     "",
     "- Un fichier d'unité le décrit.",
-    "- Après en avoir écrit ou modifié un, lance daemon-reload : systemd relit ses fichiers d'unité."
+    "- Après en avoir écrit ou modifié un, lance daemon-reload : systemd relit ses fichiers d'unité.",
+    "- Une unité venue d'un paquet (/usr/lib/systemd/system/) : ne la modifie pas, lance sudo systemctl edit nom."
    ]
   },
   {

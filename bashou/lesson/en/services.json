@@ -20,7 +20,9 @@
   "systemd-1-07",
   "systemd-2-05",
   "systemd-2-02",
-  "systemd-1-05"
+  "systemd-1-05",
+  "systemd-2-11",
+  "systemd-2-12"
  ],
  "recall": [
   "systemd-1-01",
@@ -51,7 +53,8 @@
     "A service is a program systemd runs in the background for you: a web server, a database.",
     "",
     "- A unit file describes it.",
-    "- After you write or change one, run daemon-reload: systemd rereads its unit files."
+    "- After you write or change one, run daemon-reload: systemd rereads its unit files.",
+    "- A unit from a package (/usr/lib/systemd/system/): don't edit it, run sudo systemctl edit name."
    ]
   },
   {

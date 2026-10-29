@@ -75,7 +75,8 @@
    "text": [
     "- Logs: sudo journalctl --vacuum-size=200M trims the journal.",
     "- Caches: sudo apt clean (or sudo dnf clean all).",
-    "- Your home: du -sh ~/* | sort -h."
+    "- Your home: du -sh ~/* | sort -h.",
+    "- Full, but df shows room? df -i (inodes). A deleted log still held open: lsof +L1, then restart that program."
    ]
   }
  ]

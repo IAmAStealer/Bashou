@@ -16,7 +16,7 @@ from pathlib import Path
 from unittest import mock
 
 from bashou import challenges, duel, fight, state, which
-from bashou.challenges import cicd, repos, secrets, sql
+from bashou.challenges import cicd, repos, secrets, sql, system
 
 def setUpModule():
     """The reference solutions are written for GNU sed (sed -i without a suffix, \\n in a replacement). macOS has
@@ -870,6 +870,20 @@ class CicdFightTest(unittest.TestCase):
 
 
 @unittest.skipUnless(shutil.which("gpg") and shutil.which("gpgconf"), "needs gpg")
+class UnitImpTest(unittest.TestCase):
+    def test_the_fixed_unit_runs_as_its_own_user(self):
+        """linux-judge (2026-10-29): the right unit ran the app as root. It keeps its User= line."""
+        with tempfile.TemporaryDirectory() as tmp:
+            work = Path(tmp)
+            meta = system.unit_setup(work, random.Random(1))
+            unit = work / meta["args"]["unit"]
+            self.assertIn(f"User={meta['name']}", unit.read_text())
+            subprocess.run(["bash", "-c", UNIT_FIX], cwd=work, check=True)
+            self.assertTrue(system.unit_verify(work, meta, ""))
+            unit.write_text(unit.read_text().replace(f"User={meta['name']}\n", ""))
+            self.assertFalse(system.unit_verify(work, meta, ""))
+
+
 class SecretsFightTest(unittest.TestCase):
     """gpg and pass fights: they start unsolved, cheats lose, and Bashou's own gpg never uses ~/.gnupg."""
 

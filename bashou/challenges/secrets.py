@@ -216,7 +216,7 @@ ALL = [
               task="The Forger Ferret put the same release, " + RELEASE + ", on two mirrors: mirror1/ and mirror2/, "
                    "each with its signature (.sig). The vendor's public key is vendor.gpg.\nOnly one download is "
                    "genuine. Which mirror? answer <mirror1|mirror2>",
-              hints=["A signature proves who made a file, and that nothing changed since. gpgv checks it against a "
+              hints=["A signature proves which key signed a file, and that nothing changed since; here vendor.gpg is the vendor's key. gpgv checks it against a "
                      "keyring you choose, without adding anything to your own keys: gpgv --keyring ./vendor.gpg "
                      "file.sig file (the ./ matters: without it, gpgv looks in ~/.gnupg).",
                      "gpgv --keyring ./vendor.gpg mirror1/" + RELEASE + ".sig mirror1/" + RELEASE + ", then the same "
