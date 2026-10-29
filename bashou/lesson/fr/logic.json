@@ -66,7 +66,9 @@
     "[ ] est une commande faite pour les questions : elle répond oui ou non, comme grep -q.",
     "",
     "- Laisse une espace après [ et avant ] : [-f x] n'est pas compris.",
-    "- Mets les variables entre guillemets doubles : une variable vide casserait le test. Avec -gt, un $n vide reste une erreur (code 2), lue comme non. [[ ]] dans les scripts bash évite le piège des guillemets (leçon Les données dans les scripts).",
+    "- Mets les variables entre guillemets doubles : une variable vide casserait le test. Avec -gt, un $n vide reste une erreur (code 2), lue comme non.",
+    "- Nombres : -eq -ne -lt -le -gt -ge. Texte : = et != (== est à bash). Dans [ ], < et > sont des redirections.",
+    "- Deux tests : [ -f a ] && [ -d b ], pas -a ni -o dans [ ].",
     "$ if [ -d backup ]; then echo 'prêt'; fi"
    ]
   },
@@ -111,8 +113,9 @@
    "text": [
     "&& (ET) répond oui seulement quand les deux réponses sont oui. || (OU) répond oui dès que l'une des deux est oui.",
     "",
-    "- Pour copier un fichier dans un dossier, il faut le fichier ET le dossier : &&.",
+    "- Copier un fichier dans un dossier : il faut les deux, &&.",
     "- Bash s'arrête dès qu'il sait : a && b ne lance b que si a a dit oui, a || b que si a a dit non.",
+    "- a && b || c n'est pas un if/else : c tourne aussi si b échoue.",
     "$ mkdir backup || echo 'impossible de le créer'"
    ]
   },
@@ -124,7 +127,7 @@
     " c         !      &&     ||     pas 0",
     "",
     " bash    if [ \"$n\" -gt 5 ] && [ \"$ok\" = yes ]",
-    " python  if n > 5 and ok:",
+    " python  if n > 5 and ok == \"yes\":",
     " c       if (n > 5 && ok)"
    ],
    "point": 0,
@@ -137,6 +140,8 @@
     "Chaque langage a les trois mêmes mots : non, et, ou (not, and, or). Seule l'écriture change.",
     "",
     "- Regarde la dernière colonne : pour bash, 0 veut dire oui (ça a marché). En Python et en C, 0 veut dire faux.",
+    "- En Python, \"\", [] et None sont faux aussi.",
+    "- && et || en bash : de gauche à droite. En Python, and passe d'abord.",
     "- Avant Python ou C, assure-toi de savoir lire une condition à voix haute et dire quand elle est vraie."
    ]
   }

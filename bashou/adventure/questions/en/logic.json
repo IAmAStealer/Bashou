@@ -153,7 +153,7 @@
    "100"
   ],
   "answer": 0,
-  "explain": "best must start as a value that really is in the list, then each other item is compared to it. If best starts at 0 and the list is [-5, -2, -9], no number beats 0 and the answer is 0, which isn't in the list. Starting from the first item always works."
+  "explain": "best must start as a value that really is in the list, then each other item is compared to it. If best starts at 0 and the list is [-5, -2, -9], no number beats 0 and the answer is 0, which isn't in the list. Starting from the first item works for any list that isn't empty; check for the empty list first."
  },
  {
   "id": "logic-1-13",
@@ -205,7 +205,7 @@
    "n is positive"
   ],
   "answer": 0,
-  "explain": "% (modulo) gives the remainder of a division. An even number divided by 2 leaves 0: 8 % 2 = 0, while 7 % 2 = 1. It's handy elsewhere too: n % 3 == 0 is true every third number, and n % 10 gives the last digit."
+  "explain": "% (modulo) gives the remainder of a division. An even number divided by 2 leaves 0: 8 % 2 = 0, while 7 % 2 = 1. It's handy elsewhere too: n % 3 == 0 is true every third number, and for a positive n, n % 10 gives the last digit."
  },
  {
   "id": "logic-1-17",
@@ -452,7 +452,7 @@
    "Both do the same"
   ],
   "answer": 0,
-  "explain": "[ is a command, so > is still a redirection: [ \"$n\" > 10 ] runs [ \"$n\" ], writes nothing into a new file named 10, and answers yes for any n that isn't empty. Numbers use -eq -ne -lt -le -gt -ge; text uses = and !=."
+  "explain": "[ is a command, so > is still a redirection: [ \"$n\" > 10 ] runs [ \"$n\" ], creates a file named 10, or empties it if it exists, and answers yes for any n that isn't empty. Numbers use -eq -ne -lt -le -gt -ge; text uses = and !=."
  },
  {
   "id": "logic-2-16",
@@ -470,20 +470,20 @@
  {
   "id": "logic-3-11",
   "level": 3,
-  "q": "Bash runs `false || true && echo ran`. Does ran print?",
+  "q": "Bash runs `true || false && echo ran`. Does ran print?",
   "choices": [
    "Yes: bash reads it left to right",
    "No: && binds first, like in Python",
-   "No: false stops the line",
+   "No: true stops the line",
    "Only with set -e"
   ],
   "answer": 0,
-  "explain": "In bash, && and || have the same priority and are read left to right: (false || true) says yes, then && runs echo. In Python, and binds tighter than or: False or (True and X). The same-looking line can mean two things: in bash, put if or { } around what goes together."
+  "explain": "In bash, && and || have the same priority and are read left to right: (true || false) says yes, then && runs echo. In Python, and binds tighter than or: True or (False and X) stops at True, and X never runs. The same-looking line means two things: in bash, put if or { } around what goes together."
  },
  {
   "id": "logic-2-17",
   "level": 2,
-  "q": "A script starts with #!/bin/sh. Which test works there?",
+  "q": "A script starts with #!/bin/sh and must run with any POSIX sh. Which test should it use?",
   "choices": [
    "[ \"$a\" = \"$b\" ] && [ -f x ]",
    "[ \"$a\" == \"$b\" ]",
@@ -491,6 +491,6 @@
    "[[ $a == $b ]]"
   ],
   "answer": 0,
-  "explain": "sh (dash on Debian) follows POSIX: inside [ ], text equality is =; == is bash's, and dash answers \"unexpected operator\". -a and -o inside [ ] were removed from POSIX: join two tests with && or || between them. [[ ]] is bash only."
+  "explain": "sh (dash on Debian) follows POSIX: inside [ ], text equality is =; == is bash's, and dash answers \"unexpected operator\". -a and -o inside [ ] were removed from POSIX: dash still accepts them, but they are ambiguous with some values. Join two tests with && or || between them. [[ ]] is bash only."
  }
 ]

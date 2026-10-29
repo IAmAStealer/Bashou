@@ -153,7 +153,7 @@
    "100"
   ],
   "answer": 0,
-  "explain": "best doit démarrer avec une valeur qui est vraiment dans la liste, puis chaque autre élément lui est comparé. Si best démarre à 0 et que la liste est [-5, -2, -9], aucun nombre ne bat 0 et la réponse est 0, qui n'est pas dans la liste. Partir du premier élément marche toujours."
+  "explain": "best doit démarrer avec une valeur qui est vraiment dans la liste, puis chaque autre élément lui est comparé. Si best démarre à 0 et que la liste est [-5, -2, -9], aucun nombre ne bat 0 et la réponse est 0, qui n'est pas dans la liste. Partir du premier élément marche pour toute liste non vide ; teste d'abord la liste vide."
  },
  {
   "id": "logic-1-13",
@@ -205,7 +205,7 @@
    "n est positif"
   ],
   "answer": 0,
-  "explain": "% (modulo) donne le reste d'une division. Un nombre pair divisé par 2 laisse 0 : 8 % 2 = 0, alors que 7 % 2 = 1. C'est pratique ailleurs aussi : n % 3 == 0 est vrai un nombre sur trois, et n % 10 donne le dernier chiffre."
+  "explain": "% (modulo) donne le reste d'une division. Un nombre pair divisé par 2 laisse 0 : 8 % 2 = 0, alors que 7 % 2 = 1. C'est pratique ailleurs aussi : n % 3 == 0 est vrai un nombre sur trois, et pour un n positif, n % 10 donne le dernier chiffre."
  },
  {
   "id": "logic-1-17",
@@ -452,7 +452,7 @@
    "Les deux font pareil"
   ],
   "answer": 0,
-  "explain": "[ est une commande, donc > reste une redirection : [ \"$n\" > 10 ] lance [ \"$n\" ], écrit du vide dans un nouveau fichier nommé 10, et répond oui pour tout n non vide. Les nombres utilisent -eq -ne -lt -le -gt -ge ; le texte, = et !=."
+  "explain": "[ est une commande, donc > reste une redirection : [ \"$n\" > 10 ] lance [ \"$n\" ], crée un fichier nommé 10, ou le vide s'il existe, et répond oui pour tout n non vide. Les nombres utilisent -eq -ne -lt -le -gt -ge ; le texte, = et !=."
  },
  {
   "id": "logic-2-16",
@@ -470,20 +470,20 @@
  {
   "id": "logic-3-11",
   "level": 3,
-  "q": "Bash lance `false || true && echo ran`. Est-ce que ran s'affiche ?",
+  "q": "Bash lance `true || false && echo ran`. Est-ce que ran s'affiche ?",
   "choices": [
    "Oui : bash lit de gauche à droite",
    "Non : && passe d'abord, comme en Python",
-   "Non : false arrête la ligne",
+   "Non : true arrête la ligne",
    "Seulement avec set -e"
   ],
   "answer": 0,
-  "explain": "En bash, && et || ont la même priorité et se lisent de gauche à droite : (false || true) dit oui, puis && lance echo. En Python, and lie plus fort que or : False or (True and X). La même ligne peut dire deux choses : en bash, mets un if ou des { } autour de ce qui va ensemble."
+  "explain": "En bash, && et || ont la même priorité et se lisent de gauche à droite : (true || false) dit oui, puis && lance echo. En Python, and lie plus fort que or : True or (False and X) s'arrête à True, et X ne tourne jamais. La même ligne peut dire deux choses : en bash, mets un if ou des { } autour de ce qui va ensemble."
  },
  {
   "id": "logic-2-17",
   "level": 2,
-  "q": "Un script commence par #!/bin/sh. Quel test marche là ?",
+  "q": "Un script commence par #!/bin/sh et doit marcher avec tout sh POSIX. Quel test écrire ?",
   "choices": [
    "[ \"$a\" = \"$b\" ] && [ -f x ]",
    "[ \"$a\" == \"$b\" ]",
@@ -491,6 +491,6 @@
    "[[ $a == $b ]]"
   ],
   "answer": 0,
-  "explain": "sh (dash sur Debian) suit POSIX : dans [ ], l'égalité de texte est = ; == est à bash, et dash répond « unexpected operator ». -a et -o dans [ ] ont été retirés de POSIX : relie deux tests avec && ou || entre eux. [[ ]] n'existe qu'en bash."
+  "explain": "sh (dash sur Debian) suit POSIX : dans [ ], l'égalité de texte est = ; == est à bash, et dash répond « unexpected operator ». -a et -o dans [ ] ont été retirés de POSIX : dash les accepte encore, mais ils sont ambigus avec certaines valeurs. Relie deux tests avec && ou || entre eux. [[ ]] n'existe qu'en bash."
  }
 ]
