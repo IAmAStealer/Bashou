@@ -17,7 +17,12 @@
   "logic-1-05",
   "logic-1-07",
   "logic-2-07",
-  "logic-2-08"
+  "logic-2-08",
+  "logic-2-14",
+  "logic-2-15",
+  "logic-2-16",
+  "logic-2-17",
+  "logic-3-11"
  ],
  "recall": [
   "logic-2-11",
@@ -48,7 +53,7 @@
    "text": [
     "Every command answers a question when it ends: did it work? That answer is its exit status.",
     "",
-    "- 0 means yes, it worked. Any other number means no (grep: 1 for not found, 2 for an error).",
+    "- 0 means yes, it worked. Any other number means no, or an error: grep answers 1 for not found, 2 when it can't read the file. if takes both as no.",
     "- $? holds the answer of the last command.",
     "- -q tells grep to stay quiet: only the answer counts. -x matches whole lines only: without it, eve would find steven."
    ]
@@ -95,7 +100,7 @@
     "[ ] is a command made for questions: it answers yes or no, like grep -q.",
     "",
     "- Keep a space after [ and before ]: [-f x] is not understood.",
-    "- Put variables in double quotes: an empty one would break the test. In bash scripts, [[ ]] does the same job without that trap (lesson Data in scripts).",
+    "- Put variables in double quotes: an empty one would break the test. With -gt, an empty $n is still an error (status 2), read as no. [[ ]] in bash scripts avoids the quote trap (lesson Data in scripts).",
     "$ if [ -d backup ]; then echo 'ready'; fi"
    ]
   },

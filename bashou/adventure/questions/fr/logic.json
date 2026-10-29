@@ -392,7 +392,7 @@
  {
   "id": "logic-2-11",
   "level": 2,
-  "q": "Un script commence par `if ! grep -q \"$1\" guests.txt; then echo open; fi`. Qui obtient open ?",
+  "q": "Un script commence par `if ! grep -qxF -- \"$1\" guests.txt; then echo open; fi`. Qui obtient open ?",
   "choices": [
    "Tous ceux qui ne sont PAS dans guests.txt",
    "Seulement les invités de guests.txt",
@@ -400,7 +400,7 @@
    "Tout le monde : grep -q n'affiche rien"
   ],
   "answer": 0,
-  "explain": "grep -q répond oui quand le nom est dans le fichier. Le ! retourne cette réponse, donc le bloc s'exécute quand le nom n'y est PAS : les inconnus entrent et les invités restent dehors. Un ! n'est qu'un caractère, facile à ajouter par erreur. Lis la condition à voix haute, « si PAS sur la liste, ouvre », pour entendre si elle dit ce que tu veux."
+  "explain": "grep répond oui quand le nom est dans le fichier, et ! retourne la réponse : les inconnus entrent, pas les invités. Pire : si guests.txt manque, grep répond 2 (une erreur) et ! en fait aussi un oui : la porte s'ouvre pour tous. Un ! n'est qu'un caractère, facile à ajouter : lis la condition à voix haute, « si PAS sur la liste, ouvre »."
  },
  {
   "id": "logic-2-12",
@@ -426,6 +426,71 @@
    "root"
   ],
   "answer": 0,
-  "explain": "Chaque commande se termine avec un code de retour, un nombre gardé dans $?. 0 veut dire réussite (ici : trouvé), tout autre nombre veut dire échec (1 : pas trouvé, pour grep). C'est l'inverse de ce qu'on attend souvent, parce qu'il y a une seule façon de réussir et beaucoup d'échouer. if, && et || lisent tous ce nombre."
+  "explain": "Chaque commande finit avec un code de retour, un nombre gardé dans $?. 0 veut dire réussite (ici : trouvé) ; tout autre nombre veut dire non ou erreur (grep : 1 pas trouvé, 2 fichier illisible). Il y a une façon de réussir et beaucoup d'échouer. if, && et || lisent tous ce nombre, et prennent une erreur pour un non."
+ },
+ {
+  "id": "logic-2-14",
+  "level": 2,
+  "q": "`[ -f notes.txt ] && cp notes.txt backup/ || echo 'no notes'`. notes.txt existe mais pas backup/. Qu'est-ce qui s'affiche ?",
+  "choices": [
+   "L'erreur de cp, puis no notes",
+   "Seulement l'erreur de cp",
+   "Rien",
+   "Seulement no notes"
+  ],
+  "answer": 0,
+  "explain": "a && b || c n'est pas un if/else : c tourne quand a échoue, et aussi quand b échoue. Ici le test dit oui, cp échoue, donc || lance echo et prétend qu'il n'y a pas de notes. Quand les deux chemins comptent, écris un if : if [ -f notes.txt ]; then cp …; else echo 'no notes'; fi."
+ },
+ {
+  "id": "logic-2-15",
+  "level": 2,
+  "q": "Pourquoi `[ \"$n\" -gt 10 ]` compare des nombres, alors que `[ \"$n\" > 10 ]` est un piège ?",
+  "choices": [
+   "> dans [ ] écrit dans un fichier nommé 10",
+   "> compare du texte, pas des nombres",
+   "> ne marche qu'en Python",
+   "Les deux font pareil"
+  ],
+  "answer": 0,
+  "explain": "[ est une commande, donc > reste une redirection : [ \"$n\" > 10 ] lance [ \"$n\" ], écrit du vide dans un nouveau fichier nommé 10, et répond oui pour tout n non vide. Les nombres utilisent -eq -ne -lt -le -gt -ge ; le texte, = et !=."
+ },
+ {
+  "id": "logic-2-16",
+  "level": 2,
+  "q": "En Python, lesquelles de ces valeurs comptent comme fausses dans un if ?",
+  "choices": [
+   "0, \"\", [] et None",
+   "Seulement False",
+   "Seulement 0 et False",
+   "Toutes sauf True"
+  ],
+  "answer": 0,
+  "explain": "Python demande à chaque valeur si elle est vraie : 0, une chaîne vide, une liste vide et None disent non, presque tout le reste dit oui. Donc `if names:` veut dire « si la liste n'est pas vide ». and et or rendent même une de leurs valeurs : 0 or 'x' vaut 'x'. Bash est l'exception : 0 y veut dire oui."
+ },
+ {
+  "id": "logic-3-11",
+  "level": 3,
+  "q": "Bash lance `false || true && echo ran`. Est-ce que ran s'affiche ?",
+  "choices": [
+   "Oui : bash lit de gauche à droite",
+   "Non : && passe d'abord, comme en Python",
+   "Non : false arrête la ligne",
+   "Seulement avec set -e"
+  ],
+  "answer": 0,
+  "explain": "En bash, && et || ont la même priorité et se lisent de gauche à droite : (false || true) dit oui, puis && lance echo. En Python, and lie plus fort que or : False or (True and X). La même ligne peut dire deux choses : en bash, mets un if ou des { } autour de ce qui va ensemble."
+ },
+ {
+  "id": "logic-2-17",
+  "level": 2,
+  "q": "Un script commence par #!/bin/sh. Quel test marche là ?",
+  "choices": [
+   "[ \"$a\" = \"$b\" ] && [ -f x ]",
+   "[ \"$a\" == \"$b\" ]",
+   "[ \"$a\" = \"$b\" -a -f x ]",
+   "[[ $a == $b ]]"
+  ],
+  "answer": 0,
+  "explain": "sh (dash sur Debian) suit POSIX : dans [ ], l'égalité de texte est = ; == est à bash, et dash répond « unexpected operator ». -a et -o dans [ ] ont été retirés de POSIX : relie deux tests avec && ou || entre eux. [[ ]] n'existe qu'en bash."
  }
 ]

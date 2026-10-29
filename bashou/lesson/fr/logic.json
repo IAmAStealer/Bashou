@@ -19,7 +19,7 @@
    "text": [
     "Chaque commande répond à une question quand elle se termine : a-t-elle réussi ? Cette réponse est son code de retour.",
     "",
-    "- 0 veut dire oui, elle a réussi. Tout autre nombre veut dire non (grep : 1 pour pas trouvé, 2 pour une erreur).",
+    "- 0 veut dire oui, elle a réussi. Tout autre nombre veut dire non, ou erreur : grep répond 1 pour pas trouvé, 2 s'il ne peut pas lire le fichier. if prend les deux pour un non.",
     "- $? contient la réponse de la dernière commande.",
     "- -q demande à grep de ne rien afficher : seule la réponse compte. -x ne garde que les lignes entières : sans lui, eve trouverait steven."
    ]
@@ -66,7 +66,7 @@
     "[ ] est une commande faite pour les questions : elle répond oui ou non, comme grep -q.",
     "",
     "- Laisse une espace après [ et avant ] : [-f x] n'est pas compris.",
-    "- Mets les variables entre guillemets doubles : une variable vide casserait le test. Dans les scripts bash, [[ ]] fait le même travail sans ce piège (leçon Les données dans les scripts).",
+    "- Mets les variables entre guillemets doubles : une variable vide casserait le test. Avec -gt, un $n vide reste une erreur (code 2), lue comme non. [[ ]] dans les scripts bash évite le piège des guillemets (leçon Les données dans les scripts).",
     "$ if [ -d backup ]; then echo 'prêt'; fi"
    ]
   },
