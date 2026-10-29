@@ -166,7 +166,7 @@
    "Demander à l'IA si elle est bien sûre"
   ],
   "answer": 0,
-  "explain": "Un modèle peut nommer un paquet qui n'existe pas, ou confondre deux noms. Des attaquants enregistrent ces noms inventés avec du code nuisible dedans, en attendant qu'on les installe. Cherche-le sur l'index officiel (PyPI, npm, ta distribution) : qui le publie, depuis quand, qui l'utilise. Redemander à l'IA ne donne qu'une autre supposition."
+  "explain": "Un modèle peut nommer un paquet qui n'existe pas, ou confondre deux noms. Des attaquants enregistrent ces noms inventés avec du code nuisible dedans. L'installer peut déjà lancer son code, et du code nuisible peut passer tous les tests. Cherche-le sur l'index officiel (PyPI, npm, ta distribution) : qui le publie, depuis quand. Redemander à l'IA ne donne qu'une autre supposition."
  },
  {
   "id": "ai-2-06",
@@ -179,6 +179,6 @@
    "Un bug qui n'arrive qu'avec rm"
   ],
   "answer": 0,
-  "explain": "Tout ce que le modèle lit arrive dans le même contexte que ta demande, et il ne distingue pas toujours tes ordres d'un texte écrit par d'autres. C'est l'injection de prompt. Une page web, un ticket ou un fichier venu d'ailleurs est une donnée : surveille ce que l'outil veut faire après en avoir lu un, et refuse une commande que tu n'as pas demandée."
+  "explain": "Tout ce que le modèle lit arrive dans le même contexte que ta demande, et il ne distingue pas toujours tes ordres d'un texte écrit par d'autres. C'est l'injection de prompt. Un texte venu d'ailleurs est une donnée : surveille ce que l'outil veut faire après l'avoir lu, et refuse une commande que tu n'as pas demandée. Garde l'outil en mode où il demande avant d'en lancer, pour avoir cette chance."
  }
 ]

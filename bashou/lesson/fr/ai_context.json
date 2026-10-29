@@ -10,7 +10,7 @@
     " │ ses réponses                         │",
     " │ fichiers lus, sorties de commandes   │",
     " └──────────────────────────────────────┘",
-    " dehors : la discussion d'hier, tout fichier fermé"
+    " dehors : discussion d'hier, fichiers non ouverts"
    ],
    "point": 0,
    "mark": [
@@ -19,9 +19,9 @@
    "text": [
     "Un modèle d'IA ne se souvient pas de toi. À chaque réponse, il lit un seul bloc de texte : sa fenêtre de contexte.",
     "",
-    "- Tout ce qui est dans ce bloc compte : les instructions, tes messages, ses réponses, les fichiers lus, les sorties des commandes lancées.",
+    "- Tout ce bloc compte : instructions, tes messages, ses réponses, fichiers lus, sorties des commandes lancées.",
     "- Ce qui est dehors n'existe pas pour lui : la discussion d'hier, un fichier qu'il n'a pas ouvert. Une nouvelle session part de zéro, sauf ce que l'outil charge.",
-    "- Un texte écrit par d'autres (une page web, un ticket) est une donnée, pas un ordre, même s'il en donne."
+    "- Un texte écrit par d'autres (une page web, un ticket) peut cacher des ordres. Le modèle peut les suivre : surveille l'outil ensuite."
    ]
   },
   {
@@ -108,7 +108,7 @@
     "Garde le fichier court et précis : il est chargé à chaque fois, chaque ligne coûte de la place, et un long fichier noie les règles importantes.",
     "",
     "- Oui : comment construire et tester, les conventions, ce qu'il ne faut pas toucher, le pourquoi d'un choix inhabituel.",
-    "- Pas de secrets : le fichier est souvent commité, et tout son contenu est envoyé au modèle. Pareil pour un log ou une config que tu colles : retire le jeton d'abord.",
+    "- Pas de secrets : le fichier est souvent commité, et tout son contenu est envoyé au modèle. Pareil pour un log ou une config collés : retire mots de passe, clés et jetons. Un secret déjà envoyé : change-le.",
     "- Pas de copie du code : l'IA l'ouvre au besoin. La doc de Claude Code conseille moins de 200 lignes."
    ]
   },
@@ -130,7 +130,7 @@
     "Un fichier d'instructions est un conseil, pas un verrou : le modèle le suit en général, rien ne l'y oblige.",
     "",
     "- Une règle qui doit toujours tenir (ne jamais déployer, ne rien effacer) va là où l'outil l'impose : permissions, ou un hook qui refuse la commande.",
-    "- Donne-lui seulement les accès utiles, aucune clé interdite, et valide toi-même les actions risquées (supprimer, pousser, déployer)."
+    "- Donne-lui seulement les accès dont la tâche a besoin, pas une clé de plus, et valide toi-même le risqué (supprimer, pousser, déployer)."
    ]
   }
  ]

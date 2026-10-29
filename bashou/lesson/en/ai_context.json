@@ -44,7 +44,7 @@
     "",
     "- Everything in that block counts: instructions, your messages, its answers, the files it read, the outputs of the commands it ran.",
     "- Anything outside it doesn't exist for the model: yesterday's chat, a file it didn't open. A new session starts empty, except for what the tool loads.",
-    "- Text written by others (a web page, an issue) is data, not orders, even when it gives some."
+    "- Text written by others (a web page, an issue) can hide orders. The model may follow them: watch what the tool does next."
    ]
   },
   {
@@ -131,7 +131,7 @@
     "Keep the file short and specific: it's loaded every time, each line costs room, and a long file buries the rules that matter.",
     "",
     "- Yes: how to build and test, conventions, what not to touch, the why of an unusual choice.",
-    "- No secrets: the file is usually committed, and all of it is sent to the model. Same for a log or a config you paste: remove the token first.",
+    "- No secrets: the file is usually committed, and all of it is sent to the model. Same for a log or a config you paste: remove passwords, keys and tokens first. One already sent: change it.",
     "- No copy of the code: the AI opens the code when it needs it. Claude Code's docs advise under 200 lines."
    ]
   },
