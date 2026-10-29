@@ -18,7 +18,16 @@ from ..render import ESC
 
 FPS = 15
 SPEED = 5.0                    # world units per second: the pet walks on its own between events
-BOSS_SECONDS = 20
+BOSS_MIN, BOSS_MAX = 25, 40    # seconds per boss question: more when there is more to read
+BAR = 20                       # cells of the boss's time bar
+
+
+def boss_seconds(q):
+    """A boss question's time: BOSS_MIN for a short one, a second more for every 12 characters past 150."""
+    chars = len(q["q"]) + sum(len(c) for c in q["choices"])
+    return min(BOSS_MAX, BOSS_MIN + max(0, chars - 150) // 12)
+
+
 QUIT_KEYS = ("s", "S", "q", "Q", ESC, "\x03", "\x04")
 UP, DOWN, LEFT, RIGHT = "\x1b[A", "\x1b[B", "\x1b[D", "\x1b[C"
 ENTER = ("\r", "\n")
@@ -169,7 +178,8 @@ class Game:
         q = quiz.pick(adv["topic"], world.level(adv, adv["topic"]), adv["seen"], self.rng, self.systems)
         adv["seen"] = (adv["seen"] + [q["id"]])[-400:]
         if boss:
-            self.boss["deadline"] = now + BOSS_SECONDS
+            self.boss["span"] = boss_seconds(q)
+            self.boss["deadline"] = now + self.boss["span"]
         return q
 
     def answer(self, i, now):
@@ -414,7 +424,8 @@ class Game:
             q = self.question
             if phase == "boss":
                 left = max(0.0, self.boss["deadline"] - now)
-                bar = "█" * int(left) + "░" * (BOSS_SECONDS - int(left))
+                full = round(BAR * left / self.boss["span"])
+                bar = "█" * full + "░" * (BAR - full)
                 head = [(_("{boss} · {n}/{total}").format(boss=cap(_(world.TOPICS[adv["topic"]][2])),
                                                            n=self.boss["total"] - self.boss["left"] + 1,
                                                            total=self.boss["total"]), BAD),

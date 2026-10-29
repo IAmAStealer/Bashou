@@ -32,7 +32,7 @@ A pixel-art pet that lives in the top-right corner of your terminal and grows as
   meadows, hills, forests, deserts, lakes and dungeons. The road splits into topics (Bash, Linux,
   Python, Rust, C, Debian, Rocky Linux, CI/CD): monsters ask a question (wrong: ♥ -1), locked chests
   open with a real shell trick in a sandbox (`mkdir -p`, `mv`, `chmod`, `tar`…) and may give a heart
-  back, and each path ends with a boss: timed questions (20 s each), each miss costs a heart. Beat it
+  back, and each path ends with a boss: timed questions (25 to 40 s each, longer ones get more), each miss costs a heart. Beat it
   and it's a checkpoint, the topic levels up (harder questions next time). Lose your last heart and
   you go back to the last checkpoint, where you can pick another path. Finish a chapter and a new quest starts. `s` saves and quits at any time.
   Finishing chapter 1 brings the Snail (a slug at first), and its achievements follow your adventure.

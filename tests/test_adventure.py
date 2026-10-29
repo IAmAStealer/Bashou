@@ -214,12 +214,22 @@ class GameTest(unittest.TestCase):
         g.draw(2.0, 0)
         self.assertIn((top, left), g.canvas.shown)              # the cell under the box's old top-left
 
+    def test_boss_time_grows_with_what_there_is_to_read(self):
+        """Owner (2026-10-29): 20 s was short for logic questions and long commands to read."""
+        short = {"q": "What does pwd print?", "choices": ["a", "b", "c", "d"]}
+        long_ = {"q": "x" * 150, "choices": ["y" * 60] * 4}
+        self.assertEqual(adventure.boss_seconds(short), adventure.BOSS_MIN)
+        self.assertEqual(adventure.boss_seconds(long_), adventure.BOSS_MAX)
+        self.assertGreaterEqual(adventure.BOSS_MIN, 25)
+        mid = {"q": "x" * 120, "choices": ["y" * 40] * 4}
+        self.assertLess(adventure.BOSS_MIN, adventure.boss_seconds(mid), adventure.BOSS_MAX)
+
     def test_boss_hits_take_a_heart_each(self):
         g = self.game
         self.go("\r", "\r")
         g.adv["segment"] = len(world.events(g.adv)) - 1
         self.walk_to_event()
-        g.update(0, 0 + adventure.BOSS_SECONDS + 1)       # too slow: a hit, not a defeat
+        g.update(0, 0 + adventure.BOSS_MAX + 1)           # too slow: a hit, not a defeat
         self.assertFalse(g.result[0])
         self.assertIn("Too slow", " ".join(g.result[1]))
         self.assertEqual((g.adv["phase"], g.adv["hearts"]), ("boss", 2))
