@@ -60,7 +60,7 @@ Bashou vit dans ton vrai terminal, pendant que tu travailles : un seul compagnon
 | `bashou project` | 13 vrais projets en Python, Shell, C et Rust (fusionner des PDF, trier des photos, un script de sauvegarde…), un petit pas à la fois |
 | `bashou spot` | Jeu rapide : une IPv6, un hash, du base64, un JWT… dis ce que c'est, de plus en plus vite |
 | `bashou arena` | Un combat chronométré, ou une enquête de sécurité (un fichier caché, une porte dérobée dans cron, un binaire SUID) |
-| `bashou adventure` | Une balade à travers 13 thèmes avec 477 questions sur ce qui tourne mal et ce qu'il faut vérifier en premier, des boss et des coffres |
+| `bashou adventure` | Une balade à travers 13 thèmes avec 479 questions sur ce qui tourne mal et ce qu'il faut vérifier en premier, des boss et des coffres |
 | `bashou share` | Un QR code : ton téléphone dessine une bannière de ton compagnon et de ta progression, à envoyer où tu veux |
 
 <details>

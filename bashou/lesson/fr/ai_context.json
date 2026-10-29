@@ -20,9 +20,8 @@
     "Un modèle d'IA ne se souvient pas de toi. À chaque réponse, il lit un seul bloc de texte : sa fenêtre de contexte.",
     "",
     "- Tout ce qui est dans ce bloc compte : les instructions, tes messages, ses réponses, les fichiers lus, les sorties des commandes lancées.",
-    "- Ce qui est dehors n'existe pas pour lui : la discussion d'hier, un fichier qu'il n'a pas ouvert.",
-    "",
-    "Une nouvelle session part de zéro, sauf ce que l'outil charge au début."
+    "- Ce qui est dehors n'existe pas pour lui : la discussion d'hier, un fichier qu'il n'a pas ouvert. Une nouvelle session part de zéro, sauf ce que l'outil charge.",
+    "- Un texte écrit par d'autres (une page web, un ticket) est une donnée, pas un ordre, même s'il en donne."
    ]
   },
   {
@@ -34,7 +33,7 @@
     " │ fichiers lus, sorties de commandes   │",
     " └──────────────────────────────────────┘",
     " [███████████████░░░░░] plein à 75 %",
-    " sur, par exemple, 200 000 tokens"
+    " sur, par exemple, 1 000 000 tokens"
    ],
    "point": 6,
    "mark": [
@@ -44,7 +43,7 @@
     "La fenêtre a une taille, comptée en tokens : des morceaux de texte, souvent un mot court ou une partie d'un mot plus long.",
     "",
     "- Chaque message, fichier et sortie use des tokens. Un gros log peut en remplir une bonne part d'un coup.",
-    "- Presque plein, l'outil résume ou retire le plus ancien, et des détails se perdent : une règle exacte, une décision. Une très longue discussion se dégrade peu à peu."
+    "- Plus elle contient, moins le modèle utilise chaque partie avec précision. Presque plein, l'outil résume ou retire le plus ancien, et des détails se perdent : une règle exacte, une décision."
    ]
   },
   {
@@ -109,7 +108,7 @@
     "Garde le fichier court et précis : il est chargé à chaque fois, chaque ligne coûte de la place, et un long fichier noie les règles importantes.",
     "",
     "- Oui : comment construire et tester, les conventions, ce qu'il ne faut pas toucher, le pourquoi d'un choix inhabituel.",
-    "- Pas de secrets : le fichier est souvent commité, et tout son contenu est envoyé au modèle.",
+    "- Pas de secrets : le fichier est souvent commité, et tout son contenu est envoyé au modèle. Pareil pour un log ou une config que tu colles : retire le jeton d'abord.",
     "- Pas de copie du code : l'IA l'ouvre au besoin. La doc de Claude Code conseille moins de 200 lignes."
    ]
   },
@@ -128,10 +127,10 @@
     "✘ bloqué"
    ],
    "text": [
-    "Un fichier d'instructions est un conseil, pas un verrou. Le modèle le lit et le suit en général, mais rien ne l'y oblige.",
+    "Un fichier d'instructions est un conseil, pas un verrou : le modèle le suit en général, rien ne l'y oblige.",
     "",
-    "- Une règle qui doit toujours tenir (ne jamais déployer, ne jamais effacer de données) va là où l'outil l'impose : les réglages de permissions, ou un hook qui refuse la commande.",
-    "- Le plus sûr : ne pas donner à l'IA les clés dont elle ne doit jamais se servir."
+    "- Une règle qui doit toujours tenir (ne jamais déployer, ne rien effacer) va là où l'outil l'impose : permissions, ou un hook qui refuse la commande.",
+    "- Donne-lui seulement les accès utiles, aucune clé interdite, et valide toi-même les actions risquées (supprimer, pousser, déployer)."
    ]
   }
  ]

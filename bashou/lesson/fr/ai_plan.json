@@ -110,8 +110,9 @@
     "« C'est fait » est une affirmation, pas une preuve : une IA peut être sûre d'elle et se tromper.",
     "",
     "- git diff montre chaque ligne modifiée. Lis-le : c'est toi qui gardes le changement.",
-    "- Lance les tests toi-même. Des lignes retirées d'un test méritent une question : le test avait-il tort, ou l'a-t-on fait passer ?",
-    "- Un changement que tu ne sais pas expliquer : demande, ou ne le garde pas."
+    "- Lance les tests toi-même. Des lignes retirées d'un test : le test avait-il tort, ou l'a-t-on fait passer ?",
+    "- Un changement que tu ne sais pas expliquer : demande, ou ne le garde pas.",
+    "- Un paquet qu'elle ajoute : vérifie qu'il existe et qui le publie."
    ]
   },
   {

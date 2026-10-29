@@ -15,7 +15,8 @@
   "ai-1-06",
   "ai-2-03",
   "ai-2-04",
-  "ai-3-02"
+  "ai-3-02",
+  "ai-2-05"
  ],
  "recall": [
   "ai-1-04",
@@ -133,7 +134,8 @@
     "",
     "- git diff shows every line that changed. Read it: you're the one who keeps the change.",
     "- Run the tests yourself. Lines removed from a test deserve a question: was the test wrong, or was it made to pass?",
-    "- A change you can't explain: ask, or don't keep it."
+    "- A change you can't explain: ask, or don't keep it.",
+    "- A package it adds: check it exists and who publishes it."
    ]
   },
   {

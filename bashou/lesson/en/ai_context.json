@@ -15,7 +15,8 @@
   "ai-1-03",
   "ai-2-01",
   "ai-2-02",
-  "ai-3-01"
+  "ai-3-01",
+  "ai-2-06"
  ],
  "recall": [
   "ai-1-01",
@@ -42,9 +43,8 @@
     "An AI model doesn't remember you. Each time it answers, it reads one block of text: its context window.",
     "",
     "- Everything in that block counts: instructions, your messages, its answers, the files it read, the outputs of the commands it ran.",
-    "- Anything outside it doesn't exist for the model: yesterday's chat, a file it didn't open.",
-    "",
-    "A new session starts empty, except for what the tool loads at the start."
+    "- Anything outside it doesn't exist for the model: yesterday's chat, a file it didn't open. A new session starts empty, except for what the tool loads.",
+    "- Text written by others (a web page, an issue) is data, not orders, even when it gives some."
    ]
   },
   {
@@ -56,7 +56,7 @@
     " │ files it read, command outputs       │",
     " └──────────────────────────────────────┘",
     " [███████████████░░░░░] 75% full",
-    " of, for example, 200 000 tokens"
+    " of, for example, 1 000 000 tokens"
    ],
    "point": 6,
    "mark": [
@@ -66,7 +66,7 @@
     "The window has a size, counted in tokens: pieces of text, often a short word or part of a longer one.",
     "",
     "- Every message, file and output uses tokens. One big log can fill a good part of it at once.",
-    "- When it gets close to full, the tool summarizes or drops the oldest parts, and details get lost: an exact rule, a decision. A very long chat slowly gets worse."
+    "- The more it holds, the less precisely the model uses each part. Close to full, the tool summarizes or drops the oldest parts, and details get lost: an exact rule, a decision."
    ]
   },
   {
@@ -131,7 +131,7 @@
     "Keep the file short and specific: it's loaded every time, each line costs room, and a long file buries the rules that matter.",
     "",
     "- Yes: how to build and test, conventions, what not to touch, the why of an unusual choice.",
-    "- No secrets: the file is usually committed, and all of it is sent to the model.",
+    "- No secrets: the file is usually committed, and all of it is sent to the model. Same for a log or a config you paste: remove the token first.",
     "- No copy of the code: the AI opens the code when it needs it. Claude Code's docs advise under 200 lines."
    ]
   },
@@ -153,7 +153,7 @@
     "An instruction file is advice, not a lock. The model reads it and usually follows it, but nothing forces it to.",
     "",
     "- A rule that must always hold (never deploy, never delete data) goes where the tool enforces it: permission settings, or a hook that refuses the command.",
-    "- Safest of all: don't give the AI the keys it must never use."
+    "- Give it only the access the task needs, never keys it must not use, and approve risky actions (delete, push, deploy) yourself."
    ]
   }
  ]
