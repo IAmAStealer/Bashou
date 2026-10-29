@@ -120,7 +120,7 @@ LESSONS = [
         ("GitHub Actions reads .github/workflows/*.yml, GitLab reads .gitlab-ci.yml. Names that start with "
          "a dot are hidden: ls -a shows them.", "ls -a; cat .gitlab-ci.yml"),
         ("These files are YAML, written like an outline: a line pushed further right belongs to the line "
-         "above it. Each level is 2 spaces further right. Only spaces, never tabs.",
+         "above it. Each level is usually 2 spaces further right. Only spaces, never tabs.",
          "cat .github/workflows/ci.yml"),
         ("Jobs run side by side unless you set an order: needs: on GitHub, stages: on GitLab. A deploy "
          "should wait for the tests, and be skipped when they fail.", "grep -n 'needs:\\|stage' .gitlab-ci.yml"),

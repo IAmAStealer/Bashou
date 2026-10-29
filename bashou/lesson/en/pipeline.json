@@ -19,7 +19,9 @@
   "cicd-2-12",
   "cicd-2-13",
   "cicd-1-06",
-  "cicd-1-07"
+  "cicd-1-07",
+  "cicd-2-14",
+  "cicd-2-15"
  ],
  "recall": [
   "cicd-1-10",
@@ -53,7 +55,7 @@
     "",
     "- Stages run one after the other.",
     "- Jobs in the same stage run side by side: unit and lint together.",
-    "- A job fails? The next stages don't run."
+    "- A job fails when a command of its script ends with a status other than 0 (|| true hides that). The next stages don't run."
    ]
   },
   {
@@ -91,7 +93,8 @@
     "   deploy:",
     "     runs-on: ubuntu-latest",
     "     needs: test",
-    "     if: github.ref == 'refs/heads/main'"
+    "     if: github.ref == 'refs/heads/main'",
+    "     environment: production"
    ],
    "point": 5,
    "mark": [
@@ -102,6 +105,7 @@
     "",
     "- needs: test makes deploy wait for test, and skip if test fails.",
     "- if: keeps it to the main branch.",
+    "- environment: production can require a reviewer's approval first.",
     "- Without needs, a broken build can still deploy!"
    ]
   },

@@ -778,7 +778,7 @@ class CicdFightTest(unittest.TestCase):
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
             self.assertEqual(fight.cmd_answer(str(base), "done"), 1)
-        self.assertIn("line 11 has a tab", out.getvalue())
+        self.assertIn("line 13 has a tab", out.getvalue())
         cicd.write(base / "arena", cicd.WORKFLOW, cicd.GH_OK.replace("ubuntu-latest", "macos-latest"))
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
@@ -808,7 +808,7 @@ class CicdFightTest(unittest.TestCase):
 
         with mock.patch.object(fight.shutil, "which", return_value=None):
             text = run()
-        self.assertIn("line 11 has a tab", text)
+        self.assertIn("line 13 has a tab", text)
         self.assertIn("sudo apt install yamllint", text)
         cicd.write(base / "arena", cicd.WORKFLOW, cicd.GH_OK)
         done = mock.Mock(stdout="  1:1  warning  missing document start\n")

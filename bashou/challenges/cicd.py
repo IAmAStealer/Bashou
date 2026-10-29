@@ -141,13 +141,15 @@ def as_list(value):
 
 # --- GitHub Actions -------------------------------------------------------------------------------
 
-CHECKOUT = "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2"
+CHECKOUT = "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1"
 WORKFLOW = ".github/workflows/ci.yml"
 
 GH_OK = f"""name: CI
 on:
   push:
   pull_request:
+permissions:
+  contents: read
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -195,6 +197,8 @@ GH_SECRET = f"""name: Deploy
 on:
   push:
     branches: [main]
+permissions:
+  contents: read
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -230,6 +234,8 @@ GH_NEEDS = f"""name: CI
 on:
   push:
   pull_request:
+permissions:
+  contents: read
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -295,8 +301,9 @@ def jobs(data):
 
 
 def stage_setup(work, rng):
-    write(work, GITLAB, GL_STAGES.replace("{stage}", rng.choice(["tests", "testing", "check", "unit-test"])))
-    return {}
+    stage = rng.choice(["tests", "testing", "check", "unit-test"])
+    write(work, GITLAB, GL_STAGES.replace("{stage}", stage))
+    return {"args": {"stage": stage}}
 
 
 def stage_verify(work, meta, value):
@@ -353,7 +360,7 @@ def manual_verify(work, meta, value):
 # --- the fights -----------------------------------------------------------------------------------
 
 YAML_OUTLINE = ("YAML is written like an outline: a line pushed further right belongs to the line above it. "
-                "Each level is 2 spaces further right, and lines that belong together start at the same place.")
+                "Each level is usually 2 spaces further right (the number is free), and lines that belong together start at the same place.")
 YAML_NEIGHBOURS = ("Find the line that doesn't start where its neighbours do. runs-on: and steps: both belong to "
                    "the job, so they line up; name: and run: both belong to the same step, so they line up too.")
 
@@ -368,7 +375,7 @@ ALL = [
               setup=indent_setup, verify=indent_verify),
     Challenge(level=1, id="stage_specter", threat="Stage Specter", **CICD, why=yaml_why(GITLAB), file=GITLAB,
               task="The Stage Specter renamed a stage in " + GITLAB + ": GitLab refuses the pipeline, "
-                   "'unit job: chosen stage does not exist'.\nMake every job use a stage from the stages: list, "
+                   "'unit job: chosen stage {stage} does not exist; available stages are .pre, build, test, deploy, .post'.\nMake every job use a stage from the stages: list, "
                    "without renaming the stages. Then: verify",
               hints=["The file starts with a dot, so ls hides it: ls -a shows it. stages: lists build, test and "
                      "deploy, in the order they run; each job's stage: must be one of them.",
@@ -379,8 +386,8 @@ ALL = [
               task="The Secret Sprite wrote an API token in clear in " + WORKFLOW + ": anyone who can read the "
                    "repository can steal it.\nMake the step read it from the repository's secrets instead "
                    "(the secret is called API_TOKEN). Then: verify",
-              hints=["GitHub keeps secrets outside the code (Settings > Secrets). A workflow reads one with "
-                     "${{ secrets.NAME }}: the value never appears in the file, and it's hidden in the logs.",
+              hints=["GitHub keeps secrets outside the code (Settings > Secrets and variables > Actions). A workflow reads one with "
+                     "${{ secrets.NAME }}: the value never appears in the file, and GitHub masks it in the logs: a help, not a guarantee, so never echo a secret.",
                      "Replace the token with ${{ secrets.API_TOKEN }} on the API_TOKEN: line. In real life, "
                      "the leaked token must also be revoked: it stays in the git history."],
               setup=secret_setup, verify=secret_verify),
