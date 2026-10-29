@@ -69,7 +69,7 @@
     "",
     "- needs: test fait attendre test à deploy, et le saute si test échoue.",
     "- if: le limite à la branche main.",
-    "- environment: production peut exiger l'accord d'un relecteur avant.",
+    "- environment: production peut exiger l'accord d'un relecteur avant (à régler dans Settings > Environments).",
     "- Sans needs, un build cassé peut quand même déployer !"
    ]
   },

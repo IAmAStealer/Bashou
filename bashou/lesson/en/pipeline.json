@@ -105,7 +105,7 @@
     "",
     "- needs: test makes deploy wait for test, and skip if test fails.",
     "- if: keeps it to the main branch.",
-    "- environment: production can require a reviewer's approval first.",
+    "- environment: production can require a reviewer's approval first (set it in Settings > Environments).",
     "- Without needs, a broken build can still deploy!"
    ]
   },

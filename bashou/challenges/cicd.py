@@ -71,7 +71,7 @@ def _map(lines, i, indent):
         key = _scalar(m.group(1))
         out[key], i = _value(lines, i + 1, indent, (m.group(2) or "").strip())
     if i < len(lines) and lines[i][0] > indent:
-        raise ValueError(_("line {n} is pushed further right than the lines it belongs with.").format(n=lines[i][2]))
+        raise ValueError(_("line {n} doesn't start where the lines it belongs with start: line it up with them.").format(n=lines[i][2]))
     return out, i
 
 
@@ -92,7 +92,7 @@ def _list(lines, i, indent):
             value, i = _scalar(item), i + 1
         out.append(value)
     if i < len(lines) and lines[i][0] > indent:
-        raise ValueError(_("line {n} is pushed further right than the lines it belongs with.").format(n=lines[i][2]))
+        raise ValueError(_("line {n} doesn't start where the lines it belongs with start: line it up with them.").format(n=lines[i][2]))
     return out, i
 
 

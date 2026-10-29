@@ -124,8 +124,8 @@ LESSONS = [
          "cat .github/workflows/ci.yml"),
         ("Jobs run side by side unless you set an order: needs: on GitHub, stages: on GitLab. A deploy "
          "should wait for the tests, and be skipped when they fail.", "grep -n 'needs:\\|stage' .gitlab-ci.yml"),
-        ("Conditions decide when a job runs: if: on GitHub, rules: on GitLab. when: manual makes GitLab "
-         "wait for someone to click, handy for a production deploy.", "grep -n 'if:\\|rules:\\|when:' .gitlab-ci.yml"),
+        ("Conditions decide when a job runs: if: on GitHub, rules: on GitLab. when: manual makes "
+         "the job wait for a click on its play button, handy for a production deploy.", "grep -n 'if:\\|rules:\\|when:' .gitlab-ci.yml"),
         ("Never write a password or a token in the file: everyone who reads the repository gets it. The "
          "CI keeps secrets for you: ${{ secrets.NAME }} on GitHub, a CI/CD variable on GitLab.",
          "grep -rni 'token\\|password' .github .gitlab-ci.yml"),
