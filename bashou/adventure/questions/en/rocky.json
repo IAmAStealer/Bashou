@@ -400,7 +400,7 @@
    "Stop firewalld"
   ],
   "answer": 0,
-  "explain": "SELinux has on/off switches called booleans for common needs. httpd_can_network_connect_db lets the web server connect to database ports and nothing more. -P keeps it after a reboot, getsebool -a lists them all. setenforce 0 would switch off all protection for one need, and chmod 777 is unrelated."
+  "explain": "SELinux has on/off switches called booleans for common needs. httpd_can_network_connect_db lets the web server connect to database ports and nothing more. -P keeps it after a reboot, getsebool -a lists them all. setenforce 0 would switch off all protection for one need, and chmod 777 never fixes an SELinux denial: it only opens the files to everyone."
  },
  {
   "id": "rocky-3-04",

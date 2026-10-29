@@ -400,7 +400,7 @@
    "Arrêter firewalld"
   ],
   "answer": 0,
-  "explain": "SELinux a des interrupteurs appelés booléens pour les besoins courants. httpd_can_network_connect_db permet au serveur web de se connecter aux ports de bases de données, rien de plus. -P le garde après un redémarrage, getsebool -a les liste tous. setenforce 0 couperait toute la protection pour un seul besoin, et chmod 777 n'a rien à voir."
+  "explain": "SELinux a des interrupteurs appelés booléens pour les besoins courants. httpd_can_network_connect_db permet au serveur web de se connecter aux ports de bases de données, rien de plus. -P le garde après un redémarrage, getsebool -a les liste tous. setenforce 0 couperait toute la protection pour un seul besoin, et chmod 777 ne règle jamais un refus de SELinux : il ouvre juste les fichiers à tous."
  },
  {
   "id": "rocky-3-04",

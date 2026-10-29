@@ -19,5 +19,6 @@ without asking first. Only touch files in this repo; anything outside it still n
 - After adding or changing CI/CD content (pipeline, cicd questions and fights): run the `cicd-judge` agent.
 - After adding or changing logic content (logic lesson, logic questions and fights, conditions shown elsewhere): run the `logic-judge` agent.
 - After adding or changing AI content (ai_* lessons, ai questions): run the `ai-judge` agent.
+- After adding or changing Linux system content (users, permissions, processes, disk, archives, services, pass lessons; linux and systemd questions; system, security and secrets fights): run the `linux-judge` agent.
 - Commit subjects are short sentences in plain English (they become release notes).
 - Task-specific rules are mem guidelines (listed at session start with when to load them).
