@@ -83,7 +83,8 @@
     "Anyone could run a fake mirror. The signature proves the list comes from the real repository and wasn't changed.",
     "",
     "- NO_PUBKEY (\"Missing key\" on Debian 13): you don't have the key yet. Get it from the project's own website.",
-    "- Never switch the check off to make the error go away."
+    "- Never switch the check off to make the error go away.",
+    "- On Rocky, dnf checks each package's rpm signature with the keys in /etc/pki/rpm-gpg/ (gpgcheck=1)."
    ]
   },
   {
@@ -105,7 +106,8 @@
     "",
     "- Libraries (lib…) are code shared by many programs.",
     "- apt remembers why each package is there: manual (you asked for it) or auto (a dependency). apt-mark showmanual and showauto list them.",
-    "- apt autoremove removes the auto ones nothing needs anymore."
+    "- apt autoremove removes the auto ones nothing needs anymore.",
+    "- dnf does the same: dnf autoremove, and dnf mark install name keeps one."
    ]
   },
   {

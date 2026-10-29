@@ -283,7 +283,7 @@
    "unattended-upgrades --enable"
   ],
   "answer": 0,
-  "explain": "Installing unattended-upgrades isn't enough: it must be switched on. dpkg-reconfigure -plow unattended-upgrades asks 'Automatically download and install stable updates?' and, on yes, writes /etc/apt/apt.conf.d/20auto-upgrades with the two daily settings set to \"1\": refresh the lists, and run the upgrade."
+  "explain": "On Debian, installing it already answers yes by default and writes /etc/apt/apt.conf.d/20auto-upgrades. dpkg-reconfigure -plow unattended-upgrades asks again, 'Automatically download and install stable updates?': answer yes to turn it back on. The file holds two daily settings set to \"1\": refresh the lists, and run the upgrade. apt-config dump APT::Periodic shows them."
  },
  {
   "id": "debian-2-12",
@@ -348,7 +348,7 @@
    "The package list is corrupted, run apt clean"
   ],
   "answer": 0,
-  "explain": "NO_PUBKEY followed by an id means the repository is signed with a key apt doesn't have, so apt ignores it: it isn't broken, it's being careful. Fetch the key from the publisher's official site, convert it with gpg --dearmor into /etc/apt/keyrings/, and name it with Signed-By in the repository entry."
+  "explain": "NO_PUBKEY followed by an id means the repository is signed with a key apt doesn't have, so apt ignores it: it isn't broken, it's being careful. Fetch the key from the publisher's official site and save it in /etc/apt/keyrings/ (as .asc if it's text, or as .gpg after gpg --dearmor), then name it with Signed-By in the repository entry."
  },
  {
   "id": "debian-3-04",

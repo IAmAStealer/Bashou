@@ -283,7 +283,7 @@
    "unattended-upgrades --enable"
   ],
   "answer": 0,
-  "explain": "Installer unattended-upgrades ne suffit pas : il faut l'activer. dpkg-reconfigure -plow unattended-upgrades demande s'il faut télécharger et installer automatiquement les mises à jour et, si oui, écrit /etc/apt/apt.conf.d/20auto-upgrades avec les deux réglages quotidiens à \"1\" : rafraîchir les listes, et lancer la mise à jour."
+  "explain": "Sur Debian, l'installer répond déjà oui par défaut et écrit /etc/apt/apt.conf.d/20auto-upgrades. dpkg-reconfigure -plow unattended-upgrades repose la question (installer automatiquement les mises à jour ?) : réponds oui pour le rallumer. Le fichier contient deux réglages quotidiens à \"1\" : rafraîchir les listes, et lancer la mise à jour. apt-config dump APT::Periodic les montre."
  },
  {
   "id": "debian-2-12",
@@ -348,7 +348,7 @@
    "La liste des paquets est abîmée, lancez apt clean"
   ],
   "answer": 0,
-  "explain": "NO_PUBKEY suivi d'un identifiant veut dire que le dépôt est signé avec une clé qu'apt n'a pas : apt l'ignore. Rien n'est cassé, il est prudent. Récupère la clé sur le site officiel de l'éditeur, convertis-la avec gpg --dearmor dans /etc/apt/keyrings/, et cite-la avec Signed-By dans l'entrée du dépôt."
+  "explain": "NO_PUBKEY suivi d'un identifiant veut dire que le dépôt est signé avec une clé qu'apt n'a pas : apt l'ignore. Rien n'est cassé, il est prudent. Récupère la clé sur le site officiel de l'éditeur et range-la dans /etc/apt/keyrings/ (en .asc si c'est du texte, ou en .gpg après gpg --dearmor), puis cite-la avec Signed-By dans l'entrée du dépôt."
  },
  {
   "id": "debian-3-04",

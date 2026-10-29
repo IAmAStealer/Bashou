@@ -75,7 +75,7 @@
    "dnf refresh"
   ],
   "answer": 0,
-  "explain": "dnf check-update rafraîchit les données des dépôts et liste chaque paquet qui a une nouvelle version en attente, sans rien installer. Son code de retour vaut 100 quand des mises à jour attendent et 0 quand il n'y en a pas : un script de supervision peut lever une alerte là-dessus. dnf upgrade les installerait."
+  "explain": "dnf check-update liste chaque paquet qui a une nouvelle version en attente, sans rien installer ; il rafraîchit d'abord les données des dépôts si elles ont plus de 48 heures (--refresh le force). Son code de retour vaut 100 quand des mises à jour attendent et 0 quand il n'y en a pas : un script de supervision peut lever une alerte là-dessus. dnf upgrade les installerait."
  },
  {
   "id": "rocky-1-07",

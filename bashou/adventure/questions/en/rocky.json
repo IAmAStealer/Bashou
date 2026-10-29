@@ -75,7 +75,7 @@
    "dnf refresh"
   ],
   "answer": 0,
-  "explain": "dnf check-update refreshes the repository data and lists each package with a newer version waiting, without installing anything. Its exit code is 100 when updates are waiting and 0 when there are none: a monitoring script can raise an alert on that. dnf upgrade would install them."
+  "explain": "dnf check-update lists each package with a newer version waiting, without installing anything; it refreshes the repository data first when it's older than 48 hours (--refresh forces it). Its exit code is 100 when updates are waiting and 0 when there are none: a monitoring script can raise an alert on that. dnf upgrade would install them."
  },
  {
   "id": "rocky-1-07",

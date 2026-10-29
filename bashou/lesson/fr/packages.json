@@ -47,7 +47,8 @@
     "N'importe qui pourrait monter un faux miroir. La signature prouve que la liste vient du vrai dépôt et n'a pas été modifiée.",
     "",
     "- NO_PUBKEY (« Missing key » sur Debian 13) : tu n'as pas encore la clé. Prends-la sur le site du projet lui-même.",
-    "- Ne coupe jamais la vérification pour faire taire l'erreur."
+    "- Ne coupe jamais la vérification pour faire taire l'erreur.",
+    "- Sur Rocky, dnf vérifie la signature rpm de chaque paquet avec les clés de /etc/pki/rpm-gpg/ (gpgcheck=1)."
    ]
   },
   {
@@ -69,7 +70,8 @@
     "",
     "- Les bibliothèques (lib…) sont du code partagé par beaucoup de programmes.",
     "- apt retient pourquoi chaque paquet est là : manual (tu l'as demandé) ou auto (une dépendance). apt-mark showmanual et showauto les listent.",
-    "- apt autoremove enlève les paquets auto dont plus rien n'a besoin."
+    "- apt autoremove enlève les paquets auto dont plus rien n'a besoin.",
+    "- dnf fait pareil : dnf autoremove, et dnf mark install nom en garde un."
    ]
   },
   {

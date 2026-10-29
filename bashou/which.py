@@ -71,7 +71,7 @@ def install(tool):
     if system() == "debian":
         return f"sudo apt install {debian}"
     if tool == "pass" and "rhel" in os_family():
-        return "sudo dnf install epel-release && sudo dnf install pass"     # pass lives in EPEL on RHEL, Rocky, Alma
+        return "sudo dnf config-manager --set-enabled crb && sudo dnf install epel-release && sudo dnf install pass"     # pass lives in EPEL on RHEL, Rocky, Alma
     if system() == "rocky":
         return f"sudo dnf install {redhat}"
     if tool == "rustc":

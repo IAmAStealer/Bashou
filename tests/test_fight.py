@@ -1030,6 +1030,11 @@ class RepoFightTest(unittest.TestCase):
                 .replace("trixie trixie-updates", "trixie trixie-updates trixie-backports")
                 .replace("Components: main\nSigned", "Components: main contrib non-free-firmware\nSigned"))
             self.assertTrue(repos.debian_verify(work, {}, "done"))
+            # packages-judge (2026-10-29): the wiki's own trixie lines, with deb-src and Enabled, are right too
+            (work / "debian.sources").write_text(repos.DEBIAN_OK.replace("Types: deb\n", "Types: deb deb-src\nEnabled: yes\n"))
+            self.assertTrue(repos.debian_verify(work, {}, "done"))
+            (work / "debian.sources").write_text(repos.DEBIAN_OK.replace("Types: deb\n", "Types: deb-src\n"))
+            self.assertFalse(repos.debian_verify(work, {}, "done"))
             (work / "rocky.repo").write_text(repos.ROCKY_OK.replace(
                 "baseurl=https://dl.rockylinux.org/pub/rocky/$releasever/BaseOS/$basearch/os/",
                 "mirrorlist=https://mirrors.rockylinux.org/mirrorlist?arch=$basearch&repo=BaseOS-$releasever$rltype"))

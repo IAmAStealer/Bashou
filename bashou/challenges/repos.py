@@ -83,7 +83,8 @@ def debian_verify(work, meta, value):
         found = stanzas((work / "debian.sources").read_text())
     except OSError:
         return False
-    if len(found) != 2 or any(s.get("types") != "deb" or s.get("signed-by") not in KEYRINGS for s in found):
+    if len(found) != 2 or any(not {"deb"} <= set(s.get("types", "").split()) <= {"deb", "deb-src"}
+                               or s.get("signed-by") not in KEYRINGS for s in found):
         return False
     main = next((s for s in found if uri(s.get("uris", "")) == "https://deb.debian.org/debian"), None)
     sec = next((s for s in found if uri(s.get("uris", "")) == "https://security.debian.org/debian-security"), None)
@@ -221,7 +222,8 @@ ALL = [
                    "right values online, or in your own /etc/apt/sources.list.d. Then: verify",
               hints=["Official lines: wiki.debian.org/SourcesList. `man sources.list` explains each field. "
                      "Since Debian 11, security uses <release>-security.",
-                     "Compare: diff debian.sources /etc/apt/sources.list.d/debian.sources (if you run trixie)."],
+                     "Compare with your own: ls /etc/apt/sources.list.d/ (on trixie, a *.sources file; an upgraded "
+                     "system may still use /etc/apt/sources.list, and apt modernize-sources converts it)."],
               setup=debian_setup, verify=debian_verify),
     Challenge(level=2, id="repo_revenant", fix=True, pet="ant", tools=EDITORS, skill="rocky", requires=["sed"],
               threat="Repo Revenant",
