@@ -185,8 +185,8 @@ LESSONS = [
         ("A script should never hold a password: it ends up in backups, screenshots and git history. $( ) lets it "
          "fetch the password when it runs, so the file stays safe to share. || exit 1 stops it when pass fails.",
          "db_password=$(pass show db/prod) || exit 1"),
-        ("Not installed yet? On Debian and Ubuntu: sudo apt install gnupg pass. On Rocky, Alma and RHEL: sudo dnf "
-         "install gnupg2, then pass from EPEL (sudo dnf install epel-release first).", "sudo apt install gnupg pass"),
+        ("Not installed yet? On Debian and Ubuntu: sudo apt install gnupg pass. On Rocky and Alma: sudo dnf install "
+         "gnupg2, then pass from EPEL (sudo dnf install epel-release first; on RHEL, see the EPEL docs).", "sudo apt install gnupg pass"),
     ]},
     {"id": "gdb", "tool": "gdb", "topics": ("c",), "title": "gdb, the debugger", "pages": [
         ("A debugger runs your program and lets you stop it and look inside. Build with -g first: it keeps the "

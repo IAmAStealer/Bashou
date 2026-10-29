@@ -230,8 +230,8 @@ ALL = [
                    "Then: verify",
               hints=["Paths are case-sensitive: open dl.rockylinux.org/pub/rocky/9/ in a browser and follow them. "
                      "gpgcheck must stay 1, and the key must be Rocky 9's.",
-                     "Compare with /etc/yum.repos.d/rocky.repo on a Rocky 9 machine: "
-                     "baseurl=https://dl.rockylinux.org/pub/rocky/$releasever/BaseOS/$basearch/os/"],
+                     "The right form, for BaseOS: baseurl=https://dl.rockylinux.org/pub/rocky/$releasever/BaseOS/$basearch/os/ "
+                     "(a real Rocky 9 file uses mirrorlist= and keeps baseurl commented out)."],
               setup=rocky_setup, verify=rocky_verify),
     Challenge(level=2, id="enabled_ettin", fix=True, pet="ant", tools=("dnf", "yum"), skill="rocky", requires=["dnf"],
               uses=restricted, threat="Enabled Ettin",

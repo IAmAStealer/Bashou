@@ -290,13 +290,13 @@
   "level": 2,
   "q": "Par défaut sur Debian, qu'installe unattended-upgrades ?",
   "choices": [
-   "Seulement l'archive de sécurité",
+   "Sécurité et correctifs des versions mineures",
    "Toutes les mises à jour disponibles",
    "Seulement les nouveaux noyaux",
    "Rien tant que tu ne listes pas de paquets"
   ],
   "answer": 0,
-  "explain": "Par défaut, il ne prend que les paquets de l'archive de sécurité de Debian, ceux qui corrigent des failles connues. Les autres mises à jour attendent que tu les installes à la main, quand tu peux surveiller. La liste des origines permises est Origins-Pattern dans /etc/apt/apt.conf.d/50unattended-upgrades. La sécurité seule est le choix prudent."
+  "explain": "Par défaut, il prend les mises à jour de sécurité de Debian et les correctifs de la version stable elle-même (ses versions mineures, seulement des corrections) : jamais -updates, les backports ou d'autres dépôts. Les origines permises sont Origins-Pattern dans /etc/apt/apt.conf.d/50unattended-upgrades. Sur Ubuntu, c'est la sécurité seule par défaut."
  },
  {
   "id": "debian-2-13",
@@ -335,7 +335,7 @@
    "Rien : apt fait confiance à tout dépôt ajouté"
   ],
   "answer": 0,
-  "explain": "Enregistre la clé publique de l'éditeur comme fichier dans /etc/apt/keyrings/ et ajoute Signed-By: qui pointe dessus dans l'entrée de ce dépôt. apt accepte alors cette clé seulement pour ce dépôt, pas pour tous. apt-key, qui faisait confiance à une clé partout, a disparu ; trusted=yes coupe simplement la vérification."
+  "explain": "Enregistre la clé publique de l'éditeur comme fichier dans /etc/apt/keyrings/ et ajoute Signed-By: qui pointe dessus dans l'entrée de ce dépôt. apt accepte alors cette clé seulement pour ce dépôt, pas pour tous. apt-key, qui faisait confiance à une clé partout, est déconseillé et a disparu dans Debian 13 ; trusted=yes coupe simplement la vérification."
  },
  {
   "id": "debian-3-03",
@@ -452,7 +452,7 @@
    "systemd-update.timer"
   ],
   "answer": 0,
-  "explain": "Deux timers systemd font le travail : apt-daily.timer rafraîchit les listes de paquets, puis apt-daily-upgrade.timer lance unattended-upgrades pour installer. systemctl list-timers 'apt*' montre quand chacun est passé et quand il repassera. L'ancien script /etc/cron.daily/apt s'efface quand systemd est là."
+  "explain": "Deux timers systemd font le travail : apt-daily.timer rafraîchit les listes de paquets, puis apt-daily-upgrade.timer lance unattended-upgrades pour installer. systemctl list-timers 'apt*' montre quand chacun est passé et quand il repassera. L'ancien script /etc/cron.daily/apt-compat s'efface quand systemd tourne."
  },
  {
   "id": "debian-3-12",

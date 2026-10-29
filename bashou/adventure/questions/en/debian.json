@@ -290,13 +290,13 @@
   "level": 2,
   "q": "Out of the box on Debian, what does unattended-upgrades install?",
   "choices": [
-   "Updates from the security archive only",
+   "Security updates and stable point-release fixes",
    "Every available update",
    "Only new kernels",
    "Nothing until you list packages"
   ],
   "answer": 0,
-  "explain": "By default it only takes packages from Debian's security archive, the ones that fix known holes. Other updates wait for you to install them by hand, when you can watch. The list of allowed origins is Origins-Pattern in /etc/apt/apt.conf.d/50unattended-upgrades. Security only is the careful choice."
+  "explain": "By default it takes Debian's security updates and the fixes of the stable release itself (its point releases, bug fixes only): never -updates, backports or other repositories. The allowed origins are Origins-Pattern in /etc/apt/apt.conf.d/50unattended-upgrades. On Ubuntu the default is security only."
  },
  {
   "id": "debian-2-13",
@@ -335,7 +335,7 @@
    "Nothing: apt trusts any repository you add"
   ],
   "answer": 0,
-  "explain": "Save the publisher's public key as a file in /etc/apt/keyrings/ and add Signed-By: pointing to it in that repository's entry. apt then accepts that key only for that repository, not for all of them. apt-key, which trusted a key everywhere, is gone; trusted=yes simply turns the check off."
+  "explain": "Save the publisher's public key as a file in /etc/apt/keyrings/ and add Signed-By: pointing to it in that repository's entry. apt then accepts that key only for that repository, not for all of them. apt-key, which trusted a key everywhere, is deprecated and gone in Debian 13; trusted=yes simply turns the check off."
  },
  {
   "id": "debian-3-03",
@@ -452,7 +452,7 @@
    "systemd-update.timer"
   ],
   "answer": 0,
-  "explain": "Two systemd timers do the work: apt-daily.timer refreshes the package lists, then apt-daily-upgrade.timer runs unattended-upgrades to install. systemctl list-timers 'apt*' shows when each last ran and runs next. The old /etc/cron.daily/apt script only steps aside when systemd is there."
+  "explain": "Two systemd timers do the work: apt-daily.timer refreshes the package lists, then apt-daily-upgrade.timer runs unattended-upgrades to install. systemctl list-timers 'apt*' shows when each last ran and runs next. The old /etc/cron.daily/apt-compat script steps aside when systemd is running."
  },
  {
   "id": "debian-3-12",

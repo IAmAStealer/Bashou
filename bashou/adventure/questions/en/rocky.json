@@ -192,7 +192,7 @@
    "It turns SELinux off"
   ],
   "answer": 0,
-  "explain": "EPEL (Extra Packages for Enterprise Linux) adds thousands of packages Rocky doesn't ship. They are signed and well maintained, but by the Fedora community, not by Rocky. Enabling it means trusting one more publisher to install code as root, and its packages don't get the same ten-year support."
+  "explain": "EPEL (Extra Packages for Enterprise Linux) adds thousands of packages Rocky doesn't ship. They are signed and well maintained, but by the Fedora community, not by Rocky. Enabling it means trusting one more publisher to install code as root, and its packages don't get the same ten-year support. To turn it on: sudo dnf config-manager --set-enabled crb, then sudo dnf install epel-release."
  },
  {
   "id": "rocky-2-03",
@@ -439,6 +439,6 @@
    "It turns SELinux on"
   ],
   "answer": 0,
-  "explain": "With automatic updates, nobody reads the list before the install: whatever a repository serves gets installed as root. gpgcheck=1 makes dnf check each package's signature, the only check left, so a hacked mirror can't slip in a modified package. On Debian, Signed-By plays the same role."
+  "explain": "With automatic updates, nobody reads the list before the install: whatever a repository serves gets installed as root. gpgcheck=1 makes dnf check each package's signature, the only check left, so a hacked mirror can't slip in a modified package. On Debian, apt always checks signatures: make sure no entry switches that off."
  }
 ]

@@ -58,10 +58,10 @@
     "trixie-security"
    ],
    "text": [
-    "apt reads /etc/apt/sources.list and /etc/apt/sources.list.d/. Debian 13's new format: one block per repository.",
+    "apt reads /etc/apt/sources.list and /etc/apt/sources.list.d/. Debian 13's format: one block per repository. Debian 12: one line each, deb https://deb.debian.org/debian bookworm main.",
     "",
     "- URIs: the server. Suites: the release and its updates. Components: parts of the archive.",
-    "- Security updates have their own server and suite. man sources.list explains every field."
+    "- Security updates have their own server and suite (man sources.list)."
    ]
   },
   {

@@ -192,7 +192,7 @@
    "Il coupe SELinux"
   ],
   "answer": 0,
-  "explain": "EPEL (Extra Packages for Enterprise Linux) ajoute des milliers de paquets que Rocky ne fournit pas. Ils sont signés et bien entretenus, mais par la communauté Fedora, pas par Rocky. L'activer, c'est faire confiance à un éditeur de plus pour installer du code en root, et ses paquets n'ont pas le même support de dix ans."
+  "explain": "EPEL (Extra Packages for Enterprise Linux) ajoute des milliers de paquets absents de Rocky. Signés et bien entretenus, mais par la communauté Fedora, pas par Rocky. L'activer, c'est faire confiance à un éditeur de plus, qui installe du code en root, et ses paquets n'ont pas le même support de dix ans. Pour l'activer : sudo dnf config-manager --set-enabled crb, puis sudo dnf install epel-release."
  },
  {
   "id": "rocky-2-03",
@@ -439,6 +439,6 @@
    "Ça active SELinux"
   ],
   "answer": 0,
-  "explain": "Avec les mises à jour automatiques, personne ne lit la liste avant l'installation : tout ce que sert un dépôt s'installe en root. gpgcheck=1 fait vérifier par dnf la signature de chaque paquet, le seul contrôle qui reste : un miroir piraté ne peut pas glisser un paquet modifié. Sur Debian, Signed-By joue le même rôle."
+  "explain": "Avec les mises à jour automatiques, personne ne lit la liste avant l'installation : tout ce que sert un dépôt s'installe en root. gpgcheck=1 fait vérifier par dnf la signature de chaque paquet, le seul contrôle qui reste : un miroir piraté ne peut pas glisser un paquet modifié. Sur Debian, apt vérifie toujours les signatures : vérifie qu'aucune entrée ne coupe ça."
  }
 ]

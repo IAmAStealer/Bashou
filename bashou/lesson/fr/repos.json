@@ -23,10 +23,10 @@
     "trixie-security"
    ],
    "text": [
-    "apt lit /etc/apt/sources.list et /etc/apt/sources.list.d/. Le nouveau format de Debian 13 : un bloc par dépôt.",
+    "apt lit /etc/apt/sources.list et /etc/apt/sources.list.d/. Le format de Debian 13 : un bloc par dépôt. Debian 12 : une ligne chacun, deb https://deb.debian.org/debian bookworm main.",
     "",
     "- URIs : le serveur. Suites : la version et ses mises à jour. Components : les parties de l'archive.",
-    "- La sécurité a son propre serveur et sa suite. man sources.list explique chaque champ."
+    "- La sécurité a son propre serveur et sa suite (man sources.list)."
    ]
   },
   {
