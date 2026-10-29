@@ -15,5 +15,9 @@ without asking first. Only touch files in this repo; anything outside it still n
 - After adding or changing C that players see (compilation, gcc_use, stack_heap, pointers, debugger, c questions, C fights): run the `c-judge` agent.
 - After adding or changing git that players see (the git lesson, git questions, git fights): run the `git-judge` agent.
 - After adding or changing network content (network, ip_addr, ipv6, dns*, tcp, net_debug, network questions and fights; not certificates): run the `network-judge` agent.
+- After adding or changing package content (packages, repos, debian and rocky questions and fights): run the `packages-judge` agent.
+- After adding or changing CI/CD content (pipeline, cicd questions and fights): run the `cicd-judge` agent.
+- After adding or changing logic content (logic lesson, logic questions and fights, conditions shown elsewhere): run the `logic-judge` agent.
+- After adding or changing AI content (ai_* lessons, ai questions): run the `ai-judge` agent.
 - Commit subjects are short sentences in plain English (they become release notes).
 - Task-specific rules are mem guidelines (listed at session start with when to load them).
