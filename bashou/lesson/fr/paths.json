@@ -118,7 +118,7 @@
     "",
     "- Quelque chose est mal configuré ? Regarde dans /etc.",
     "- Quelque chose a cassé ? journalctl, ou les fichiers de /var/log, disent souvent pourquoi.",
-    "- /tmp est vidé au redémarrage sur la plupart des systèmes, et en mémoire depuis Debian 13 : rien de gros ni d'important."
+    "- /tmp est vidé au redémarrage sur Debian et Ubuntu (en mémoire depuis Debian 13) ; Rocky efface les fichiers de plus de 10 jours. Rien de gros ni d'important."
    ]
   }
  ]

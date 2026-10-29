@@ -64,7 +64,7 @@
    "history | tail"
   ],
   "answer": 0,
-  "explain": "last reads the record of past logins: who, from which address, when, for how long. Debian 13 removed last: there, journalctl -u ssh shows each 'Accepted … from' line (or install wtmpdb: wtmpdb last). who only shows who is connected now. A login from an address you don't know is worth a closer look."
+  "explain": "last reads the record of past logins: who, from which address, when, for how long. Debian 13 removed last: there, journalctl -u ssh (-u sshd on Rocky) shows each 'Accepted … from' line (or install wtmpdb: wtmpdb last). who only shows who is connected now. A login from an address you don't know is worth a closer look."
  },
  {
   "id": "linux-1-06",

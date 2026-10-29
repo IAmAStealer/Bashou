@@ -76,7 +76,7 @@
     "",
     "- Use it only for the command that needs it, never out of habit.",
     "- sudo remembers your password for a few minutes, then asks again.",
-    "- Change sudo rules only with sudo visudo: it checks the file before saving. sudo -l lists what you may run.",
+    "- Change sudo rules only with sudo visudo (or visudo -f /etc/sudoers.d/name): it checks the syntax first, and a broken file locks everyone out of sudo. sudo -l lists what you may run.",
     "- ✘ sudo echo x > /etc/f: your shell opens the file, as you. ✔ echo x | sudo tee /etc/f > /dev/null."
    ]
   }

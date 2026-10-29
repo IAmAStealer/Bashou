@@ -141,7 +141,7 @@
     "",
     "- Something misconfigured? Look in /etc.",
     "- Something broke? journalctl, or the files in /var/log, often say why.",
-    "- /tmp is emptied at reboot on most systems, and lives in memory since Debian 13: nothing big or important there."
+    "- /tmp is emptied at reboot on Debian and Ubuntu (in memory since Debian 13); Rocky deletes files older than 10 days. Nothing big or important there."
    ]
   }
  ]

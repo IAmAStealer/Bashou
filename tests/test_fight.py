@@ -869,7 +869,6 @@ class CicdFightTest(unittest.TestCase):
         self.assertFalse(self.fixed("secret_sprite", lambda text, meta: text + "# old: " + meta["token"] + "\n"))
 
 
-@unittest.skipUnless(shutil.which("gpg") and shutil.which("gpgconf"), "needs gpg")
 class UnitImpTest(unittest.TestCase):
     def test_the_fixed_unit_runs_as_its_own_user(self):
         """linux-judge (2026-10-29): the right unit ran the app as root. It keeps its User= line."""
@@ -884,6 +883,7 @@ class UnitImpTest(unittest.TestCase):
             self.assertFalse(system.unit_verify(work, meta, ""))
 
 
+@unittest.skipUnless(shutil.which("gpg") and shutil.which("gpgconf"), "needs gpg")
 class SecretsFightTest(unittest.TestCase):
     """gpg and pass fights: they start unsolved, cheats lose, and Bashou's own gpg never uses ~/.gnupg."""
 

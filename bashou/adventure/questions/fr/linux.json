@@ -64,7 +64,7 @@
    "history | tail"
   ],
   "answer": 0,
-  "explain": "last lit l'historique des connexions : qui, depuis quelle adresse, quand, combien de temps. Debian 13 a retiré last : là, journalctl -u ssh montre chaque ligne 'Accepted … from' (ou installe wtmpdb : wtmpdb last). who montre seulement qui est connecté maintenant. Une connexion depuis une adresse inconnue mérite qu'on regarde de plus près."
+  "explain": "last lit l'historique des connexions : qui, depuis quelle adresse, quand, combien de temps. Debian 13 a retiré last : là, journalctl -u ssh (-u sshd sur Rocky) montre chaque ligne 'Accepted … from' (ou installe wtmpdb : wtmpdb last). who montre seulement qui est connecté maintenant. Une connexion depuis une adresse inconnue mérite qu'on regarde de plus près."
  },
  {
   "id": "linux-1-06",

@@ -305,7 +305,7 @@
    "systemctl status --all"
   ],
   "answer": 0,
-  "explain": "-p err keeps the messages of priority err and worse (crit, alert, emerg), -b only this boot (-b -1 the boot before). Add -u name for one service. Errors only is a good first look, but the warning just before an error often says why: read around it once you know where."
+  "explain": "-p err keeps the messages of priority err and worse (crit, alert, emerg), -b only this boot (-b -1 the boot before). Add -u name for one service. Without sudo (or the adm group), journalctl shows only your own messages. Errors only is a good first look, but the warning just before an error often says why: read around it once you know where."
  },
 {
   "id": "systemd-2-12",

@@ -54,7 +54,7 @@
     "",
     "- A unit file describes it.",
     "- After you write or change one, run daemon-reload: systemd rereads its unit files.",
-    "- A unit from a package (/usr/lib/systemd/system/): don't edit it, run sudo systemctl edit name."
+    "- A unit from a package (/usr/lib/systemd/system/): don't edit it, an upgrade would overwrite your change. sudo systemctl edit name writes a drop-in in /etc/systemd/system/name.service.d/."
    ]
   },
   {

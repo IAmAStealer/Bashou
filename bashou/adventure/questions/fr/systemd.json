@@ -305,7 +305,7 @@
    "systemctl status --all"
   ],
   "answer": 0,
-  "explain": "-p err garde les messages de priorité err et pire (crit, alert, emerg), -b seulement ce démarrage (-b -1 le précédent). Ajoute -u nom pour un seul service. Les erreurs seules sont un bon premier regard, mais l'avertissement juste avant dit souvent pourquoi : lis autour une fois que tu sais où."
+  "explain": "-p err garde les messages de priorité err et pire (crit, alert, emerg), -b seulement ce démarrage (-b -1 le précédent). Ajoute -u nom pour un seul service. Sans sudo (ou le groupe adm), journalctl ne montre que tes propres messages. Les erreurs seules sont un bon premier regard, mais l'avertissement juste avant dit souvent pourquoi : lis autour une fois que tu sais où."
  },
 {
   "id": "systemd-2-12",

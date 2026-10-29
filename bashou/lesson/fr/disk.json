@@ -52,7 +52,7 @@
     "- Journaux : sudo journalctl --vacuum-size=200M réduit le journal.",
     "- Caches : sudo apt clean (ou sudo dnf clean all).",
     "- Ton dossier : du -sh ~/* | sort -h.",
-    "- Plein, mais df montre de la place ? df -i (inodes). Un log effacé encore ouvert : lsof +L1, puis redémarre ce programme."
+    "- Plein, mais df montre de la place ? df -i (inodes). Un log effacé encore ouvert : sudo lsof +L1 (installe lsof s'il manque), puis redémarre ce programme."
    ]
   }
  ]
