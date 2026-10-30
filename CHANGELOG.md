@@ -3,6 +3,25 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.12.0 — 2026-10-30
+
+### Changes
+
+- New lessons on SSH and firewalls, with two fights: the Key Kraken (fix the rights of `~/.ssh`) and the Drop Dragon (find the nftables rule that drops a client).
+- New lessons on Python errors and exit codes (the Except Eel), SQL's NULL (the Null Newt) and Rust ownership and borrowing (the Borrow Badger and the Vector Viper).
+- The git lesson now covers conflicts, stash and undo, in seven pages, with the Revert Revenant.
+- Every lesson ends on a quiz of its own questions, and three right answers open the lessons after it. 44 new questions, 488 in all.
+- Boss questions give 25 to 40 seconds, more when the question and its choices take longer to read.
+- The lesson library shows its two views as tabs under the title; `f` switches.
+- The Stowaway Stoat is fought with `dpkg` and the Autoremove Adder with `apt-mark`, the commands their answers need.
+- Lessons, questions and fights on Rust, C, git, networks, packages, CI/CD, logic, AI and Linux were reviewed against the official docs, man pages and release notes: Mac commands next to Linux ones, Debian 13's missing `last`, logs per system, EPEL with CRB, script injection that really injects, and many more.
+- Several pets are lit from the top left, the Resolver Rook is redrawn as a chess tower, and the Snakelet and the Snake get the drawings they should have had in 0.11.0.
+- The README opens on four pictures and the install.
+
+### Breaking changes
+
+- Breaking change: a pony was given 40 seconds to answer a boss, spent 39 reading the choices and bolted at the last one. Bring it home with `bashou pony hoof`.
+
 ## v0.11.0 — 2026-10-27
 
 ### Changes

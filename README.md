@@ -103,6 +103,11 @@ server. The first time, it asks for a nickname (`bashou share --name Nova` chang
 
 ## What's new
 
+**0.12.0**
+- **New lessons**: SSH and firewalls, Python errors, SQL's NULL, Rust ownership, git conflicts and undo,
+  with seven new fights.
+- Every lesson ends on its own quiz, and boss questions give more time when there is more to read.
+
 **0.11.0**
 - **Your path in the library**: the lessons to take next come first (`f` shows them all), and hard
   lessons wait until you master the ones before.

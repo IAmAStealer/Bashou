@@ -101,6 +101,12 @@ les navigateurs n'envoient jamais à un serveur. La première fois, il te demand
 
 ## Quoi de neuf
 
+**0.12.0**
+- **Nouvelles leçons** : SSH et pare-feu, erreurs Python, le NULL de SQL, l'ownership de Rust, les
+  conflits et l'annulation dans git, avec sept nouveaux combats.
+- Chaque leçon se termine sur son propre quiz, et les questions des boss laissent plus de temps quand
+  il y a plus à lire.
+
 **0.11.0**
 - **Ton chemin dans la bibliothèque** : les leçons à suivre ensuite d'abord (`f` les montre toutes), et
   les leçons difficiles attendent que tu maîtrises celles d'avant.
