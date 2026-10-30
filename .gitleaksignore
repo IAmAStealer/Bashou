@@ -1,2 +1,4 @@
 # Not a secret: the achievement's example reads the password from `pass` (curl -u "admin:$(pass show ...)").
 43154e687a1e2378eb91d253e1f92d32f0888fe0:bashou/achievements.py:curl-auth-user:358
+# Not a secret: the Key Kraken's practice key file has no key inside, only a line saying it opens nothing.
+63a08fe178a90efc01f90f8e375e7a58edca142b:bashou/challenges/network.py:private-key:371

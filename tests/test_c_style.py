@@ -15,10 +15,15 @@ from bashou import challenges
 ROOT = Path(__file__).resolve().parent.parent
 STYLE = ROOT / "doc" / "contributing" / "c-style.md"
 STRICT = ["-std=c99", "-pedantic", "-Wall", "-Wextra", "-fsyntax-only"]
-# The bug a fight's file holds on purpose, since the player fixes it: what gcc says about it.
+# The bug a fight's file holds on purpose, since the player fixes it: what gcc says about it, and clang (gcc on a
+# Mac) in its own words.
 ON_PURPOSE = {
-    "semicolon_slug": "expected ‘;’",
-    "warning_wraith": "-Wparentheses",
+    "semicolon_slug": re.compile(r"expected [‘']?;"),
+    "warning_wraith": re.compile(r"-Wparentheses"),
+}
+# Bugs on purpose only clang notices: allowed, not required, since gcc says nothing.
+CLANG_SEES = {
+    "stack_specter": re.compile(r"-Winfinite-recursion"),
 }
 
 
@@ -45,8 +50,8 @@ class FightFileTest(unittest.TestCase):
             for name, found in diagnostics(c):     # syntax only needs gcc, not gdb
                 seen += 1
                 with self.subTest(fight=c.id, file=name):
-                    expected = ON_PURPOSE.get(c.id)
-                    self.assertTrue(all(expected and expected in line for line in found), found)
+                    allowed = [r for r in (ON_PURPOSE.get(c.id), CLANG_SEES.get(c.id)) if r]
+                    self.assertTrue(all(any(r.search(line) for r in allowed) for line in found), found)
         self.assertGreater(seen, 5)
 
     def test_the_bug_on_purpose_is_still_there(self):
@@ -54,7 +59,15 @@ class FightFileTest(unittest.TestCase):
         for fight, expected in ON_PURPOSE.items():
             with self.subTest(fight=fight):
                 found = [line for _, lines in diagnostics(fights[fight]) for line in lines]
-                self.assertTrue(any(expected in line for line in found), found)
+                self.assertTrue(any(expected.search(line) for line in found), found)
+
+
+class ClangWordsTest(unittest.TestCase):
+    def test_the_bugs_on_purpose_are_known_in_clangs_words_too(self):
+        """CI for 0.12.0 failed on macOS, where gcc is clang: these are its lines for the two fights."""
+        self.assertRegex("hello.c:14:28: error: expected ';' after expression", ON_PURPOSE["semicolon_slug"])
+        self.assertRegex("sum.c:14:1: warning: all paths through this function will call itself [-Winfinite-recursion]",
+                         CLANG_SEES["stack_specter"])
 
 
 class StyleFileTest(unittest.TestCase):

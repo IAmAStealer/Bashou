@@ -6,6 +6,7 @@
 """
 
 import ast
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -67,3 +68,14 @@ class SecurityTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class FakeKeyTest(unittest.TestCase):
+    def test_every_practice_key_is_known_to_gitleaks(self):
+        """CI for 0.12.0 stopped on the Key Kraken's practice key: gitleaks flags a key's header lines even with
+        nothing real inside. A practice key in our code is fine once .gitleaksignore names its file."""
+        ignored = (ROOT / ".gitleaksignore").read_text()
+        for p in SOURCES:
+            if re.search(r"-----BEGIN[ A-Z0-9_-]*PRIVATE KEY-----", p.read_text()):
+                with self.subTest(file=p.relative_to(ROOT)):
+                    self.assertIn(f":{p.relative_to(ROOT)}:private-key:", ignored)
