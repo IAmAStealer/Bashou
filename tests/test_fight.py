@@ -3,6 +3,7 @@ import datetime
 import io
 import json
 import os
+import pwd
 import random
 import re
 import shlex
@@ -135,7 +136,7 @@ SOLUTIONS = {
     "trial_dash_name": ("printf '%s\\n' -n > name.txt", None),
     "pattern_pixie": ("grep -cxE '[A-Z]{{2}}-[0-9]{{4}}' codes.txt", None),
     # linux fights: id, rights, du, tar, a unit file, headers
-    "group_gremlin": ("id -gn", None),
+    "group_gremlin": ("id -gn {x}", r"account (\S+):"),
     "padlock_pest": ("chmod 600 diary.txt && chmod 755 backup.sh", None),
     "trial_private_diary": ("chmod 600 diary.txt", None),
     "bloat_blob": ("du -s * | sort -n | tail -1 | cut -f2", None),
@@ -867,6 +868,26 @@ class CicdFightTest(unittest.TestCase):
         self.assertTrue(self.fixed("secret_sprite", swap("${{secrets.API_TOKEN}}")))
         self.assertFalse(self.fixed("secret_sprite", swap("$API_TOKEN")))
         self.assertFalse(self.fixed("secret_sprite", lambda text, meta: text + "# old: " + meta["token"] + "\n"))
+
+
+class GroupGremlinTest(unittest.TestCase):
+    """The Gremlin once asked for your own main group, which is nearly always your own name."""
+
+    ACCOUNTS = [("alice", "alice"), ("nobody", "nogroup"), ("sync", "nogroup"), ("www-data", "www-data")]
+
+    def test_asks_about_an_account_whose_group_has_another_name(self):
+        with mock.patch.object(system, "accounts", return_value=self.ACCOUNTS):
+            for seed in range(20):
+                meta = system.gremlin_setup(None, random.Random(seed))
+                self.assertIn((meta["args"]["user"], meta["answer"]), self.ACCOUNTS[1:3])
+
+    def test_never_asks_about_you(self):
+        me = pwd.getpwuid(os.getuid()).pw_name
+        self.assertNotIn(me, [user for user, _ in system.accounts()])
+
+    def test_falls_back_to_any_other_account(self):
+        with mock.patch.object(system, "accounts", return_value=[("alice", "alice")]):
+            self.assertEqual(system.gremlin_setup(None, random.Random(1))["args"]["user"], "alice")
 
 
 class UnitImpTest(unittest.TestCase):

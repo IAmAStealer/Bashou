@@ -5,6 +5,7 @@ import configparser
 import grp
 import io
 import os
+import pwd
 import tarfile
 
 from . import Challenge
@@ -17,25 +18,40 @@ ROOMS = ("attic", "cellar", "garage", "kitchen", "library", "loft", "porch", "sh
 
 # --- Group Gremlin: id -------------------------------------------------------------------------------
 
-def main_group():
-    try:
-        return grp.getgrgid(os.getgid()).gr_name
-    except KeyError:
-        return str(os.getgid())
+def accounts():
+    """(user, main group name) of every account but yours whose main group has a name."""
+    me = pwd.getpwuid(os.getuid()).pw_name
+    found = set()
+    for pw in pwd.getpwall():
+        try:
+            found.add((pw.pw_name, grp.getgrgid(pw.pw_gid).gr_name))
+        except KeyError:
+            pass
+    return sorted(pair for pair in found if pair[0] != me)
+
+
+def gremlin_setup(work, rng):
+    """Another account, best one whose main group isn't named after it (sync is in nogroup or root)."""
+    pairs = accounts()
+    odd = [pair for pair in pairs if pair[0] != pair[1]]
+    user, group = rng.choice(odd or pairs or [(pwd.getpwuid(os.getuid()).pw_name, grp.getgrgid(os.getgid()).gr_name)])
+    return {"args": {"user": user}, "answer": group}
 
 
 GROUP_GREMLIN = Challenge(
     level=1, id="group_gremlin", pet="hedgehog", tools=("id", "groups"), threat="Group Gremlin", requires=["id"],
     skill="linux",
-    task="The Group Gremlin wants to know which team you play for.\nWhat is the name of your main group (your "
-         "primary group)?",
-    help="Here, find the option that prints only the group, and the one that prints names instead of numbers.",
+    task="The Group Gremlin hides behind the account {user}: not you, another user of this machine.\nWhat is "
+         "the name of {user}'s main group (its primary group)?",
+    help="Here, find the option that prints only the group, the one that prints names instead of numbers, and "
+         "how to ask about another user than you.",
     hints=["Every user has a number (uid) and belongs to groups: one main group, which new files get, and maybe "
-           "others. id prints all of it at once: uid, gid (the main group) and groups. The name is in "
-           "brackets after gid=.",
-           "Try: id (look at gid=...) or id -gn, which prints just the main group's name."],
-    setup=lambda work, rng: {},
-    verify=lambda w, m, v: v.strip() in {main_group(), str(os.getgid())},
+           "others. A main group is often named like its user, but not always. id prints all of it, and not only "
+           "for you: id {user} works too.",
+           "The files behind it: in /etc/passwd the 4th field is the main group's number (gid), and /etc/group "
+           "gives each gid its name. On a Mac, accounts live in a directory service instead, so ask id.",
+           "Try: id {user} (look at gid=...) or id -gn {user}, which prints just the main group's name."],
+    setup=gremlin_setup,
 )
 
 
