@@ -49,17 +49,36 @@ def starter(work, data, steps, code):
 # --- running your code --------------------------------------------------------
 
 HARNESS = r"""
-import copy, importlib.util, json, sys
-path, func = sys.argv[1], sys.argv[2]
+import contextlib, copy, importlib.util, json, sys
+path, func, zeros = sys.argv[1], sys.argv[2], sys.argv[3] == "zeros"
 cases = json.load(sys.stdin)
 spec = importlib.util.spec_from_file_location("fixed", path)
 mod = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(mod)
+with contextlib.redirect_stdout(sys.stderr):       # your own prints stay out of the results
+    spec.loader.exec_module(mod)
+if not callable(getattr(mod, func, None)):
+    print(json.dumps({"missing": func}))
+    sys.exit(1)
+failed = []
 for args, want in cases:
     given = copy.deepcopy(args)
-    got = getattr(mod, func)(*given)
-    if json.loads(json.dumps(got)) != want or given != args:
-        sys.exit(1)
+    try:
+        with contextlib.redirect_stdout(sys.stderr):
+            result = getattr(mod, func)(*given)
+    except (Exception, SystemExit) as err:
+        failed.append({"args": args, "error": f"{type(err).__name__}: {err}"})
+        continue
+    try:
+        got = json.loads(json.dumps(result))
+    except (TypeError, ValueError):
+        got = None
+    if zeros and isinstance(got, dict):
+        got = {k: v for k, v in got.items() if v != 0}
+    if got != want or given != args:
+        failed.append({"args": args, "want": want, "got": repr(result), "changed": given != args})
+if failed:
+    print(json.dumps(min(failed, key=lambda f: len(json.dumps(f)))))
+    sys.exit(1)
 print("ok")
 """
 
@@ -72,12 +91,55 @@ def run(cmd, cwd, stdin="", timeout=10, env=None):
         return None
 
 
-def py_tests(name, func):
-    """verify(): call `func` from your file on the cases in meta["cases"] ([args, expected])."""
+def py_test_run(work, meta, name, func, zeros):
+    """Run the hidden tests: "ok", the smallest failing case (a dict), or None when nothing came back."""
+    r = run([sys.executable, "-c", HARNESS, str(work / name), func, "zeros" if zeros else "-"], work,
+            json.dumps(meta["cases"]), 5)
+    if r is None:
+        return None
+    if r.returncode == 0 and r.stdout.strip() == "ok":
+        return "ok"
+    try:
+        return json.loads(r.stdout)
+    except ValueError:
+        return {"broken": True}
+
+
+def py_tests(name, func, zeros=False):
+    """verify(): call `func` from your file on the cases in meta["cases"] ([args, expected]).
+    `zeros`: a dict of counts may also list what it counted 0 times."""
     def verify(work, meta, value):
-        r = run([sys.executable, "-c", HARNESS, str(work / name), func], work, json.dumps(meta["cases"]), 5)
-        return bool(r) and r.returncode == 0 and r.stdout.strip() == "ok"
+        return py_test_run(work, meta, name, func, zeros) == "ok"
     return verify
+
+
+def short(value, width=160):
+    text = value if isinstance(value, str) else repr(value)
+    return text if len(text) <= width else text[:width - 1] + "…"
+
+
+def py_why(name, func, zeros=False):
+    """why(): one hidden test your code fails, shown as a call, what it should give and what it gives
+    (bug report: a right-looking output was refused with no example to compare)."""
+    def why(work):
+        meta = json.loads((Path(work).parent / "meta.json").read_text())
+        fail = py_test_run(work, meta, name, func, zeros)
+        if fail == "ok":
+            return None
+        if fail is None:
+            return _("Your code didn't finish within 5 seconds: a loop that never ends?")
+        if "missing" in fail:
+            return _("{name} has no function {func}() any more: did you rename it?").format(name=name, func=func)
+        if fail.get("broken"):
+            return _("Your file doesn't run: python3 {name} shows why.").format(name=name)
+        call = short(f"{func}({', '.join(repr(a) for a in fail['args'])})", 400)   # the input, in full if it can
+        if "error" in fail:
+            return _("One test fails: {call} raises {error}.").format(call=call, error=fail["error"])
+        if fail["changed"]:
+            return _("One test fails: {call} changes what it was given.").format(call=call)
+        return _("One test fails: {call} should give {want}, yours gives {got}.").format(
+            call=call, want=short(fail["want"]), got=short(fail["got"]))   # got: repr of what you returned
+    return why
 
 
 def py_output(name):
@@ -684,14 +746,15 @@ ALL = [
                      "Build a new list instead.",
                      "Try: seen = [] then for host in hosts: if host not in seen: seen.append(host), "
                      "and return seen."],
-              setup=list_setup, verify=py_tests("hosts.py", "unique")),
+              setup=list_setup, verify=py_tests("hosts.py", "unique"), why=py_why("hosts.py", "unique")),
     Challenge(level=2, id="dict_djinn", fix=True, pet="snake", threat="Dict Djinn", **PY,
               task="The Dict Djinn hid a key: tally.py crashes with KeyError: '{level}'.\n"
                    "Fix tally.py (its first lines say what it must do). Run it: python3 tally.py\n"
                    "When it works, type: verify",
               hints=["counts[level] += 1 reads counts[level] first, and the first time it isn't there.",
                      "Try: counts[level] = counts.get(level, 0) + 1"],
-              setup=dict_setup, verify=py_tests("tally.py", "count_levels")),
+              setup=dict_setup, verify=py_tests("tally.py", "count_levels", zeros=True),
+              why=py_why("tally.py", "count_levels", zeros=True)),
     Challenge(level=2, id="except_eel", fix=True, pet="snake", threat="Except Eel", **PY,
               task="The Except Eel slipped a bare except into count.py: a missing file prints 0, and the script "
                    "says it worked.\nFix count.py (its first lines say what it must do). Run it: python3 count.py "
@@ -708,14 +771,14 @@ ALL = [
                    "When it works, type: verify",
               hints=["A while loop stops when its condition turns false. What in the loop changes i?",
                      "Add i += 1 inside the loop (or write: for i in range(tries):)."],
-              setup=loop_setup, verify=py_tests("retry.py", "delays")),
+              setup=loop_setup, verify=py_tests("retry.py", "delays"), why=py_why("retry.py", "delays")),
     Challenge(level=2, id="ouroboros", fix=True, pet="snake", threat="Ouroboros", **PY,
               task="The Ouroboros bites its own tail: du.py forgets the files in subfolders.\n"
                    "Fix du.py (its first lines say what it must do). Run it: python3 du.py\n"
                    "When it works, type: verify",
               hints=["total(item) is called for each subfolder, but where does its result go?",
                      "Write: size += total(item)"],
-              setup=tree_setup, verify=py_tests("du.py", "total")),
+              setup=tree_setup, verify=py_tests("du.py", "total"), why=py_why("du.py", "total")),
     Challenge(level=2, id="json_jinn", pet="snake", threat="JSON Jinn", **PY,
               task="The JSON Jinn guards config.json. Read it with python3, not by eye.\n"
                    "Which port does the database use? Answer with: answer <port>\n"

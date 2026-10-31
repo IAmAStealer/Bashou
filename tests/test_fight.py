@@ -1030,6 +1030,47 @@ class SqlFightTest(unittest.TestCase):
             self.assertEqual(meta["answer"], str(total))
 
 
+class PythonTestsFightTest(unittest.TestCase):
+    def djinn(self, old, new):
+        base = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, base)
+        work = base / "arena"
+        work.mkdir()
+        ch = challenges.BY_ID["dict_djinn"]
+        meta = {"challenge": ch.id, **ch.setup(work, random.Random(1))}
+        (base / "meta.json").write_text(json.dumps(meta))
+        tally = work / "tally.py"
+        tally.write_text(tally.read_text().replace(old, new))
+        return ch, work, meta
+
+    def test_counts_of_zero_are_right(self):
+        """Bug report: a dict with every level, some at 0, printed right on app.log but verify refused it."""
+        ch, work, meta = self.djinn("    counts = {}", "    counts = {'DEBUG': 0, 'INFO': 0, 'WARN': 0, 'ERROR': 0}")
+        self.assertTrue(ch.check(work, meta, "done"))
+        self.assertIsNone(ch.why(work))
+
+    def test_a_failed_verify_shows_one_test(self):
+        """Bug report: verify said "not yet" with no example to compare with."""
+        ch, work, meta = self.djinn("counts[level] += 1", "counts[level] = 1")
+        self.assertFalse(ch.check(work, meta, "done"))
+        why = ch.why(work)
+        self.assertRegex(why, r"count_levels\(\[.*\]\) should give \{.*\}, yours gives \{.*\}")
+        ch, work, meta = self.djinn("x", "x")                         # the bug as given: a KeyError
+        self.assertIn("raises KeyError", ch.why(work))
+
+    def test_what_the_tests_tell_is_true(self):
+        """python-judge: a debug print, a set returned, a renamed function or sys.exit() each got a wrong message."""
+        fix = "counts[level] = counts.get(level, 0) + 1"
+        ch, work, meta = self.djinn("counts[level] += 1", "print(level)\n        " + fix)
+        self.assertTrue(ch.check(work, meta, "done"))                 # your prints don't break the tests
+        ch, work, meta = self.djinn("        counts[level] += 1\n    return counts", f"        {fix}\n    return set(counts)")
+        self.assertRegex(ch.why(work), r"yours gives (set\(\)|\{')")   # what you returned, not a TypeError
+        ch, work, meta = self.djinn("def count_levels", "def tally")
+        self.assertIn("no function count_levels()", ch.why(work))
+        ch, work, meta = self.djinn("        counts[level] += 1\n    return counts", f"        {fix}\n    raise SystemExit(1)")
+        self.assertIn("raises SystemExit", ch.why(work))
+
+
 class GitFightTest(unittest.TestCase):
     @unittest.skipUnless(shutil.which("git"), "needs git")
     def test_fight_repos_run_no_background_maintenance(self):
