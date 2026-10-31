@@ -28,14 +28,23 @@ def log(base, *records):
 
 
 class JudgeTest(unittest.TestCase):
-    def test_the_lesson_hits_other_tools_hurt_looking_is_free(self):
+    def test_the_lesson_hits_only_wrong_answers_hurt(self):
         hydra = challenges.BY_ID["grep_hydra"]
         self.assertEqual(duel.judge(hydra, 0, "grep -c ERROR app.log"), "hit")
         self.assertEqual(duel.judge(hydra, 0, "cat app.log | grep ERROR"), "hit")
-        self.assertEqual(duel.judge(hydra, 2, "grep -c ERROR nope.log"), "hurt")      # missed
-        self.assertEqual(duel.judge(hydra, 0, "awk '/ERROR/' app.log"), "hurt")       # not the lesson
+        self.assertEqual(duel.judge(hydra, duel.WRONG, "answer 3"), "hurt")
         for free in ("ls -la", "cat app.log", "cd ..", "head -3 app.log", "hint", "task", "answer 3"):
             self.assertIsNone(duel.judge(hydra, 0, free), free)
+        self.assertIsNone(duel.judge(hydra, 1, "answer 3"))      # right, but without grep: told, not hurt
+
+    def test_trying_things_is_free(self):
+        """Owner bug: running your python3 script and seeing it fail cost a heart. Trying is how you
+        learn; only a wrong answer costs one, in every fight. `verify` checks a fix: it's always safe."""
+        hydra, leech = challenges.BY_ID["grep_hydra"], challenges.BY_ID["list_leech"]
+        self.assertIsNone(duel.judge(hydra, 2, "grep -c ERROR nope.log"))
+        self.assertIsNone(duel.judge(hydra, 0, "awk '/ERROR/' app.log"))
+        self.assertIsNone(duel.judge(leech, 1, "python3 hosts.py"))
+        self.assertIsNone(duel.judge(leech, 1, "verify"))
 
     def test_every_reference_solution_hits(self):
         for ch in challenges.ALL:
@@ -63,7 +72,6 @@ class JudgeTest(unittest.TestCase):
         hydra, imp = challenges.BY_ID["grep_hydra"], challenges.BY_ID["indent_imp"]
         self.assertIsNone(duel.judge(hydra, 127, "gerp ERROR app.log"))
         self.assertIsNone(duel.judge(hydra, 0, "find . -name '*.log'"))
-        self.assertEqual(duel.judge(hydra, 0, "awk '/ERROR/' app.log"), "hurt")       # still not the lesson
         for cmd in ("grep -n steps .github/workflows/ci.yml", "cat -A .github/workflows/ci.yml | grep run",
                     "diff ci.yml ci.yml.bak", "cp ci.yml ci.yml.bak"):
             self.assertIsNone(duel.judge(imp, 0, cmd), cmd)
@@ -73,7 +81,7 @@ class JudgeTest(unittest.TestCase):
         """Fix fights: opening an editor is free, building or running your program hits."""
         leech, slug = challenges.BY_ID["list_leech"], challenges.BY_ID["semicolon_slug"]
         self.assertIsNone(duel.judge(leech, 0, "nano hosts.py"))
-        self.assertEqual(duel.judge(leech, 1, "python3 hosts.py"), "hurt")
+        self.assertIsNone(duel.judge(leech, 1, "python3 hosts.py"))
         self.assertEqual(duel.judge(slug, 0, "./hello"), "hit")
         self.assertEqual(duel.judge(slug, 0, "gcc hello.c -o hello && ./hello"), "hit")
 
@@ -90,17 +98,17 @@ class ScoreTest(TempState):
         d = duel.load(self.base)
         self.assertEqual((d["enemy"], d["hearts"], d["event"]), (1, duel.HEARTS, "hit"))
 
-    def test_three_wrong_commands_knock_you_out(self):
-        log(self.base, (0, "ls"), (0, "awk 1 app.log"))
+    def test_three_wrong_answers_knock_you_out(self):
+        log(self.base, (0, "ls"), (0, "awk 1 app.log"), (1, "grep"), (duel.WRONG, "answer 1"))
         self.assertEqual(duel.cmd_judge(self.base), 0)
-        log(self.base, (0, "sed -n 1p app.log"))
+        log(self.base, (duel.WRONG, "answer 2"))
         self.assertEqual(duel.cmd_judge(self.base), 0)
         self.assertEqual(duel.load(self.base)["hearts"], 1)
-        log(self.base, (1, "grep"))
+        log(self.base, (duel.WRONG, "answer 4"))
         self.assertEqual(duel.cmd_judge(self.base), duel.KO)
 
     def test_each_command_is_judged_once(self):
-        log(self.base, (0, "awk 1 app.log"))
+        log(self.base, (duel.WRONG, "answer 1"))
         duel.cmd_judge(self.base)
         duel.cmd_judge(self.base)                          # an empty Enter: nothing new
         self.assertEqual(duel.load(self.base)["hearts"], duel.HEARTS - 1)
@@ -150,11 +158,11 @@ class ArenaShellTest(TempState):
                               env=env, capture_output=True, text=True, timeout=30).returncode
 
     def test_knocked_out(self):
-        self.assertEqual(self.run_arena(["ls", "awk 1 app.log", "sed 1d app.log", "wc -l app.log", "echo still"]),
+        self.assertEqual(self.run_arena(["ls", "awk 1 app.log", "answer -1", "answer -2", "answer -3", "echo still"]),
                          duel.KO)
 
     def test_without_the_duel_nothing_hurts(self):
-        self.assertEqual(self.run_arena(["awk 1 app.log", "sed 1d app.log", "wc -l app.log", "flee"], duel_on=False),
+        self.assertEqual(self.run_arena(["answer -1", "answer -2", "answer -3", "flee"], duel_on=False),
                          fight.FLEE)
 
     def test_a_knockout_ends_the_threat(self):

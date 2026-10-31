@@ -1,9 +1,8 @@
 """The fight, drawn where your pet lives: the task, your pet and its hearts, the enemy and its health.
 
 In the arena, every command is judged (`judge`): a successful command with the fight's tool hits the
-enemy, looking around is free, anything else (or a failed command with the tool) hurts you. A typo
-(command not found) is free, and so is any other command in a fight where you fix a file: `verify`
-checks the result there. At 0 hearts you're knocked out. `start()` runs `python3 launch.py bashou.duel <arena> <shell pid>`, which draws
+enemy, and only a wrong `answer` hurts you. Trying things, looking around, typos, failed runs and
+`verify` (it checks your fix, it's safe) are free: that's how you find the answer. At 0 hearts you're knocked out. `start()` runs `python3 launch.py bashou.duel <arena> <shell pid>`, which draws
 it at the top right, flashing whoever was hit; the arena's prompt runs `judge` after each command.
 """
 
@@ -25,12 +24,8 @@ from .render import ESC
 HEARTS = 3
 ENEMY = 3                 # health pips; hits bring it to 1, `answer` lands the last blow
 KO = 4                    # exit code of the arena shell when you're knocked out
+WRONG = 5                 # exit code of `answer` when the answer is wrong: ♥ -1 (`verify` is always safe)
 FLASH = 0.6               # seconds a hit flashes
-FREE = {"ls", "cd", "pwd", "cat", "head", "tail", "less", "more", "file", "stat", "tree", "echo", "nl", "find",
-        "realpath", "readlink", "whoami", "id", "date",
-        "clear", "man", "help", "history", "type", "which", "task", "hint", "lesson", "answer", "verify", "check", "flee", "bashou",
-        "nano", "vi", "vim", "nvim", "emacs", "micro", "ed", "code"}   # editing a file to fix is fine
-NOT_FOUND = 127                  # bash's status for a command that doesn't exist: a typo
 
 ENEMIES = Path(__file__).resolve().parent / "enemies"     # <challenge id>.json, the pet format, facing left
 PLACEHOLDER = ((150, 150, 160), (80, 80, 90))              # for a new fight still without its sprite
@@ -41,11 +36,9 @@ def judge(ch, status, command):
     found = analyze(command)
     if found.help_only:
         return None                                       # reading the help is never a mistake
-    if ch.used_by(found):
-        return "hit" if status == 0 else "hurt"
-    if status == NOT_FOUND or ch.fix:      # a typo; or a fight where Bashou checks the file itself:
-        return None                        # looking around with grep or diff can't cheat, it helps
-    return None if found.tools <= FREE else "hurt"
+    if "answer" in found.tools:
+        return "hurt" if status == WRONG else None
+    return "hit" if status == 0 and ch.used_by(found) else None
 
 
 def path(base):
@@ -75,8 +68,7 @@ def cmd_judge(base):
             d["said"] = "💥 " + cap(_("{tool} hits the {threat}!").format(tool=ch.tool, threat=_(ch.threat)))
         elif verdict == "hurt":
             d["hearts"] = max(0, d["hearts"] - 1)
-            d["said"] = "✗ " + (_("Missed! ♥ -1") if ch.used_by(analyze(command)) else
-                                _("That's not {tool}: ♥ -1").format(tool=ch.tool))
+            d["said"] = "✗ " + _("Wrong answer: ♥ -1")
         if verdict:
             d["event"], d["at"] = verdict, time.time()
     d["offset"] = len(data)

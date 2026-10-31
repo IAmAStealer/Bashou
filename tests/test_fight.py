@@ -787,12 +787,12 @@ class CicdFightTest(unittest.TestCase):
         cicd.write(base / "arena", cicd.WORKFLOW, cicd.GH_OK.replace("        run:", "\t  run:"))
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
-            self.assertEqual(fight.cmd_answer(str(base), "done"), 1)
+            self.assertEqual(fight.cmd_answer(str(base), "done"), 1)                 # verify is safe
         self.assertIn("line 13 has a tab", out.getvalue())
         cicd.write(base / "arena", cicd.WORKFLOW, cicd.GH_OK.replace("ubuntu-latest", "macos-latest"))
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
-            self.assertEqual(fight.cmd_answer(str(base), "done"), 1)
+            self.assertEqual(fight.cmd_answer(str(base), "done"), 1)                 # verify is safe
         self.assertNotIn("YAML", out.getvalue())                         # valid YAML, just not the fix
         for right, wrong in cicd.INDENT_MISTAKES:
             with tempfile.TemporaryDirectory() as tmp:

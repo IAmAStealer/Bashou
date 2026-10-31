@@ -68,7 +68,8 @@ Bashou vit dans ton vrai terminal, pendant que tu travailles : un seul compagnon
 
 Ça commence par les premiers pas (une option à trouver dans `--help`, une faute à corriger dans ton
 éditeur, des fichiers à ranger) et ça monte jusqu'aux droits Linux, aux services et aux conflits de fusion
-git. Une commande réussie avec le bon outil touche l'ennemi ; les autres te coûtent un cœur.
+git. Une commande réussie avec le bon outil touche l'ennemi ; seule une mauvaise réponse à `answer`
+te coûte un cœur (`verify` ne coûte rien) : essaie autant que tu veux à l'invite.
 
 - **Combats de code** : un petit fichier Python, C ou Rust cassé à réparer (un `;` oublié, une boucle sans
   fin, une fuite de mémoire, une injection shell).

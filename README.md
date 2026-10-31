@@ -68,8 +68,8 @@ Bashou runs in your real terminal, while you work: one pet for all your terminal
 
 They start with the first steps (an option to find in `--help`, a typo to fix in your editor, files to
 tidy) and go up to Linux rights, services and git merge conflicts. A successful command with the right
-tool hits the enemy; other commands cost you a heart (looking around with `ls`, `cat` or `find`, or a
-typo, never does; in a fight where you fix a file, only a failed try with the tool does).
+tool hits the enemy; only a wrong `answer` costs you a heart (`verify` is always safe), so try things at
+the prompt as much as you like.
 
 - **Code fights** hand you a small broken Python, C or Rust file to fix (a missing `;`, a loop that never
   ends, a memory leak, a shell injection).

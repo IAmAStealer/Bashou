@@ -405,7 +405,7 @@ def cmd_answer(base, value):
         else:
             print(BAD + "✗ " + _("Not quite. The {threat} shrugs it off.").format(threat=_(ch.threat))
                   + f"{RESET} {DIM}(hint · lesson · task · flee){RESET}")
-        return 1
+        return 1 if ch.fix else duel.WRONG
     if ch.kind == "fight" and not used_tool(base, ch) and ch.needs:
         print(ACCENT + "✓ " + _("Right answer.") + " " + _(ch.needs) + RESET)
         return 1
@@ -534,7 +534,7 @@ def stop_shell(shell):
 
 def arena(ch, intro, rng=None, fight=False, help_first=False, limit=None):
     """Run the sandbox bash for `ch`. `intro(task_text)` is printed first. Returns (exit code, notes).
-    With `fight`, the duel is drawn at the top and wrong commands cost hearts (duel.py). With `limit`
+    With `fight`, the duel is drawn at the top and wrong answers cost hearts (duel.py). With `limit`
     (seconds), Bashou stops the shell when the time is up and the code is TIMEOUT."""
     base = Path(tempfile.mkdtemp(prefix="bashou-arena-"))
     work = base / "arena"
@@ -642,8 +642,8 @@ def run(ch=None, limit=None, badger=False):
               + RESET)
     elif code == KO:
         print(f"\n{BAD}{BOLD}💫 " + _("Knocked out! The {threat} wins this time.").format(threat=_(ch.threat))
-              + f"{RESET}\n{DIM}" + _("Only `{tool}` hurts it; looking around (ls, cat, find…) and typos are free. "
-                                       "It'll be back.").format(tool=ch.tool) + RESET)
+              + f"{RESET}\n{DIM}" + _("Only wrong answers cost hearts: try things at the prompt as much as you like before you answer. "
+                                       "It'll be back.") + RESET)
     else:
         print(f"\n{DIM}" + _("You fled. The {threat} will be back.").format(threat=_(ch.threat)) + RESET)
     if told:

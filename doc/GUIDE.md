@@ -58,7 +58,7 @@ A pixel-art pet that lives in the top-right corner of your terminal and grows as
   `verify` will (and runs `yamllint` if you have it); logic fights come with a small test script to
   run and extend. For your first 5 wins, the first `hint` teaches
   you to ask the tool itself: `wc --help`, how to read its Usage line (`[ ]` optional, `...` several)
-  and its option list, and what to look for in it. Reading help (`--help`, `man`) never costs a heart.
+  and its option list, and what to look for in it. Only a wrong `answer` costs a heart; `verify` is always safe.
 - **Reviews: beaten fights come back.** We remember what we practise again just as we start to
   forget it, so Bashou uses spaced repetition (the "1-7-30" rhythm of flashcard systems like the
   Leitner boxes). A fight you win comes back **1 day** later, then **7 days** after that, then
