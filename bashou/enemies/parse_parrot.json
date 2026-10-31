@@ -1,0 +1,59 @@
+{
+ "name": "Parse Parrot",
+ "palette": {
+  "r": "#e04848",
+  "R": "#9a2828",
+  "g": "#48b058",
+  "G": "#2a7a38",
+  "b": "#4a84e0",
+  "B": "#2a4a9a",
+  "Y": "#f4c840",
+  "y": "#8a6420",
+  "p": "#ffffff",
+  "q": "#8890a0",
+  "h": "#8a5a30",
+  "e": "#ffffff",
+  "k": "#101018"
+ },
+ "base": [
+  ".......rrrr......",
+  ".....rrrrrrrR....",
+  "....rrekrrrrrR...",
+  "..YYYrrrrrrrrR...",
+  ".YyyYYrrrgggggR..",
+  ".Y..yYrrgggggggG.",
+  "..pppYrgggbbgggG.",
+  "..pqp.ggbbbbbgGG.",
+  "..ppp..gbbbbBgG..",
+  "..pqp...GgggG.bB.",
+  "..ppp...y..y..bBB",
+  "hhhhhhhhhhhhhhhhh"
+ ],
+ "poses": {
+  "inhale": {
+   "4": "-YyyYYrrgggggggR-",
+   "5": "-Y..yYrgggggggggG"
+  },
+  "closed": {
+   "2": "------kk---------"
+  },
+  "left": {
+   "2": "------ke---------"
+  },
+  "right": {
+   "2": "------ek---------"
+  },
+  "fidget": {
+   "6": "..pppY-----------",
+   "7": "..pqp.-----------",
+   "8": "..ppp..----------",
+   "9": "..pqp...---------",
+   "10": "..ppp...---------",
+   "11": "..pqp------------"
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

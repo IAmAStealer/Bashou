@@ -156,6 +156,19 @@ SOLUTIONS = {
     "negation_gnome": ("sed -i 's/if ! grep/if grep/' door.sh", None),
     "trial_logic_door": ("sed -i 's/if ! grep/if grep/' door.sh", None),
     "coin_wraith": ("sed -i 's/||/\\&\\&/' save.sh", None),
+    "square_spider": ("sed -i '/^while/,$d' common.sh && echo 'grep -Fxf newsletter.txt customers.txt' >> common.sh",
+                      None),
+    "trial_logic_missing": ("sed -i '/^while/,$d' missing.sh && echo 'grep -vFxf present.txt team.txt' >> missing.sh",
+                            None),
+    "parse_parrot": ("sed -i -e '/^  price=/d' -e 's/\\$((price \\* qty))/$((price[$item] * qty))/' bill.sh && "
+                     "sed -i '/^while/i declare -A price; "
+                     "while read -r item cents; do price[$item]=$cents; done < prices.txt' bill.sh", None),
+    "bitflip_banshee": ("sed -i -e 's/^  s1=.*/  s1=$(( b[1] ^ b[3] ^ b[5] ^ b[7] ))/' -e 's/^  s2=.*/  "
+                        "s2=$(( b[2] ^ b[3] ^ b[6] ^ b[7] ))/' -e 's/^  s4=.*/  s4=$(( b[4] ^ b[5] ^ b[6] ^ b[7] ))/' "
+                        "fix_bits.sh", None),
+    "trial_logic_parity": ("sed -i 's/p | /p ^ /' parity.sh", None),
+    "trial_logic_shelf": ("sed -i 's/^  place=.*/  place=${{shelf[$item]}}/' shelf.sh && sed -i '/^while/i declare -A "
+                          "shelf; while read -r item n; do shelf[$item]=$n; done < shelves.txt' shelf.sh", None),
     # rust fights (rustc): fix the file
     "mut_marmot": ("sed -i 's/let errors = 0;/let mut errors = 0;/' counter.rs", None),
     "const_condor": ("sed -i 's/^const MAX_POINTS = /const MAX_POINTS: u32 = /' points.rs", None),

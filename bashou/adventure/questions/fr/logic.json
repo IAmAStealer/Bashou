@@ -492,5 +492,200 @@
   ],
   "answer": 0,
   "explain": "sh (dash sur Debian) suit POSIX : dans [ ], l'égalité de texte est = ; == est à bash, et dash répond « unexpected operator ». -a et -o dans [ ] ont été retirés de POSIX : dash les accepte encore, mais ils sont ambigus avec certaines valeurs. Relie deux tests avec && ou || entre eux. [[ ]] n'existe qu'en bash."
+ },
+ {
+  "id": "logic-2-18",
+  "level": 2,
+  "q": "Deux boucles imbriquées comparent chaque ligne de a.txt à chaque ligne de b.txt : 1 seconde pour 1 000 lignes chacun. Et pour 10 000 ?",
+  "choices": [
+   "Environ 100 secondes",
+   "Environ 10 secondes",
+   "Environ 20 secondes",
+   "Environ 1 000 secondes"
+  ],
+  "answer": 0,
+  "explain": "Chaque boucle tourne 10 fois plus, et elles se multiplient : 10 × 10 = 100 fois plus de comparaisons, environ 100 secondes. 10 secondes, ce serait une seule boucle (un travail qui grandit comme n). Des boucles imbriquées grandissent comme n × n : un script qui allait bien sur un échantillon peut prendre des heures sur le vrai fichier."
+ },
+ {
+  "id": "logic-2-19",
+  "level": 2,
+  "q": "Tu chronomètres un script sur 100, 200, puis 400 lignes : 0,1 s, 0,2 s, 0,4 s. Qu'est-ce que ça t'apprend ?",
+  "choices": [
+   "Il grandit comme n : 2 × plus de lignes, 2 × le temps",
+   "Son travail grandit comme n × n",
+   "Il est trop lent pour les gros fichiers",
+   "Rien : une mesure par taille ne prouve rien"
+  ],
+  "answer": 0,
+  "explain": "Quand les lignes doublent, le temps double : le travail grandit comme n, 100 fois plus de lignes prennent environ 100 fois plus de temps. Avec une boucle dans une boucle, le temps serait × 4 à chaque fois (n × n). Chronométrer un script sur des tailles qui doublent te dit lequel tu as, avant que les vraies données le fassent."
+ },
+ {
+  "id": "logic-2-20",
+  "level": 2,
+  "q": "Quelle commande affiche les lignes de a.txt qui sont aussi une ligne de b.txt, en lisant chaque fichier une fois ?",
+  "choices": [
+   "grep -Fxf b.txt a.txt",
+   "Une boucle while qui lance grep -qxF sur b.txt par ligne",
+   "grep -f b.txt a.txt",
+   "cat a.txt b.txt | uniq -d"
+  ],
+  "answer": 0,
+  "explain": "grep -Fxf lit b.txt une fois (-f), en texte simple (-F), et garde les lignes de a.txt égales à une ligne entière (-x). La boucle est juste, mais elle lance un grep par ligne, et chacun relit b.txt jusqu'à trouver la ligne. Sans -F ni -x, chaque ligne est une regex et se trouve dans des lignes plus longues. sort a.txt b.txt | uniq -d ne marche que si aucun fichier ne répète une ligne."
+ },
+ {
+  "id": "logic-3-12",
+  "level": 3,
+  "q": "for f in *; do n=$(wc -l < big.csv); echo \"$f $n\"; done tourne dans un dossier de 50 000 fichiers et c'est lent. Pourquoi ?",
+  "choices": [
+   "wc relit big.csv à chaque tour pour la même réponse",
+   "La boucle for : bash ne sait pas tourner 50 000 fois",
+   "echo : printf serait plus rapide",
+   "Le * : ls listerait les fichiers plus vite"
+  ],
+  "answer": 0,
+  "explain": "Le nombre de lignes de big.csv ne change jamais, et pourtant la boucle lance wc et relit le fichier 50 000 fois. Monte n=$(wc -l < big.csv) au-dessus de la boucle : il tourne une fois. Un travail dont la réponse ne change pas se fait hors de la boucle. Bash fait 50 000 tours en une fraction de seconde quand le corps ne coûte rien, et développe * une fois."
+ },
+ {
+  "id": "logic-3-13",
+  "level": 3,
+  "q": "grep -xf list.txt data.txt, 20 000 adresses dans chacun, prend une minute et trouve ana-b@example.org pour ana.b@example.org. La solution ?",
+  "choices": [
+   "-F : lire les lignes de list.txt comme du texte",
+   "-x : seulement des lignes entières",
+   "-i : ignorer la casse",
+   "-w : seulement des mots entiers"
+  ],
+  "answer": 0,
+  "explain": "Sans -F, chaque ligne de list.txt est une regex : le point vaut n'importe quel caractère, donc ana.b trouve ana-b, et grep essaie 20 000 regex sur chaque ligne. Avec -F, il les lit comme du texte fixe et les cherche toutes à la fois : moins d'une seconde au lieu d'une minute (GNU grep 3.11). -x est déjà là : lignes entières seulement."
+ },
+ {
+  "id": "logic-2-21",
+  "level": 2,
+  "q": "bill.sh parcourt 20 000 commandes et lance price=$(grep \"^$item \" prices.txt | cut -d' ' -f2) pour chacune. Pourquoi est-ce lent ?",
+  "choices": [
+   "Chaque ligne lance des programmes et relit prices.txt",
+   "read -r est lent sur les longs fichiers",
+   "printf est plus lent qu'echo",
+   "Le calcul dans $(( )) est lent"
+  ],
+  "answer": 0,
+  "explain": "$( ) lance un nouveau processus, grep et cut en lancent deux de plus, et grep relit prices.txt depuis le début : chaque ligne paie des programmes et une recherche. Ensemble, environ une milliseconde par ligne : 20 000 lignes prennent une demi-minute. Lis prices.txt une fois dans une table, et la boucle ne fait qu'une recherche dans la table par ligne."
+ },
+ {
+  "id": "logic-2-22",
+  "level": 2,
+  "q": "declare -A price; price[tea]=250. Qu'affiche echo \"${price[tea]}\" ?",
+  "choices": [
+   "250",
+   "tea",
+   "price[tea]",
+   "Rien : declare -A fait une liste"
+  ],
+  "answer": 0,
+  "explain": "declare -A crée un tableau associatif : une table d'un nom (la clé) vers une valeur. price[tea]=250 range 250 sous tea, ${price[tea]} le relit. Sans -A, bash crée un tableau simple : tea est lu comme un calcul, une variable tea, vide donc 0, et tous les noms tombent dans la même case. Il faut bash 4 ou plus : le /bin/bash 3.2 de macOS n'a pas -A."
+ },
+ {
+  "id": "logic-2-23",
+  "level": 2,
+  "q": "La boucle qui remplit la table des prix va où ?",
+  "choices": [
+   "Avant la boucle des commandes : prices.txt lu une fois",
+   "Dans la boucle des commandes, pour des prix frais",
+   "Après la boucle des commandes",
+   "Dans un second script lancé par commande"
+  ],
+  "answer": 0,
+  "explain": "Remplis la table en un passage avant la boucle : prices.txt est lu une fois, puis chaque commande y cherche son prix. Dans la boucle des commandes, il serait relu à chaque ligne : n commandes × m prix, le même travail qu'avant, juste en bash."
+ },
+ {
+  "id": "logic-3-14",
+  "level": 3,
+  "q": "awk 'NR == FNR { p[$1] = $2; next } { print $1, p[$2] }' prices.txt orders.txt. Quand NR == FNR est-il vrai ?",
+  "choices": [
+   "Pendant qu'awk lit le premier fichier, prices.txt",
+   "Sur chaque ligne des deux fichiers",
+   "Seulement sur la première ligne",
+   "Jamais : NR et FNR comptent pareil"
+  ],
+  "answer": 0,
+  "explain": "NR compte toutes les lignes lues, FNR repart à 1 à chaque fichier. Ils ne sont égaux que pendant le premier fichier : awk y remplit la table et next passe à la ligne suivante. Sur orders.txt, NR continue de grandir et le second bloc cherche les prix. Attention : si prices.txt est vide, NR == FNR reste vrai sur orders.txt aussi."
+ },
+ {
+  "id": "logic-3-15",
+  "level": 3,
+  "q": "Une table indexée par ${item%%-*} (le nom jusqu'au premier -) donne un mauvais prix pour tea. Pourquoi ?",
+  "choices": [
+   "tea-xl devient tea : deux articles, une seule clé",
+   "%% enlève tout le nom",
+   "Une clé ne peut pas contenir de -",
+   "declare -A trie les clés"
+  ],
+  "answer": 0,
+  "explain": "${item%%-*} coupe du premier - jusqu'à la fin : tea-xl devient tea. Les deux articles tombent sur la même clé, et le dernier prix lu gagne. Une table a besoin d'une clé unique par article : ici le nom entier : price[$item]=$cents."
+ },
+ {
+  "id": "logic-2-24",
+  "level": 2,
+  "q": "Avec un bit de parité paire, 1011 est envoyé en 10111. Quel mot, à l'arrivée, montre qu'un bit a changé ?",
+  "choices": [
+   "10011",
+   "10111",
+   "11110",
+   "00000"
+  ],
+  "answer": 0,
+  "explain": "Parité paire : le bit de parité rend pair le nombre de 1. 10111 a quatre 1, pair : rien à signaler. 10011 en a trois, impair : un bit a changé. 11110 et 00000 ont un compte pair : plus de bits ont changé, et la parité ne voit rien. En bash, fais le XOR de tous les bits : $(( 1 ^ 0 ^ 0 ^ 1 ^ 1 )) donne 1, le compte est impair."
+ },
+ {
+  "id": "logic-2-25",
+  "level": 2,
+  "q": "Qu'affiche echo $(( 1 ^ 1 ^ 1 )) ?",
+  "choices": [
+   "1",
+   "0",
+   "3",
+   "111"
+  ],
+  "answer": 0,
+  "explain": "^ est le XOR : 1 quand un nombre impair de ses bits vaut 1. 1 ^ 1 = 0, puis 0 ^ 1 = 1. Trois 1, c'est impair, donc 1. Avec |, le OU, ça afficherait aussi 1, mais 1 | 1 | 1 | 1 donne toujours 1 là où le XOR donne 0 : le OU ne sait pas compter."
+ },
+ {
+  "id": "logic-2-26",
+  "level": 2,
+  "q": "Un octet envoyé avec un bit de parité paire arrive avec un nombre impair de 1. Que sais-tu ?",
+  "choices": [
+   "Un nombre impair de bits a changé : lesquels, on ne sait pas",
+   "Le dernier bit a changé, exactement",
+   "Rien n'a changé",
+   "Deux bits ont changé"
+  ],
+  "answer": 0,
+  "explain": "Chaque inversion change le compte de 1 d'une unité : un compte impair veut dire 1, 3, 5 ou 7 inversions, le plus souvent une. La parité ne dit pas quel bit : toutes les inversions se ressemblent. Deux inversions ramènent un compte pair et passent inaperçues. Pour trouver le bit, il faut plus de contrôles, comme les codes de Hamming."
+ },
+ {
+  "id": "logic-3-16",
+  "level": 3,
+  "q": "Un mot Hamming(7,4) arrive. Les contrôles donnent s1=1, s2=0, s4=1. Que fait le décodeur ?",
+  "choices": [
+   "Il remet le bit 5",
+   "Il remet le bit 2",
+   "Rien : le mot est bon",
+   "Il redemande le mot"
+  ],
+  "answer": 0,
+  "explain": "Lis les contrôles comme un nombre binaire s4 s2 s1 : 101 vaut 5, la position du bit inversé (s1 et s4 lisent la position 5, s2 non). Le décodeur remet b[5], b[5] ^ 1, puis garde les positions 3, 5, 6 et 7. Les trois à 0 : aucune inversion."
+ },
+ {
+  "id": "logic-3-17",
+  "level": 3,
+  "q": "sha256sum -c SHA256SUMS dit debian.iso: FAILED. Qu'en faire ?",
+  "choices": [
+   "Copier ou télécharger le fichier à nouveau",
+   "Reconstruire le fichier à partir de la somme",
+   "Remettre le bit que la somme désigne",
+   "Relancer sha256sum jusqu'à ce qu'il dise OK"
+  ],
+  "answer": 0,
+  "explain": "Une somme de contrôle détecte tout changement, mais ne dit pas où : 64 chiffres hexa pour tout le fichier. Elle ne répare donc pas : récupère une bonne copie. La relancer redonne en général FAILED : la copie sur le disque a changé. Si elle dit OK, l'inversion a eu lieu à la lecture (RAM, câble) : vérifie la machine. Contre une falsification, vérifie aussi la signature des sommes."
  }
 ]

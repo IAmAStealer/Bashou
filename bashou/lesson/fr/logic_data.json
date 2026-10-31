@@ -1,0 +1,144 @@
+{
+  "title": "Mettre les données en forme une fois : les tables",
+  "summary": "Relire un fichier à chaque ligne coûte cher. Lis-le une fois dans une table, declare -A ou awk, et chaque ligne devient une seule recherche.",
+  "pages": [
+    {
+      "scheme": [
+        " while read -r customer item qty; do",
+        "   price=$(grep \"^$item \" prices.txt |",
+        "           cut -d' ' -f2)",
+        "   …",
+        " done < orders.txt",
+        "",
+        "   à chaque ligne : $( ) lance un processus",
+        "                   grep et cut aussi",
+        "                   prices.txt relu"
+      ],
+      "point": 1,
+      "mark": [
+        "$(grep",
+        "prices.txt relu"
+      ],
+      "text": [
+        "bill.sh n'a qu'une boucle : n commandes, n tours. Pourtant 1 000 commandes prennent 1,4 s : chaque tour coûte cher.",
+        "",
+        "- Chaque ligne lance trois programmes : environ une milliseconde ensemble, bien plus que chercher un prix.",
+        "- grep relit prices.txt depuis le début à chaque fois : le même fichier analysé sans fin.",
+        "- 20 000 commandes : environ 30 secondes, pour quelques centaines de Ko."
+      ]
+    },
+    {
+      "scheme": [
+        " prices.txt          declare -A price",
+        " tea 250      ──►    price[tea]=250",
+        " tea-xl 400   ──►    price[tea-xl]=400",
+        " cake 300     ──►    price[cake]=300",
+        "",
+        " ${price[tea-xl]}    → 400, sans recherche"
+      ],
+      "point": 0,
+      "mark": [
+        "declare -A price"
+      ],
+      "text": [
+        "Lis le fichier une fois, et garde-le dans la forme dont ta question a besoin : une table de l'article vers le prix.",
+        "",
+        "- declare -A crée un tableau associatif : chaque clé (un nom) mène à sa valeur.",
+        "- ${price[$item]} trouve la valeur par sa clé : aucun fichier à lire, aussi rapide avec 10 articles qu'avec 100 000.",
+        "- Il faut bash 4 ou plus : le /bin/bash 3.2 de macOS n'a pas -A."
+      ]
+    },
+    {
+      "scheme": [
+        " declare -A price",
+        " while read -r item cents; do        ← une fois",
+        "   price[$item]=$cents",
+        " done < prices.txt",
+        "",
+        " while read -r customer item qty; do ← n tours",
+        "   printf '%s %s %s\\n' \"$customer\" \"$item\" \\",
+        "     \"$((price[$item] * qty))\"",
+        " done < orders.txt"
+      ],
+      "point": 1,
+      "mark": [
+        "une fois"
+      ],
+      "text": [
+        "Deux boucles l'une après l'autre, pas l'une dans l'autre.",
+        "",
+        "- 20 000 commandes : 0,2 s au lieu de 30, chaque fichier lu une fois.",
+        "- Dans $(( )), price[$item] lit la table, sans $ devant.",
+        "- Un article absent y donne 0, et $(( )) lit la valeur comme un calcul : 0250 est de l'octal, du texte peut lancer une commande. Fichier d'ailleurs ? Vérifie : [[ -v price[$item] && ${price[$item]} =~ ^(0|[1-9][0-9]*)$ ]]."
+      ]
+    },
+    {
+      "scheme": [
+        " awk 'NR == FNR { price[$1] = $2; next }",
+        "      { print $1, $2, price[$2] * $3 }' \\",
+        "     prices.txt orders.txt",
+        "",
+        "   NR    numéro de ligne, tous fichiers",
+        "   FNR   numéro de ligne dans ce fichier",
+        "   NR == FNR : 1er fichier seulement → remplir",
+        "   puis chaque commande : chercher, multiplier"
+      ],
+      "point": 0,
+      "mark": [
+        "NR == FNR"
+      ],
+      "text": [
+        "awk a des tables intégrées, et lit les deux fichiers dans un seul programme.",
+        "",
+        "- NR == FNR n'est vrai que pendant le premier fichier : awk y remplit la table, et next passe à la ligne suivante.",
+        "- Sur orders.txt, price[$2] est une recherche dans la table, puis une multiplication.",
+        "- Attention : si prices.txt est vide, NR == FNR reste vrai sur orders.txt."
+      ]
+    },
+    {
+      "scheme": [
+        "   question           forme          réponse",
+        "   x dans la liste ?  liste          tout lire",
+        "   prix de x ?        table (clé)    une étape",
+        "   dans les deux ?    listes triées  un passage",
+        "",
+        "   bash : declare -A  awk : tableaux",
+        "   Python : dict      SQL : index, peu d’étapes"
+      ],
+      "point": 2,
+      "mark": [
+        "table (clé)"
+      ],
+      "text": [
+        "Les données sont les mêmes ; la forme que tu leur donnes décide du travail.",
+        "",
+        "- Une liste répond en la lisant : n étapes par question.",
+        "- Une table répond par la clé : une étape, quelle que soit sa taille.",
+        "- Deux listes triées répondent à « dans les deux ? » en un seul passage, côte à côte : c'est ce que font comm et join.",
+        "- Mets les données en forme une fois, avant la boucle. Ensuite, pose autant de questions que tu veux."
+      ]
+    },
+    {
+      "scheme": [
+        " ✘ price[${item%%-*}]=$cents",
+        "     tea     250  →  price[tea]=250",
+        "     tea-xl  400  →  price[tea]=400  ← écrase",
+        "",
+        " ✔ price[$item]=$cents",
+        "     tea     250  →  price[tea]=250",
+        "     tea-xl  400  →  price[tea-xl]=400"
+      ],
+      "point": 2,
+      "mark": [
+        "écrase"
+      ],
+      "text": [
+        "Une table ne vaut que par sa clé : une clé par chose que tu cherches.",
+        "",
+        "- Raccourcis la clé et deux articles la partagent : le dernier lu gagne, sans un mot.",
+        "- Pareil avec une clé prise dans une colonne qui se répète, comme un prénom.",
+        "- Avant de croire une table, demande-toi : deux lignes peuvent-elles donner la même clé ?"
+      ]
+    }
+  ]
+}

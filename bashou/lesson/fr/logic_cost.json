@@ -1,0 +1,179 @@
+{
+  "title": "Combien de travail : les boucles dans les boucles",
+  "summary": "Compte ce que fait un script avant que les données grossissent : une boucle, c'est n ; une boucle dans une boucle, n × n ; et un outil qui lit chaque fichier une seule fois bat les deux.",
+  "pages": [
+    {
+      "scheme": [
+        " while IFS= read -r c; do",
+        "   printf '%s\\n' \"$c\"",
+        " done < customers.txt",
+        "",
+        "   un tour par ligne : n lignes, n tours",
+        "",
+        "   lignes    tours",
+        "   1 000     1 000",
+        "   20 000    20 000      ← × 20 lignes, × 20 tours"
+      ],
+      "script": [
+        "while IFS= read -r c; do",
+        "  printf '%s\\n' \"$c\"",
+        "done < customers.txt"
+      ],
+      "point": 4,
+      "mark": [
+        "n tours"
+      ],
+      "text": [
+        "Un script qui marche sur 10 lignes peut prendre des heures sur un million. Pour le voir venir, compte le travail : combien de fois chaque étape tourne-t-elle ?",
+        "",
+        "- Une boucle sur un fichier tourne une fois par ligne : n lignes, n tours.",
+        "- Deux fois plus de lignes, deux fois plus de temps : ça va.",
+        "- Les programmeurs l'écrivent O(n), « de l'ordre de n »."
+      ]
+    },
+    {
+      "scheme": [
+        " while IFS= read -r c; do          ← n tours",
+        "   while IFS= read -r m; do        ← n chacun",
+        "     if [ \"$c\" = \"$m\" ]; then",
+        "       printf '%s\\n' \"$c\"",
+        "     fi",
+        "   done < newsletter.txt",
+        " done < customers.txt",
+        "   lignes    comparaisons",
+        "   1 000     1 000 000",
+        "   20 000    400 000 000 ← × 20 lignes, × 400"
+      ],
+      "script": [
+        "while IFS= read -r c; do",
+        "while IFS= read -r m; do",
+        "if [ \"$c\" = \"$m\" ]; then",
+        "printf '%s\\n' \"$c\"",
+        "fi",
+        "done < newsletter.txt",
+        "done < customers.txt"
+      ],
+      "point": 1,
+      "mark": [
+        "n chacun",
+        "400 000 000"
+      ],
+      "text": [
+        "Mets une boucle dans une boucle et les nombres se multiplient : pour chaque client, la boucle intérieure relit toute la newsletter.",
+        "",
+        "- n clients × n abonnés : n × n comparaisons, O(n²).",
+        "- 20 fois plus de lignes de chaque côté, c'est 400 fois plus de travail.",
+        "- C'est la raison habituelle pour laquelle un script qui allait bien sur un échantillon prend des minutes ou des heures sur le vrai fichier."
+      ]
+    },
+    {
+      "scheme": [
+        " $ TIMEFORMAT='%R s'        en zsh : TIMEFMT='%E'",
+        " $ time bash common.sh > out.txt",
+        "",
+        "   lignes  temps",
+        "   200     0.150 s",
+        "   400     0.611 s   × 4",
+        "   800     2.500 s   × 4   ← n × n",
+        "   20 000 lignes : 2.5 × 25 × 25 ≈ 26 minutes"
+      ],
+      "point": 6,
+      "mark": [
+        "× 4"
+      ],
+      "text": [
+        "Ne devine pas, mesure : chronomètre sur de petites listes, puis sur des listes deux fois plus longues, toutes : n'en double qu'une et n × n ressemble à n.",
+        "",
+        "- Temps × 2 : le travail grandit comme n. Temps × 4 : comme n × n, 625 fois plus long pour 25 fois plus de lignes.",
+        "- > out.txt, pas > /dev/null : GNU grep le remarque et s'arrête à la première ligne trouvée, le temps mentirait."
+      ]
+    },
+    {
+      "scheme": [
+        " while IFS= read -r c; do",
+        "   if grep -qxF -- \"$c\" newsletter.txt; then",
+        "     printf '%s\\n' \"$c\"",
+        "   fi",
+        " done < customers.txt",
+        "",
+        "   la boucle qu'on voit :   n tours",
+        "   la boucle dans grep :    jusqu'à n lignes/tour"
+      ],
+      "script": [
+        "while IFS= read -r c; do",
+        "if grep -qxF -- \"$c\" newsletter.txt; then",
+        "printf '%s\\n' \"$c\"",
+        "fi",
+        "done < customers.txt"
+      ],
+      "point": 7,
+      "mark": [
+        "la boucle dans grep"
+      ],
+      "text": [
+        "grep relit la newsletter à chaque appel, jusqu'à trouver la ligne : une deuxième boucle, cachée dans grep.",
+        "",
+        "- À ces tailles, lancer un programme par ligne (1 ms) coûte le plus : 18 s pour 20 000 lignes. Le chrono montre × 2, bien trop lent quand même.",
+        "- Python aussi : x in une_liste parcourt la liste. s = set(une_liste), fait une fois avant la boucle, répond à x in s en un pas."
+      ]
+    },
+    {
+      "scheme": [
+        " ✘ while IFS= read -r f; do",
+        "     today=$(date +%F)  ← pareil à chaque tour",
+        "     printf '%s %s\\n' \"$today\" \"$f\"",
+        "   done < files.txt",
+        "",
+        " ✔ today=$(date +%F)    ← une fois",
+        "   while IFS= read -r f; do",
+        "     printf '%s %s\\n' \"$today\" \"$f\"",
+        "   done < files.txt"
+      ],
+      "script": [
+        "today=$(date +%F)",
+        "while IFS= read -r f; do",
+        "printf '%s %s\\n' \"$today\" \"$f\"",
+        "done < files.txt"
+      ],
+      "point": 5,
+      "mark": [
+        "une fois"
+      ],
+      "text": [
+        "Un travail dont la réponse ne change pas d'un tour à l'autre se fait avant la boucle.",
+        "",
+        "- Ici, date donne le même jour pour chaque fichier : demande une fois, garde la réponse dans une variable.",
+        "- Chaque $( ) lance un nouveau processus, ici pour exécuter date. Sur 50 000 fichiers, ça fait 50 000 processus pour une seule réponse."
+      ]
+    },
+    {
+      "scheme": [
+        " grep -Fxf newsletter.txt customers.txt",
+        "            │              │",
+        "            │              └ lu une fois",
+        "            └ lu une fois, gardé en mémoire",
+        "              où chercher chaque ligne (GNU grep)",
+        "",
+        " comm -12 <(sort customers.txt) \\",
+        "          <(sort newsletter.txt)",
+        "",
+        "   triées : parcourues côte à côte, une fois"
+      ],
+      "script": [
+        "grep -Fxf newsletter.txt customers.txt",
+        "comm -12 <(sort customers.txt) \\",
+        "<(sort newsletter.txt)"
+      ],
+      "point": 0,
+      "mark": [
+        "lu une fois"
+      ],
+      "text": [
+        "La solution : un outil qui lit chaque fichier une seule fois.",
+        "",
+        "- grep -Fxf : -f lit quoi chercher dans un fichier, -F en texte simple (un point n'est qu'un point), -x en lignes entières.",
+        "- comm -12 : les lignes communes à deux fichiers triés ; <(sort fichier) les lui passe comme des fichiers (bash et zsh, pas sh). Trier coûte environ n × log n : 300 000 étapes pour 20 000 lignes."
+      ]
+    }
+  ]
+}

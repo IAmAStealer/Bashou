@@ -143,6 +143,53 @@ LESSONS = [
          "copying a file into a folder, you need the file AND the folder.",
          "if [ -f notes.txt ] && [ -d backup ]; then cp notes.txt backup/; fi"),
     ]},
+    {"id": "cost", "tool": "comm", "topics": ("logic",), "title": "How much work: loops inside loops", "pages": [
+        ("A loop over a file runs once per line: twice the lines, twice the time. Put a loop inside it and the "
+         "counts multiply: 1 000 lines on each side make a million comparisons, 20 000 make 400 million.",
+         "time bash common.sh > out.txt"),
+        ("Measure before you guess: run the script on small lists, then on lists twice as long, every one of them: "
+         "double only one and n × n looks like n. Time × 2: the work grows like the data. Time × 4: like n × n, "
+         "and the real file takes minutes or hours.",
+         "head -n 400 customers.txt > c.txt && head -n 400 newsletter.txt > n.txt"),
+        ("A command inside a loop is often a hidden loop: grep starts again every turn and reads the file until it "
+         "finds the line. And work whose answer never changes, like today's date, belongs before the loop, done once.",
+         "today=$(date +%F)"),
+        ("Let one tool read each file once. grep -Fxf finds the lines of one file that are in another; sorted, "
+         "comm -12 shows the lines in both, comm -23 those only in the first.",
+         "comm -23 <(sort team.txt) <(sort present.txt)"),
+    ]},
+    {"id": "data", "tool": "declare", "topics": ("logic",), "title": "Shape the data once: tables", "pages": [
+        ("A grep or a cut inside a loop starts a program and reads its file again on every line: a millisecond "
+         "or more each time. 20 000 lines make 20 000 searches of the same file.",
+         "time bash bill.sh > out.txt"),
+        ("Read the file once, into a table: an associative array maps each name to its value. declare -A "
+         "creates one; price[tea]=250 stores a value, ${price[tea]} reads it back.",
+         "declare -A price"),
+        ("Fill it in one pass, before the loop. Then each line looks its value up in the table, without "
+         "reading any file: the work of the loop stays one step per line.",
+         "while read -r item cents; do price[$item]=$cents; done < prices.txt"),
+        ("awk builds the same table: NR == FNR is true only while it reads the first file (if that file is "
+         "empty, it stays true on the second). The idea is everywhere: a dict in Python, an index in SQL.",
+         "awk 'NR == FNR { price[$1] = $2; next } { print $1, $2, price[$2] * $3 }' prices.txt orders.txt"),
+    ]},
+    {"id": "ecc", "tool": "^", "topics": ("logic",), "title": "Codes that fix themselves", "pages": [
+        ("A bit can flip on the way: noise on a cable, a cosmic ray in memory, a worn disk. A 1 arrives as a "
+         "0, nothing crashes, and the data is just wrong. XOR with 0010 flips one bit: 1011 becomes 1001, which "
+         "bash prints as 9.",
+         "echo $(( 2#1011 ^ 2#0010 ))"),
+        ("A parity bit is the XOR of the data: ^ gives 1 when an odd number of bits are 1. On arrival, XOR "
+         "every bit: 1 means a bit flipped. It can't say which, and two flips cancel out. | is OR, not XOR.",
+         "echo $(( 1 ^ 0 ^ 1 ^ 1 ))"),
+        ("A checksum detects any change in a whole file, but can't repair it: on FAILED, get the file again. "
+         "Debian's SHA256SUMS lists every image: --ignore-missing skips the ones you didn't download. On macOS, "
+         "without coreutils: shasum -a 256 -c --ignore-missing SHA256SUMS.",
+         "sha256sum -c --ignore-missing SHA256SUMS"),
+        ("Hamming(7,4) adds 3 parity bits to 4 data bits, each over a different group of positions. The checks "
+         "that fail, read as a binary number, give the position that flipped: flip it back. ECC memory uses the "
+         "same idea, plus one overall parity bit: classically 8 check bits for every 64, enough to fix one flip "
+         "and spot two.",
+         "bad=$(( s1 + 2 * s2 + 4 * s4 ))"),
+    ]},
     {"id": "sql", "tool": "sqlite3", "topics": ("sql",), "title": "SQL with SQLite", "pages": [
         ("A database keeps data in tables: rows and columns, like a spreadsheet the computer can search fast. "
          "SQLite keeps a whole database in one file: sqlite3 opens it, and creates it if it doesn't exist yet. "

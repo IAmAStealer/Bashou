@@ -1,0 +1,60 @@
+{
+ "name": "Square Spider",
+ "palette": {
+  "Y": "#ffe680",
+  "y": "#f2c232",
+  "o": "#b0801c",
+  "w": "#fffbe6",
+  "O": "#5a3a14",
+  "W": "#fffef0",
+  "P": "#b89ef0",
+  "p": "#7c58c8",
+  "Q": "#4a3290",
+  "L": "#8a6ad0",
+  "l": "#5a3ea0",
+  "q": "#2a1a4a",
+  "S": "#ece4ff",
+  "e": "#d4d8dc",
+  "k": "#3a3f44",
+  "f": "#f4f0e4",
+  "F": "#8a7a5c"
+ },
+ "base": [
+  "..LLL.........LL.",
+  ".LllLL.......Ll.L",
+  ".Ll..Ll.wYOYyOYyL",
+  "Ll....LlYoOyoOyoL",
+  "l...SPPqOOOOOOOOL",
+  "..PPpPPqYyOYyOYyl",
+  "..ekpekqyoOyoOyol",
+  "..pPpppQOOOOOOOOl",
+  ".LQppPQqYyOYyOYol",
+  "Ll.QqQq.ooOooOool",
+  "Ll.f.f...Ll..Ll.l",
+  "L..F.F....Ll..Ll."
+ ],
+ "poses": {
+  "inhale": {
+   "4": "----PPPPq--------"
+  },
+  "closed": {
+   "6": "--kk-kk----------"
+  },
+  "left": {
+   "6": "--ke-ke----------"
+  },
+  "right": {
+   "6": "--ek-ek----------"
+  },
+  "fidget": {
+   "5": "-----------WW----",
+   "6": "-----------WY----",
+   "10": "--------Ll..Ll..-",
+   "11": "--------Ll..Ll..-"
+  }
+ },
+ "particles": [
+  0,
+  7
+ ]
+}

@@ -1,0 +1,62 @@
+{
+ "name": "Bitflip Banshee",
+ "palette": {
+  "W": "#f2fcff",
+  "c": "#bfe6f2",
+  "C": "#7ab4cc",
+  "d": "#3c6e8c",
+  "H": "#b4f6f0",
+  "h": "#4ec0c4",
+  "j": "#2a7890",
+  "b": "#5a9ab8",
+  "B": "#35607e",
+  "m": "#1c2a3c",
+  "M": "#4a3a6a",
+  "e": "#d0d6dc",
+  "k": "#3a3f44",
+  "r": "#ff4a5a",
+  "g": "#8affc0"
+ },
+ "base": [
+  "......jhhHHhj....",
+  "....jhHHHHHhhhhj.",
+  "...jhWWWWWchHHHhh",
+  "rrr.hWekWekCjjhhj",
+  "r.r.hcWccWcChHHh.",
+  "r.r.hcmmmCCjjjhj.",
+  "r.r..cmMmCCcb....",
+  "rrr..cmMmCcbcbb..",
+  ".....ccmCcbbbcbb.",
+  "......cgCggbbbBbb",
+  ".......CCbbBBb.Bb",
+  "........CB.BB..B."
+ ],
+ "poses": {
+  "inhale": {
+   "5": "-----ccmcC-------",
+   "6": "-----cmMmC-------",
+   "7": "-----ccmcC-------",
+   "8": "-----cccC--------"
+  },
+  "closed": {
+   "3": "------kk-kk------"
+  },
+  "left": {
+   "3": "------ke-ke------"
+  },
+  "right": {
+   "3": "------ek-ek------"
+  },
+  "fidget": {
+   "3": "rr.--------------",
+   "4": ".r.--------------",
+   "5": ".r.--------------",
+   "6": ".r.--------------",
+   "7": "rrr--------------"
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}

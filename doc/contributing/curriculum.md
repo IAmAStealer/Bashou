@@ -52,7 +52,7 @@ A topic is complete when it has all four: questions, a lesson, one or more fight
 - Packages: users → packages; packages + network → repos
 - Network: processes → network → ip_addr → ipv6; ip_addr → dns → dns_tools; ip_addr → tcp;
   tcp + keys → ssh; tcp → firewall; dns_tools + tcp + firewall → net_debug; keys + net_debug → certs → certs_tools → certs_admin → certs_ca → certs_cnf → certs_revoke
-- Logic: variables → logic
+- Logic: variables → logic → logic_ecc; loops + logic → logic_cost → logic_data
 - Python: scripts + loops + logic → py_start → py_flow → py_names; py_flow → py_errors; py_names + pipes → py_data
 - C: computer + scripts + logic → compilation → gcc_use → stack_heap → pointers → debugger
 - Rust: stack_heap → rust_vars → rust_own
@@ -138,6 +138,9 @@ input. Rules: [bash-style.md](bash-style.md).
 ### Logic
 
 1. `logic` — yes/no answers, if, !, && and || · Negation Gnome, Coin Wraith
+2. `logic_cost` — counting work: n, n × n, measuring by doubling, hidden loops, one pass · Square Spider
+3. `logic_data` — shaping data once: the cost of a program per line, declare -A tables, awk NR == FNR, the right shape for the question, unique keys · Parse Parrot
+4. `logic_ecc` — codes that fix themselves: flipped bits, parity and XOR, checksums detect, Hamming(7,4) finds and fixes one flip, ECC RAM, RAID, QR codes · Bitflip Banshee
 
 ### C
 

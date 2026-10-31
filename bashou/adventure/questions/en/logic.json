@@ -492,5 +492,200 @@
   ],
   "answer": 0,
   "explain": "sh (dash on Debian) follows POSIX: inside [ ], text equality is =; == is bash's, and dash answers \"unexpected operator\". -a and -o inside [ ] were removed from POSIX: dash still accepts them, but they are ambiguous with some values. Join two tests with && or || between them. [[ ]] is bash only."
+ },
+ {
+  "id": "logic-2-18",
+  "level": 2,
+  "q": "Two nested loops compare every line of a.txt with every line of b.txt: 1 second for 1 000 lines each. About how long for 10 000 each?",
+  "choices": [
+   "About 100 seconds",
+   "About 10 seconds",
+   "About 20 seconds",
+   "About 1 000 seconds"
+  ],
+  "answer": 0,
+  "explain": "Each loop runs 10 times more, and they multiply: 10 × 10 = 100 times more comparisons, about 100 seconds. 10 seconds would be a single loop (work that grows like n). Nested loops grow like n × n: that's why a script that was fine on a sample can take hours on the real file."
+ },
+ {
+  "id": "logic-2-19",
+  "level": 2,
+  "q": "You time a script on 100, 200, then 400 lines and get 0.1 s, 0.2 s, 0.4 s. What does that tell you?",
+  "choices": [
+   "Its work grows like n: twice the lines, twice the time",
+   "Its work grows like n × n",
+   "It's too slow for big files",
+   "Nothing: one timing per size proves nothing"
+  ],
+  "answer": 0,
+  "explain": "Each time the lines double, the time doubles: the work grows like n, so 100 times more lines take about 100 times longer. With a loop inside a loop, the time would be × 4 at each doubling (n × n). Timing one script on sizes that double tells you which one you have, before the real data does."
+ },
+ {
+  "id": "logic-2-20",
+  "level": 2,
+  "q": "Which command prints the lines of a.txt that are also a line of b.txt, reading each file only once?",
+  "choices": [
+   "grep -Fxf b.txt a.txt",
+   "A while loop running grep -qxF on b.txt for each line",
+   "grep -f b.txt a.txt",
+   "cat a.txt b.txt | uniq -d"
+  ],
+  "answer": 0,
+  "explain": "grep -Fxf reads b.txt once (-f), as plain text (-F), and keeps the lines of a.txt equal to a whole line of it (-x). The loop is right, but it starts one grep per line, and each reads b.txt again until it finds the line. Without -F and -x, each line is a regex and matches inside longer lines. sort a.txt b.txt | uniq -d works only if neither file repeats a line."
+ },
+ {
+  "id": "logic-3-12",
+  "level": 3,
+  "q": "for f in *; do n=$(wc -l < big.csv); echo \"$f $n\"; done runs in a folder of 50 000 files and is slow. Why?",
+  "choices": [
+   "wc reads big.csv on every turn for the same answer",
+   "The for loop: bash can't loop 50 000 times",
+   "echo: printf would be faster",
+   "The *: ls would list the files faster"
+  ],
+  "answer": 0,
+  "explain": "The count of big.csv never changes, yet the loop starts wc and reads the whole file 50 000 times. Move n=$(wc -l < big.csv) above the loop and it runs once: work whose answer doesn't change belongs outside the loop. Bash loops 50 000 times in a fraction of a second when the body is cheap, and it expands * once."
+ },
+ {
+  "id": "logic-3-13",
+  "level": 3,
+  "q": "grep -xf list.txt data.txt, 20 000 addresses in each, takes a minute and finds ana-b@example.org for ana.b@example.org. The fix?",
+  "choices": [
+   "-F: read the lines of list.txt as plain text",
+   "-x: match whole lines only",
+   "-i: ignore case",
+   "-w: match whole words"
+  ],
+  "answer": 0,
+  "explain": "Without -F, each line of list.txt is a regex: the dot matches any character, so ana.b matches ana-b, and grep tries 20 000 regexes on each line. With -F it reads them as fixed text and searches them all at once: under a second instead of about a minute (GNU grep 3.11). -x is already there: whole lines only."
+ },
+ {
+  "id": "logic-2-21",
+  "level": 2,
+  "q": "bill.sh loops over 20 000 orders and runs price=$(grep \"^$item \" prices.txt | cut -d' ' -f2) for each. Why is it slow?",
+  "choices": [
+   "Each line starts programs and reads prices.txt again",
+   "read -r is slow on long files",
+   "printf is slower than echo",
+   "Arithmetic in $(( )) is slow"
+  ],
+  "answer": 0,
+  "explain": "$( ) starts a new process, grep and cut start two more, and grep reads prices.txt from the top: every line pays for programs and a search. Together that is about a millisecond per line, so 20 000 lines take about half a minute. Read prices.txt once into a table and the loop does one lookup per line."
+ },
+ {
+  "id": "logic-2-22",
+  "level": 2,
+  "q": "declare -A price; price[tea]=250. What does echo \"${price[tea]}\" print?",
+  "choices": [
+   "250",
+   "tea",
+   "price[tea]",
+   "Nothing: declare -A makes a list"
+  ],
+  "answer": 0,
+  "explain": "declare -A makes an associative array: a table from a name (the key) to a value. price[tea]=250 stores 250 under tea, ${price[tea]} reads it back. Without -A, bash makes a plain array: tea is read as arithmetic, a variable named tea, unset so 0, and every name lands on the same slot. Needs bash 4 or newer: macOS's /bin/bash 3.2 has no -A."
+ },
+ {
+  "id": "logic-2-23",
+  "level": 2,
+  "q": "The loop that fills the price table goes where?",
+  "choices": [
+   "Before the order loop: read prices.txt once",
+   "Inside the order loop, to keep prices fresh",
+   "After the order loop",
+   "In a second script run for each order"
+  ],
+  "answer": 0,
+  "explain": "Fill the table in one pass before the loop: prices.txt is read once, then each order looks its price up. Inside the order loop it would read prices.txt again on every line: n orders × m prices, the same work as before, just in bash."
+ },
+ {
+  "id": "logic-3-14",
+  "level": 3,
+  "q": "awk 'NR == FNR { p[$1] = $2; next } { print $1, p[$2] }' prices.txt orders.txt. When is NR == FNR true?",
+  "choices": [
+   "While awk reads the first file, prices.txt",
+   "On every line of both files",
+   "Only on the first line",
+   "Never: NR and FNR count the same"
+  ],
+  "answer": 0,
+  "explain": "NR counts every line read so far, FNR restarts at 1 with each file. They are equal only during the first file: there awk fills the table and next skips to the next line. On orders.txt, NR keeps growing and the second block looks prices up. Careful: if prices.txt is empty, NR == FNR stays true on orders.txt too."
+ },
+ {
+  "id": "logic-3-15",
+  "level": 3,
+  "q": "A table keyed with ${item%%-*} (the name up to the first -) gives the wrong price for tea. Why?",
+  "choices": [
+   "tea-xl becomes tea: two items share one key",
+   "%% removes the whole name",
+   "Keys can't hold a -",
+   "declare -A sorts the keys"
+  ],
+  "answer": 0,
+  "explain": "${item%%-*} cuts from the first - to the end: tea-xl becomes tea. Both items land on the same key, and the last price read wins. A table needs a key that is unique per item: here the whole name: price[$item]=$cents."
+ },
+ {
+  "id": "logic-2-24",
+  "level": 2,
+  "q": "With an even parity bit, 1011 is sent as 10111. Which word, as it arrives, shows that a bit flipped?",
+  "choices": [
+   "10011",
+   "10111",
+   "11110",
+   "00000"
+  ],
+  "answer": 0,
+  "explain": "Even parity: the parity bit makes the number of 1s even. 10111 holds four 1s, even: fine. 10011 holds three, odd: a bit flipped. 11110 and 00000 hold an even count: more bits changed, and parity sees nothing. In bash, XOR every bit: $(( 1 ^ 0 ^ 0 ^ 1 ^ 1 )) gives 1, so the count is odd."
+ },
+ {
+  "id": "logic-2-25",
+  "level": 2,
+  "q": "What does echo $(( 1 ^ 1 ^ 1 )) print?",
+  "choices": [
+   "1",
+   "0",
+   "3",
+   "111"
+  ],
+  "answer": 0,
+  "explain": "^ is XOR: 1 when an odd number of its bits are 1. 1 ^ 1 = 0, then 0 ^ 1 = 1. Three 1s is odd, so 1. With |, OR, it would also print 1, but 1 | 1 | 1 | 1 still gives 1 where XOR gives 0: OR can't count."
+ },
+ {
+  "id": "logic-2-26",
+  "level": 2,
+  "q": "A byte sent with an even parity bit arrives with an odd number of 1s. What do you know?",
+  "choices": [
+   "An odd number of bits flipped: which, unknown",
+   "Exactly the last bit flipped",
+   "Nothing changed",
+   "Two bits flipped"
+  ],
+  "answer": 0,
+  "explain": "Each flip changes the count of 1s by one, so an odd count means 1, 3, 5 or 7 flips, most likely one. Parity can't say which bit: every flip looks the same. Two flips bring the count back to even and go unseen. To find the bit, you need more checks, like Hamming codes."
+ },
+ {
+  "id": "logic-3-16",
+  "level": 3,
+  "q": "A Hamming(7,4) word arrives. The checks give s1=1, s2=0, s4=1. What does the decoder do?",
+  "choices": [
+   "Flip bit 5 back",
+   "Flip bit 2 back",
+   "Nothing: the word is fine",
+   "Ask for the word again"
+  ],
+  "answer": 0,
+  "explain": "Read the checks as a binary number s4 s2 s1: 101 is 5, the position of the flipped bit (s1 and s4 read position 5, s2 doesn't). The decoder flips b[5] back, b[5] ^ 1, then keeps positions 3, 5, 6 and 7. All three at 0 means no flip."
+ },
+ {
+  "id": "logic-3-17",
+  "level": 3,
+  "q": "sha256sum -c SHA256SUMS says debian.iso: FAILED. What can you do with that?",
+  "choices": [
+   "Copy or download the file again",
+   "Rebuild the file from the checksum",
+   "Flip the bit the checksum points to",
+   "Run sha256sum again until it says OK"
+  ],
+  "answer": 0,
+  "explain": "A checksum detects a change, any change, but it can't say where: it's 64 hex digits for the whole file, not a map of it. So it can't repair: get a good copy again. Running it again usually gives the same FAILED: the copy on disk changed. If it says OK the second time, the flip happened while reading (RAM, cable): check that machine. To trust the sums against tampering, check their signature too."
  }
 ]

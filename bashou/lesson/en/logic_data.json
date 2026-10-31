@@ -1,0 +1,183 @@
+{
+  "id": "logic_data",
+  "order": 264,
+  "skill": "logic",
+  "after": [
+    "logic_cost"
+  ],
+  "masters": [
+    "won parse_parrot"
+  ],
+  "questions": [
+    "logic-2-21",
+    "logic-2-22",
+    "logic-2-23",
+    "logic-3-14",
+    "logic-3-15"
+  ],
+  "recall": [
+    "logic-2-21",
+    "logic-2-22",
+    "logic-2-23"
+  ],
+  "fights": [
+    "parse_parrot"
+  ],
+  "title": "Shape the data once: tables",
+  "summary": "Searching a file again on every line is slow work. Read it once into a table, declare -A or awk, and each line becomes one lookup.",
+  "pages": [
+    {
+      "scheme": [
+        " while read -r customer item qty; do",
+        "   price=$(grep \"^$item \" prices.txt |",
+        "           cut -d' ' -f2)",
+        "   …",
+        " done < orders.txt",
+        "",
+        "   on every line:  $( ) starts a process",
+        "                   grep and cut start too",
+        "                   prices.txt read again"
+      ],
+      "point": 1,
+      "mark": [
+        "$(grep",
+        "prices.txt read again"
+      ],
+      "text": [
+        "bill.sh is only one loop: n orders, n turns. Still, 1 000 orders take 1.4 seconds, because each turn is expensive.",
+        "",
+        "- Each line starts three programs: about a millisecond together, far more than looking a price up.",
+        "- grep reads prices.txt from the top every time: the same file parsed again and again.",
+        "- 20 000 orders: about 30 seconds, for a few hundred kilobytes."
+      ]
+    },
+    {
+      "scheme": [
+        " prices.txt          declare -A price",
+        " tea 250      ──►    price[tea]=250",
+        " tea-xl 400   ──►    price[tea-xl]=400",
+        " cake 300     ──►    price[cake]=300",
+        "",
+        " ${price[tea-xl]}    → 400, no search"
+      ],
+      "point": 0,
+      "mark": [
+        "declare -A price"
+      ],
+      "text": [
+        "Read the file once, and keep it in the shape your question needs: a table from item to price.",
+        "",
+        "- declare -A makes an associative array: each key (a name) leads to its value.",
+        "- ${price[$item]} finds the value by its key: no file to read, as fast with 10 items as with 100 000.",
+        "- Needs bash 4 or newer: macOS's /bin/bash 3.2 has no -A."
+      ]
+    },
+    {
+      "scheme": [
+        " declare -A price",
+        " while read -r item cents; do        ← once",
+        "   price[$item]=$cents",
+        " done < prices.txt",
+        "",
+        " while read -r customer item qty; do ← n turns",
+        "   printf '%s %s %s\\n' \"$customer\" \"$item\" \\",
+        "     \"$((price[$item] * qty))\"",
+        " done < orders.txt"
+      ],
+      "script": [
+        "declare -A price",
+        "while read -r item cents; do",
+        "price[$item]=$cents",
+        "done < prices.txt",
+        "while read -r customer item qty; do",
+        "printf '%s %s %s\\n' \"$customer\" \"$item\" \\",
+        "\"$((price[$item] * qty))\"",
+        "done < orders.txt"
+      ],
+      "point": 1,
+      "mark": [
+        "once"
+      ],
+      "text": [
+        "Two loops, one after the other, not one inside the other.",
+        "",
+        "- 20 000 orders: 0.2 s instead of about 30, each file read once.",
+        "- Inside $(( )), price[$item] reads the table: no $ needed in front.",
+        "- An item missing from the table gives 0 there, and $(( )) reads the value as arithmetic: 0250 is octal, text can run commands. When the file comes from outside, check first: [[ -v price[$item] && ${price[$item]} =~ ^(0|[1-9][0-9]*)$ ]]."
+      ]
+    },
+    {
+      "scheme": [
+        " awk 'NR == FNR { price[$1] = $2; next }",
+        "      { print $1, $2, price[$2] * $3 }' \\",
+        "     prices.txt orders.txt",
+        "",
+        "   NR    line number, all files together",
+        "   FNR   line number in this file",
+        "   NR == FNR:  first file only → fill",
+        "   then each order:  look up, multiply"
+      ],
+      "script": [
+        "awk 'NR == FNR { price[$1] = $2; next }",
+        "{ print $1, $2, price[$2] * $3 }' \\",
+        "prices.txt orders.txt"
+      ],
+      "point": 0,
+      "mark": [
+        "NR == FNR"
+      ],
+      "text": [
+        "awk has tables built in, and reads both files in one program.",
+        "",
+        "- NR == FNR is true only during the first file: awk fills the table there, and next skips to the next line.",
+        "- On orders.txt, price[$2] is a lookup, then a multiplication.",
+        "- Careful: if prices.txt is empty, NR == FNR stays true on orders.txt."
+      ]
+    },
+    {
+      "scheme": [
+        "   question            shape         work",
+        "   is x in the list?   list          read it all",
+        "   what's x's price?   table (key)   one step",
+        "   in both lists?      sorted lists  one walk",
+        "",
+        "   bash: declare -A    awk: arrays",
+        "   Python: dict        SQL: index, a few steps"
+      ],
+      "point": 2,
+      "mark": [
+        "table (key)"
+      ],
+      "text": [
+        "The data is the same; the shape you give it decides the work.",
+        "",
+        "- A list answers by reading it: n steps for each question.",
+        "- A table answers by key: one step, whatever its size.",
+        "- Two sorted lists answer “in both?” in one walk, side by side: that is what comm and join do.",
+        "- Shape the data once, before the loop. Then ask as many questions as you like."
+      ]
+    },
+    {
+      "scheme": [
+        " ✘ price[${item%%-*}]=$cents",
+        "     tea     250  →  price[tea]=250",
+        "     tea-xl  400  →  price[tea]=400  ← overwrites",
+        "",
+        " ✔ price[$item]=$cents",
+        "     tea     250  →  price[tea]=250",
+        "     tea-xl  400  →  price[tea-xl]=400"
+      ],
+      "point": 2,
+      "mark": [
+        "overwrites"
+      ],
+      "text": [
+        "A table is only as good as its key: one key for each thing you look up.",
+        "",
+        "- Cut the key short and two items share it: the last one read wins, without a word.",
+        "- Same with a key taken from a column that repeats, like a first name.",
+        "- Before you trust a table, ask: can two lines give the same key?"
+      ]
+    }
+  ]
+}
