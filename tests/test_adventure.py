@@ -215,12 +215,14 @@ class GameTest(unittest.TestCase):
         self.assertIn((top, left), g.canvas.shown)              # the cell under the box's old top-left
 
     def test_boss_time_grows_with_what_there_is_to_read(self):
-        """Owner (2026-10-29): 20 s was short for logic questions and long commands to read."""
+        """Owner (2026-10-29): 20 s was short for logic questions and long commands to read.
+        Owner (2026-10-31): still short, 35 to 50 s."""
         short = {"q": "What does pwd print?", "choices": ["a", "b", "c", "d"]}
         long_ = {"q": "x" * 150, "choices": ["y" * 60] * 4}
         self.assertEqual(adventure.boss_seconds(short), adventure.BOSS_MIN)
         self.assertEqual(adventure.boss_seconds(long_), adventure.BOSS_MAX)
-        self.assertGreaterEqual(adventure.BOSS_MIN, 25)
+        self.assertGreaterEqual(adventure.BOSS_MIN, 35)
+        self.assertGreaterEqual(adventure.BOSS_MAX, 50)
         mid = {"q": "x" * 120, "choices": ["y" * 40] * 4}
         self.assertLess(adventure.BOSS_MIN, adventure.boss_seconds(mid), adventure.BOSS_MAX)
 

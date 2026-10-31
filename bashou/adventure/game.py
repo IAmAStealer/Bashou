@@ -18,7 +18,7 @@ from ..render import ESC
 
 FPS = 15
 SPEED = 5.0                    # world units per second: the pet walks on its own between events
-BOSS_MIN, BOSS_MAX = 25, 40    # seconds per boss question: more when there is more to read
+BOSS_MIN, BOSS_MAX = 35, 50    # seconds per boss question: more when there is more to read
 BAR = 20                       # cells of the boss's time bar
 
 
