@@ -49,13 +49,13 @@
   {
    "do": "Replace every unwrap() with Result and ?: a missing file, broken JSON, a task number that doesn't exist.",
    "done": "each mistake prints a clear message instead of a panic.",
-   "hint": "Make functions return `Result<…, String>` (or Box<dyn Error>), use `?` to pass errors up, and print them once in main.",
+   "hint": "Make functions return `Result<…, Box<dyn Error>>`: `?` passes any error up. With `Result<…, String>`, write `.map_err(|e| e.to_string())?`. Print the error once in main.",
    "why": "unwrap() says \"this can't fail\". When it can, Rust makes you decide what happens. `?` keeps that decision short to write."
   },
   {
    "do": "Mark a task as done, and delete a task.",
    "done": "`done 2` and `delete 3` work and are saved.",
-   "hint": "`get_mut(i)` gives a task you can change, `remove(i)` deletes one. Remember the user counts from 1.",
+   "hint": "`get_mut(i)` gives a task you can change, or None when it doesn't exist; `remove(i)` deletes one but panics on a missing one, so check `i < tasks.len()` first. The user counts from 1: `n.checked_sub(1)` (a plain `n - 1` panics on 0 in a debug build).",
    "why": "Borrowing a value to change it (&mut) is the core of Rust's rules: one writer at a time, checked by the compiler."
   },
   {

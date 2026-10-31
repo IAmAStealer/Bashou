@@ -58,7 +58,7 @@
     "& prête une valeur sans la déplacer : elle crée une référence, et ça s'appelle un emprunt.",
     "",
     "- La fonction la lit, le propriétaire la garde, et tu peux rappeler la fonction.",
-    "- Une fonction qui ne fait que lire prend &str (du texte), &[T] (une liste) ou &T, pas String ni Vec.",
+    "- Une fonction qui ne fait que lire prend &str (du texte), &[T] (une liste) ou &T, pas String, &String, Vec ni &Vec.",
     "- Un emprunt ne peut pas durer plus longtemps que le propriétaire : rustc le vérifie, donc pas de pointeur dans le vide."
    ]
   },

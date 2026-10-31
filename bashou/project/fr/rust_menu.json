@@ -11,7 +11,7 @@
   {
    "do": "Écris 3 de tes vraies recettes dans un fichier (TOML ou JSON) et charge-les avec serde.",
    "done": "le programme affiche les 3 recettes du fichier.",
-   "hint": "La crate toml lit le TOML, agréable à écrire à la main : des sections `[[recipe]]`.",
+   "hint": "La crate toml lit le TOML, agréable à écrire à la main : des sections `[[recipe]]`. Ajoute-les avec `cargo add serde --features derive` et `cargo add toml`.",
    "why": "Des données dans un fichier peuvent changer sans recompiler. Le TOML est fait pour les fichiers que les gens écrivent eux-mêmes."
   },
   {
@@ -53,7 +53,7 @@
   {
    "do": "Enregistre la liste de courses dans un fichier texte que tu peux imprimer ou envoyer sur ton téléphone.",
    "done": "le fichier est facile à lire au magasin.",
-   "hint": "`write!` et `writeln!` marchent sur les fichiers comme `print!` à l'écran.",
+   "hint": "`write!` et `writeln!` marchent sur les fichiers comme `print!` à l'écran, une fois `use std::io::Write;` en haut du fichier.",
    "why": "La sortie, c'est ce dont tu vas te servir. La rendre agréable à lire fait partie du travail, ce n'est pas de la décoration."
   },
   {

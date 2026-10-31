@@ -95,7 +95,7 @@
     "- In a debug build, Rust stops (panics) instead of quietly wrapping to 4.",
     "- When rustc can see both values, it refuses x + 10 before the program even runs.",
     "- as converts: x as u32 + 10.",
-    "- Going down, as cuts: 300 as u8 is 44. u8::try_from checks."
+    "- Going down, as cuts: a u32 holding 300, as u8, gives 44. u8::try_from(x) checks and returns an error instead."
    ]
   },
   {

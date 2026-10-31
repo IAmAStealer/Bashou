@@ -19,7 +19,7 @@
   {
    "do": "Write 3 of your real recipes in a file (TOML or JSON) and load them with serde.",
    "done": "the program prints the 3 recipes from the file.",
-   "hint": "The toml crate reads TOML, which is pleasant to write by hand: `[[recipe]]` sections.",
+   "hint": "The toml crate reads TOML, which is pleasant to write by hand: `[[recipe]]` sections. Add them with `cargo add serde --features derive` and `cargo add toml`.",
    "why": "Data in a file can change without recompiling. TOML is made for files people write themselves."
   },
   {
@@ -61,7 +61,7 @@
   {
    "do": "Save the shopping list to a text file you can print or send to your phone.",
    "done": "the file is easy to read in the store.",
-   "hint": "`write!` and `writeln!` work on files like `print!` does on the screen.",
+   "hint": "`write!` and `writeln!` work on files like `print!` does on the screen, once `use std::io::Write;` is at the top.",
    "why": "The output is what you'll use. Making it pleasant to read is part of the job, not decoration."
   },
   {

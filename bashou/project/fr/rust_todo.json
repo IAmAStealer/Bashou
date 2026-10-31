@@ -41,13 +41,13 @@
   {
    "do": "Remplace chaque unwrap() par Result et ? : un fichier absent, un JSON cassé, un numéro de tâche qui n'existe pas.",
    "done": "chaque erreur affiche un message clair au lieu d'un panic.",
-   "hint": "Fais renvoyer `Result<…, String>` (ou Box<dyn Error>) à tes fonctions, utilise `?` pour remonter les erreurs, et affiche-les une seule fois dans main.",
+   "hint": "Fais renvoyer `Result<…, Box<dyn Error>>` à tes fonctions : `?` remonte n'importe quelle erreur. Avec `Result<…, String>`, écris `.map_err(|e| e.to_string())?`. Affiche l'erreur une seule fois dans main.",
    "why": "unwrap() veut dire « ça ne peut pas échouer ». Quand ça peut, Rust te fait décider de ce qui se passe. `?` rend cette décision courte à écrire."
   },
   {
    "do": "Marque une tâche comme faite, et supprime une tâche.",
    "done": "`done 2` et `delete 3` marchent et sont enregistrés.",
-   "hint": "`get_mut(i)` donne une tâche que tu peux modifier, `remove(i)` en supprime une. N'oublie pas que l'utilisateur compte à partir de 1.",
+   "hint": "`get_mut(i)` donne une tâche que tu peux modifier, ou None si elle n'existe pas ; `remove(i)` en supprime une mais panique si elle manque, alors vérifie `i < tasks.len()` avant. L'utilisateur compte à partir de 1 : `n.checked_sub(1)` (un simple `n - 1` panique sur 0 en build de debug).",
    "why": "Emprunter une valeur pour la modifier (&mut) est le cœur des règles de Rust : un seul écrivain à la fois, vérifié par le compilateur."
   },
   {

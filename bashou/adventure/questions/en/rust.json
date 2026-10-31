@@ -270,7 +270,7 @@
    "&mut T"
   ],
   "answer": 0,
-  "explain": "Arc (atomic reference count) lets several threads own the same value, and frees it when the last one is done. Mutex makes each thread take a lock before touching it, so only one changes it at a time. Rc and RefCell do the same for a single thread only, and the compiler refuses to send them to another thread. For a plain number, an AtomicUsize in an Arc does it without a lock."
+  "explain": "Arc (atomic reference count) lets several threads own the same value, and frees it when the last one is done. Mutex makes each thread take a lock before touching it, so only one changes it at a time. Rc<RefCell<T>> does the same for a single thread only, and the compiler refuses to send it to another thread. For a plain number, an AtomicUsize in an Arc does it without a lock."
  },
  {
   "id": "rust-2-08",
@@ -309,7 +309,7 @@
    "cargo update --safe"
   ],
   "answer": 0,
-  "explain": "cargo audit reads Cargo.lock and compares each exact dependency version with the RustSec database of known vulnerabilities, then lists the ones affected and the fixed version. Install it once with cargo install cargo-audit, and run it in CI so a new advisory shows up without you having to think about it."
+  "explain": "cargo audit reads Cargo.lock and compares each exact dependency version with the RustSec database of known vulnerabilities, then lists the ones affected and the fixed version. Install it once with cargo install --locked cargo-audit (it needs a recent Rust: on Debian 12, get Rust with rustup first), and run it in CI so a new advisory shows up without you having to think about it."
  },
  {
   "id": "rust-1-15",

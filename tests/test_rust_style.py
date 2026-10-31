@@ -49,6 +49,45 @@ class FightFileTest(unittest.TestCase):
         self.assertGreater(seen, 5)
 
 
+HINT_FIXES = {            # fight: the edits its last hint asks for, each (old, new, words of the hint)
+    "mut_marmot": [("let errors = 0;", "let mut errors = 0;", "let mut errors = 0;")],
+    "const_condor": [("const MAX_POINTS =", "const MAX_POINTS: u32 =", "const MAX_POINTS: u32 =")],
+    "shadow_shade": [("let mut guess", "let guess", "Remove mut"),
+                     ("    guess = guess.trim().parse().unwrap();",
+                      '    let guess: u32 = guess.trim().parse().expect("not a number");',
+                      'let guess: u32 = guess.trim().parse().expect("not a number");')],
+    "byte_basilisk": [("let mut total: u8 = 0;", "let mut total: u32 = 0;", "let mut total: u32 = 0;"),
+                      ("total += r;", "total += r as u32;", "total += r as u32;")],
+    "borrow_badger": [("fn shout(text: String)", "fn shout(text: &str)", "fn shout(text: &str)"),
+                      ("shout(name)", "shout(&name)", "shout(&name)")],
+    "vector_viper": [("let first = &temps[0];", "let first = temps[0];", "let first = temps[0];")],
+}
+
+
+@unittest.skipUnless(shutil.which("rustc"), "no rustc")
+class HintTest(unittest.TestCase):
+    def test_the_last_hint_builds_without_warnings_and_wins(self):
+        """rust-judge (2026-10-31): a hint kept `let mut guess` (a warning) and never said to drop the old line."""
+        for c in challenges.rust.ALL:
+            with self.subTest(fight=c.id), tempfile.TemporaryDirectory() as tmp:
+                work = Path(tmp)
+                meta = c.setup(work, random.Random(0))
+                src = next(work.glob("*.rs"))
+                code = src.read_text()
+                for old, new, said in HINT_FIXES[c.id]:
+                    self.assertIn(said, c.hints[-1])
+                    self.assertIn(old, code)
+                    code = code.replace(old, new)
+                src.write_text(code)
+                for edition in ([], ["--edition", "2021"]):
+                    done = subprocess.run(["rustc", *edition, src.name, "-o", "prog"], cwd=work,
+                                          capture_output=True, text=True, timeout=120)
+                    self.assertEqual(done.returncode, 0, done.stderr)
+                    self.assertNotIn("warning", done.stderr)
+                    out = subprocess.run(["./prog"], cwd=work, capture_output=True, text=True, timeout=10).stdout
+                    self.assertEqual(out, meta["expected"])
+
+
 class StyleFileTest(unittest.TestCase):
     def test_every_rule_has_an_online_source(self):
         """Owner (2026-10-26): every rule needs an online reference, official when there is one."""

@@ -85,7 +85,7 @@
     "& lends a value without moving it: it makes a reference, and that is called borrowing.",
     "",
     "- The function reads it, the owner keeps it, and you can call it again.",
-    "- A function that only reads takes &str (text), &[T] (a list) or &T, not String or Vec.",
+    "- A function that only reads takes &str (text), &[T] (a list) or &T, not String, &String, Vec or &Vec.",
     "- A borrow can't outlive the owner: rustc checks it, so no dangling pointer."
    ]
   },

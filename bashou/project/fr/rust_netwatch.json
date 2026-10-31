@@ -15,7 +15,7 @@
    "why": "Un outil de surveillance, c'est une boucle qui ne finit jamais. Teste-la avec un court délai : attendre 30 secondes par essai, c'est du débogage lent."
   },
   {
-   "do": "N'affiche que les changements : « hors ligne à 14:02 », « de retour à 14:05 ».",
+   "do": "N'affiche que les changements : « hors ligne », « de retour ».",
    "done": "rien ne s'affiche tant que l'état ne change pas.",
    "hint": "Garde l'état précédent dans une variable, et compare.",
    "why": "Se souvenir du dernier état et réagir aux changements s'appelle détecter un front. Ça transforme un flot de vérifications en quelques événements utiles."
@@ -59,7 +59,7 @@
   {
    "do": "Fais-le tourner en permanence, comme service utilisateur systemd ou au démarrage.",
    "done": "il note les coupures après un redémarrage sans que tu le lances.",
-   "hint": "Un fichier d'unité dans ~/.config/systemd/user/, puis `systemctl --user enable --now netwatch`.",
+   "hint": "Un fichier d'unité ~/.config/systemd/user/netwatch.service avec [Install] WantedBy=default.target, puis `systemctl --user enable --now netwatch`, et `loginctl enable-linger` pour qu'il démarre au boot, sans que tu sois connecté (en SSH il peut demander sudo).",
    "why": "Un outil de surveillance qu'il faut lancer soi-même sera éteint le jour où ça compte. Les services démarrent avec la machine."
   },
   {

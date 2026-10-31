@@ -199,7 +199,8 @@ ALL = [
                    "When it works, type: verify",
               hints=["mut lets a value change, never its type. A new let with the same name can: "
                      "that's shadowing.",
-                     "Keep the let guess with the text, and add: let guess: u32 = guess.trim().parse().expect(\"not a number\"); "
+                     "Remove mut from the first let guess (the text never changes), then replace the line guess = … with: "
+                     "let guess: u32 = guess.trim().parse().expect(\"not a number\"); "
                      "(expect stops the program, with that message, if the text isn't a number)."],
               setup=guess_setup, verify=rust_output("guess.rs")),
     Challenge(level=2, id="byte_basilisk", fix=True, pet="beaver", threat="Byte Basilisk", after=("mut_marmot",), **RUST,

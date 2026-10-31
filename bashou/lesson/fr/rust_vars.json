@@ -65,7 +65,7 @@
     "- En build debug, Rust s'arrête (panic) au lieu de revenir en silence à 4.",
     "- Quand rustc voit les deux valeurs, il refuse x + 10 avant même que le programme tourne.",
     "- as convertit : x as u32 + 10.",
-    "- Vers plus petit, as coupe : 300 as u8 vaut 44. u8::try_from vérifie."
+    "- Vers plus petit, as coupe : un u32 qui vaut 300, en as u8, donne 44. u8::try_from(x) vérifie et renvoie une erreur."
    ]
   },
   {

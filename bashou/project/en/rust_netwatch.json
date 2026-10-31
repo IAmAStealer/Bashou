@@ -25,7 +25,7 @@
    "why": "A monitor is a loop that never ends. Test it with a short delay: waiting 30 seconds per try is slow debugging."
   },
   {
-   "do": "Print only the changes: \"offline at 14:02\", \"back at 14:05\".",
+   "do": "Print only the changes: \"offline\", \"back online\".",
    "done": "nothing prints while the status stays the same.",
    "hint": "Keep the previous status in a variable, and compare.",
    "why": "Remembering the last state and reacting to changes is called edge detection. It turns a flood of checks into a few useful events."
@@ -69,7 +69,7 @@
   {
    "do": "Run it all the time, as a systemd user service or at startup.",
    "done": "it logs outages after a reboot without you starting it.",
-   "hint": "A unit file in ~/.config/systemd/user/, then `systemctl --user enable --now netwatch`.",
+   "hint": "A unit file ~/.config/systemd/user/netwatch.service with [Install] WantedBy=default.target, then `systemctl --user enable --now netwatch`, and `loginctl enable-linger` so it starts at boot, without you logged in (over SSH it may ask for sudo).",
    "why": "A monitor you have to start yourself will be off on the day it matters. Services start with the machine."
   },
   {
