@@ -1,46 +1,54 @@
 {
  "name": "Forest",
  "next": "world_tree",
- "next_at": {"level": 20},
+ "next_at": {
+  "level": 20
+ },
  "palette": {
-  "d": "#1e4a2a",
-  "g": "#2f7a3a",
-  "G": "#5ab050",
+  "m": "#3a3f44",
+  "w": "#eef0f2",
   "l": "#a0e070",
+  "G": "#5ab050",
+  "g": "#2f7a3a",
+  "d": "#1e4a2a",
   "t": "#6a4428",
   "s": "#4a3a20",
-  "m": "#191919"
+  "S": "#6a5430"
  },
  "base": [
   "........l........",
-  ".......gGg.......",
-  "..l...gGlGg...l..",
-  ".gGg..gGGGg..gGg.",
-  ".gGg.gGmGmGg.gGg.",
-  "gGlGggGGGGGgggGlg",
-  "gGGGgGGlGGGGggGGg",
-  "dgGgdgGGGGGGgdgGd",
-  ".dgdgGGGGGlGGgdd.",
+  ".......lGd.......",
+  "..l...llGgd...l..",
+  ".Ggd..llGgd..Ggd.",
+  ".Ggd.llGGggd.Ggd.",
+  "GGgd.lwmGwmd.GGgd",
+  "GGgdllmmGmmgdGGgd",
+  "GGgdlllGGgggdGGgd",
+  ".GgdlllGGgggdGgd.",
   "..t.dddddddddd.t.",
   "..t.....t.....t..",
-  "sssssssssssssssss"
+  "SSSSSSSssssssssss"
  ],
  "poses": {
   "inhale": {
-   "0": ".......lll......."
+   "1": "--l-----------l--",
+   "2": "--G-----------G--"
   },
   "closed": {
-   "4": "-------G-G-------"
+   "5": "------lG-gg------",
+   "6": "------dd-dd------"
   },
   "left": {
-   "4": "------mGmG-------"
+   "5": "-----wmGwmg------",
+   "6": "-----m-Gm-g------"
   },
   "right": {
-   "4": "-------GmGm------"
+   "5": "------lwmgwm-----",
+   "6": "------l-mg-m-----"
   },
   "fidget": {
-   "2": "..G...-----...G..",
-   "3": ".glg..-----..glg."
+   "0": "--------.l-------",
+   "1": "---------gd------"
   }
  },
  "particles": [

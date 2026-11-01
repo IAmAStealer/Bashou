@@ -2,49 +2,57 @@
  "name": "World tree",
  "symmetric": true,
  "palette": {
-  "d": "#2a5a28",
-  "L": "#4f8a3a",
+  "m": "#3a3f44",
+  "w": "#eef0f2",
+  "H": "#b8e08a",
   "l": "#8cc060",
+  "L": "#4f8a3a",
+  "s": "#356b34",
+  "d": "#2a5530",
   "y": "#ffe080",
-  "b": "#2a6ac0",
+  "W": "#d8eeff",
   "B": "#7ab8f0",
-  "g": "#60b050",
-  "n": "#3e2816",
-  "t": "#6a4428",
+  "b": "#2a6ac0",
+  "c": "#1c4688",
+  "G": "#60b050",
+  "n": "#54351f",
+  "S": "#6a4428",
   "T": "#94643a",
-  "m": "#191919"
+  "U": "#b8844e"
  },
  "base": [
-  "..dddd.bBb.dddd..",
-  ".dLLlLdbgBbdLlLd.",
-  "dLlLLLdBbbgdLLlLd",
-  "dLLyLLLdbbdLLyLLd",
-  ".dLLLLLLddLLLLLd.",
-  "..dddLLLLLLLddd..",
-  ".....tTTTTTt.....",
-  ".....tTmTmTt.....",
-  ".....tTTTTTt.....",
-  "....ntTTTTTtn....",
-  "..nnntTTTTTtnnn..",
+  "..LLLL.WBb.dddd..",
+  ".LHHlldBGGbdlLLd.",
+  "LllllldBbGcdLLLsd",
+  "dllylLLdbcdLsysLd",
+  ".dLLLLlLddsssLsd.",
+  "..ddddddddddddd..",
+  "....nSSSSSSSn....",
+  "....nUwmTwmSn....",
+  "....nTmmTmmSn....",
+  "....nUTTTTSSn....",
+  "..nnnUTTTTSSnnn..",
   "nnn..nn.n.nn..nnn"
  ],
  "poses": {
   "inhale": {
-   "0": ".ddddd.bBb.ddddd."
+   "0": "-d-------------d-"
   },
   "closed": {
-   "7": "-------T-T-------"
+   "7": "------TT-TT------",
+   "8": "------nn-nn------"
   },
   "left": {
-   "7": "------mTmT-------"
+   "7": "-----wmTwmT------",
+   "8": "-----m-Tm-T------"
   },
   "right": {
-   "7": "-------TmTm------"
+   "7": "------TwmTwm-----",
+   "8": "------T-mT-m-----"
   },
   "fidget": {
-   "1": "-------bBgb------",
-   "2": "-------BbgB------",
-   "3": "---L---------L---"
+   "1": "-------G-B-------",
+   "2": "-------G-B-------"
   }
  },
  "particles": [

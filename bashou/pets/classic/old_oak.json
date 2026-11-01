@@ -1,0 +1,54 @@
+{
+ "name": "Old oak",
+ "next": "blossom_tree",
+ "next_at": {"level": 16},
+ "symmetric": true,
+ "palette": {
+  "d": "#2f5f2a",
+  "L": "#4f8a3a",
+  "l": "#8cc060",
+  "a": "#b07a30",
+  "A": "#5a3a1a",
+  "n": "#3e2816",
+  "t": "#6a4428",
+  "T": "#94643a",
+  "m": "#191919"
+ },
+ "base": [
+  "...ddddd.ddddd...",
+  ".ddLLlLLdLLlLLdd.",
+  "dLLlLLLLLLLLlLLLd",
+  "dLLLALLlLLLLLALLd",
+  "dLLLaLLLLLLlLaLLd",
+  ".ddLLdLLLLLdLLdd.",
+  "...dddtTTTtddd...",
+  "....ntTmTmTtn....",
+  "....ntTTnTTtn....",
+  "...nttTTTTTttn...",
+  "..nntTTTTTTTtnn..",
+  ".nnn.nnn.nnn.nnn."
+ ],
+ "poses": {
+  "inhale": {
+   "0": "..ddddddddddddd.."
+  },
+  "closed": {
+   "7": "-------T-T-------"
+  },
+  "left": {
+   "7": "------mTmT-------"
+  },
+  "right": {
+   "7": "-------TmTm------"
+  },
+  "fidget": {
+   "3": "----L--------L---",
+   "4": "----A--------A---",
+   "10": "--nntTTTTTTTtnn.."
+  }
+ },
+ "particles": [
+  3,
+  14
+ ]
+}

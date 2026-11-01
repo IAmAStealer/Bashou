@@ -1,50 +1,59 @@
 {
  "name": "Tree spirit",
  "next": "old_oak",
- "next_at": {"level": 14},
+ "next_at": {
+  "level": 14
+ },
  "palette": {
-  "L": "#50a04b",
+  "m": "#3a3f44",
+  "w": "#eef0f2",
   "l": "#96d26e",
-  "g": "#3c7837",
-  "m": "#191919",
-  "p": "#ffa096",
-  "n": "#784628",
-  "d": "#32733c",
+  "L": "#50a04b",
+  "g": "#34783e",
+  "d": "#22503a",
+  "s": "#34783e",
+  "E": "#5a3a26",
   "t": "#7d5532",
   "T": "#aa784b",
-  "f": "#ffc8dc"
+  "U": "#cc9a62",
+  "f": "#ffc8dc",
+  "p": "#ffa096",
+  "n": "#5a3424"
  },
  "base": [
-  "....ddddddd......",
-  "..ddLLLLLLLdd....",
-  ".dLLlLLfLLlLLd...",
-  "dLLlLLLLLLLlLLd..",
-  "dLLLLfLLLfLLLLd..",
-  ".ddLLLLLLLLLdd...",
-  "...dtTTTTTtd.....",
-  "g..tTmTTTmTt..g..",
-  ".g.tpTTnTTpt.g...",
-  "..gtTTTTTTTtg....",
-  "...tTTTTTTTt.....",
-  "..ttt.ttt.ttt...."
+  "....LLLdddd......",
+  "..LLfllllLLdd....",
+  ".LlllllfLLLLLd...",
+  "dllllLLLLLssssd..",
+  "dlLLLfLLsfssssd..",
+  ".ddddddddddddd...",
+  "...EtttttttE.....",
+  "lL.ETwmTwmtE.Lg..",
+  ".UTETmmTmmtEtE...",
+  "...ETpTnTptE.....",
+  "...EUTTTTttE.....",
+  "..EtE.EtE.EtE...."
  ],
  "poses": {
   "inhale": {
-   "0": "---d-------d-----",
-   "5": "-d-----------d---"
+   "0": "---d-------d-----"
   },
   "closed": {
-   "7": "----tt---tt------"
+   "7": "-----TT-TT-------",
+   "8": "-----nn-nn-------"
   },
   "left": {
-   "7": "----mT--mT-------"
+   "7": "----wmTwmT-------",
+   "8": "----m-Tm-T-------"
   },
   "right": {
-   "7": "-----Tm--Tm------"
+   "7": "-----TwmTwm------",
+   "8": "-----T-mT-m------"
   },
   "fidget": {
-   "6": "g-------------g--",
-   "9": "--.---------.----"
+   "6": "lL-----------Lg--",
+   "7": ".UT---------tE.--",
+   "8": "-..---------..---"
   }
  },
  "particles": [

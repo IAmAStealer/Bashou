@@ -1,0 +1,51 @@
+{
+ "name": "Blossom tree",
+ "next": "forest",
+ "next_at": {"level": 18},
+ "lone_pixels": true,
+ "palette": {
+  "k": "#b04a78",
+  "P": "#f08cb8",
+  "p": "#ffc0dc",
+  "W": "#fff0f6",
+  "t": "#5a3a2a",
+  "T": "#7d5532",
+  "m": "#191919"
+ },
+ "base": [
+  "....kkkkkkkkk....",
+  "..kkPPpPPPPpPkk..",
+  ".kPPpWpPPPpWpPPk.",
+  "kPPPPpPPPPPPpPPPk",
+  "kPpPPPPPPpPPPPpPk",
+  ".kkPPkkPPPkkPPkk.",
+  "...kktTTTTTtkk...",
+  "..p..tTmTmTt...p.",
+  ".....tTTTTTt..p..",
+  ".p...tTTTTTt.....",
+  "....ttTTTTTtt....",
+  "...ttt..t..ttt..."
+ ],
+ "poses": {
+  "inhale": {
+   "0": "...kkkkkkkkkkk..."
+  },
+  "closed": {
+   "7": "-------T-T-------"
+  },
+  "left": {
+   "7": "------mTmT-------"
+  },
+  "right": {
+   "7": "-------TmTm------"
+  },
+  "fidget": {
+   "7": "....p-------.p...",
+   "9": "p....-------....."
+  }
+ },
+ "particles": [
+  4,
+  2
+ ]
+}

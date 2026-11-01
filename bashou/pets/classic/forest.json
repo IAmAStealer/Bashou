@@ -1,0 +1,50 @@
+{
+ "name": "Forest",
+ "next": "world_tree",
+ "next_at": {"level": 20},
+ "palette": {
+  "d": "#1e4a2a",
+  "g": "#2f7a3a",
+  "G": "#5ab050",
+  "l": "#a0e070",
+  "t": "#6a4428",
+  "s": "#4a3a20",
+  "m": "#191919"
+ },
+ "base": [
+  "........l........",
+  ".......gGg.......",
+  "..l...gGlGg...l..",
+  ".gGg..gGGGg..gGg.",
+  ".gGg.gGmGmGg.gGg.",
+  "gGlGggGGGGGgggGlg",
+  "gGGGgGGlGGGGggGGg",
+  "dgGgdgGGGGGGgdgGd",
+  ".dgdgGGGGGlGGgdd.",
+  "..t.dddddddddd.t.",
+  "..t.....t.....t..",
+  "sssssssssssssssss"
+ ],
+ "poses": {
+  "inhale": {
+   "0": ".......lll......."
+  },
+  "closed": {
+   "4": "-------G-G-------"
+  },
+  "left": {
+   "4": "------mGmG-------"
+  },
+  "right": {
+   "4": "-------GmGm------"
+  },
+  "fidget": {
+   "2": "..G...-----...G..",
+   "3": ".glg..-----..glg."
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

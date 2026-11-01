@@ -1,51 +1,61 @@
 {
  "name": "Blossom tree",
  "next": "forest",
- "next_at": {"level": 18},
+ "next_at": {
+  "level": 18
+ },
  "lone_pixels": true,
  "palette": {
-  "k": "#b04a78",
-  "P": "#f08cb8",
+  "m": "#3a3f44",
+  "w": "#eef0f2",
   "p": "#ffc0dc",
-  "W": "#fff0f6",
+  "P": "#f08cb8",
+  "K": "#d0689a",
+  "k": "#a84474",
   "t": "#5a3a2a",
-  "T": "#7d5532",
-  "m": "#191919"
+  "S": "#6a4630",
+  "T": "#8a5e38",
+  "U": "#ad7a4c"
  },
  "base": [
-  "....kkkkkkkkk....",
-  "..kkPPpPPPPpPkk..",
-  ".kPPpWpPPPpWpPPk.",
-  "kPPPPpPPPPPPpPPPk",
-  "kPpPPPPPPpPPPPpPk",
-  ".kkPPkkPPPkkPPkk.",
-  "...kktTTTTTtkk...",
-  "..p..tTmTmTt...p.",
-  ".....tTTTTTt..p..",
-  ".p...tTTTTTt.....",
-  "....ttTTTTTtt....",
-  "...ttt..t..ttt..."
+  "....PPPpkkkkk....",
+  "..PPpppppppPpkk..",
+  ".PppppppPPpPPPPk.",
+  "kppppPPPpPPPKKKPk",
+  "kpPPPPpPPKKKKPKKk",
+  ".kkKKkkKKKkkKKkk.",
+  "...ktSSSSSSStk...",
+  "..p.tUwmTwmSt..p.",
+  "....tTmmTmmSt.p..",
+  "p...tUTTTTSSt....",
+  "...ttUTTTSSStt...",
+  "..ttt...t...ttt.."
  ],
  "poses": {
   "inhale": {
-   "0": "...kkkkkkkkkkk..."
+   "0": "---k---------k---"
   },
   "closed": {
-   "7": "-------T-T-------"
+   "7": "------TT-TT------",
+   "8": "------tt-tt------"
   },
   "left": {
-   "7": "------mTmT-------"
+   "7": "-----wmTwmT------",
+   "8": "-----m-Tm-T------"
   },
   "right": {
-   "7": "-------TmTm------"
+   "7": "------TwmTwm-----",
+   "8": "------T-mT-m-----"
   },
   "fidget": {
-   "7": "....p-------.p...",
-   "9": "p....-------....."
+   "7": "--.--------.p--.-",
+   "8": "--------------.--",
+   "9": ".----------------",
+   "10": "-p---------------"
   }
  },
  "particles": [
   4,
-  2
+  1
  ]
 }
