@@ -11,6 +11,7 @@ neither needs any code:
 with no programming at all; we turn them into game files. The JSON sprites in `bashou/pets/` go
 straight into the game: they may be drawn with an AI, and every one is checked by hand before it's
 merged. The exception is the large ones, `bashou/pets/large/`: drawn by a person, like `art/`.
+With an AI agent, point it at [doc/agents/pixel-art.md](../agents/pixel-art.md).
 
 ## 1. The pets in the game: `bashou/pets/<pet>.json`
 
