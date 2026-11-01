@@ -48,6 +48,8 @@ SETTINGS = {
     "updates": Setting("on", "look for a new version once a day (on/off)", choices=("on", "off")),
     "size": Setting("small", "pet size: small, or large for pets that have big pixel art (small/large)",
                     choices=("small", "large")),
+    "style": Setting("new", "pet drawings: new, or classic for the old look of redrawn pets (new/classic)",
+                     choices=("new", "classic")),
     "talk": Setting((10, 20), "minutes between the things your pet says on its own (e.g. 10-20, 30, or off)", off=True),
     "quiet": Setting((60, 60), "seconds without typing before it says one (it waits for a pause in your work)"),
     "editor": Setting("nano", "the text editor your hints and lessons show (nano/vi)", choices=("nano", "vi")),

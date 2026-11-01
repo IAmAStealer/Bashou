@@ -15,7 +15,7 @@ SHOWN = f"{ESC}[38;2;245;200;70m"  # gold: the stars of the form shown
 SPRITE_W = 19                     # the sprite and a gap: the forms list starts after it
 HOVER = f"{ESC}[48;2;55;60;82m"   # the tile under the mouse
 PREVIEW_SHORT = 9                  # sprite, blank line, name and next stage
-KEYS = {"f": "form"}             # besides terminal.NAMES
+KEYS = {"f": "form", "s": "style"}             # besides terminal.NAMES
 
 
 def hint(s, pet):
@@ -155,7 +155,7 @@ class Board:
     def starter_preview(self, width=60):
         s = self.s
         sprite, form, name, voice = progress.current(s, "starter")
-        pet = creatures.get(sprite)
+        pet = creatures.get(sprite, style=self.style)
         cells = [[True] * pet.width for _ in range(len(pet.base) // 2)]
         out = self.with_forms(render.lines(pet, ["inhale"] if self.breath else [], cells, progress.look(s, "starter")),
                               "starter", width) + [""]
@@ -169,7 +169,7 @@ class Board:
 
     def pony_preview(self):
         from . import pony
-        pet = creatures.get(creatures.FAMILIES[self.pony].first)
+        pet = creatures.get(creatures.FAMILIES[self.pony].first, style=self.style)
         cells = [[True] * pet.width for _ in range(len(pet.base) // 2)]
         out = render.lines(pet, ["inhale"] if self.breath else [], cells) + [""]
         out.append(f"{BOLD}{_(creatures.NAMES[self.pony])}{RESET}  " + DIM + _("pony {n}/{total} found").format(
@@ -191,7 +191,7 @@ class Board:
         out = []
         if drawn:
             stage = progress.look(self.s, pet_id) if unlocked else 1
-            pet = creatures.PETS[creatures.form(pet_id, stage)]
+            pet = creatures.get(creatures.form(pet_id, stage), style=self.style)
             shown = pet if unlocked else silhouette(pet)
             cells = [[True] * pet.width for _ in range(len(pet.base) // 2)]
             poses = ["inhale"] if self.breath else []
@@ -224,7 +224,7 @@ class Board:
         """(grid lines, preview lines, preview on the side?) fitting a cols × lines terminal.
         When it's too short, the preview keeps its sprite and name, and the grid scrolls."""
         self.cols = max(1, min(COLS, (cols - 1) // TILE_W))
-        head = render.heading("Bashou", _("{n} pets · arrows/hjkl or mouse · Enter: pick · f: form · q: quit").format(
+        head = render.heading("Bashou", _("{n} pets · arrows/hjkl or mouse · Enter: pick · f: form · s: style · q: quit").format(
             n=f"{sum(p in self.s['pets'] for p in self.ids) + bool(self.ponies)}/{len(self.ids) - 1}"), cols) + [""] + self.tile(0)
         side = cols >= self.cols * TILE_W + 40
         width = max(20, (cols - self.cols * TILE_W - 6) if side else cols - 3)
@@ -296,6 +296,18 @@ class Board:
         self.s = state.load()
         self.message = _("{name}: form {n}/{total}").format(name=progress.current(self.s, pet)[2], n=form, total=top)
 
+    @property
+    def style(self):
+        return state.setting(self.s, "style")
+
+    def switch_style(self):
+        """Old or new drawings of the redrawn pets, everywhere the pet shows (`bashou config style`)."""
+        style = "new" if self.style == "classic" else "classic"
+        with state.locked() as s:
+            s.setdefault("settings", {})["style"] = style
+        self.s = state.load()
+        self.message = _("Style: old drawings") if style == "classic" else _("Style: new drawings")
+
     def key(self, k):
         n, size = self.pos, len(self.ids)
         last_row, COLS = 1 + (self.rows() - 1) * self.cols, self.cols
@@ -327,6 +339,9 @@ class Board:
             return True
         elif k == "form":
             self.switch_form(self.ids[n])
+            return True
+        elif k == "style":
+            self.switch_style()
             return True
         elif k == "quit":
             return False

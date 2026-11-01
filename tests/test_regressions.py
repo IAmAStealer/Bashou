@@ -533,8 +533,8 @@ class ConfigTest(TempState):
         """bashou config asks each setting (Enter keeps it, a wrong value is asked again), saves once."""
         with state.locked() as s:
             s["settings"]["size"] = "large"
-        # bubble, updates, size, talk (wrong, then off), quiet, editor, os, skills?, language?
-        self.assertEqual(self.answer("3", "", "default", "loud", "off", "", "", "", "n", ""), 0)
+        # bubble, updates, size, style, talk (wrong, then off), quiet, editor, os, skills?, language?
+        self.assertEqual(self.answer("3", "", "default", "", "loud", "off", "", "", "", "n", ""), 0)
         s = state.load()
         self.assertEqual(state.setting(s, "bubble"), (3, 3))
         self.assertEqual(state.setting(s, "size"), "small")

@@ -101,7 +101,7 @@ class Scene:
         s = state.load()
         sprite, _stage, self.name, _voice = progress.current(s)
         self.look = progress.look(s)
-        self.pet = creatures.get(sprite)
+        self.pet = creatures.get(sprite, style=state.setting(s, "style"))
         self.enemy = enemy_sprite(self.ch.id)
         self.drawn = ""
 

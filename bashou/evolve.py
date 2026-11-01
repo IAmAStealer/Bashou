@@ -24,7 +24,8 @@ def scenes(s, e):
     e = progress.evolution(s, e)
     who = e["who"]
     (old_id, old_name), (new_id, new_name) = (progress.sprite_of(s, who, e[k]) for k in ("from", "to"))
-    old, new = creatures.get(old_id), creatures.get(new_id)
+    style = state.setting(s, "style")
+    old, new = creatures.get(old_id, style=style), creatures.get(new_id, style=style)
     cells = [[True] * max(old.width, new.width) for _ in range(len(old.base) // 2)]
 
     def draw(pet, form):

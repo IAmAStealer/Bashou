@@ -123,7 +123,7 @@ def hint(s):
 
 def show(pony):
     """The pony, then where it was found."""
-    pet = creatures.get(creatures.FAMILIES[pony].first)
+    pet = creatures.get(creatures.FAMILIES[pony].first, style=state.setting(state.load(), "style"))
     cells = [[True] * pet.width for _ in range(len(pet.base) // 2)]
     print()
     for line in render.lines(pet, [], cells):

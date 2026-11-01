@@ -75,8 +75,8 @@ class Companion:
         self.busy = True
         self.state_mtime = 0
         sprite, self.voice = progress.current(state.load())[::3]
-        self.sprite, self.size = sprite, "small"
-        self.pet = creatures.get(sprite)
+        self.sprite, self.size, self.style = sprite, "small", "new"
+        self.pet = creatures.get(sprite, style=self.style)
         self.cells = render.mask(self.pet)
         self.stage = 1
         self.look = 1
@@ -204,7 +204,7 @@ class Companion:
         i18n.use(None)                 # `bashou config language` may have changed it
         s = state.load()
         sprite, stage, name, self.voice = progress.current(s)
-        self.sprite, self.size = sprite, state.setting(s, "size")
+        self.sprite, self.size, self.style = sprite, state.setting(s, "size"), state.setting(s, "style")
         self.stage = self.behavior.stage = stage
         self.look = progress.look(s)           # the form drawn; the actions follow `stage`
         threat = fight.active_threat(s)
@@ -358,9 +358,9 @@ class Companion:
 
     def fit(self, cols):
         """The large sprite when asked for and the terminal has room for it, else the small one."""
-        pet = creatures.get(self.sprite, self.size)
+        pet = creatures.get(self.sprite, self.size, style=self.style)
         if cols < pet.width + 20:
-            pet = creatures.get(self.sprite)
+            pet = creatures.get(self.sprite, style=self.style)
         if pet is not self.pet:
             self.pet = pet
             self.cells = render.mask(pet)

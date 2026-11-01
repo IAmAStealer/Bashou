@@ -22,7 +22,7 @@ def draw(pos, breath):
     cols = []
     for i, line in enumerate(STARTERS):
         forms = STARTERS[line]
-        pet = creatures.get(forms[0])
+        pet = creatures.get(forms[0], style=state.setting(state.load(), "style"))
         cells = [[True] * pet.width for _ in range(len(pet.base) // 2)]
         sprite = render.lines(pet, ["inhale"] if breath and i == pos else [], cells)
         name = _(PETS[forms[0]].name)

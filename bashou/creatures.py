@@ -222,6 +222,7 @@ def names(pet_id):
 
 PETS = {path.stem: load(path) for path in sorted(ART.glob("*.json"))}
 LARGE = {path.stem: load(path) for path in sorted((ART / "large").glob("*.json"))}   # `bashou config size large`
+CLASSIC = {path.stem: load(path) for path in sorted((ART / "classic").glob("*.json"))}  # old looks of redrawn pets
 
 
 def chain(first):
@@ -238,10 +239,13 @@ FORMS = {pet: chain(FAMILIES[pet].first) for pet in NAMES}                # pet 
 STARTERS = {f.id: chain(f.first) for f in sorted(FAMILIES.values(), key=lambda f: f.order) if f.starter}
 
 
-def get(pet_id, size="small"):
-    """A pet's sprite; with size "large", its big pixel art when it has one."""
+def get(pet_id, size="small", style="new"):
+    """A pet's sprite; with size "large", its big pixel art when it has one; with style "classic", its look
+    from before it was redrawn, when it was."""
     if size == "large" and pet_id in LARGE:
         return LARGE[pet_id]
+    if style == "classic" and pet_id in CLASSIC:
+        return CLASSIC[pet_id]
     return PETS.get(pet_id, PETS["stardust"])
 
 
@@ -261,7 +265,8 @@ def main():
         return 0
     if args == ["check"]:
         enemies = sorted((ART.parent / "enemies").glob("*.json"))
-        found = [p for path in sorted(ART.glob("*.json")) + sorted((ART / "large").glob("*.json")) + enemies
+        found = [p for path in sorted(ART.glob("*.json")) + sorted((ART / "large").glob("*.json"))
+                 + sorted((ART / "classic").glob("*.json")) + enemies
                  for p in problems(path)]
         found += [p for path in sorted(FAMILY_DIR.glob("*.json")) for p in family_problems(path)]
         print("\n".join(found) or f"{len(PETS)} pets OK, {len(LARGE)} large, {len(FAMILIES)} families")

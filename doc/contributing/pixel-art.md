@@ -77,6 +77,13 @@ large Tarantula has no face, so its "blink" and "look" poses move its legs inste
 shows. `python3 -m bashou.creatures check` checks both folders; see a large one with
 `python3 -m bashou.creatures show large/tarantula`.
 
+### Old looks: `bashou/pets/classic/<form>.json`
+
+When a pet is redrawn, its old drawing moves here, under the same name, and the new one takes its
+place in `bashou/pets/`. Players pick the look with `s` on the swap board or
+`bashou config style new|classic`. Same size, same poses and stages as the new drawing
+(`tests/test_style.py`); `check` looks at this folder too.
+
 ### Enemies: `bashou/enemies/<fight id>.json`
 
 The threats of `bashou fight` are drawn next to your pet during the duel. Same format and size as a
