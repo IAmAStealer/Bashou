@@ -1,0 +1,48 @@
+{
+ "name": "Toad",
+ "palette": {
+  "a": "#4a3a22",
+  "o": "#8a7440",
+  "d": "#5e4c2a",
+  "c": "#d8c89a",
+  "y": "#e8c040",
+  "m": "#191919",
+  "p": "#d89a80",
+  "l": "#a89058"
+ },
+ "base": [
+  "..aaa.....aaa....",
+  ".aoooa...aoooa...",
+  ".aymya...aymya...",
+  "aoodooooooodooa..",
+  "aoooooodoooooda..",
+  "aopoodooodoopoa..",
+  ".aoooaaaaaoooa...",
+  ".aoocccccccooa...",
+  "aoocccccccccooa..",
+  "aoocccccccccooa..",
+  "allocccccccolla..",
+  ".aaaaaaaaaaaaa..."
+ ],
+ "poses": {
+  "inhale": {
+   "7": "---c-------c-----"
+  },
+  "closed": {
+   "2": "--aaa-----aaa----"
+  },
+  "left": {
+   "2": "--my------my-----"
+  },
+  "right": {
+   "2": "---ym------ym----"
+  },
+  "fidget": {
+   "6": "-----ccccc-------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

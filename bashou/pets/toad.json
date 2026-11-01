@@ -2,43 +2,52 @@
  "name": "Toad",
  "palette": {
   "a": "#4a3a22",
+  "s": "#67503a",
   "o": "#8a7440",
+  "l": "#a89058",
+  "h": "#c6ae70",
   "d": "#5e4c2a",
   "c": "#d8c89a",
+  "C": "#b4a68a",
   "y": "#e8c040",
-  "m": "#191919",
-  "p": "#d89a80",
-  "l": "#a89058"
+  "Y": "#b48a34",
+  "g": "#fff4d0",
+  "m": "#3a3f44",
+  "p": "#d89a80"
  },
  "base": [
-  "..aaa.....aaa....",
-  ".aoooa...aoooa...",
-  ".aymya...aymya...",
-  "aoodooooooodooa..",
-  "aoooooodoooooda..",
-  "aopoodooodoopoa..",
-  ".aoooaaaaaoooa...",
-  ".aoocccccccooa...",
-  "aoocccccccccooa..",
-  "aoocccccccccooa..",
-  "allocccccccolla..",
+  ".aaaa....aaaa....",
+  "ahllla..aloooa...",
+  "aygmyaaaaygmya...",
+  "aymmYlhloymmYsa..",
+  "ahllhldooohoosa..",
+  "alpodooooodopsa..",
+  ".aloaaaaaaaosa...",
+  ".alocccccccCsa...",
+  "ahocccccccccCla..",
+  "adocccccccCCsda..",
+  "ahhoCCCCCCCsooa..",
   ".aaaaaaaaaaaaa..."
  ],
  "poses": {
   "inhale": {
-   "7": "---c-------c-----"
+   "7": "alocccccccccCsa.."
   },
   "closed": {
-   "2": "--aaa-----aaa----"
+   "2": "-llll----oooo----",
+   "3": "-aaaa----aaaa----"
   },
   "left": {
-   "2": "--my------my-----"
+   "2": "-gmyy----gmyy----",
+   "3": "-mmyY----mmyY----"
   },
   "right": {
-   "2": "---ym------ym----"
+   "2": "-yygm----yygm----",
+   "3": "-yYmm----yYmm----"
   },
   "fidget": {
-   "6": "-----ccccc-------"
+   "2": "-llll------------",
+   "3": "-aaaa------------"
   }
  },
  "particles": [

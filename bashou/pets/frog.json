@@ -1,46 +1,58 @@
 {
  "name": "Tree frog",
  "next": "toad",
- "next_at": {"achievements": 5},
+ "next_at": {
+  "achievements": 5
+ },
  "palette": {
-  "a": "#3c823c",
+  "a": "#336f3a",
+  "s": "#46985a",
   "o": "#6ebe50",
-  "l": "#a5dc6e",
+  "l": "#94d25c",
+  "h": "#c6e682",
+  "k": "#a8dc70",
   "c": "#e1f0b4",
-  "w": "#ffffff",
-  "m": "#191919",
-  "p": "#ffa0a0"
+  "d": "#bcd4a0",
+  "p": "#f0a0a0",
+  "r": "#e0607a",
+  "e": "#d2dccb",
+  "m": "#3a3f44",
+  "g": "#fbfdf4"
  },
  "base": [
   "..aaa.....aaa....",
-  ".awwwa...awwwa...",
-  ".awmwa...awmwa...",
-  "aoooooooooooooa..",
-  "aoooooooooooooa..",
-  "aopooooooooopoa..",
-  ".aoooaaaaaoooa...",
-  ".aoocccccccooa...",
-  "aoocccccccccooa..",
-  "aoocccccccccooa..",
-  "allocccccccolla..",
+  ".aeeea...aeeea...",
+  ".aegmaaaaagmea...",
+  "ahemmllloommesa..",
+  "ahllllooookoosa..",
+  "alpooooooooopsa..",
+  ".aloaaaaaaaosa...",
+  ".alocccccccdsa...",
+  "alocccccccccdsa..",
+  "aooccccccccddsa..",
+  "ahhodddddddsooa..",
   ".aaaaaaaaaaaaa..."
  ],
  "poses": {
-  "fidget": {
-   "6": "-----ccccc-------"
-  },
   "inhale": {
-   "7": "ao-c-------c-oa--"
+   "7": "alocccccccccdsa.."
   },
   "closed": {
-   "1": "--ooo-----ooo----",
-   "2": "--aaa-----aaa----"
+   "1": "--hll-----loo----",
+   "2": "--lll-----ooo----",
+   "3": "--aaa-----aaa----"
   },
   "left": {
-   "2": "--mw------mw-----"
+   "2": "--gme-----gme----",
+   "3": "--mme-----mme----"
   },
   "right": {
-   "2": "---wm------wm----"
+   "2": "--egm-----egm----",
+   "3": "--emm-----emm----"
+  },
+  "fidget": {
+   "6": "-------r---------",
+   "7": "-------r---------"
   }
  },
  "particles": [
