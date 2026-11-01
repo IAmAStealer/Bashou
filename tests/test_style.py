@@ -72,3 +72,20 @@ class BoardStyleTest(TempState):
             for line in inspect.getsource(mod).splitlines():
                 if "creatures.get(" in line:
                     self.assertIn("style", line, f"{mod.__name__}: {line.strip()}")
+
+    @mock.patch("bashou.which.installed", return_value=True)
+    def test_the_panel_shows_the_style_key_only_for_redrawn_pets(self, _):
+        """Owner, 2026-11-01: "s doesn't work and is not easily visible" - none of their pets was redrawn yet."""
+        from bashou import board as board_mod
+        with state.locked() as s:
+            s["pets"] += ["bat", "frog"]
+        with mock.patch.dict(creatures.CLASSIC, {"mouseling": fake_classic("mouseling")}, clear=True):
+            board = board_mod.Board()
+            board.pos = board.ids.index("bat")
+            self.assertTrue(any("s: old drawing" in line for line in board.preview()))
+            board.key("style")
+            self.assertTrue(any("s: new drawing" in line for line in board.preview()))
+            board.pos = board.ids.index("frog")
+            self.assertFalse(any("drawing" in line for line in board.preview()))
+            board.key("style")
+            self.assertIn("one drawing", board.message)

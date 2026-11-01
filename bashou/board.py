@@ -98,36 +98,39 @@ class Board:
         return (_("level {level}").format(level=need["level"]) if "level" in need
                 else f"{need['achievements']} 🏆")
 
+    def redrawn(self, who):
+        """Has a form of this pet an old drawing to switch to with s?"""
+        return any(form in creatures.CLASSIC for form in progress.chain(self.s, who))
+
     def with_forms(self, sprite_lines, who, width):
         """The sprite, and its forms on its right (owner), cut to the room left; under it only when there's
-        almost no room. Remembers where each form is, for a click."""
+        almost no room. Remembers where each form is, for a click. Then the keys that change the look."""
         forms = self.forms(who)
         self.form_lines = {}
-        more = progress.reached(self.s, who) > 1                 # another form to show: say how
+        hints = [_("f: change form")] if progress.reached(self.s, who) > 1 else []   # another form to show
+        if self.redrawn(who):
+            hints.append(_("s: new drawing") if self.style == "classic" else _("s: old drawing"))
+        hints = [ACCENT + h + RESET for h in hints]
         if width >= SPRITE_W + 12:
             out = []
-            for i in range(max(len(sprite_lines), len(forms))):
+            for i in range(max(len(sprite_lines), len(forms) + len(hints))):
                 left = sprite_lines[i] if i < len(sprite_lines) else ""
-                pad = " " * (SPRITE_W - render.width(render.strip(left)))
+                pad = " " * (SPRITE_W - render.width(render.strip(left))) if i < len(sprite_lines) else " " * SPRITE_W
                 if i < len(forms):
                     k, text = forms[i]
                     self.form_lines[i] = (k, SPRITE_W)
                     text = render.fit(text, width - SPRITE_W)[0]
                     out.append(left + pad + self.colored(text) + RESET)
-                elif i == len(forms) and more:
-                    out.append(left + pad + ACCENT + _("f: change form") + RESET)
+                elif i - len(forms) < len(hints):
+                    out.append(left + pad + hints[i - len(forms)])
                 else:
                     out.append(left)
-            if len(forms) >= len(sprite_lines) and more:
-                out.append(" " * SPRITE_W + ACCENT + _("f: change form") + RESET)
             return out
         out = list(sprite_lines) + [""]
         for k, text in forms:
             self.form_lines[len(out)] = (k, 0)
             out.append(self.colored(text) + RESET)
-        if more:
-            out.append(ACCENT + _("f: change form") + RESET)
-        return out
+        return out + hints
 
     @staticmethod
     def colored(text):
@@ -307,6 +310,9 @@ class Board:
             s.setdefault("settings", {})["style"] = style
         self.s = state.load()
         self.message = _("Style: old drawings") if style == "classic" else _("Style: new drawings")
+        pet_id = self.ids[self.pos]
+        if pet_id not in ("starter", "ponies") and not self.redrawn(pet_id):
+            self.message += DIM + " · " + _("this pet has only one drawing for now") + RESET
 
     def key(self, k):
         n, size = self.pos, len(self.ids)
