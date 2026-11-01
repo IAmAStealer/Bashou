@@ -17,7 +17,7 @@ Most contributions don't need any code: you edit a JSON file (or draw PNGs) and 
 | Write a security challenge | Python (a small setup function) | [security-challenges.md](../doc/contributing/security-challenges.md) |
 | Package releases (apt, dnf) | `tools/package.py`, `.github/workflows/packages.yml` | [packaging.md](../doc/contributing/packaging.md) |
 
-Translating with an AI agent: see [doc/agents/translation.md](../doc/agents/translation.md).
+Translating with an AI agent: see [doc/agents/translation.md](../doc/agents/translation.md). Drawing 17 × 12 sprites with an AI agent: see [doc/agents/pixel-art.md](../doc/agents/pixel-art.md).
 
 Bugs and ideas: [open an issue](https://github.com/IAmAStealer/Bashou/issues/new/choose) and pick a form
 (bug, idea, lesson, adventure question, security challenge), in English or French. Not comfortable with JSON? The *Adventure

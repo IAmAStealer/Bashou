@@ -19,7 +19,7 @@ et tu lances une vérification. Les guides détaillés sont en anglais.
 | Écrire un défi de sécurité | Python (une petite fonction de préparation) | [security-challenges.md](../doc/contributing/security-challenges.md) |
 | Empaqueter les versions (apt, dnf) | `tools/package.py`, `.github/workflows/packages.yml` | [packaging.md](../doc/contributing/packaging.md) |
 
-Traduire avec un agent IA : voir [doc/agents/translation.md](../doc/agents/translation.md).
+Traduire avec un agent IA : voir [doc/agents/translation.md](../doc/agents/translation.md). Dessiner les sprites 17 × 12 avec un agent IA : voir [doc/agents/pixel-art.md](../doc/agents/pixel-art.md).
 
 Bugs et idées : [ouvre un ticket](https://github.com/IAmAStealer/Bashou/issues/new/choose) et choisis un
 formulaire. Il y en a en français : *Signaler un bug (en français)* et *Proposer une idée (en français)*.

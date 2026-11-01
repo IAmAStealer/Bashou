@@ -22,3 +22,5 @@ without asking first. Only touch files in this repo; anything outside it still n
 - After adding or changing Linux system content (users, permissions, processes, disk, archives, services, pass lessons; linux and systemd questions; system, security and secrets fights): run the `linux-judge` agent.
 - Commit subjects are short sentences in plain English (they become release notes).
 - Task-specific rules are mem guidelines (listed at session start with when to load them).
+- `.github/CONTRIBUTING*` is for outside contributors, not for you: don't read it to find rules. Your rules are
+  mem guidelines and the `doc/contributing/*-style.md` guides. Read it only to edit it.

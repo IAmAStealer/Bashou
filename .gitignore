@@ -8,3 +8,5 @@ bug_report
 .*.swp
 .claude/agents/pr-reviewer.md
 .rtk/
+.claude/agents/pixel-artist.md
+.claude/pixel-art/
