@@ -2,48 +2,53 @@
  "name": "Vampire",
  "symmetric": true,
  "palette": {
-  "a": "#3a2c48",
-  "o": "#54426a",
-  "e": "#6e5a88",
-  "w": "#ffffff",
-  "m": "#191919",
-  "r": "#e0303a",
-  "n": "#2a1d2a",
-  "W": "#2e2438",
-  "V": "#9b2436"
+  "a": "#33264a",
+  "s": "#4a3868",
+  "o": "#5e4a80",
+  "h": "#7c66a0",
+  "e": "#76629a",
+  "f": "#5c4a80",
+  "R": "#a08cc8",
+  "p": "#8a2c4c",
+  "n": "#20172c",
+  "m": "#3a3f44",
+  "w": "#eef0f2",
+  "r": "#ff4a5a",
+  "U": "#c83c4c",
+  "V": "#982638",
+  "W": "#661c36"
  },
  "base": [
-  "...a.........a...",
-  "...a.........a...",
-  "...aa.......aa...",
-  "...aoaaaaaaaoa...",
-  "W..aoooooooooa..W",
-  "WV.aorrooorroa.VW",
-  "WVVaormooomroaVVW",
-  "WVVVaoownwooaVVVW",
-  "WWVVaoeeeeeoaVVWW",
-  ".W.W.aeeeeea.W.W.",
-  ".....aoooooa.....",
-  "......a...a......"
+  "....a.......a....",
+  "....aa.....aa....",
+  "a...apa...apa...a",
+  "aU..aphaaaopa..Va",
+  "aUU.ahhhaoosa.VVa",
+  "aUVVahwrowrsaWWVa",
+  "aVVVahrrorrsaWWWa",
+  "aVVWaoewnwfRaWWWa",
+  "aWWWaeeeeffRaWWWa",
+  ".W.W.aeeffsa.W.W.",
+  "......aaaaa......",
+  ".......a.a......."
  ],
  "poses": {
   "inhale": {
-   "3": "W---------------W"
+   "1": "a---------------a"
   },
   "closed": {
-   "5": "-----oo---oo-----",
-   "6": "-----aa---aa-----"
+   "5": "------ho-oo------",
+   "6": "------aa-aa------"
   },
   "left": {
-   "6": "-----mr---mr-----"
+   "6": "------mr-mr------"
   },
   "right": {
-   "6": "-----rm---rm-----"
+   "6": "------rm-rm------"
   },
   "fidget": {
-   "4": ".---------------.",
-   "5": ".---------------.",
-   "9": "-W-------------W-"
+   "2": ".---------------.",
+   "9": "W---------------W"
   }
  },
  "particles": [

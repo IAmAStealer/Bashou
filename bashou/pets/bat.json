@@ -1,51 +1,56 @@
 {
  "name": "Bat",
  "next": "vampire",
- "next_at": {"achievements": 5},
+ "next_at": {
+  "achievements": 5
+ },
  "symmetric": true,
  "palette": {
-  "a": "#5a4b78",
+  "a": "#3e3468",
+  "s": "#62589a",
   "o": "#8c78b4",
-  "e": "#cdbee6",
-  "w": "#ffffff",
-  "m": "#191919",
-  "p": "#ffa5be",
-  "n": "#462d46",
-  "W": "#46375f",
-  "V": "#735f96"
+  "h": "#b098cc",
+  "e": "#dccbe8",
+  "f": "#b2a6d4",
+  "p": "#f0a2bc",
+  "n": "#6b3f5e",
+  "m": "#3a3f44",
+  "w": "#eef0f2",
+  "U": "#8670aa",
+  "V": "#605292",
+  "W": "#4a3f7a"
  },
  "base": [
-  ".................",
-  "...a.........a...",
-  "...aa.......aa...",
-  "...aoaaaaaaaoa...",
-  "W..aoooooooooa..W",
-  "WV.aowwooowwoa.VW",
-  "WVVaowmooomwoaVVW",
-  "WVVVapoonoopaVVVW",
-  "WWVVaoeeeeeoaVVWW",
-  ".W.W.aeeeeea.W.W.",
-  ".....aoooooa.....",
-  "......a...a......"
+  "....a.......a....",
+  "....aa.....aa....",
+  "a...apa...apa...a",
+  "aU..aphaaaopa..Va",
+  "aUU.ahhhooosa.VVa",
+  "aUVVahwmowmsaWWVa",
+  "aVVVapmmommpaWWWa",
+  "aVVWaoeenefsaWWWa",
+  "aWWWaeeeeffsaWWWa",
+  ".W.W.aeeffsa.W.W.",
+  "......aaaaa......",
+  ".......a.a......."
  ],
  "poses": {
   "inhale": {
-   "3": "W---------------W"
+   "1": "a---------------a"
   },
   "closed": {
-   "5": "-----oo---oo-----",
-   "6": "-----aa---aa-----"
+   "5": "------ho-oo------",
+   "6": "------aa-aa------"
   },
   "left": {
-   "6": "-----mw---mw-----"
+   "5": "------mw-mw------"
   },
   "right": {
-   "6": "-----wm---wm-----"
+   "6": "------mw-mw------"
   },
   "fidget": {
-   "4": ".---------------.",
-   "5": ".---------------.",
-   "9": "-W-------------W-"
+   "2": ".---------------.",
+   "9": "W---------------W"
   }
  },
  "particles": [
