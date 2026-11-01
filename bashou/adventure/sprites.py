@@ -119,7 +119,7 @@ def hero(form):
     """(frames, palette): the back view, then a step with each side (feet lifted, body up a pixel)."""
     form = back_of(form)
     base = BACK[form]
-    palette = creatures.get(form).palette
+    palette = (creatures.CLASSIC.get(form) or creatures.get(form)).palette   # the colors the back was drawn with
     low = max(i for i, row in enumerate(base) if row.strip("."))
     has_feet = "." in base[low].strip(".")
 

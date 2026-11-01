@@ -23,6 +23,10 @@ class ClassicFilesTest(unittest.TestCase):
             self.assertEqual(set(old.poses), set(new.poses), pet_id)
             self.assertEqual(set(old.stages), set(new.stages), pet_id)
 
+    def test_an_old_look_evolves_into_a_pet_of_the_main_folder(self):
+        """Bug 2026-11-01: check wanted universe.json inside classic/ for the old Galaxy."""
+        self.assertEqual(creatures.problems(creatures.ART / "classic" / "galaxy.json"), [])
+
     def test_check_looks_at_the_classic_sprites(self):
         self.assertIn('"classic"', inspect.getsource(creatures.main))
 

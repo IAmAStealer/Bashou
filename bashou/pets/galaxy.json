@@ -1,7 +1,9 @@
 {
  "name": "Galaxy",
  "next": "universe",
- "next_at": {"level": 20},
+ "next_at": {
+  "level": 20
+ },
  "lone_pixels": true,
  "palette": {
   "b": "#3a4aa0",
@@ -10,17 +12,18 @@
   "o": "#d89a40",
   "y": "#ffe080",
   "Y": "#fff6d0",
-  "m": "#3a2810",
-  "s": "#ffffff"
+  "s": "#ffffff",
+  "m": "#3a3f44",
+  "w": "#eef0f2"
  },
  "base": [
   ".......bBBBb.....",
   "....bBBccBBbb..s.",
   "..bBcb....bBBb...",
   ".bBc..ooyoo..bB..",
-  ".Bc..oyYYYyo..Bb.",
-  "bB..oyYmYmYyo.cB.",
-  "Bc..oyyYYYyyo..B.",
+  ".Bc..oYYYyyo..Bb.",
+  "bB..oYwmYwmyo.cB.",
+  "Bc..oYmmymmyo..B.",
   ".Bb..oyyyyyo..cb.",
   "..bB..ooooo..Bb..",
   "s..bBBb....bcB...",
@@ -29,21 +32,22 @@
  ],
  "poses": {
   "inhale": {
-   "4": "-----oyYsYyo-----"
+   "4": "--------s--------"
   },
   "closed": {
-   "5": "-------Y-Y-------"
+   "5": "------YY-yy------"
   },
   "left": {
-   "5": "------mYmYY------"
+   "5": "-----wmYwmy------",
+   "6": "-----m-ym-y------"
   },
   "right": {
-   "5": "------YYmYm------"
+   "5": "------Ywmywm-----",
+   "6": "------y-my-m-----"
   },
   "fidget": {
    "1": "---------------.s",
-   "9": ".s---------------",
-   "2": "----c------------"
+   "9": ".s---------------"
   }
  },
  "particles": [

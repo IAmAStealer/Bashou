@@ -1,0 +1,53 @@
+{
+ "name": "Galaxy",
+ "next": "universe",
+ "next_at": {"level": 20},
+ "lone_pixels": true,
+ "palette": {
+  "b": "#3a4aa0",
+  "B": "#6a80e0",
+  "c": "#b8d0ff",
+  "o": "#d89a40",
+  "y": "#ffe080",
+  "Y": "#fff6d0",
+  "m": "#3a2810",
+  "s": "#ffffff"
+ },
+ "base": [
+  ".......bBBBb.....",
+  "....bBBccBBbb..s.",
+  "..bBcb....bBBb...",
+  ".bBc..ooyoo..bB..",
+  ".Bc..oyYYYyo..Bb.",
+  "bB..oyYmYmYyo.cB.",
+  "Bc..oyyYYYyyo..B.",
+  ".Bb..oyyyyyo..cb.",
+  "..bB..ooooo..Bb..",
+  "s..bBBb....bcB...",
+  ".....bbBccBBb....",
+  "........bBBb....."
+ ],
+ "poses": {
+  "inhale": {
+   "4": "-----oyYsYyo-----"
+  },
+  "closed": {
+   "5": "-------Y-Y-------"
+  },
+  "left": {
+   "5": "------mYmYY------"
+  },
+  "right": {
+   "5": "------YYmYm------"
+  },
+  "fidget": {
+   "1": "---------------.s",
+   "9": ".s---------------",
+   "2": "----c------------"
+  }
+ },
+ "particles": [
+  0,
+  0
+ ]
+}

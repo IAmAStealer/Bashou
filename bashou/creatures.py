@@ -109,7 +109,8 @@ def problems(path):
     for pose in POSES if idle == "breathe" else ("swim_up", "swim_down") + POSES[1:]:
         if pose not in d.get("poses", {}):
             found.append(f"{path.name}: missing pose {pose}")
-    if d.get("next") and not (path.parent / f"{d['next']}.json").exists():
+    home = ART if path.parent.name in ("classic", "large") else path.parent   # old looks evolve into pets
+    if d.get("next") and not (home / f"{d['next']}.json").exists():
         found.append(f"{path.name}: \"next\" is {d['next']!r}, and there's no {d['next']}.json to evolve into")
     need = d.get("next_at", {})
     if bool(d.get("next")) != bool(need):

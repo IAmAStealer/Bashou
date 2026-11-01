@@ -1,0 +1,48 @@
+{
+ "name": "Red giant",
+ "next": "nebula",
+ "next_at": {"level": 14},
+ "symmetric": true,
+ "palette": {
+  "g": "#4a1408",
+  "h": "#8a2410",
+  "e": "#d04a18",
+  "o": "#f07030",
+  "w": "#ffb070",
+  "m": "#3a0c04"
+ },
+ "base": [
+  ".....ghhhhhg.....",
+  "....ghwwwwohg....",
+  "...ghwwwwooohg...",
+  "...hewwwoooooh...",
+  "..gwwwwooooooeg..",
+  "..gwwwmooomoeeg..",
+  "..gwwooooooeeeg..",
+  "..ghooooooeeeeg..",
+  "...hoooooeeeeh...",
+  "...ghoooeeeehg...",
+  "....ghoeeeehg....",
+  ".....ghhhhhg....."
+ ],
+ "poses": {
+  "inhale": {},
+  "closed": {
+   "5": "------o---o------"
+  },
+  "left": {
+   "5": "-----mo--mo------"
+  },
+  "right": {
+   "5": "------om--om-----"
+  },
+  "fidget": {
+   "4": "--------w--------",
+   "6": "--------w--------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

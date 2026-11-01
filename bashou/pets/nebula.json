@@ -1,49 +1,55 @@
 {
  "name": "Nebula",
  "next": "black_hole",
- "next_at": {"level": 16},
+ "next_at": {
+  "level": 16
+ },
  "palette": {
-  "k": "#3a1850",
+  "m": "#3a3f44",
+  "w": "#eef0f2",
+  "k": "#4a2266",
   "p": "#7a3aa0",
   "P": "#c058c0",
   "q": "#ff9ad8",
   "t": "#2c8aa0",
   "T": "#7ae0e0",
-  "w": "#fff4d0",
-  "m": "#191919"
+  "s": "#fff4d0"
  },
  "base": [
   ".....kkk...kkk...",
-  "...kkpPPk.kpPPk..",
-  "..kpPqqPPkPPqPpk.",
-  ".kpPqwqPPPPttTpk.",
-  ".kpPPqPPPPtTTtpk.",
-  "kpPPPPmPPPmTtPPpk",
-  "kpPPtPPPPPPPPPPpk",
-  ".kpttTPPqPPPPPpk.",
-  ".kpTTtPPPPPPwPpk.",
-  "..kptPPPPpPPPpk..",
+  "...kkqqPk.kqPPk..",
+  "..kqqsqPPkPqTTpk.",
+  ".kqqPPPPPPPPtTpk.",
+  ".kqPPPPPPPPPPPpk.",
+  "kqPPPwmPPPwmPPPpk",
+  "kPPPPmmPPPmmPPppk",
+  ".kPTTPPPPPPPPPpk.",
+  ".kPttPPPPPPPsPpk.",
+  "..kPPPPPPpPPppk..",
   "...kkpPPk.kppk...",
   "....kkkk...kk...."
  ],
  "poses": {
   "inhale": {
-   "0": "....kkkkk.kkkk...",
-   "11": "...kkkkkk.kkkk..."
+   "0": "----k---k-k------",
+   "11": "---k----k-k--k---"
   },
   "closed": {
-   "5": "------P---P------"
+   "5": "-----PP---PP-----"
   },
   "left": {
-   "5": "-----mP--mP------"
+   "5": "----wmP--wmP-----",
+   "6": "----m-P--m-P-----"
   },
   "right": {
-   "5": "------Pm--Pm-----"
+   "5": "-----Pwm--Pwm----",
+   "6": "-----P-m--P-m----"
   },
   "fidget": {
-   "3": "-----q-----------",
-   "8": "------------P----",
-   "2": "------------w----"
+   "2": "-----P-----------",
+   "3": "----s------------",
+   "7": "------------s----",
+   "8": "------------P----"
   }
  },
  "particles": [

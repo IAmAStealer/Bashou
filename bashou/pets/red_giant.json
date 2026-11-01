@@ -1,44 +1,59 @@
 {
  "name": "Red giant",
  "next": "nebula",
- "next_at": {"level": 14},
+ "next_at": {
+  "level": 14
+ },
  "symmetric": true,
  "palette": {
-  "g": "#4a1408",
-  "h": "#8a2410",
-  "e": "#d04a18",
+  "m": "#3a3f44",
+  "w": "#ff9c58",
+  "g": "#5c1a10",
+  "h": "#9a3216",
+  "D": "#9c2a26",
+  "e": "#c84a22",
   "o": "#f07030",
-  "w": "#ffb070",
-  "m": "#3a0c04"
+  "W": "#ffcf98"
  },
  "base": [
   ".....ghhhhhg.....",
   "....ghwwwwohg....",
-  "...ghwwwwooohg...",
-  "...hewwwoooooh...",
-  "..gwwwwooooooeg..",
-  "..gwwwmooomoeeg..",
-  "..gwwooooooeeeg..",
-  "..ghooooooeeeeg..",
-  "...hoooooeeeeh...",
-  "...ghoooeeeehg...",
-  "....ghoeeeehg....",
-  ".....ghhhhhg....."
+  "...ghwWWwooehg...",
+  "...hwWWwoooeeg...",
+  "..hwwwwoooooeeg..",
+  "..hwwwmooowmeeg..",
+  "..hwwmmooommeeg..",
+  "..howooooooeeDg..",
+  "...hoooooeeDDg...",
+  "...ghooeeeDDgg...",
+  "....ggeeDDDgg....",
+  ".....ggggggg....."
  ],
  "poses": {
-  "inhale": {},
+  "inhale": {
+   "2": "--ghwW-w-w-oehg--",
+   "3": "--hwW-wo---o-eg--",
+   "4": "-hw---o-----o-eg-",
+   "5": "-hw-----------eg-",
+   "6": "-hw-o-------o-eg-",
+   "7": "-howo------o-eDg-",
+   "8": "--ho-----o-e-Dg--",
+   "9": "--gho-e---e-D-g--"
+  },
   "closed": {
-   "5": "------o---o------"
+   "5": "------w---oe-----"
   },
   "left": {
-   "5": "-----mo--mo------"
+   "5": "-----mw--wme-----",
+   "6": "----m-o--m-o-----"
   },
   "right": {
-   "5": "------om--om-----"
+   "5": "------wm--owm----",
+   "6": "-----o-m--o-m----"
   },
   "fidget": {
-   "4": "--------w--------",
-   "6": "--------w--------"
+   "1": "---------o-------",
+   "7": "----o---w--o-----"
   }
  },
  "particles": [
