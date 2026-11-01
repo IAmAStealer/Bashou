@@ -3123,102 +3123,102 @@
    ],
    [
     7,
-    "Jade golem",
+    "Amethyst golem",
     null
    ],
    [
     7,
-    "Jade golem",
+    "Amethyst golem",
     null
    ],
    [
     7,
-    "Jade golem",
+    "Amethyst golem",
     null
    ],
    [
     7,
-    "Jade golem",
+    "Amethyst golem",
     null
    ],
    [
     7,
-    "Jade golem",
+    "Amethyst golem",
     null
    ],
    [
     7,
-    "Jade golem",
+    "Amethyst golem",
     null
    ],
    [
     7,
-    "Jade golem",
+    "Amethyst golem",
     null
    ],
    [
     7,
-    "Jade golem",
+    "Amethyst golem",
     null
    ],
    [
     7,
-    "Jade golem",
+    "Amethyst golem",
     null
    ],
    [
     7,
+    "Amethyst golem",
+    null
+   ],
+   [
+    8,
     "Jade golem",
     null
    ],
    [
     8,
-    "Amethyst golem",
+    "Jade golem",
     null
    ],
    [
     8,
-    "Amethyst golem",
+    "Jade golem",
     null
    ],
    [
     8,
-    "Amethyst golem",
+    "Jade golem",
     null
    ],
    [
     8,
-    "Amethyst golem",
+    "Jade golem",
     null
    ],
    [
     8,
-    "Amethyst golem",
+    "Jade golem",
     null
    ],
    [
     8,
-    "Amethyst golem",
+    "Jade golem",
     null
    ],
    [
     8,
-    "Amethyst golem",
+    "Jade golem",
     null
    ],
    [
     8,
-    "Amethyst golem",
+    "Jade golem",
     null
    ],
    [
     8,
-    "Amethyst golem",
-    null
-   ],
-   [
-    8,
-    "Amethyst golem",
+    "Jade golem",
     null
    ],
    [
@@ -3495,8 +3495,8 @@
      "stone",
      "golem",
      "crystal",
-     "jade_golem",
      "amethyst_golem",
+     "jade_golem",
      "ruby_golem",
      "diamond_golem",
      "pet_rock"
@@ -3508,8 +3508,8 @@
      "Stone",
      "Rock golem",
      "Crystal golem",
-     "Jade golem",
      "Amethyst golem",
+     "Jade golem",
      "Ruby golem",
      "Diamond golem",
      "Pet rock"
@@ -3521,8 +3521,8 @@
      "Pierre",
      "Golem de roche",
      "Golem de cristal",
-     "Golem de jade",
      "Golem améthyste",
+     "Golem de jade",
      "Golem de rubis",
      "Golem de diamant",
      "Caillou chéri"
@@ -5124,6 +5124,32 @@
      "..aaa.....aaa...."
     ]
    },
+   "amethyst_golem": {
+    "palette": {
+     "a": "#3a3440",
+     "r": "#6a6470",
+     "R": "#9a94a0",
+     "v": "#4a2070",
+     "p": "#8a4ac0",
+     "P": "#c090f0",
+     "W": "#f4e8ff",
+     "m": "#1a0c24"
+    },
+    "base": [
+     "....aarrrrraa....",
+     "...aRRrrrrrRRa...",
+     ".arRavvvvvvvaRra.",
+     ".arvpPpvvvpPpvra.",
+     "arRvPWPpvpPWPvRra",
+     "arrvpmpPPPpmpvrra",
+     "arrvvpPPPPPpvvrra",
+     "arRvpPpvvvpPpvRra",
+     ".arrvvpPPPpvvrra.",
+     ".aarrvvvvvvvrraa.",
+     "..aarrrrrrrrraa..",
+     ".aaa..aaaaa..aaa."
+    ]
+   },
    "jade_golem": {
     "palette": {
      "a": "#4a3222",
@@ -5150,32 +5176,6 @@
      "...aodwmwmwdoa...",
      "...aoodddddooa...",
      "...aaaaaaaaaaa..."
-    ]
-   },
-   "amethyst_golem": {
-    "palette": {
-     "a": "#3a3440",
-     "r": "#6a6470",
-     "R": "#9a94a0",
-     "v": "#4a2070",
-     "p": "#8a4ac0",
-     "P": "#c090f0",
-     "W": "#f4e8ff",
-     "m": "#1a0c24"
-    },
-    "base": [
-     "....aarrrrraa....",
-     "...aRRrrrrrRRa...",
-     ".arRavvvvvvvaRra.",
-     ".arvpPpvvvpPpvra.",
-     "arRvPWPpvpPWPvRra",
-     "arrvpmpPPPpmpvrra",
-     "arrvvpPPPPPpvvrra",
-     "arRvpPpvvvpPpvRra",
-     ".arrvvpPPPpvvrra.",
-     ".aarrvvvvvvvrraa.",
-     "..aarrrrrrrrraa..",
-     ".aaa..aaaaa..aaa."
     ]
    },
    "ruby_golem": {

@@ -1,7 +1,7 @@
 {
  "name": "Amethyst golem",
- "next": "ruby_golem",
- "next_at": {"level": 16},
+ "next": "jade_golem",
+ "next_at": {"level": 14},
  "symmetric": true,
  "palette": {
   "a": "#3a3440",

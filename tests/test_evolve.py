@@ -205,3 +205,11 @@ class NoSpoilerTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class GolemOrderTest(unittest.TestCase):
+    def test_amethyst_comes_before_jade(self):
+        """Owner, 2026-11-01: invert jade and amethyst in the Pebble family."""
+        from bashou import creatures
+        self.assertEqual([creatures.PETS[f].next for f in ("crystal", "amethyst_golem", "jade_golem")],
+                         ["amethyst_golem", "jade_golem", "ruby_golem"])
