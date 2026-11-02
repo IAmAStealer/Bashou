@@ -128,6 +128,23 @@ class LonePixelTest(unittest.TestCase):
             if not pet.lone_pixels:
                 self.assertEqual(creatures.lone(pet.base), [], pet.id)
 
+    def test_no_stray_pixel_when_poses_add_up(self):
+        """The Vampire's wing tip floated (owner, 2026-11-01): breathing raised it, the fidget cut what held it.
+        The game stacks poses, so each mix it can show counts, old looks too."""
+        for path in [*sorted(creatures.ART.glob("*.json")), *sorted((creatures.ART / "classic").glob("*.json"))]:
+            self.assertEqual([p for p in creatures.problems(path) if "lone pixel" in p], [], path.name)
+
+    def test_check_names_the_poses_that_leave_a_pixel_alone(self):
+        import json, tempfile
+        from pathlib import Path
+        sprite = {"name": "X", "palette": {"a": "#000000"}, "base": ["...", "a..", "aa.", "aa."],
+                  "poses": {"inhale": {"0": "a--"}, "closed": {}, "left": {}, "right": {}, "fidget": {"1": ".--"}}}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "x.json"
+            path.write_text(json.dumps(sprite))
+            found = " ".join(creatures.problems(path))
+        self.assertIn("lone pixel at row 0, column 0 in inhale + fidget", found)
+
 
 if __name__ == "__main__":
     unittest.main()

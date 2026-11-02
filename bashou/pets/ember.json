@@ -3,6 +3,7 @@
  "next": "candle",
  "next_at": {"achievements": 8},
  "symmetric": true,
+ "lone_pixels": true,
  "palette": {
   "a": "#8a2a14",
   "o": "#f08030",

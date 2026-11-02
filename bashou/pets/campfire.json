@@ -2,6 +2,7 @@
  "name": "Campfire",
  "next": "beacon",
  "next_at": {"achievements": 24},
+ "lone_pixels": true,
  "palette": {
   "a": "#8a2a14",
   "o": "#f08030",

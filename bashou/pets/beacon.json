@@ -3,6 +3,7 @@
  "next": "blaze",
  "next_at": {"achievements": 29},
  "symmetric": true,
+ "lone_pixels": true,
  "palette": {
   "o": "#f08030",
   "w": "#ffd070",

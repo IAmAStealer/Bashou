@@ -1,5 +1,6 @@
 {
  "name": "Leak Lurker",
+ "lone_pixels": true,
  "palette": {
   "a": "#20302a",
   "b": "#70c070",

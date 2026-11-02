@@ -81,6 +81,25 @@ def lone(base):
                                          if (dr or dc) and 0 <= r + dr < h and 0 <= c + dc < w)]
 
 
+def pose_mixes(poses):
+    """The poses the game can show at once (behavior.py), in the order it paints them."""
+    has = poses.__contains__
+    moves = [[], ["closed"], ["tail_up"], ["closed", "tail_up"], ["left"], ["right"], ["closed", "wash1"], ["closed", "wash2"]]
+    return [mix for breath in ([], ["inhale"]) for move in moves for swim in ([], ["swim_up"], ["swim_down"])
+            for fidget in ([], ["fidget"])
+            for mix in [breath + move + swim + fidget]
+            if mix and all(map(has, mix)) and not (fidget and set(move) & {"left", "right", "wash1", "wash2"})]
+
+
+def painted(base, rows_of_poses):
+    """base with these poses painted over it, in order ('-' keeps the pixel below)."""
+    rows = [list(row) for row in base]
+    for pose in rows_of_poses:
+        for r, row in pose.items():
+            rows[int(r)] = [old if new == "-" else new for old, new in zip(rows[int(r)], row)]
+    return rows
+
+
 def problems(path):
     """What's wrong in a pet file, in words a contributor can act on."""
     try:
@@ -124,6 +143,13 @@ def problems(path):
     if not d.get("lone_pixels"):
         for r, c in lone(base):
             found.append(f"{path.name}: lone pixel at row {r}, column {c} (on purpose? add \"lone_pixels\": true)")
+        if not found:
+            seen = set()
+            for mix in pose_mixes(d.get("poses", {})):
+                for r, c in set(lone(painted(base, [d["poses"][p] for p in mix]))) - seen:
+                    seen.add((r, c))
+                    found.append(f"{path.name}: lone pixel at row {r}, column {c} in {' + '.join(mix)} "
+                                 f"(on purpose? add \"lone_pixels\": true)")
     zr, zc = d.get("particles", (0, 13))
     if zc + 3 > len(base[0]) or any(base[2 * zr + i][zc + j] != "." for i in (0, 1) for j in range(3)):
         found.append(f"{path.name}: particles spot (row {zr}, column {zc}) must be 3 empty cells")

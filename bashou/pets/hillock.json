@@ -2,6 +2,7 @@
  "name": "Hillock",
  "next": "cabin",
  "next_at": {"achievements": 3},
+ "lone_pixels": true,
  "palette": {
   "g": "#5fa040",
   "G": "#3e7a30",
