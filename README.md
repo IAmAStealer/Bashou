@@ -103,6 +103,11 @@ server. The first time, it asks for a nickname (`bashou share --name Nova` chang
 
 ## What's new
 
+**0.12.1**
+- **New Logic lessons**: what a loop costs, shaping data once, codes that fix flipped bits, with three new fights.
+- The starter families, the Bat and the Frog are redrawn; press `s` on the pet board to keep the old looks.
+- In fights, only a wrong answer costs a heart.
+
 **0.12.0**
 - **New lessons**: SSH and firewalls, Python errors, SQL's NULL, Rust ownership, git conflicts and undo,
   with seven new fights.

@@ -3,6 +3,23 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.12.1 — 2026-11-02
+
+### Changes
+
+- Three new Logic lessons, each with a fight and a chest: how much work a loop costs (the Square Spider), shaping data once into a table (the Parse Parrot), and codes that find and fix flipped bits (the Bitflip Banshee). 15 new questions, 503 in all.
+- The Star, Sprout, Pebble, Bat and Frog families are redrawn. Their old looks stay one key away: press `s` on the pet board, or use `bashou config style`.
+- In fights, only a wrong `answer` costs a heart: running your script, a failed command and `verify` are free.
+- Boss questions give 35 to 50 seconds.
+- Python fights accept counts of zero, and a failed `verify` shows one test your code fails. The Except Eel says why it refuses your script, such as a bare `except:` left in it.
+- The Group Gremlin asks about another account's main group, not yours, since yours is nearly always your own name.
+- The Amethyst golem now comes before the Jade golem.
+- Rust lessons, hints and projects were corrected after a full recheck, and every Rust fight's last hint is now built and run by the tests.
+
+### Breaking changes
+
+- Breaking change: a pony heard that only a wrong answer costs a heart, answered everything wrong to check and left with none. Bring it home with `bashou pony hoof`.
+
 ## v0.12.0 — 2026-10-30
 
 ### Changes

@@ -102,6 +102,13 @@ les navigateurs n'envoient jamais à un serveur. La première fois, il te demand
 
 ## Quoi de neuf
 
+**0.12.1**
+- **Nouvelles leçons de Logique** : ce que coûte une boucle, ranger les données une seule fois, les codes qui
+  réparent les bits inversés, avec trois nouveaux combats.
+- Les familles de départ, la Chauve-souris et la Grenouille sont redessinées ; la touche `s` du tableau des pets
+  garde les anciens dessins.
+- En combat, seule une mauvaise réponse coûte un cœur.
+
 **0.12.0**
 - **Nouvelles leçons** : SSH et pare-feu, erreurs Python, le NULL de SQL, l'ownership de Rust, les
   conflits et l'annulation dans git, avec sept nouveaux combats.
