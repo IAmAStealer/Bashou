@@ -1,0 +1,55 @@
+{
+ "name": "Jade golem",
+ "next": "ruby_golem",
+ "next_at": {"level": 16},
+ "symmetric": true,
+ "palette": {
+  "a": "#4a3222",
+  "o": "#3f9a6a",
+  "d": "#27694a",
+  "l": "#7fd0a0",
+  "C": "#e4fff0",
+  "m": "#2b1c14",
+  "w": "#eef2e0",
+  "r": "#c9a26a",
+  "R": "#8f6c3e",
+  "b": "#34c47a"
+ },
+ "base": [
+  ".rrr.........rrr.",
+  "....rrrRRRrrr....",
+  "...aaaabCbaaaa...",
+  "...alddoooddoa...",
+  "...aldmCodmCoa...",
+  "...aldmmodmmoa...",
+  "...aoddoCoddoa...",
+  "...aoodddddooa...",
+  "...aodmmmmmdoa...",
+  "...aodwmwmwdoa...",
+  "...aoodddddooa...",
+  "...aaaaaaaaaaa..."
+ ],
+ "poses": {
+  "inhale": {
+   "2": "-------CbC-------"
+  },
+  "closed": {
+   "4": "------oo--oo-----",
+   "5": "------dd--dd-----"
+  },
+  "left": {
+   "4": "------Cm--Cm-----"
+  },
+  "right": {
+   "4": "-------m---m-----",
+   "5": "-------C---C-----"
+  },
+  "fidget": {
+   "9": "------mwmwm------"
+  }
+ },
+ "particles": [
+  5,
+  14
+ ]
+}

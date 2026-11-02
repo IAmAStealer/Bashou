@@ -1,0 +1,52 @@
+{
+ "name": "Diamond golem",
+ "next": "pet_rock",
+ "next_at": {"level": 20},
+ "symmetric": true,
+ "lone_pixels": true,
+ "palette": {
+  "k": "#3a5a7a",
+  "b": "#8ac8f0",
+  "B": "#c8ecff",
+  "w": "#ffffff",
+  "p": "#f0a0e0",
+  "y": "#fff080",
+  "m": "#2a3a4a"
+ },
+ "base": [
+  ".....kkkkkkk.....",
+  "....kBwBBBwBk....",
+  "...kBBbBBBbBBk...",
+  "..kbBbbBwBbbBbk..",
+  ".kkkkkkkkkkkkkkk.",
+  "..kbbbmBBBmbbbk..",
+  "...kbbBbBbBbbk...",
+  "y...kbbBwBbbk...p",
+  ".....kbBBBbk.....",
+  "......kbBbk......",
+  ".......kbk.......",
+  "........k........"
+ ],
+ "poses": {
+  "inhale": {
+   "3": "-------www-------"
+  },
+  "closed": {
+   "5": "------b---b------"
+  },
+  "left": {
+   "5": "-----mb--mb------"
+  },
+  "right": {
+   "5": "------bm--bm-----"
+  },
+  "fidget": {
+   "7": "p...------------y",
+   "1": "-----w-w--w-w----"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

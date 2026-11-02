@@ -1,46 +1,56 @@
 {
  "name": "Crystal golem",
  "next": "amethyst_golem",
- "next_at": {"level": 12},
+ "next_at": {
+  "level": 12
+ },
  "palette": {
-  "a": "#555a64",
-  "o": "#8c919b",
-  "m": "#191919",
+  "k": "#555a64",
+  "d": "#6c7080",
+  "o": "#8e939c",
+  "l": "#b2b4b6",
+  "h": "#d6d3c8",
+  "m": "#3a3f44",
+  "w": "#eef0f2",
   "p": "#ffa0aa",
-  "n": "#3c3c46",
+  "n": "#5a4a52",
   "c": "#6ed7eb",
-  "C": "#c8f5ff"
+  "C": "#c8f5ff",
+  "e": "#3a9bbf"
  },
  "base": [
-  "C......c......C..",
-  "cC...aCcCa...Cc..",
-  "cc..aoooooa..cc..",
-  ".a.aoooooooa.a...",
-  "ac.aomooomoa.ca..",
-  "aCaaoooooooaaCa..",
-  "aooaoponopoaooa..",
-  "aooaoooooooaooa..",
-  ".a.aoooooooa.a...",
-  "...aoocccooa.....",
-  "...aoaaaaaoa.....",
-  "..aaa.....aaa...."
+  ".C.....C.....C...",
+  "Cc...kCcek...Cc..",
+  "ce..khhlodk..ce..",
+  ".k.khllooodk.k...",
+  "kC.klwooowdk.ck..",
+  "kckklmooomdkkek..",
+  "kloklponopdkodk..",
+  "kodklooooodkddk..",
+  ".k.klooooodk.k...",
+  "...kodCceddk.....",
+  "...kokkkkkdk.....",
+  "..kkk.....kkk...."
  ],
  "poses": {
   "inhale": {
    "9": "------CCC--------"
   },
   "closed": {
-   "4": "----nn---nn------"
+   "4": "-----o---o-------",
+   "5": "----mm---mm------"
   },
   "left": {
-   "4": "----mo--mo-------"
+   "4": "----wo--wo-------",
+   "5": "----mo--mo-------"
   },
   "right": {
-   "4": "-----om--om------"
+   "4": "-----ow--ow------",
+   "5": "-----om--om------"
   },
   "fidget": {
-   "0": "c-------------c--",
-   "1": "C------Cc-----C--"
+   "0": "-c-----c-----c---",
+   "1": "cC----cC-----cC--"
   }
  },
  "particles": [

@@ -1,7 +1,9 @@
 {
  "name": "Ruby golem",
  "next": "diamond_golem",
- "next_at": {"level": 18},
+ "next_at": {
+  "level": 18
+ },
  "symmetric": true,
  "palette": {
   "g": "#3a3a44",
@@ -13,33 +15,38 @@
   "r": "#b01830",
   "R": "#f04060",
   "W": "#ffc0d0",
-  "m": "#1a0408"
+  "m": "#3a3f44",
+  "d": "#50505c",
+  "D": "#7a5418"
  },
  "base": [
   "....ssSSSSSss....",
-  "...sSSSSSSSSSs...",
-  ".gsSGYYYYYYYGSsg.",
-  "gssGYkrrrrrkYGssg",
-  "gSsGkrRWrrrrkGsSg",
-  "gSsGkrmrrrmrkGsSg",
-  "gssGkrrrrrrrkGssg",
-  ".gsGkrrRrrrrkGsg.",
-  ".gsGYkkrrrkkYGsg.",
-  "..gsGGYYYYYGGsg..",
-  "...gsssgggsssg...",
-  "..ggggg...ggggg.."
+  "...sSSSSSSSSss...",
+  ".gsSGYYYYYYYGssg.",
+  "gssGYkRRrrrkGDdsg",
+  "gSsGkrWrrrWrkDdsg",
+  "gSsGkrmrrrmrkDdsg",
+  "gssGkrrrrrrrkDdsg",
+  ".gsGkrrRrrrrkDdg.",
+  ".gsGGkkrrrkkDDdg.",
+  "..gsGGGGGGGDDdg..",
+  "...gsssgggsddg...",
+  "...gggg...gggg..."
  ],
  "poses": {
   "inhale": {
-   "4": "-----rRWWrrr-----"
+   "3": "------WR---------"
   },
   "closed": {
-   "5": "------r---r------"
+   "4": "------r---r------",
+   "5": "-----mmm-mmm-----"
   },
   "left": {
+   "4": "-----Wr--Wr------",
    "5": "-----mr--mr------"
   },
   "right": {
+   "4": "------rW--rW-----",
    "5": "------rm--rm-----"
   },
   "fidget": {

@@ -1,48 +1,60 @@
 {
  "name": "Amethyst golem",
  "next": "jade_golem",
- "next_at": {"level": 14},
- "symmetric": true,
+ "next_at": {
+  "level": 14
+ },
  "palette": {
-  "a": "#3a3440",
-  "r": "#6a6470",
-  "R": "#9a94a0",
-  "v": "#4a2070",
+  "k": "#555a64",
+  "d": "#6c7080",
+  "o": "#8e939c",
+  "l": "#b2b4b6",
+  "h": "#d6d3c8",
+  "V": "#4a2474",
+  "v": "#5e2f94",
   "p": "#8a4ac0",
-  "P": "#c090f0",
-  "W": "#f4e8ff",
-  "m": "#1a0c24"
+  "P": "#b984ea",
+  "W": "#f6ecff",
+  "m": "#3a3f44",
+  "w": "#eef0f2",
+  "b": "#ffa0aa"
  },
  "base": [
-  "....aarrrrraa....",
-  "...aRRrrrrrRRa...",
-  ".arRavvvvvvvaRra.",
-  ".arvpPpvvvpPpvra.",
-  "arRvPWPpvpPWPvRra",
-  "arrvpmpPPPpmpvrra",
-  "arrvvpPPPPPpvvrra",
-  "arRvpPpvvvpPpvRra",
-  ".arrvvpPPPpvvrra.",
-  ".aarrvvvvvvvrraa.",
-  "..aarrrrrrrrraa..",
-  ".aaa..aaaaa..aaa."
+  ".....kkkkkkk.....",
+  "....khhllllok....",
+  "...khllooooodk...",
+  "...klwmooowmdk...",
+  "...klmmooommdk...",
+  ".kkklbokkkobdkkk.",
+  "khlklokvpvkodkodk",
+  "kloklkpPVpPkdkodk",
+  "kloklkvpvPWkdkodk",
+  ".kkkookpPPkddkkk.",
+  "...klokkkkkodk...",
+  "..kkkk.....kkkk.."
  ],
  "poses": {
   "inhale": {
-   "6": "----vpPWPWPpv----"
+   "4": "-kk-----------kk-",
+   "5": "khl-----------odk",
+   "6": "-lo--------------",
+   "8": ".kk-----------kk.",
+   "9": "-..-----------..-"
   },
   "closed": {
-   "5": "-----p-----p-----"
+   "3": "-----oo---oo-----"
   },
   "left": {
-   "5": "----mp----mp-----"
+   "3": "----wmo--wmo-----",
+   "4": "----m-o--m-o-----"
   },
   "right": {
-   "5": "-----pm----pm----"
+   "3": "-----owm--owm----",
+   "4": "-----o-m--o-m----"
   },
   "fidget": {
-   "3": "-----W-----W-----",
-   "7": "------W---W------"
+   "7": "---------W-------",
+   "8": "----------P------"
   }
  },
  "particles": [

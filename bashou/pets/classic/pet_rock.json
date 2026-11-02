@@ -1,0 +1,56 @@
+{
+ "name": "Pet rock",
+ "symmetric": true,
+ "palette": {
+  "k": "#2e2e36",
+  "d": "#56565f",
+  "r": "#84848e",
+  "R": "#aeaeb8",
+  "W": "#d6d6e0",
+  "e": "#f6f6f2",
+  "p": "#191919",
+  "n": "#7a5228",
+  "B": "#e8c088",
+  "b": "#c8995a",
+  "s": "#e8d070",
+  "S": "#b8983c"
+ },
+ "base": [
+  ".................",
+  ".....kkkkkkk.....",
+  "...kkWWRRrrrkk...",
+  "...kReeRReerdk...",
+  "..kRRpeRrperddk..",
+  "..krRRRrrrrdddk..",
+  ".skrrrrrrrrdddks.",
+  "nSskrrrrrrdddksSn",
+  "nBBBBBBBBBBBBBBBn",
+  "nbbbbbbbbbbbbbbbn",
+  "nbnbbbbbbbbbbbnbn",
+  "nnnnnnnnnnnnnnnnn"
+ ],
+ "poses": {
+  "inhale": {
+   "6": "s---------------s"
+  },
+  "closed": {
+   "3": "-----RR--rr------",
+   "4": "-----kk--kk------"
+  },
+  "left": {
+   "3": "-----pe--pe------",
+   "4": "-----ee--ee------"
+  },
+  "right": {
+   "4": "-----ep--ep------"
+  },
+  "fidget": {
+   "3": "-----ep--ep------",
+   "4": "-----ee--ee------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

@@ -1,41 +1,56 @@
 {
  "name": "Rock golem",
  "next": "crystal",
- "next_at": {"level": 10},
+ "next_at": {
+  "level": 10
+ },
  "palette": {
-  "a": "#555a64",
-  "o": "#8c919b",
-  "G": "#6ea550",
-  "m": "#191919",
+  "k": "#555a64",
+  "d": "#6c7080",
+  "o": "#8e939c",
+  "l": "#b2b4b6",
+  "h": "#d6d3c8",
+  "m": "#3a3f44",
+  "w": "#eef0f2",
   "p": "#ffa0aa",
-  "n": "#3c3c46"
+  "n": "#5a4a52",
+  "L": "#a8cc64",
+  "G": "#6ea550",
+  "g": "#3f7a4a"
  },
  "base": [
-  "....GGGGG........",
-  "...aGGoGGa.......",
-  "..aoooooooa......",
-  "..aomooomoa......",
-  "..aoooooooa......",
-  "..aoponopoa......",
-  "aaaoooooooaaa....",
-  "aoaoooooooaoa....",
-  "aoaoooooooaoa....",
-  ".a.aoooooa.a.....",
-  "...aoaaaoa.......",
-  "..aaa...aaa......"
+  "....LLGGg........",
+  "...kGGhggk.......",
+  "..khhlloodk......",
+  "..klwooowdk......",
+  "..klmooomdk......",
+  "..klponopdk......",
+  ".kklooooodkk.....",
+  "klklooooodkdk....",
+  "koklooooodkdk....",
+  ".k.koddddk.k.....",
+  "...kokkkdk.......",
+  "..kkk...kkk......"
  ],
  "poses": {
   "inhale": {
-   "5": "aa---------aa----"
+   "5": "-k--------k------",
+   "6": "kl---------dk----",
+   "7": "-o---------------",
+   "8": ".k---------k.----",
+   "9": "-.---------.-----"
   },
   "closed": {
-   "3": "---nn---nn-------"
+   "3": "----o---o--------",
+   "4": "---mm---mm-------"
   },
   "left": {
-   "3": "---mo--mo--------"
+   "3": "---wo--wo--------",
+   "4": "---mo--mo--------"
   },
   "right": {
-   "3": "----om--om-------"
+   "3": "----ow--ow-------",
+   "4": "----om--om-------"
   },
   "fidget": {
    "0": "------p----------"

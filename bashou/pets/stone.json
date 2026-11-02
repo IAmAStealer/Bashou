@@ -1,40 +1,50 @@
 {
  "name": "Stone",
  "next": "golem",
- "next_at": {"level": 8},
+ "next_at": {
+  "level": 8
+ },
  "symmetric": true,
  "palette": {
-  "a": "#555a64",
-  "o": "#8c919b",
-  "l": "#b9bec8",
-  "m": "#191919",
+  "k": "#555a64",
+  "d": "#6c7080",
+  "o": "#8e939c",
+  "l": "#b2b4b6",
+  "h": "#d6d3c8",
+  "m": "#3a3f44",
+  "w": "#eef0f2",
   "p": "#ffa0aa",
-  "n": "#3c3c46"
+  "n": "#5a4a52"
  },
  "base": [
   ".................",
   ".................",
   ".................",
   ".................",
-  ".....alaaaaa.....",
-  "....alllloooa....",
-  "...alllooooooa...",
-  "...allmooomooa...",
-  "...alooooooooa...",
-  "...aopoonoopoa...",
-  "....aooooooon....",
-  ".....aaaaaaa....."
+  ".....kkkkkkk.....",
+  "....khhlloodk....",
+  "...khlloodoodk...",
+  "...klwmooowmdk...",
+  "...kommooommdk...",
+  "...kopoonodpdk...",
+  "....koddddldk....",
+  ".....kkkkkkk....."
  ],
  "poses": {
-  "inhale": {},
+  "inhale": {
+   "3": ".....kkkkkkk.....",
+   "4": "....khhlloodk...."
+  },
   "closed": {
-   "7": "------o---o------"
+   "7": "-----oo---oo-----"
   },
   "left": {
-   "7": "-----mo--mo------"
+   "7": "----wmo--wmo-----",
+   "8": "----mmo--mmo-----"
   },
   "right": {
-   "7": "------om--om-----"
+   "7": "-----owm--owm----",
+   "8": "-----omm--omm----"
   },
   "fidget": {
    "9": "-------non-------"

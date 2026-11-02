@@ -1,0 +1,47 @@
+{
+ "name": "Stone",
+ "next": "golem",
+ "next_at": {"level": 8},
+ "symmetric": true,
+ "palette": {
+  "a": "#555a64",
+  "o": "#8c919b",
+  "l": "#b9bec8",
+  "m": "#191919",
+  "p": "#ffa0aa",
+  "n": "#3c3c46"
+ },
+ "base": [
+  ".................",
+  ".................",
+  ".................",
+  ".................",
+  ".....alaaaaa.....",
+  "....alllloooa....",
+  "...alllooooooa...",
+  "...allmooomooa...",
+  "...alooooooooa...",
+  "...aopoonoopoa...",
+  "....aooooooon....",
+  ".....aaaaaaa....."
+ ],
+ "poses": {
+  "inhale": {},
+  "closed": {
+   "7": "------o---o------"
+  },
+  "left": {
+   "7": "-----mo--mo------"
+  },
+  "right": {
+   "7": "------om--om-----"
+  },
+  "fidget": {
+   "9": "-------non-------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

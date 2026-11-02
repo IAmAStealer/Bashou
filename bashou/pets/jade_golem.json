@@ -1,51 +1,55 @@
 {
  "name": "Jade golem",
  "next": "ruby_golem",
- "next_at": {"level": 16},
- "symmetric": true,
+ "next_at": {
+  "level": 16
+ },
  "palette": {
-  "a": "#4a3222",
-  "o": "#3f9a6a",
-  "d": "#27694a",
-  "l": "#7fd0a0",
-  "C": "#e4fff0",
-  "m": "#2b1c14",
-  "w": "#eef2e0",
-  "r": "#c9a26a",
-  "R": "#8f6c3e",
-  "b": "#34c47a"
+  "J": "#2a6448",
+  "j": "#3a8460",
+  "g": "#5cb383",
+  "G": "#9adbb0",
+  "H": "#dcf5d8",
+  "m": "#3a3f44",
+  "w": "#eef0f2",
+  "b": "#ffa0aa",
+  "n": "#5a4a52"
  },
  "base": [
-  ".rrr.........rrr.",
-  "....rrrRRRrrr....",
-  "...aaaabCbaaaa...",
-  "...alddoooddoa...",
-  "...aldmCodmCoa...",
-  "...aldmmodmmoa...",
-  "...aoddoCoddoa...",
-  "...aoodddddooa...",
-  "...aodmmmmmdoa...",
-  "...aodwmwmwdoa...",
-  "...aoodddddooa...",
-  "...aaaaaaaaaaa..."
+  ".....JJJJJJJ.....",
+  "....JHHGgggjJ....",
+  "...JHGggggggjJ...",
+  "...JHGgwmgwmjJ...",
+  "...JHGgmmgmmjJ...",
+  ".JJJHGgbgngbjJJ..",
+  "JHGJHGgggggjjJjJ.",
+  "JGgJHGggggjjjJjJ.",
+  "JGgJGGgggjjjjJjJ.",
+  ".JJJGGggjjjjjJJ..",
+  "...JGgJJJJjjJ....",
+  "...JJJ....JJJ...."
  ],
  "poses": {
   "inhale": {
-   "2": "-------CbC-------"
+   "4": "-JJ-----------J--",
+   "5": "JHG-----------jJ-",
+   "6": "-Gg--------------",
+   "8": ".JJ-----------J.-",
+   "9": "-..-----------.--"
   },
   "closed": {
-   "4": "------oo--oo-----",
-   "5": "------dd--dd-----"
+   "3": "-------gg-gg-----"
   },
   "left": {
-   "4": "------Cm--Cm-----"
+   "3": "------wmgwmg-----",
+   "4": "------m-gm-g-----"
   },
   "right": {
-   "4": "-------m---m-----",
-   "5": "-------C---C-----"
+   "3": "-------gwmgwm----",
+   "4": "-------g-mg-m----"
   },
   "fidget": {
-   "9": "------mwmwm------"
+   "1": "-----G-----------"
   }
  },
  "particles": [
