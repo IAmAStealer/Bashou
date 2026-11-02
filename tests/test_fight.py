@@ -561,6 +561,9 @@ class ChallengeTest(unittest.TestCase):
             self.assertTrue(fight.used_tool(base, ch))
 
 
+# A real program of this machine: CI on Ubuntu 26.04, where /usr/bin/env is a link (uutils), broke a fake that named it.
+OWNED_FILE = next(str(p) for p in sorted(Path("/usr/bin").iterdir())
+                  if p.is_file() and not p.is_symlink() and " " not in p.name)
 FAKE_RPM = r"""#!/bin/bash
 qf=""; mode=""; args=()
 while [ $# -gt 0 ]; do
@@ -578,10 +581,16 @@ case $mode in
          if [ -n "$qf" ]; then printf coreutils; nl; else echo coreutils-8.32-35.el9.x86_64; fi
        else echo "file $name is not owned by any package"; exit 1; fi ;;
 esac
-"""
+""".replace("/usr/bin/env", OWNED_FILE)
 
 
 class PackageFightTest(unittest.TestCase):
+    def test_the_fake_rpm_owns_a_file_the_fight_can_pick(self):
+        """CI for 0.12.1: the Hare skips links, so a link in the fake rpm's list left it nothing to ask about."""
+        self.assertTrue(os.path.isfile(OWNED_FILE) and not os.path.islink(OWNED_FILE))
+        self.assertIn(OWNED_FILE, FAKE_RPM)
+        self.assertNotIn("/usr/bin/env", FAKE_RPM)
+
     def test_they_follow_the_distro(self):
         with mock.patch("bashou.which.os_family", return_value=frozenset({"ubuntu", "debian"})):
             self.assertFalse(challenges.BY_ID["release_raven"].available())
