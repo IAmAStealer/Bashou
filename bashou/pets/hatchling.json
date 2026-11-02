@@ -1,15 +1,20 @@
 {
  "name": "Hatchling",
  "next": "turtle",
- "next_at": {"achievements": 3},
+ "next_at": {
+  "achievements": 3
+ },
  "palette": {
-  "S": "#78552d",
+  "S": "#6e4a2e",
+  "d": "#8e6838",
   "h": "#af8246",
+  "H": "#d4ac60",
   "g": "#82be5a",
-  "e": "#5f9646",
-  "m": "#191919",
+  "e": "#568f4c",
+  "l": "#b0da72",
+  "m": "#3a3f44",
   "w": "#f5eedc",
-  "x": "#cfc4a8"
+  "x": "#c4b48e"
  },
  "base": [
   ".................",
@@ -19,15 +24,16 @@
   ".................",
   ".................",
   "....SSSSS........",
-  "...ShhShhS..ggg..",
-  ".wShhhShhhSwgmg..",
-  ".wSSSSSSSSSwgg...",
-  ".wxwwxwwxwwxw....",
-  "..wwwwwwwwww....."
+  "...SHhShhS..lgg..",
+  ".xSHhhShhdSggmgg.",
+  ".xSSSSSSSSSxggge.",
+  ".xwwxwwxwwwxx....",
+  "..xxxxxxxxxx....."
  ],
  "poses": {
   "inhale": {
-   "6": "---S-----S-------"
+   "7": "-----H-H---------",
+   "8": "----H----h-------"
   },
   "closed": {
    "8": "-------------e---"
@@ -39,9 +45,10 @@
    "8": "-------------gm--"
   },
   "fidget": {
-   "7": "------------...--",
-   "8": "------------...--",
-   "9": "------------..---"
+   "6": ".................",
+   "7": "....SSSSS........",
+   "8": ".x.SHhShhS.xgmg..",
+   "9": ".xSHhhShhdSxgge.."
   }
  },
  "particles": [

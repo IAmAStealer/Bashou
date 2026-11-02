@@ -1,45 +1,56 @@
 {
  "name": "Turtle",
  "next": "sea_turtle",
- "next_at": {"achievements": 5},
+ "next_at": {
+  "achievements": 5
+ },
  "palette": {
-  "S": "#78552d",
+  "S": "#6e4a2e",
+  "d": "#8e6838",
   "h": "#af8246",
+  "H": "#d4ac60",
   "g": "#82be5a",
-  "e": "#5f9646",
-  "m": "#191919"
+  "e": "#568f4c",
+  "l": "#b0da72",
+  "m": "#3a3f44"
  },
  "base": [
   ".................",
   ".................",
   ".................",
-  "....SSSSSSS......",
-  "..SShhhShhhSS....",
-  ".ShhhhShhhhhS....",
-  "ShhhhShhhhShhS.gg",
-  "SSSSSSSSSSSSSSgmg",
-  ".eggeeeeeeeggeggg",
-  ".gg.gg...gg.gg...",
+  "....SSSSSS.......",
+  "..SSHhhShhSS.....",
+  ".SHHhhShhhdSS....",
+  "ShhhhSHhhdSdSlgg.",
+  "SSSSSSSSSSSSggmgg",
+  ".egleeeeeegleggge",
+  ".gg.ee..ee.gg....",
   ".................",
   "................."
  ],
  "poses": {
-  "fidget": {
-   "6": "---------------..",
-   "7": "--------------S..",
-   "8": "--------------..."
-  },
-  "left": {
-   "7": "--------------mg-"
-  },
-  "right": {
-   "7": "---------------gm"
-  },
   "inhale": {
-   "3": "---S-------S-----"
+   "4": "-----H-----------",
+   "5": "----H-----h------",
+   "6": "-------H---h-----"
   },
   "closed": {
-   "7": "---------------e-"
+   "7": "--------------e--"
+  },
+  "left": {
+   "7": "-------------mg--"
+  },
+  "right": {
+   "7": "--------------gm-"
+  },
+  "fidget": {
+   "3": ".................",
+   "4": "....SSSSSS.......",
+   "5": "..SSHhhShhSS.....",
+   "6": ".SHHhhShhhdSS....",
+   "7": "ShhhhSHhhdSdS....",
+   "8": "SSSSSSSSSSSSSgmg.",
+   "9": ".gg.ee..ee.gg.ge."
   }
  },
  "particles": [
