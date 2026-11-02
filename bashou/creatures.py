@@ -91,11 +91,12 @@ def pose_mixes(poses):
             if mix and all(map(has, mix)) and not (fidget and set(move) & {"left", "right", "wash1", "wash2"})]
 
 
-def painted(base, rows_of_poses):
-    """base with these poses painted over it, in order ('-' keeps the pixel below)."""
+def painted(base, poses, mix):
+    """base as the game shows this mix of poses: each painted in order, then any "a+b" pose they complete."""
     rows = [list(row) for row in base]
-    for pose in rows_of_poses:
-        for r, row in pose.items():
+    meets = [name for name in poses if "+" in name and set(name.split("+")) <= set(mix)]
+    for name in [*mix, *meets]:
+        for r, row in poses[name].items():
             rows[int(r)] = [old if new == "-" else new for old, new in zip(rows[int(r)], row)]
     return rows
 
@@ -146,7 +147,7 @@ def problems(path):
         if not found:
             seen = set()
             for mix in pose_mixes(d.get("poses", {})):
-                for r, c in set(lone(painted(base, [d["poses"][p] for p in mix]))) - seen:
+                for r, c in set(lone(painted(base, d["poses"], mix))) - seen:
                     seen.add((r, c))
                     found.append(f"{path.name}: lone pixel at row {r}, column {c} in {' + '.join(mix)} "
                                  f"(on purpose? add \"lone_pixels\": true)")
@@ -284,7 +285,7 @@ def main():
             path = ART / f"{pet_id}.json"
             pet = load(path if path.exists() else ART.parent / "enemies" / f"{pet_id}.json")
             cells = [[True] * pet.width for _ in range(len(pet.base) // 2)]
-            frames = [("base", [], 1)] + [(p, [p], 1) for p in pet.poses] + [(f"stage {n}", [], n) for n in pet.stages]
+            frames = [("base", [], 1)] + [(p, p.split("+"), 1) for p in pet.poses] + [(f"stage {n}", [], n) for n in pet.stages]
             print(f"\033[1m{pet.name}\033[0m ({pet_id})")
             for name, poses, stage in frames:
                 print(f"  \033[2m{name}\033[0m")

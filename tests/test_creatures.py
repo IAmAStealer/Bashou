@@ -134,6 +134,20 @@ class LonePixelTest(unittest.TestCase):
         for path in [*sorted(creatures.ART.glob("*.json")), *sorted((creatures.ART / "classic").glob("*.json"))]:
             self.assertEqual([p for p in creatures.problems(path) if "lone pixel" in p], [], path.name)
 
+    def test_the_wing_tip_follows_the_wing(self):
+        """Breathing raises the wing, the fidget lowers it: together, the tip moves with it and doesn't vanish
+        (owner, 2026-11-02)."""
+        def top(pet, poses):
+            return next(r for r, row in enumerate(render.grid(pet, poses)) if row[0] != ".")
+        for pet in [creatures.PETS["bat"], creatures.PETS["vampire"], creatures.CLASSIC["bat"], creatures.CLASSIC["vampire"]]:
+            self.assertEqual(top(pet, ["inhale", "fidget"]) - top(pet, ["inhale"]), top(pet, ["fidget"]) - top(pet, []), pet.id)
+
+    def test_a_pose_can_say_how_two_others_meet(self):
+        pet = creatures.Pet(id="x", name="X", base=["..", ".."], palette={"a": (0, 0, 0)},
+                            poses={"inhale": [(0, 0, "a")], "fidget": [(0, 0, ".")], "inhale+fidget": [(1, 1, "a")]})
+        self.assertEqual(render.grid(pet, ["inhale", "fidget"]), [[".", "."], [".", "a"]])
+        self.assertEqual(render.grid(pet, ["fidget"]), [[".", "."], [".", "."]])
+
     def test_check_names_the_poses_that_leave_a_pixel_alone(self):
         import json, tempfile
         from pathlib import Path

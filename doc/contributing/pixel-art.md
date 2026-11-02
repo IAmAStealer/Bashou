@@ -54,6 +54,8 @@ number of rows (the pets are 17 × 12).
   A new form is one new file and one link: the board shows one more star, and the tests walk every pet
   through it.
 - **`symmetric`** (optional): `true` when the outline is a mirror image. `check` keeps it one.
+- **`"inhale+fidget"`** (optional): a pose named after two others, painted only when both show. Use it when
+  they move the same pixels, so a part follows the move instead of coming loose (see `vampire.json`).
 - **`lone_pixels`** (optional): `true` when pixels touching no other are on purpose (sparkles, spores,
   bubbles). Without it, `check` reports each one as a stray pixel.
 - **`idle`** (optional): `"swim"` instead of breathing; the pet then needs `swim_up` and `swim_down`

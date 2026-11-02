@@ -18,6 +18,10 @@ def grid(pet, poses, stage=1):
     for pose in poses:
         for r, c, k in pet.poses.get(pose, ()):
             g[r][c] = k
+    for name, pixels in pet.poses.items():        # "inhale+fidget": how two poses meet, painted once both are shown
+        if "+" in name and set(name.split("+")) <= set(poses):
+            for r, c, k in pixels:
+                g[r][c] = k
     return g
 
 
