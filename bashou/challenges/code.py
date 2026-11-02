@@ -344,6 +344,7 @@ def eel_setup(work, rng):
     write(work, "count.py", "#", [
         _("Fight: count.py counts the lines of a file. Given a file that isn't there, it prints 0 and says it worked."),
         _("Wanted: the count for a real file; for a missing one, a message on stderr and exit status 1."),
+        _("And no bare except: name the error you expect."),
         _("Run it:") + " python3 count.py notes.txt; echo $?   " + _("then:") + " python3 count.py nope.txt; echo $?",
         _("Help: type lesson in the arena, the Sage Owl explains it with a drawing."),
     ], EEL_CODE)
@@ -352,24 +353,46 @@ def eel_setup(work, rng):
     return {"lines": n}
 
 
-def eel_verify(work, meta, value):
-    """No bare except left. A real file: its count, status 0. A missing one: nothing on stdout, a message
-    on stderr, status 1 (a script that fails must say so to cron or CI)."""
+def eel_wrong(work, meta):
+    """What's still wrong with count.py, or None. No bare except left. A real file: its count, status 0. A missing
+    one: nothing on stdout, a message on stderr, status 1 (a script that fails must say so to cron or CI)."""
     try:
         tree = ast.parse((work / "count.py").read_text(encoding="utf-8"))
     except (OSError, SyntaxError, ValueError):
-        return False
-    if any(isinstance(h, ast.ExceptHandler) and (h.type is None or getattr(h.type, "id", "") == "BaseException")
-           for h in ast.walk(tree)):
-        return False                                    # the bare except is what the fight is about
+        return _("Your file doesn't run: python3 {name} shows why.").format(name="count.py")
+    handlers = [h for h in ast.walk(tree) if isinstance(h, ast.ExceptHandler)]
+    if any(h.type is None for h in handlers):           # the bare except is what the fight is about
+        return _("The bare except: is still in count.py. Your script may look right, but it would also hide a typo "
+                 "or Ctrl+C: name the error you expect, like except OSError as err:")
+    if any(getattr(h.type, "id", "") == "BaseException" for h in handlers):
+        return _("except BaseException: catches as much as a bare except, even Ctrl+C: "
+                 "name the error you expect, like except OSError as err:")
     with tempfile.TemporaryDirectory() as tmp:
         shutil.copy(work / "count.py", tmp)
         n = meta["lines"] + 2
         (Path(tmp) / "list.txt").write_text("x\n" * n, encoding="utf-8")
         good = run([sys.executable, "count.py", "list.txt"], tmp, timeout=5)
         bad = run([sys.executable, "count.py", "missing.txt"], tmp, timeout=5)
-    return (bool(good) and good.returncode == 0 and good.stdout == f"{n}\n"
-            and bool(bad) and bad.returncode == 1 and bad.stdout == "" and bad.stderr.strip() != "")
+    if not good or not bad:
+        return _("Your code didn't finish within 5 seconds: a loop that never ends?")
+    if good.returncode != 0 or good.stdout != f"{n}\n":
+        return _("With a real file, count.py should print only the count and end with status 0: "
+                 "python3 count.py notes.txt; echo $?")
+    if bad.stdout != "":
+        return _("With a missing file, nothing should go to stdout: the message goes to stderr.")
+    if bad.returncode != 1:
+        return _("With a missing file, the exit status should be 1: python3 count.py nope.txt; echo $?")
+    if bad.stderr.strip() == "":
+        return _("With a missing file, say what went wrong on stderr: print(err, file=sys.stderr)")
+    return None
+
+
+def eel_verify(work, meta, value):
+    return eel_wrong(work, meta) is None
+
+
+def eel_why(work):
+    return eel_wrong(work, json.loads((Path(work).parent / "meta.json").read_text()))
 
 
 LOOP_CODE = '''
@@ -764,7 +787,7 @@ ALL = [
                      "went wrong on stderr, and end with status 1.",
                      "Write: except OSError as err: (OSError covers a missing file, a forbidden one and a folder), "
                      "then print(err, file=sys.stderr) and sys.exit(1)."],
-              setup=eel_setup, verify=eel_verify),
+              setup=eel_setup, verify=eel_verify, why=eel_why),
     Challenge(level=2, id="loop_lich", fix=True, pet="snake", threat="Loop Lich", **PY,
               task="The Loop Lich traps retry.py in a loop that never ends.\n"
                    "Fix retry.py (its first lines say what it must do). Run it: python3 retry.py\n"

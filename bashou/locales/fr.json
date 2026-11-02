@@ -3125,5 +3125,12 @@
  "start over with a new starter": "recommence avec un nouveau starter",
  "get the new version": "installe la nouvelle version",
  "which version of Bashou this is": "quelle version de Bashou c'est",
- "what changed in each release (q quits)": "ce qui a changé à chaque version (q quitte)"
+ "what changed in each release (q quits)": "ce qui a changé à chaque version (q quitte)",
+ "And no bare except: name the error you expect.": "Et pas d'except nu : nomme l'erreur que tu attends.",
+ "The bare except: is still in count.py. Your script may look right, but it would also hide a typo or Ctrl+C: name the error you expect, like except OSError as err:": "L'except: nu est encore dans count.py. Ton script peut sembler juste, mais il cacherait aussi une faute de frappe ou un Ctrl+C : nomme l'erreur que tu attends, comme except OSError as err:",
+ "With a real file, count.py should print only the count and end with status 0: python3 count.py notes.txt; echo $?": "Avec un vrai fichier, count.py doit afficher seulement le nombre et finir avec le code 0 : python3 count.py notes.txt; echo $?",
+ "With a missing file, nothing should go to stdout: the message goes to stderr.": "Avec un fichier absent, rien ne doit aller sur stdout : le message va sur stderr.",
+ "With a missing file, the exit status should be 1: python3 count.py nope.txt; echo $?": "Avec un fichier absent, le code de sortie doit être 1 : python3 count.py nope.txt; echo $?",
+ "With a missing file, say what went wrong on stderr: print(err, file=sys.stderr)": "Avec un fichier absent, dis ce qui ne va pas sur stderr : print(err, file=sys.stderr)",
+ "except BaseException: catches as much as a bare except, even Ctrl+C: name the error you expect, like except OSError as err:": "except BaseException: attrape autant qu'un except nu, même Ctrl+C : nomme l'erreur que tu attends, comme except OSError as err:"
 }

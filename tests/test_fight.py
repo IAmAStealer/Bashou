@@ -1043,6 +1043,61 @@ class SqlFightTest(unittest.TestCase):
             self.assertEqual(meta["answer"], str(total))
 
 
+class ExceptEelWhyTest(unittest.TestCase):
+    """Bug report: a script that behaved right kept its bare except, and verify refused it without saying why."""
+
+    KEPT = "    except:\n        sys.stderr.write('Missing File')\n        sys.exit(1)\n"
+    NAMED = "    except OSError as err:\n        print(err, file=sys.stderr)\n        sys.exit(1)\n"
+
+    def eel(self, handler):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        base = Path(tmp.name)
+        work = base / "arena"
+        work.mkdir()
+        ch = challenges.BY_ID["except_eel"]
+        meta = {"challenge": ch.id, **ch.setup(work, random.Random(1))}
+        (base / "meta.json").write_text(json.dumps(meta))
+        count = work / "count.py"
+        count.write_text(count.read_text().replace("    except:\n        print(0)\n", handler))
+        return ch, work, meta
+
+    def test_a_kept_bare_except_is_named(self):
+        ch, work, meta = self.eel(self.KEPT)
+        self.assertFalse(ch.check(work, meta, "done"))
+        self.assertIn("except:", ch.why(work))
+        self.assertIn("OSError", ch.why(work))
+
+    def test_except_baseexception_is_not_called_bare(self):
+        ch, work, meta = self.eel("    except BaseException as err:\n        print(err, file=sys.stderr)\n        sys.exit(1)\n")
+        self.assertFalse(ch.check(work, meta, "done"))
+        self.assertIn("except BaseException", ch.why(work))
+        self.assertNotIn("still in count.py", ch.why(work))
+
+    def test_a_right_script_has_nothing_to_explain(self):
+        ch, work, meta = self.eel(self.NAMED)
+        self.assertTrue(ch.check(work, meta, "done"))
+        self.assertIsNone(ch.why(work))
+
+    def test_each_wrong_exit_says_what_is_wrong(self):
+        for handler, word in (("    except OSError:\n        print(0)\n", "stdout"),
+                              ("    except OSError:\n        print('no', file=sys.stderr)\n", "status"),
+                              ("    except OSError:\n        sys.exit(1)\n", "stderr")):
+            with self.subTest(word):
+                ch, work, meta = self.eel(handler)
+                self.assertFalse(ch.check(work, meta, "done"))
+                self.assertIn(word, ch.why(work))
+
+    def test_a_broken_file_says_so(self):
+        ch, work, meta = self.eel("    except OSError\n")
+        self.assertFalse(ch.check(work, meta, "done"))
+        self.assertIn("doesn't run", ch.why(work))
+
+    def test_the_task_names_the_rule(self):
+        ch, work, meta = self.eel(self.NAMED)
+        self.assertIn("name the error", (work / "count.py").read_text())
+
+
 class PythonTestsFightTest(unittest.TestCase):
     def djinn(self, old, new):
         base = Path(tempfile.mkdtemp())
