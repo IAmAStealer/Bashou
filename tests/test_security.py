@@ -79,3 +79,11 @@ class FakeKeyTest(unittest.TestCase):
             if re.search(r"-----BEGIN[ A-Z0-9_-]*PRIVATE KEY-----", p.read_text()):
                 with self.subTest(file=p.relative_to(ROOT)):
                     self.assertIn(f":{p.relative_to(ROOT)}:private-key:", ignored)
+
+
+class CiPythonTest(unittest.TestCase):
+    def test_ubuntu_job_uses_a_python_its_runner_has(self):
+        """CI for 0.12.1 failed: setup-python has no Python 3.9 on ubuntu-latest, now Ubuntu 26.04."""
+        ci = (ROOT / ".github" / "workflows" / "ci.yml").read_text()
+        self.assertIn('python: ["3.10", "3.13"]', ci)
+        self.assertIn("image: rockylinux:9", ci)                 # 3.9 stays tested: Rocky 9's own Python
