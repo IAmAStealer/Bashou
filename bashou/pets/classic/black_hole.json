@@ -1,0 +1,51 @@
+{
+ "name": "Black hole",
+ "next": "galaxy",
+ "next_at": {"level": 18},
+ "symmetric": true,
+ "palette": {
+  "k": "#06060c",
+  "K": "#2a2a3e",
+  "r": "#9a3a10",
+  "o": "#f08020",
+  "y": "#ffd060",
+  "w": "#fff4c0",
+  "e": "#c8cdd0"
+ },
+ "base": [
+  "......rooor......",
+  "....royyyyyor....",
+  "...oyKKKKKKKyo...",
+  "..ryKkkkkkkkKyr..",
+  "..oKkkekkkekkKo..",
+  "..yKkkkkkkkkkKy..",
+  "rooyywwwwwwwyyoor",
+  "..ryyyyooooyyyr..",
+  "..oKkkkkkkkkkKo..",
+  "...oKKkkkkkKKo...",
+  "....roKKKKKor....",
+  "......rooor......"
+ ],
+ "poses": {
+  "inhale": {
+   "6": "royywwwwwwwwwyyor"
+  },
+  "closed": {
+   "4": "-------k---k-----"
+  },
+  "left": {
+   "4": "-----ek--ek------"
+  },
+  "right": {
+   "4": "------ke--ke-----"
+  },
+  "fidget": {
+   "6": "rooyywwywwywwyoor",
+   "0": "------roooo......"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}
