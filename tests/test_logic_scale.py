@@ -6,12 +6,16 @@ import json
 import random
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 from bashou import challenges
 from bashou.challenges import logic
+
+# CI for 0.12.1: macOS's grep -f takes over 5 seconds on 20 000 lines, as the hints tell players; comm is their way.
+SLOW_GREP_F = sys.platform == "darwin"
 
 
 def arena(fight_id, seed=0):
@@ -57,6 +61,8 @@ class SquareSpiderTest(unittest.TestCase):
 
     def test_one_pass_fixes_win(self):
         for name, body in self.FIXES.items():
+            if name == "grep" and SLOW_GREP_F:
+                continue
             tmp, work, ch, meta = arena(self.FIGHT)
             with tmp, self.subTest(name):
                 self.fixed(work, body)
@@ -69,7 +75,7 @@ class SquareSpiderTest(unittest.TestCase):
             with tmp, self.subTest(name):
                 self.fixed(work, body)
                 self.assertFalse(ch.check(work, meta, "done"))
-                if name == self.SHOWS[0]:
+                if name == self.SHOWS[0] and not SLOW_GREP_F:
                     self.assertIn(self.SHOWS[1], ch.why(work))
                 else:                                        # 20 000 regexes: wrong, and grep is slow on them too
                     self.assertTrue(ch.why(work))
@@ -180,3 +186,12 @@ class HiddenListsTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class MacReferenceTest(unittest.TestCase):
+    def test_reference_solutions_do_not_rely_on_grep_f(self):
+        """CI for 0.12.1 failed on macOS: the reference solutions used grep -f, too slow there on 20 000 lines."""
+        from tests.test_fight import SOLUTIONS
+        for fight in ("square_spider", "trial_logic_missing"):
+            self.assertNotIn("xf ", SOLUTIONS[fight][0])
+            self.assertIn("comm -", SOLUTIONS[fight][0])

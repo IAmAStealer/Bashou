@@ -156,9 +156,9 @@ SOLUTIONS = {
     "negation_gnome": ("sed -i 's/if ! grep/if grep/' door.sh", None),
     "trial_logic_door": ("sed -i 's/if ! grep/if grep/' door.sh", None),
     "coin_wraith": ("sed -i 's/||/\\&\\&/' save.sh", None),
-    "square_spider": ("sed -i '/^while/,$d' common.sh && echo 'grep -Fxf newsletter.txt customers.txt' >> common.sh",
+    "square_spider": ("sed -i '/^while/,$d' common.sh && echo 'comm -12 <(sort customers.txt) <(sort newsletter.txt)' >> common.sh",
                       None),
-    "trial_logic_missing": ("sed -i '/^while/,$d' missing.sh && echo 'grep -vFxf present.txt team.txt' >> missing.sh",
+    "trial_logic_missing": ("sed -i '/^while/,$d' missing.sh && echo 'comm -23 <(sort team.txt) <(sort present.txt)' >> missing.sh",
                             None),
     "parse_parrot": ("sed -i -e '/^  price=/d' -e 's/\\$((price \\* qty))/$((price[$item] * qty))/' bill.sh && "
                      "sed -i '/^while/i declare -A price; "
