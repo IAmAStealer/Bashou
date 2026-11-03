@@ -1,64 +1,73 @@
 {
  "name": "Mole king",
  "palette": {
-  "a": "#503c37",
-  "o": "#7d645a",
-  "c": "#d7beaa",
+  "a": "#62402f",
+  "b": "#472b24",
+  "h": "#a5745a",
+  "o": "#875c48",
+  "s": "#6b4438",
+  "c": "#dcbc9e",
+  "C": "#bd9a80",
   "n": "#ff8ca0",
+  "N": "#d9627c",
+  "w": "#ffc8cc",
+  "p": "#ffa9b0",
+  "P": "#f58c98",
+  "q": "#c25a70",
+  "W": "#f4e2c8",
+  "e": "#d19a50",
+  "d": "#ad7530",
+  "D": "#825022",
   "m": "#191919",
-  "l": "#fac8be",
-  "q": "#46322d",
-  "y": "#f0c030",
-  "w": "#ffe680",
-  "h": "#8c7160",
-  "s": "#6d5654",
-  "b": "#6c564b",
-  "d": "#5e4845",
-  "C": "#c4aa9e",
-  "p": "#e4aeae",
-  "Y": "#c89a2c"
+  "g": "#fff5e6",
+  "k": "#4a2e2c",
+  "y": "#f0b92e",
+  "Y": "#c8922a",
+  "L": "#ffe98a"
  },
  "base": [
-  ".....y.y.Y.......",
-  ".....ywyYY.......",
-  "....aaaaaaa......",
-  "..abhhhooooda....",
-  ".ahhhooooooooa...",
-  ".ahomooooomosa...",
-  "ahoooccncCoossa..",
-  "ahoocccycCCossa..",
-  "llooooqoqoosslp..",
-  "llpooooooosslpp..",
-  ".aoooooosssssa...",
-  "..aaaaaaaaaaa...."
+  "......y.y.Y......",
+  "....aayLyYYbb....",
+  "..ahhhhhoooosbb..",
+  ".ahhoooooooooosb.",
+  ".ahogmooooogmosb.",
+  ".aoommooooommosb.",
+  "ahooooowwNooooosb",
+  "aooooocnnNCoooosb",
+  "appPoockkkCooPPqb",
+  "pppPqoccyCCoPPPPq",
+  "pWPWPoooooooPWPWq",
+  ".aoeeeedddddDDsb."
  ],
  "poses": {
-  "inhale": {
-   "5": "ah-----------sa--"
-  },
   "closed": {
-   "5": "----q-----q------"
+   "4": "----oo-----oo----",
+   "5": "----kk-----kk----"
   },
   "left": {
-   "5": "---mo----mo------"
+   "4": "---gmo----gmo----",
+   "5": "---m-o----m-o----"
   },
   "right": {
-   "5": "----om----om-----"
+   "4": "----ogm----ogm---",
+   "5": "----o-m----o-m---"
+  },
+  "inhale": {
+   "1": "---a---------b---",
+   "2": "-ah------------b-",
+   "3": "ah-o----------osb"
   },
   "fidget": {
-   "0": "......y.y.Y......",
-   "1": "......ywyYY......",
-   "3": "---------------ll",
-   "4": "---------------lp",
-   "5": "---------------lp",
-   "6": "---------------oa",
-   "7": "---------------oa",
-   "8": "-------------saa.",
-   "9": "------------ssa.."
+   "0": "-----y.y.Y.-ppq--",
+   "1": "-----yLyY-PpPPq--",
+   "2": "-----------PPq-b-",
+   "8": "-------------oos-",
+   "9": "------------ooosb",
+   "10": "------------oosb."
   }
  },
  "particles": [
   0,
-  14
+  1
  ]
 }

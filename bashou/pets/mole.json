@@ -5,59 +5,84 @@
   "achievements": 5
  },
  "palette": {
-  "a": "#503c37",
-  "o": "#7d645a",
-  "c": "#d7beaa",
+  "a": "#62402f",
+  "b": "#472b24",
+  "h": "#a5745a",
+  "o": "#875c48",
+  "s": "#6b4438",
+  "c": "#dcbc9e",
+  "C": "#bd9a80",
   "n": "#ff8ca0",
+  "N": "#d9627c",
+  "w": "#ffc8cc",
+  "p": "#ffa9b0",
+  "P": "#f58c98",
+  "q": "#c25a70",
+  "W": "#f4e2c8",
+  "e": "#d19a50",
+  "d": "#ad7530",
+  "D": "#825022",
   "m": "#191919",
-  "l": "#fac8be",
-  "q": "#46322d",
-  "h": "#8c7160",
-  "s": "#6d5654",
-  "b": "#6c564b",
-  "d": "#5e4845",
-  "C": "#c4aa9e",
-  "p": "#e4aeae",
-  "e": "#8a6238",
-  "f": "#6a4830"
+  "g": "#fff5e6",
+  "k": "#4a2e2c"
  },
  "base": [
   ".................",
   ".................",
-  "....aaaaaaa......",
-  "..abhhhooooda....",
-  ".ahhhooooooooa...",
-  ".ahomooooomosa...",
-  "ahoooccncCoossa..",
-  "ahoocccccCCossa..",
-  "llooooqoqoosslp..",
-  "llpooooooosslpp..",
-  ".aoooooosssssa...",
-  "..aaaaaaaaaaa...."
+  ".................",
+  ".....aaaaaab.....",
+  "...ahhhhoooosb...",
+  "..ahhoooooooosb..",
+  "..ahogmooogmosb..",
+  "..aoommooommosb..",
+  ".ppPooowwNoooPPq.",
+  "pppPoocnnNCooPPPq",
+  "pWPWoocckCCooWPWq",
+  "...aeeeddddDDb..."
  ],
  "poses": {
-  "inhale": {
-   "5": "ah-----------sa--"
-  },
   "closed": {
-   "5": "----q-----q------"
+   "6": "-----oo---oo-----",
+   "7": "-----kk---kk-----"
   },
   "left": {
-   "5": "---mo----mo------"
+   "6": "----gmo--gmo-----",
+   "7": "----m-o--m-o-----"
   },
   "right": {
-   "5": "----om----om-----"
+   "6": "-----ogm--ogm----",
+   "7": "-----o-m--o-m----"
+  },
+  "inhale": {
+   "2": "-----aaaaaab-----",
+   "3": "---ahhhhoooosb---",
+   "4": "--ah-ooo----osb--"
   },
   "fidget": {
-   "7": "----------------e",
-   "8": "-------------saef",
-   "9": "------------sll--",
-   "10": "------------lllpf",
-   "11": "-------------eeff"
+   "1": "-------------ed--",
+   "2": "-------------dD--",
+   "3": "-----.......-----",
+   "4": "---..aaaaaab..--e",
+   "5": "--.a-hhh----sb.-D",
+   "6": "----hoo---oo-----",
+   "7": "---h-g----g------",
+   "8": "-----mmooomm-----",
+   "9": "------oww-o------",
+   "10": "-----eeeddDD-----"
+  },
+  "closed+fidget": {
+   "7": "-----oo---oo-----",
+   "8": "-----kk---kk-----"
+  },
+  "inhale+fidget": {
+   "2": ".............dD..",
+   "3": ".....aaaaaab.....",
+   "4": "...ahhhhoooosb..e",
+   "5": "..ahhoooooooosb.D"
   }
  },
  "particles": [
   0,
-  13
+  1
  ]
 }
