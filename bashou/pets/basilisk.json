@@ -1,46 +1,57 @@
 {
  "name": "Basilisk",
- "symmetric": true,
  "palette": {
-  "a": "#1e3a1e",
-  "o": "#3f7a3a",
-  "l": "#b8c070",
-  "y": "#ffe040",
-  "n": "#10240f",
-  "w": "#f0f0e0",
-  "r": "#c02030",
-  "g": "#e8b830"
+  "a": "#174a3a",
+  "d": "#1f6b44",
+  "o": "#2f8c48",
+  "h": "#5bad54",
+  "s": "#1e6342",
+  "c": "#dccf94",
+  "b": "#b4a162",
+  "e": "#877540",
+  "m": "#2a2e33",
+  "w": "#f4f6f8",
+  "p": "#d08084",
+  "y": "#ffec8c",
+  "L": "#ffd84a",
+  "g": "#eab52c",
+  "G": "#a9791c"
  },
  "base": [
-  ".....g..g..g.....",
-  ".....ggggggg.....",
-  "....aaaaaaaaa....",
-  "...aoooooooooa...",
-  "...aoyoooooyoa...",
-  "...aooononoooa...",
-  "....aowooowoa....",
-  ".....aaoooaa.....",
-  "...aaaaoooaaaa...",
-  ".aaoolllllllooaa.",
-  "aoolllllllllllooa",
-  ".aaaaaaaaaaaaaaa."
+  "..L..Lg..G.......",
+  "..gygggggG.......",
+  ".ahhoooooa.......",
+  ".aowmoowmoa......",
+  ".aommoommoa......",
+  ".apoossoopa...a..",
+  "..addddddda..aha.",
+  "...adcca.....aoa.",
+  "..adccaaaaaaaaoa.",
+  ".ahdccbhhhhhhhha.",
+  "aoosoooosooosoooa",
+  ".abebbbbebbbebba."
  ],
  "poses": {
   "inhale": {
-   "8": "--a-----------a--"
+   "9": "a----------------"
   },
   "closed": {
-   "4": "-----a-----a-----"
+   "3": "---oo--oo--------",
+   "4": "---aa--aa--------"
   },
   "left": {
-   "4": "----yo----yo-----"
+   "3": "aowmoowmooa------",
+   "4": "aommoommooa------"
   },
   "right": {
-   "4": "-----oy----oy----"
+   "2": ".ahhooooooa------",
+   "3": ".aoowmoowmoa-----",
+   "4": ".aoommoommoa-----"
   },
   "fidget": {
-   "7": "--------r--------",
-   "8": "-------r-r-------"
+   "0": "...aL..Lg........",
+   "1": "..ahgygggg.G.....",
+   "2": ".ahhoooooggG....."
   }
  },
  "particles": [
