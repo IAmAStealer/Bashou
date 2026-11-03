@@ -2,52 +2,46 @@
  "name": "Fennec",
  "next": "fox",
  "next_at": {"achievements": 3},
- "palette": {
-  "a": "#a8703a",
-  "o": "#e8c48a",
-  "i": "#f0b0a0",
-  "w": "#fff5e6",
-  "m": "#191919",
-  "k": "#4a3020"
- },
+ "palette": {"a": "#cfa068", "b": "#966238", "e": "#b07a44", "d": "#7d4e2c", "o": "#e8c48a", "l": "#f4dba8", "s": "#cfa066", "i": "#f0b0a0", "j": "#d68a82", "w": "#fff5e6", "h": "#ead5b8", "k": "#5c3a26", "m": "#191919", "g": "#fff5e6"},
  "base": [
-  "a.........a......",
-  "aa.......aa......",
-  "aia.....aia......",
-  "aiia...aiia......",
-  "aoiaaaaaaioa.....",
-  "aomoooooomoa.....",
-  "aomoooooomoa.....",
-  "awwoooooowwa.....",
-  ".awwwwkwwwwa.....",
-  "..awwwwwwwa.aaaa.",
-  ".aoowwwwooaaoooka",
-  ".aaaaaaaaaaaaaaaa"
+  "e.............e..",
+  "ele.........ese..",
+  "alie.......eisb..",
+  ".eliie...eijsd...",
+  ".eliiie.eiijsd...",
+  "..eliieeeijsd....",
+  "..eloooooooosd...",
+  ".elogmooogmosd...",
+  ".ewommooommohd.kk",
+  "..ewwwwkwwwhd.eod",
+  "...eoowwwoosdoosd",
+  "...ehhdddhhddddd."
  ],
  "poses": {
   "inhale": {
-   "9": "-a---------------",
-   "10": "a----------------"
+   "10": "--eo-------------",
+   "11": "--e--------------"
   },
   "closed": {
-   "5": "--o------o-------",
-   "6": "--k------k-------"
+   "7": "----oo---oo------",
+   "8": "----kk---kk------"
   },
   "left": {
-   "5": "-mo-----mo-------",
-   "6": "-mo-----mo-------"
+   "7": "---gmo--gmo------",
+   "8": "--om-o--m-o------"
   },
   "right": {
-   "5": "--om-----om------",
-   "6": "--om-----om------"
+   "7": "----ogm--ogm-----",
+   "8": "----o-m--o-ms----"
   },
   "fidget": {
-   "0": ".----------------",
-   "1": ".a---------------"
+   "0": "--------------.--",
+   "1": "------------...--",
+   "2": "------------ee.--",
+   "3": "-----------iisee-",
+   "4": "------------jjssd",
+   "5": "-------------ddd-"
   }
  },
- "particles": [
-  0,
-  13
- ]
+ "particles": [0, 6]
 }

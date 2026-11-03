@@ -1,54 +1,43 @@
 {
  "name": "Kitsune",
- "symmetric": true,
- "palette": {
-  "a": "#b0806a",
-  "o": "#fff4ea",
-  "w": "#ffe6d2",
-  "m": "#191919",
-  "r": "#e0483a",
-  "g": "#f5c542",
-  "t": "#231a15"
- },
+ "palette": {"a": "#e2c6b2", "b": "#a87c6a", "i": "#e0483a", "e": "#c49a82", "d": "#8a6252", "o": "#fff4ea", "l": "#fffdf8", "s": "#efcfba", "r": "#e0483a", "q": "#b5352f", "g": "#f5c542", "y": "#ffe98f", "m": "#191919", "k": "#3c2823"},
  "base": [
-  "gt..r.......r..tg",
-  "gotrar.....rartog",
-  "towaoaaaaaaaoawot",
-  "ttwaomooooomoawtt",
-  "gttaomooooomoattg",
-  "gooarwooooowraoog",
-  "twwtawwwmwwwatwwt",
-  "ttt..awwwwwa..ttt",
-  "gtt.aoowwwooa.ttg",
-  "gooaooowwwoooaoog",
-  "towaowwooowwoawot",
-  ".twtaaaaaaaaatwt."
+  "..r.......q....r.",
+  ".rre.....eqq..rgr",
+  ".eoie...eisd.eood",
+  ".aoiiereiisb.eosd",
+  "elooooroooosdedr.",
+  "elogmooogmosdergr",
+  "erommooommsrdoood",
+  ".eoooooooosdooosd",
+  ".reooomoosdeeeer.",
+  "rgredooodddooorgr",
+  "eoseooooosdoooosd",
+  ".dddrrddrrdddddd."
  ],
  "poses": {
   "inhale": {
-   "9": "--a-----------a--"
+   "9": "----o---os-------"
   },
   "closed": {
-   "3": "-----o-----o-----",
-   "4": "-----a-----a-----"
+   "5": "---oo---oo-------",
+   "6": "---kk---kk-------"
   },
   "left": {
-   "3": "----mo----mo-----",
-   "4": "----mo----mo-----"
+   "5": "--gmo--gmo-------",
+   "6": "-om-o--m-oos-----"
   },
   "right": {
-   "3": "-----om----om----",
-   "4": "-----om----om----"
+   "5": "---ogm--ogm------",
+   "6": "---o-m--o-ms-----"
   },
   "fidget": {
-   "4": ".g---------------",
-   "5": ".g---------------",
-   "8": "---------------g.",
-   "9": "---------------g."
+   "0": "------r--------y-",
+   "1": "-----rgr-------y-",
+   "2": "-----ryr---------",
+   "5": "---------------y-",
+   "9": "-y-------------y-"
   }
  },
- "particles": [
-  0,
-  7
- ]
+ "particles": [0, 5]
 }
