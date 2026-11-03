@@ -1,52 +1,65 @@
 {
  "name": "Dragonet",
  "next": "great_dragon",
- "next_at": {"achievements": 5},
+ "next_at": {
+  "achievements": 5
+ },
  "palette": {
   "a": "#2d7346",
   "o": "#5ab464",
+  "h": "#8cd070",
+  "s": "#37994e",
   "c": "#f0dc8c",
-  "y": "#fae6aa",
-  "m": "#191919",
-  "w": "#ffffff",
+  "C": "#e4bc62",
+  "L": "#e0b450",
+  "T": "#b98a35",
+  "m": "#3a3f44",
+  "w": "#eef0f2",
   "n": "#235532",
   "v": "#825abe",
-  "l": "#fae6aa"
+  "V": "#a484dc",
+  "W": "#5f4498",
+  "g": "#8a8a8a",
+  "G": "#c8c4bc"
  },
  "base": [
-  "..y.......y......",
-  "..yaaaaaaay......",
-  ".aoooooooooa.....",
-  ".aomwooowmoa.....",
-  ".aommooommoa.....",
-  ".aooononoooa.....",
-  "..aoooooooa......",
-  "v.aocccccoa.v....",
-  "vvaocccccoavv....",
-  ".vaocccccoav...ay",
-  "..aoooooooa.aooa.",
-  "..ll.aaa.ll.aaa.."
+  "..T.......T......",
+  "..LaaaaaaaL......",
+  ".ahhhhoooooa.....",
+  ".ahmwooowmsa.....",
+  ".ahmmooommsa.....",
+  ".aooononoosa.....",
+  "..aooooossa......",
+  "V.aocccccsa.v....",
+  "VvaoccccCsavW....",
+  ".vaocccCCsaW...aT",
+  "..aosssssssooooa.",
+  "..LL.aaa.LLaaaa.."
  ],
  "poses": {
-  "fidget": {
-   "6": "v-----------v----",
-   "8": "-.---------.-----",
-   "9": "-.---------.-----"
-  },
-  "right": {
-   "3": "---mw---mw-------"
-  },
   "inhale": {
-   "6": "-ao-------oa-----"
+   "6": "-ao-------sa-----"
   },
   "closed": {
-   "3": "---oo---oo-------"
+   "3": "---oo---oo-------",
+   "4": "---aa---aa-------"
   },
   "left": {
-   "3": "---wm---wm-------"
+   "3": "---mw---mw-------",
+   "5": "----nono---------"
+  },
+  "right": {
+   "3": "---wm---wm-------",
+   "5": "-----onon--------"
+  },
+  "fidget": {
+   "2": "--------------GG-",
+   "3": "-------------GGGg",
+   "4": "-------------Ggg-",
+   "5": "------------g----"
   },
   "tail_up": {
-   "8": "---------------ay",
+   "8": "---------------aT",
    "9": "---------------oa"
   }
  },

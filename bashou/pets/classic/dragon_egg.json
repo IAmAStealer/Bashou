@@ -1,0 +1,50 @@
+{
+ "name": "Dragon egg",
+ "next": "dragon",
+ "next_at": {"achievements": 3},
+ "symmetric": true,
+ "palette": {
+  "a": "#2d7346",
+  "o": "#5ab464",
+  "c": "#f0dc8c",
+  "n": "#183d25",
+  "m": "#191919"
+ },
+ "base": [
+  ".................",
+  ".................",
+  ".......aaa.......",
+  ".....aaocoaa.....",
+  "....aoooooooa....",
+  "...aoomooomooa...",
+  "...aocooooocoa...",
+  "...anonononona...",
+  "...aononononoa...",
+  "...aoocooocooa...",
+  "....aoooooooa....",
+  ".....aaaaaaa....."
+ ],
+ "poses": {
+  "inhale": {
+   "2": "-------.--a------",
+   "3": "-----.------a----"
+  },
+  "closed": {
+   "5": "------n---n------"
+  },
+  "left": {
+   "5": "-----mo--mo------"
+  },
+  "right": {
+   "5": "------om--om-----"
+  },
+  "fidget": {
+   "1": "--------a--------",
+   "7": "------------o----"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}
