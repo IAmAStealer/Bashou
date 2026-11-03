@@ -7,16 +7,18 @@
   "w": "#b070c0",
   "y": "#ffd040",
   "m": "#191919",
-  "s": "#f0c0d0"
+  "s": "#f0c0d0",
+  "l": "#8c479c",
+  "d": "#6c3280"
  },
  "base": [
   ".....aaaaaaa.....",
-  "...aaowoooooaa...",
-  "o.aowwooooooooa.o",
-  "o.aowoooooooooa.o",
-  "oaaoyyoooooyyoaao",
-  ".aaoymoooooymoaa.",
-  "..aoooooooooooa..",
+  "...aalwwloooaa...",
+  "o.allwlloooooda.o",
+  "o.allooooooooda.o",
+  "oaaoyyoooooyydaao",
+  ".aaoymoooooymdaa.",
+  "..aooooooooodda..",
   ".aoaooaoaoaooaoa.",
   "ao.aoaoa.aoaoa.oa",
   "os.o.ao...oa.o.so",
@@ -35,16 +37,17 @@
    "5": "----my-----my----"
   },
   "right": {
-   "5": "----ym-----ym----"
+   "4": "----oyy----oyy---",
+   "5": "----oym----oym---"
   },
   "fidget": {
+   "0": ".oo--------------",
    "1": "o----------------",
-   "2": ".o---------------",
-   "3": ".----------------"
+   "2": "-s---------------"
   }
  },
  "particles": [
   0,
-  0
+  14
  ]
 }
