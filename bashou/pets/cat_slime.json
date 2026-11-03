@@ -1,12 +1,17 @@
 {
  "name": "Cat slime",
  "next": "thunder_slime",
- "next_at": {"achievements": 24},
+ "next_at": {
+  "achievements": 24
+ },
  "palette": {
   "a": "#8a5a2a",
+  "b": "#6f4526",
   "o": "#f0b060",
   "w": "#ffe8c0",
-  "m": "#191919",
+  "l": "#f8cc84",
+  "d": "#cf8a4c",
+  "m": "#3a3f44",
   "p": "#ff9aa8",
   "q": "#6a4420",
   "i": "#ff9aa8",
@@ -16,26 +21,21 @@
  "base": [
   ".................",
   "..a.........a....",
-  "..aa.......aa....",
-  "..aiaaaaaaaia....",
-  "..aowoooooooa....",
-  "..aoooooooooa....",
-  ".aooomooomoooa...",
-  ".aooomooomoooa..t",
-  "kaopoooqooopoak.t",
-  "kaoooooooooooakt.",
-  "..aoooooooooa....",
-  "...aaaaaaaaa....."
+  "..aia.....aia....",
+  "..aioaaaaaoia....",
+  "..awlooooooda....",
+  "..alooooooooa....",
+  ".aooomooomooda...",
+  ".aooomooomooda..t",
+  "akopoooqooopdka.t",
+  "akoooooooodddkat.",
+  ".aaoooddddddaat..",
+  "...aaaabbbbb....."
  ],
  "poses": {
-  "fidget": {
-   "6": "----------------t",
-   "7": "---------------t.",
-   "8": "----------------."
-  },
   "inhale": {
-   "10": "-ao---------oa---",
-   "11": "--a---------a----"
+   "10": "-ao---------da---",
+   "11": "--a---------b----"
   },
   "closed": {
    "6": "-----o---o-------",
@@ -43,11 +43,16 @@
   },
   "left": {
    "6": "----mo--mo-------",
-   "7": "----mo--mo-------"
+   "7": "----mo--mo-------",
+   "8": "------qo---------"
   },
   "right": {
    "6": "-----om--om------",
-   "7": "-----om--om------"
+   "7": "-----om--om------",
+   "8": "-------oq--------"
+  },
+  "fidget": {
+   "1": "-------------a---"
   }
  },
  "particles": [

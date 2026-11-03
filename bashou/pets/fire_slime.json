@@ -1,37 +1,35 @@
 {
  "name": "Fire slime",
  "next": "rock_slime",
- "next_at": {"achievements": 11},
+ "next_at": {
+  "achievements": 11
+ },
  "palette": {
-  "a": "#8a2a14",
-  "o": "#f08030",
-  "w": "#ffd070",
-  "m": "#191919",
-  "p": "#ffe0a0",
+  "a": "#7e2414",
+  "r": "#dc5f22",
+  "o": "#f28a30",
+  "w": "#ffb648",
+  "c": "#ffe07a",
+  "m": "#24130e",
   "q": "#6a2010",
   "f": "#e84020",
   "y": "#ffe060"
  },
  "base": [
-  ".....y.f.y.......",
-  "..f..fyfy..f.....",
-  ".ff..awooa.ff....",
-  "..f.awooooa.f....",
-  "...awooooooa.....",
+  ".....f.f.f.......",
+  "..f..fyfyf..f....",
+  "..ff.arrra.ff....",
+  "..fyarooorayf....",
+  "..yaoooooooay....",
   "..aoooooooooa....",
-  "faooomooomoooaf..",
   ".aooomooomoooa...",
-  ".aopoooqooopoa...",
-  ".aoooooooooooa...",
-  "..aoooooooooa....",
+  ".aooomooomoooa...",
+  ".aoooooqoooooa...",
+  ".aoooowcwooooa...",
+  "..aoowcccwooa....",
   "...aaaaaaaaa....."
  ],
  "poses": {
-  "fidget": {
-   "0": "-----f-y-f-------",
-   "1": "--y--------y-----",
-   "2": "-y----------y----"
-  },
   "inhale": {
    "10": "-ao---------oa---",
    "11": "--a---------a----"
@@ -42,11 +40,18 @@
   },
   "left": {
    "6": "----mo--mo-------",
-   "7": "----mo--mo-------"
+   "7": "----mo--mo-------",
+   "8": "------qo---------"
   },
   "right": {
    "6": "-----om--om------",
-   "7": "-----om--om------"
+   "7": "-----om--om------",
+   "8": "-------oq--------"
+  },
+  "fidget": {
+   "0": "..f...f.f...f....",
+   "1": "--f..fyyyf..f----",
+   "2": "--fy-------yf----"
   }
  },
  "particles": [

@@ -1,0 +1,57 @@
+{
+ "name": "Leaf slime",
+ "next": "fire_slime",
+ "next_at": {"achievements": 8},
+ "palette": {
+  "a": "#2f6e2a",
+  "o": "#7ccc5a",
+  "w": "#d8f5c0",
+  "m": "#191919",
+  "p": "#ffa0aa",
+  "q": "#6b4a22",
+  "d": "#63bb47",
+  "b": "#bfe8ff"
+ },
+ "base": [
+  ".......a.........",
+  "......aoa........",
+  ".....awdoa....b..",
+  "....awodooa..b...",
+  "...awoodoooa.....",
+  "..aodoodoodoa....",
+  ".aooomodomoooa...",
+  ".aodomdddmodoa...",
+  ".aopdooqoodpoa...",
+  ".aooodododoooa...",
+  "..aooodddoooa....",
+  "...aaaaaaaaa....."
+ ],
+ "poses": {
+  "fidget": {
+   "6": "---------d-------",
+   "7": "---------qq------"
+  },
+  "inhale": {
+   "2": "--------------.--",
+   "3": "-------------.---",
+   "8": "------mmm--------",
+   "9": "------mmm--------"
+  },
+  "closed": {
+   "6": "-----d---d-------",
+   "7": "----qq---qq------"
+  },
+  "left": {
+   "6": "----md--md-------",
+   "7": "----mo--mo-------"
+  },
+  "right": {
+   "6": "-----dm--dm------",
+   "7": "-----om--om------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

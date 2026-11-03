@@ -1,33 +1,41 @@
 {
  "name": "Thunder slime",
  "next": "king_slime",
- "next_at": {"achievements": 29},
+ "next_at": {
+  "achievements": 29
+ },
  "lone_pixels": true,
  "palette": {
-  "m": "#191919",
-  "a": "#2e3440",
-  "o": "#6b7486",
-  "w": "#a9b2c2",
-  "q": "#1c2029",
+  "m": "#3a3f44",
+  "a": "#343c4e",
+  "b": "#272d3a",
+  "o": "#6f798e",
+  "w": "#aab3c3",
+  "l": "#8b95a9",
+  "d": "#525b6f",
+  "q": "#2a2f3b",
   "z": "#ffe14a",
   "s": "#6ec3ff"
  },
  "base": [
   ".................",
   "....aaa..aaa.....",
-  "...awwoaawwoa....",
-  ".aawoooooooooaa..",
-  "aoooooooooooooa..",
-  "aoooomooomooooa..",
-  "aoooomooomooooa..",
-  "aoooooqqqoooooa..",
-  ".aaaaaaaaaaaaa...",
+  "...awwlaawlda....",
+  ".aawlooooooodaa..",
+  "aloooooooooooda..",
+  "aoooomooomoooda..",
+  "aoooomooomoooda..",
+  "aoooooqqqooodda..",
+  ".aaaaaabbbbbbb...",
   "....z..s....z....",
   "...zz....s.zz....",
   "...z.......z....."
  ],
  "poses": {
   "inhale": {
+   "0": "....aaa..aaa.....",
+   "1": "...awwlaawlda....",
+   "2": "...awloooooda....",
    "9": "-------.-s-------",
    "10": "-------s-.-------"
   },
@@ -37,16 +45,18 @@
   },
   "left": {
    "5": "----mo--mo-------",
-   "6": "----mo--mo-------"
+   "6": "----mo--mo-------",
+   "7": "-----qqqo--------"
   },
   "right": {
    "5": "-----om--om------",
-   "6": "-----om--om------"
+   "6": "-----om--om------",
+   "7": "------oqqq-------"
   },
   "fidget": {
-   "9": "----w-------w----",
-   "10": "---ww------ww----",
-   "11": "---w-------w-----"
+   "9": "-------.z.-------",
+   "10": "-------zz.-------",
+   "11": "-------z---------"
   }
  },
  "particles": [

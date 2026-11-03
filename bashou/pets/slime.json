@@ -1,37 +1,38 @@
 {
  "name": "Slime",
  "next": "leaf_slime",
- "next_at": {"achievements": 5},
+ "next_at": {
+  "achievements": 5
+ },
  "palette": {
   "a": "#329682",
   "o": "#6ed7b9",
   "w": "#e6fff5",
-  "m": "#191919",
+  "m": "#3a3f44",
   "p": "#ffa0aa",
-  "q": "#286455"
+  "q": "#286455",
+  "d": "#4bb5a8",
+  "l": "#a4efc4",
+  "b": "#2a7a78"
  },
  "base": [
   ".......a.........",
-  "......aoa........",
-  ".....awooa.......",
-  "....awooooa......",
-  "...awooooooa.....",
-  "..aoooooooooa....",
-  ".aooomooomoooa...",
-  ".aooomooomoooa...",
-  ".aopoooqooopoa...",
-  ".aoooooooooooa...",
-  "..aoooooooooa....",
-  "...aaaaaaaaa....."
+  "......ala........",
+  ".....awoda.......",
+  "....awoooda......",
+  "...awoolooda.....",
+  "..aloooooooda....",
+  ".aooomooomooda...",
+  ".aooomooomooda...",
+  ".aopoooqooopda...",
+  ".aolooooooddda...",
+  "..aooodddddda....",
+  "...aaaabbbbb....."
  ],
  "poses": {
-  "fidget": {
-   "0": "-------.a--------",
-   "1": "------.aoa-------"
-  },
   "inhale": {
-   "10": "-ao---------oa---",
-   "11": "--a---------a----"
+   "10": "-ao---------da---",
+   "11": "--a---------b----"
   },
   "closed": {
    "6": "-----o---o-------",
@@ -39,11 +40,18 @@
   },
   "left": {
    "6": "----mo--mo-------",
-   "7": "----mo--mo-------"
+   "7": "----mo--mo-------",
+   "8": "------qo---------"
   },
   "right": {
    "6": "-----om--om------",
-   "7": "-----om--om------"
+   "7": "-----om--om------",
+   "8": "-------oq--------"
+  },
+  "fidget": {
+   "9": "--------------a--",
+   "10": "-------------aloa",
+   "11": "--------------bb-"
   }
  },
  "particles": [

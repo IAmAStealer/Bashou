@@ -20,7 +20,8 @@ class ClassicFilesTest(unittest.TestCase):
             new = creatures.PETS.get(pet_id)
             self.assertIsNotNone(new, f"classic/{pet_id}.json: no pet {pet_id}")
             self.assertEqual((len(old.base), old.width), (len(new.base), new.width), pet_id)
-            self.assertEqual(set(old.poses), set(new.poses), pet_id)
+            simple = lambda poses: {name for name in poses if "+" not in name}  # "inhale+fidget" is optional
+            self.assertEqual(simple(old.poses), simple(new.poses), pet_id)
             self.assertEqual(set(old.stages), set(new.stages), pet_id)
 
     def test_an_old_look_evolves_into_a_pet_of_the_main_folder(self):
