@@ -1,44 +1,56 @@
 {
  "name": "Ghost",
  "palette": {
-  "a": "#96aadc",
+  "a": "#6074bc",
+  "A": "#4d5fa8",
+  "g": "#f9fbff",
   "w": "#f0f5ff",
-  "m": "#28283c",
-  "p": "#ffb4c8"
+  "l": "#d8e1fa",
+  "q": "#b8c6ee",
+  "m": "#20202f",
+  "G": "#4e5a8c",
+  "p": "#ff9db8",
+  "t": "#ff7fa0"
  },
  "base": [
-  "....aaaaaa.......",
-  "..aawwwwwwaa.....",
-  ".awwwwwwwwwwa....",
-  "awwwwwwwwwwwwa...",
-  "awwmmwwwwmmwwa...",
-  "awwmmwwwwmmwwa...",
-  "awpwwwwmwwwpwa...",
-  "awwwwwwwwwwwwa...",
-  "awwwwwwwwwwwwa...",
-  "awwwwwwwwwwwwa...",
-  "awwaawwaawwaawa..",
-  ".aa..aa..aa..a..."
+  ".................",
+  "......aaaaa......",
+  "....aalllllaa....",
+  "...allwwwwwlla...",
+  "..alwwwwwwwwwla..",
+  "..alwGmwwwGmwla..",
+  "..alwmmwgwmmwla..",
+  "..alpwggmggwpla..",
+  "..alwwgggggwwla..",
+  "..AlllwwwwwlllA..",
+  "..AqqAqqAqqAqqAA.",
+  "...AA.AA.AA.AA..."
  ],
  "poses": {
   "fidget": {
-   "10": "---w-a-w-a-w-a---",
-   "11": "-.-a-.-a-.-a-.a--"
+   "5": "----------ww-----",
+   "7": "-------mmm-------",
+   "8": "-------ttt-------",
+   "9": "-------ttt-------"
   },
   "inhale": {
-   "7": "--------------a--",
-   "8": "--------------a--"
+   "6": "-alw---------wla-",
+   "7": "-alw---------wla-",
+   "8": "-alw-g-----g-wla-",
+   "9": "-Al--w-----w--lA-"
   },
   "closed": {
-   "4": "---ww----ww------"
+   "5": "-----ww---ww-----"
   },
   "left": {
-   "4": "--m-w---m-w------",
-   "5": "--m-w---m-w------"
+   "5": "----Gmw--Gmw-----",
+   "6": "----mmw--mmw-----",
+   "7": "-------mg--------"
   },
   "right": {
-   "4": "---w-m---w-m-----",
-   "5": "---w-m---w-m-----"
+   "5": "-----wGm--wGm----",
+   "6": "-----wmm--wmm----",
+   "7": "--------gm-------"
   }
  },
  "particles": [

@@ -6580,24 +6580,30 @@
    },
    "ghost": {
     "palette": {
-     "a": "#96aadc",
+     "a": "#6074bc",
+     "A": "#4d5fa8",
+     "g": "#f9fbff",
      "w": "#f0f5ff",
-     "m": "#28283c",
-     "p": "#ffb4c8"
+     "l": "#d8e1fa",
+     "q": "#b8c6ee",
+     "m": "#20202f",
+     "G": "#4e5a8c",
+     "p": "#ff9db8",
+     "t": "#ff7fa0"
     },
     "base": [
-     "....aaaaaa.......",
-     "..aawwwwwwaa.....",
-     ".awwwwwwwwwwa....",
-     "awwwwwwwwwwwwa...",
-     "awwmmwwwwmmwwa...",
-     "awwmmwwwwmmwwa...",
-     "awpwwwwmwwwpwa...",
-     "awwwwwwwwwwwwa...",
-     "awwwwwwwwwwwwa...",
-     "awwwwwwwwwwwwa...",
-     "awwaawwaawwaawa..",
-     ".aa..aa..aa..a..."
+     ".................",
+     "......aaaaa......",
+     "....aalllllaa....",
+     "...allwwwwwlla...",
+     "..alwwwwwwwwwla..",
+     "..alwGmwwwGmwla..",
+     "..alwmmwgwmmwla..",
+     "..alpwggmggwpla..",
+     "..alwwgggggwwla..",
+     "..AlllwwwwwlllA..",
+     "..AqqAqqAqqAqqAA.",
+     "...AA.AA.AA.AA..."
     ]
    },
    "spiderling": {
