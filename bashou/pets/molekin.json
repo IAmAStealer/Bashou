@@ -1,7 +1,9 @@
 {
  "name": "Molekin",
  "next": "mole",
- "next_at": {"achievements": 3},
+ "next_at": {
+  "achievements": 3
+ },
  "symmetric": true,
  "palette": {
   "a": "#503c37",
@@ -10,7 +12,11 @@
   "n": "#ff8ca0",
   "m": "#191919",
   "l": "#fac8be",
-  "q": "#46322d"
+  "q": "#46322d",
+  "h": "#8c7160",
+  "s": "#6d5654",
+  "C": "#c4aa9e",
+  "p": "#e4aeae"
  },
  "base": [
   ".................",
@@ -18,17 +24,18 @@
   ".................",
   ".................",
   ".................",
-  "......aaaaa......",
-  ".....aoooooa.....",
-  "....aomooomoa....",
-  "...aooccnccooa...",
-  "..llaoooooooall..",
-  "....aoooooooa....",
+  ".....aaaaaaa.....",
+  "....ahhhooooa....",
+  "...ahomooomosa...",
+  "...aooccncCosa...",
+  "..llaooooossalp..",
+  "....aoooosssa....",
   ".....aaaaaaa....."
  ],
  "poses": {
   "inhale": {
-   "10": "---a---------a---"
+   "10": "---ao-------sa---",
+   "11": "----aaaaaaaaa----"
   },
   "closed": {
    "7": "------q---q------"
@@ -40,8 +47,11 @@
    "7": "------om--om-----"
   },
   "fidget": {
-   "7": "--------n--------",
-   "8": "--------c--------"
+   "4": ".....aaaaaaa.....",
+   "5": "....ahhhooooa....",
+   "6": "...ahoqonoqosa...",
+   "7": "...aoocnnnCosa...",
+   "8": "...aoooooooosa..."
   }
  },
  "particles": [

@@ -1,0 +1,50 @@
+{
+ "name": "Mole king",
+ "palette": {
+  "a": "#503c37",
+  "o": "#7d645a",
+  "c": "#d7beaa",
+  "n": "#ff8ca0",
+  "m": "#191919",
+  "l": "#fac8be",
+  "q": "#46322d",
+  "y": "#f0c030",
+  "w": "#fff4c0"
+ },
+ "base": [
+  ".....y.y.y.......",
+  ".....yyyyy.......",
+  "....aaaaaaa......",
+  "..aaoooooooaa....",
+  ".aoooooooooooa...",
+  ".aoomooooomooa...",
+  "aooooccnccooooa..",
+  "aooocccycccoooa..",
+  "llooooqoqooooll..",
+  "lllooooooooolll..",
+  ".aoooooooooooa...",
+  "..aaaaaaaaaaa...."
+ ],
+ "poses": {
+  "inhale": {
+   "4": "ao-----------oa--"
+  },
+  "closed": {
+   "5": "----q-----q------"
+  },
+  "left": {
+   "5": "---mo----mo------"
+  },
+  "right": {
+   "5": "----om----om-----"
+  },
+  "fidget": {
+   "0": "-------w---------",
+   "1": "------w----------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

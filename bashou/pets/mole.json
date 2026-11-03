@@ -1,7 +1,9 @@
 {
  "name": "Mole",
  "next": "mole_king",
- "next_at": {"achievements": 5},
+ "next_at": {
+  "achievements": 5
+ },
  "palette": {
   "a": "#503c37",
   "o": "#7d645a",
@@ -9,38 +11,49 @@
   "n": "#ff8ca0",
   "m": "#191919",
   "l": "#fac8be",
-  "q": "#46322d"
+  "q": "#46322d",
+  "h": "#8c7160",
+  "s": "#6d5654",
+  "b": "#6c564b",
+  "d": "#5e4845",
+  "C": "#c4aa9e",
+  "p": "#e4aeae",
+  "e": "#8a6238",
+  "f": "#6a4830"
  },
  "base": [
   ".................",
   ".................",
   "....aaaaaaa......",
-  "..aaoooooooaa....",
-  ".aoooooooooooa...",
-  ".aoomooooomooa...",
-  "aooooccnccooooa..",
-  "aooocccccccoooa..",
-  "llooooqoqooooll..",
-  "lllooooooooolll..",
-  ".aoooooooooooa...",
+  "..abhhhooooda....",
+  ".ahhhooooooooa...",
+  ".ahomooooomosa...",
+  "ahoooccncCoossa..",
+  "ahoocccccCCossa..",
+  "llooooqoqoosslp..",
+  "llpooooooosslpp..",
+  ".aoooooosssssa...",
   "..aaaaaaaaaaa...."
  ],
  "poses": {
-  "fidget": {
-   "5": "-------n---------",
-   "6": "-------c---------"
-  },
   "inhale": {
-   "4": "ao-----------oa--"
+   "5": "ah-----------sa--"
   },
   "closed": {
-   "5": "---m-------m-----"
+   "5": "----q-----q------"
   },
   "left": {
    "5": "---mo----mo------"
   },
   "right": {
    "5": "----om----om-----"
+  },
+  "fidget": {
+   "7": "----------------e",
+   "8": "-------------saef",
+   "9": "------------sll--",
+   "10": "------------lllpf",
+   "11": "-------------eeff"
   }
  },
  "particles": [
