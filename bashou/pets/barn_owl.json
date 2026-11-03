@@ -1,7 +1,9 @@
 {
  "name": "Barn owl",
  "next": "owl",
- "next_at": {"achievements": 5},
+ "next_at": {
+  "achievements": 5
+ },
  "symmetric": true,
  "palette": {
   "a": "#7a5634",
@@ -10,7 +12,12 @@
   "f": "#fbf6ee",
   "r": "#c88a58",
   "m": "#191919",
-  "b": "#e8c8a8"
+  "b": "#e8c8a8",
+  "h": "#e6bd80",
+  "d": "#c09056",
+  "F": "#ebe2d4",
+  "A": "#a98352",
+  "B": "#9d7345"
  },
  "base": [
   ".................",
@@ -18,21 +25,22 @@
   "..aorrrooorrroa..",
   "...arfffrfffra...",
   "...arfmfffmfra...",
-  "...arfffbfffra...",
-  "...aorfffffroa...",
-  "..aoogrfffrgooa..",
-  "..aogoorrroogoa..",
-  "..aoogooooogooa..",
-  "...aaoooooooaa...",
+  "...arfffbffFra...",
+  "...aorffffFroa...",
+  "..ahogrfffrgoda..",
+  "..ahgoorrroogda..",
+  "..aoogooooogdda..",
+  "...aAoooodddBa...",
   ".....bb...bb....."
  ],
  "poses": {
   "inhale": {
-   "8": "-a-------------a-",
-   "9": "-a-------------a-"
+   "8": ".ahogoorrroogoda.",
+   "9": ".aooogooooogodda.",
+   "10": "..aaAoooodddBaa.."
   },
   "closed": {
-   "4": "-----rfr-rfr-----"
+   "4": "------aa-aa------"
   },
   "left": {
    "4": "-----mf--mf------"
@@ -41,8 +49,17 @@
    "4": "------fm--fm-----"
   },
   "fidget": {
-   "7": "--.--------------",
-   "8": "-ao--------------"
+   "1": ".....aaaaaaaaa...",
+   "2": "...aorrrooorrroa.",
+   "3": "....aorfffrffra..",
+   "4": "....aorfmffaara..",
+   "5": "....aorfffbfFra..",
+   "6": "....aoorfffFroa..",
+   "7": "..ahogoorffroda..",
+   "8": "-------orrro-----"
+  },
+  "closed+fidget": {
+   "4": "--------aa-------"
   }
  },
  "particles": [

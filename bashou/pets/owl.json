@@ -7,29 +7,35 @@
   "y": "#f5be3c",
   "m": "#191919",
   "c": "#e1cdaa",
-  "l": "#966e46"
+  "l": "#966e46",
+  "h": "#b88a58",
+  "d": "#87603a",
+  "A": "#8f6840",
+  "B": "#7a5533",
+  "W": "#e6d8bc",
+  "Y": "#e0a632",
+  "L": "#fbd669",
+  "C": "#cdb892"
  },
  "base": [
   ".a...........a...",
   ".aa.........aa...",
-  ".aoaaaaaaaaaoa...",
-  "aowwwoaaaowwwoa..",
-  "awyyywoaowyyywa..",
-  "awymywooowymywa..",
-  "awyyywoyowyyywa..",
-  "aowwwoyyyowwwoa..",
-  "aooocclcclcooaa..",
-  "aaoclcclcclcaaa..",
-  ".aoocclccclooa...",
-  "..aayy...yyaa...."
+  ".ahAaaaaaaaBoa...",
+  "ahwwwoaaaowwwda..",
+  "awLyywoaowLyyWa..",
+  "awymywooowymyWa..",
+  "awyyYWoyowyyYWa..",
+  "aowWWoyYYowWWda..",
+  "ahoocclcclcodda..",
+  "aAhclcclcclCdBa..",
+  ".aoocclcclCdda...",
+  "..aAyY...yYBa...."
  ],
  "poses": {
-  "fidget": {
-   "0": "a.-----------.a--"
-  },
   "inhale": {
-   "9": "a----------------",
-   "10": "a-------------a--"
+   "9": "ahoclcclcclCoda..",
+   "10": "aooocclcclCodda..",
+   "11": ".aaAyY...yYBaa..."
   },
   "closed": {
    "4": "--www-----www----",
@@ -41,6 +47,21 @@
   },
   "right": {
    "5": "---ym------ym----"
+  },
+  "fidget": {
+   "0": "..a...........a..",
+   "1": "..aa.........aa..",
+   "2": "..ahAaaaaaaaBoa..",
+   "3": ".ahowwwoaaaowwda.",
+   "4": ".aowLyywoaowwwWa.",
+   "5": ".aowymywooowaaWa.",
+   "6": ".aowyyYWoyowwwWa.",
+   "7": ".ahowWWoyYYowWda."
+  },
+  "closed+fidget": {
+   "4": "----www----------",
+   "5": "----aaa----------",
+   "6": "----www----------"
   }
  },
  "particles": [

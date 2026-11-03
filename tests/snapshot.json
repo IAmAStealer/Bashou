@@ -6214,21 +6214,26 @@
      "y": "#f5be3c",
      "m": "#191919",
      "b": "#e8a030",
-     "c": "#d8c4a0"
+     "c": "#d8c4a0",
+     "h": "#a0764e",
+     "d": "#755038",
+     "e": "#c6ae8c",
+     "Y": "#e2a431",
+     "L": "#fad264"
     },
     "base": [
      ".................",
      ".................",
      ".................",
      "....aaaaaaaa.....",
-     "...aossoossoa....",
-     "...ayyyooyyya....",
+     "...ahssoossda....",
+     "...aLyyooLyya....",
      "...aymyooymya....",
-     "...aoyyobyyoa....",
-     "...aoscccsoa.....",
-     "...aocscscoa.....",
-     "....aocccoa......",
-     ".....b...b......."
+     "...aoyYooyYda....",
+     "...ahscbbcsda....",
+     "...aocsccseda....",
+     "....aocceeda.....",
+     ".....b....b......"
     ]
    },
    "barn_owl": {
@@ -6239,7 +6244,12 @@
      "f": "#fbf6ee",
      "r": "#c88a58",
      "m": "#191919",
-     "b": "#e8c8a8"
+     "b": "#e8c8a8",
+     "h": "#e6bd80",
+     "d": "#c09056",
+     "F": "#ebe2d4",
+     "A": "#a98352",
+     "B": "#9d7345"
     },
     "base": [
      ".................",
@@ -6247,12 +6257,12 @@
      "..aorrrooorrroa..",
      "...arfffrfffra...",
      "...arfmfffmfra...",
-     "...arfffbfffra...",
-     "...aorfffffroa...",
-     "..aoogrfffrgooa..",
-     "..aogoorrroogoa..",
-     "..aoogooooogooa..",
-     "...aaoooooooaa...",
+     "...arfffbffFra...",
+     "...aorffffFroa...",
+     "..ahogrfffrgoda..",
+     "..ahgoorrroogda..",
+     "..aoogooooogdda..",
+     "...aAoooodddBa...",
      ".....bb...bb....."
     ]
    },
@@ -6264,21 +6274,29 @@
      "y": "#f5be3c",
      "m": "#191919",
      "c": "#e1cdaa",
-     "l": "#966e46"
+     "l": "#966e46",
+     "h": "#b88a58",
+     "d": "#87603a",
+     "A": "#8f6840",
+     "B": "#7a5533",
+     "W": "#e6d8bc",
+     "Y": "#e0a632",
+     "L": "#fbd669",
+     "C": "#cdb892"
     },
     "base": [
      ".a...........a...",
      ".aa.........aa...",
-     ".aoaaaaaaaaaoa...",
-     "aowwwoaaaowwwoa..",
-     "awyyywoaowyyywa..",
-     "awymywooowymywa..",
-     "awyyywoyowyyywa..",
-     "aowwwoyyyowwwoa..",
-     "aooocclcclcooaa..",
-     "aaoclcclcclcaaa..",
-     ".aoocclccclooa...",
-     "..aayy...yyaa...."
+     ".ahAaaaaaaaBoa...",
+     "ahwwwoaaaowwwda..",
+     "awLyywoaowLyyWa..",
+     "awymywooowymyWa..",
+     "awyyYWoyowyyYWa..",
+     "aowWWoyYYowWWda..",
+     "ahoocclcclcodda..",
+     "aAhclcclcclCdBa..",
+     ".aoocclcclCdda...",
+     "..aAyY...yYBa...."
     ]
    },
    "molekin": {
