@@ -16,11 +16,11 @@
   "......aaaaa......",
   "....aaowwooaa....",
   "...aowwoooooqa...",
-  "...aowoooooooa...",
+  "...aoooooooooa...",
   "..aoowmooowmoqa..",
   "..aoommooommoqa..",
-  "..aoppooqooppqa..",
-  "...aoooooooooa...",
+  "..aoppoooooppqa..",
+  "...aooooqooooa...",
   "..aoqa.aoa.aoqa..",
   ".aoqa.aoooa.aoqa.",
   "aoqa..ao.oa..aoqa",
@@ -28,24 +28,26 @@
  ],
  "poses": {
   "fidget": {
-   "9": "aoqa.------------",
-   "10": ".aoqa------------",
-   "11": "..aa.------------"
+   "7": "a----------------",
+   "8": "ao.aoa-----------",
+   "9": "aoooa------------",
+   "10": ".aaa-------------",
+   "11": "......-----------"
   },
   "inhale": {
-   "7": "..aoooooooooooa.."
+   "7": "..aoooooqoooooa.."
   },
   "closed": {
    "4": "-----oo---oo-----",
    "5": "-----qq---qq-----"
   },
   "left": {
-   "4": "----wmo---wmo----",
-   "5": "----mmo---mmo----"
+   "4": "----wmo--wmo-----",
+   "5": "----mmo--mmo-----"
   },
   "right": {
-   "4": "-----owm---owm---",
-   "5": "-----omm---omm---"
+   "4": "-----owm--owm----",
+   "5": "-----omm--omm----"
   }
  },
  "particles": [
