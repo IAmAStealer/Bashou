@@ -1,49 +1,67 @@
 {
  "name": "Beanbag",
  "next": "sofa",
- "next_at": {"achievements": 3},
- "symmetric": true,
+ "next_at": {
+  "achievements": 3
+ },
+ "particles": [
+  0,
+  14
+ ],
  "palette": {
   "a": "#8c323c",
+  "q": "#6e232d",
+  "b": "#b04a4c",
+  "e": "#7d2a3c",
+  "L": "#e27a76",
   "o": "#cd555f",
-  "l": "#e88890",
+  "s": "#ad4058",
   "m": "#191919",
-  "p": "#ffb0b8",
-  "q": "#6e232d"
+  "p": "#f09aa0"
  },
  "base": [
   ".................",
   ".................",
   ".................",
-  ".................",
-  ".................",
-  "......aaaaa......",
-  "....aaolooqaa....",
-  "...aolooooooqa...",
-  "..aoomooooomooa..",
-  "..aopoooqooopoa..",
-  ".aoooooooooooooa.",
-  "..aaaaaaaaaaaaa.."
+  ".........baae....",
+  ".......baLsosq...",
+  ".....aLLoosoosq..",
+  "....aLLoooooosq..",
+  "...aLoomooomosq..",
+  "..aLLoomooomoosq.",
+  ".aLLoopoooooposq.",
+  ".aLoooooooooossq.",
+  "..aqqqqqqqqqqqe.."
  ],
  "poses": {
   "inhale": {
-   "10": "ao-------------oa"
+   "2": ".........baae....",
+   "3": ".......baLsosq...",
+   "4": ".....aLLoosoosq.."
   },
   "closed": {
-   "8": "-----q-----q-----"
+   "7": "-------o---o-----",
+   "8": "-------a---a-----"
   },
   "left": {
-   "8": "----mo----mo-----"
+   "7": "------mo--mo-----",
+   "8": "------mo--mo-----"
   },
   "right": {
-   "8": "-----om----om----"
+   "7": "-------om--om----",
+   "8": "-------om--om----"
   },
   "fidget": {
-   "4": "--------q--------"
+   "2": ".................",
+   "3": ".................",
+   "4": ".....baaae.......",
+   "5": "....aLLoosaaae...",
+   "6": "...aLLooooooosq..",
+   "7": "..aLoo-------osq.",
+   "8": ".aLLo--------osq.",
+   "9": "aLLo---------oosq",
+   "10": "aLooooooooooooosq",
+   "11": ".aqqqqqqqqqqqqqe."
   }
- },
- "particles": [
-  0,
-  14
- ]
+ }
 }

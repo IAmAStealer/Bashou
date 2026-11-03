@@ -1,52 +1,68 @@
 {
  "name": "Throne",
  "symmetric": true,
- "palette": {
-  "a": "#6e4a10",
-  "g": "#e8b830",
-  "G": "#fff0a0",
-  "w": "#f5f5f5",
-  "W": "#c8d0d8",
-  "m": "#191919",
-  "p": "#ffb0b8",
-  "n": "#b07070",
-  "b": "#7fc8ff"
- },
- "base": [
-  "......g.g.g......",
-  "......gGggg......",
-  "...aaaaaaaaaaa...",
-  "...awwwwwwwwwa...",
-  "...awwmwwwmwwa...",
-  "...awpwwnwwpwa...",
-  ".g.aaaaaaaaaaa.g.",
-  "gaGgggggggggggGag",
-  "g.awwwwwwwwwwwa.g",
-  "...aWwwwwwwwWa...",
-  ".....awwwwwa.....",
-  "....aggggggga...."
- ],
- "poses": {
-  "inhale": {
-   "0": "------.-.-.------",
-   "1": "------g---g------"
-  },
-  "closed": {
-   "4": "------W---W------"
-  },
-  "left": {
-   "4": "-----mw--mw------"
-  },
-  "right": {
-   "4": "------wm--wm-----"
-  },
-  "fidget": {
-   "8": "------bbbbb------",
-   "9": "-------bb--------"
-  }
- },
  "particles": [
   0,
   13
- ]
+ ],
+ "palette": {
+  "a": "#6e4a10",
+  "T": "#b3a080",
+  "U": "#8a7045",
+  "g": "#e8b830",
+  "G": "#fff0a0",
+  "d": "#b87e20",
+  "w": "#f5f5f5",
+  "v": "#c8d0d8",
+  "V": "#98a2b8",
+  "r": "#cd555f",
+  "R": "#ad4058",
+  "b": "#7fc8ff",
+  "B": "#4a90d8",
+  "C": "#c8ecff",
+  "m": "#191919",
+  "p": "#ffb0b8"
+ },
+ "base": [
+  ".....g..g..g.....",
+  ".....grrGrRd.....",
+  "...aaaaaaaaaaa...",
+  "...awwmwwwmwva...",
+  "g..apwmwwwmwpa..g",
+  "g.aGgggggggggda.d",
+  "gawwbbbbbbbbbwvad",
+  ".awwwCbbbbbBwwva.",
+  "..awwwwwwwwwvva..",
+  "...aTwwwwwvvUa...",
+  ".....awwwwva.....",
+  "....aggggggda...."
+ ],
+ "poses": {
+  "inhale": {
+   "0": "--------G--------",
+   "1": "-----G-----------",
+   "3": "------------w----",
+   "7": "-----CC----b-----"
+  },
+  "closed": {
+   "3": "------w---w------",
+   "4": "------V---V------"
+  },
+  "left": {
+   "3": "-----mw--mw------",
+   "4": "-----mw--mw------"
+  },
+  "right": {
+   "3": "------wm--wm-----",
+   "4": "------wm--wm-----"
+  },
+  "fidget": {
+   "0": ".................",
+   "1": ".....g..g..g.....",
+   "2": ".b---grrGrRd---b.",
+   "3": "..b-----------b..",
+   "6": "----bCCCbBBBb----",
+   "7": "-----bBBCCCb-----"
+  }
+ }
 }
