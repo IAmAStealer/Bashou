@@ -6560,19 +6560,21 @@
     "palette": {
      "a": "#1e4a8a",
      "b": "#3aa0f0",
-     "w": "#c8f0ff",
+     "l": "#86d6ff",
+     "w": "#d4f4ff",
+     "g": "#f2fcff",
      "m": "#0a1a3a"
     },
     "base": [
      ".........a.......",
      "........ab.......",
      ".......abba......",
-     "......abwwba.....",
-     ".....abwwwwba....",
-     "....abwwwwwwba...",
-     "....abwmwwmwba...",
-     "....abwwwwwwba...",
-     ".....abwwwwba....",
+     "......abbbba.....",
+     ".....abllllba....",
+     "....ablwwwwlba...",
+     "....ablmggmlba...",
+     "....ablwggwlba...",
+     ".....ablwwlba....",
      "......abbbba.....",
      ".......aaaa......",
      "................."
