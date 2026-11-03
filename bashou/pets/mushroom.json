@@ -1,23 +1,9 @@
 {
  "name": "Mushroom",
  "next": "blob",
- "next_at": {
-  "achievements": 5
- },
+ "next_at": {"achievements": 5},
  "lone_pixels": true,
- "palette": {
-  "a": "#98243a",
-  "d": "#bd2f45",
-  "r": "#e14646",
-  "R": "#f4775a",
-  "w": "#fff5eb",
-  "c": "#f5e8cd",
-  "s": "#d7c3a0",
-  "f": "#c8ab7e",
-  "m": "#3a3f44",
-  "p": "#ffaaaa",
-  "n": "#965050"
- },
+ "palette": {"a": "#98243a", "d": "#bd2f45", "r": "#e14646", "R": "#f4775a", "w": "#fff5eb", "c": "#f5e8cd", "s": "#d7c3a0", "f": "#c8ab7e", "m": "#3a3f44", "p": "#ffaaaa", "n": "#965050"},
  "base": [
   "....aaaaaaa......",
   "..aaRRrrwwraa....",
@@ -26,16 +12,17 @@
   "arrrrrccrddddda..",
   ".aaaaaaaaaaaaa...",
   "...sssssssss.....",
-  "...ccmcccmcss....",
-  "...ccmcccmcss....",
-  "...cpccnccpss....",
-  "..sccccccccsss...",
+  "...scmcccmcs.....",
+  "...scmcccmcs.....",
+  "...spccnccps.....",
+  "..scccccccccs....",
   "..sssssssssss...."
  ],
  "poses": {
   "inhale": {
-   "1": "-a-----------a---",
-   "2": "aR-----------ra--"
+   "0": "...aaaaaaaaa.....",
+   "1": ".aaRRRrrwwrraa...",
+   "2": "aRRwwrrrrwwrrra.."
   },
   "closed": {
    "7": "-----c---c-------"
@@ -58,13 +45,11 @@
    "6": ".aaaaaaaaaaaaa..."
   },
   "inhale+fidget": {
-   "1": "f...aaaaaaa...f..",
-   "2": ".aaaRRrrwwraaa..f",
+   "0": ".f...........f.f.",
+   "1": "...aaaaaaaaa.....",
+   "2": ".aaRRRrrwwrraa..f",
    "3": "aRRwwrrrrwwrrra.."
   }
  },
- "particles": [
-  0,
-  13
- ]
+ "particles": [0, 13]
 }
