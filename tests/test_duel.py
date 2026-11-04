@@ -55,6 +55,8 @@ class JudgeTest(unittest.TestCase):
                 cmd = "rustc prog.rs && ./counter"
             if "micro" in ch.tools and ch.skill != "script":             # repository files: edit them
                 cmd = f"{ch.tool} the.repo"
+            if ch.id in ("subnet_sprite", "six_serpent"):                # finish solve.py, then run it
+                cmd = "python3 solve.py"
             if ch.id == "cleartext_cricket":                             # edit the script, then use pass
                 cmd = "pass show db/prod"
             if ch.id == "upsert_unicorn":                                # write the file, then try it on a copy

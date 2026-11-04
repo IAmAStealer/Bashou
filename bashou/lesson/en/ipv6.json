@@ -60,7 +60,9 @@
     "",
     "- In each group, leading zeros go: 0db8 is db8.",
     "- One run of zero groups becomes :: (only once, or nobody knows how many zeros each :: holds).",
-    "- 2001:db8::/32 is reserved for examples and documentation."
+    "- 2001:db8::/32 is reserved for examples and documentation.",
+    "- Python's ipaddress writes any address in its shortest form:",
+    "$ python3 -c \"import ipaddress; print(ipaddress.ip_address('2001:0db8::0001'))\""
    ]
   },
   {

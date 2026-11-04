@@ -63,13 +63,13 @@ SOLUTIONS = {
     "loop_lich": ("sed -i 's/^        delay = delay \\* 2$/&\\n        i += 1/' retry.py", None),
     "ouroboros": ("sed -i 's/^            total(item)$/            size += total(item)/' du.py", None),
     "json_jinn": ("sed -i 's/^print(config.keys())$/print(config[\"database\"][\"port\"])/' solve.py", None),
-    "base64_banshee": ("python3 -c \"import base64; print(base64.b64decode(open('secret.txt').read()).split()[-1]"
-                       ".decode())\"", None),
-    "percent_poltergeist": ("python3 -c \"import re, urllib.parse as u; "
-                            "print(re.search(r'etc/(\\w+)', u.unquote(open('access.log').read())).group(1))\"", None),
+    "base64_banshee": ("sed -i 's/^print(text)$/print(base64.b64decode(text).decode())/' solve.py", None),
+    "percent_poltergeist": ("sed -i 's|^        print(line, end=\"\")$|        line = urllib.parse.unquote(line)\\n"
+                            "        if \"/etc/\" in line:\\n            print(line.split(\"/etc/\")[1].split()[0])|' solve.py",
+                            None),
     "injection_imp": ("sed -i 's/os.system(\"echo checking \" + host)/print(\"checking\", host)/' check_hosts.py", None),
-    "token_trickster": ("python3 -c \"import base64, json; p = open('token.txt').read().split('.')[1]; "
-                        "print(json.loads(base64.urlsafe_b64decode(p + '=='))['sub'])\"", None),
+    "token_trickster": ("sed -i 's/^print(payload)$/print(json.loads(base64.urlsafe_b64decode(payload + \"==\"))"
+                        "[\"sub\"])/' solve.py", None),
     "leak_lurker": ("sed -i 's/^        fputs(loud, stdout);$/&\\n        free(loud);/' shout.c", None),
     "fencepost_fiend": ("sed -i 's/i <= count/i < count/' average.c", None),
     "stack_specter": ("sed -i 's/^    return n + sum_to(n - 1);$/    if (n <= 0)\\n        return 0;\\n&/' sum.c", None),
@@ -83,13 +83,12 @@ SOLUTIONS = {
                           " -ex 'print balance' ./loan 2>/dev/null | sed -n 's/^[$]1 = //p'", r"for month (\d+)"),
     "loopback_lurker": ("ss -tlnpH | grep 'pid={x},' | awk '{{sub(/.*:/, \"\", $4); print $4}}'", r"process (\d+)"),
     "address_adder": ("ip -4 -br addr show {x} | awk '{{print $3}}'", r"address on (\S+)\?"),
-    "subnet_sprite": ("python3 -c \"import ipaddress as i; n = i.ip_network('{x}'); "
-                      "print(sum(i.ip_address(l.strip()) in n for l in open('hosts.txt')))\"", r"inside (\S+)\?"),
+    "subnet_sprite": ("sed -i 's/^        print(address)$/        if address in net:\\n            count += 1/' solve.py", None),
     "route_raven": ("ip route get {x} | awk '{{for (i = 1; i < NF; i++) if ($i == \"via\") print $(i + 1)}}'",
                     r"packet for (\S+) leaves"),
     "resolver_rook": ("getent hosts {x} | awk '{{print $1}}' | head -1", r"own name, (.+)\.\n"),
-    "six_serpent": ("python3 -c \"import ipaddress as i; [print(i.ip_address(l.strip())) for l in open('addrs.txt')]\" "
-                    "| sort | uniq -d", None),
+    "six_serpent": ("sed -i 's/^        print(address)$/        if address in seen:\\n            print(address)\\n"
+                    "        seen.add(address)/' solve.py", None),
     "handshake_heron": ("tcpdump -nnr capture.pcap 'tcp[tcpflags] == tcp-syn' 2>/dev/null | awk '{{print $3}}' "
                         "| sort | uniq -c | awk '$1 > 1 {{print $2}}'", None),
     "refused_revenant": ("tcpdump -nnr capture.pcap 'tcp[tcpflags] & tcp-rst != 0' 2>/dev/null | awk '{{print $3}}'", None),
@@ -715,9 +714,9 @@ class ReviewTest(unittest.TestCase):
 class LenientAnswerTest(unittest.TestCase):
     def test_the_same_answer_written_another_way(self):
         from bashou.challenges import code, packages
-        self.assertTrue(code.url_verify(None, {"answer": "shadow"}, "/etc/shadow"))
-        self.assertTrue(code.url_verify(None, {"answer": "shadow"}, "shadow"))
-        self.assertFalse(code.url_verify(None, {"answer": "shadow"}, "passwd"))
+        self.assertTrue(code.url_right("/etc/shadow", "shadow"))
+        self.assertTrue(code.url_right("shadow", "shadow"))
+        self.assertFalse(code.url_right("passwd", "shadow"))
         self.assertTrue(packages.same_version("bash 5.2.37-2+b9", "5.2.37-2+b9"))       # dpkg-query -W
         self.assertTrue(packages.same_version("4.0.4-9", "2:4.0.4-9"))
         self.assertFalse(packages.same_version("", "2:4.0.4-9"))
@@ -1396,6 +1395,19 @@ class FixFightTest(unittest.TestCase):
                 mock.patch.object(fight, "used_tool", return_value=True):
             self.assertEqual(fight.cmd_verify(str(base)), 0)
         self.assertEqual(check.call_args.args[2], "done")
+
+    def test_a_program_never_run_is_told_to_verify_again_not_to_answer(self):
+        """`answer <value>` says "Nothing to answer here" in these fights: don't send the player there."""
+        base = Path(tempfile.mkdtemp())
+        self.addCleanup(__import__("shutil").rmtree, base)
+        (base / "arena").mkdir()
+        (base / "meta.json").write_text('{"challenge": "json_jinn"}')
+        with contextlib.redirect_stdout(io.StringIO()) as out, \
+                mock.patch.object(challenges.Challenge, "check", return_value=True), \
+                mock.patch.object(fight, "used_tool", return_value=False):
+            self.assertEqual(fight.cmd_verify(str(base)), 1)
+        self.assertIn("then verify again", out.getvalue())
+        self.assertNotIn("answer again", out.getvalue())
 
 
 class UniqTipTest(unittest.TestCase):

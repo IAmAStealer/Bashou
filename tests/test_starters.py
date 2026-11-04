@@ -2,7 +2,9 @@
 program to make: give a small base file to help"; "at least not totally empty, some people have blank page
 syndrome"). It runs as it is and leaves one step to write."""
 
+import base64
 import json
+import os
 import random
 import sqlite3
 import subprocess
@@ -13,21 +15,20 @@ from pathlib import Path
 
 from bashou import challenges
 
-# fight: (line of the starter to change, what to put instead, has it won? (output, meta))
+# fight: (line of the starter to change, what to put instead)
 FINISH = {
-    "json_jinn": ("print(config.keys())", "print(config[\"database\"][\"port\"])",
-                  lambda out, m: str(m["answer"]) in out.split()),
-    "base64_banshee": ("print(text)", "print(base64.b64decode(text).decode())",
-                       lambda out, m: m["answer"] in out),
-    "percent_poltergeist": ("        print(line, end=\"\")", "        print(urllib.parse.unquote(line), end=\"\")",
-                            lambda out, m: "/etc/" + m["answer"] in out),
-    "token_trickster": ("print(payload)", "print(base64.urlsafe_b64decode(payload + \"==\"))",
-                        lambda out, m: m["answer"] in out),
-    "subnet_sprite": ("        print(address)", "        count += address in net",
-                      lambda out, m: f"{m['answer']} inside" in out),
-    "six_serpent": ("        print(line.strip())", "        print(ipaddress.ip_address(line.strip()))",
-                    lambda out, m: out.split().count(m["answer"]) == 2),
+    "json_jinn": ("print(config.keys())", "print(config[\"database\"][\"port\"])"),
+    "base64_banshee": ("print(text)", "print(base64.b64decode(text).decode())"),
+    "percent_poltergeist": ("        print(line, end=\"\")",
+                            "        line = urllib.parse.unquote(line)\n        if \"/etc/\" in line:\n"
+                            "            print(line.split(\"/etc/\")[1].split()[0])"),
+    "token_trickster": ("print(payload)", "print(json.loads(base64.urlsafe_b64decode(payload + \"==\"))[\"sub\"])"),
+    "subnet_sprite": ("        print(address)", "        if address in net:\n            count += 1"),
+    "six_serpent": ("        print(address)",
+                    "        if address in seen:\n            print(address)\n        seen.add(address)"),
 }
+DATA = {"json_jinn": "config.json", "base64_banshee": "secret.txt", "percent_poltergeist": "access.log",
+        "token_trickster": "token.txt", "subnet_sprite": "hosts.txt", "six_serpent": "addrs.txt"}
 
 
 class Fights(unittest.TestCase):
@@ -43,37 +44,153 @@ class Fights(unittest.TestCase):
 
 
 class StarterTest(Fights):
-    def run_solve(self, work):
-        done = subprocess.run([sys.executable, "solve.py"], cwd=work, capture_output=True, text=True, timeout=30)
-        self.assertEqual(done.returncode, 0, done.stderr)
-        return done.stdout
+    """Bug (user, 2026-11-04): these fights asked to type the answer; your program must print it, and `verify`
+    runs your program."""
 
-    def test_the_starter_runs_but_leaves_the_answer_to_you(self):
-        for cid, (_line, _new, won) in FINISH.items():
+    def test_they_are_won_with_verify_not_by_typing_the_answer(self):
+        for cid in FINISH:
+            ch = challenges.BY_ID[cid]
+            self.assertTrue(ch.fix, cid)
+            self.assertIn("verify", ch.task, cid)
+            self.assertNotIn("answer <", ch.task, cid)
+            self.assertIn("solve.py", ch.task, cid)
+
+    def test_the_starter_runs_but_does_not_win(self):
+        for cid in FINISH:
             for seed in range(5):
                 with self.subTest(cid, seed=seed):
                     work, meta = self.fight(cid, seed)
-                    self.assertFalse(won(self.run_solve(work), meta))
+                    done = subprocess.run([sys.executable, "solve.py"], cwd=work, capture_output=True, text=True,
+                                          timeout=30)
+                    self.assertEqual(done.returncode, 0, done.stderr)
+                    self.assertFalse(challenges.BY_ID[cid].check(work, meta, "done"))
 
     def test_finishing_the_starter_wins(self):
-        for cid, (line, new, won) in FINISH.items():
+        for cid, (line, new) in FINISH.items():
             for seed in range(5):
                 with self.subTest(cid, seed=seed):
                     work, meta = self.fight(cid, seed)
                     code = (work / "solve.py").read_text()
                     self.assertEqual(code.splitlines().count(line), 1, code)
                     (work / "solve.py").write_text(code.replace(line + "\n", new + "\n"))
-                    self.assertTrue(won(self.run_solve(work), meta))
+                    self.assertTrue(challenges.BY_ID[cid].check(work, meta, "done"))
 
-    def test_the_task_points_to_the_starter(self):
-        for cid in FINISH:
-            self.assertIn("solve.py", challenges.BY_ID[cid].task, cid)
+    def test_an_answer_typed_in_the_program_does_not_win(self):
+        for cid, data in DATA.items():
+            for seed in range(5):
+                with self.subTest(cid, seed=seed):
+                    work, meta = self.fight(cid, seed)
+                    (work / "solve.py").write_text(f"print({str(meta['answer'])!r})\n")
+                    (work.parent / "meta.json").write_text(json.dumps(meta))
+                    ch = challenges.BY_ID[cid]
+                    self.assertFalse(ch.check(work, meta, "done"))
+                    self.assertIn(data, ch.why(work))
+
+    def test_extra_output_does_not_win(self):
+        for cid, (line, new) in FINISH.items():
+            with self.subTest(cid):
+                work, meta = self.fight(cid, 1)
+                code = (work / "solve.py").read_text().replace(line + "\n", new + "\n")
+                (work / "solve.py").write_text(code + 'print("done")\n')
+                self.assertFalse(challenges.BY_ID[cid].check(work, meta, "done"))
+
+    def test_the_data_file_gone_is_told_not_a_crash(self):
+        for cid, data in DATA.items():
+            with self.subTest(cid):
+                work, meta = self.fight(cid, 1)
+                (work / "solve.py").write_text(f"print({str(meta['answer'])!r})\n")
+                (work / data).unlink()
+                (work.parent / "meta.json").write_text(json.dumps(meta))
+                self.assertFalse(challenges.BY_ID[cid].check(work, meta, "done"))
+                self.assertIn(data, challenges.BY_ID[cid].why(work))
+
+    def test_the_poltergeist_takes_the_file_with_its_path(self):
+        work, meta = self.fight("percent_poltergeist", 2)
+        (work / "solve.py").write_text(
+            'import re, urllib.parse\n\nwith open("access.log", encoding="utf-8") as fh:\n'
+            '    print(re.search(r"/etc/\\w+", urllib.parse.unquote(fh.read())).group())\n')
+        self.assertTrue(challenges.BY_ID["percent_poltergeist"].check(work, meta, "done"))
+
+    def finished(self, cid, seed=1):
+        work, meta = self.fight(cid, seed)
+        line, new = FINISH[cid]
+        (work / "solve.py").write_text((work / "solve.py").read_text().replace(line + "\n", new + "\n"))
+        (work.parent / "meta.json").write_text(json.dumps(meta))
+        return challenges.BY_ID[cid], work, meta
+
+    def test_a_folder_without_rights_does_not_crash_verify(self):
+        for mode in (0o555, 0o500, 0o300, 0o100):
+            with self.subTest(oct(mode)):
+                ch, work, meta = self.finished("json_jinn", mode)
+                work.chmod(mode)
+                self.addCleanup(work.chmod, 0o755)
+                if mode & 0o400:                       # readable: the answer can be read
+                    self.assertTrue(ch.check(work, meta, "done"))
+                else:
+                    ch.check(work, meta, "done")       # no exception is all we ask
+
+    def test_links_in_the_folder_are_not_followed(self):
+        ch, work, meta = self.finished("json_jinn")
+        (work / "a").symlink_to(".")
+        (work / "b").symlink_to(".")
+        (work / "home").symlink_to("/")
+        self.assertTrue(ch.check(work, meta, "done"))
+
+    def test_a_pipe_for_the_data_file_does_not_hang(self):
+        work, meta = self.fight("json_jinn", 1)
+        (work / "solve.py").write_text(f"print({meta['answer']})\n")
+        (work / "config.json").unlink()
+        os.mkfifo(work / "config.json")
+        (work.parent / "meta.json").write_text(json.dumps(meta))
+        ch = challenges.BY_ID["json_jinn"]
+        self.assertFalse(ch.check(work, meta, "done"))
+        self.assertIn("config.json", ch.why(work))
+
+    def test_a_program_that_removes_itself_does_not_crash(self):
+        work, meta = self.fight("json_jinn", 1)
+        (work / "solve.py").write_text(f"import os\nos.remove('solve.py')\nprint({meta['answer']})\n")
+        self.assertFalse(challenges.BY_ID["json_jinn"].check(work, meta, "done"))
+
+    def test_a_crash_on_the_copy_is_told_as_a_crash(self):
+        """Without the padding, half the tokens decode: the real error must show, not "doesn't read the file"."""
+        ch, work, meta = self.finished("token_trickster")
+        (work / "solve.py").write_text(
+            'import base64, json, sys\nwith open("token.txt", encoding="utf-8") as fh:\n'
+            '    claims = fh.read().split(".")[1]\n'
+            f'if json.loads(base64.urlsafe_b64decode(claims + "=="))["sub"] != {meta["answer"]!r}:\n'
+            '    sys.exit("Incorrect padding")\n'
+            f'print({meta["answer"]!r})\n')
+        self.assertFalse(ch.check(work, meta, "done"))
+        self.assertIn("Incorrect padding", ch.why(work))
+
+    def test_a_slow_refusal_does_not_run_the_program_again(self):
+        ch, work, meta = self.finished("json_jinn")
+        (work / "solve.py").write_text('with open("runs", "a") as f:\n    f.write("x")\n')
+        (work.parent / "meta.json").write_text(json.dumps(meta))
+        self.assertFalse(ch.check(work, meta, "done"))
+        self.assertIn("print()", ch.why(work))
+        self.assertEqual((work / "runs").read_text(), "x")
+
+    def test_the_poltergeist_wants_nothing_else(self):
+        work, meta = self.fight("percent_poltergeist", 2)
+        ch = challenges.BY_ID["percent_poltergeist"]
+        for out in ("The attacker wants /etc/{}", "attack found\\n/etc/{}", "nope/{}"):
+            (work / "solve.py").write_text(f'print("{out.format(meta["answer"])}")\n')
+            self.assertFalse(ch.check(work, meta, "done"), out)
+
+    def test_counting_lines_does_not_win_the_sprite(self):
+        work, meta = self.fight("subnet_sprite", 1)
+        total = len((work / "hosts.txt").read_text().splitlines())
+        (work / "solve.py").write_text(
+            f'with open("hosts.txt", encoding="utf-8") as fh:\n    print(sum(1 for line in fh) - {total - meta["answer"]})\n')
+        self.assertFalse(challenges.BY_ID["subnet_sprite"].check(work, meta, "done"))
+
+    def test_the_banshee_hides_only_the_word(self):
+        work, meta = self.fight("base64_banshee", 3)
+        self.assertEqual(base64.b64decode((work / "secret.txt").read_text()).decode(), meta["answer"])
 
 
 class JsonJinnTest(Fights):
-    """Bug (user, 2026-11-04): the JSON Jinn asked to type the port by hand; like the other programming
-    fights, your program must print it, and `verify` runs your program."""
-
     def finish(self, work, line):
         code = (work / "solve.py").read_text()
         (work / "solve.py").write_text(code.replace("print(config.keys())", line))

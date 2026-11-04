@@ -18,7 +18,7 @@ import time
 from pathlib import Path
 
 from . import Challenge
-from .code import starter
+from .code import solve_fight, starter
 from ..i18n import _
 from .trials import trial as make
 
@@ -186,9 +186,9 @@ def sprite_setup(work, rng):
     third = rng.randrange(0, 60) * 4
     net = ipaddress.ip_network(f"10.{rng.randrange(1, 250)}.{third}.0/22")
     first, last = int(net.network_address), int(net.broadcast_address)
-    inside = [ipaddress.ip_address(rng.randrange(first + 1, last)) for _ in range(rng.randrange(5, 12))]
-    near = [ipaddress.ip_address(first - rng.randrange(1, 300)) for _ in range(4)] + \
-           [ipaddress.ip_address(last + rng.randrange(1, 300)) for _ in range(5)]
+    inside = [ipaddress.ip_address(a) for a in rng.sample(range(first + 1, last), rng.randrange(5, 12))]
+    near = [ipaddress.ip_address(a) for a in rng.sample(range(first - 299, first), 4) +
+            rng.sample(range(last + 1, last + 300), 5)]
     hosts = inside + near
     rng.shuffle(hosts)
     (work / "hosts.txt").write_text("".join(f"{h}\n" for h in hosts))
@@ -196,8 +196,17 @@ def sprite_setup(work, rng):
         _("ipaddress knows networks: address in net is True when the address is inside it."),
         _("Your step: instead of printing each address, add 1 to count when it's inside the network."),
     ], f'import ipaddress\n\nnet = ipaddress.ip_network("{net}")\ncount = 0\nwith open("hosts.txt", encoding="utf-8") as fh:\n'
-       '    for line in fh:\n        address = ipaddress.ip_address(line.strip())\n        print(address)\nprint(count, "inside", net)\n')
+       '    for line in fh:\n        address = ipaddress.ip_address(line.strip())\n        print(address)\nprint(count)\n')
     return {"args": {"net": str(net)}, "answer": sum(h in net for h in hosts)}
+
+
+def sprite_change(text, meta):
+    """One more address inside the network and one outside, both new: counting lines isn't counting addresses."""
+    net = ipaddress.ip_network(meta["args"]["net"])
+    known = {line.strip() for line in text.splitlines()}
+    inside = next(h for h in net.hosts() if str(h) not in known)
+    beyond = next(h for h in (net.broadcast_address + i for i in range(1, 1000)) if str(h) not in known)
+    return f"{text}{inside}\n{beyond}\n", meta["answer"] + 1
 
 
 def serpent_setup(work, rng):
@@ -210,11 +219,20 @@ def serpent_setup(work, rng):
     rng.shuffle(lines)
     (work / "addrs.txt").write_text("".join(f"{a}\n" for a in lines))
     starter(work, "addrs.txt", [
-        _("Your step: it prints each address as written in the file. Print ipaddress.ip_address(...) "
-          "instead: Python always writes an address in its shortest form, so the twin shows up twice. "
-          "Then python3 solve.py | sort | uniq -d keeps only that one."),
-    ], 'import ipaddress\n\nwith open("addrs.txt", encoding="utf-8") as fh:\n    for line in fh:\n        print(line.strip())\n')
+        _("ipaddress.ip_address(...) reads an address however it's written, and prints it in its shortest form."),
+        _("Your step: it prints every address. Print one only when it's already in seen, and add each one to seen."),
+    ], 'import ipaddress\n\nseen = set()\nwith open("addrs.txt", encoding="utf-8") as fh:\n    for line in fh:\n'
+       '        address = ipaddress.ip_address(line.strip())\n        print(address)\n')
     return {"answer": str(twin)}
+
+
+def serpent_change(text, meta):
+    """Another twin, written both ways like the first one."""
+    twin = ipaddress.ip_address(meta["answer"])
+    other = ipaddress.ip_address(int(twin) + 1)
+    lines = [line.strip() for line in text.splitlines()]
+    return "".join((str(other) if line == str(twin) else other.exploded) + "\n" if ipaddress.ip_address(line) == twin
+                   else line + "\n" for line in lines), str(other)
 
 
 # --- captures: pcap files written byte by byte ----------------------------------------------------
@@ -467,16 +485,17 @@ ALL = [
                      "Try: ip -br addr show {dev}"],
               setup=adder_setup, verify=lambda w, m, v: v.strip().split("/")[0] in m["addrs"],
               requires=["ip"], works=gateway_works, **NET),
-    Challenge(level=1, id="subnet_sprite", tools=("python3", "python", "ipcalc", "sipcalc"), threat="Subnet Sprite",
+    Challenge(level=1, id="subnet_sprite", fix=True, tools=("python3", "python"), threat="Subnet Sprite",
               task="The Subnet Sprite mixed addresses into hosts.txt.\n"
-                   "How many of them are inside {net}? Answer with: answer <number>\n"
-                   "solve.py is a start: run python3 solve.py, then finish it.",
+                   "How many of them are inside {net}? Finish solve.py so that it prints that number and nothing else.\n"
+                   "Run it: python3 solve.py\n"
+                   "When it works, type: verify",
               hints=["{net} is a /22: 1,024 addresses, four /24 blocks in a row. Near misses just outside "
-                     "are the trap. Python's ipaddress module knows the exact limits, "
-                     "and so does ipcalc {net} if it's installed.",
-                     "Try: python3 -c 'import ipaddress as i; n = i.ip_network(\"{net}\"); "
-                     "print(sum(i.ip_address(line.strip()) in n for line in open(\"hosts.txt\")))'"],
-              setup=sprite_setup, requires=["python3"], **NET),
+                     "are the trap. Python's ipaddress module knows the exact limits.",
+                     "In solve.py, replace print(address) with two lines: if address in net:, then count += 1 "
+                     "indented one level more."],
+              setup=sprite_setup, requires=["python3"],
+              **solve_fight("hosts.txt", lambda: _("the number of addresses inside the network"), sprite_change), **NET),
     Challenge(level=2, id="route_raven", os="linux", tools=("ip",), threat="Route Raven",
               task="The Route Raven asks: a packet for {target} leaves this machine through a gateway.\n"
                    "What is the gateway's address? Answer with: answer <address>",
@@ -491,15 +510,17 @@ ALL = [
                      "DNS. Any address it prints for the name is right.",
                      "Try: getent hosts {name}"],
               setup=rook_setup, verify=lambda w, m, v: v.strip() in m["addrs"], requires=["getent"], **NET),
-    Challenge(level=2, id="six_serpent", tools=("python3", "python"), threat="Six Serpent",
+    Challenge(level=2, id="six_serpent", fix=True, tools=("python3", "python"), threat="Six Serpent",
               task="The Six Serpent wrote one IPv6 address twice in addrs.txt: once short, once in full.\n"
-                   "Which address? Answer in its shortest form: answer <address>\n"
-                   "solve.py is a start: run python3 solve.py, then finish it.",
+                   "Which address? Finish solve.py so that it prints that address in its shortest form and nothing else.\n"
+                   "Run it: python3 solve.py\n"
+                   "When it works, type: verify",
               hints=["The same IPv6 address can be written many ways: leading zeros dropped, one run of zero "
                      "groups as ::. Python's ipaddress writes every one in the shortest form, then compare.",
-                     "In solve.py, replace print(line.strip()) with print(ipaddress.ip_address(line.strip())), "
-                     "then: python3 solve.py | sort | uniq -d"],
-              setup=serpent_setup, requires=["python3"], after=("subnet_sprite",), **NET),
+                     "In solve.py, replace print(address) with three lines: if address in seen:, then print(address) "
+                     "indented one level more, then seen.add(address) back at the level of the if."],
+              setup=serpent_setup, requires=["python3"], after=("subnet_sprite",),
+              **solve_fight("addrs.txt", lambda: _("the address in its shortest form"), serpent_change), **NET),
     Challenge(level=2, id="handshake_heron", threat="Handshake Heron",
               task="The Handshake Heron swallowed a connection in capture.pcap: one client sent SYN, "
                    "again and again, and never got an answer.\nWhich client port? Answer with: answer <port>",

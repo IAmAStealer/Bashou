@@ -1,4 +1,4 @@
-"""Code fights (owner, 2026-09-23): fix a small Python or C file, or answer with a python3 one-liner.
+"""Code fights (owner, 2026-09-23): fix a small Python or C file, or finish a small program.
 
 Fix fights: the file starts with a comment saying what goes in, what should come out, how to run it
 and where to find help (the fight's lesson). Bashou then runs hidden tests on your version: Python through a
@@ -44,6 +44,70 @@ def starter(work, data, steps, code):
     lines = [_("A start for you: this program already reads {file}. Run it as it is: python3 solve.py").format(
         file=data)] + steps
     (work / "solve.py").write_text("\n".join("# " + line for line in lines) + "\n\n" + code)
+
+
+# --- fights won by what your program prints -----------------------------------
+
+def solve_output(work, meta, data, what, change, right):
+    """What solve.py prints: "ok", or the reason it isn't right yet. It runs on the real file, then on a copy of
+    the folder where `change` put another answer: a program that holds the answer hasn't read the file."""
+    if not (work / "solve.py").is_file():
+        return _("solve.py is gone: without it, Bashou has no program to run.")
+    first = run([sys.executable, "solve.py"], work, timeout=5)
+    if first is None:
+        return _("Your code didn't finish within 5 seconds: a loop that never ends?")
+    if first.returncode != 0:
+        return _("Your file doesn't run: python3 {name} shows why.").format(name="solve.py")
+    if not first.stdout.strip():
+        return _("solve.py prints nothing: a program shows only what you print().")
+    if not right(first.stdout.strip(), meta["answer"]):
+        return _("solve.py must print {what} and nothing else. Right now it prints: {got}").format(
+            what=what(), got=short(first.stdout.strip()))
+    changed = _("{file} has changed: solve.py must read the file as it was given.").format(file=data)
+    if not (work / data).is_file():                # a pipe would wait for ever, with no time limit
+        return changed
+    try:
+        text, other = change((work / data).read_text(), meta)
+    except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        return changed
+    with tempfile.TemporaryDirectory() as tmp:
+        try:                                     # the whole folder: solve.py may import the player's other files
+            shutil.copytree(work, tmp, symlinks=True, dirs_exist_ok=True)      # links stay links: a link to / stays small
+        except OSError:                          # something that can't be copied: the rest is there
+            pass
+        os.chmod(tmp, 0o700)                     # copytree gave it the rights of the player's folder
+        try:
+            if not (Path(tmp) / "solve.py").exists():      # a folder that can't be listed
+                shutil.copy2(work / "solve.py", tmp)
+        except OSError:
+            return _("solve.py is gone: without it, Bashou has no program to run.")
+        (Path(tmp) / data).unlink(missing_ok=True)
+        (Path(tmp) / data).write_text(text)
+        second = run([sys.executable, "solve.py"], tmp, timeout=5)
+    if second is None:
+        return _("Your code didn't finish within 5 seconds: a loop that never ends?")
+    if second.returncode != 0:
+        return _("solve.py is right on your file but crashes on another {file}: {error}").format(
+            file=data, error=short((second.stderr.strip().splitlines() or [""])[-1]))
+    if not right(second.stdout.strip(), other):
+        return _("The answer is right, but solve.py doesn't get it from {file}, or reaches it by a full path: "
+                 "a program that holds the answer stops being right as soon as the file changes.").format(file=data)
+    return "ok"
+
+
+def solve_fight(data, what, change, right=lambda out, answer: out == str(answer)):
+    """The verify and why of a fight won by solve.py. change(text, meta) gives the file with another answer,
+    and that answer; what() names what the program must print."""
+    last = {}                                      # a refused verify runs check then why: run the program once
+
+    def told(work, meta):
+        last[str(work)] = solve_output(work, meta, data, what, change, right)
+        return last[str(work)]
+
+    def why(work):
+        reason = last.pop(str(work), None) or told(work, json.loads((Path(work).parent / "meta.json").read_text()))
+        return None if reason == "ok" else reason
+    return {"verify": lambda work, meta, value: told(work, meta) == "ok", "why": why}
 
 
 # --- running your code --------------------------------------------------------
@@ -470,7 +534,7 @@ def tree_setup(work, rng):
     return {"cases": cases + [[[demo], size(demo)]]}
 
 
-# --- level 2: python3 one-liners ----------------------------------------------
+# --- level 2: small programs on a data file -------------------------------------
 
 def json_setup(work, rng):
     ports = rng.sample(range(1024, 9999), 4)
@@ -487,54 +551,15 @@ def json_setup(work, rng):
     return {"answer": ports[2]}
 
 
-def json_output(work, meta):
-    """What solve.py prints: "ok", or the reason it isn't right yet. It runs on the real config.json, then on a
-    copy with another port: a program that holds the port itself hasn't read the file."""
-    if not (work / "solve.py").is_file():
-        return _("solve.py is gone: without it, Bashou has no program to run.")
-    first = run([sys.executable, "solve.py"], work, timeout=5)
-    if first is None:
-        return _("Your code didn't finish within 5 seconds: a loop that never ends?")
-    if first.returncode != 0:
-        return _("Your file doesn't run: python3 {name} shows why.").format(name="solve.py")
-    if not first.stdout.strip():
-        return _("solve.py prints nothing: a program shows only what you print().")
-    if first.stdout.strip() != str(meta["answer"]):
-        return _("solve.py must print the database port and nothing else. Right now it prints: {got}").format(
-            got=short(first.stdout.strip()))
-    other = meta["answer"] + 1
-    try:
-        config = json.loads((work / "config.json").read_text())
-        config["database"]["port"] = other
-    except (OSError, ValueError, KeyError, TypeError):
-        return _("config.json has changed: solve.py must read the file as it was given.")
-    with tempfile.TemporaryDirectory() as tmp:
-        try:                                     # the whole folder: solve.py may import the player's other files
-            shutil.copytree(work, tmp, dirs_exist_ok=True, ignore_dangling_symlinks=True)
-        except shutil.Error:                     # something that can't be copied: the rest is there
-            pass
-        (Path(tmp) / "config.json").unlink(missing_ok=True)
-        (Path(tmp) / "config.json").write_text(json.dumps(config, indent=2) + "\n")     # same layout as the real file
-        second = run([sys.executable, "solve.py"], tmp, timeout=5)
-    if second is None or second.returncode != 0 or second.stdout.strip() != str(other):
-        return _("The port is right, but solve.py doesn't get it from config.json: "
-                 "a program that holds the answer stops being right as soon as the file changes.")
-    return "ok"
-
-
-def json_verify(work, meta, value):
-    return json_output(work, meta) == "ok"
-
-
-def json_why(work):
-    told = json_output(work, json.loads((Path(work).parent / "meta.json").read_text()))
-    return None if told == "ok" else told
+def json_change(text, meta):
+    config = json.loads(text)
+    config["database"]["port"] = meta["answer"] + 1
+    return json.dumps(config, indent=2) + "\n", meta["answer"] + 1
 
 
 def b64_setup(work, rng):
     word = rng.choice(("lantern", "harbor", "pebble", "thistle", "compass", "ember", "orchid", "falcon"))
-    note = f"answer {word}\n"
-    (work / "secret.txt").write_text(base64.b64encode(note.encode()).decode() + "\n")
+    (work / "secret.txt").write_text(base64.b64encode(word.encode()).decode() + "\n")
     starter(work, "secret.txt", [
         _("Your step: it prints the text still encoded. base64.b64decode(text) undoes base64 and gives "
           "bytes; .decode() turns those bytes into text you can read."),
@@ -542,9 +567,23 @@ def b64_setup(work, rng):
     return {"answer": word}
 
 
-def url_verify(work, meta, value):
+def b64_change(text, meta):
+    return base64.b64encode(b"quartz").decode() + "\n", "quartz"
+
+
+def url_right(out, answer):
     """shadow, /etc/shadow or etc/shadow."""
-    return value.strip().rstrip("/").rsplit("/", 1)[-1] == meta["answer"]
+    return out in (answer, f"etc/{answer}", f"/etc/{answer}")
+
+
+def percent(text):
+    return "".join(f"%{b:02x}" for b in text.encode())
+
+
+def url_change(text, meta):
+    if percent(f"etc/{meta['answer']}") not in text:
+        raise ValueError
+    return text.replace(percent(f"etc/{meta['answer']}"), percent("etc/group")), "group"
 
 
 def url_setup(work, rng):
@@ -552,12 +591,12 @@ def url_setup(work, rng):
     ips = [f"10.1.{rng.randint(0, 9)}.{rng.randint(1, 254)}" for _i in range(8)]
     queries = ("red%20shoes", "caf%C3%A9", "50%25%20off", "a%2Bb", "size%3D42")
     lines = [f"{rng.choice(ips)} GET /search?q={rng.choice(queries)} 200" for _i in range(rng.randint(30, 50))]
-    attack = "".join(f"%{b:02x}" for b in f"../../../etc/{target}".encode())
+    attack = percent(f"../../../etc/{target}")
     lines.insert(rng.randint(5, len(lines) - 5), f"{rng.choice(ips)} GET /download?file={attack} 200")
     (work / "access.log").write_text("\n".join(lines) + "\n")
     starter(work, "access.log", [
         _("Your step: it prints each line as it is, %XX codes and all. urllib.parse.unquote(line) turns "
-          "them back into characters. Then look for /etc in what it prints."),
+          "them back into characters. Then print only the file named after /etc/ on the line that has it."),
     ], 'import urllib.parse\n\nwith open("access.log", encoding="utf-8") as fh:\n    for line in fh:\n        print(line, end="")\n')
     return {"answer": target}
 
@@ -619,10 +658,18 @@ def jwt_setup(work, rng):
     starter(work, "token.txt", [
         _("It already splits the token at its dots: header, payload, signature."),
         _("Your step: decode the payload. It's base64url without its = padding: "
-          "base64.urlsafe_b64decode(payload + \"==\") puts the padding back and decodes it."),
-    ], 'import base64\n\nwith open("token.txt", encoding="utf-8") as fh:\n    token = fh.read().strip()\n'
+          "base64.urlsafe_b64decode(payload + \"==\") gives it enough padding (Python ignores any extra) and "
+          "decodes it to JSON. json.loads reads that JSON: print only its \"sub\"."),
+    ], 'import base64\nimport json\n\nwith open("token.txt", encoding="utf-8") as fh:\n    token = fh.read().strip()\n'
        'header, payload, signature = token.split(".")\nprint(payload)\n')
     return {"answer": user}
+
+
+def jwt_change(text, meta):
+    head, body, sig = text.strip().split(".")
+    claims = json.loads(base64.urlsafe_b64decode(body + "=="))
+    claims["sub"] = meta["answer"] + "2"
+    return f"{head}.{b64url(json.dumps(claims).encode())}.{sig}\n", claims["sub"]
 
 
 # --- C ------------------------------------------------------------------------
@@ -853,22 +900,26 @@ ALL = [
                    "When it works, type: verify",
               hints=["json.load turns the file into dicts: config[\"database\"] is one section, and it holds a port.",
                      "Change the last line of solve.py to: print(config[\"database\"][\"port\"])"],
-              setup=json_setup, verify=json_verify, why=json_why),
-    Challenge(level=2, id="base64_banshee", pet="snake", threat="Base64 Banshee", **PY,
+              setup=json_setup, **solve_fight("config.json", lambda: _("the database port"), json_change)),
+    Challenge(level=2, id="base64_banshee", fix=True, pet="snake", threat="Base64 Banshee", **PY,
               task="The Base64 Banshee wails in secret.txt: it's base64, not a secret code.\n"
-                   "Decode it with python3. What is the vault word?\n"
-                   "solve.py is a start: run python3 solve.py, then finish it.",
+                   "What is the vault word? Finish solve.py so that it prints that word and nothing else.\n"
+                   "Run it: python3 solve.py\n"
+                   "When it works, type: verify",
               hints=["base64 is an encoding, anyone can undo it.",
-                     "Try: python3 -c 'import base64; print(base64.b64decode(open(\"secret.txt\").read()).decode())'"],
-              setup=b64_setup),
-    Challenge(level=2, id="percent_poltergeist", pet="snake", threat="Percent Poltergeist", **PY,
+                     "Change the last line of solve.py to: print(base64.b64decode(text).decode())"],
+              setup=b64_setup, **solve_fight("secret.txt", lambda: _("the vault word"), b64_change)),
+    Challenge(level=2, id="percent_poltergeist", fix=True, pet="snake", threat="Percent Poltergeist", **PY,
               task="The Percent Poltergeist hides an attack in access.log behind %XX codes.\n"
-                   "Decode the log with python3. Which file under /etc was the attacker after?\n"
-                   "solve.py is a start: run python3 solve.py, then finish it.",
+                   "Which file under /etc was the attacker after? "
+                   "Finish solve.py so that it prints that file's name and nothing else.\n"
+                   "Run it: python3 solve.py\n"
+                   "When it works, type: verify",
               hints=["urllib.parse.unquote turns the %XX codes back into characters: %2e%2e%2f becomes ../",
-                     "Try: python3 -c 'import urllib.parse; print(urllib.parse.unquote(open(\"access.log\").read()))'"
-                     " | grep etc"],
-              setup=url_setup, verify=url_verify),
+                     "Instead of printing each line: line = urllib.parse.unquote(line), then if \"/etc/\" is in it, "
+                     "print(line.split(\"/etc/\")[1].split()[0])"],
+              setup=url_setup, **solve_fight("access.log", lambda: _("the name of the file under /etc"), url_change,
+                                             url_right)),
     Challenge(level=3, id="injection_imp", fix=True, pet="snake", threat="Injection Imp", after=("list_leech",), **PY,
               task="The Injection Imp slipped a command into hosts.txt, and check_hosts.py runs it.\n"
                    "Fix check_hosts.py (its first lines say what it must do). Run it: python3 check_hosts.py\n"
@@ -876,14 +927,16 @@ ALL = [
               hints=["os.system hands the whole string to a shell, so ; $( ) | in the data become commands.",
                      "Try: subprocess.run(['echo', 'checking', host], check=True) (import subprocess), or just print."],
               setup=inject_setup, verify=inject_verify),
-    Challenge(level=3, id="token_trickster", pet="snake", threat="Token Trickster", after=("base64_banshee",), **PY,
+    Challenge(level=3, id="token_trickster", fix=True, pet="snake", threat="Token Trickster",
+              after=("base64_banshee",), **PY,
               task="The Token Trickster flashes a JWT in token.txt. Signed is not secret: read it.\n"
-                   "Which user (sub) is the token for? Decode it with python3.\n"
-                   "solve.py is a start: run python3 solve.py, then finish it.",
+                   "Which user (sub) is the token for? Finish solve.py so that it prints that user and nothing else.\n"
+                   "Run it: python3 solve.py\n"
+                   "When it works, type: verify",
               hints=["A JWT is header.payload.signature, each part base64url without padding.",
-                     "Try: python3 -c 'import base64; p = open(\"token.txt\").read().split(\".\")[1]; "
-                     "print(base64.urlsafe_b64decode(p + \"==\").decode())'"],
-              setup=jwt_setup),
+                     "Change the last line of solve.py to: "
+                     "print(json.loads(base64.urlsafe_b64decode(payload + \"==\"))[\"sub\"])"],
+              setup=jwt_setup, **solve_fight("token.txt", lambda: _("the token's user"), jwt_change)),
     Challenge(level=2, id="leak_lurker", fix=True, works=lambda: bool(sanitizer()) and leaks(), pet="beaver", threat="Leak Lurker", **C,
               task="The Leak Lurker feeds on memory nobody frees in shout.c.\n"
                    "Fix shout.c (its first lines say what it must do). "

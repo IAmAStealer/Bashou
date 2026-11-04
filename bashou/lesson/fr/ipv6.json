@@ -35,7 +35,9 @@
     "",
     "- Dans chaque groupe, les zéros de tête partent : 0db8 devient db8.",
     "- Une suite de groupes nuls devient :: (une seule fois, sinon personne ne saurait combien de zéros cache chaque ::).",
-    "- 2001:db8::/32 est réservée aux exemples et à la documentation."
+    "- 2001:db8::/32 est réservée aux exemples et à la documentation.",
+    "- Le module ipaddress de Python écrit toute adresse sous sa forme la plus courte :",
+    "$ python3 -c \"import ipaddress; print(ipaddress.ip_address('2001:0db8::0001'))\""
    ]
   },
   {

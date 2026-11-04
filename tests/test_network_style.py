@@ -3,10 +3,13 @@ kind of content). Addresses in text players read are documentation, private or s
 one changes with time and belongs to someone."""
 
 import ipaddress
+import random
 import re
+import tempfile
 import unittest
 from pathlib import Path
 
+from bashou.challenges import network
 from tests.test_bash_style import all_texts
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -45,6 +48,28 @@ class TextTest(unittest.TestCase):
         self.assertEqual(list(outside("example.org 104.20.26.136, 2606:4700::6812:1a88")),
                          ["104.20.26.136", "2606:4700::6812:1a88"])
         self.assertEqual(list(outside("203.0.113.100 2001:db8::1 fe80::1 ::1 192.168.1.10 dig @1.1.1.1")), [])
+
+
+class GeneratedFilesTest(unittest.TestCase):
+    """N1 also holds for the files a fight writes, and for the copy its check changes."""
+
+    def test_the_files_and_their_copies_stay_in_allowed_addresses(self):
+        for setup, change, data in ((network.sprite_setup, network.sprite_change, "hosts.txt"),
+                                    (network.serpent_setup, network.serpent_change, "addrs.txt")):
+            for seed in range(20):
+                with self.subTest(data, seed=seed), tempfile.TemporaryDirectory() as tmp:
+                    meta = setup(Path(tmp), random.Random(seed))
+                    text = (Path(tmp) / data).read_text()
+                    self.assertEqual(list(outside(text)), [])
+                    self.assertEqual(list(outside(change(text, meta)[0])), [])
+
+    def test_no_address_comes_twice_in_the_sprite_file(self):
+        """Bug (network-judge, 2026-11-04): with a repeated address, "how many?" had two defensible answers."""
+        for seed in range(200):
+            with self.subTest(seed=seed), tempfile.TemporaryDirectory() as tmp:
+                network.sprite_setup(Path(tmp), random.Random(seed))
+                lines = (Path(tmp) / "hosts.txt").read_text().split()
+                self.assertEqual(len(lines), len(set(lines)))
 
 
 class StyleFileTest(unittest.TestCase):

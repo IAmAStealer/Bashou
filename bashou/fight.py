@@ -409,6 +409,11 @@ def cmd_answer(base, value):
     if ch.kind == "fight" and not used_tool(base, ch) and ch.needs:
         print(ACCENT + "✓ " + _("Right answer.") + " " + _(ch.needs) + RESET)
         return 1
+    if ch.kind == "fight" and not used_tool(base, ch) and ch.fix:
+        print(ACCENT + "✓ " + _("Right, but only `{tool}` can hurt the {threat}. "
+                                "Run it with {tool} (a successful command), then verify again.")
+              .format(tool=ch.tool, threat=_(ch.threat)) + RESET)
+        return 1
     if ch.kind == "fight" and not used_tool(base, ch):   # investigations: any way you like
         print(ACCENT + "✓ " + _("Right answer, but only `{tool}` can hurt the {threat}. "
                                 "Solve it with {tool} (a successful command), then answer again.")
