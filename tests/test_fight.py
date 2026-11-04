@@ -62,7 +62,7 @@ SOLUTIONS = {
     "dict_djinn": ("sed -i 's/counts\\[level\\] += 1/counts[level] = counts.get(level, 0) + 1/' tally.py", None),
     "loop_lich": ("sed -i 's/^        delay = delay \\* 2$/&\\n        i += 1/' retry.py", None),
     "ouroboros": ("sed -i 's/^            total(item)$/            size += total(item)/' du.py", None),
-    "json_jinn": ("python3 -c \"import json; print(json.load(open('config.json'))['database']['port'])\"", None),
+    "json_jinn": ("sed -i 's/^print(config.keys())$/print(config[\"database\"][\"port\"])/' solve.py", None),
     "base64_banshee": ("python3 -c \"import base64; print(base64.b64decode(open('secret.txt').read()).split()[-1]"
                        ".decode())\"", None),
     "percent_poltergeist": ("python3 -c \"import re, urllib.parse as u; "

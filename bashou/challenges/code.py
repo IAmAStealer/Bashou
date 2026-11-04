@@ -85,8 +85,8 @@ print("ok")
 
 def run(cmd, cwd, stdin="", timeout=10, env=None):
     try:
-        return subprocess.run(cmd, cwd=cwd, input=stdin, capture_output=True, text=True, timeout=timeout,
-                              env=env)
+        return subprocess.run(cmd, cwd=cwd, input=stdin, capture_output=True, text=True, errors="replace",
+                              timeout=timeout, env=env)
     except (subprocess.TimeoutExpired, OSError):
         return None
 
@@ -487,6 +487,50 @@ def json_setup(work, rng):
     return {"answer": ports[2]}
 
 
+def json_output(work, meta):
+    """What solve.py prints: "ok", or the reason it isn't right yet. It runs on the real config.json, then on a
+    copy with another port: a program that holds the port itself hasn't read the file."""
+    if not (work / "solve.py").is_file():
+        return _("solve.py is gone: without it, Bashou has no program to run.")
+    first = run([sys.executable, "solve.py"], work, timeout=5)
+    if first is None:
+        return _("Your code didn't finish within 5 seconds: a loop that never ends?")
+    if first.returncode != 0:
+        return _("Your file doesn't run: python3 {name} shows why.").format(name="solve.py")
+    if not first.stdout.strip():
+        return _("solve.py prints nothing: a program shows only what you print().")
+    if first.stdout.strip() != str(meta["answer"]):
+        return _("solve.py must print the database port and nothing else. Right now it prints: {got}").format(
+            got=short(first.stdout.strip()))
+    other = meta["answer"] + 1
+    try:
+        config = json.loads((work / "config.json").read_text())
+        config["database"]["port"] = other
+    except (OSError, ValueError, KeyError, TypeError):
+        return _("config.json has changed: solve.py must read the file as it was given.")
+    with tempfile.TemporaryDirectory() as tmp:
+        try:                                     # the whole folder: solve.py may import the player's other files
+            shutil.copytree(work, tmp, dirs_exist_ok=True, ignore_dangling_symlinks=True)
+        except shutil.Error:                     # something that can't be copied: the rest is there
+            pass
+        (Path(tmp) / "config.json").unlink(missing_ok=True)
+        (Path(tmp) / "config.json").write_text(json.dumps(config, indent=2) + "\n")     # same layout as the real file
+        second = run([sys.executable, "solve.py"], tmp, timeout=5)
+    if second is None or second.returncode != 0 or second.stdout.strip() != str(other):
+        return _("The port is right, but solve.py doesn't get it from config.json: "
+                 "a program that holds the answer stops being right as soon as the file changes.")
+    return "ok"
+
+
+def json_verify(work, meta, value):
+    return json_output(work, meta) == "ok"
+
+
+def json_why(work):
+    told = json_output(work, json.loads((Path(work).parent / "meta.json").read_text()))
+    return None if told == "ok" else told
+
+
 def b64_setup(work, rng):
     word = rng.choice(("lantern", "harbor", "pebble", "thistle", "compass", "ember", "orchid", "falcon"))
     note = f"answer {word}\n"
@@ -802,13 +846,14 @@ ALL = [
               hints=["total(item) is called for each subfolder, but where does its result go?",
                      "Write: size += total(item)"],
               setup=tree_setup, verify=py_tests("du.py", "total"), why=py_why("du.py", "total")),
-    Challenge(level=2, id="json_jinn", pet="snake", threat="JSON Jinn", **PY,
+    Challenge(level=2, id="json_jinn", fix=True, pet="snake", threat="JSON Jinn", **PY,
               task="The JSON Jinn guards config.json. Read it with python3, not by eye.\n"
-                   "Which port does the database use? Answer with: answer <port>\n"
-                   "solve.py is a start: run python3 solve.py, then finish it.",
-              hints=["python3 -c runs one line of Python. json.load turns the file into dicts.",
-                     "Try: python3 -c 'import json; print(json.load(open(\"config.json\"))[\"database\"][\"port\"])'"],
-              setup=json_setup),
+                   "Which port does the database use? Finish solve.py so that it prints that port and nothing else.\n"
+                   "Run it: python3 solve.py\n"
+                   "When it works, type: verify",
+              hints=["json.load turns the file into dicts: config[\"database\"] is one section, and it holds a port.",
+                     "Change the last line of solve.py to: print(config[\"database\"][\"port\"])"],
+              setup=json_setup, verify=json_verify, why=json_why),
     Challenge(level=2, id="base64_banshee", pet="snake", threat="Base64 Banshee", **PY,
               task="The Base64 Banshee wails in secret.txt: it's base64, not a secret code.\n"
                    "Decode it with python3. What is the vault word?\n"

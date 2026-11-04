@@ -2,6 +2,7 @@
 program to make: give a small base file to help"; "at least not totally empty, some people have blank page
 syndrome"). It runs as it is and leaves one step to write."""
 
+import json
 import random
 import sqlite3
 import subprocess
@@ -67,6 +68,95 @@ class StarterTest(Fights):
     def test_the_task_points_to_the_starter(self):
         for cid in FINISH:
             self.assertIn("solve.py", challenges.BY_ID[cid].task, cid)
+
+
+class JsonJinnTest(Fights):
+    """Bug (user, 2026-11-04): the JSON Jinn asked to type the port by hand; like the other programming
+    fights, your program must print it, and `verify` runs your program."""
+
+    def finish(self, work, line):
+        code = (work / "solve.py").read_text()
+        (work / "solve.py").write_text(code.replace("print(config.keys())", line))
+
+    def why(self, work, meta):
+        (work.parent / "meta.json").write_text(json.dumps(meta))      # where the fight keeps it
+        return self.ch.why(work)
+
+    def setUp(self):
+        super().setUp()
+        self.ch = challenges.BY_ID["json_jinn"]
+
+    def test_it_is_won_with_verify_not_by_typing_the_port(self):
+        self.assertTrue(self.ch.fix)
+        self.assertIn("verify", self.ch.task)
+        self.assertNotIn("answer <", self.ch.task)
+
+    def test_the_starter_as_given_does_not_win(self):
+        work, meta = self.fight("json_jinn", 1)
+        self.assertFalse(self.ch.check(work, meta, "done"))
+        self.assertIn("port", self.why(work, meta))
+
+    def test_a_program_that_prints_the_port_wins(self):
+        for seed in range(5):
+            with self.subTest(seed=seed):
+                work, meta = self.fight("json_jinn", seed)
+                self.finish(work, 'print(config["database"]["port"])')
+                self.assertTrue(self.ch.check(work, meta, "done"))
+                self.assertIsNone(self.why(work, meta))
+
+    def test_a_port_typed_in_the_program_does_not_win(self):
+        work, meta = self.fight("json_jinn", 2)
+        self.finish(work, f"print({meta['answer']})")
+        self.assertFalse(self.ch.check(work, meta, "done"))
+        self.assertIn("config.json", self.why(work, meta))
+
+    def test_the_wrong_section_does_not_win(self):
+        work, meta = self.fight("json_jinn", 3)
+        self.finish(work, 'print(config["cache"]["port"])')
+        self.assertFalse(self.ch.check(work, meta, "done"))
+
+    def test_reading_the_file_line_by_line_wins(self):
+        work, meta = self.fight("json_jinn", 4)
+        (work / "solve.py").write_text(
+            'lines = open("config.json", encoding="utf-8").read().splitlines()\n'
+            'at = next(i for i, line in enumerate(lines) if "database" in line)\n'
+            'part = next(line for line in lines[at:] if "port" in line)\n'
+            'print(part.split(":")[1].strip(" ,"))\n')
+        self.assertTrue(self.ch.check(work, meta, "done"), self.why(work, meta))
+
+    def test_a_second_file_of_the_player_wins(self):
+        work, meta = self.fight("json_jinn", 5)
+        (work / "helper.py").write_text(
+            'import json\nwith open("config.json", encoding="utf-8") as f:\n'
+            '    port = json.load(f)["database"]["port"]\n')
+        (work / "solve.py").write_text("from helper import port\nprint(port)\n")
+        self.assertTrue(self.ch.check(work, meta, "done"), self.why(work, meta))
+
+    def test_printing_nothing_is_told_plainly(self):
+        work, meta = self.fight("json_jinn", 6)
+        self.finish(work, 'port = config["database"]["port"]')
+        self.assertFalse(self.ch.check(work, meta, "done"))
+        self.assertIn("print()", self.why(work, meta))
+
+    def test_bytes_that_are_not_text_do_not_crash(self):
+        work, meta = self.fight("json_jinn", 7)
+        self.finish(work, 'import sys; sys.stdout.buffer.write(b"\\xff")')
+        self.assertFalse(self.ch.check(work, meta, "done"))
+        self.assertIn("port", self.why(work, meta))
+
+    def test_extra_words_do_not_win(self):
+        work, meta = self.fight("json_jinn", 3)
+        self.finish(work, 'print("port", config["database"]["port"])')
+        self.assertFalse(self.ch.check(work, meta, "done"))
+
+    def test_a_broken_or_missing_program_is_refused_with_a_reason(self):
+        work, meta = self.fight("json_jinn", 4)
+        self.finish(work, "print(")
+        self.assertFalse(self.ch.check(work, meta, "done"))
+        self.assertIn("python3 solve.py", self.why(work, meta))
+        (work / "solve.py").unlink()
+        self.assertFalse(self.ch.check(work, meta, "done"))
+        self.assertIn("solve.py", self.why(work, meta))
 
 
 class SqlStarterTest(Fights):
