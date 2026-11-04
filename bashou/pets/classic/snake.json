@@ -1,0 +1,55 @@
+{
+ "name": "Snake",
+ "next": "basilisk",
+ "next_at": {"achievements": 5},
+ "palette": {
+  "a": "#1d3b24",
+  "d": "#3f8f3a",
+  "o": "#6cc24a",
+  "h": "#a6e06a",
+  "s": "#3a7d34",
+  "c": "#f3ecc4",
+  "b": "#d8c98e",
+  "m": "#2a2e33",
+  "w": "#f4f6f8",
+  "p": "#f0a0a0",
+  "r": "#e64650",
+  "e": "#b3a066"
+ },
+ "base": [
+  "...aaaaaa........",
+  "..ahhhhhha.......",
+  ".ahhoooooa.......",
+  ".aowmoowmoa......",
+  ".aommoommoa......",
+  ".apoossoopa...a..",
+  "..addddddda..aha.",
+  "...adcca.....aoa.",
+  "..adccaaaaaaaaoa.",
+  ".ahdccbhhhhhhhha.",
+  "aoosoooosooosoooa",
+  ".abebbbbebbbebba."
+ ],
+ "poses": {
+  "inhale": {
+   "9": "a----------------"
+  },
+  "closed": {
+   "3": "---oo--oo--------",
+   "4": "---aa--aa--------"
+  },
+  "left": {
+   "3": "---mw--mw--------"
+  },
+  "right": {
+   "4": "---mw--mw--------"
+  },
+  "fidget": {
+   "5": "-----rr----------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

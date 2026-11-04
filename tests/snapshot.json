@@ -6498,18 +6498,18 @@
      "e": "#b3a066"
     },
     "base": [
-     "...aaaaaa........",
-     "..ahhhhhha.......",
-     ".ahhoooooa.......",
-     ".aowmoowmoa......",
-     ".aommoommoa......",
-     ".apoossoopa...a..",
-     "..addddddda..aha.",
-     "...adcca.....aoa.",
-     "..adccaaaaaaaaoa.",
-     ".ahdccbhhhhhhhha.",
-     "aoosoooosooosoooa",
-     ".abebbbbebbbebba."
+     ".................",
+     "..aaaaaaa........",
+     ".ahhhhhhha.......",
+     ".aowmowmoa.......",
+     ".aommommoa.......",
+     ".apoosoopa.......",
+     "..addddda...a....",
+     "...adcca...aha...",
+     "..adccaaaaaaoa...",
+     ".ahdccbhhhhhha...",
+     "aoosooosooosoa...",
+     ".abebbbbebbbba..."
     ]
    },
    "basilisk": {

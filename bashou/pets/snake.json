@@ -1,7 +1,9 @@
 {
  "name": "Snake",
  "next": "basilisk",
- "next_at": {"achievements": 5},
+ "next_at": {
+  "achievements": 5
+ },
  "palette": {
   "a": "#1d3b24",
   "d": "#3f8f3a",
@@ -17,35 +19,47 @@
   "e": "#b3a066"
  },
  "base": [
-  "...aaaaaa........",
-  "..ahhhhhha.......",
-  ".ahhoooooa.......",
-  ".aowmoowmoa......",
-  ".aommoommoa......",
-  ".apoossoopa...a..",
-  "..addddddda..aha.",
-  "...adcca.....aoa.",
-  "..adccaaaaaaaaoa.",
-  ".ahdccbhhhhhhhha.",
-  "aoosoooosooosoooa",
-  ".abebbbbebbbebba."
+  ".................",
+  "..aaaaaaa........",
+  ".ahhhhhhha.......",
+  ".aowmowmoa.......",
+  ".aommommoa.......",
+  ".apoosoopa.......",
+  "..addddda...a....",
+  "...adcca...aha...",
+  "..adccaaaaaaoa...",
+  ".ahdccbhhhhhha...",
+  "aoosooosooosoa...",
+  ".abebbbbebbbba..."
  ],
  "poses": {
   "inhale": {
    "9": "a----------------"
   },
   "closed": {
-   "3": "---oo--oo--------",
-   "4": "---aa--aa--------"
+   "3": "---oo-oo---------",
+   "4": "---aa-aa---------"
   },
   "left": {
-   "3": "---mw--mw--------"
+   "3": "---mw-mw---------",
+   "4": "---mw-mw---------"
   },
   "right": {
-   "4": "---mw--mw--------"
+   "3": "---wm-wm---------",
+   "4": "---wm-wm---------"
   },
   "fidget": {
-   "5": "-----rr----------"
+   "0": "..aaaaaaa........",
+   "1": ".ahhhhhhha.......",
+   "2": ".aowmowmoa.......",
+   "3": ".aommommoa.......",
+   "4": ".apoosoopa.......",
+   "5": "..addddda........",
+   "6": "...adcca........."
+  },
+  "closed+fidget": {
+   "2": "---oo-oo---------",
+   "3": "---aa-aa---------"
   }
  },
  "particles": [
