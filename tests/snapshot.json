@@ -8966,28 +8966,32 @@
    },
    "honey_badger": {
     "palette": {
-     "k": "#24232a",
-     "K": "#55525e",
-     "w": "#f4f1e8",
-     "W": "#c9c5bb",
-     "g": "#8d8980",
-     "e": "#e2483a",
-     "n": "#6a6470",
-     "c": "#e2d4a4"
+     "w": "#f5f1e4",
+     "W": "#d3cebf",
+     "g": "#918c82",
+     "k": "#3a3843",
+     "K": "#5a5664",
+     "d": "#26242d",
+     "E": "#ff5a3c",
+     "r": "#b82a2e",
+     "t": "#eadfc6",
+     "p": "#a02c3c",
+     "c": "#cbb27a",
+     "C": "#8f7846"
     },
     "base": [
-     ".................",
-     "......wwwwww.....",
-     "....wwwwWwwwWW...",
-     "...wwWwwWWWWgWWW.",
-     "..wwWWgWWWggggWWk",
-     ".wwWggkkkkkkkkgkk",
-     "wWkekkkkkkkkkkkK.",
-     "nkkkkkkkkkkkkkkK.",
-     "....kkkkkkkkkkk..",
-     "....Kkk.....Kkk..",
-     "....Kkk.....Kkk..",
-     "..cccc.....cccc.."
+     "...............gg",
+     ".........gggg..gW",
+     ".......ggwwwwgggW",
+     ".....ggwwwwWWWWWg",
+     "...ggwwwwWWWgWggK",
+     "..gwwwwWWggggkkkK",
+     ".KkgwWWgkkKkkkkkK",
+     "KkrkkkkrkkdkkkkKd",
+     "kkkEkkEkkkdkkkkd.",
+     ".kkkKdkkdkKkdKkd.",
+     "..dtppptd.Kk.Kk..",
+     "...dtttd.cCc.cCc."
     ]
    },
    "pony_foal": {

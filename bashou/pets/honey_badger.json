@@ -1,50 +1,66 @@
 {
  "name": "Honey badger",
  "palette": {
-  "k": "#24232a",
-  "K": "#55525e",
-  "w": "#f4f1e8",
-  "W": "#c9c5bb",
-  "g": "#8d8980",
-  "e": "#e2483a",
-  "n": "#6a6470",
-  "c": "#e2d4a4"
+  "w": "#f5f1e4",
+  "W": "#d3cebf",
+  "g": "#918c82",
+  "k": "#3a3843",
+  "K": "#5a5664",
+  "d": "#26242d",
+  "E": "#ff5a3c",
+  "r": "#b82a2e",
+  "t": "#eadfc6",
+  "p": "#a02c3c",
+  "c": "#cbb27a",
+  "C": "#8f7846"
  },
  "base": [
-  ".................",
-  "......wwwwww.....",
-  "....wwwwWwwwWW...",
-  "...wwWwwWWWWgWWW.",
-  "..wwWWgWWWggggWWk",
-  ".wwWggkkkkkkkkgkk",
-  "wWkekkkkkkkkkkkK.",
-  "nkkkkkkkkkkkkkkK.",
-  "....kkkkkkkkkkk..",
-  "....Kkk.....Kkk..",
-  "....Kkk.....Kkk..",
-  "..cccc.....cccc.."
+  "...............gg",
+  ".........gggg..gW",
+  ".......ggwwwwgggW",
+  ".....ggwwwwWWWWWg",
+  "...ggwwwwWWWgWggK",
+  "..gwwwwWWggggkkkK",
+  ".KkgwWWgkkKkkkkkK",
+  "KkrkkkkrkkdkkkkKd",
+  "kkkEkkEkkkdkkkkd.",
+  ".kkkKdkkdkKkdKkd.",
+  "..dtppptd.Kk.Kk..",
+  "...dtttd.cCc.cCc."
  ],
  "poses": {
   "inhale": {
-   "1": "-----w------w----"
+   "0": "----------ggg----",
+   "1": "----------wwwg---"
   },
   "closed": {
-   "6": "---k-------------"
+   "7": "--K----K---------",
+   "8": "---K--K----------"
   },
   "left": {
-   "6": "--ek-------------"
+   "7": "-rk---rk---------",
+   "8": "--Ek-Ek----------"
   },
   "right": {
-   "6": "---ke------------"
+   "7": "--kr---kr--------",
+   "8": "---kE-kE---------"
   },
   "fidget": {
-   "3": "----------------k",
-   "5": "---------------k.",
-   "11": "-c---------------"
+   "5": "--.g-------------",
+   "6": "-..KkgwWg-k------",
+   "7": "..K-r--k-rk-d----",
+   "8": "..-k-Ek-E-k-d----",
+   "9": "W..-kkKdk-dKkdK--",
+   "10": "-g..dt-pptd------",
+   "11": "---..d-ttdcC-----"
+  },
+  "closed+fidget": {
+   "7": "----K----K-------",
+   "8": "-----K--K--------"
   }
  },
  "particles": [
   0,
-  14
+  0
  ]
 }
