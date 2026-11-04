@@ -1,0 +1,58 @@
+{
+ "name": "Orc",
+ "next": "troll",
+ "next_at": {
+  "achievements": 8
+ },
+ "symmetric": true,
+ "palette": {
+  "k": "#24331f",
+  "o": "#6b9a4a",
+  "O": "#4a7034",
+  "h": "#9cc46e",
+  "H": "#2a2a2a",
+  "r": "#e04030",
+  "w": "#ffd0c0",
+  "n": "#3e6030",
+  "T": "#f0e8d0",
+  "m": "#3a1414",
+  "A": "#9a9aa8",
+  "a": "#5a5a68",
+  "b": "#6a4422"
+ },
+ "base": [
+  "......kHHHk......",
+  "....kkoHHHokk....",
+  "...kohhhohhhok...",
+  "kk.koohooohook.kk",
+  "kokkoOOoooOOokkok",
+  ".kkoooOOoOOoookk.",
+  "..koowrooorwook..",
+  "..kOooonnnoooOk..",
+  "..kOoTmmmmmToOk..",
+  "...kOTOOOOOTOk...",
+  "AAAa.kkkkkkk.aAAA",
+  "aAAAabbbbbbbaAAAa"
+ ],
+ "poses": {
+  "inhale": {
+   "10": "----a-------a----"
+  },
+  "closed": {
+   "6": "-----OO---OO-----"
+  },
+  "left": {
+   "6": "-----rw---rw-----"
+  },
+  "right": {
+   "6": "-----wr---wr-----"
+  },
+  "fidget": {
+   "8": "------T---T------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

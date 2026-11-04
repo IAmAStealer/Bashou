@@ -1,53 +1,57 @@
 {
  "name": "Troll",
- "symmetric": true,
- "particles": [
-  0,
-  14
- ],
  "palette": {
-  "k": "#161c24",
+  "k": "#2b3846",
+  "h": "#b8d0dc",
   "o": "#7d98aa",
   "O": "#4f6577",
-  "h": "#b8d0dc",
-  "M": "#6cc040",
-  "n": "#d9805e",
+  "D": "#3a4c5c",
+  "n": "#a98c8c",
   "Y": "#ffb020",
-  "w": "#fff4c8",
   "m": "#22140e",
   "T": "#f4ecd8",
   "b": "#7a4f2a",
-  "B": "#4e3018"
+  "B": "#4e3018",
+  "G": "#7aa652",
+  "q": "#4c7434"
  },
  "base": [
-  "....M.MMMMM.M....",
-  "...kkMkkkkkMkk...",
-  ".koohhhhhhhhhook.",
-  "kokoohhhhhhhookok",
-  "kookoOOoooOOokook",
-  ".kkowYOonoOYwokk.",
-  "..kooYonnnoYook..",
-  "..kOoonnnnnooOk..",
-  ".kOOTOOOOOOOTOOk.",
-  "kOOOTmmmmmmmTOOOk",
-  "kOOkOOOOOOOOOkOOk",
-  ".kkkbbBbBbBbbkkk."
+  "......kkkkk......",
+  "....kkhhhooOk....",
+  "...khhhoooooOk...",
+  "...khOOOoOOOOkkk.",
+  "...khYmomYoOOkoOk",
+  "..kkoonoooOOOkOk.",
+  "..knnnnooOoOOkk..",
+  ".kTknnkTooooOOk..",
+  ".kTmmmmmTooOOOk..",
+  ".koooooooooOOOk..",
+  ".khhkkkkkkkkkOOOk",
+  "khhooooooooOOOOOk"
  ],
  "poses": {
   "inhale": {
-   "11": "k---------------k"
+   "9": "---------------k-",
+   "10": "kh---------------"
   },
   "closed": {
-   "5": "----OO-----OO----"
+   "4": "-----OO-OO-------"
   },
   "left": {
-   "5": "----mY-----mY----"
+   "4": "-----mY----------"
   },
   "right": {
-   "5": "----Ym-----Ym----"
+   "4": "--------Ym-------"
   },
   "fidget": {
-   "4": "-----oo---oo-----"
+   "7": "--k----k---------",
+   "8": "--m-----m--------",
+   "9": "--TmmmmmT--------",
+   "10": "--OOOOOOO--------"
+  },
+  "inhale+fidget": {
+   "10": "-h---------------"
   }
- }
+ },
+ "particles": [0, 14]
 }

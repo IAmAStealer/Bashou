@@ -1,0 +1,53 @@
+{
+ "name": "Troll",
+ "symmetric": true,
+ "particles": [
+  0,
+  14
+ ],
+ "palette": {
+  "k": "#161c24",
+  "o": "#7d98aa",
+  "O": "#4f6577",
+  "h": "#b8d0dc",
+  "M": "#6cc040",
+  "n": "#d9805e",
+  "Y": "#ffb020",
+  "w": "#fff4c8",
+  "m": "#22140e",
+  "T": "#f4ecd8",
+  "b": "#7a4f2a",
+  "B": "#4e3018"
+ },
+ "base": [
+  "....M.MMMMM.M....",
+  "...kkMkkkkkMkk...",
+  ".koohhhhhhhhhook.",
+  "kokoohhhhhhhookok",
+  "kookoOOoooOOokook",
+  ".kkowYOonoOYwokk.",
+  "..kooYonnnoYook..",
+  "..kOoonnnnnooOk..",
+  ".kOOTOOOOOOOTOOk.",
+  "kOOOTmmmmmmmTOOOk",
+  "kOOkOOOOOOOOOkOOk",
+  ".kkkbbBbBbBbbkkk."
+ ],
+ "poses": {
+  "inhale": {
+   "11": "k---------------k"
+  },
+  "closed": {
+   "5": "----OO-----OO----"
+  },
+  "left": {
+   "5": "----mY-----mY----"
+  },
+  "right": {
+   "5": "----Ym-----Ym----"
+  },
+  "fidget": {
+   "4": "-----oo---oo-----"
+  }
+ }
+}
