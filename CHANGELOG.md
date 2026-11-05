@@ -3,6 +3,19 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.12.2 — 2026-11-05
+
+### Changes
+
+- Rocky Linux 9 can install Bashou from `dnf` again: the 0.12.1 package carried a signature its `rpm` can't read, so `dnf` called it unsigned and refused it.
+- The Turtle, Slime, Mushroom, Octopus, Kraken, Dragon, Owl, Beanbag, Fennec, Mole, Ghost, Snake, Ant, Honey badger, Axolotl, Gremlin and Snail families are redrawn or retouched, most with a fidget of their own. Their old looks stay one key away: press `s` on the pet board, or use `bashou config style`.
+- The JSON Jinn, Base64 Banshee, Percent Poltergeist, Token Trickster, Subnet Sprite and Six Serpent are now won by a program: finish `solve.py`, then `verify`. It is also run on a changed copy, so a hardcoded answer is refused.
+- Pets no longer lose a pixel when breathing and fidgeting at once.
+
+### Breaking changes
+
+- Breaking change: a pony watched the new Snail stretch its eye stalks, tried the same with its neck and is now looking at you from over the next hill. Bring it home with `bashou pony hoof`.
+
 ## v0.12.1 — 2026-11-02
 
 ### Changes

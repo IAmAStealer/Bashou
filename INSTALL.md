@@ -47,7 +47,18 @@ Used the test installer (`install-macos.sh`)? Remove the line `source ~/.bashou/
 Installed with git on Debian or Red Hat, and want the repository instead? Run `bashou update --packages`.
 It shows every command it will run, asks you, then moves you over. Your pets and progress are kept.
 
+## After installing from a package
+
+Open a new terminal: your pet is there.
+
+- No pet on Debian or Ubuntu? Run `bashou on` once.
+- `bashou off` hides it, `bashou on` brings it back.
+- Updates come with `apt upgrade` or `dnf upgrade`.
+
 ## Uninstall
+
+Installed as a package: `sudo apt remove bashou` or `sudo dnf remove bashou`, then remove the
+`source /usr/share/bashou/bashou.bash` line from `~/.bashrc` (and the `bashou.zsh` one from `~/.zshrc`).
 
 Installed with git:
 

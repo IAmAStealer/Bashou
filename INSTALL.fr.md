@@ -49,7 +49,18 @@ de ton `~/.zshrc` et le dossier `~/.bashou`. Tes compagnons et ta progression re
 Installé avec git sur Debian ou Red Hat, et tu veux le dépôt à la place ? Lance `bashou update --packages`.
 Il montre chaque commande qu'il va lancer, te demande, puis fait le passage. Tes compagnons et ta progression sont gardés.
 
+## Après une installation par paquet
+
+Ouvre un nouveau terminal : ton compagnon est là.
+
+- Pas de compagnon sur Debian ou Ubuntu ? Lance `bashou on` une fois.
+- `bashou off` le cache, `bashou on` le fait revenir.
+- Les mises à jour arrivent avec `apt upgrade` ou `dnf upgrade`.
+
 ## Désinstaller
+
+Installé en paquet : `sudo apt remove bashou` ou `sudo dnf remove bashou`, puis enlève la ligne
+`source /usr/share/bashou/bashou.bash` de `~/.bashrc` si tu l'avais ajoutée (et la ligne `bashou.zsh` de `~/.zshrc`).
 
 Installé avec git :
 

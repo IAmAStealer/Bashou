@@ -270,7 +270,8 @@ class ReadmeCountsTest(unittest.TestCase):
         import json
         from bashou import achievements, creatures, learn
         from bashou.adventure import world
-        text = (Path(__file__).resolve().parent.parent / "README.md").read_text()
+        base = Path(__file__).resolve().parent.parent
+        text = (base / "README.md").read_text() + (base / "doc/COMMANDS.md").read_text()
         root = Path(__file__).resolve().parent.parent / "bashou/adventure/questions/en"
         counts = {
             r"\((\d+) commands, from": len(learn.COMMANDS),
@@ -281,7 +282,7 @@ class ReadmeCountsTest(unittest.TestCase):
         }
         for pattern, real in counts.items():
             self.assertEqual(int(re.search(pattern, text).group(1)), real, pattern)
-        text = (Path(__file__).resolve().parent.parent / "README.fr.md").read_text()
+        text = (base / "README.fr.md").read_text() + (base / "doc/COMMANDS.fr.md").read_text()
         for pattern, real in zip((r"\((\d+) commandes, de", r"\*\*(\d+) succès\*\*", r"travers (\d+) thèmes",
                                   r"avec (\d+) questions", r"(\d+) autres compagnons se cachent"), counts.values()):
             self.assertEqual(int(re.search(pattern, text).group(1)), real, pattern)
