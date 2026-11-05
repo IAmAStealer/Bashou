@@ -19,6 +19,7 @@ import io
 import json
 import os
 import shutil
+import struct
 import subprocess
 import sys
 import tarfile
@@ -269,6 +270,17 @@ def apt_repo(debs, site, key):
     gpg("--local-user", key, "--armor", "--detach-sign", "-o", str(folder / "Release.gpg"), str(folder / "Release"))
 
 
+def signed_for_old_rpm(path):
+    """Does this .rpm hold a signature rpm 4 can read (DSAHEADER 267 or RSAHEADER 268)? rpm 6 can sign in tag 278 only."""
+    data = Path(path).read_bytes()[:96 + 16 + 16 * 64]
+    header = data[96:]      # after the 96-byte lead
+    if header[:3] != b"\x8e\xad\xe8" or len(header) < 16:
+        return False
+    count = struct.unpack(">I", header[8:12])[0]
+    tags = {struct.unpack(">I", entry)[0] for entry in (header[16 + i * 16:20 + i * 16] for i in range(count)) if len(entry) == 4}
+    return bool(tags & {267, 268})
+
+
 def dnf_repo(rpms, site, key):
     """Signed packages, and signed metadata (repo_gpgcheck=1)."""
     folder = site / "rpm"
@@ -278,6 +290,9 @@ def dnf_repo(rpms, site, key):
         subprocess.run(["rpmsign", "--addsign", "--define", f"_gpg_name {key}",
                         "--define", f"__gpg {shutil.which('gpg')}", str(target)], check=True,
                        stdout=subprocess.DEVNULL)
+        if not signed_for_old_rpm(target):
+            sys.exit(f"{target.name}: Rocky 9's rpm can't read this signature, dnf would call it unsigned. "
+                     "Build and sign with rpm 4 (ubuntu-24.04), not rpm 6.")
     subprocess.run(["createrepo_c", "--quiet", str(folder)], check=True)
     repomd = folder / "repodata/repomd.xml"
     gpg("--local-user", key, "--armor", "--detach-sign", "-o", f"{repomd}.asc", str(repomd))

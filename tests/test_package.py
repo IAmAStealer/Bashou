@@ -6,6 +6,7 @@ import io
 import os
 import re
 import shutil
+import struct
 import subprocess
 import tempfile
 import unittest
@@ -291,6 +292,48 @@ class ZshSetupTest(unittest.TestCase):
         subprocess.run(["zsh", "-c", "python3 -m bashou on; true"], capture_output=True, text=True, env=env)
         self.assertIn("bashou.zsh", (self.home / ".zshrc").read_text())
         self.assertIn("bashou.bash", (self.home / ".bashrc").read_text())
+
+
+class SignatureForOldRpmTest(unittest.TestCase):
+    """rpm 6 (Ubuntu 26.04) signs in a tag that Rocky 9's rpm can't read: dnf says the package isn't signed."""
+
+    def rpm(self, *tags):
+        """The start of a .rpm: the 96-byte lead, then a signature header holding these tags."""
+        index = b"".join(struct.pack(">IIII", tag, 7, 0, 1) for tag in tags)
+        header = b"\x8e\xad\xe8\x01\0\0\0\0" + struct.pack(">II", len(tags), 0) + index
+        fd, path = tempfile.mkstemp(suffix=".rpm")
+        self.addCleanup(os.unlink, path)
+        with os.fdopen(fd, "wb") as fh:
+            fh.write(b"\xed\xab\xee\xdb" + bytes(92) + header)
+        return Path(path)
+
+    def test_rpm_4_signature_is_readable(self):
+        self.assertTrue(package.signed_for_old_rpm(self.rpm(268, 273)))     # RSAHEADER, also used for ed25519 keys
+        self.assertTrue(package.signed_for_old_rpm(self.rpm(267, 273)))     # DSAHEADER
+
+    def test_rpm_6_signature_alone_is_not(self):
+        self.assertFalse(package.signed_for_old_rpm(self.rpm(62, 273, 278, 279, 999)))      # bashou 0.12.1's own tags
+
+    def test_a_file_that_is_no_rpm_is_not(self):
+        fd, path = tempfile.mkstemp()
+        self.addCleanup(os.unlink, path)
+        os.close(fd)
+        self.assertFalse(package.signed_for_old_rpm(Path(path)))
+
+    def test_dnf_repo_refuses_to_publish_a_package_rocky_9_calls_unsigned(self):
+        unreadable = self.rpm(273, 278)
+
+        def rpmsign(cmd, **kw):     # signing "works", as it did on Ubuntu 26.04, but leaves only rpm 6's tag
+            return subprocess.CompletedProcess(cmd, 0)
+
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(package.subprocess, "run", rpmsign):
+            with self.assertRaisesRegex(SystemExit, "Rocky 9"):
+                package.dnf_repo([unreadable], Path(tmp) / "site", "KEY")
+
+    def test_packages_are_built_where_rpm_is_version_4(self):
+        workflow = (ROOT / ".github/workflows/packages.yml").read_text()
+        publish = workflow.split("  publish:", 1)[1].split("\n  tap:", 1)[0]
+        self.assertIn("runs-on: ubuntu-24.04", publish)
 
 
 if __name__ == "__main__":

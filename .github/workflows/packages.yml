@@ -21,7 +21,8 @@ permissions:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    # rpm 4, not ubuntu-latest: rpm 6 (Ubuntu 26.04) signs in a way Rocky 9's dnf calls "not signed".
+    runs-on: ubuntu-24.04
     permissions:
       contents: write          # push the gh-pages branch, attach the packages to the release
       id-token: write          # build provenance of the packages
