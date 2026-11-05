@@ -1,7 +1,9 @@
 {
  "name": "Groundbreaker",
  "next": "bricklayer",
- "next_at": {"achievements": 5},
+ "next_at": {
+  "achievements": 5
+ },
  "palette": {
   "o": "#3f4424",
   "g": "#8f9c4e",
@@ -21,14 +23,14 @@
   "s": "#ebbe78"
  },
  "base": [
+  ".................",
   "..........yyy....",
   ".........yYYYH...",
-  "........HHHHHH...",
-  ".........ww.ww...",
-  ".........wm.mw...",
+  "........HHHHHHH..",
+  "........owwgwwo..",
+  "........owmgmwo..",
   ".........ogggo...",
-  ".........opmpo...",
-  "...sS....VRVgo...",
+  "...sS....opmpo...",
   ".aaaaaa..VRVgo...",
   "aSsSaSsa.vRvgo...",
   "oGaaaaaGglllggo..",
@@ -36,21 +38,29 @@
  ],
  "poses": {
   "inhale": {
-   "5": "........ogggggo.."
+   "6": "--------ogggggo--"
   },
   "closed": {
-   "3": "---------oo-oo---",
-   "4": "---------GG-GG---"
+   "4": "--------oGGgGGo--",
+   "5": "--------ooogooo--"
   },
   "left": {
-   "4": "---------mw.mw---"
+   "5": "--------gmwgmwo--"
   },
   "right": {
-   "4": "---------wm.wm---"
+   "5": "--------owmgwmg--"
   },
   "fidget": {
-   "6": "...sS....opmpo...",
-   "7": ".........VRVgo..."
+   "0": "..........yyy....",
+   "1": ".........yYYYH...",
+   "2": "........HHHHHHH..",
+   "3": "........owwgwwo..",
+   "4": "........owmgmwo..",
+   "5": ".........ogggo..."
+  },
+  "closed+fidget": {
+   "3": "--------oGGgGGo--",
+   "4": "--------ooogooo--"
   }
  },
  "particles": [

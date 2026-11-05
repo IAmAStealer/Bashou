@@ -1,7 +1,9 @@
 {
  "name": "Shell painter",
  "next": "gary",
- "next_at": {"achievements": 11},
+ "next_at": {
+  "achievements": 11
+ },
  "palette": {
   "o": "#3f4424",
   "g": "#8f9c4e",
@@ -24,36 +26,44 @@
   "Q": "#c04070"
  },
  "base": [
-  ".............yyy.",
-  "............yYYYH",
-  "....aaaaa..HHHHHH",
-  "..AAPPSSSaa.ww.ww",
-  ".APPQaaasSa.wm.mw",
-  ".APQAPPasSa.ogggo",
-  ".APQAAPsSSa.opmpo",
-  ".AQPPQQSSa..VRVgo",
-  "..AAPPQaa...VRVgo",
-  "..P..P......vRvgo",
+  ".................",
+  "...........yyy...",
+  "...aaaaa..yYYYH..",
+  ".AAPPSSSaHHHHHHH.",
+  "APPQaaasSowwgwwo.",
+  "APQAPPasSowmgmwo.",
+  "APQAAPsSSaogggo..",
+  "AQPPQQSSa.opmpo..",
+  ".AAPPQaa..VRVgo..",
+  ".P..P.....vRvgo..",
   "oGGGGGGGGGglllgo.",
   ".oGGGGGGGGGGGGo.."
  ],
  "poses": {
   "inhale": {
-   "2": "....aaaaaa.HHHHHH"
+   "6": "---------ogggggo-"
   },
   "closed": {
-   "3": "------------oo-oo",
-   "4": "------------GG-GG"
+   "4": "---------oGGgGGo-",
+   "5": "---------ooogooo-"
   },
   "left": {
-   "4": "------------mw.mw"
+   "5": "---------gmwgmwo-"
   },
   "right": {
-   "4": "------------wm.wm"
+   "5": "---------owmgwmg-"
   },
   "fidget": {
-   "9": ".....P......vRvgo",
-   "10": "oGPGGGGGGGglllgo."
+   "0": "...........yyy...",
+   "1": "..........yYYYH..",
+   "2": "...aaaaa.HHHHHHH.",
+   "3": ".AAPPSSSaowwgwwo.",
+   "4": "APPQaaasSowmgmwo.",
+   "5": "APQAPPasSaogggo.."
+  },
+  "closed+fidget": {
+   "3": "---------oGGgGGo-",
+   "4": "---------ooogooo-"
   }
  },
  "particles": [

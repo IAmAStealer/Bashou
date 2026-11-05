@@ -1,7 +1,9 @@
 {
  "name": "Bricklayer",
  "next": "shell_painter",
- "next_at": {"achievements": 8},
+ "next_at": {
+  "achievements": 8
+ },
  "palette": {
   "o": "#3f4424",
   "g": "#8f9c4e",
@@ -24,36 +26,44 @@
   "h": "#9a6634"
  },
  "base": [
+  ".................",
   "..........yyy....",
   ".........yYYYH...",
-  "........HHHHHH...",
-  ".........ww.wwkKK",
-  "..aa.....wm.mwkkk",
-  ".aSsa.sS.ogggo.h.",
-  "aSsaSa...opmpo.h.",
-  "aSaSsaa..VRVgo.h.",
-  "aSsaSSsa.VRVgo.h.",
-  "aSSsaSsa.vRvgo.h.",
+  "........HHHHHHH..",
+  "..aa....owwgwwo..",
+  ".aSsa...owmgmwo..",
+  "aSaaSasS.ogggo...",
+  "aSasaSa..opmpokKK",
+  "aSsaaSsa.VRVgokkk",
+  "aSSsSaSa.vRvgo.h.",
   "oGaaaaaGglllggoh.",
-  ".oGGGGGGGGGGGGo.."
+  ".oGGGGGGGGGGGGoh."
  ],
  "poses": {
   "inhale": {
-   "5": ".aSsa.sSogggggoh."
+   "6": "--------ogggggo--"
   },
   "closed": {
-   "3": "---------oo-oo---",
-   "4": "---------GG-GG---"
+   "4": "--------oGGgGGo--",
+   "5": "--------ooogooo--"
   },
   "left": {
-   "4": "---------mw.mw---"
+   "5": "--------gmwgmwo--"
   },
   "right": {
-   "4": "---------wm.wm---"
+   "5": "--------owmgwmg--"
   },
   "fidget": {
-   "5": ".aSsa....ogggo.h.",
-   "6": "aSsaSasS.opmpo.h."
+   "0": "..........yyy....",
+   "1": ".........yYYYH...",
+   "2": "........HHHHHHH..",
+   "3": "........owwgwwo..",
+   "4": "..aa....owmgmwo..",
+   "5": ".aSsa....ogggo..."
+  },
+  "closed+fidget": {
+   "3": "--------oGGgGGo--",
+   "4": "--------ooogooo--"
   }
  },
  "particles": [

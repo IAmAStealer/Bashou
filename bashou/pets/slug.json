@@ -1,7 +1,9 @@
 {
  "name": "Slug",
  "next": "snail",
- "next_at": {"achievements": 3},
+ "next_at": {
+  "achievements": 3
+ },
  "palette": {
   "o": "#3f4424",
   "g": "#8f9c4e",
@@ -12,38 +14,45 @@
   "p": "#e3937e"
  },
  "base": [
-  ".......ooo...ooo.",
-  "......owmwo.owmwo",
-  "......owmwo.owmwo",
-  ".......ooo...ooo.",
-  "........g.....g..",
-  "........g.....g..",
-  "......oggggggggo.",
-  ".....oggggggggggo",
-  ".....ogggpmggmpgo",
-  "...oogllllgmmgggo",
-  ".ooglllllllggggo.",
-  "oGGGGGGGGGGGGGo.."
+  ".................",
+  "......ooo...ooo..",
+  ".....owmwo.owmwo.",
+  ".....owmwo.owmwo.",
+  "......ooo...ooo..",
+  ".......g.....g...",
+  ".....oggggggggo..",
+  "....oggggggggggo.",
+  "....ogggpmggmpgo.",
+  "..oogllllgmmgggo.",
+  "ooglllllllggggo..",
+  ".oGGGGGGGGGGGo..."
  ],
  "poses": {
   "inhale": {
-   "6": ".....oggggggggggo"
+   "6": "....oggggggggggo."
   },
   "closed": {
-   "1": "------oGGGo-oGGGo",
-   "2": "------ooooo-ooooo"
+   "2": "-----oGGGo-oGGGo-",
+   "3": "-----ooooo-ooooo-"
   },
   "left": {
-   "1": "------omwwo-omwwo",
-   "2": "------omwwo-omwwo"
+   "2": "-----gmwwo-gmwwo-",
+   "3": "-----gmwwo-gmwwo-"
   },
   "right": {
-   "1": "------owwmo-owwmo",
-   "2": "------owwmo-owwmo"
+   "2": "-----owwmg-owwmg-",
+   "3": "-----owwmg-owwmg-"
   },
   "fidget": {
-   "10": "o----------------",
-   "11": ".----------------"
+   "0": "......ooo...ooo..",
+   "1": ".....owmwo.owmwo.",
+   "2": ".....owmwo.owmwo.",
+   "3": "......ooo...ooo..",
+   "4": ".......g.....g..."
+  },
+  "closed+fidget": {
+   "1": "-----oGGGo-oGGGo-",
+   "2": "-----ooooo-ooooo-"
   }
  },
  "particles": [

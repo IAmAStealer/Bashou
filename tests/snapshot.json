@@ -7018,18 +7018,18 @@
      "p": "#e3937e"
     },
     "base": [
-     ".......ooo...ooo.",
-     "......owmwo.owmwo",
-     "......owmwo.owmwo",
-     ".......ooo...ooo.",
-     "........g.....g..",
-     "........g.....g..",
-     "......oggggggggo.",
-     ".....oggggggggggo",
-     ".....ogggpmggmpgo",
-     "...oogllllgmmgggo",
-     ".ooglllllllggggo.",
-     "oGGGGGGGGGGGGGo.."
+     ".................",
+     "......ooo...ooo..",
+     ".....owmwo.owmwo.",
+     ".....owmwo.owmwo.",
+     "......ooo...ooo..",
+     ".......g.....g...",
+     ".....oggggggggo..",
+     "....oggggggggggo.",
+     "....ogggpmggmpgo.",
+     "..oogllllgmmgggo.",
+     "ooglllllllggggo..",
+     ".oGGGGGGGGGGGo..."
     ]
    },
    "snail": {
@@ -7052,14 +7052,14 @@
      "s": "#ebbe78"
     },
     "base": [
+     ".................",
      "..........yyy....",
      ".........yYYYH...",
-     "........HHHHHH...",
-     ".........ww.ww...",
-     ".........wm.mw...",
+     "........HHHHHHH..",
+     "........owwgwwo..",
+     "........owmgmwo..",
      ".........ogggo...",
-     ".........opmpo...",
-     "...sS....VRVgo...",
+     "...sS....opmpo...",
      ".aaaaaa..VRVgo...",
      "aSsSaSsa.vRvgo...",
      "oGaaaaaGglllggo..",
@@ -7089,18 +7089,18 @@
      "h": "#9a6634"
     },
     "base": [
+     ".................",
      "..........yyy....",
      ".........yYYYH...",
-     "........HHHHHH...",
-     ".........ww.wwkKK",
-     "..aa.....wm.mwkkk",
-     ".aSsa.sS.ogggo.h.",
-     "aSsaSa...opmpo.h.",
-     "aSaSsaa..VRVgo.h.",
-     "aSsaSSsa.VRVgo.h.",
-     "aSSsaSsa.vRvgo.h.",
+     "........HHHHHHH..",
+     "..aa....owwgwwo..",
+     ".aSsa...owmgmwo..",
+     "aSaaSasS.ogggo...",
+     "aSasaSa..opmpokKK",
+     "aSsaaSsa.VRVgokkk",
+     "aSSsSaSa.vRvgo.h.",
      "oGaaaaaGglllggoh.",
-     ".oGGGGGGGGGGGGo.."
+     ".oGGGGGGGGGGGGoh."
     ]
    },
    "shell_painter": {
@@ -7126,16 +7126,16 @@
      "Q": "#c04070"
     },
     "base": [
-     ".............yyy.",
-     "............yYYYH",
-     "....aaaaa..HHHHHH",
-     "..AAPPSSSaa.ww.ww",
-     ".APPQaaasSa.wm.mw",
-     ".APQAPPasSa.ogggo",
-     ".APQAAPsSSa.opmpo",
-     ".AQPPQQSSa..VRVgo",
-     "..AAPPQaa...VRVgo",
-     "..P..P......vRvgo",
+     ".................",
+     "...........yyy...",
+     "...aaaaa..yYYYH..",
+     ".AAPPSSSaHHHHHHH.",
+     "APPQaaasSowwgwwo.",
+     "APQAPPasSowmgmwo.",
+     "APQAAPsSSaogggo..",
+     "AQPPQQSSa.opmpo..",
+     ".AAPPQaa..VRVgo..",
+     ".P..P.....vRvgo..",
      "oGGGGGGGGGglllgo.",
      ".oGGGGGGGGGGGGo.."
     ]
