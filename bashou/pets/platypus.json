@@ -1,49 +1,52 @@
 {
  "name": "Platypus",
- "lone_pixels": true,
  "palette": {
   "a": "#4a3020",
+  "A": "#5e3e28",
   "o": "#8a5a34",
-  "c": "#b88a5a",
-  "b": "#6a7482",
-  "n": "#20242a",
+  "l": "#a8784a",
+  "s": "#6d4529",
   "m": "#191919",
-  "f": "#6a4a3a",
-  "T": "#5a3a22",
-  "y": "#f5d040"
+  "B": "#76838f",
+  "b": "#55616f",
+  "d": "#3a4250",
+  "t": "#6e5246",
+  "L": "#8e6e5a",
+  "T": "#46322d",
+  "q": "#b8606c"
  },
  "base": [
   ".................",
-  "...y.............",
-  ".............y...",
   ".................",
-  "......aaaaaaa....",
-  ".....aoooooooa...",
-  "bnbbaomoooooooa..",
-  "bbbbaoooooooooaTT",
-  ".bbb.acccccccaTTT",
-  ".....aaoooooaaTT.",
-  "....ff.....ff....",
-  "...fff....fff...."
+  "...........TTT...",
+  "..........TLtLT..",
+  ".........TtLtLtT.",
+  "....AAAAAAAaaTtT.",
+  "...AlllooooosaTT.",
+  "..Alloosooooosa..",
+  "..Alomooooomosa..",
+  "..AooBBBbbbbosa..",
+  ".bb.Bbbbbbbbd.bb.",
+  ".BbB..ddddd..BbB."
  ],
  "poses": {
   "inhale": {
-   "8": "----a------------",
-   "9": "----a------------"
+   "6": "..AlllooooooosaT.",
+   "7": ".Alloosooooooosa.",
+   "8": ".Allomooooomoosa."
   },
   "closed": {
-   "6": "------a----------"
+   "8": "-----a-----a-----"
   },
   "left": {
-   "6": "-----mo----------"
+   "8": "----mo----mo-----"
   },
   "right": {
-   "6": "------om---------"
+   "8": "-----om----om----"
   },
   "fidget": {
-   "0": "---y-------------",
-   "1": "---.----------y--",
-   "2": "-------------.---"
+   "10": "-----qqqqqqq-----",
+   "11": "------bbbbb------"
   }
  },
  "particles": [
