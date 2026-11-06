@@ -1,0 +1,53 @@
+{
+ "name": "Flying squirrel",
+ "palette": {
+  "a": "#6e3719",
+  "o": "#c88040",
+  "c": "#f5d7af",
+  "w": "#ffffff",
+  "m": "#191919",
+  "n": "#3a2014",
+  "p": "#f0a0a0",
+  "t": "#6e4020",
+  "T": "#a86a38"
+ },
+ "base": [
+  ".................",
+  ".................",
+  "....aoa...aoa....",
+  "....aoaaaaaoa....",
+  "...aoooooooooa...",
+  "...aomwooomwoa...",
+  "...aommonommoa...",
+  "aoooacpcccpcaoooa",
+  ".aoooacccccaoooa.",
+  "..aaooacccaooaa..",
+  "....aa.aaa.aa.tTt",
+  "..............tt."
+ ],
+ "poses": {
+  "inhale": {
+   "8": "a---------------a"
+  },
+  "closed": {
+   "5": "-----oo---oo-----",
+   "6": "-----aa---aa-----"
+  },
+  "left": {
+   "5": "----mwo--mwo-----",
+   "6": "----mmo--mmo-----"
+  },
+  "right": {
+   "5": "-----omw--omw----",
+   "6": "-----omm--omm----"
+  },
+  "fidget": {
+   "9": "---------------tt",
+   "11": "--------------..-"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}

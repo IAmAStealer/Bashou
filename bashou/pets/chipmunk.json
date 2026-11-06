@@ -1,37 +1,44 @@
 {
  "name": "Chipmunk",
  "next": "flying_squirrel",
- "next_at": {"achievements": 5},
+ "next_at": {
+  "achievements": 5
+ },
  "palette": {
   "a": "#6e3719",
+  "s": "#a0602e",
   "o": "#c88040",
+  "l": "#dc9a58",
   "c": "#f5d7af",
+  "C": "#dcb88e",
   "n": "#3a2014",
   "m": "#191919",
-  "w": "#fff0dc",
   "t": "#6e4020",
-  "T": "#a86a38"
+  "D": "#8a5530",
+  "T": "#a86a38",
+  "L": "#c48a52",
+  "P": "#b4705c"
  },
  "base": [
   ".................",
   ".................",
-  ".................",
-  ".................",
-  "..aoa.aoa........",
-  ".aowonowoa..tt...",
-  ".aomooomoa.tTTt..",
-  "accconoccca.tTt..",
-  ".acccccccattTt...",
-  "..aocccccoaTt....",
-  "..aoooooooa......",
-  "...aa...aa......."
+  ".............tt..",
+  "............tLLt.",
+  "..ala.aoa...tLTt.",
+  ".alcosocoa..tTTt.",
+  "alomooomosa.tTDt.",
+  "acccoPoccCa.tTDt.",
+  ".accccccCatTDt...",
+  ".aoccccCsatDt....",
+  "..aooossatt......",
+  "..aa...aa........"
  ],
  "poses": {
   "inhale": {
-   "9": "-ao--------------"
+   "10": "-ao--------------"
   },
   "closed": {
-   "6": "---a---a---------"
+   "6": "--aa---aa--------"
   },
   "left": {
    "6": "--mo--mo---------"
@@ -40,8 +47,9 @@
    "6": "---om--om--------"
   },
   "fidget": {
-   "4": "-------------tt--",
-   "5": "------------..---"
+   "2": "-------------.tt.",
+   "3": "------------.tLLt",
+   "4": "------------.tLTt"
   }
  },
  "particles": [

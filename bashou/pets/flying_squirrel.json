@@ -2,52 +2,60 @@
  "name": "Flying squirrel",
  "palette": {
   "a": "#6e3719",
+  "s": "#a0602e",
   "o": "#c88040",
+  "l": "#dc9a58",
   "c": "#f5d7af",
-  "w": "#ffffff",
+  "C": "#dcb88e",
+  "g": "#fff5eb",
   "m": "#191919",
-  "n": "#3a2014",
   "p": "#f0a0a0",
   "t": "#6e4020",
-  "T": "#a86a38"
+  "D": "#8a5530",
+  "T": "#a86a38",
+  "L": "#c48a52",
+  "P": "#b4705c"
  },
  "base": [
-  ".................",
-  ".................",
-  "....aoa...aoa....",
-  "....aoaaaaaoa....",
-  "...aoooooooooa...",
-  "...aomwooomwoa...",
-  "...aommonommoa...",
-  "aoooacpcccpcaoooa",
-  ".aoooacccccaoooa.",
-  "..aaooacccaooaa..",
-  "....aa.aaa.aa.tTt",
-  "..............tt."
+  "............ttt..",
+  "....a......tLLLt.",
+  "...apa....tLLTTTt",
+  "...alpa...tLTTTDt",
+  "..alooa...tTTTDDt",
+  ".alooosa...tTTDt.",
+  "alogmoooaaaatTDt.",
+  "PoommooooooosDDt.",
+  ".acccccccCCsa....",
+  "aloooooooooosa...",
+  ".aooooooooosa....",
+  "..aaaaaaaaaa....."
  ],
  "poses": {
   "inhale": {
-   "8": "a---------------a"
+   "5": "--------aaa------",
+   "6": "--------oooo-----"
   },
   "closed": {
-   "5": "-----oo---oo-----",
-   "6": "-----aa---aa-----"
+   "6": "---oo------------",
+   "7": "---aa------------"
   },
   "left": {
-   "5": "----mwo--mwo-----",
-   "6": "----mmo--mmo-----"
+   "6": "--gmo------------",
+   "7": "--m-o------------"
   },
   "right": {
-   "5": "-----omw--omw----",
-   "6": "-----omm--omm----"
+   "6": "---ogm-----------",
+   "7": "---o-m-----------"
   },
   "fidget": {
-   "9": "---------------tt",
-   "11": "--------------..-"
+   "0": "...........ttt...",
+   "1": "....a.....tLLLt..",
+   "2": "...apa...tLLTTTt.",
+   "3": "...alpa..tLTTTDt."
   }
  },
  "particles": [
   0,
-  14
+  0
  ]
 }
