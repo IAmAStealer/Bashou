@@ -1,53 +1,70 @@
 {
  "name": "Beaver",
  "next": "platypus",
- "next_at": {"achievements": 5},
+ "next_at": {
+  "achievements": 5
+ },
+ "lone_pixels": true,
  "palette": {
   "a": "#462d1e",
-  "o": "#96643c",
-  "c": "#d7b48c",
+  "A": "#5e3e28",
+  "o": "#8a5a34",
+  "l": "#a8784a",
+  "s": "#6d4529",
+  "c": "#b8926a",
+  "C": "#9c7550",
   "n": "#3c231e",
   "w": "#fafaf0",
+  "W": "#d8cdb0",
   "m": "#191919",
-  "p": "#eb8c82",
-  "t": "#5f463c",
-  "T": "#46322d"
+  "g": "#fff5eb",
+  "t": "#6e5246",
+  "T": "#46322d",
+  "L": "#8e6e5a",
+  "b": "#6fb9dc",
+  "S": "#efe8d6"
  },
  "base": [
   ".................",
-  "..aa........aa...",
-  ".aooaaaaaaaaooa..",
-  ".aooooooooooooa..",
-  ".aoomoooooomooa..",
-  ".apooccnnccoopa..",
-  ".aoooccwwccoooa..",
-  ".aooooowwoooooa..",
-  ".aoocccccccoooatt",
-  ".aoocccccccoooaTt",
-  "..aoooooooooaatTt",
-  "...aaa....aaa.tt."
+  "..AA.....aa......",
+  ".AlAAAAAAAoa.....",
+  ".AlogmogmosaTTT..",
+  ".AoommommosaLtLT.",
+  ".AosoooososatTtT.",
+  ".AoccnnnccsaLtLT.",
+  ".AoccwScccsatTtT.",
+  ".AooCwSCCosaLtT..",
+  ".AsooCCooosaTT...",
+  "..Aoocccoosa.....",
+  "...AAa..aaa......"
  ],
  "poses": {
   "inhale": {
-   "8": "ao---------------",
-   "9": "ao---------------"
+   "10": "-Ao--------sa----"
   },
   "closed": {
-   "4": "----o------o-----",
-   "5": "----a------a-----"
+   "3": "----oo-oo--------",
+   "4": "----aa-aa--------"
   },
   "left": {
-   "4": "---mo-----mo-----"
+   "3": "---gmogmo--------",
+   "4": "---mmommo--------"
   },
   "right": {
-   "4": "----om-----om----"
+   "3": "----ogmogm-------",
+   "4": "----ommomm-------"
   },
   "fidget": {
-   "7": "---------------.-",
-   "8": "---------------..",
-   "9": "---------------..",
-   "10": "---------------tT",
-   "11": "---------------tt"
+   "2": "------------.....",
+   "3": "------------.....",
+   "4": "------------.b...",
+   "5": "------------...b.",
+   "6": "------------b.b..",
+   "7": "------------.....",
+   "8": "------------TTT..",
+   "9": "------------LtLT.",
+   "10": "-----------atTtT.",
+   "11": "------------TTT.."
   }
  },
  "particles": [
