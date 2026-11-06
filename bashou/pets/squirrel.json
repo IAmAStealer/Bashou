@@ -1,51 +1,60 @@
 {
  "name": "Red squirrel",
  "next": "chipmunk",
- "next_at": {"achievements": 3},
+ "next_at": {
+  "achievements": 3
+ },
  "palette": {
   "a": "#6e3719",
+  "s": "#a8502a",
   "o": "#cd6e32",
+  "l": "#e3904a",
   "c": "#f5d7af",
+  "C": "#dcb88e",
   "n": "#50281e",
   "m": "#191919",
   "t": "#82411e",
+  "D": "#c0642e",
   "T": "#e1823c",
-  "y": "#966437"
+  "L": "#f0a05a",
+  "k": "#5e4630",
+  "K": "#7a5c3e",
+  "y": "#9a6a36",
+  "Y": "#b8844a"
  },
  "base": [
   ".................",
   "...a...a....ttt..",
-  "..aoa.aoa..tTTTt.",
-  "..aoooooa.tTTTTt.",
-  ".aomoooomatTTTt..",
-  ".aooonnooatTTt...",
-  "..acccccatTTTt...",
-  ".aoccccccaTTTt...",
-  ".aocyyyycaTTt....",
-  ".aoccyyccoaTt....",
-  "..aoooooooat.....",
-  "...aa...aa......."
+  "..ala.aoa...tLLTt",
+  ".alloooosa.tLTTTt",
+  "alomooomosatTTTt.",
+  "aooocncoosatTTt..",
+  ".aocccccsatTTTt..",
+  "..aoKkksatTTDt...",
+  ".aolYyyosaTDt....",
+  ".aoccycCsaDt.....",
+  ".aooccCssat......",
+  "..aa...aa........"
  ],
  "poses": {
   "inhale": {
-   "7": "a----------------",
-   "8": "a----------------",
-   "9": "a----------------"
+   "9": "ao---------------",
+   "10": "ao---------------"
   },
   "closed": {
-   "4": "---o----o--------",
-   "5": "---a-------------"
+   "4": "--aa---aa--------"
   },
   "left": {
-   "4": "--mo---m---------"
+   "4": "--mo--mo---------"
   },
   "right": {
    "4": "---om--om--------"
   },
   "fidget": {
-   "1": "-----------.ttt--",
-   "2": "---------------T-",
-   "3": "----------------t"
+   "0": "------------tt---",
+   "1": "-----------tLLt--",
+   "2": "-----------tLTTt.",
+   "3": "-----------tTTTt."
   }
  },
  "particles": [

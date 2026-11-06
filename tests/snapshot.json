@@ -7271,27 +7271,35 @@
    "squirrel": {
     "palette": {
      "a": "#6e3719",
+     "s": "#a8502a",
      "o": "#cd6e32",
+     "l": "#e3904a",
      "c": "#f5d7af",
+     "C": "#dcb88e",
      "n": "#50281e",
      "m": "#191919",
      "t": "#82411e",
+     "D": "#c0642e",
      "T": "#e1823c",
-     "y": "#966437"
+     "L": "#f0a05a",
+     "k": "#5e4630",
+     "K": "#7a5c3e",
+     "y": "#9a6a36",
+     "Y": "#b8844a"
     },
     "base": [
      ".................",
      "...a...a....ttt..",
-     "..aoa.aoa..tTTTt.",
-     "..aoooooa.tTTTTt.",
-     ".aomoooomatTTTt..",
-     ".aooonnooatTTt...",
-     "..acccccatTTTt...",
-     ".aoccccccaTTTt...",
-     ".aocyyyycaTTt....",
-     ".aoccyyccoaTt....",
-     "..aoooooooat.....",
-     "...aa...aa......."
+     "..ala.aoa...tLLTt",
+     ".alloooosa.tLTTTt",
+     "alomooomosatTTTt.",
+     "aooocncoosatTTt..",
+     ".aocccccsatTTTt..",
+     "..aoKkksatTTDt...",
+     ".aolYyyosaTDt....",
+     ".aoccycCsaDt.....",
+     ".aooccCssat......",
+     "..aa...aa........"
     ]
    },
    "chipmunk": {
