@@ -3,64 +3,57 @@
  "palette": {
   "w": "#f5f1e4",
   "W": "#d3cebf",
-  "g": "#918c82",
+  "g": "#a39e93",
+  "G": "#6e6a62",
   "k": "#3a3843",
   "K": "#5a5664",
   "d": "#26242d",
-  "E": "#ff5a3c",
-  "r": "#b82a2e",
-  "t": "#eadfc6",
-  "p": "#a02c3c",
-  "c": "#cbb27a",
-  "C": "#8f7846"
+  "m": "#191919",
+  "r": "#c8323a",
+  "p": "#6e1a24",
+  "t": "#fbf6e6",
+  "e": "#5e2a2e"
  },
  "base": [
-  "...............gg",
-  ".........gggg..gW",
-  ".......ggwwwwgggW",
-  ".....ggwwwwWWWWWg",
-  "...ggwwwwWWWgWggK",
-  "..gwwwwWWggggkkkK",
-  ".KkgwWWgkkKkkkkkK",
-  "KkrkkkkrkkdkkkkKd",
-  "kkkEkkEkkkdkkkkd.",
-  ".kkkKdkkdkKkdKkd.",
-  "..dtppptd.Kk.Kk..",
-  "...dtttd.cCc.cCc."
+  ".gWg.........gWg.",
+  "gWkdKkkwwWkkkdkWg",
+  "dkkKkkkwwWkkkkkkd",
+  "gwkkkkkwwWkkkkkWg",
+  "gwwkgkkwwWkkgkWWg",
+  "gwwkkgWwwWWgkkWWg",
+  "gwwkwekwwWkwekWWg",
+  ".gwkeekwwWkeekWg.",
+  "..gwkkkwwWkkkWg..",
+  "...gkkkwwWkkkg...",
+  "....dkkmKmkkd....",
+  "......dtrtd......"
  ],
  "poses": {
   "inhale": {
-   "0": "----------ggg----",
-   "1": "----------wwwg---"
+   "8": ".gwwkkkwwWkkkWWg."
   },
   "closed": {
-   "7": "--K----K---------",
-   "8": "---K--K----------"
+   "6": "----kk-----kk----",
+   "7": "----KK-----KK----"
   },
   "left": {
-   "7": "-rk---rk---------",
-   "8": "--Ek-Ek----------"
+   "6": "---wek----wek----",
+   "7": "---eek----eek----"
   },
   "right": {
-   "7": "--kr---kr--------",
-   "8": "---kE-kE---------"
+   "6": "----kwe----kwe---",
+   "7": "----kee----kee---"
   },
   "fidget": {
-   "5": "--.g-------------",
-   "6": "-..KkgwWg-k------",
-   "7": "..K-r--k-rk-d----",
-   "8": "..-k-Ek-E-k-d----",
-   "9": "W..-kkKdk-dKkdK--",
-   "10": "-g..dt-pptd------",
-   "11": "---..d-ttdcC-----"
-  },
-  "closed+fidget": {
-   "7": "----K----K-------",
-   "8": "-----K--K--------"
+   "0": ".................",
+   "1": ".gWdKkkwwWkkkdWg.",
+   "9": "...gkKkwwWkKkg...",
+   "10": "....dpkmKmkpd....",
+   "11": ".....dtrrrtd....."
   }
  },
  "particles": [
-  0,
-  0
+  5,
+  14
  ]
 }
