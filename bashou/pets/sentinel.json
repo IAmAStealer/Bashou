@@ -1,53 +1,70 @@
 {
  "name": "Sentinel",
+ "particles": [0, 14],
  "palette": {
   "a": "#6e5032",
+  "d": "#4a3226",
+  "k": "#3e2a22",
+  "L": "#dcb47c",
   "o": "#c8a06e",
+  "s": "#a07852",
   "c": "#f0d7af",
+  "e": "#d6b48a",
   "n": "#32231e",
   "m": "#191919",
-  "s": "#c83a3a",
-  "B": "#3a3a44",
-  "L": "#9ad0ff",
-  "R": "#6a6a70",
-  "r": "#8a8a90"
+  "g": "#fff5eb",
+  "q": "#e8644c",
+  "r": "#c83a3a",
+  "R": "#922a3c",
+  "W": "#b0aea8",
+  "x": "#8a8a90",
+  "X": "#6a6a72",
+  "G": "#4c4a56"
  },
  "base": [
-  "......aaaa.......",
-  ".....aoooooa.....",
-  "....anmooomna....",
-  "....aoooooooa....",
-  ".....aocnnca.....",
-  "......assssa.....",
-  ".....aoccccoa....",
-  "....aooccccooa...",
-  ".....aoccccoa....",
-  ".....aoooooa.....",
-  "..RRRRRRRRRRRRR..",
-  ".RRrrrrrrrrrrrRR."
+  ".................",
+  ".......aaaa......",
+  "......aLLooodd...",
+  "...aaLLkgmooosa..",
+  "..nLLLokmmooosa..",
+  "...aacccckoooa...",
+  ".....aqrrrrRRaR..",
+  "....aLoooooossaR.",
+  "....s.acccoossa..",
+  ".....acceeoossa..",
+  "..XWWaaaaxaaaasdd",
+  ".XWxxxxxxxxxxXXG."
  ],
  "poses": {
   "inhale": {
-   "7": "---a----------a--"
+   "8": "-----ac----------"
   },
   "closed": {
-   "2": "------n---n------"
+   "3": "--------Lo-------",
+   "4": "--------kk-------"
   },
   "left": {
-   "2": "-----mo--mo------"
+   "3": "------kgmo-------",
+   "4": "------km-o-------"
   },
   "right": {
-   "2": "------om--om-----"
+   "3": "-------Lkgm------",
+   "4": "-------ok-m------"
   },
   "fidget": {
-   "1": "-----BB---BB-----",
-   "2": "-----BLBBBLB-----",
-   "3": "-----c-----c-----",
-   "7": "---..a------a..--"
+   "0": "-------aaaa------",
+   "1": "------aLLooodd---",
+   "2": "---aaLL-kgm-osa--",
+   "3": "--nLL-ook-m------",
+   "4": "--.aacccck---a.--",
+   "5": "---..aqrrrrRR-R--",
+   "6": "------Lcccoos----",
+   "7": "---------------.-"
+  },
+  "inhale+fidget": {},
+  "closed+fidget": {
+   "2": "--------Lo-------",
+   "3": "---------k-------"
   }
- },
- "particles": [
-  0,
-  14
- ]
+ }
 }
