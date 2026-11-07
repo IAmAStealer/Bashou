@@ -1,0 +1,49 @@
+{
+ "name": "Leviathan",
+ "palette": {
+  "a": "#102440",
+  "o": "#2a5a90",
+  "s": "#4a8ac0",
+  "y": "#7ff0ff",
+  "t": "#0a0a14",
+  "w": "#e8f0f0",
+  "W": "#1a3a6a",
+  "F": "#a8d8f0"
+ },
+ "base": [
+  "..........s.s.s..",
+  ".........aaaaaaa.",
+  "........aooooyoa.",
+  ".......awwoooooa.",
+  ".......atttaoooa.",
+  "........aaaooooa.",
+  "..s.s......aooa..",
+  ".sasas.....aooa..",
+  "aooooooa..aooa...",
+  "FWWWFWWWFWWWFWWWF",
+  "WWWWWWWWWWWWWWWWW",
+  ".WWWWWWWWWWWWWWW."
+ ],
+ "poses": {
+  "inhale": {
+   "9": "-F--WF--WF--WF--W"
+  },
+  "closed": {
+   "2": "-------------a---"
+  },
+  "left": {
+   "2": "------------yo---"
+  },
+  "right": {
+   "2": "-------------oy--"
+  },
+  "fidget": {
+   "3": "--------ao-------",
+   "4": "--------.aa------"
+  }
+ },
+ "particles": [
+  0,
+  6
+ ]
+}
