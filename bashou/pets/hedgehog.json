@@ -1,53 +1,57 @@
 {
  "name": "Hedgehog",
- "next": "porcupine",
- "next_at": {"achievements": 5},
  "palette": {
+  "Q": "#efe2c6",
+  "L": "#a6886a",
   "s": "#5f4b41",
-  "S": "#967d69",
+  "d": "#3e302f",
+  "C": "#f7e4c4",
   "c": "#ebcdaa",
+  "F": "#c49e86",
+  "n": "#2b2020",
   "m": "#191919",
-  "n": "#281e1e",
+  "g": "#fff5e6",
   "p": "#f09696",
   "a": "#b48c6e"
  },
  "base": [
   ".................",
-  ".....s.s.s.......",
-  "...s.sssssss.s...",
-  "..sssSsSsSsssss..",
-  ".ssSsSsSsSsSsss..",
-  ".sssssssssssssss.",
-  "sccmcccsSsSsSsss.",
-  "ccccccccssssssss.",
-  "nccpcccsSsSsSsss.",
-  ".ccccccsssssssss.",
-  "..cccccccccccc...",
+  "........Q..Q..Q..",
+  "......sLssLssLs..",
+  "....ssLssLssLssL.",
+  "...ssLssLssLssLs.",
+  "..CCcssLssLssLddQ",
+  ".CCcccLssLsssdds.",
+  "CCcgmccsLsdsddsd.",
+  "cccmmccLddsddsdd.",
+  "ncpcccFddsddsdd..",
+  ".cccFFFFFFFFFFF..",
   "...aa......aa...."
  ],
  "poses": {
   "inhale": {
-   "4": "----------------s",
-   "5": "s----------------"
+   "2": ".....s---------s."
   },
   "closed": {
-   "6": "---c-------------",
-   "7": "---s-------------"
+   "7": "---cc------------",
+   "8": "---dd------------"
   },
   "left": {
-   "6": "--mc-------------"
+   "7": "--gmc------------",
+   "8": "--mmc------------"
   },
   "right": {
-   "6": "---cm------------"
+   "7": "---cgm-----------",
+   "8": "---cmm-----------"
   },
   "fidget": {
-   "1": "-----.-.-.-------",
-   "2": "---.---------.---",
-   "3": "---s-------------"
+   "0": "........Q..Q..Q..",
+   "1": ".....Q..L..L..L..",
+   "2": "----------------Q",
+   "4": "----------------Q"
   }
  },
- "particles": [
-  0,
-  13
- ]
+ "next": "porcupine",
+ "next_at": {"achievements": 5},
+ "particles": [0, 0]
 }
