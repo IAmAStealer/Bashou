@@ -2,33 +2,38 @@
  "name": "Pigeon",
  "next": "messenger",
  "next_at": {"achievements": 5},
+ "particles": [0, 13],
  "palette": {
   "a": "#464b5f",
+  "w": "#c3c8d4",
   "o": "#9196aa",
+  "s": "#6f7489",
+  "d": "#505569",
+  "G": "#8ad0b0",
   "g": "#5aa08c",
   "p": "#aa6eaa",
-  "w": "#c8cdd7",
+  "P": "#7e4c86",
   "m": "#e66e28",
   "y": "#f0aa50"
  },
  "base": [
   ".................",
   ".....aaaa........",
-  "....aooooa.......",
-  "...aoomoooa......",
-  ".yyaooooooa......",
-  "..yyaggggoa......",
-  "....agpgpgoaa....",
-  "...aooooooooaa...",
-  "..aoowwooowwooa..",
-  "..aoooooooooooa..",
-  "...aaooooooaa....",
+  "....awwooa.......",
+  "...awomoosa......",
+  ".yyaooooosa......",
+  "..yyaGgggsa......",
+  "....agpppPsaa....",
+  "...aowwwwoosaa...",
+  "..awoooodddoosa..",
+  "..aoooooodddssa..",
+  "...aassssssaa....",
   ".....y....y......"
  ],
  "poses": {
   "inhale": {
-   "8": "-a-------------a-",
-   "9": "-a-------------a-"
+   "6": "---ag------------",
+   "7": "--ao-------------"
   },
   "closed": {
    "3": "------a----------"
@@ -40,13 +45,21 @@
    "3": "------om---------"
   },
   "fidget": {
-   "3": "-yy--------------",
-   "4": "-..y-------------",
-   "5": "--..-------------"
+   "1": "----a---.--------",
+   "2": "---aw-o-a.-------",
+   "3": "--awomo-sa.------",
+   "4": "y-ao----sa.------",
+   "5": "-y-aGg--sa.------",
+   "6": "----------a------"
+  },
+  "closed+fidget": {
+   "3": "-----a-----------"
+  },
+  "inhale+fidget": {
+
+  },
+  "inhale+closed+fidget": {
+
   }
- },
- "particles": [
-  0,
-  13
- ]
+ }
 }

@@ -1,52 +1,54 @@
 {
  "name": "Albatross",
  "symmetric": true,
- "particles": [
-  0,
-  13
- ],
+ "particles": [0, 13],
  "palette": {
   "k": "#3a3f4f",
   "w": "#f4f4f0",
   "W": "#d0d4dc",
-  "d": "#4a4a58",
-  "D": "#2e2e3a",
+  "V": "#a9afbf",
+  "l": "#86828f",
+  "d": "#57535f",
+  "D": "#3b3842",
   "y": "#f0c060",
   "Y": "#d08a40",
   "m": "#191919",
-  "r": "#c83a3a"
+  "h": "#e0604e",
+  "r": "#c83a3a",
+  "R": "#8a2020"
  },
  "base": [
   "......kkkkk......",
-  ".....kwwwwwk.....",
-  "....kwmwwwmwk....",
-  "....kwwyyywwk....",
-  "dd...kwwYwwk...dd",
-  "dDdd.kwwwwwk.ddDd",
-  ".dDddkwwwwwkddDd.",
-  "..dDdkwrrrwkdDd..",
-  "...dDkWwwwWkDd...",
-  "....dkWWwWWkd....",
-  "......kWWWk......",
+  "....kkwwwwwkk....",
+  "...kwwmwwwmwwk...",
+  "...kwwwyyYwwwk...",
+  "ll..kwwwYwwWk..ll",
+  "dDll.kwwwwWk.llDd",
+  ".dDdlkwwwwWkldDd.",
+  "..dDdkhrrrRkdDd..",
+  "...dDkwwwwWkDd...",
+  "....dkWwwWVkd....",
+  "......kWWVk......",
   ".....yy...yy....."
  ],
  "poses": {
   "inhale": {
-   "6": "ddDdd-------ddDdd"
+   "6": "d---------------d"
   },
   "closed": {
    "2": "------k---k------"
   },
   "left": {
-   "3": "------yyyw-------"
+   "2": "-----mw--mw------"
   },
   "right": {
-   "3": "-------wyyy------"
+   "2": "------wm--wm-----"
   },
   "fidget": {
-   "3": "dd-------------dd",
-   "4": "dD-------------Dd",
-   "5": "-.dd---------dd.-"
+   "2": "---------------ll",
+   "3": "---------------lD",
+   "4": "--------------lDd",
+   "5": "--------------d--"
   }
  }
 }
