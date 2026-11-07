@@ -1,52 +1,63 @@
 {
  "name": "Queen bee",
- "lone_pixels": true,
  "palette": {
-  "a": "#32281e",
+  "a": "#2e2219",
+  "k": "#45362a",
+  "l": "#6e5a40",
+  "O": "#b87a1e",
+  "S": "#94591a",
+  "Y": "#ffe486",
   "o": "#fac83c",
-  "k": "#3c3228",
-  "w": "#d7ebfa",
-  "m": "#191919",
+  "s": "#de9a2a",
   "p": "#f08c78",
-  "y": "#e8a020"
+  "v": "#8fb0cc",
+  "b": "#d4e8f8",
+  "B": "#f4faff",
+  "m": "#191919",
+  "g": "#fff5eb",
+  "C": "#ffe07a",
+  "G": "#e8a020",
+  "E": "#a8640e",
+  "r": "#e04a5a"
  },
  "base": [
-  "...a.........a...",
-  "....ay.y.ya......",
-  ".....yyyyy.......",
-  "..wwwaaaaawww....",
-  ".wwwaooooowwww...",
-  "...aomooomoa.....",
-  "..aoopooopooa....",
-  ".akkkkkkkkkkka...",
-  ".aoooooooooooa...",
-  ".akkkkkkkkkkka...",
-  "..aoooooooooa....",
-  "...aaaaaaaaa....."
+  "a.........vvv....",
+  "a.C.C.G..vBBbv...",
+  ".aCGrGE.vBBbbv...",
+  "..OOOS..vBbbv....",
+  ".OYYoS.OYlvvlO...",
+  "OYogmosYYkYYkYO..",
+  "OoommosookookoOl.",
+  ".OpooSSsokoskosk.",
+  "..SSS..Sskssksska",
+  ".......SskssksSa.",
+  ".......aSaSSaS...",
+  "......a.a........"
  ],
  "poses": {
   "inhale": {
-   "7": "a-------------a--",
-   "8": "a-------------a--"
+   "9": "--------------sa.",
+   "10": "-------------sS.."
   },
   "closed": {
-   "5": "-----o---o-------",
-   "6": "-----a---a-------"
+   "5": "---oo------------",
+   "6": "---aa------------"
   },
   "left": {
-   "5": "----mo--mo-------"
+   "5": "--gmo------------",
+   "6": "--mmo------------"
   },
   "right": {
-   "5": "-----om--om------"
+   "5": "---ogm-----------",
+   "6": "---omm-----------"
   },
   "fidget": {
-   "2": "---ww-----ww-----",
-   "3": "--.---------.----",
-   "4": "-.-----------.---"
+   "0": "a................",
+   "1": "a.C.C.G..........",
+   "2": ".aCGrGE.vvvvv....",
+   "3": "..OOOS.vBBBbbvvv.",
+   "4": "-------Ovbbbbbbbv"
   }
  },
- "particles": [
-  0,
-  14
- ]
+ "particles": [0, 14]
 }
