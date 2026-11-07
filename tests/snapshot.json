@@ -7367,26 +7367,30 @@
    },
    "squab": {
     "palette": {
-     "a": "#8a7a50",
-     "o": "#e8d890",
-     "f": "#fff4c0",
-     "y": "#f0aa50",
+     "l": "#b8902e",
+     "k": "#8f6626",
+     "K": "#6e4a26",
+     "f": "#fff6b4",
+     "y": "#ffd83c",
+     "s": "#f0ac2c",
+     "o": "#f5922a",
+     "O": "#d26a1e",
      "m": "#191919",
-     "Y": "#c47a2c"
+     "g": "#fff5eb"
     },
     "base": [
      ".................",
      ".................",
      ".................",
-     ".................",
-     ".....aaaa........",
-     "....aooooa.......",
-     "...aoomoooa......",
-     ".yyaoooooooa.....",
-     "..yyaoooooooaa...",
-     "....aooffooooa...",
-     "....aaoooooaa....",
-     "......y...y......"
+     "......lllkk......",
+     "....lffyyyyyk....",
+     "...lygmyyygmsk...",
+     "...lymmyyymmsk...",
+     "..kysyyoooyssyK..",
+     "..kysyyyOyysssK..",
+     "....kyyyysssK....",
+     ".....kkKKKKK.....",
+     "......oO.oO......"
     ]
    },
    "pigeon": {
