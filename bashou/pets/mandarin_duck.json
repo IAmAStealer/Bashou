@@ -1,45 +1,56 @@
 {
  "name": "Mandarin duck",
  "palette": {
-  "k": "#3b3b44",
+  "k": "#4a4856",
+  "E": "#4b3358",
+  "e": "#6b4f33",
+  "C": "#43817a",
   "c": "#2f5e5a",
-  "f": "#f3d7a0",
+  "x": "#234745",
+  "f": "#f0c078",
   "W": "#f6f3ea",
+  "S": "#f59a45",
   "s": "#e8772e",
+  "T": "#b9561f",
+  "p": "#8b5e9e",
   "P": "#6b3f7a",
+  "u": "#4e2d5c",
+  "B": "#dcbc86",
   "b": "#c9a26a",
   "d": "#a88450",
   "o": "#f08a24",
   "r": "#d8322a",
   "R": "#9e1f1a",
-  "m": "#141414"
+  "m": "#191919"
  },
  "base": [
   "....kkkkk........",
-  "...kfcccck.......",
-  "..kffccccck......",
-  "..kWmWWWWWk......",
-  "rrrrrffsssk......",
-  ".RRRkssssskkk....",
-  "...kPPbbbsssk..k.",
-  "..kPPPbbbssssksk.",
-  "..kPPPbkkkkbbbbk.",
-  "..kPPPbbbbkkbbk..",
-  "...kddbbbbbbdk...",
-  "....kook.kook...."
+  "...kfCCcck.......",
+  "..kffCCccxk......",
+  "..kWWmWWWWk......",
+  "rrrrrffSsTk......",
+  ".RRRkSSssTkkk....",
+  "...EpPBBbSsTe..e.",
+  "..EpPPBbbSssTese.",
+  "..EPPubeeeebbdde.",
+  "..EPuubbbbeedde..",
+  "...eddbbbdddde...",
+  "....eooe.eooe...."
  ],
  "poses": {
   "inhale": {
-   "8": "-kP------------bk"
+   "8": "-EP--------------",
+   "9": "-EP-----------de-",
+   "10": "--ed---------de--"
   },
   "closed": {
-   "3": "----W------------"
+   "3": "-----d-----------"
   },
   "left": {
-   "3": "---mW------------"
+   "3": "----mW-----------"
   },
   "right": {
-   "3": "----Wm-----------"
+   "3": "-----Wm----------"
   },
   "fidget": {
    "5": "-..--------------",

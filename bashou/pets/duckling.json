@@ -1,35 +1,43 @@
 {
  "name": "Duckling",
  "next": "duck",
- "next_at": {"achievements": 3},
+ "next_at": {
+  "achievements": 3
+ },
  "palette": {
   "k": "#8a6a20",
+  "K": "#6c4e18",
   "y": "#ffe066",
+  "l": "#fff2a8",
   "Y": "#f2c230",
+  "D": "#d99a22",
   "o": "#f08a24",
-  "m": "#141414",
-  "O": "#c9731a"
+  "O": "#c9731a",
+  "m": "#191919"
  },
  "base": [
   ".................",
   ".................",
   "....kkkk.........",
-  "...kyyyyk........",
-  "..kyymyyyk.......",
-  "oookyyyyyk.......",
-  ".OOkyyyyk........",
-  "...kyyyyykkk.....",
-  "..kyyyYYyyyyk....",
-  "..kyyyYYYyyyk....",
-  "...kkyyyyykk.....",
-  ".....ok..ok......"
+  "...kllyyK........",
+  "..klymyyYK.......",
+  "oookyyyyYK.......",
+  ".OOkyyyYK........",
+  "...kyyyyYKKK.....",
+  "..klyyYYyyyYK....",
+  "..kyyyYYYyyYK....",
+  "...KKyyYYYKK.....",
+  ".....oK..oK......"
  ],
  "poses": {
   "inhale": {
-   "8": ".kyyyYYyyyyyk...."
+   "7": "..ky-------------",
+   "8": ".kly-------------",
+   "9": ".ky--------------",
+   "10": "..KKy------------"
   },
   "closed": {
-   "4": "-----Y-----------"
+   "4": "-----D-----------"
   },
   "left": {
    "4": "----my-----------"

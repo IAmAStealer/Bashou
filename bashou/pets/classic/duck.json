@@ -1,0 +1,52 @@
+{
+ "name": "Duck",
+ "palette": {
+  "k": "#3b3b44",
+  "g": "#2f8a55",
+  "c": "#f4f4f4",
+  "B": "#8a5234",
+  "b": "#b8a48c",
+  "d": "#8c7a66",
+  "o": "#f08a24",
+  "m": "#141414",
+  "y": "#f5b83a",
+  "Y": "#d98f1c"
+ },
+ "base": [
+  "....kkkkk........",
+  "...kgggggk.......",
+  "..kgggggggk......",
+  "..kgmgggggk......",
+  "yyyyygggggk......",
+  ".YYYkccccckkk....",
+  "...kBBbbbbbbk..k.",
+  "..kBBBbbbbbbbkbk.",
+  "..kBBBbkkkkbbbbk.",
+  "..kBBBbbbbkkbbk..",
+  "...kddbbbbbbdk...",
+  "....kook.kook...."
+ ],
+ "poses": {
+  "inhale": {
+   "8": "-kB------------bk"
+  },
+  "closed": {
+   "3": "----g------------"
+  },
+  "left": {
+   "3": "---mg------------"
+  },
+  "right": {
+   "3": "----gm-----------"
+  },
+  "fidget": {
+   "5": "-..--------------",
+   "6": "--Y--------------",
+   "7": "-Y---------------"
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}

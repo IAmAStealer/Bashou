@@ -1,43 +1,50 @@
 {
  "name": "White duck",
  "next": "mandarin_duck",
- "next_at": {"achievements": 8},
+ "next_at": {
+  "achievements": 8
+ },
  "palette": {
   "k": "#4a4d57",
   "w": "#f8f8f4",
   "g": "#d6dbe0",
-  "p": "#f7b5c4",
+  "G": "#aab2be",
+  "v": "#8b94a3",
+  "p": "#f2a0b4",
   "o": "#f5a623",
-  "m": "#141414",
-  "y": "#f5b83a",
+  "O": "#d4881c",
+  "m": "#191919",
+  "y": "#efa72e",
   "Y": "#d98f1c"
  },
  "base": [
   "....kkkkk........",
-  "...kwwwwwk.......",
-  "..kwwwwwwwk......",
-  "..kwmwwwwwk......",
-  "yyyyypwwwwk......",
-  ".YYYkwwwwwkkk....",
-  "...kwwwwwwwwk..k.",
-  "..kwwwwwwwwwwkwk.",
-  "..kwwwwkkkkwwwwk.",
-  "..kwwwwwwwkkwwk..",
-  "...kggwwwwwwgk...",
-  "....kook.kook...."
+  "...kwwwwgk.......",
+  "..kwwwwwwgk......",
+  "..kwwmwwwgk......",
+  "yyyyypwwggk......",
+  ".YYYkwwwggkkk....",
+  "...kwwwwwwggk..k.",
+  "..kwwwwwwwwggkwk.",
+  "..kwwwwvvvvwwgGk.",
+  "..kwwwwwwwvvgGk..",
+  "...kggwwwgggGk...",
+  "....koOk.koOk...."
  ],
  "poses": {
   "inhale": {
-   "8": "-kw------------wk"
+   "8": "-kw--------------",
+   "9": "-kw-----------Gk-",
+   "10": "--kg---------Gk--"
   },
   "closed": {
-   "3": "----w------------"
+   "3": "-----G-----------"
   },
   "left": {
-   "3": "---mw------------"
+   "3": "----mw-----------"
   },
   "right": {
-   "3": "----wm-----------"
+   "3": "-----wm----------"
   },
   "fidget": {
    "5": "-..--------------",

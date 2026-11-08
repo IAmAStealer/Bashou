@@ -1,45 +1,60 @@
 {
  "name": "Duck",
  "next": "white_duck",
- "next_at": {"achievements": 5},
+ "next_at": {
+  "achievements": 5
+ },
  "palette": {
-  "k": "#3b3b44",
+  "A": "#2a6246",
+  "H": "#1e4c38",
+  "G": "#45a86c",
   "g": "#2f8a55",
+  "h": "#21694a",
   "c": "#f4f4f4",
+  "C": "#cdd2dc",
+  "E": "#5e3724",
+  "Q": "#a96a3f",
   "B": "#8a5234",
+  "X": "#663b2b",
+  "k": "#5b4939",
+  "l": "#cfbda3",
   "b": "#b8a48c",
   "d": "#8c7a66",
+  "D": "#6f6050",
+  "y": "#efa72e",
+  "Y": "#d98f1c",
   "o": "#f08a24",
-  "m": "#141414",
-  "y": "#f5b83a",
-  "Y": "#d98f1c"
+  "O": "#c9731a",
+  "m": "#191919"
  },
  "base": [
-  "....kkkkk........",
-  "...kgggggk.......",
-  "..kgggggggk......",
-  "..kgmgggggk......",
-  "yyyyygggggk......",
-  ".YYYkccccckkk....",
-  "...kBBbbbbbbk..k.",
-  "..kBBBbbbbbbbkbk.",
-  "..kBBBbkkkkbbbbk.",
-  "..kBBBbbbbkkbbk..",
-  "...kddbbbbbbdk...",
-  "....kook.kook...."
+  "....AAAAH........",
+  "...AGGgghH.......",
+  "..AGGgggghH......",
+  "..AGGmggghH......",
+  "yyyyyggghhH......",
+  ".YYYEccccCkkk....",
+  "...EQBllbbbbk..k.",
+  "..EQBBlbbbbbdkbk.",
+  "..EBBXbDDDDbbddk.",
+  "..EBXXbbbbDDddk..",
+  "...kddbbddddDk...",
+  "....koOk.koOk...."
  ],
  "poses": {
   "inhale": {
-   "8": "-kB------------bk"
+   "8": "-EB--------------",
+   "9": "-EB-----------dk-",
+   "10": "--kd---------Dk--"
   },
   "closed": {
-   "3": "----g------------"
+   "3": "-----h-----------"
   },
   "left": {
-   "3": "---mg------------"
+   "3": "----mg-----------"
   },
   "right": {
-   "3": "----gm-----------"
+   "3": "-----gm----------"
   },
   "fidget": {
    "5": "-..--------------",
