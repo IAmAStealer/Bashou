@@ -7947,28 +7947,30 @@
    "yeti": {
     "palette": {
      "a": "#4f5d7e",
+     "A": "#3f4b68",
+     "l": "#f4f7fc",
      "o": "#dde7f6",
-     "w": "#f7f8fb",
-     "s": "#7488b5",
-     "f": "#8fa8d8",
-     "e": "#7ff0ff",
-     "m": "#1e1e24",
+     "s": "#aebfdc",
+     "f": "#7f9ad0",
+     "F": "#6580b5",
+     "m": "#191919",
+     "g": "#e6eeff",
      "t": "#ffffff",
-     "x": "#bfe9ff"
+     "r": "#2c2a3c"
     },
     "base": [
-     ".....aaaaaaa.....",
-     "...aaowwwwwoaa...",
-     "..aowwoooooowoa..",
-     ".aoofffffffffooa.",
-     ".aoffemfffmeffoa.",
-     "aaoffffaaaffffoaa",
-     "aosofmtttttmfosoa",
-     "aosoosooooosoosoa",
-     "aowwooooooooowwoa",
-     ".aoxoooooooooxoa.",
-     ".aoooa.....aoooa.",
-     ".aaaaa.....aaaaa."
+     "......aa.aa......",
+     ".....alooosa.....",
+     "...aaloffFosaa...",
+     "..aloffmfmfFosa..",
+     ".alooffmfmfFossa.",
+     "alooofFFFFFFosssa",
+     "aloosrtrrrtrsossa",
+     ".aosaoFFFFFoasoa.",
+     "aoosaollooosasosa",
+     "alosaoloooosaosoa",
+     ".aooaoosaoosaooa.",
+     ".aaa.aaaaaaa.aaa."
     ]
    },
    "duckling": {
