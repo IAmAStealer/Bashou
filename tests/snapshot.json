@@ -7863,27 +7863,31 @@
    },
    "snow_cub": {
     "palette": {
-     "a": "#5b6070",
-     "o": "#d7dbe3",
-     "w": "#f7f8fb",
-     "s": "#6e7384",
-     "e": "#8fcab8",
-     "m": "#1e1e24",
-     "p": "#d98c8c"
+     "a": "#2f3340",
+     "A": "#262a35",
+     "o": "#dbdfe7",
+     "l": "#f4f5f8",
+     "s": "#aeb5c6",
+     "w": "#fbf7f0",
+     "r": "#5a6072",
+     "m": "#191919",
+     "p": "#d98c8c",
+     "c": "#8d95a8",
+     "q": "#e3a6a6"
     },
     "base": [
      ".................",
      ".................",
-     ".aa...aa.........",
-     "aoaaaaaoa........",
-     "aooosoooa........",
-     "aemeoemea........",
-     "aooopoooa..aa....",
-     ".awwawwa..assa...",
-     ".aosoosa..aooa...",
-     "aoossosoa.asoa...",
-     "awwoooowwaaooa...",
-     ".aaaaaaaaaaaaa..."
+     "..a.......a......",
+     ".asa.....asa.....",
+     ".aoaaaaaaaoa.....",
+     ".aoooorooooa.....",
+     ".aoomooomooaaa...",
+     ".aoomooomooaolA..",
+     ".aowwwpwwwoaccsA.",
+     "..aaaaaaaaaoorrA.",
+     "...aowwoollllrrA.",
+     "...aaaaaaaaaaaA.."
     ]
    },
    "snow_leopard": {
