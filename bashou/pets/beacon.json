@@ -1,49 +1,60 @@
 {
  "name": "Beacon",
  "next": "blaze",
- "next_at": {"achievements": 29},
+ "next_at": {
+  "achievements": 29
+ },
  "symmetric": true,
  "lone_pixels": true,
  "palette": {
-  "o": "#f08030",
-  "w": "#ffd070",
+  "H": "#fff4c8",
   "y": "#ffe060",
+  "w": "#ffd070",
+  "o": "#f08030",
   "f": "#e84020",
-  "m": "#191919",
+  "m": "#3a3f44",
   "p": "#ffb0a0",
   "s": "#9a96a0",
-  "t": "#5e5a66"
+  "t": "#5e5a66",
+  "S": "#c4bab4",
+  "D": "#47434e"
  },
  "base": [
-  "........y........",
-  "......y.f.y......",
-  ".....yfyoyfy.....",
-  "....yfoowoofy....",
-  "....fowmwmwof....",
-  "...ffowpwpwoff...",
-  "...fooooooooof...",
-  "..ttttttttttttt..",
+  "........f........",
+  "......f.o.f......",
+  ".....foyyyof.....",
+  "....foywwwyof....",
+  "....foymHmyof....",
+  "...foywpHpwyof...",
+  "...foyyyHyyyof...",
+  "..tSSSSSSSSSSSt..",
   "...tssssssssst...",
-  "......tssst......",
-  "......tssst......",
-  "....ttttttttt...."
+  "......tsSst......",
+  "......tsSst......",
+  "....tDDDDDDDt...."
  ],
  "poses": {
   "inhale": {
-   "3": "---y---------y---"
+   "0": "------f---f------",
+   "1": "------o---o------"
   },
   "closed": {
-   "4": "-------o-o-------"
+   "4": "-------w-w-------"
   },
   "left": {
-   "4": "------mwmw-------"
+   "4": "------mHmHy------"
   },
   "right": {
-   "4": "-------wmwm------"
+   "4": "------yHmHm------"
   },
   "fidget": {
-   "0": "-----y-----y-----",
-   "1": "------.---.------"
+   "0": "......f.f.f......",
+   "1": ".....fofyfof.....",
+   "2": "....foyywyyof....",
+   "3": "...foywHHHwyof...",
+   "4": "...foyw-H-wyof...",
+   "5": "..foywH-H-Hwyof..",
+   "6": "..foywHHHHHwyof.."
   }
  },
  "particles": [

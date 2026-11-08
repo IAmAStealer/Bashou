@@ -1,45 +1,52 @@
 {
  "name": "Blaze",
  "next": "phoenix",
- "next_at": {"achievements": 35},
+ "next_at": {
+  "achievements": 35
+ },
  "palette": {
-  "o": "#f08030",
-  "w": "#ffd070",
+  "H": "#fff4c8",
   "y": "#ffe060",
+  "w": "#ffd070",
+  "o": "#f08030",
   "f": "#e84020",
-  "m": "#191919",
+  "a": "#8a2a14",
+  "m": "#3a3f44",
   "p": "#ffb0a0"
  },
  "base": [
-  "..y.....y....y...",
-  ".yf...y.f.y..fy..",
-  ".fo..yfyoyfy..of.",
-  ".fofyfofwfofyfof.",
-  "ffooooowwwoooooff",
-  "fooowwwwwwwwwooof",
-  "foowwwmwwwmwwwoof",
-  "foowwwpwwwpwwwoof",
-  ".foowwwwwwwwwoof.",
-  ".ffoooooooooooff.",
+  "..f.....f....f...",
+  ".fo...f.o.f..of..",
+  ".fo..fooyoof..of.",
+  ".foofooywyoofoof.",
+  "ffoooyywHwyyoooff",
+  "fooyywwHHHwwyyoof",
+  "fooywwmHHHmwwyoof",
+  "fooywwpHHHpwwyoof",
+  ".fooyywwwwwyyoof.",
+  ".ffoooyyyyyoooff.",
   "..fffooooooofff..",
-  "....fffffffff...."
+  "....aaaaaaaaa...."
  ],
  "poses": {
   "inhale": {
-   "8": "f---------------f"
+   "8": "f---------------f",
+   "4": "-------HHH-------"
   },
   "closed": {
    "6": "------w---w------"
   },
   "left": {
-   "6": "-----mw--mw------"
+   "6": "-----mwHHmw------"
   },
   "right": {
-   "6": "------wm--wm-----"
+   "6": "------wmHHwm-----"
   },
   "fidget": {
-   "0": "--.----y.--------",
-   "1": "---------------y-"
+   "0": ".f..f..fof..f..f.",
+   "1": ".fo.fo.oyo.of.of.",
+   "2": ".fooooooyoooooof.",
+   "3": ".foooyyHHHyyooof."
   }
  },
  "particles": [
