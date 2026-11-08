@@ -1,52 +1,70 @@
 {
  "name": "Mountain ghost",
  "next": "yeti",
- "next_at": {"achievements": 8},
+ "next_at": {
+  "achievements": 8
+ },
  "lone_pixels": true,
  "palette": {
-  "a": "#4f5d7e",
-  "o": "#dde7f6",
-  "w": "#f7f8fb",
-  "s": "#7488b5",
+  "a": "#5a6a94",
+  "A": "#4c5b82",
+  "l": "#dfe9fb",
+  "o": "#b7c7e8",
+  "s": "#8296c2",
   "e": "#7ff0ff",
-  "m": "#1e1e24",
-  "p": "#d98c8c",
-  "x": "#bfe9ff"
+  "E": "#2fa8c8",
+  "W": "#f2f7ff",
+  "n": "#4a5a86",
+  "R": "#3d4a68",
+  "q": "#7f8fb5",
+  "d": "#6e82ae"
  },
  "base": [
-  ".aa.....aa..x....",
-  "aoaaaaaaaoa......",
-  "aosoosoosoa..x...",
-  "aoemeoemeoa....x.",
-  "aoooopooooa..aa..",
-  ".awwwawwwa..assa.",
-  "..awwwwwa...aooa.",
-  ".asoossoosa.asoa.",
-  "aosooosoosoaaooa.",
-  "aoossoooossoasoa.",
-  "aowwsoosoowwaooa.",
-  ".aaaaaaaaaaaaaaa."
+  ".aa......aa..q...",
+  ".aoa....aoa......",
+  "asoaaaaaaosa..qs.",
+  "asoooooooosa...sq",
+  "asoeEooeEosa...so",
+  "asoEEooEEosa..so.",
+  "asolnllnlosaoso..",
+  ".asolnnlosa......",
+  "..aasoosaa...W...",
+  ".W.qsddsq...WWq..",
+  "WWq..d.d...qRWqR.",
+  "RRRRRRRRRRRRRRRRR"
  ],
  "poses": {
   "inhale": {
-   "7": "ao--------oa-----"
+   "6": "-----WW----------",
+   "10": "------d----------"
   },
   "closed": {
-   "3": "--aaa-aaa--------"
+   "4": "---oo--oo--------",
+   "5": "---nn--nn--------"
   },
   "left": {
-   "3": "--me--me---------"
+   "4": "--eEo-eEo--------",
+   "5": "--EEo-EEo--------"
   },
   "right": {
-   "3": "---em--em--------"
+   "4": "---oeE-oeE-------",
+   "5": "---oEE-oEE-------"
   },
   "fidget": {
-   "4": "-------------.aa-",
-   "5": "------------aoaa-"
+   "0": "-------------.---",
+   "1": "--------------qsq",
+   "2": "-------------s..s",
+   "3": "-------------q.so",
+   "4": "---------------os"
+  },
+  "tail_up": {
+   "0": "-------------.-q-",
+   "1": "---------------qs",
+   "2": "--------------.so"
   }
  },
  "particles": [
   0,
-  13
+  4
  ]
 }

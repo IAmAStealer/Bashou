@@ -1,50 +1,66 @@
 {
  "name": "Snow leopard",
  "next": "mountain_ghost",
- "next_at": {"achievements": 5},
+ "next_at": {
+  "achievements": 5
+ },
  "palette": {
-  "a": "#5b6070",
-  "o": "#d7dbe3",
-  "w": "#f7f8fb",
-  "s": "#6e7384",
-  "e": "#8fcab8",
-  "m": "#1e1e24",
+  "a": "#4a5062",
+  "A": "#3b4050",
+  "l": "#f4f5f8",
+  "o": "#dbdfe7",
+  "s": "#aeb5c6",
+  "w": "#fbf7f0",
+  "r": "#5a6072",
+  "c": "#8d95a8",
+  "m": "#191919",
   "p": "#d98c8c"
  },
  "base": [
-  ".aa.....aa.......",
-  "aoaaaaaaaoa......",
-  "aosoosoosoa......",
-  "aoemeoemeoa......",
-  "aoooopooooa..aa..",
-  ".awwwawwwa..assa.",
-  "..awwwwwa...aooa.",
-  ".asoossoosa.asoa.",
-  "aosooosoosoaaooa.",
-  "aoossoooossoasoa.",
-  "aowwsoosoowwaooa.",
-  ".aaaaaaaaaaaaaaa."
+  ".a.......a...aa..",
+  "asa.....asa.alsA.",
+  "aoaaaaaaaoa.alosA",
+  "alooooooosa..alsA",
+  "alomooomosaccclsA",
+  "aoomooomosaorrosA",
+  "aowwwpwwwsaorcosA",
+  ".awwwwwwwasooocrA",
+  "..aaaaaaassooorrA",
+  "...alosaaaaaaoosA",
+  "...awwsa.....awsA",
+  "...aaaaa.....aaaA"
  ],
  "poses": {
   "inhale": {
-   "7": "ao--------oa-----"
+   "3": "-----------cc----",
+   "4": "-----------ooo---"
   },
   "closed": {
-   "3": "--aaa-aaa--------"
+   "4": "---o---o---------",
+   "5": "--aa---aa--------"
   },
   "left": {
-   "3": "--me--me---------"
+   "4": "--mo--mo---------",
+   "5": "--mo--mo---------"
   },
   "right": {
-   "3": "---em--em--------"
+   "4": "---om--om--------",
+   "5": "---om--om--------"
   },
   "fidget": {
-   "4": "-------------.aa-",
-   "5": "------------aoaa-"
+   "0": "-----------....aa",
+   "1": "-----------...alA",
+   "2": "-----------..alsA",
+   "3": "-----------..alsA"
+  },
+  "tail_up": {
+   "0": "-----------...aa.",
+   "1": "-----------..alsA",
+   "2": "-----------..alsA"
   }
  },
  "particles": [
   0,
-  13
+  3
  ]
 }

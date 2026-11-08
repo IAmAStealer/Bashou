@@ -1,0 +1,48 @@
+{
+ "name": "Snow leopard",
+ "palette": {
+  "a": "#5b6070",
+  "o": "#d7dbe3",
+  "w": "#f7f8fb",
+  "s": "#6e7384",
+  "e": "#8fcab8",
+  "m": "#1e1e24",
+  "p": "#d98c8c"
+ },
+ "base": [
+  ".aa.....aa.......",
+  "aoaaaaaaaoa......",
+  "aosoosoosoa......",
+  "aoemeoemeoa......",
+  "aoooopooooa..aa..",
+  ".awwwawwwa..assa.",
+  "..awwwwwa...aooa.",
+  ".asoossoosa.asoa.",
+  "aosooosoosoaaooa.",
+  "aoossoooossoasoa.",
+  "aowwsoosoowwaooa.",
+  ".aaaaaaaaaaaaaaa."
+ ],
+ "poses": {
+  "inhale": {
+   "7": "ao--------oa-----"
+  },
+  "closed": {
+   "3": "--aaa-aaa--------"
+  },
+  "left": {
+   "3": "--me--me---------"
+  },
+  "right": {
+   "3": "---em--em--------"
+  },
+  "fidget": {
+   "4": "-------------.aa-",
+   "5": "------------aoaa-"
+  }
+ },
+ "particles": [
+  0,
+  13
+ ]
+}
