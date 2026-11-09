@@ -1,38 +1,47 @@
 {
  "name": "Waterfall",
  "next": "mill",
- "next_at": {"achievements": 15},
+ "next_at": {
+  "achievements": 15
+ },
  "palette": {
   "g": "#5fa040",
   "G": "#3e7a30",
-  "d": "#8a5a34",
-  "D": "#5c3a22",
   "t": "#6e4428",
+  "d": "#8a5a34",
+  "D": "#6a4226",
+  "c": "#a87444",
+  "p": "#c6a06c",
   "R": "#7a3020",
   "r": "#b04a30",
+  "q": "#d2683e",
+  "i": "#f2e0b0",
   "h": "#e0c890",
   "H": "#a88858",
   "y": "#ffe070",
   "s": "#8a8a94",
   "k": "#c8c8d0",
+  "S": "#5e5e6a",
+  "z": "#b6b6c2",
   "f": "#c8a070",
+  "F": "#e2c094",
   "w": "#3a8ad0",
   "W": "#a8dcff",
-  "S": "#5e5e6a"
+  "T": "#e8f6ff"
  },
  "base": [
   ".................",
   ".................",
-  ".SSw.............",
-  "SsSW.............",
-  "SssW........Rs...",
-  "SsSw.......RrR...",
-  "SssW......RrrrR..",
-  "SsSw..f.f.hyhtH..",
-  "SSsWwfffffhhhtH..",
-  ".GwWwggggggggggG.",
-  "..DdddddddddddD..",
-  "....DdddddddD...."
+  ".zSw.............",
+  "zzsW.............",
+  "zSsW........qs...",
+  "Sssw.......qrR...",
+  "SzsW......qrrrR..",
+  "SSsw..F.f.iyhtH..",
+  "SSsWwFfffHihhtH..",
+  ".gwWwgggggggGGGG.",
+  "..cddpdddddddDD..",
+  "....ddDdddDDD...."
  ],
  "poses": {
   "inhale": {
@@ -50,8 +59,10 @@
    "6": "---w-------------"
   },
   "fidget": {
-   "8": "----W------------",
-   "9": "--WwW------------"
+   "6": "----T------------",
+   "7": "----WT-----------",
+   "8": "---TW------------",
+   "9": "--TWT------------"
   }
  },
  "particles": [

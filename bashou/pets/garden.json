@@ -1,37 +1,47 @@
 {
  "name": "Garden",
  "next": "river",
- "next_at": {"achievements": 8},
+ "next_at": {
+  "achievements": 8
+ },
  "palette": {
   "g": "#5fa040",
   "G": "#3e7a30",
-  "d": "#8a5a34",
-  "D": "#5c3a22",
-  "t": "#6e4428",
-  "l": "#3f8a3c",
   "L": "#78c050",
+  "l": "#3f8a3c",
+  "B": "#a4dc68",
+  "j": "#2f6b3c",
+  "t": "#6e4428",
+  "d": "#8a5a34",
+  "D": "#6a4226",
+  "c": "#a87444",
+  "p": "#c6a06c",
   "R": "#7a3020",
   "r": "#b04a30",
+  "q": "#d2683e",
+  "i": "#f2e0b0",
   "h": "#e0c890",
   "H": "#a88858",
   "y": "#ffe070",
   "s": "#8a8a94",
   "k": "#c8c8d0",
-  "f": "#c8a070"
+  "f": "#c8a070",
+  "F": "#e2c094",
+  "x": "#f09cb0"
  },
  "base": [
   ".................",
   ".................",
   ".................",
   "....L............",
-  "...LLl......Rs...",
-  "..LlllL....RrR...",
-  "...lll....RrrrR..",
-  "....t.f.f.hyhtH..",
-  "..gggfffffhhhtH..",
-  ".GgggLgLgLgggggG.",
-  "..DdddddddddddD..",
-  "....DdddddddD...."
+  "...BLl......qs...",
+  "..LLllj....qrR...",
+  "...ljj....qrrrR..",
+  "....t.F.f.iyhtH..",
+  "..LLgFfffHihhtH..",
+  ".gLLgLgLgLgggGGG.",
+  "..cddpdddddddDD..",
+  "....ddDdddDDD...."
  ],
  "poses": {
   "inhale": {
@@ -47,7 +57,7 @@
    "3": ".....L..........."
   },
   "fidget": {
-   "6": "-------y---------"
+   "9": "-----y-x-y-------"
   }
  },
  "particles": [

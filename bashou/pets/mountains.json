@@ -1,45 +1,56 @@
 {
  "name": "Mountains",
  "next": "village",
- "next_at": {"achievements": 24},
+ "next_at": {
+  "achievements": 24
+ },
  "palette": {
   "g": "#5fa040",
   "G": "#3e7a30",
-  "d": "#8a5a34",
-  "D": "#5c3a22",
-  "t": "#6e4428",
-  "l": "#3f8a3c",
   "L": "#78c050",
+  "l": "#3f8a3c",
+  "B": "#a4dc68",
+  "t": "#6e4428",
+  "d": "#8a5a34",
+  "D": "#6a4226",
+  "c": "#a87444",
   "R": "#7a3020",
   "r": "#b04a30",
+  "q": "#d2683e",
+  "i": "#f2e0b0",
   "h": "#e0c890",
   "H": "#a88858",
   "y": "#ffe070",
   "s": "#8a8a94",
   "k": "#c8c8d0",
+  "K": "#e6e6ec",
+  "S": "#5e5e6a",
   "f": "#c8a070",
+  "F": "#e2c094",
+  "b": "#d8d0c0",
+  "I": "#efe8da",
   "w": "#3a8ad0",
   "W": "#a8dcff",
-  "M": "#36405a",
-  "m": "#424e6a",
-  "N": "#9aa8c0",
-  "e": "#26402c",
-  "E": "#2e4c34",
-  "b": "#d8d0c0"
+  "v": "#2c6cae",
+  "M": "#404c6c",
+  "m": "#505e84",
+  "N": "#a4b2c8",
+  "e": "#30543a",
+  "E": "#3a6246"
  },
  "base": [
   ".................",
   "...N.........N...",
-  "f.Nmf...N...NmN..",
-  ".fmfmM.NmN.MmmmM.",
-  "MRtRmMMmmmMMRsmMM",
-  "MfbfMMMLMMMRrRMMM",
-  "fbbHfELlLeRrrrRee",
-  "ebbHeeeteehyhtHee",
-  "ebtHeeeteehhhtHee",
-  ".GggwWwggggggggG.",
-  "..DdwWwdddddddD..",
-  "....wWwdddddD...."
+  "F.NNf...N...NNm..",
+  ".FmfmM.NmN.mNmmM.",
+  "MRtRmMMmmmMMqsmMM",
+  "MfbHMMMLMMMqrRMMM",
+  "fIbHHEBLleqrrrRee",
+  "eIbHeeeteeiyhtHee",
+  "eItHeeeteeihhtHee",
+  ".gLLwWvggggggGGG.",
+  "..cdwWvddddddDD..",
+  "....wWvdddDDD...."
  ],
  "poses": {
   "inhale": {
@@ -49,17 +60,14 @@
    "7": "-----------H-----"
   },
   "left": {
-   "5": "------L-L--------"
+   "5": "------LM---------"
   },
   "right": {
-   "5": "------L-L--------"
+   "5": "-------ML--------"
   },
   "fidget": {
-   "2": "-m---m-----------",
-   "3": "--f-f------------",
-   "4": "ff-t-ff----------",
-   "5": "-Mf-f------------",
-   "6": "-e---e-----------"
+   "2": "-------KKk-------",
+   "3": "------KkkkS------"
   }
  },
  "particles": [

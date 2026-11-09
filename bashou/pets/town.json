@@ -1,72 +1,81 @@
 {
  "name": "Town",
+ "lone_pixels": true,
  "palette": {
   "g": "#5fa040",
   "G": "#3e7a30",
-  "d": "#8a5a34",
-  "D": "#5c3a22",
+  "L": "#78c050",
   "t": "#6e4428",
+  "d": "#8a5a34",
+  "D": "#6a4226",
+  "c": "#a87444",
+  "p": "#c6a06c",
   "R": "#7a3020",
   "r": "#b04a30",
+  "q": "#d2683e",
+  "i": "#f2e0b0",
   "h": "#e0c890",
   "H": "#a88858",
   "y": "#ffe070",
-  "s": "#8a8a94",
-  "f": "#c8a070",
-  "w": "#3a8ad0",
-  "W": "#a8dcff",
-  "M": "#36405a",
-  "m": "#424e6a",
-  "N": "#9aa8c0",
   "Y": "#fff6c0",
   "u": "#c8a850",
-  "e": "#26402c",
-  "A": "#3e4862",
-  "a": "#4a5672",
-  "n": "#a4b0c6",
-  "E": "#2e4c34",
   "O": "#fff0b0",
-  "b": "#d8d0c0"
+  "s": "#8a8a94",
+  "f": "#c8a070",
+  "b": "#d8d0c0",
+  "w": "#3a8ad0",
+  "W": "#a8dcff",
+  "v": "#2c6cae",
+  "T": "#e8f6ff",
+  "M": "#404c6c",
+  "m": "#505e84",
+  "N": "#a4b2c8",
+  "e": "#30543a",
+  "E": "#3a6246"
  },
  "base": [
   ".y.....y..O....y.",
   "...N.............",
-  "..NmN...N....R...",
-  ".MmmmM.Nmn..uyu..",
-  "MMmmmMMRsaAMrrr..",
-  "MMMMMMRrRMMMhhhEe",
-  "eReeRRrrrRrRrrree",
-  "RrRRrRyhtHyHhhhee",
-  "hyHhyHhhtHhHhthee",
-  ".GgggggggggGbbbf.",
-  "..DddddddddDwWfff",
-  "....DdddddDwWwww."
+  "..NNm...N....R...",
+  ".mNmmM.NmN..uyu..",
+  "MMmmmMMqsmMMqrR..",
+  "MMMMMMqrRMMMihHEe",
+  "eqeeqRrrrqrRqrRee",
+  "qrRqrRyhtHyHihHee",
+  "iyHiyHihtHiHitHee",
+  ".gLLLggggggGbbbf.",
+  "..cddpddddDDwWfff",
+  "....ddDddDDwWwvv."
  ],
  "poses": {
   "inhale": {
    "3": "-------------Y---"
   },
   "left": {
-   "3": "---------N-------",
-   "4": "---------m-------"
+   "3": "------------yuu--"
   },
   "right": {
-   "3": "---------N-------",
-   "4": "---------mM------"
+   "3": "------------uuy--"
   },
   "closed": {
-   "3": "---------N--HHH--",
-   "4": "---------mM------"
+   "3": "------------HHH--",
+   "7": "------H---H------",
+   "8": "-H--H------------"
   },
   "fidget": {
-   "0": "-.-----.---------",
-   "10": "------------wWwf-",
-   "11": "-----------Wwfff-"
+   "0": "-----rYr---------",
+   "1": "-----YTY---------",
+   "2": "-----rYr---------"
+  },
+  "inhale+left": {
+   "3": "------------Yuu--"
+  },
+  "inhale+right": {
+   "3": "------------uuY--"
   }
  },
  "particles": [
   0,
   12
- ],
- "lone_pixels": true
+ ]
 }

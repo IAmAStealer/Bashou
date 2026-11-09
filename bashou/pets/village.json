@@ -1,41 +1,49 @@
 {
  "name": "Village",
  "next": "port",
- "next_at": {"achievements": 29},
+ "next_at": {
+  "achievements": 29
+ },
  "palette": {
   "g": "#5fa040",
   "G": "#3e7a30",
-  "d": "#8a5a34",
-  "D": "#5c3a22",
-  "t": "#6e4428",
-  "l": "#3f8a3c",
   "L": "#78c050",
+  "l": "#3f8a3c",
+  "B": "#a4dc68",
+  "t": "#6e4428",
+  "d": "#8a5a34",
+  "D": "#6a4226",
+  "c": "#a87444",
+  "p": "#c6a06c",
   "R": "#7a3020",
   "r": "#b04a30",
+  "q": "#d2683e",
+  "i": "#f2e0b0",
   "h": "#e0c890",
   "H": "#a88858",
   "y": "#ffe070",
   "s": "#8a8a94",
   "k": "#c8c8d0",
-  "M": "#36405a",
-  "m": "#424e6a",
-  "N": "#9aa8c0",
-  "e": "#26402c",
-  "E": "#2e4c34"
+  "K": "#e6e6ec",
+  "M": "#404c6c",
+  "m": "#505e84",
+  "N": "#a4b2c8",
+  "e": "#30543a",
+  "E": "#3a6246"
  },
  "base": [
   ".................",
   "...N.........N...",
-  "..NmN...N...NmN..",
-  ".MmmmM.NmN.MmmmM.",
-  "MMmmmMMmmmMMRsmMM",
-  "MMMMMMMMLMMRrRMMM",
-  "eReeEReLlLRrrrRee",
-  "RrReRrRetehyhtHee",
-  "hyHehyHetehhhtHee",
-  ".GgggggggggggggG.",
-  "..DdddddddddddD..",
-  "....DdddddddD...."
+  "..NNm...N...NNm..",
+  ".mNmmM.NmN.mNmmM.",
+  "MMmmmMMmmmMMqsmMM",
+  "MMMMMMMMLMMqrRMMM",
+  "eqeeEqeBLlqrrrRee",
+  "qrReqrRetehyhtHee",
+  "iyHeiyHeteihhtHee",
+  ".gLLLggggggggGGG.",
+  "..cddpdddddddDD..",
+  "....ddDdddDDD...."
  ],
  "poses": {
   "inhale": {
@@ -46,14 +54,16 @@
    "8": "-H---H-----------"
   },
   "left": {
-   "5": "--------L--------"
+   "5": "-------LM--------"
   },
   "right": {
-   "5": "--------L--------"
+   "5": "--------ML-------"
   },
   "fidget": {
-   "4": "-------------.k--",
-   "3": "--------------k--"
+   "2": "--------------K--",
+   "3": "-------------k---",
+   "4": "--K---K----------",
+   "5": "-k---k-----------"
   }
  },
  "particles": [
