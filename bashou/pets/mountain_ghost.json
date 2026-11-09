@@ -4,7 +4,6 @@
  "next_at": {
   "achievements": 8
  },
- "lone_pixels": true,
  "palette": {
   "a": "#5a6a94",
   "A": "#4c5b82",
@@ -20,14 +19,14 @@
   "d": "#6e82ae"
  },
  "base": [
-  ".aa......aa..q...",
+  ".aa......aa......",
   ".aoa....aoa......",
   "asoaaaaaaosa..qs.",
   "asoooooooosa...sq",
   "asoeEooeEosa...so",
   "asoEEooEEosa..so.",
-  "asolnllnlosaoso..",
-  ".asolnnlosa......",
+  "asolWnnWlosaoso..",
+  ".asolWWlosa......",
   "..aasoosaa...W...",
   ".W.qsddsq...WWq..",
   "WWq..d.d...qRWqR.",
@@ -35,7 +34,7 @@
  ],
  "poses": {
   "inhale": {
-   "6": "-----WW----------",
+   "7": "----W--W---------",
    "10": "------d----------"
   },
   "closed": {
@@ -51,14 +50,13 @@
    "5": "---oEE-oEE-------"
   },
   "fidget": {
-   "0": "-------------.---",
    "1": "--------------qsq",
    "2": "-------------s..s",
    "3": "-------------q.so",
    "4": "---------------os"
   },
   "tail_up": {
-   "0": "-------------.-q-",
+   "0": "---------------q-",
    "1": "---------------qs",
    "2": "--------------.so"
   }
