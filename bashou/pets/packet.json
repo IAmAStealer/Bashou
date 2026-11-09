@@ -4,44 +4,53 @@
  "next_at": {"achievements": 8},
  "symmetric": true,
  "palette": {
-  "n": "#1c2a4a",
-  "m": "#191919",
+  "n": "#3560ac",
+  "k": "#2b4e92",
+  "m": "#3a3f44",
   "p": "#ff9fb0",
+  "E": "#fff8ea",
   "e": "#f2ead8",
-  "d": "#c9bca0"
+  "d": "#c9bca0",
+  "D": "#ddd0b8"
  },
  "base": [
   ".................",
   ".................",
   "..nnnnnnnnnnnnn..",
-  "..nddeeeeeeeddn..",
-  "..needdeeeddeen..",
-  "..neeeedddeeeen..",
-  "..neeemeeemeeen..",
-  "..neepeeneepeen..",
-  "..neeeeeeeeeeen..",
-  "..nnnnnnnnnnnnn..",
-  "....nn.....nn....",
+  "..nddEEEEEEEddk..",
+  "..needdEEEddeek..",
+  "..neeeedddeeeek..",
+  "..neeemeeemeeDk..",
+  "..neepeeneepeDk..",
+  "..nDDDDDDDDDDDk..",
+  "..kkkkkkkkkkkkk..",
+  "....kk.....kk....",
   "................."
  ],
  "poses": {
   "inhale": {
-   "5": "-n-------------n-",
-   "6": "-n-------------n-",
-   "7": "-n-------------n-"
+   "5": "-ne-----------Dk-",
+   "6": "-ne-----------Dk-",
+   "7": "-ne-----------Dk-"
   },
   "closed": {
-   "6": "------e---e------"
+   "6": "------d---d------"
   },
   "left": {
-   "6": "-----me--me------"
+   "6": "-----me--me------",
+   "7": "--------d--------"
   },
   "right": {
-   "6": "------em--em-----"
+   "6": "------em--em-----",
+   "7": "--------d--------"
   },
   "fidget": {
-   "10": "----.-------.----",
-   "11": "----n-------n----"
+   "0": "-------nnk-------",
+   "1": "----nnnEEDkkk----",
+   "2": "----DEEEEEDDD----",
+   "3": "---DDDDDDDDDDD---",
+   "4": "---eeeeeeeeeee---",
+   "5": "---eeeeeeeeeee---"
   }
  },
  "particles": [
