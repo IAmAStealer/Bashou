@@ -10,49 +10,45 @@
   "k": "#3a2a1e",
   "b": "#9a7656",
   "B": "#6e5038",
-  "L": "#b48e6a",
   "l": "#c8a47e",
   "t": "#b6866a",
   "T": "#82583e",
-  "p": "#d2a58c",
-  "o": "#b8504a",
+  "d": "#5e4430",
   "r": "#d8483a",
-  "R": "#8a2820",
-  "h": "#f08068"
+  "R": "#8a2820"
  },
  "base": [
   ".................",
   "....kkkkk........",
-  "...kLLbbbk.......",
-  "..kbmebbbBk......",
-  ".kttbbbbbbBk.....",
-  "ktttTbbpbbbBk....",
-  "kTttTkbbpblbBk...",
-  ".kTTkbbbblllbBk..",
-  "..hrkbbblllllbBk.",
+  "...kbbbdbk.......",
+  "..kbmebbbbk......",
+  ".kttbbbdbbbk.....",
+  "ktttTbbbbbbbk....",
+  "kTttTkbbbblbbk...",
+  ".kTTkbbbblllbbk..",
+  "..rrkbbblllllbbk.",
   "..rRRrkbllllllbBk",
   "...rrkBBbbbbBBBBk",
   "....kkkkkkkkkkkk."
  ],
  "poses": {
   "inhale": {
-   "7": "------------lbBk-",
-   "8": "-------l---------"
+   "7": ".kTTkbbbbllllbbk.",
+   "8": "..rrkbbllllllbbk."
   },
   "closed": {
    "3": "----kk-----------"
   },
   "left": {
-   "3": "----me-----------"
-  },
-  "right": {
    "3": "----em-----------"
   },
+  "right": {
+   "3": "----mm-----------"
+  },
   "fidget": {
-   "4": "kt---------------",
-   "5": "---T-------------",
-   "6": ".kkoo------------",
-   "7": "-.ko-------------"
+   "5": ".kttTbbbbbbbk....",
+   "6": "ktttTkbbbblbbk...",
+   "7": "kTTTkbbbblllbbk.."
   }
  },
  "particles": [
