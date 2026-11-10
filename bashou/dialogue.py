@@ -14,7 +14,7 @@ from .i18n import _
 
 # Trait (an achievement you earned) -> lines any pet may say.
 TRAITS = {
-    "warrior": ["Any threats around? I'm ready.", "I sharpened my claws. `bashou fight`?"],
+    "warrior": ["We won a fight together. I feel braver now.", "My claws are sharp. If a threat comes, I'll tell you."],
     "veteran": ["Ten fights won. The threats fear us now."],
     "legend": ["Legends don't wait for threats. They hunt them."],
     "night_owl": ["Late again? I like the quiet.", "The prompt glows nicer at night."],

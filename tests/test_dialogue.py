@@ -33,8 +33,17 @@ class DialogueTest(unittest.TestCase):
         s = state.default()
         s["achievements"] = ["warrior"]
         said = {dialogue.line(s, "star", random.Random(i)) for i in range(300)}
-        self.assertTrue(any("claws" in t or "threats around" in t for t in said))
+        self.assertTrue(any("claws" in t or "braver" in t for t in said))
         self.assertFalse(any("Late again" in t or "nicer at night" in t for t in said))
+
+    def test_no_fight_talk_without_a_threat(self):
+        # A player felt a fight was waiting when none was (bug report 2026-11-10).
+        s = state.default()
+        s["achievements"] = ["warrior", "veteran", "legend"]
+        said = {dialogue.line(s, "star", random.Random(i)) for i in range(500)}
+        for t in said:
+            self.assertNotIn("bashou fight", t)
+            self.assertNotIn("Any threats around", t)
 
     def test_every_command_achievement_has_an_example(self):
         # Night owl is about the time, not a command. Secrets have no example: the pet never suggests
