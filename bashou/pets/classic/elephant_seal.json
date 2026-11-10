@@ -1,0 +1,58 @@
+{
+ "name": "Elephant seal",
+ "next": "royal_seal",
+ "next_at": {
+  "achievements": 8
+ },
+ "palette": {
+  "m": "#141418",
+  "e": "#ffffff",
+  "k": "#3a2a1e",
+  "b": "#9a7656",
+  "B": "#6e5038",
+  "l": "#c8a47e",
+  "t": "#b6866a",
+  "T": "#82583e",
+  "d": "#5e4430",
+  "r": "#d8483a",
+  "R": "#8a2820"
+ },
+ "base": [
+  ".................",
+  "....kkkkk........",
+  "...kbbbdbk.......",
+  "..kbmebbbbk......",
+  ".kttbbbdbbbk.....",
+  "ktttTbbbbbbbk....",
+  "kTttTkbbbblbbk...",
+  ".kTTkbbbblllbbk..",
+  "..rrkbbblllllbbk.",
+  "..rRRrkbllllllbBk",
+  "...rrkBBbbbbBBBBk",
+  "....kkkkkkkkkkkk."
+ ],
+ "poses": {
+  "inhale": {
+   "7": ".kTTkbbbbllllbbk.",
+   "8": "..rrkbbllllllbbk."
+  },
+  "closed": {
+   "3": "----kk-----------"
+  },
+  "left": {
+   "3": "----em-----------"
+  },
+  "right": {
+   "3": "----mm-----------"
+  },
+  "fidget": {
+   "5": ".kttTbbbbbbbk....",
+   "6": "ktttTkbbbblbbk...",
+   "7": "kTTTkbbbblllbbk.."
+  }
+ },
+ "particles": [
+  0,
+  10
+ ]
+}

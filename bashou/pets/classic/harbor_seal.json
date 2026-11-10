@@ -1,0 +1,56 @@
+{
+ "name": "Harbor seal",
+ "next": "elephant_seal",
+ "next_at": {
+  "achievements": 5
+ },
+ "palette": {
+  "m": "#141418",
+  "e": "#ffffff",
+  "k": "#3a3f4c",
+  "s": "#9aa4b4",
+  "S": "#6c7688",
+  "l": "#cdd4de",
+  "d": "#4e5666",
+  "n": "#26262e",
+  "r": "#d8483a",
+  "R": "#8a2820"
+ },
+ "base": [
+  ".................",
+  "...kkkk..........",
+  "..ksssSk.........",
+  ".ksmesssk........",
+  "nllsssdsk........",
+  ".kklssssk........",
+  "...kslsdssk......",
+  "..rrklllsssk.....",
+  ".rRRrklllsdsk..k.",
+  ".rRRrkllllssskkSk",
+  "..rrkSlllSSSSSSk.",
+  "....kkkkkkkkkkk.."
+ ],
+ "poses": {
+  "inhale": {
+   "6": "...ksllsdssk.....",
+   "7": "..rrkllllsssk...."
+  },
+  "closed": {
+   "3": "---kk------------"
+  },
+  "left": {
+   "3": "---em------------"
+  },
+  "right": {
+   "3": "---mm------------"
+  },
+  "fidget": {
+   "8": ".rRRrklllsdsk.kk.",
+   "9": ".rRRrkllllssskSk."
+  }
+ },
+ "particles": [
+  0,
+  9
+ ]
+}
