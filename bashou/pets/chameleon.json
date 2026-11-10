@@ -1,51 +1,78 @@
 {
  "name": "Chameleon",
  "next": "mantis",
- "next_at": {"achievements": 3},
+ "next_at": {
+  "achievements": 3
+ },
  "palette": {
-  "k": "#1f5848",
+  "k": "#2a7560",
+  "K": "#1f5c50",
   "g": "#4f9e5a",
   "l": "#7cc46a",
-  "h": "#8ed8a8",
-  "s": "#c8e8cc",
+  "h": "#bde486",
+  "d": "#3a8256",
+  "s": "#d6efd2",
+  "S": "#94c8a4",
   "e": "#f6efd2",
-  "p": "#10322c",
-  "t": "#7a5232"
+  "m": "#3a3f44",
+  "t": "#8a5c36",
+  "T": "#6a4428",
+  "u": "#35b4b0",
+  "U": "#7ce0cf",
+  "v": "#23878f",
+  "n": "#1f6f7a",
+  "N": "#1a5a6a",
+  "o": "#f08a3c",
+  "y": "#ffd25a"
  },
  "base": [
   "........k........",
   ".......kgkk......",
-  "......kgllgkk....",
-  ".....kglggggsssk.",
-  "...kkhhlgggsepesk",
-  ".khhllgggggsepesk",
-  ".kllggggggggsssgk",
-  ".kggglgggggggggk.",
-  "kgkkkgkkkkgkkkk..",
-  "kgkgkgk...gk.....",
-  "kgggkggk.kggk....",
-  ".kkktkkkttkkkttt."
+  "......klhlgkk....",
+  ".....kghlgggsssk.",
+  "...kkhhlgglsemeSk",
+  ".khhllgglgdsemeSk",
+  ".kllgglggdddSSSgK",
+  ".kgggdgdddddddgK.",
+  "klKKKgKKKKgKKKK..",
+  "klKgKgK..kgK.....",
+  "kgddKgdK.KgdK....",
+  ".KKKtKKKttKKKttT."
  ],
  "poses": {
   "inhale": {
-   "7": "---------------gk",
-   "8": "--------------kk-"
+   "7": "---------------dK",
+   "8": "--------------KK-"
   },
   "closed": {
-   "4": "-----------sgggs-",
-   "5": "-----------sssss-"
+   "4": "-----------sgggS-",
+   "5": "-----------sSSSS-"
   },
   "left": {
-   "4": "------------pee--",
-   "5": "------------pee--"
+   "4": "------------mee--",
+   "5": "------------mee--"
   },
   "right": {
-   "4": "------------eep--",
-   "5": "------------eep--"
+   "4": "------------eem--",
+   "5": "------------eem--"
   },
   "fidget": {
-   "6": "---------------gk",
-   "7": "---------------kh"
+   "0": "--------n--------",
+   "1": "-------nunn------",
+   "2": "------nUyUunn----",
+   "3": "-----nuyUuoo---N-",
+   "4": "---nnyyUuuo-----N",
+   "5": "-nyyUUouuov-----N",
+   "6": "-nUUoouuovvv---uN",
+   "7": "-nuuovuovvvvovuN-",
+   "8": "nUNNNuNNNNuNNNN--",
+   "9": "nUNuNuN--nuN-----",
+   "10": "nuvvNuvN-NuvN----",
+   "11": "-NNN-NNN--NNN----"
+  },
+  "inhale+fidget": {
+   "7": "---------------vN",
+   "8": "---------------N-"
   }
  },
  "particles": [
