@@ -1,35 +1,40 @@
 {
  "name": "Cheetah",
  "next": "falcon",
- "next_at": {"achievements": 8},
+ "next_at": {
+  "achievements": 8
+ },
  "palette": {
-  "k": "#3a2214",
+  "k": "#8a5a2c",
+  "K": "#6b3f1f",
   "o": "#e8a050",
   "O": "#f4cc94",
   "e": "#c07850",
   "s": "#6a3020",
-  "r": "#e0702a",
+  "T": "#3f2316",
   "m": "#2a1410",
   "n": "#4a2020",
-  "c": "#fae4c0"
+  "c": "#fae4c0",
+  "C": "#e2c49c",
+  "r": "#e0702a"
  },
  "base": [
-  ".kkk..kkkkk..kkk.",
-  "keeokksososkkoeek",
-  "koeoosooooosooeok",
-  ".kooOOoooooOOook.",
-  ".kosrmooooomrsok.",
-  ".kooosooooosoook.",
-  ".kooOOscccsOOook.",
-  "..kooOsnnnsOook..",
-  "...koOccsccOok...",
-  "....kOcsOscOk....",
-  ".....kOcccOk.....",
-  "......kkkkk......"
+  ".kkk..kkkkk..kkK.",
+  "keeokksososKKoeeK",
+  "koeoosoooooosoeoK",
+  ".kooOOoooooOOoeK.",
+  ".kosrmooooomrseK.",
+  ".kooosooooosooeK.",
+  ".keoOTOcccOTOoeK.",
+  "..kooTOnnnOToeK..",
+  "...koOTcscTOeK...",
+  "....kOcsOscCK....",
+  ".....kOcccCK.....",
+  "......KKKKK......"
  ],
  "poses": {
   "inhale": {
-   "10": ".....kOcncOk....."
+   "10": "--------n--------"
   },
   "closed": {
    "4": "----ss-----ss----"
@@ -41,8 +46,11 @@
    "4": "----rm-----rm----"
   },
   "fidget": {
-   "0": "-------------....",
-   "1": "--------------kk-"
+   "0": "-------------...-",
+   "1": "-------------K...",
+   "2": "-------------KKK-",
+   "3": "-------------eseK",
+   "4": "----------------K"
   }
  },
  "particles": [
