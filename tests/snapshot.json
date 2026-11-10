@@ -9732,24 +9732,26 @@
      "L": "#8ec5ff",
      "i": "#c77a12",
      "w": "#ffffff",
-     "o": "#5a4636",
+     "o": "#8a6d54",
      "p": "#ff8fb1",
      "P": "#f2a33a",
-     "s": "#e8326f"
+     "s": "#e8326f",
+     "l": "#fff9d2",
+     "O": "#664e3c"
     },
     "base": [
-     "p.b.mmm..........",
-     ".PbmmLLm.........",
-     ".bbbmLMLm........",
-     "bbiwbmLMLm.......",
-     "bbiibbbmLMm..mmm.",
-     "nbbbbbbbmLM.mLLMm",
-     "....bbbbbbbbsbLMm",
-     ".....bbbbsbsbbmLM",
-     ".....BbbbbsbbB.LM",
-     ".....bB....bB..mM",
-     ".....bB....bB..M.",
-     ".....oo....oo...."
+     "p.n.mLm..........",
+     "PPlmmLLM.........",
+     ".BlbmLLmM........",
+     "BliwbmLLmM.......",
+     "BbiibbbmLmM..mLm.",
+     "nBBBbbbbmmM.mLLmM",
+     "....nlllbbbbsBLmM",
+     ".....BbbbsbsbBLmM",
+     ".....Bbnnnsbbn.mM",
+     ".....bn....bn..mM",
+     ".....bn....bn..M.",
+     ".....oO....oO...."
     ]
    },
    "train": {
