@@ -9770,6 +9770,7 @@
     "palette": {
      "k": "#3a3946",
      "K": "#5e5d6e",
+     "h": "#8c8ba2",
      "n": "#22212a",
      "s": "#d0d4dc",
      "S": "#888c96",
@@ -9778,24 +9779,25 @@
      "Y": "#a08a40",
      "r": "#d63a2e",
      "R": "#8a2420",
-     "g": "#e6e6ec",
-     "G": "#aaaab6",
+     "o": "#f2735a",
+     "g": "#d8d8e0",
+     "G": "#9c9cac",
      "b": "#ffd870",
      "t": "#6b5a4a"
     },
     "base": [
-     "..gg.............",
-     ".gGgg............",
-     "..SsS.......nnnnn",
-     "...n......KK.Kbbk",
-     "..KKKKKsKKKKKKbbk",
+     "..wg.............",
+     ".wgGG............",
+     ".KhKKk......rrrrR",
+     "..Kkk.....hK.Kbbk",
+     "..KhhKKsKhhKKKbbk",
      ".ykkkkkSkkkkkkkkk",
      ".nnnnnnSnnnnnnkkn",
      "..SSSSSSSSSSSSSSn",
-     ".S.rr...rr...rr..",
+     ".S.or...or...or..",
      "SsrwRrsrwRrsrwRr.",
-     ".SrRRr.rRRr.rRRr.",
-     "SS.rr...rr...rr.."
+     "SsrRRr.rRRr.rRRr.",
+     "SS.rR...rR...rR.."
     ]
    },
    "seal_pup": {

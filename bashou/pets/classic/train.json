@@ -1,0 +1,58 @@
+{
+ "name": "Train",
+ "palette": {
+  "k": "#3a3946",
+  "K": "#5e5d6e",
+  "n": "#22212a",
+  "s": "#d0d4dc",
+  "S": "#888c96",
+  "w": "#f2f2ee",
+  "y": "#ffe070",
+  "Y": "#a08a40",
+  "r": "#d63a2e",
+  "R": "#8a2420",
+  "g": "#e6e6ec",
+  "G": "#aaaab6",
+  "b": "#ffd870",
+  "t": "#6b5a4a"
+ },
+ "base": [
+  "..gg.............",
+  ".gGgg............",
+  "..SsS.......nnnnn",
+  "...n......KK.Kbbk",
+  "..KKKKKsKKKKKKbbk",
+  ".ykkkkkSkkkkkkkkk",
+  ".nnnnnnSnnnnnnkkn",
+  "..SSSSSSSSSSSSSSn",
+  ".S.rr...rr...rr..",
+  "SsrwRrsrwRrsrwRr.",
+  ".SrRRr.rRRr.rRRr.",
+  "SS.rr...rr...rr.."
+ ],
+ "poses": {
+  "inhale": {
+   "0": ".gggg............",
+   "1": "gGGgg............"
+  },
+  "closed": {
+   "5": "-Y---------------"
+  },
+  "left": {
+   "0": "gg...............",
+   "1": "gGg.............."
+  },
+  "right": {
+   "0": "...gg............",
+   "1": "..gGgg..........."
+  },
+  "fidget": {
+   "1": "---------g-------",
+   "2": "---------gg------"
+  }
+ },
+ "particles": [
+  0,
+  14
+ ]
+}
