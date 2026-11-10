@@ -137,10 +137,18 @@ class LonePixelTest(unittest.TestCase):
     def test_the_wing_tip_follows_the_wing(self):
         """Breathing raises the wing, the fidget lowers it: together, the tip moves with it and doesn't vanish
         (owner, 2026-11-02)."""
-        def top(pet, poses):
-            return next(r for r, row in enumerate(render.grid(pet, poses)) if row[0] != ".")
+        def top(pet, poses, col):
+            return next((r for r, row in enumerate(render.grid(pet, poses)) if row[col] != "."), None)
+        # New looks fold a wing in (2026-11-10): a folded wing stays folded while breathing, the other still breathes.
         for pet in [creatures.PETS["bat"], creatures.PETS["vampire"], creatures.CLASSIC["bat"], creatures.CLASSIC["vampire"]]:
-            self.assertEqual(top(pet, ["inhale", "fidget"]) - top(pet, ["inhale"]), top(pet, ["fidget"]) - top(pet, []), pet.id)
+            for col in (0, -1):
+                if top(pet, ["fidget"], col) is None:
+                    self.assertIsNone(top(pet, ["inhale", "fidget"], col), pet.id)
+                else:                       # the wing follows the breath, or is held still (the vampire's cape)
+                    both = top(pet, ["inhale", "fidget"], col)
+                    self.assertIn(both, {top(pet, ["fidget"], col),
+                                         top(pet, ["inhale"], col) + top(pet, ["fidget"], col) - top(pet, [], col)},
+                                  (pet.id, col))
 
     def test_a_pose_can_say_how_two_others_meet(self):
         pet = creatures.Pet(id="x", name="X", base=["..", ".."], palette={"a": (0, 0, 0)},
