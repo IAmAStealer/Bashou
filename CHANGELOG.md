@@ -3,6 +3,19 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.12.3 — 2026-11-10
+
+### Changes
+
+- Every pet family is now redrawn or retouched. This release covers the Platypus, Kit, Beaver, Squirrel, Pigeon, Hedgehog, Bee, Whale, Meerkat, Snow leopard, Duck, Spark, Packet, Landscape, Chameleon, Seal and Train families, the Hacker cat and the thirteen ponies. Their old looks stay one key away: press `s` on the pet board, or use `bashou config style`.
+- Pets no longer wave an arm when they fidget. Each one does something of its own: a bat folds a wing, a frog sticks out its tongue, a slime wobbles, a train puffs steam.
+- Pets no longer hint at a fight when none is waiting.
+- Terminals in VS Code no longer print `bash: _bashou_handover: command not found` at every prompt when Bashou is installed from a package.
+
+### Breaking changes
+
+- Breaking change: a pony saw every pet get its own fidget, asked for one too and was given a tail swish. It is now swishing its way across the meadow. Bring it home with `bashou pony hoof`.
+
 ## v0.12.2 — 2026-11-05
 
 ### Changes
