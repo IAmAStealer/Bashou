@@ -236,9 +236,24 @@ def for_fight(lessons, fight_id):
     return [le for le in lessons if fight_id in le.get("fights", [])]
 
 
+def needed(s, lesson):
+    """The `masters` lines that count for you: a line made only of fights ("won X | won Y") whose skills you
+    don't learn is left out (a Linux-only player masters processes without ps_phantom, a Bash fight)."""
+    from .. import challenges
+
+    def none_for_you(cond):
+        sides = [c.split() for c in cond.split("|")]
+        return all(w[0] == "won" and w[1] in challenges.BY_ID and not skills.wanted(s, challenges.BY_ID[w[1]].skill)
+                   for w in sides)
+    return [c for c in lesson.get("masters", []) if not none_for_you(c)]
+
+
 def mastered(s, lesson):
-    """You've shown you know it: the fights and achievements it prepares for are done."""
-    return bool(lesson.get("masters")) and holds(s, lesson["masters"])
+    """You've shown you know it: the fights and achievements it prepares for are done. A lesson whose every
+    line is a fight of a skill you don't learn (bash_zsh for a Rust-only player) has nothing left to prove."""
+    if not lesson.get("masters"):
+        return False
+    return holds(s, needed(s, lesson))
 
 
 def status(s, lesson):

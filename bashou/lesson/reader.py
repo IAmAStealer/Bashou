@@ -12,7 +12,7 @@ import sys
 from .. import achievements, challenges, creatures, progress, render, skills, state, terminal
 from ..adventure import quiz
 from ..i18n import _
-from . import (HERE, answered, by_id, depths, first_open, load, mastered, met, own, passed, progress_of, read,
+from . import (HERE, answered, by_id, depths, first_open, load, mastered, met, needed, own, passed, progress_of, read,
                quiz_pass, record_right, right, shown, skills_of, status, to_pass, unlocked, waiting_for)
 from ..render import ESC, BOLD, DIM, RESET, REV, GOOD, BAD
 
@@ -349,7 +349,7 @@ class Library:
         elif st == "next":
             info = [(part, "") for part in render.wrap(le["summary"], width, 3)] + [
                 (part, NEXT) for part in render.wrap(_("Your next step. To master it: {how}").format(
-                    how=missing(self.s, le["masters"])), width, 3)]
+                    how=missing(self.s, needed(self.s, le))), width, 3)]
         else:
             info = [(part, "") for part in render.wrap(le["summary"], width, 3)] + [
                 (part, DIM) for part in render.wrap(
@@ -425,7 +425,7 @@ class Library:
             elif hard and not mastered(self.s, le):
                 self.message += " " + _("{lessons} opens once you have mastered this one: {how}.").format(
                     lessons=_(" and ").join(_("“{name}”").format(name=short(w["title"])) for w in hard),
-                    how=missing(self.s, le["masters"]))
+                    how=missing(self.s, needed(self.s, le)))
             elif status(self.s, le) == "next":
                 self.message += " " + _("Now practice it: fights and achievements make it mastered.")
             if notes:
@@ -630,7 +630,7 @@ def how_to_unlock(s, lesson):
             parts.append(_("read “{lesson}”").format(lesson=name))
             continue
         if lesson.get("opens") == "mastered":
-            parts.append(_("master “{lesson}”: {how}").format(lesson=name, how=missing(s, before["masters"])))
+            parts.append(_("master “{lesson}”: {how}").format(lesson=name, how=missing(s, needed(s, before))))
             continue
         ways = ways_to_pass(s, before)
         parts.append(_("practice “{lesson}”: {ways}").format(lesson=name,
@@ -667,7 +667,7 @@ def unlock_lines(s, lesson, width):
             continue
         if opens == "mastered":
             ways += [(part, "") for part in render.wrap(
-                _("To master {lesson}: {how}.").format(lesson=quoted(before), how=missing(s, before["masters"])),
+                _("To master {lesson}: {how}.").format(lesson=quoted(before), how=missing(s, needed(s, before))),
                 width, 2)]
             continue
         ways += [(part, "") for part in render.wrap(
