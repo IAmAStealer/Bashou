@@ -19,11 +19,11 @@
     "édition de liens"
    ],
    "text": [
-    "gcc hello.c -o hello fait quatre étapes à la suite.",
+    "Le C fait tourner le noyau Linux, la plupart de ses pilotes et bash : rapide, proche de la machine, et tu gères la mémoire toi-même.",
     "",
-    "- Les étapes 1 à 3 changent ton fichier en fichier objet (.o) : du code machine avec des trous.",
+    "- gcc hello.c -o hello fait quatre étapes. Les étapes 1 à 3 donnent un fichier objet (.o) : du code machine à trous.",
     "- L'étape 4, l'éditeur de liens, bouche les trous : il relie tes appels à printf à la bibliothèque C.",
-    "- gcc écrit le .o dans un fichier temporaire et l'efface ; gcc -c hello.c garde hello.o."
+    "- gcc efface le .o à la fin ; gcc -c hello.c garde hello.o."
    ]
   },
   {

@@ -44,11 +44,11 @@
     "link"
    ],
    "text": [
-    "gcc hello.c -o hello does four steps in a row.",
+    "C runs the Linux kernel, most of its drivers and bash itself: fast, close to the machine, and you manage memory yourself.",
     "",
-    "- Steps 1 to 3 turn your file into an object file (.o): machine code with holes in it.",
+    "- gcc hello.c -o hello does four steps. Steps 1 to 3 make an object file (.o): machine code with holes in it.",
     "- Step 4, the linker, fills the holes: it connects your calls to printf to the C library.",
-    "- gcc writes the .o to a temporary file and deletes it; gcc -c hello.c keeps hello.o."
+    "- gcc deletes the .o when done; gcc -c hello.c keeps hello.o."
    ]
   },
   {

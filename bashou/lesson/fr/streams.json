@@ -16,6 +16,8 @@
     "stderr (2)"
    ],
    "text": [
+    "Une tâche de nuit écrit des milliers de lignes : tu veux les résultats dans un fichier, les erreurs dans un autre, et rien à l'écran. C'est à ça que servent les flux.",
+    "",
     "Chaque programme démarre avec trois flux, chacun avec un numéro :",
     "",
     "- stdin (0) : ce qu'il lit, le clavier par défaut.",

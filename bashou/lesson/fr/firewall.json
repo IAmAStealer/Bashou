@@ -17,10 +17,10 @@
     "pare-feu"
    ],
    "text": [
-    "Un pare-feu décide, paquet par paquet, ce qui peut entrer ou sortir.",
+    "Sur Internet, les machines sont scannées sans arrêt : une base ouverte à tous finit trouvée. Un pare-feu décide, paquet par paquet, ce qui peut entrer ou sortir : seuls les ports que tu choisis sont joignables.",
     "",
     "- Sous Linux, c'est le noyau qui filtre (nftables) ; les outils ne font qu'écrire les règles.",
-    "- Rocky active firewalld. Debian installe nftables mais ne filtre rien : nftables.service est éteint, et /etc/nftables.conf laisse tout entrer tant que tu n'écris pas de règles (ufw seulement s'il est installé).",
+    "- Rocky active firewalld. Debian installe nftables mais ne filtre rien : nftables.service est éteint, et /etc/nftables.conf laisse tout entrer sans règles écrites (ufw seulement s'il est installé).",
     "- Un exemple qui ouvre un port dit toujours sur quel système."
    ]
   },

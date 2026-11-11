@@ -51,6 +51,8 @@
     "test"
    ],
    "text": [
+    "Someone pushes broken code at 6 pm: without CI, nobody may notice until users do. A pipeline runs the same tests on every push and deploys only what passed: a bug the tests catch never reaches anyone.",
+    "",
     "On each push, the CI server runs your pipeline: jobs grouped in stages.",
     "",
     "- Stages run one after the other.",

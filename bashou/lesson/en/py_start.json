@@ -37,6 +37,8 @@
     "print"
    ],
    "text": [
+    "Python is the next step when a bash script grows past a page, or has to handle JSON, dates or numbers: it reads more clearly, and python3 is often already installed.",
+    "",
     "python3 reads the whole file, then runs it from top to bottom. No separate compile step.",
     "",
     "- python3 alone opens a prompt to try things; exit() or Ctrl+D leaves. In a program, stop with sys.exit()."

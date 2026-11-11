@@ -35,7 +35,7 @@
     "tar -czf"
    ],
    "text": [
-    "tar packs many files into one. z compresses it with gzip.",
+    "Send a whole folder as one file, keep last week's backup, unpack sources you downloaded: tar packs many files into one, and z compresses it with gzip.",
     "",
     "$ tar -czf site.tar.gz site/"
    ]

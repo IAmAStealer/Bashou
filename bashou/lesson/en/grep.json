@@ -38,7 +38,7 @@
     "error disk"
    ],
    "text": [
-    "grep prints the lines that contain your word. The file doesn't change.",
+    "A 50,000-line log and one error to find: grep prints only the lines that contain your word. The file doesn't change.",
     "",
     "- Put quotes around a pattern with spaces: grep 'disk full' app.log."
    ]

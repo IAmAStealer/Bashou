@@ -43,6 +43,8 @@
     "server.gpg"
    ],
    "text": [
+    "A password written in a script ends up in git, in backups, on screens. pass keeps it encrypted and hands it over only when a command needs it.",
+    "",
     "pass keeps each password in its own file, encrypted with your gpg key (see the lesson on keys).",
     "",
     "- The name is the path: backup/server is backup/server.gpg.",

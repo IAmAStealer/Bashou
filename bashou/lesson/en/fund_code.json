@@ -41,6 +41,8 @@
     "compile"
    ],
    "text": [
+    "Which language for which job? Glue scripts: often Python or bash. Kernels, drivers, fast servers: C or Rust. The reason is how each one reaches the CPU.",
+    "",
     "A CPU only understands machine code: numbers that stand for its tiny instructions.",
     "",
     "- You write source code, text a person can read.",
@@ -103,8 +105,7 @@
     "It also changes what you hand over.",
     "",
     "- A compiled program is built for one kind of machine, and often needs that system's libraries: build again for another one.",
-    "- A script runs anywhere its interpreter and libraries are.",
-    "- Glue and quick tools: often Python or bash. Fast, long-running tools: often C, Rust or Go."
+    "- A script runs anywhere its interpreter and libraries are."
    ]
   }
  ]

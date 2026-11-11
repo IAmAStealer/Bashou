@@ -51,10 +51,11 @@
     "this machine"
    ],
    "text": [
-    "An IPv4 address is 32 bits, written as 4 numbers. The /24 after it (the prefix) says how many bits name the network; the rest numbers the machines in it.",
+    "Two machines on the same desk can't reach each other? Compare addresses: the /24 marks the network part; only the same one talks directly.",
+    "An IPv4 address is 32 bits, written as 4 numbers. The /24 (the prefix) says how many bits name the network; the rest numbers the machines.",
     "",
     "- Like a street and a house number: 192.168.1 is the street, 20 the house.",
-    "- Machines with the same network part talk to each other directly."
+    "- Same network part: they talk directly. Another one, like 192.168.2.7: a router must pass the messages."
    ]
   },
   {

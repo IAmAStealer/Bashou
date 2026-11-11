@@ -13,6 +13,8 @@
     "print"
    ],
    "text": [
+    "Python prend le relais quand un script bash dépasse une page, ou doit traiter du JSON, des dates ou des nombres : il se lit plus clairement, et python3 est souvent déjà installé.",
+    "",
     "python3 lit tout le fichier, puis l'exécute de haut en bas. Pas d'étape de compilation à part.",
     "",
     "- python3 tout seul ouvre une invite pour essayer ; exit() ou Ctrl+D en sort. Dans un programme, arrête avec sys.exit()."

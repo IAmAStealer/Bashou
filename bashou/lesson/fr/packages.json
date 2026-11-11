@@ -21,10 +21,10 @@
     "apt update"
    ],
    "text": [
-    "Les programmes arrivent dans des paquets, rangés dans des dépôts.",
+    "Besoin de curl sur un serveur neuf ? À la main : le trouver, ses bibliothèques, chaque correctif. Un gestionnaire de paquets (apt, dnf) fait tout ça, signature vérifiée, depuis des dépôts.",
     "",
     "- apt update rafraîchit seulement la liste : rien n'est installé ni mis à jour.",
-    "- apt install lit cette liste, télécharge le paquet, et met ses fichiers en place."
+    "- apt install lit la liste, télécharge le paquet et met ses fichiers en place."
    ]
   },
   {

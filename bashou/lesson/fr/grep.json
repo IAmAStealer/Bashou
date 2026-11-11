@@ -15,7 +15,7 @@
     "error disk"
    ],
    "text": [
-    "grep affiche les lignes qui contiennent ton mot. Le fichier ne change pas.",
+    "Un journal de 50 000 lignes et une erreur à trouver : grep n'affiche que les lignes qui contiennent ton mot. Le fichier ne change pas.",
     "",
     "- Mets des guillemets autour d'un motif avec des espaces : grep 'disk full' app.log."
    ]

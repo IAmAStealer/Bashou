@@ -36,6 +36,8 @@
     "$(date +%A)"
    ],
    "text": [
+    "Name a backup after today's date, count files before deleting them: you need a command's output inside another command.",
+    "",
     "$( ) runs the command inside it first, then puts what it printed in its place.",
     "",
     "- The outer command never sees $(date +%A): it only gets Monday.",

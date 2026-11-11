@@ -16,6 +16,8 @@
     "server.gpg"
    ],
    "text": [
+    "Un mot de passe écrit dans un script finit dans git, dans les sauvegardes, sur les écrans. pass le garde chiffré et ne le donne que quand une commande en a besoin.",
+    "",
     "pass garde chaque mot de passe dans son propre fichier, chiffré avec ta clé gpg (voir la leçon sur les clés).",
     "",
     "- Le nom est le chemin : backup/server, c'est backup/server.gpg.",

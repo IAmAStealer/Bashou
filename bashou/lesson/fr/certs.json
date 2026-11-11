@@ -15,6 +15,8 @@
     "names (SAN)"
    ],
    "text": [
+    "Chaque site https donne un certificat à ton navigateur. Le jour où il expire, les navigateurs avertissent et les scripts échouent avec \"certificate has expired\" : le site est inutilisable pour tout le monde jusqu'au renouvellement.",
+    "",
     "Un certificat, c'est une clé publique avec une promesse : cette clé appartient à ces noms, jusqu'à cette date. Une CA (autorité de certification) l'a vérifié et a signé la promesse.",
     "",
     "- Sa clé privée reste sur le serveur : elle prouve que le serveur est bien celui dont parle le certificat.",

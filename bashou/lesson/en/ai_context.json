@@ -43,7 +43,7 @@
     "context window"
    ],
    "text": [
-    "An AI model doesn't remember you. Each time it answers, it reads one block of text: its context window.",
+    "An AI coding tool reads files and runs commands for you. To check its work, know what it sees: one block of text, its context window.",
     "",
     "- Everything in that block counts: instructions, your messages, its answers, the files it read, the outputs of the commands it ran.",
     "- Anything outside it doesn't exist for the model: yesterday's chat, a file it didn't open. A new session starts empty, except for what the tool loads.",

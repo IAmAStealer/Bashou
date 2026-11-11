@@ -17,7 +17,7 @@
     "SERVER"
    ],
    "text": [
-    "dig interroge directement le DNS et montre toute la réponse.",
+    "Le site s'ouvre chez ton collègue mais pas chez toi. Avant d'accuser le site, interroge directement le DNS : dig montre toute la réponse, et tu peux comparer la tienne avec la sienne.",
     "",
     "- status: NOERROR veut dire que ça a marché. NXDOMAIN : ce nom n'existe pas. SERVFAIL : la recherche a échoué.",
     "- ANSWER contient les enregistrements, SERVER dit qui a répondu.",

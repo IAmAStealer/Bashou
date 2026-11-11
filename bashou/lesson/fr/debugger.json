@@ -15,7 +15,9 @@
     "gdb"
    ],
    "text": [
-    "Un débogueur lance ton programme pour toi, et peut l'arrêter pour montrer ce qu'il y a dedans : quelle ligne, quels appels, quelles valeurs.",
+    "Ton programme a planté avec Segmentation fault, sans numéro de ligne : un débogueur montre où, et aide à comprendre pourquoi.",
+    "",
+    "Il lance ton programme pour toi, et peut l'arrêter pour montrer ce qu'il y a dedans : quelle ligne, quels appels, quelles valeurs.",
     "",
     "- Compile avec -g d'abord : gdb a besoin des numéros de ligne.",
     "$ gcc -Wall -g prog.c -o prog && gdb -q ./prog",

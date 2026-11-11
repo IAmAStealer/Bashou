@@ -17,7 +17,7 @@
     "mut"
    ],
    "text": [
-    "En Rust, une variable ne peut pas changer, sauf si tu le dis.",
+    "Rust sert aux mêmes travaux que le C (outils rapides, code système), mais son compilateur refuse la plupart des bugs de mémoire avant que le programme tourne. Ça commence petit : une variable ne peut pas changer, sauf si tu le dis.",
     "",
     "- let : fixe. Le compilateur refuse tout changement.",
     "- let mut : celle-ci peut changer.",

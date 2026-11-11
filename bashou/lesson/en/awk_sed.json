@@ -46,6 +46,8 @@
     "$2"
    ],
    "text": [
+    "Add up the sizes in a column, or change a port in 200 config files: awk reads columns, sed edits lines, both without opening an editor.",
+    "",
     "awk cuts every line into fields, at the spaces, and runs your little program on each line.",
     "",
     "- $1 is the first field, $2 the second, $0 the whole line.",

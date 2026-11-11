@@ -16,10 +16,12 @@
     "$2"
    ],
    "text": [
+    "Additionner une colonne, changer un port dans 200 fichiers : awk lit les colonnes, sed modifie les lignes, sans éditeur.",
+    "",
     "awk coupe chaque ligne en champs, aux espaces, et lance ton petit programme sur chaque ligne.",
     "",
     "- $1 est le premier champ, $2 le deuxième, $0 la ligne entière.",
-    "- Contrairement à cut, plusieurs espaces à la suite comptent comme un seul séparateur.",
+    "- Contrairement à cut, plusieurs espaces à la suite font un seul séparateur.",
     "- Mets le programme entre apostrophes, pour que le shell ne touche pas à $2."
    ]
   },

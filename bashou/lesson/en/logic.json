@@ -51,7 +51,7 @@
     "$?"
    ],
    "text": [
-    "Every command answers a question when it ends: did it work? That answer is its exit status.",
+    "A script must decide: back up only if the disk is mounted, alert only if the log has errors. A command asks each question and answers as it ends: did it work? That answer is its exit status.",
     "",
     "- 0 means yes, it worked. Any other number means no, or an error: grep answers 1 for not found, 2 when it can't read the file. if takes both as no.",
     "- $? holds the answer of the last command.",

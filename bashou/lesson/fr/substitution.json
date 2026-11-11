@@ -14,6 +14,8 @@
     "$(date +%A)"
    ],
    "text": [
+    "Nommer une sauvegarde avec la date du jour, compter des fichiers avant de les effacer : il te faut la sortie d'une commande dans une autre.",
+    "",
     "$( ) lance d'abord la commande qu'il contient, puis met à sa place ce qu'elle a écrit.",
     "",
     "- La commande autour ne voit jamais $(date +%A) : elle reçoit seulement Monday.",

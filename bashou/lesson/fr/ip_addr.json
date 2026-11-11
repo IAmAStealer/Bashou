@@ -19,10 +19,11 @@
     "cette machine"
    ],
    "text": [
-    "Une adresse IPv4 fait 32 bits, écrits en 4 nombres. Le /24 qui suit (le préfixe) dit combien de bits nomment le réseau ; le reste numérote les machines dedans.",
+    "Deux machines sur le même bureau n'arrivent pas à se parler ? Compare les adresses : le /24 marque la partie réseau ; seule la même se parle directement.",
+    "Une adresse IPv4 fait 32 bits, écrits en 4 nombres. Le /24 (le préfixe) dit combien de bits nomment le réseau ; le reste numérote les machines.",
     "",
     "- Comme une rue et un numéro : 192.168.1 est la rue, 20 la maison.",
-    "- Les machines qui ont la même partie réseau se parlent directement."
+    "- Même partie réseau : elles se parlent directement. Une autre, comme 192.168.2.7 : il faut un routeur pour passer les messages."
    ]
   },
   {

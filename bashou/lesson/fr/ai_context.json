@@ -17,11 +17,11 @@
     "fenêtre de contexte"
    ],
    "text": [
-    "Un modèle d'IA ne se souvient pas de toi. À chaque réponse, il lit un seul bloc de texte : sa fenêtre de contexte.",
+    "Une IA de code lit des fichiers et lance des commandes pour toi. Pour la vérifier, sache ce qu'elle voit : un bloc de texte, sa fenêtre de contexte.",
     "",
     "- Tout ce bloc compte : instructions, tes messages, ses réponses, fichiers lus, sorties des commandes lancées.",
-    "- Ce qui est dehors n'existe pas pour lui : la discussion d'hier, un fichier qu'il n'a pas ouvert. Une nouvelle session part de zéro, sauf ce que l'outil charge.",
-    "- Un texte écrit par d'autres (une page web, un ticket) peut cacher des ordres. Le modèle peut les suivre : surveille l'outil ensuite."
+    "- Le reste n'existe pas pour elle : la discussion d'hier, un fichier non ouvert. Une nouvelle session part de zéro, sauf ce que l'outil charge.",
+    "- Un texte écrit par d'autres (une page web, un ticket) peut cacher des ordres. Le modèle peut les suivre : surveille la suite."
    ]
   },
   {

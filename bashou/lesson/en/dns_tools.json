@@ -47,7 +47,7 @@
     "SERVER"
    ],
    "text": [
-    "dig asks DNS directly and shows the whole answer.",
+    "The site opens for your colleague but not for you. Before blaming the site, ask DNS directly: dig shows the whole answer, and you can compare yours with theirs.",
     "",
     "- status: NOERROR means it worked. NXDOMAIN: no such name. SERVFAIL: the lookup broke.",
     "- ANSWER holds the records, SERVER says who answered.",

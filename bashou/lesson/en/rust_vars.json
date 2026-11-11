@@ -48,7 +48,7 @@
     "mut"
    ],
    "text": [
-    "In Rust, a variable can't change unless you say so.",
+    "Rust is for the same jobs as C (fast tools, system code), but its compiler refuses most memory bugs before the program runs. It starts small: a variable can't change unless you say so.",
     "",
     "- let: fixed. The compiler refuses any change.",
     "- let mut: this one may change.",

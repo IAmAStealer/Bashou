@@ -41,7 +41,7 @@
     "authorized_keys"
    ],
    "text": [
-    "ssh opens a shell on another machine, and everything on the way is encrypted.",
+    "Your server sits in a data centre, with no screen or keyboard. ssh opens its shell from your laptop, and everything on the way is encrypted.",
     "",
     "- Log in with a key, not a password: ssh-keygen -t ed25519 makes the pair (the keys lesson explains how the two halves work).",
     "- Give it a passphrase: it protects the private key if your laptop is stolen.",

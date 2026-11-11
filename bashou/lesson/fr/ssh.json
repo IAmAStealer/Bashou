@@ -13,7 +13,7 @@
     "authorized_keys"
    ],
    "text": [
-    "ssh ouvre un shell sur une autre machine, et tout ce qui passe est chiffré.",
+    "Ton serveur est dans un centre de données, sans écran ni clavier. ssh t'ouvre son shell depuis ton portable, et tout ce qui passe est chiffré.",
     "",
     "- Connecte-toi avec une clé, pas un mot de passe : ssh-keygen -t ed25519 fabrique la paire (la leçon sur les clés explique les deux moitiés).",
     "- Donne-lui une phrase de passe : elle protège la clé privée si on te vole ton portable.",

@@ -16,6 +16,8 @@
     "compiler"
    ],
    "text": [
+    "Quel langage pour quel travail ? Scripts qui relient des outils : souvent Python ou bash. Noyaux, pilotes, serveurs rapides : C ou Rust. La raison, c'est la façon dont chacun arrive au processeur.",
+    "",
     "Un processeur ne comprend que le code machine : des nombres qui représentent ses toutes petites instructions.",
     "",
     "- Tu écris du code source, du texte qu'une personne peut lire.",
@@ -78,8 +80,7 @@
     "Ça change aussi ce que tu remets aux autres.",
     "",
     "- Un programme compilé est construit pour un type de machine, et souvent pour les bibliothèques de ce système : reconstruis-le pour un autre.",
-    "- Un script tourne partout où son interpréteur et ses bibliothèques sont.",
-    "- Colle et petits outils : souvent Python ou bash. Outils rapides qui tournent longtemps : souvent C, Rust ou Go."
+    "- Un script tourne partout où son interpréteur et ses bibliothèques sont."
    ]
   }
  ]

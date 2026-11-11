@@ -17,7 +17,7 @@
     "$?"
    ],
    "text": [
-    "Chaque commande répond à une question quand elle se termine : a-t-elle réussi ? Cette réponse est son code de retour.",
+    "Un script décide : sauvegarder seulement si le disque est monté, alerter seulement si le journal a des erreurs. Une commande pose chaque question et répond en finissant : a-t-elle réussi ? C'est son code de retour.",
     "",
     "- 0 veut dire oui, elle a réussi. Tout autre nombre veut dire non, ou erreur : grep répond 1 pour pas trouvé, 2 s'il ne peut pas lire le fichier. if prend les deux pour un non.",
     "- $? contient la réponse de la dernière commande.",

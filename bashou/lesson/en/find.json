@@ -46,7 +46,7 @@
     "x.bak"
    ],
    "text": [
-    "ls shows one folder. find walks into every folder below the start, as deep as it goes.",
+    "The disk is full of old .bak files somewhere under /srv: find walks into every folder below the start, as deep as it goes, and keeps what matches. ls shows only one folder.",
     "",
     "- First where to start (maze), then the tests that keep what matches.",
     "- Quote the pattern: '*.bak'. Without quotes, the shell may expand it first, with the names of the folder you are in."

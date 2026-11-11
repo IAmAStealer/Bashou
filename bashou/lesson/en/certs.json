@@ -44,6 +44,8 @@
     "names (SAN)"
    ],
    "text": [
+    "Every https site hands your browser a certificate. On the day it expires, browsers warn and scripts fail with \"certificate has expired\": the site is unusable for everyone until it is renewed.",
+    "",
     "A certificate is a public key with a promise attached: this key belongs to these names, until this date. A CA (certificate authority) checked it and signed the promise.",
     "",
     "- Its private key stays on the server: it proves the server is the one the certificate talks about.",

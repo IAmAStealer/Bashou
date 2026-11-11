@@ -57,7 +57,7 @@
     "apt update"
    ],
    "text": [
-    "Programs come in packages, stored in repositories.",
+    "Need curl on a fresh server? By hand, you'd find it, its libraries and every security fix yourself. A package manager (apt, dnf) does all three, and checks a signature to know where it comes from. Programs come in packages, stored in repositories.",
     "",
     "- apt update only refreshes the list: nothing is installed or upgraded.",
     "- apt install reads that list, downloads the package, and puts its files in place."

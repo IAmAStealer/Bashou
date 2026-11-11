@@ -44,7 +44,7 @@
     "firewall"
    ],
    "text": [
-    "A firewall decides, packet by packet, what may come in or go out.",
+    "Machines on the Internet are scanned all the time: a database left open to everyone gets found. A firewall decides, packet by packet, what may come in or go out, so only the ports you choose are reachable.",
     "",
     "- On Linux the kernel does the filtering (nftables); tools only write the rules.",
     "- Rocky turns firewalld on. Debian installs nftables but filters nothing: nftables.service is off, and /etc/nftables.conf lets everything in until you write rules (ufw only if installed).",

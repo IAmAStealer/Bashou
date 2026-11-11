@@ -42,6 +42,8 @@
     "#!/usr/bin/env bash"
    ],
    "text": [
+    "The same five commands every morning, a backup every night at 2: when you type something twice, write it once.",
+    "",
     "A script is a text file of commands, run from top to bottom. It runs later, without you watching: that changes how you write it.",
     "",
     "- The first line, #! (the shebang), says which program reads the file.",

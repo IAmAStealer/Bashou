@@ -13,7 +13,7 @@
     "tar -czf"
    ],
    "text": [
-    "tar met plein de fichiers dans un seul. z le compresse avec gzip.",
+    "Envoyer un dossier entier en un seul fichier, garder la sauvegarde de la semaine dernière, déballer des sources téléchargées : tar met plein de fichiers dans un seul, et z le compresse avec gzip.",
     "",
     "$ tar -czf site.tar.gz site/"
    ]

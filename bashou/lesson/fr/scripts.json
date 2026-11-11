@@ -15,6 +15,8 @@
     "#!/usr/bin/env bash"
    ],
    "text": [
+    "Les mêmes cinq commandes chaque matin, une sauvegarde chaque nuit à 2 h : quand tu tapes quelque chose deux fois, écris-le une fois.",
+    "",
     "Un script est un fichier texte de commandes, lancées de haut en bas. Il tourne plus tard, sans que tu regardes : ça change la façon de l'écrire.",
     "",
     "- La première ligne, #! (le shebang), dit quel programme lit le fichier.",

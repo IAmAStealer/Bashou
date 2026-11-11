@@ -41,6 +41,8 @@
     "stderr (2)"
    ],
    "text": [
+    "A nightly job prints thousands of lines: you want the results in one file, the errors in another, and nothing on screen. That's what streams are for.",
+    "",
     "Every program starts with three streams, each with a number:",
     "",
     "- stdin (0): what it reads, the keyboard by default.",

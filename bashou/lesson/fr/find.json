@@ -21,7 +21,7 @@
     "x.bak"
    ],
    "text": [
-    "ls montre un dossier. find entre dans chaque dossier sous le départ, aussi profond qu'il va.",
+    "Le disque est plein de vieux fichiers .bak quelque part sous /srv : find entre dans chaque dossier sous le départ, aussi profond qu'il va, et garde ce qui correspond. ls ne montre qu'un dossier.",
     "",
     "- D'abord où commencer (maze), puis les tests qui gardent ce qui correspond.",
     "- Mets le motif entre apostrophes : '*.bak'. Sinon le shell peut le développer d'abord, avec les noms d'ici."

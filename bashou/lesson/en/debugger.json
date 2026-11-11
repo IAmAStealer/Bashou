@@ -43,7 +43,9 @@
     "gdb"
    ],
    "text": [
-    "A debugger runs your program for you, and can stop it to show what's inside: which line, which calls, which values.",
+    "Your program crashed with Segmentation fault and no line number: a debugger shows where, and helps you see why.",
+    "",
+    "It runs your program for you, and can stop it to show what's inside: which line, which calls, which values.",
     "",
     "- Build with -g first: gdb needs the line numbers.",
     "$ gcc -Wall -g prog.c -o prog && gdb -q ./prog",
