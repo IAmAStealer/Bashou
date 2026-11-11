@@ -11,7 +11,10 @@ _bashou_handover() {
   PROMPT_COMMAND=${PROMPT_COMMAND//_bashou_handover;/}
   PROMPT_COMMAND=${PROMPT_COMMAND//;_bashou_handover/}
   PROMPT_COMMAND=${PROMPT_COMMAND//_bashou_handover/}
-  unset -f _bashou_handover
+  # Not unset: VS Code's shell integration runs its own copy of PROMPT_COMMAND (user report: "command not
+  # found" at every prompt), so the name must stay callable.
+  # shellcheck disable=SC2317  # called by PROMPT_COMMAND
+  _bashou_handover() { return $?; }
   if [[ -z ${BASHOU_DIR:-} && -r $package/bashou.bash && ! -e ${BASHOU_DATA:-$HOME/.local/share/bashou}/off ]] \
         && (( EUID != 0 )); then
     _bashou_auto=1

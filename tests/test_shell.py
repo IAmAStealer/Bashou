@@ -264,6 +264,25 @@ class PackageHandoverTest(unittest.TestCase):
                     sh.close()
 
 
+    def test_a_prompt_wrapper_that_kept_a_copy_doesnt_say_command_not_found(self):
+        """User report, 2026-11-11, in a VS Code terminal: "bash: _bashou_handover: command not found" at every
+        prompt. VS Code's shell integration copies PROMPT_COMMAND when ~/.bashrc ends and runs that copy; the
+        hook used to remove its function, so the copy called a missing command."""
+        with tempfile.TemporaryDirectory() as tmp:
+            rc = (f"source {ROOT}/bashou/handover.{self.SHELL}\n"
+                  '__vsc_original=$PROMPT_COMMAND\nPROMPT_COMMAND=\'eval "$__vsc_original"\'\n')
+            sh = Shell(tmp, bashrc=rc, env={"BASHOU_PACKAGE_DIR": "/elsewhere"}, shell=self.SHELL)
+            try:
+                self.assertTrue(sh.expect(b"$ "))
+                start = len(sh.out)
+                sh.send("true\n")
+                sh.send("false\n")
+                sh.send('echo "rc=$?"\n')
+                self.assertTrue(sh.expect(b"rc=1", start))                  # the copied hook keeps $?
+                self.assertNotIn(b"command not found", sh.out)
+            finally:
+                sh.close()
+
 
 class PackageOnByDefaultTest(unittest.TestCase):
     """Owner, 2026-10-05: Bashou wasn't on after installing the package; each user had to find `bashou on`.
