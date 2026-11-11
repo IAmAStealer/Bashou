@@ -1,0 +1,88 @@
+{
+ "title": "Hash, chiffrement, signature",
+ "summary": "Trois outils qui se ressemblent et répondent à des questions différentes : est-ce intact, qui peut le lire, qui l'a écrit.",
+ "pages": [
+  {
+   "scheme": [
+    " rapport.pdf        ─sha256─▶ 9f86d081…",
+    " rapport.pdf, 1 bit ─sha256─▶ 2c26b46b…",
+    "                               tout change",
+    "",
+    " 9f86d081… ──▶ rapport.pdf   ✘ pas de retour"
+   ],
+   "point": 1,
+   "mark": [
+    "2c26b46b…"
+   ],
+   "text": [
+    "Un hash est une empreinte des données : toujours la même pour les mêmes octets, complètement différente si un seul bit change.",
+    "",
+    "- On ne peut pas en retrouver les données, et il n'est pas secret : tout le monde peut le calculer.",
+    "- Usages : vérifier qu'un téléchargement est intact (contre un hash venu d'un endroit sûr), stocker les mots de passe (le système garde un hash lent et salé du tien : deviner prend des années, pas des secondes), nommer les commits git."
+   ]
+  },
+  {
+   "scheme": [
+    " « rdv 9h » ─clé─▶ x7#Qp9 ─même clé─▶ « rdv 9h »",
+    "",
+    " les deux côtés ont besoin du même secret :",
+    " comment le faire parvenir à l'autre ?"
+   ],
+   "point": 2,
+   "mark": [
+    "du même secret"
+   ],
+   "text": [
+    "Le chiffrement cache le contenu : seul celui qui a la clé peut le relire.",
+    "",
+    "- Avec un secret partagé (chiffrement symétrique), c'est rapide : disques, archives, un fichier fermé par une phrase de passe.",
+    "- Le plus dur est de transmettre le secret : par mail, quiconque lit le mail peut lire le fichier."
+   ]
+  },
+  {
+   "scheme": [
+    " ta paire de clés",
+    " ├── clé publique   donne-la à tout le monde",
+    " └── clé privée     toi seul l'as",
+    "                    (sous ta phrase de passe)",
+    "",
+    " clé publique de Sam  ferme",
+    " clé privée de Sam    ouvre"
+   ],
+   "point": 2,
+   "mark": [
+    "clé privée"
+   ],
+   "text": [
+    "Les paires de clés règlent ça : deux moitiés faites ensemble, une publique à donner et une privée à garder.",
+    "",
+    "- Ce que la clé publique de Sam ferme, seule la clé privée de Sam l'ouvre. Aucun secret n'a voyagé.",
+    "- On ne peut pas calculer la clé privée à partir de la publique.",
+    "- HTTPS utilise les deux : les paires de clés pour convenir d'un secret neuf, puis le chiffrement symétrique, rapide."
+   ]
+  },
+  {
+   "scheme": [
+    " éditeur ── clé privée ───▶ signe tool.tar.gz",
+    " toi     ── clé publique ─▶ vérifie",
+    "",
+    "             répond à",
+    " hash        intact ?",
+    " chiffrement qui peut le lire ?",
+    " signature   quelle clé a signé, intact ?",
+    " base64      rien : ✘ pas un secret"
+   ],
+   "point": 6,
+   "mark": [
+    "quelle clé a signé, intact ?"
+   ],
+   "text": [
+    "Une signature marche dans l'autre sens : seule la clé privée signe, quiconque a la clé publique vérifie.",
+    "",
+    "- Elle prouve quelle clé a signé et que rien n'a changé ; elle ne cache rien. Compare l'empreinte de la clé avec une source sûre.",
+    "- apt vérifie la liste signée et le hash de chaque paquet, dnf la signature de chacun. Un paquet pris à la main n'a pas ce contrôle.",
+    "- base64 ne fait que réécrire des octets en lettres : n'importe qui le décode. Ça ne protège rien."
+   ]
+  }
+ ]
+}

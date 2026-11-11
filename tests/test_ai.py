@@ -69,7 +69,7 @@ class LessonsTest(unittest.TestCase):
         fr = {le["id"]: le for le in lesson.load("fr")}
         for lid in AI:
             le = BY_ID[lid]
-            self.assertEqual(le["skill"], "ai")
+            self.assertIn("ai", le["skill"])
             self.assertFalse(le.get("fights"))
             self.assertEqual(le["masters"], [f"answered {lid} 3"])
             self.assertEqual(len(fr[lid]["pages"]), len(le["pages"]))

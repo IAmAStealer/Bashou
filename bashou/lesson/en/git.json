@@ -2,7 +2,8 @@
  "id": "git",
  "order": 270,
  "after": [
-  "scripts"
+  "scripts",
+  "fund_git"
  ],
  "opens": "read",
  "masters": [

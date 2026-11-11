@@ -1,0 +1,691 @@
+[
+ {
+  "id": "fundamentals-1-01",
+  "level": 1,
+  "q": "Your browser opens example.org. What does DNS do in that moment?",
+  "choices": [
+   "It gives the address that goes with the name",
+   "It sends the page to your browser",
+   "It encrypts the connection",
+   "It picks the fastest cable"
+  ],
+  "answer": 0,
+  "explain": "DNS is a phone book: you give it a name, it gives back an IP address. Then your browser connects to that address itself; DNS doesn't carry the page. So when only names fail and addresses still work, the network is fine and DNS is the problem."
+ },
+ {
+  "id": "fundamentals-1-02",
+  "level": 1,
+  "q": "One server runs a website and SSH. How does a client say which of the two it wants?",
+  "choices": [
+   "With the port number",
+   "With a different IP address for each",
+   "With the server's name",
+   "With its own MAC address"
+  ],
+  "answer": 0,
+  "explain": "The address finds the machine; the port picks the service on it, like a door number in a building. SSH usually listens on 22, HTTPS on 443. A service can be set to another port, so when a connection fails, check which port the service really listens on."
+ },
+ {
+  "id": "fundamentals-1-03",
+  "level": 1,
+  "q": "A site won't open. Which question do you ask first?",
+  "choices": [
+   "Does the name give an address?",
+   "Is the page's HTML valid?",
+   "Is the server's disk full?",
+   "Which browser is it?"
+  ],
+  "answer": 0,
+  "explain": "Follow the order of the trip: the name must give an address, the address must answer, the port must accept, then the service answers. Each step needs the one before. Checking the name first rules out DNS in seconds, before you blame the server or the page."
+ },
+ {
+  "id": "fundamentals-1-04",
+  "level": 1,
+  "q": "ping to the server works, but the connection to its port is refused. Which layer do you look at?",
+  "choices": [
+   "4, transport: nothing listens on that port",
+   "1, physical: the cable",
+   "3, network: the route",
+   "2, link: the MAC address"
+  ],
+  "answer": 0,
+  "explain": "ping answered, so cable, link and route work (layers 1 to 3). Refused means the machine itself said no: no program listens on that port, or it listens on another address. Check that the service runs, on which port and address, before touching the network."
+ },
+ {
+  "id": "fundamentals-1-05",
+  "level": 1,
+  "q": "ping gets no answer from a server. What can you conclude?",
+  "choices": [
+   "Not much: a firewall may block ping",
+   "The server is off",
+   "The cable is cut",
+   "DNS is broken"
+  ],
+  "answer": 0,
+  "explain": "ping uses ICMP, and many firewalls drop it on purpose. No answer can mean the machine is off, the route is missing, or ICMP is blocked. Try a test higher up: if a web page or an SSH connection works, the machine is clearly up."
+ },
+ {
+  "id": "fundamentals-1-06",
+  "level": 1,
+  "q": "The page loads, but shows \"500 Internal Server Error\". Where is the problem?",
+  "choices": [
+   "In the application on the server",
+   "In the cable",
+   "In DNS",
+   "In your Wi-Fi"
+  ],
+  "answer": 0,
+  "explain": "To get any HTTP answer, the name, the route and the connection all had to work. 500 is the application saying it failed while handling your request. Look at the application's logs on the server, not at the network."
+ },
+ {
+  "id": "fundamentals-1-07",
+  "level": 1,
+  "q": "On your local network, what does ARP find out?",
+  "choices": [
+   "Which network card (MAC) has a given IP",
+   "Which name goes with an IP",
+   "Which port a service uses",
+   "Which route leads to the Internet"
+  ],
+  "answer": 0,
+  "explain": "Inside a local network, frames are addressed to a network card by its MAC address. ARP asks everyone \"who has this IP?\" and the owner answers with its MAC. The machine keeps answers in a cache: ip neigh on Linux, arp -a on a Mac. Names are DNS's job, not ARP's."
+ },
+ {
+  "id": "fundamentals-1-08",
+  "level": 1,
+  "q": "You send data to a server on the Internet. Whose MAC address is on the frame that leaves your machine?",
+  "choices": [
+   "Your router's (the gateway)",
+   "The far server's",
+   "Your DNS server's",
+   "Nobody's: the Internet has no MAC"
+  ],
+  "answer": 0,
+  "explain": "A MAC address only counts on your own network. For a far machine, your computer sends the frame to the gateway's MAC; the IP packet inside keeps the far address. Each router then passes it to its next neighbour. That's why a gateway that doesn't answer ARP cuts you off from everything outside."
+ },
+ {
+  "id": "fundamentals-1-09",
+  "level": 1,
+  "q": "ping uses ICMP. Which port does it test?",
+  "choices": [
+   "None: ICMP has no ports",
+   "Port 80",
+   "Port 22",
+   "The port of the last service used"
+  ],
+  "answer": 0,
+  "explain": "ICMP travels inside IP, at the network layer, and has no ports: ping only tells you the machine answers, not that a service works. A web server can be down while ping succeeds, and ping can fail while the web server works. To test a service, connect to its port: curl for a website, ssh for SSH."
+ },
+ {
+  "id": "fundamentals-1-10",
+  "level": 1,
+  "q": "A video call drops a few packets now and then. Why does it use UDP rather than TCP?",
+  "choices": [
+   "Late sound is useless: better skip it than wait",
+   "UDP is encrypted, TCP isn't",
+   "UDP never loses packets",
+   "TCP can't carry sound"
+  ],
+  "answer": 0,
+  "explain": "TCP resends what's lost and waits to deliver in order: perfect for a file, bad for live sound, where a resent piece arrives too late to play. UDP just sends, and the program hides small losses. That's also why most DNS queries use UDP: one short question, asked again if no answer comes."
+ },
+ {
+  "id": "fundamentals-1-11",
+  "level": 1,
+  "q": "A firewall rule opens port 53 for TCP. DNS queries to the server still fail. Why?",
+  "choices": [
+   "DNS queries mostly use UDP: open UDP 53 too",
+   "Port 53 is reserved for the firewall",
+   "DNS needs port 80",
+   "The rule needs a reboot"
+  ],
+  "answer": 0,
+  "explain": "TCP port 53 and UDP port 53 are two different doors. Most DNS queries travel over UDP; TCP is used for big answers and zone transfers. Open the protocol the service really uses: ss -tuln on a Linux server shows udp and tcp lines separately."
+ },
+ {
+  "id": "fundamentals-1-12",
+  "level": 1,
+  "q": "How do you check that a DNS server answers on UDP?",
+  "choices": [
+   "Ask it a real query: dig @server example.org",
+   "ping its port 53",
+   "Wait for a refused message",
+   "Open it in a browser"
+  ],
+  "answer": 0,
+  "explain": "UDP has no connection, so there's nothing to \"connect\" to: a closed port may answer with an ICMP error, a filtered one stays silent, so silence proves nothing. The sure test is a real question the service must answer, here a DNS query sent to that server. ping can't help: it has no port."
+ },
+ {
+  "id": "fundamentals-1-13",
+  "level": 1,
+  "q": "What is the difference between broadcast and multicast?",
+  "choices": [
+   "Broadcast reaches everyone nearby, multicast only a group",
+   "Multicast is only for IPv4",
+   "Broadcast crosses routers, multicast doesn't",
+   "They are two names for the same thing"
+  ],
+  "answer": 0,
+  "explain": "Broadcast goes to every machine of the local network: ARP uses it to ask who has an IP. Multicast goes to a group address, and only the machines that joined that group listen. IPv6 dropped broadcast entirely and uses multicast instead."
+ },
+ {
+  "id": "fundamentals-1-14",
+  "level": 1,
+  "q": "A colleague finds printer.local from one office, but not from another subnet. Why?",
+  "choices": [
+   "mDNS multicast doesn't cross routers",
+   "The printer blocks that office",
+   "printer.local is a public name",
+   "The other subnet uses IPv6"
+  ],
+  "answer": 0,
+  "explain": "Names ending in .local are answered by mDNS, sent to 224.0.0.251, an address routers never forward. So the printer is only found by name inside its own network. Add it by its IP address, or ask the network team for an mDNS relay between the two networks."
+ },
+ {
+  "id": "fundamentals-1-15",
+  "level": 1,
+  "q": "Which of these addresses is a multicast group?",
+  "choices": [
+   "224.0.0.251",
+   "192.168.1.255",
+   "127.0.0.1",
+   "10.0.0.1"
+  ],
+  "answer": 0,
+  "explain": "Multicast addresses are 224.0.0.0 to 239.255.255.255 (224.0.0.0/4); 224.0.0.251 is the group mDNS uses. 192.168.1.255 is the broadcast address of a /24 network, 127.0.0.1 the machine itself, 10.0.0.1 an ordinary private address."
+ },
+ {
+  "id": "fundamentals-1-16",
+  "level": 1,
+  "q": "A download page shows a SHA-256 next to the file. Yours matches. What does that prove?",
+  "choices": [
+   "The file arrived unchanged",
+   "The file has no virus",
+   "The file comes from the vendor",
+   "The file is encrypted"
+  ],
+  "answer": 0,
+  "explain": "A hash is a fingerprint: the same bytes always give the same one, and one changed bit gives a completely different one. A match proves your copy equals the one the page describes. It says nothing about who made it: someone who changed the file could change the page too. That's what signatures are for."
+ },
+ {
+  "id": "fundamentals-1-17",
+  "level": 1,
+  "q": "You want to send Sam a file only Sam can open. Which key locks it?",
+  "choices": [
+   "Sam's public key",
+   "Your private key",
+   "Sam's private key",
+   "Your public key"
+  ],
+  "answer": 0,
+  "explain": "What a public key locks, only the matching private key opens. Sam gives the public key to anyone (check its fingerprint with Sam); the private key never leaves Sam. Your own private key is for signing, not for locking a file for someone else."
+ },
+ {
+  "id": "fundamentals-1-18",
+  "level": 1,
+  "q": "Your system checks an update's signature before installing it. What does a good signature tell you?",
+  "choices": [
+   "It comes from that key's owner, unchanged",
+   "That nobody else can read it",
+   "That it has no bugs",
+   "That it is the newest version"
+  ],
+  "answer": 0,
+  "explain": "Only the holder of the private key can sign; anyone with the public key can check. A good signature proves the update comes from that key's owner and wasn't changed since. It hides nothing: updates aren't secret. Your system trusts the vendor's key because it came with the system. It doesn't prove the code is good."
+ },
+ {
+  "id": "fundamentals-1-19",
+  "level": 1,
+  "q": "Why does a web server run as its own user, like www-data, rather than root?",
+  "choices": [
+   "If it's broken into, the damage stays small",
+   "root is slower",
+   "It's required by HTTP",
+   "So it can read everyone's files"
+  ],
+  "answer": 0,
+  "explain": "A program has the rights of the user it runs as. Run as root, a flaw in the web server gives the attacker the whole machine. As www-data, they only reach what www-data may touch. One user per service keeps each breach small: that's least privilege. (Only a small starter process keeps root, to open port 80.)"
+ },
+ {
+  "id": "fundamentals-1-20",
+  "level": 1,
+  "q": "Opening a file says \"Permission denied\". What does it tell you?",
+  "choices": [
+   "Your user lacks the right on it",
+   "The file is damaged",
+   "The disk is full",
+   "The file doesn't exist"
+  ],
+  "answer": 0,
+  "explain": "Every access is checked against the file's owner, group and rights. Denied means that check said no for your user, on the file or on a folder on the way to it. Look at who owns it and which rights each kind of person has before reaching for sudo. A missing file says \"No such file or directory\" instead."
+ },
+ {
+  "id": "fundamentals-1-21",
+  "level": 1,
+  "q": "Three teammates must all edit the same folder. What's the clean way?",
+  "choices": [
+   "A group with the three, given write on it",
+   "Open it to everyone",
+   "Share one login between them",
+   "Run everything as root"
+  ],
+  "answer": 0,
+  "explain": "Rights go to an owner, a group and everyone else. Put the three in one group and give that group write: each keeps their own login, and a newcomer just joins the group. Also set the folder's setgid bit (chmod g+s) so new files take the group. Opening to everyone lets any user change the files."
+ },
+ {
+  "id": "fundamentals-1-22",
+  "level": 1,
+  "q": "You start the same script in two terminals. How many processes run it?",
+  "choices": [
+   "Two, each with its own PID",
+   "One, shared",
+   "None: a script isn't a process",
+   "As many as the script has lines"
+  ],
+  "answer": 0,
+  "explain": "A program or script on disk is just a file. Each time you start it, the system makes a new process with its own memory and number, the PID. Two starts, two processes: stopping one leaves the other running."
+ },
+ {
+  "id": "fundamentals-1-23",
+  "level": 1,
+  "q": "What makes a service (a daemon) different from a command you type?",
+  "choices": [
+   "It runs with no terminal, often from boot",
+   "It is always written in C",
+   "It can't be stopped",
+   "It runs only while you're logged in"
+  ],
+  "answer": 0,
+  "explain": "A command you type belongs to your terminal and usually ends with it. A service is a process with no terminal that waits for work: a web server, SSH, a database. On most Linux systems, systemd starts it at boot, can restart it if it crashes, and keeps its logs."
+ },
+ {
+  "id": "fundamentals-1-24",
+  "level": 1,
+  "q": "A program is stuck. What do you try first?",
+  "choices": [
+   "Ask it to stop, then force only if needed",
+   "Force it at once",
+   "Unplug the machine",
+   "Delete its program file"
+  ],
+  "answer": 0,
+  "explain": "Asked to stop, a program can finish writing its files and clean up. Forced, it stops mid-way: half-written files, lock files left behind. Ask first, wait a few seconds, and force only when it won't stop. The Processes lesson shows how: kill (a polite TERM), then kill -9 (KILL, the force)."
+ },
+ {
+  "id": "fundamentals-1-25",
+  "level": 1,
+  "q": "A script compares each of n customers with each of n subscribers. The lists grow 10 times. The work?",
+  "choices": [
+   "About 100 times more",
+   "About 10 times more",
+   "The same",
+   "About 20 times more"
+  ],
+  "answer": 0,
+  "explain": "A loop inside a loop does n × n comparisons. Ten times more on each side gives 10 × 10 = 100 times more work. That's why a script fine on a sample can take hours on the real data: count how the work grows before the data does."
+ },
+ {
+  "id": "fundamentals-1-26",
+  "level": 1,
+  "q": "A script runs in a second on a 100-line sample. The real file has a million lines. What do you check first?",
+  "choices": [
+   "How its work grows with the number of lines",
+   "Whether the disk is fast enough",
+   "Whether the file is in UTF-8",
+   "Nothing: one second is fast"
+  ],
+  "answer": 0,
+  "explain": "Speed on 100 lines says nothing about a million. Work that grows like n gets 10 000 times longer; like n × n, 100 million times. Look for a loop inside a loop, or measure on 100 then 200 lines: time × 2 is fine, time × 4 is trouble."
+ },
+ {
+  "id": "fundamentals-1-27",
+  "level": 1,
+  "q": "Why is finding a word in a paper dictionary fast, even with 100 000 words?",
+  "choices": [
+   "Sorted: each look throws away half the rest",
+   "You read every page quickly",
+   "The words are short",
+   "The first letter is enough"
+  ],
+  "answer": 0,
+  "explain": "Because the words are sorted, you open in the middle and keep only the half where the word must be. 100 000 words take about 17 looks, a million about 20: that's log n. Databases use the same idea with indexes."
+ },
+ {
+  "id": "fundamentals-1-28",
+  "level": 1,
+  "q": "You mistype one digit of your card number and the form says \"invalid\" at once. How does it know?",
+  "choices": [
+   "The last digit is a check computed from the others",
+   "It asked your bank",
+   "It knows every card number",
+   "It guessed from the card's color"
+  ],
+  "answer": 0,
+  "explain": "Card numbers end with a check digit computed with the Luhn formula. One wrong digit, or most swaps of two neighbours, breaks the check, so the form knows without asking anyone. It can't tell which digit is wrong: it detects, it doesn't correct."
+ },
+ {
+  "id": "fundamentals-1-29",
+  "level": 1,
+  "q": "A QR code with a scratch across part of it still scans. Why?",
+  "choices": [
+   "It carries extra data that rebuilds the missing part",
+   "The phone guesses the link",
+   "The scratched part held nothing",
+   "QR codes are stored online"
+  ],
+  "answer": 0,
+  "explain": "QR codes add error-correcting data (Reed–Solomon codes) computed from the content. Depending on the level chosen, about 7% to 30% can be lost and rebuilt. That's why a logo can sit in the middle. But scratch one of the three big corner squares, which tell the phone where the code is, and it may not scan."
+ },
+ {
+  "id": "fundamentals-1-30",
+  "level": 1,
+  "q": "A downloaded file doesn't match its published checksum. What do you do?",
+  "choices": [
+   "Download it again: a checksum detects, it can't repair",
+   "Fix the bytes by hand",
+   "Use it anyway if it opens",
+   "Change the checksum to match"
+  ],
+  "answer": 0,
+  "explain": "A checksum like SHA-256 finds that something changed, not what. The copy is damaged or not the right file: download it again, ideally from the official site. If it still doesn't match, don't use it: someone may have changed it."
+ },
+ {
+  "id": "fundamentals-1-31",
+  "level": 1,
+  "q": "What does a git commit hold?",
+  "choices": [
+   "A snapshot of the project, with author, date and why",
+   "Only the lines you typed today",
+   "A backup of your whole disk",
+   "The list of your branches"
+  ],
+  "answer": 0,
+  "explain": "A commit saves the state of the whole project at that moment, with who made it, when, and a message saying why. Commits chain together into the history. You can go back to any of them, compare two, or find the one that broke something."
+ },
+ {
+  "id": "fundamentals-1-32",
+  "level": 1,
+  "q": "You want to try a risky idea without breaking the code that works. What do you use in git?",
+  "choices": [
+   "A branch",
+   "A copy of the folder named _old",
+   "A new repository",
+   "A commit with no message"
+  ],
+  "answer": 0,
+  "explain": "A branch is a line of work beside the main one: your commits go on it and main doesn't move. If the idea works, you merge it; if not, you delete the branch and main never saw it. Copying folders by hand is what git saves you from."
+ },
+ {
+  "id": "fundamentals-1-33",
+  "level": 1,
+  "q": "You committed a password, then deleted it in the next commit. Is it safe now?",
+  "choices": [
+   "No: it stays in the history; change the password",
+   "Yes, the file no longer has it",
+   "Yes, if nobody pushed for an hour",
+   "Yes, git hides deleted lines"
+  ],
+  "answer": 0,
+  "explain": "git keeps every commit, so the old version with the password is still there for anyone with the repository. Treat the secret as leaked: change it first. Then keep secrets out of the repository for good, for example in a file git ignores. Ignoring a file that is already committed changes nothing: git rm --cached stops tracking it."
+ },
+ {
+  "id": "fundamentals-1-34",
+  "level": 1,
+  "q": "You need every line of a log that holds a date, whatever the date. What fits?",
+  "choices": [
+   "A regular expression describing a date's shape",
+   "Searching for today's date",
+   "Reading the log by eye",
+   "Sorting the log"
+  ],
+  "answer": 0,
+  "explain": "You don't know the exact text, only its shape: four digits, a dash, two digits, a dash, two digits. A regular expression describes that shape, and grep -E finds every line that matches. Plain text search only finds one exact date."
+ },
+ {
+  "id": "fundamentals-1-35",
+  "level": 1,
+  "q": "You search prices for 1.5 with a regex. Lines with 105 show up too. Why?",
+  "choices": [
+   "In a regex, . means any character",
+   "grep ignores dots",
+   "105 and 1.5 are the same number",
+   "The file is broken"
+  ],
+  "answer": 0,
+  "explain": "A few characters are special in a regex, and the dot matches any single character, so 1.5 also matches 105 or 1x5. For an exact text, search plain text (grep -F '1.5') or escape the dot inside single quotes (grep '1\\.5')."
+ },
+ {
+  "id": "fundamentals-1-36",
+  "level": 1,
+  "q": "You need one field from a JSON file. Regex or a JSON tool?",
+  "choices": [
+   "A JSON tool like jq: a regex breaks on nesting",
+   "A regex: it's always faster",
+   "A regex, if the file is small",
+   "Neither: open it and copy by hand"
+  ],
+  "answer": 0,
+  "explain": "JSON can nest, spread over lines, escape quotes and change order: a regex that works today breaks on the next file. A parser understands the format: jq, or Python's json module. Keep regexes for shapes in plain lines."
+ },
+ {
+  "id": "fundamentals-1-37",
+  "level": 1,
+  "q": "Two programs append to the same CSV file at once and lines get mixed. What does a database add?",
+  "choices": [
+   "Safe writes from many programs, one at a time",
+   "Prettier columns",
+   "A smaller file",
+   "Nothing: it's the same"
+  ],
+  "answer": 0,
+  "explain": "A text file has no rules for two writers: their lines can interleave or cut each other. A database takes the writes one at a time, checks them, and keeps each change whole. For one program writing small data, a CSV is fine."
+ },
+ {
+  "id": "fundamentals-1-38",
+  "level": 1,
+  "q": "In a customers table, what is one row?",
+  "choices": [
+   "One customer",
+   "One detail, like every email",
+   "The whole table",
+   "The list of columns"
+  ],
+  "answer": 0,
+  "explain": "Like a spreadsheet: each row is one thing, here one customer, and each column one detail about it (name, email, city). A column holds the same detail for every customer."
+ },
+ {
+  "id": "fundamentals-1-39",
+  "level": 1,
+  "q": "A phone app keeps its data in one file inside the app, with no server. What does it likely use?",
+  "choices": [
+   "SQLite",
+   "PostgreSQL",
+   "A CSV per row",
+   "An Excel sheet"
+  ],
+  "answer": 0,
+  "explain": "SQLite is a database in a single file, run inside the program itself: phones, browsers and many small tools use it. PostgreSQL and MySQL are servers that many programs reach over the network, for data many machines share, like a busy website's."
+ },
+ {
+  "id": "fundamentals-1-40",
+  "level": 1,
+  "q": "What does a compiler like gcc do?",
+  "choices": [
+   "Translates source code once into a program the CPU runs",
+   "Runs your code line by line, each time",
+   "Checks your spelling in comments",
+   "Downloads libraries"
+  ],
+  "answer": 0,
+  "explain": "A CPU only understands machine code. A compiler reads your source code and writes a program file of machine code, once; then that file runs on its own. An interpreter, like python3, reads your code and runs it each time instead."
+ },
+ {
+  "id": "fundamentals-1-41",
+  "level": 1,
+  "q": "A Python script misspells a variable name (totl instead of total) in a branch that rarely runs. When will you find out?",
+  "choices": [
+   "Only when that line runs",
+   "When you save the file",
+   "When Python is installed",
+   "Never: Python fixes typos"
+  ],
+  "answer": 0,
+  "explain": "Before it starts, Python checks the grammar of the whole file, so a syntax error stops it at once. But a name is only looked up when its line runs: a misspelled name in a branch that never ran stays hidden, and can blow up months later. Test every branch; in C or Rust the compiler would have refused to build."
+ },
+ {
+  "id": "fundamentals-1-42",
+  "level": 1,
+  "q": "You compiled a C program on Linux x86_64. Will that file run on a Mac with an arm64 chip?",
+  "choices": [
+   "No: build it again for that system",
+   "Yes, machine code is the same everywhere",
+   "Yes, if you rename it",
+   "Only with sudo"
+  ],
+  "answer": 0,
+  "explain": "A compiled program holds machine code for one kind of CPU and one system. A Mac with an arm64 chip needs a program built for macOS on arm64: compile the source again there. A Python script, by contrast, runs wherever python3 and the libraries it uses are installed."
+ },
+ {
+  "id": "fundamentals-2-01",
+  "level": 2,
+  "q": "Why learn the OSI layers if the Internet runs on TCP/IP?",
+  "choices": [
+   "To sort a failure by where it happens",
+   "Because routers use all 7 layers",
+   "Because exams are the only use",
+   "Because TCP/IP has 7 layers too"
+  ],
+  "answer": 0,
+  "explain": "OSI is a model for reasoning: physical, link, network, transport, application. TCP/IP merges some of them (5 and 6 are blurry), but the order still holds: each layer needs the one below. Saying \"layer 4\" or \"it's DNS\" turns \"the network is down\" into a place to look."
+ },
+ {
+  "id": "fundamentals-2-02",
+  "level": 2,
+  "q": "A TCP connection fails at once with \"Connection refused\". What does that tell you?",
+  "choices": [
+   "The machine answered: no program listens on that port",
+   "A firewall silently dropped it",
+   "The name doesn't resolve",
+   "The cable is unplugged"
+  ],
+  "answer": 0,
+  "explain": "Refused is an answer: the machine is up and reachable, and its system replied that nothing listens there (rarely, a firewall set to reject, not drop). A firewall that drops packets gives a time out instead, after a long wait. So refused sends you to the service (is it running, on which address and port?), not to the network."
+ },
+ {
+  "id": "fundamentals-2-03",
+  "level": 2,
+  "q": "A script stores a password \"encrypted\" with base64. Is it protected?",
+  "choices": [
+   "No: base64 is an encoding, anyone decodes it",
+   "Yes, base64 is strong encryption",
+   "Yes, if the file ends in .b64",
+   "Only if the password is long"
+  ],
+  "answer": 0,
+  "explain": "base64 only rewrites bytes as letters so they travel in text: base64 -d turns it back, no key needed. It's not encryption and not a hash. Keep the secret out of the script: a secret store, a file only that service's user can read (mode 600), or systemd's LoadCredential=. Not Environment=: any user can read it."
+ },
+ {
+  "id": "fundamentals-2-04",
+  "level": 2,
+  "q": "An install fails without root. What's the good habit?",
+  "choices": [
+   "sudo for that one command",
+   "Log in as root for the day",
+   "Give your user every right",
+   "Open the folder to everyone"
+  ],
+  "answer": 0,
+  "explain": "sudo runs one command as root and then you're yourself again, and the system logs who ran what. Staying root all day turns every typo into a possible disaster, for the whole machine. Least privilege: root only for the command that needs it."
+ },
+ {
+  "id": "fundamentals-2-05",
+  "level": 2,
+  "q": "You close your terminal: your script stops, but the web server keeps running. Why?",
+  "choices": [
+   "The script was tied to your terminal; the server isn't",
+   "The server is faster",
+   "Scripts can't run for long",
+   "The web server runs as you"
+  ],
+  "answer": 0,
+  "explain": "Closing the terminal sends a hang-up signal to everything started from it, and your script stops on it. The web server was started by systemd, not by you, and has no terminal to lose. That's why long-running work belongs in a service."
+ },
+ {
+  "id": "fundamentals-2-06",
+  "level": 2,
+  "q": "A script takes 1 s on 1 000 lines and 4 s on 2 000. How does its work grow?",
+  "choices": [
+   "Like n × n: look for a loop inside a loop",
+   "Like n: it's fine",
+   "It doesn't grow",
+   "Like log n"
+  ],
+  "answer": 0,
+  "explain": "Twice the data and four times the time is the sign of n × n: at 20 000 lines, expect about 400 s. Work growing like n would only double. Look for a loop inside a loop, or a command that reads a whole file for each line."
+ },
+ {
+  "id": "fundamentals-2-07",
+  "level": 2,
+  "q": "Why can't a card's check digit correct the typo it found?",
+  "choices": [
+   "One digit only says something is wrong, not where",
+   "Banks forbid it",
+   "It could, but forms don't bother",
+   "It only works on the first digit"
+  ],
+  "answer": 0,
+  "explain": "A single check digit carries just enough to notice a change. To find where the error is, and so fix it, a code needs more extra data, like the error-correcting part of a QR code. Detecting is enough here: you can simply type the number again."
+ },
+ {
+  "id": "fundamentals-2-08",
+  "level": 2,
+  "q": "Why does a commit message say why, not just what?",
+  "choices": [
+   "The diff shows what; only the message keeps the why",
+   "git refuses short messages",
+   "It makes the commit smaller",
+   "So the branch gets a name"
+  ],
+  "answer": 0,
+  "explain": "Anyone can see what changed by comparing versions. Why it changed lives only in the message: the bug it fixes, the decision behind it. Months later, it's what tells you whether a strange line is safe to remove."
+ },
+ {
+  "id": "fundamentals-2-09",
+  "level": 2,
+  "q": "An AI gives you a regex for your logs. How do you trust it?",
+  "choices": [
+   "Test it on lines that must match and lines that must not",
+   "If it's long, it's right",
+   "Run it once on production",
+   "Ask the AI if it's sure"
+  ],
+  "answer": 0,
+  "explain": "A regex can match too much or too little, and both look fine at a glance. Gather a few real lines that should match and a few that shouldn't, and check each. Keep them: they become a test when the regex changes."
+ },
+ {
+  "id": "fundamentals-2-10",
+  "level": 2,
+  "q": "A transfer debits one account, then the server crashes before crediting the other. What prevents a half-done transfer?",
+  "choices": [
+   "A transaction: all its changes, or none",
+   "A backup every night",
+   "A faster server",
+   "Writing to a CSV"
+  ],
+  "answer": 0,
+  "explain": "A transaction groups the debit and the credit: the database applies both, or, after a crash, neither. Nobody ever sees money that left one account and reached no other. A nightly backup would lose the day and not fix the half-done change."
+ },
+ {
+  "id": "fundamentals-2-11",
+  "level": 2,
+  "q": "On a new server, python3 app.py says \"python3: command not found\". Why?",
+  "choices": [
+   "A script needs its interpreter installed there",
+   "The script has a typo",
+   "Python only runs on laptops",
+   "The server is out of disk"
+  ],
+  "answer": 0,
+  "explain": "A Python script isn't a program on its own: python3 reads it and runs it. Install python3 on that server, and the libraries the script needs (in a venv). A compiled program wouldn't need an interpreter, but it must be built for that server's system."
+ }
+]

@@ -1,43 +1,25 @@
 {
- "title": "Le réseau : adresses et ports",
- "summary": "Les adresses IP, les noms, les ports, et ce que veut dire écouter sur 0.0.0.0.",
+ "title": "Réseaux : tes adresses, qui écoute",
+ "summary": "Voir tes adresses, interroger le DNS, et ce qu'écouter sur 0.0.0.0 veut dire.",
  "pages": [
   {
    "scheme": [
-    " example.org ──DNS──▶ 203.0.113.10",
-    "     nom                 adresse"
-   ],
-   "point": 0,
-   "mark": [
-    "DNS"
-   ],
-   "text": [
-    "Les machines se parlent avec des nombres, les adresses IP. Le DNS transforme les noms en adresses.",
-    "",
-    "- 203.0.113.10 est une adresse réservée aux exemples ; dig montre la vraie.",
-    "",
-    "$ dig +short example.org",
-    "$ ip addr      # tes propres adresses",
-    "$ ifconfig     # sur Mac",
-    "$ ping -c 3 example.org   # 3 essais ; sans -c, ping tourne jusqu'à Ctrl-C"
-   ]
-  },
-  {
-   "scheme": [
-    " 203.0.113.10 : 443",
-    " └────┬─────┘   └┬┘",
-    "   la machine   la porte (port)",
-    "",
-    " 22 ssh   80 http   443 https   5432 postgres"
+    " $ ip addr            tes propres adresses",
+    " $ dig +short example.org",
+    " 203.0.113.10         l'adresse du nom",
+    " $ ping -c 3 example.org"
    ],
    "point": 2,
    "mark": [
-    "443"
+    "203.0.113.10"
    ],
    "text": [
-    "Une machine fait tourner plein de services. Le port dit lequel tu veux.",
+    "Adresses, noms et ports, sur ta machine.",
     "",
-    "- Un service écoute sur son port ; un client s'y connecte."
+    "- ip addr liste tes propres adresses (ifconfig sur Mac).",
+    "- dig demande au DNS l'adresse d'un nom.",
+    "- ping -c 3 envoie 3 essais ; sans -c, ping continue jusqu'à Ctrl-C.",
+    "- 203.0.113.10 est un exemple : dig te montre les vraies adresses d'example.org."
    ]
   },
   {

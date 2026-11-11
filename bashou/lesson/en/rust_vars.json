@@ -3,7 +3,8 @@
  "order": 400,
  "skill": "rust",
  "after": [
-  "stack_heap"
+  "stack_heap",
+  "fund_code"
  ],
  "opens": "mastered",
  "masters": [

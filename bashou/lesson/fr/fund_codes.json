@@ -1,0 +1,93 @@
+{
+ "title": "Des codes qui trouvent et corrigent les erreurs",
+ "summary": "Les bits basculent et les gens font des fautes de frappe. Un chiffre de contrôle trouve une erreur sur une carte bancaire, une somme de contrôle un fichier modifié, un QR code reconstruit ce qui est taché.",
+ "pages": [
+  {
+   "scheme": [
+    " envoyé   1 0 1 1 0 0 1",
+    "                │",
+    "                ↓ bruit, rayon cosmique, usure",
+    " reçu     1 0 1 0 0 0 1",
+    "",
+    " souvent ni erreur ni plantage : un bit faux"
+   ],
+   "point": 3,
+   "mark": [
+    "1 0 1 0"
+   ],
+   "text": [
+    "La mémoire, les câbles et les disques font parfois basculer un bit : un 1 arrive en 0. Souvent rien ne plante et rien ne prévient : la donnée est juste fausse.",
+    "",
+    "- Rare pour un bit, courant pour un datacenter : dans une étude de Google de 2009, environ un tiers des serveurs ont eu au moins une erreur mémoire en un an, surtout des puces défectueuses plutôt que des rayons cosmiques.",
+    "- Le remède est la redondance : ajouter un peu de données calculées à partir du reste, et les vérifier à l'arrivée."
+   ]
+  },
+  {
+   "scheme": [
+    " 4111 1111 1111 1111   dernier chiffre : un",
+    "                       chiffre de contrôle",
+    " tapé :                (Luhn)",
+    " 4111 1111 1111 1121   un chiffre faux",
+    "  → « numéro de carte invalide »",
+    "    trouvé, pas corrigé : retape-le"
+   ],
+   "point": 4,
+   "mark": [
+    "numéro de carte invalide"
+   ],
+   "text": [
+    "Un numéro de carte bancaire finit par un chiffre de contrôle calculé à partir des autres (la formule de Luhn).",
+    "",
+    "- Un formulaire repère tout chiffre faux, et la plupart des inversions de deux voisins, avant même de demander à la banque.",
+    "- Il détecte, il ne corrige pas : il ne peut pas dire quel chiffre est faux.",
+    "- Même idée : les IBAN, les ISBN, et la somme de contrôle à côté d'un téléchargement."
+   ]
+  },
+  {
+   "scheme": [
+    " QR code, taché en partie ou sous un logo",
+    "",
+    "   niveau  peut perdre",
+    "   L       environ 7 %",
+    "   M       environ 15 %",
+    "   Q       environ 25 %",
+    "   H       environ 30 %",
+    "",
+    "   → se lit encore : la partie perdue est refaite"
+   ],
+   "point": 8,
+   "mark": [
+    "refaite"
+   ],
+   "text": [
+    "Certains codes vont plus loin : ils trouvent l'erreur et la corrigent.",
+    "",
+    "- Un QR code porte des données de correction en plus (codes de Reed-Solomon) : rayé, il se lit encore.",
+    "- Corriger prend de la place : plus il peut reconstruire, plus le code est gros pour le même texte."
+   ]
+  },
+  {
+   "scheme": [
+    " code             trouve           corrige",
+    " chiffre de carte une faute        non",
+    " sha256sum        tout changement  non",
+    " bit de parité    un bit           non",
+    " RAM ECC          deux bits        un bit",
+    " RAID 5           un disque mort*  le refait",
+    " QR codes, CD     beaucoup         beaucoup"
+   ],
+   "point": 4,
+   "mark": [
+    "RAM ECC"
+   ],
+   "text": [
+    "La même idée tourne sous tes pieds chaque jour : des données en plus, calculées à partir du reste, vérifiées à l'arrivée.",
+    "",
+    "- Détecter suffit quand on peut redemander : retélécharger le fichier, retaper le numéro.",
+    "- Corriger sert quand on ne peut pas : de la mémoire en cours d'usage, un disque mort, un code taché.",
+    "- *Le disque dit lui-même qu'il est mort ; RAID ne fait que le refaire.",
+    "- Le parcours Logique construit la parité et un code qui corrige un bit basculé."
+   ]
+  }
+ ]
+}

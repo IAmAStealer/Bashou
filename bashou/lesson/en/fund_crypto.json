@@ -1,0 +1,112 @@
+{
+ "id": "fund_crypto",
+ "order": 435,
+ "skill": [
+  "fundamentals",
+  "linux",
+  "network"
+ ],
+ "after": [
+  "files"
+ ],
+ "opens": "read",
+ "masters": [
+  "answered fund_crypto 3"
+ ],
+ "questions": [
+  "fundamentals-1-16",
+  "fundamentals-1-17",
+  "fundamentals-1-18",
+  "fundamentals-2-03"
+ ],
+ "recall": [
+  "fundamentals-1-16",
+  "fundamentals-1-17"
+ ],
+ "title": "Hash, encryption, signature",
+ "summary": "Three tools that look alike and answer different questions: is it unchanged, who can read it, who wrote it.",
+ "pages": [
+  {
+   "scheme": [
+    " report.pdf        ─sha256─▶ 9f86d081…",
+    " report.pdf, 1 bit ─sha256─▶ 2c26b46b…",
+    "                              all different",
+    "",
+    " 9f86d081… ──▶ report.pdf    ✘ no way back"
+   ],
+   "point": 1,
+   "mark": [
+    "2c26b46b…"
+   ],
+   "text": [
+    "A hash is a fingerprint of data: always the same for the same bytes, completely different if one bit changes.",
+    "",
+    "- It can't be turned back into the data, and it isn't secret: anyone can compute it.",
+    "- Uses: check a download is unchanged (against a hash from a place you trust), store passwords (the system keeps a slow, salted hash of yours: guessing takes years, not seconds), name git commits."
+   ]
+  },
+  {
+   "scheme": [
+    " \"meet at 9\" ─key─▶ x7#Qp9 ─same key─▶ \"meet at 9\"",
+    "",
+    " both sides need the same secret:",
+    " how do you get it to the other one?"
+   ],
+   "point": 2,
+   "mark": [
+    "the same secret"
+   ],
+   "text": [
+    "Encryption hides the content: only someone with the key can read it back.",
+    "",
+    "- With one shared secret (symmetric encryption), it's fast: disks, archives, a file locked with a passphrase.",
+    "- The hard part is passing the secret: by mail, anyone who reads the mail can read the file."
+   ]
+  },
+  {
+   "scheme": [
+    " your key pair",
+    " ├── public key     give it to anyone",
+    " └── private key    only you have it",
+    "                    (protected by your passphrase)",
+    "",
+    " Sam's public key  locks",
+    " Sam's private key opens"
+   ],
+   "point": 2,
+   "mark": [
+    "private key"
+   ],
+   "text": [
+    "Key pairs solve that: two halves made together, a public one to give away and a private one to keep.",
+    "",
+    "- What Sam's public key locks, only Sam's private key opens. No secret had to travel.",
+    "- You can't compute the private key from the public one.",
+    "- HTTPS uses both: key pairs to agree on a fresh secret, then fast symmetric encryption."
+   ]
+  },
+  {
+   "scheme": [
+    " vendor ── private key ──▶ signs tool.tar.gz",
+    " you    ── public key  ──▶ checks it",
+    "",
+    "             answers",
+    " hash        unchanged?",
+    " encryption  who can read it?",
+    " signature   which key signed it, unchanged?",
+    " base64      nothing: ✘ not a secret"
+   ],
+   "point": 6,
+   "mark": [
+    "which key signed it, unchanged?"
+   ],
+   "text": [
+    "A signature works the other way round: only the private key signs, anyone with the public key checks.",
+    "",
+    "- It proves which key signed and that nothing changed; it hides nothing. Check the key's fingerprint against a trusted source.",
+    "- apt checks the signed package list and each package's hash, dnf each package's signature. A package downloaded by hand gets no such check.",
+    "- base64 only rewrites bytes as plain letters: anyone decodes it. It protects nothing."
+   ]
+  }
+ ]
+}

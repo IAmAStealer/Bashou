@@ -1,0 +1,111 @@
+{
+ "id": "fund_complexity",
+ "order": 261,
+ "skill": [
+  "fundamentals",
+  "logic"
+ ],
+ "after": [
+  "variables"
+ ],
+ "opens": "read",
+ "masters": [
+  "answered fund_complexity 3"
+ ],
+ "questions": [
+  "fundamentals-1-25",
+  "fundamentals-1-26",
+  "fundamentals-1-27",
+  "fundamentals-2-06"
+ ],
+ "recall": [
+  "fundamentals-1-25",
+  "fundamentals-1-26"
+ ],
+ "title": "How much work: count before it grows",
+ "summary": "A program that is quick on 100 lines can take hours on a million. Count how the work grows with the data, and measure.",
+ "pages": [
+  {
+   "scheme": [
+    " find one name among n cards",
+    "",
+    " a messy pile: look at each one   up to n",
+    " sorted, like a dictionary:",
+    "   open the middle, keep one half  about log n",
+    "",
+    "   1 000 cards: 10 looks; 1 000 000: 20"
+   ],
+   "point": 4,
+   "mark": [
+    "about log n"
+   ],
+   "text": [
+    "Before data grows, count the steps: how many times does the work run for n items?",
+    "",
+    "- In a messy pile, you may look at every card: n steps.",
+    "- In sorted cards, each look throws away half: a million cards take about 20 looks.",
+    "- That's why paper dictionaries and database indexes keep things sorted."
+   ]
+  },
+  {
+   "scheme": [
+    " two guest lists, n names each: who is on both?",
+    "",
+    " each name against every name     n × n",
+    "     1 000 names       1 000 000 checks",
+    "    20 000 names     400 000 000 checks",
+    "",
+    " sort both, walk them side by side",
+    "                       about n × log n"
+   ],
+   "point": 2,
+   "mark": [
+    "n × n"
+   ],
+   "text": [
+    "A loop inside a loop multiplies: for each name, read the whole other list again.",
+    "",
+    "- 20 times more names on each side: 400 times more work.",
+    "- Sorted lists can be walked side by side, once each: far less work.",
+    "- It's the usual reason a script fine on a sample takes hours on the real file."
+   ]
+  },
+  {
+   "scheme": [
+    " n          log n    n × log n     n × n",
+    " 100          7        700         10 000",
+    " 1 000       10     10 000      1 000 000",
+    " 1 000 000   20     20 million  a trillion"
+   ],
+   "point": 3,
+   "mark": [
+    "a trillion"
+   ],
+   "text": [
+    "What counts is how the work grows, not how fast it is today.",
+    "",
+    "- Programmers write it O(n), O(n²): \"order n\", \"order n squared\".",
+    "- On 100 items everything is fast. The difference shows only when data grows: plan for the real size."
+   ]
+  },
+  {
+   "scheme": [
+    " time it on n lines, then on 2n",
+    "",
+    "   time × 2   grows like n (or n × log n)",
+    "   time × 4   grows like n × n: look for",
+    "              a loop inside a loop"
+   ],
+   "point": 3,
+   "mark": [
+    "time × 4"
+   ],
+   "text": [
+    "Don't guess, measure: time ./script big.txt, then on a file twice as big. Use inputs that take a few seconds, or start-up time hides the growth.",
+    "",
+    "- Code an AI writes can hide a loop inside a loop: ask how the work grows with the data, then measure.",
+    "- The Logic path makes you find and fix one in a real script."
+   ]
+  }
+ ]
+}

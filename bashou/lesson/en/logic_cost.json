@@ -1,204 +1,205 @@
 {
-  "id": "logic_cost",
-  "order": 263,
-  "skill": "logic",
-  "after": [
-    "loops",
-    "logic"
-  ],
-  "masters": [
-    "won square_spider"
-  ],
-  "questions": [
-    "logic-2-18",
-    "logic-2-19",
-    "logic-2-20",
-    "logic-3-12",
-    "logic-3-13"
-  ],
-  "recall": [
-    "logic-2-18",
-    "logic-2-19",
-    "logic-2-20"
-  ],
-  "fights": [
-    "square_spider"
-  ],
-  "title": "How much work: loops inside loops",
-  "summary": "Count what a script does before the data grows: one loop is n, a loop inside a loop is n × n, and a tool that reads each file once beats both.",
-  "pages": [
-    {
-      "scheme": [
-        " while IFS= read -r c; do",
-        "   printf '%s\\n' \"$c\"",
-        " done < customers.txt",
-        "",
-        "   one turn per line: n lines, n turns",
-        "",
-        "   lines     turns",
-        "   1 000     1 000",
-        "   20 000    20 000      ← × 20 lines, × 20 turns"
-      ],
-      "script": [
-        "while IFS= read -r c; do",
-        "  printf '%s\\n' \"$c\"",
-        "done < customers.txt"
-      ],
-      "point": 4,
-      "mark": [
-        "n turns"
-      ],
-      "text": [
-        "A script that works on 10 lines can take hours on a million. To see it coming, count the work: how many times does each step run?",
-        "",
-        "- A loop over a file runs once per line. n lines: n turns.",
-        "- Twice as many lines, twice the time. That's fine: the work grows like the data.",
-        "- Programmers write it O(n), read \"order n\"."
-      ]
-    },
-    {
-      "scheme": [
-        " while IFS= read -r c; do          ← n turns",
-        "   while IFS= read -r m; do        ← n each",
-        "     if [ \"$c\" = \"$m\" ]; then",
-        "       printf '%s\\n' \"$c\"",
-        "     fi",
-        "   done < newsletter.txt",
-        " done < customers.txt",
-        "   lines     comparisons",
-        "   1 000     1 000 000",
-        "   20 000    400 000 000 ← × 20 lines, × 400 work"
-      ],
-      "script": [
-        "while IFS= read -r c; do",
-        "while IFS= read -r m; do",
-        "if [ \"$c\" = \"$m\" ]; then",
-        "printf '%s\\n' \"$c\"",
-        "fi",
-        "done < newsletter.txt",
-        "done < customers.txt"
-      ],
-      "point": 1,
-      "mark": [
-        "n each",
-        "400 000 000"
-      ],
-      "text": [
-        "Put a loop inside a loop and the counts multiply: for each customer, the inner loop reads the whole newsletter again.",
-        "",
-        "- n customers × n subscribers: n × n comparisons, O(n²).",
-        "- 20 times more lines on each side makes 400 times more work.",
-        "- It's the usual reason a script that was fine on a sample takes minutes or hours on the real file."
-      ]
-    },
-    {
-      "scheme": [
-        " $ TIMEFORMAT='%R s'        in zsh: TIMEFMT='%E'",
-        " $ time bash common.sh > out.txt",
-        "",
-        "   lines   time",
-        "   200     0.150 s",
-        "   400     0.611 s   × 4",
-        "   800     2.500 s   × 4   ← n × n",
-        "   20 000 lines: 2.5 × 25 × 25 ≈ 26 minutes"
-      ],
-      "point": 6,
-      "mark": [
-        "× 4"
-      ],
-      "text": [
-        "Don't guess, measure: time the script on small lists, then on lists twice as long, all of them: double only one and n × n looks like n.",
-        "",
-        "- Time × 2: the work grows like n. Time × 4: like n × n, 625 times longer for 25 times the lines.",
-        "- > out.txt, not > /dev/null: GNU grep notices /dev/null and stops at the first match, so the time would lie."
-      ]
-    },
-    {
-      "scheme": [
-        " while IFS= read -r c; do",
-        "   if grep -qxF -- \"$c\" newsletter.txt; then",
-        "     printf '%s\\n' \"$c\"",
-        "   fi",
-        " done < customers.txt",
-        "",
-        "   the loop you see:      n turns",
-        "   the loop inside grep:  up to n lines each turn"
-      ],
-      "script": [
-        "while IFS= read -r c; do",
-        "if grep -qxF -- \"$c\" newsletter.txt; then",
-        "printf '%s\\n' \"$c\"",
-        "fi",
-        "done < customers.txt"
-      ],
-      "point": 7,
-      "mark": [
-        "the loop inside grep"
-      ],
-      "text": [
-        "grep reads the newsletter each time you call it, until it finds the line: a second loop, hidden inside grep.",
-        "",
-        "- At these sizes, starting a program per line (about 1 ms) costs most: 18 s for 20 000 lines. Time shows × 2, still far too slow.",
-        "- Python too: x in a_list walks the list. s = set(a_list), built once before the loop, answers x in s in one step."
-      ]
-    },
-    {
-      "scheme": [
-        " ✘ while IFS= read -r f; do",
-        "     today=$(date +%F)  ← same answer every turn",
-        "     printf '%s %s\\n' \"$today\" \"$f\"",
-        "   done < files.txt",
-        "",
-        " ✔ today=$(date +%F)    ← once",
-        "   while IFS= read -r f; do",
-        "     printf '%s %s\\n' \"$today\" \"$f\"",
-        "   done < files.txt"
-      ],
-      "script": [
-        "today=$(date +%F)",
-        "while IFS= read -r f; do",
-        "printf '%s %s\\n' \"$today\" \"$f\"",
-        "done < files.txt"
-      ],
-      "point": 5,
-      "mark": [
-        "once"
-      ],
-      "text": [
-        "Work whose answer doesn't change from one turn to the next belongs before the loop.",
-        "",
-        "- Here, date gives the same day for every file: ask once, keep the answer in a variable.",
-        "- Each $( ) starts a new process, here to run date. On 50 000 files, that's 50 000 processes for one answer."
-      ]
-    },
-    {
-      "scheme": [
-        " grep -Fxf newsletter.txt customers.txt",
-        "            │              │",
-        "            │              └ read once",
-        "            └ read once, kept in memory",
-        "              to look each line up (GNU grep)",
-        "",
-        " comm -12 <(sort customers.txt) \\",
-        "          <(sort newsletter.txt)",
-        "",
-        "   sorted: both lists walked side by side, once"
-      ],
-      "script": [
-        "grep -Fxf newsletter.txt customers.txt",
-        "comm -12 <(sort customers.txt) \\",
-        "<(sort newsletter.txt)"
-      ],
-      "point": 0,
-      "mark": [
-        "read once"
-      ],
-      "text": [
-        "The fix isn't a faster loop: it's a tool that reads each file once.",
-        "",
-        "- grep -Fxf: -f takes what to look for from a file, -F as plain text (a dot is just a dot), -x as whole lines.",
-        "- comm -12 shows the lines in both sorted files; <(sort file) hands them over as files (bash and zsh, not sh). Sorting costs about n × log n: 300 000 steps for 20 000 lines, not 400 million."
-      ]
-    }
-  ]
+ "id": "logic_cost",
+ "order": 263,
+ "skill": "logic",
+ "after": [
+  "loops",
+  "logic",
+  "fund_complexity"
+ ],
+ "masters": [
+  "won square_spider"
+ ],
+ "questions": [
+  "logic-2-18",
+  "logic-2-19",
+  "logic-2-20",
+  "logic-3-12",
+  "logic-3-13"
+ ],
+ "recall": [
+  "logic-2-18",
+  "logic-2-19",
+  "logic-2-20"
+ ],
+ "fights": [
+  "square_spider"
+ ],
+ "title": "How much work: loops inside loops",
+ "summary": "Count what a script does before the data grows: one loop is n, a loop inside a loop is n × n, and a tool that reads each file once beats both.",
+ "pages": [
+  {
+   "scheme": [
+    " while IFS= read -r c; do",
+    "   printf '%s\\n' \"$c\"",
+    " done < customers.txt",
+    "",
+    "   one turn per line: n lines, n turns",
+    "",
+    "   lines     turns",
+    "   1 000     1 000",
+    "   20 000    20 000      ← × 20 lines, × 20 turns"
+   ],
+   "script": [
+    "while IFS= read -r c; do",
+    "  printf '%s\\n' \"$c\"",
+    "done < customers.txt"
+   ],
+   "point": 4,
+   "mark": [
+    "n turns"
+   ],
+   "text": [
+    "A script that works on 10 lines can take hours on a million. To see it coming, count the work: how many times does each step run?",
+    "",
+    "- A loop over a file runs once per line. n lines: n turns.",
+    "- Twice as many lines, twice the time. That's fine: the work grows like the data.",
+    "- Programmers write it O(n), read \"order n\"."
+   ]
+  },
+  {
+   "scheme": [
+    " while IFS= read -r c; do          ← n turns",
+    "   while IFS= read -r m; do        ← n each",
+    "     if [ \"$c\" = \"$m\" ]; then",
+    "       printf '%s\\n' \"$c\"",
+    "     fi",
+    "   done < newsletter.txt",
+    " done < customers.txt",
+    "   lines     comparisons",
+    "   1 000     1 000 000",
+    "   20 000    400 000 000 ← × 20 lines, × 400 work"
+   ],
+   "script": [
+    "while IFS= read -r c; do",
+    "while IFS= read -r m; do",
+    "if [ \"$c\" = \"$m\" ]; then",
+    "printf '%s\\n' \"$c\"",
+    "fi",
+    "done < newsletter.txt",
+    "done < customers.txt"
+   ],
+   "point": 1,
+   "mark": [
+    "n each",
+    "400 000 000"
+   ],
+   "text": [
+    "Put a loop inside a loop and the counts multiply: for each customer, the inner loop reads the whole newsletter again.",
+    "",
+    "- n customers × n subscribers: n × n comparisons, O(n²).",
+    "- 20 times more lines on each side makes 400 times more work.",
+    "- It's the usual reason a script that was fine on a sample takes minutes or hours on the real file."
+   ]
+  },
+  {
+   "scheme": [
+    " $ TIMEFORMAT='%R s'        in zsh: TIMEFMT='%E'",
+    " $ time bash common.sh > out.txt",
+    "",
+    "   lines   time",
+    "   200     0.150 s",
+    "   400     0.611 s   × 4",
+    "   800     2.500 s   × 4   ← n × n",
+    "   20 000 lines: 2.5 × 25 × 25 ≈ 26 minutes"
+   ],
+   "point": 6,
+   "mark": [
+    "× 4"
+   ],
+   "text": [
+    "Don't guess, measure: time the script on small lists, then on lists twice as long, all of them: double only one and n × n looks like n.",
+    "",
+    "- Time × 2: the work grows like n. Time × 4: like n × n, 625 times longer for 25 times the lines.",
+    "- > out.txt, not > /dev/null: GNU grep notices /dev/null and stops at the first match, so the time would lie."
+   ]
+  },
+  {
+   "scheme": [
+    " while IFS= read -r c; do",
+    "   if grep -qxF -- \"$c\" newsletter.txt; then",
+    "     printf '%s\\n' \"$c\"",
+    "   fi",
+    " done < customers.txt",
+    "",
+    "   the loop you see:      n turns",
+    "   the loop inside grep:  up to n lines each turn"
+   ],
+   "script": [
+    "while IFS= read -r c; do",
+    "if grep -qxF -- \"$c\" newsletter.txt; then",
+    "printf '%s\\n' \"$c\"",
+    "fi",
+    "done < customers.txt"
+   ],
+   "point": 7,
+   "mark": [
+    "the loop inside grep"
+   ],
+   "text": [
+    "grep reads the newsletter each time you call it, until it finds the line: a second loop, hidden inside grep.",
+    "",
+    "- At these sizes, starting a program per line (about 1 ms) costs most: 18 s for 20 000 lines. Time shows × 2, still far too slow.",
+    "- Python too: x in a_list walks the list. s = set(a_list), built once before the loop, answers x in s in one step."
+   ]
+  },
+  {
+   "scheme": [
+    " ✘ while IFS= read -r f; do",
+    "     today=$(date +%F)  ← same answer every turn",
+    "     printf '%s %s\\n' \"$today\" \"$f\"",
+    "   done < files.txt",
+    "",
+    " ✔ today=$(date +%F)    ← once",
+    "   while IFS= read -r f; do",
+    "     printf '%s %s\\n' \"$today\" \"$f\"",
+    "   done < files.txt"
+   ],
+   "script": [
+    "today=$(date +%F)",
+    "while IFS= read -r f; do",
+    "printf '%s %s\\n' \"$today\" \"$f\"",
+    "done < files.txt"
+   ],
+   "point": 5,
+   "mark": [
+    "once"
+   ],
+   "text": [
+    "Work whose answer doesn't change from one turn to the next belongs before the loop.",
+    "",
+    "- Here, date gives the same day for every file: ask once, keep the answer in a variable.",
+    "- Each $( ) starts a new process, here to run date. On 50 000 files, that's 50 000 processes for one answer."
+   ]
+  },
+  {
+   "scheme": [
+    " grep -Fxf newsletter.txt customers.txt",
+    "            │              │",
+    "            │              └ read once",
+    "            └ read once, kept in memory",
+    "              to look each line up (GNU grep)",
+    "",
+    " comm -12 <(sort customers.txt) \\",
+    "          <(sort newsletter.txt)",
+    "",
+    "   sorted: both lists walked side by side, once"
+   ],
+   "script": [
+    "grep -Fxf newsletter.txt customers.txt",
+    "comm -12 <(sort customers.txt) \\",
+    "<(sort newsletter.txt)"
+   ],
+   "point": 0,
+   "mark": [
+    "read once"
+   ],
+   "text": [
+    "The fix isn't a faster loop: it's a tool that reads each file once.",
+    "",
+    "- grep -Fxf: -f takes what to look for from a file, -F as plain text (a dot is just a dot), -x as whole lines.",
+    "- comm -12 shows the lines in both sorted files; <(sort file) hands them over as files (bash and zsh, not sh). Sorting costs about n × log n: 300 000 steps for 20 000 lines, not 400 million."
+   ]
+  }
+ ]
 }

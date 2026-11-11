@@ -1,0 +1,93 @@
+{
+ "id": "fund_tcp_udp",
+ "order": 467,
+ "skill": [
+  "fundamentals",
+  "network"
+ ],
+ "after": [
+  "fund_osi"
+ ],
+ "opens": "read",
+ "masters": [
+  "answered fund_tcp_udp 3"
+ ],
+ "questions": [
+  "fundamentals-1-10",
+  "fundamentals-1-11",
+  "fundamentals-1-12",
+  "fundamentals-2-02"
+ ],
+ "recall": [
+  "fundamentals-1-10",
+  "fundamentals-1-11"
+ ],
+ "title": "TCP and UDP: two ways to send",
+ "summary": "TCP opens a connection and makes sure everything arrives in order; UDP just sends. Knowing which one a service uses tells you how to test it.",
+ "pages": [
+  {
+   "scheme": [
+    " TCP  a phone call",
+    "      connect first, every byte arrives,",
+    "      in order, or you get an error",
+    "",
+    " UDP  postcards",
+    "      no connection, sent and forgotten:",
+    "      one may be lost, late, out of order"
+   ],
+   "point": 4,
+   "mark": [
+    "UDP"
+   ],
+   "text": [
+    "Both carry data between two ports. They don't promise the same thing.",
+    "",
+    "- TCP resends what's lost: web pages, SSH, databases, mail.",
+    "- UDP is lighter and faster to start: DNS queries, video calls, games, time sync. The program copes with losses itself, or asks again.",
+    "- HTTP/3 runs on QUIC, which is built on UDP."
+   ]
+  },
+  {
+   "scheme": [
+    " $ ss -tuln",
+    " Netid  Local Address:Port (cut)",
+    " udp    0.0.0.0:53",
+    " tcp    0.0.0.0:22",
+    "",
+    " DNS on UDP 53, SSH on TCP 22"
+   ],
+   "point": 2,
+   "mark": [
+    "udp"
+   ],
+   "text": [
+    "A port number belongs to one protocol: TCP port 53 and UDP port 53 are two different doors.",
+    "",
+    "- ss -tuln lists what listens: t TCP, u UDP, l listening, n numbers (Linux; on a Mac: lsof -nP -iTCP -sTCP:LISTEN).",
+    "- A firewall rule opens a port for TCP or for UDP: open the wrong one and the service stays unreachable.",
+    "- DNS mostly uses UDP 53, and TCP 53 for big answers: open both."
+   ]
+  },
+  {
+   "scheme": [
+    " TCP port, nothing listening  → refused, at once",
+    "  (or a firewall that rejects)",
+    " TCP port, firewall drops     → time out",
+    " UDP port                     → often silence",
+    "",
+    " test a UDP service with a real question:",
+    " $ dig @192.0.2.53 example.org"
+   ],
+   "point": 5,
+   "mark": [
+    "dig @192.0.2.53"
+   ],
+   "text": [
+    "TCP answers clearly: connected, refused or nothing. UDP has no connection, so silence proves little.",
+    "",
+    "- A closed UDP port may send back an ICMP error, or nothing at all if a firewall drops it.",
+    "- So test a UDP service by asking it a real question it should answer: a DNS query to that server."
+   ]
+  }
+ ]
+}

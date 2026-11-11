@@ -3,7 +3,8 @@
  "order": 410,
  "skill": "sql",
  "after": [
-  "text_tools"
+  "text_tools",
+  "fund_databases"
  ],
  "masters": [
   "won query_quokka | tool sqlite3 3"
@@ -23,27 +24,8 @@
   "query_quokka"
  ],
  "title": "SQL: your first SELECT",
- "summary": "Rows and columns, and how SELECT, FROM and WHERE pick what you want.",
+ "summary": "How SELECT, FROM and WHERE pick the rows and columns you want, and how sqlite3 opens a database.",
  "pages": [
-  {
-   "scheme": [
-    " products",
-    " ┌────┬────────┬───────┐",
-    " │ id │ name   │ price │  ◀ columns",
-    " ├────┼────────┼───────┤",
-    " │ 1  │ lamp   │ 25    │  ◀ one row",
-    " │ 2  │ mug    │ 8     │",
-    " │ 3  │ chair  │ 60    │",
-    " └────┴────────┴───────┘"
-   ],
-   "point": 4,
-   "mark": [
-    "lamp"
-   ],
-   "text": [
-    "A table is rows and columns, like a spreadsheet. Each row is one thing, each column one detail about it."
-   ]
-  },
   {
    "scheme": [
     " SELECT name, price   which columns",
@@ -55,7 +37,7 @@
     "WHERE"
    ],
    "text": [
-    "Read it like a sentence. The result is a small new table:",
+    "Read it like a sentence, on the products table of the database lesson (lamp 25, mug 8, chair 60). The result is a small new table:",
     "",
     "- lamp 25 and chair 60. The mug is left out.",
     "- Text goes between single quotes: WHERE name = 'mug'.",

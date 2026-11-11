@@ -3,7 +3,8 @@
  "order": 500,
  "skill": "network",
  "after": [
-  "dns"
+  "dns",
+  "fund_tcp_udp"
  ],
  "tools": [
   "dig",

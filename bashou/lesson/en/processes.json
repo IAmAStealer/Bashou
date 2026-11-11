@@ -7,7 +7,8 @@
  ],
  "after": [
   "computer",
-  "users"
+  "users",
+  "fund_processes"
  ],
  "masters": [
   "achievement census | tool ps 1 | tool pgrep 1 | tool kill 1",

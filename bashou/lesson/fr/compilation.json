@@ -4,27 +4,6 @@
  "pages": [
   {
    "scheme": [
-    " hello.c              gcc             hello",
-    " ┌──────────────┐               ┌──────────────┐",
-    " │ int main()   │──────────────▶│ 01001000 …   │",
-    " │ { … }        │   compile     │ code machine │",
-    " └──────────────┘               └──────────────┘",
-    "  tu peux le lire                le CPU l'exécute"
-   ],
-   "point": 2,
-   "mark": [
-    "compile"
-   ],
-   "text": [
-    "Un CPU ne comprend que le code machine : des nombres qui désignent ses petites instructions.",
-    "",
-    "- Toi, tu écris du code source, un texte lisible par une personne.",
-    "- Un compilateur, comme gcc, le traduit une fois pour toutes en un programme que le CPU peut exécuter.",
-    "- Python fait autrement : python3 lit ton script et l'exécute sur le moment, à chaque fois."
-   ]
-  },
-  {
-   "scheme": [
     " hello.c",
     "   │ 1. préprocesseur : #include et #define",
     "   │ 2. compilation : le C devient assembleur",

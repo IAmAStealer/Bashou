@@ -3,7 +3,8 @@
  "order": 140,
  "skill": "bash",
  "after": [
-  "grep"
+  "grep",
+  "fund_regex"
  ],
  "masters": [
   "achievement regex | won pattern_pixie"

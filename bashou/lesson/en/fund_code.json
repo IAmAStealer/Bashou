@@ -1,0 +1,111 @@
+{
+ "id": "fund_code",
+ "order": 305,
+ "skill": [
+  "fundamentals",
+  "c",
+  "rust",
+  "python"
+ ],
+ "after": [
+  "computer"
+ ],
+ "opens": "read",
+ "masters": [
+  "answered fund_code 3"
+ ],
+ "questions": [
+  "fundamentals-1-40",
+  "fundamentals-1-41",
+  "fundamentals-1-42",
+  "fundamentals-2-11"
+ ],
+ "recall": [
+  "fundamentals-1-40",
+  "fundamentals-1-41"
+ ],
+ "title": "From code to a running program",
+ "summary": "A CPU only runs machine code. Compiled languages translate once, interpreted ones read your code each time: what that changes for errors and for what you install.",
+ "pages": [
+  {
+   "scheme": [
+    " hello.c              gcc             hello",
+    " ┌──────────────┐               ┌──────────────┐",
+    " │ int main()   │──────────────▶│ 01001000 …   │",
+    " │ { … }        │   compile     │ machine code │",
+    " └──────────────┘               └──────────────┘",
+    "  you can read it                the CPU runs it"
+   ],
+   "point": 2,
+   "mark": [
+    "compile"
+   ],
+   "text": [
+    "A CPU only understands machine code: numbers that stand for its tiny instructions.",
+    "",
+    "- You write source code, text a person can read.",
+    "- A compiler (gcc for C, rustc through cargo for Rust) translates it once into a program file the CPU can run."
+   ]
+  },
+  {
+   "scheme": [
+    " hello.py ──python3──▶ runs, each time",
+    "   the interpreter reads it on the spot",
+    "",
+    " hello.c ──gcc, once──▶ hello ──▶ runs",
+    "   alone, as many times as you like"
+   ],
+   "point": 0,
+   "mark": [
+    "python3"
+   ],
+   "text": [
+    "Python and bash work differently: an interpreter reads your code and runs it on the spot, every time.",
+    "",
+    "- Nothing to build, quick to change and try again.",
+    "- But the interpreter must be installed wherever the script runs."
+   ]
+  },
+  {
+   "scheme": [
+    " a misspelled name in a rare branch",
+    "",
+    " C, Rust      the compiler refuses to build:",
+    "              you see it before running",
+    " Python, bash found only when that line runs,",
+    "              maybe months later"
+   ],
+   "point": 4,
+   "mark": [
+    "when that line runs"
+   ],
+   "text": [
+    "It changes when you meet your mistakes.",
+    "",
+    "- A compiler reads the whole file first and catches many mistakes before anything runs: read its messages, they name the file and the line.",
+    "- Python checks the grammar of the whole file before it starts, but looks up a name only when its line runs.",
+    "- Neither catches wrong logic: test your program in every language, and every branch of a script."
+   ]
+  },
+  {
+   "scheme": [
+    " you ship              it needs",
+    " a C or Rust program   the same CPU and system",
+    "                       (Linux x86_64, macOS arm64)",
+    " a Python script       python3 and its libraries",
+    "                       (in a venv made there)"
+   ],
+   "point": 1,
+   "mark": [
+    "the same CPU and system"
+   ],
+   "text": [
+    "It also changes what you hand over.",
+    "",
+    "- A compiled program is built for one kind of machine, and often needs that system's libraries: build again for another one.",
+    "- A script runs anywhere its interpreter and libraries are.",
+    "- Glue and quick tools: often Python or bash. Fast, long-running tools: often C, Rust or Go."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,88 @@
+{
+ "title": "Combien de travail : compter avant que ça grossisse",
+ "summary": "Un programme rapide sur 100 lignes peut prendre des heures sur un million. Compte comment le travail grandit avec les données, et mesure.",
+ "pages": [
+  {
+   "scheme": [
+    " trouver un nom parmi n fiches",
+    "",
+    " un tas en vrac : regarder chacune  jusqu'à n",
+    " triées, comme un dictionnaire :",
+    "   ouvrir au milieu, garder une moitié",
+    "                               environ log n",
+    "   1 000 fiches : 10 coups ; 1 000 000 : 20"
+   ],
+   "point": 4,
+   "mark": [
+    "environ log n"
+   ],
+   "text": [
+    "Avant que les données grossissent, compte les étapes : combien de fois le travail tourne-t-il pour n éléments ?",
+    "",
+    "- Dans un tas en vrac, tu regardes peut-être chaque fiche : n étapes.",
+    "- Dans des fiches triées, chaque coup d'œil élimine la moitié : un million de fiches demandent environ 20 coups.",
+    "- C'est pour ça que les dictionnaires papier et les index des bases de données gardent tout trié."
+   ]
+  },
+  {
+   "scheme": [
+    " deux listes de n invités : qui est sur les deux ?",
+    "",
+    " chaque nom contre chaque nom      n × n",
+    "     1 000 noms        1 000 000 tests",
+    "    20 000 noms      400 000 000 tests",
+    "",
+    " trier les deux, les parcourir côte à côte",
+    "                       environ n × log n"
+   ],
+   "point": 2,
+   "mark": [
+    "n × n"
+   ],
+   "text": [
+    "Une boucle dans une boucle multiplie : pour chaque nom, on relit toute l'autre liste.",
+    "",
+    "- 20 fois plus de noms de chaque côté : 400 fois plus de travail.",
+    "- Des listes triées se parcourent côte à côte, une fois chacune : beaucoup moins de travail.",
+    "- C'est la raison habituelle pour laquelle un script rapide sur un échantillon prend des heures sur le vrai fichier."
+   ]
+  },
+  {
+   "scheme": [
+    " n          log n    n × log n      n × n",
+    " 100          7        700          10 000",
+    " 1 000       10     10 000       1 000 000",
+    " 1 000 000   20     20 millions  mille milliards"
+   ],
+   "point": 3,
+   "mark": [
+    "mille milliards"
+   ],
+   "text": [
+    "Ce qui compte, c'est comment le travail grandit, pas sa vitesse aujourd'hui.",
+    "",
+    "- Les programmeurs l'écrivent O(n), O(n²) : « ordre n », « ordre n au carré ».",
+    "- Sur 100 éléments, tout est rapide. La différence n'apparaît que quand les données grossissent : prévois pour la vraie taille."
+   ]
+  },
+  {
+   "scheme": [
+    " mesure sur n lignes, puis sur 2n",
+    "",
+    "   temps × 2   grandit comme n (ou n × log n)",
+    "   temps × 4   grandit comme n × n : cherche",
+    "               une boucle dans une boucle"
+   ],
+   "point": 3,
+   "mark": [
+    "temps × 4"
+   ],
+   "text": [
+    "Ne devine pas, mesure : time ./script gros.txt, puis sur un fichier deux fois plus gros. Prends des entrées qui durent quelques secondes, sinon le temps de démarrage cache la croissance.",
+    "",
+    "- Le code qu'écrit une IA peut cacher une boucle dans une boucle : demande comment le travail grandit avec les données, puis mesure.",
+    "- Le parcours Logique te fait en trouver et en corriger une dans un vrai script."
+   ]
+  }
+ ]
+}

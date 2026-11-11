@@ -1,0 +1,87 @@
+{
+ "id": "fund_regex",
+ "order": 125,
+ "skill": [
+  "fundamentals",
+  "bash"
+ ],
+ "after": [
+  "reading"
+ ],
+ "opens": "read",
+ "masters": [
+  "answered fund_regex 3"
+ ],
+ "questions": [
+  "fundamentals-1-34",
+  "fundamentals-1-35",
+  "fundamentals-1-36",
+  "fundamentals-2-09"
+ ],
+ "recall": [
+  "fundamentals-1-34",
+  "fundamentals-1-35"
+ ],
+ "title": "Regular expressions: what they are for",
+ "summary": "Search by shape when you don't know the exact text: dates, addresses, error lines. Where people use them, and when not to.",
+ "pages": [
+  {
+   "scheme": [
+    " a date:     2026-11-11",
+    " the shape:  4 digits-2 digits-2 digits",
+    " a regex:    [0-9]{4}-[0-9]{2}-[0-9]{2}",
+    " search:     grep -E 'that regex' app.log"
+   ],
+   "point": 2,
+   "mark": [
+    "[0-9]{4}-[0-9]{2}-[0-9]{2}"
+   ],
+   "text": [
+    "A regular expression (regex) describes the shape of a text, not one exact word.",
+    "",
+    "- Reach for one when you know what the text looks like, not what it says: a date, an IP address, a line that starts with ERROR.",
+    "- The Bash path teaches the syntax: [0-9] is one digit, {4} four times (with grep -E)."
+   ]
+  },
+  {
+   "scheme": [
+    " grep, sed, awk       search and change files",
+    " editors, IDEs        find and replace",
+    " Python, JavaScript   check input, pull out",
+    "                      a piece of text",
+    " fail2ban, log tools  match the lines that",
+    "                      matter"
+   ],
+   "point": 0,
+   "mark": [
+    "grep, sed, awk"
+   ],
+   "text": [
+    "Regexes are everywhere text is searched.",
+    "",
+    "- The same idea works in all these tools, with small differences between dialects (basic, extended, Perl-like).",
+    "- Learn the common part once; check the tool's help for its extras."
+   ]
+  },
+  {
+   "scheme": [
+    " ✘ an exact text with dots   1.5 matches 105",
+    "   ✔ plain search: grep -F '1.5'",
+    " ✘ JSON, HTML, CSV            ✔ a real parser",
+    "                              (jq, Python)",
+    " ✔ a shape in plain lines"
+   ],
+   "point": 0,
+   "mark": [
+    "1.5 matches 105"
+   ],
+   "text": [
+    "A regex is not always the right tool.",
+    "",
+    "- Some characters are special: . means any character. For an exact text, search plain text.",
+    "- JSON and HTML nest, and CSV hides commas inside quotes: use a parser (jq, Python's json or csv module). A regex breaks on the first unusual file.",
+    "- A regex from an AI or the web: test it on lines that must match and lines that must not."
+   ]
+  }
+ ]
+}

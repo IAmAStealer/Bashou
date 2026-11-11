@@ -1,0 +1,63 @@
+{
+ "title": "Processus et services",
+ "summary": "Un programme sur le disque ne fait rien ; une copie qui tourne est un processus. Les services sont des processus qui tournent sans terminal, dès le démarrage.",
+ "pages": [
+  {
+   "scheme": [
+    " /usr/bin/python3      un programme : un fichier",
+    "   ├─ lance ▶ PID 2301  python3 app.py",
+    "   └─ lance ▶ PID 2350  python3 tool.py",
+    "              deux processus, un programme"
+   ],
+   "point": 3,
+   "mark": [
+    "deux processus"
+   ],
+   "text": [
+    "Un programme est un fichier. Lance-le et le système crée un processus : une copie qui tourne, avec sa mémoire et son numéro, le PID.",
+    "",
+    "- Lance-le deux fois, tu as deux processus. En arrêter un laisse l'autre.",
+    "- Chaque processus tourne sous un utilisateur, avec les droits de cet utilisateur."
+   ]
+  },
+  {
+   "scheme": [
+    " ton terminal ────▶ ls, nano, un script",
+    "                    s'arrêtent à sa fermeture",
+    "",
+    " systemd (PID 1) ─▶ sshd, un serveur web",
+    "                    sans terminal, dès le boot"
+   ],
+   "point": 3,
+   "mark": [
+    "systemd (PID 1)"
+   ],
+   "text": [
+    "Ce que tu tapes tourne dans ton terminal et finit en général avec lui.",
+    "",
+    "- Un service (ou démon) est un processus sans terminal : il attend du travail, souvent du démarrage à l'arrêt.",
+    "- Sur la plupart des Linux, systemd lance les services, relance ceux qui plantent si leur unité le demande (Restart=), et garde leurs journaux. Un Mac utilise launchd."
+   ]
+  },
+  {
+   "scheme": [
+    " demander : arrête-toi   il enregistre, ferme",
+    " forcer :   stop net      fichiers à moitié écrits",
+    "",
+    " 1. demande, attends quelques secondes",
+    " 2. force seulement s'il ne s'arrête pas"
+   ],
+   "point": 3,
+   "mark": [
+    "1. demande"
+   ],
+   "text": [
+    "Pour arrêter un processus, demande avant de forcer.",
+    "",
+    "- Quand on lui demande, un programme peut finir d'écrire et ranger. Forcé, il s'arrête en plein milieu : fichiers cassés, verrous oubliés.",
+    "- Un service s'arrête par son gestionnaire (systemctl stop) : il reste arrêté et le journal dit pourquoi.",
+    "- Les leçons Processus et Services montrent les commandes."
+   ]
+  }
+ ]
+}

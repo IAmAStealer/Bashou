@@ -46,6 +46,7 @@ SKILLS = {
         ("tcpdump", "the packet fights: watch a TCP connection open, packet by packet"),
         ("openssl", "the certificate fights: read a certificate, check its chain, make a request"))),
     "ai": Skill("AI tools: context, memory, planning"),      # lessons and questions, no fights (owner)
+    "fundamentals": Skill("Fundamentals: what each tool is for, when to use it"),   # lessons and questions only
 }
 
 

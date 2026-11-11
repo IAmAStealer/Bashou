@@ -4,24 +4,6 @@
  "pages": [
   {
    "scheme": [
-    " ta paire de clés",
-    " ├── clé publique   donne-la à qui tu veux",
-    " └── clé privée     toi seul l'as",
-    "                    (sous ta phrase secrète)"
-   ],
-   "point": 2,
-   "mark": [
-    "clé privée"
-   ],
-   "text": [
-    "gpg -c verrouille un fichier avec une phrase secrète qu'il faut partager. Les paires de clés évitent ça.",
-    "",
-    "- Les deux moitiés sont fabriquées ensemble et marchent ensemble.",
-    "- On ne peut pas calculer la clé privée à partir de la publique."
-   ]
-  },
-  {
-   "scheme": [
     " Ada ── clé publique de Sam ──▶ file.gpg",
     "",
     " file.gpg ── clé privée de Sam ──▶ ouvert",

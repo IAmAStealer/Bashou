@@ -1,0 +1,691 @@
+[
+ {
+  "id": "fundamentals-1-01",
+  "level": 1,
+  "q": "Ton navigateur ouvre example.org. Que fait le DNS à ce moment-là ?",
+  "choices": [
+   "Il donne l'adresse qui va avec le nom",
+   "Il envoie la page à ton navigateur",
+   "Il chiffre la connexion",
+   "Il choisit le câble le plus rapide"
+  ],
+  "answer": 0,
+  "explain": "Le DNS est un annuaire : tu lui donnes un nom, il rend une adresse IP. Ensuite ton navigateur se connecte lui-même à cette adresse ; le DNS ne transporte pas la page. Donc quand seuls les noms échouent et que les adresses marchent, le réseau va bien et c'est le DNS le problème."
+ },
+ {
+  "id": "fundamentals-1-02",
+  "level": 1,
+  "q": "Un serveur fait tourner un site web et SSH. Comment un client dit-il lequel des deux il veut ?",
+  "choices": [
+   "Avec le numéro de port",
+   "Avec une adresse IP différente pour chacun",
+   "Avec le nom du serveur",
+   "Avec sa propre adresse MAC"
+  ],
+  "answer": 0,
+  "explain": "L'adresse trouve la machine ; le port choisit le service dessus, comme un numéro de porte dans un immeuble. SSH écoute en général sur 22, HTTPS sur 443. On peut régler un service sur un autre port : quand une connexion échoue, vérifie sur quel port il écoute vraiment."
+ },
+ {
+  "id": "fundamentals-1-03",
+  "level": 1,
+  "q": "Un site ne s'ouvre pas. Quelle question poses-tu en premier ?",
+  "choices": [
+   "Le nom donne-t-il une adresse ?",
+   "Le HTML de la page est-il valide ?",
+   "Le disque du serveur est-il plein ?",
+   "Quel navigateur est-ce ?"
+  ],
+  "answer": 0,
+  "explain": "Suis l'ordre du trajet : le nom doit donner une adresse, l'adresse doit répondre, le port doit accepter, puis le service répond. Chaque étape a besoin de la précédente. Vérifier le nom d'abord écarte le DNS en quelques secondes, avant d'accuser le serveur ou la page."
+ },
+ {
+  "id": "fundamentals-1-04",
+  "level": 1,
+  "q": "ping vers le serveur marche, mais la connexion à son port est refusée. Quelle couche regardes-tu ?",
+  "choices": [
+   "4, transport : rien n'écoute sur ce port",
+   "1, physique : le câble",
+   "3, réseau : la route",
+   "2, liaison : l'adresse MAC"
+  ],
+  "answer": 0,
+  "explain": "ping a répondu, donc câble, liaison et route marchent (couches 1 à 3). Refusé veut dire que la machine elle-même a dit non : aucun programme n'écoute sur ce port, ou il écoute sur une autre adresse. Vérifie que le service tourne, sur quel port et quelle adresse, avant de toucher au réseau."
+ },
+ {
+  "id": "fundamentals-1-05",
+  "level": 1,
+  "q": "ping n'obtient aucune réponse d'un serveur. Que peux-tu en conclure ?",
+  "choices": [
+   "Pas grand-chose : un pare-feu peut bloquer ping",
+   "Le serveur est éteint",
+   "Le câble est coupé",
+   "Le DNS est cassé"
+  ],
+  "answer": 0,
+  "explain": "ping utilise ICMP, et beaucoup de pare-feux le jettent exprès. Pas de réponse peut vouloir dire machine éteinte, route absente ou ICMP bloqué. Essaie un test plus haut : si une page web ou une connexion SSH marche, la machine est bien là."
+ },
+ {
+  "id": "fundamentals-1-06",
+  "level": 1,
+  "q": "La page charge, mais affiche « 500 Internal Server Error ». Où est le problème ?",
+  "choices": [
+   "Dans l'application sur le serveur",
+   "Dans le câble",
+   "Dans le DNS",
+   "Dans ton Wi-Fi"
+  ],
+  "answer": 0,
+  "explain": "Pour obtenir une réponse HTTP, le nom, la route et la connexion ont tous dû marcher. 500, c'est l'application qui dit qu'elle a échoué en traitant ta demande. Regarde les journaux de l'application sur le serveur, pas le réseau."
+ },
+ {
+  "id": "fundamentals-1-07",
+  "level": 1,
+  "q": "Sur ton réseau local, que trouve ARP ?",
+  "choices": [
+   "Quelle carte réseau (MAC) a une IP donnée",
+   "Quel nom va avec une IP",
+   "Quel port un service utilise",
+   "Quelle route mène à Internet"
+  ],
+  "answer": 0,
+  "explain": "Dans un réseau local, les trames sont adressées à une carte réseau par son adresse MAC. ARP demande à tout le monde « qui a cette IP ? » et la propriétaire répond avec sa MAC. La machine garde les réponses en cache : ip neigh sous Linux, arp -a sur Mac. Les noms, c'est le travail du DNS, pas d'ARP."
+ },
+ {
+  "id": "fundamentals-1-08",
+  "level": 1,
+  "q": "Tu envoies des données à un serveur sur Internet. La MAC de qui est sur la trame qui quitte ta machine ?",
+  "choices": [
+   "Celle de ton routeur (la passerelle)",
+   "Celle du serveur lointain",
+   "Celle de ton serveur DNS",
+   "Aucune : Internet n'a pas de MAC"
+  ],
+  "answer": 0,
+  "explain": "Une adresse MAC ne compte que sur ton propre réseau. Pour une machine lointaine, ton ordinateur envoie la trame à la MAC de la passerelle ; le paquet IP dedans garde l'adresse lointaine. Chaque routeur le passe ensuite à son voisin suivant. C'est pour ça qu'une passerelle qui ne répond pas à ARP te coupe de tout l'extérieur."
+ },
+ {
+  "id": "fundamentals-1-09",
+  "level": 1,
+  "q": "ping utilise ICMP. Quel port teste-t-il ?",
+  "choices": [
+   "Aucun : ICMP n'a pas de ports",
+   "Le port 80",
+   "Le port 22",
+   "Le port du dernier service utilisé"
+  ],
+  "answer": 0,
+  "explain": "ICMP voyage dans IP, à la couche réseau, et n'a pas de ports : ping dit seulement que la machine répond, pas qu'un service marche. Un serveur web peut être en panne pendant que ping réussit, et ping peut échouer pendant que le site marche. Pour tester un service, connecte-toi à son port : curl pour un site, ssh pour SSH."
+ },
+ {
+  "id": "fundamentals-1-10",
+  "level": 1,
+  "q": "Un appel vidéo perd quelques paquets de temps en temps. Pourquoi utilise-t-il UDP plutôt que TCP ?",
+  "choices": [
+   "Un son en retard ne sert à rien : mieux vaut le sauter",
+   "UDP est chiffré, TCP non",
+   "UDP ne perd jamais de paquets",
+   "TCP ne peut pas transporter de son"
+  ],
+  "answer": 0,
+  "explain": "TCP renvoie ce qui est perdu et attend pour livrer dans l'ordre : parfait pour un fichier, mauvais pour du son en direct, où un morceau renvoyé arrive trop tard. UDP envoie, c'est tout, et le programme masque les petites pertes. C'est aussi pour ça que la plupart des requêtes DNS passent par UDP : une courte question, reposée si rien ne revient."
+ },
+ {
+  "id": "fundamentals-1-11",
+  "level": 1,
+  "q": "Une règle de pare-feu ouvre le port 53 en TCP. Les requêtes DNS vers le serveur échouent toujours. Pourquoi ?",
+  "choices": [
+   "Le DNS passe surtout par UDP : ouvre aussi UDP 53",
+   "Le port 53 est réservé au pare-feu",
+   "Le DNS a besoin du port 80",
+   "La règle demande un redémarrage"
+  ],
+  "answer": 0,
+  "explain": "Le port TCP 53 et le port UDP 53 sont deux portes différentes. La plupart des requêtes DNS passent par UDP ; TCP sert pour les grosses réponses et les transferts de zone. Ouvre le protocole que le service utilise vraiment : ss -tuln sur un serveur Linux montre les lignes udp et tcp à part."
+ },
+ {
+  "id": "fundamentals-1-12",
+  "level": 1,
+  "q": "Comment vérifier qu'un serveur DNS répond en UDP ?",
+  "choices": [
+   "Lui poser une vraie requête : dig @serveur example.org",
+   "Faire un ping sur son port 53",
+   "Attendre un message refusé",
+   "L'ouvrir dans un navigateur"
+  ],
+  "answer": 0,
+  "explain": "UDP n'a pas de connexion, donc il n'y a rien à quoi « se connecter » : un port fermé peut répondre par une erreur ICMP, un port filtré reste muet : le silence ne prouve rien. Le test sûr, c'est une vraie question à laquelle le service doit répondre, ici une requête DNS envoyée à ce serveur. ping n'aide pas : il n'a pas de port."
+ },
+ {
+  "id": "fundamentals-1-13",
+  "level": 1,
+  "q": "Quelle est la différence entre broadcast et multicast ?",
+  "choices": [
+   "Le broadcast touche tous les voisins, le multicast un groupe",
+   "Le multicast n'existe qu'en IPv4",
+   "Le broadcast traverse les routeurs, pas le multicast",
+   "Ce sont deux noms pour la même chose"
+  ],
+  "answer": 0,
+  "explain": "Le broadcast va à toutes les machines du réseau local : ARP s'en sert pour demander qui a une IP. Le multicast va à une adresse de groupe, et seules les machines qui ont rejoint ce groupe écoutent. IPv6 a supprimé le broadcast et utilise le multicast à la place."
+ },
+ {
+  "id": "fundamentals-1-14",
+  "level": 1,
+  "q": "Un collègue trouve imprimante.local depuis un bureau, mais pas depuis un autre sous-réseau. Pourquoi ?",
+  "choices": [
+   "Le multicast mDNS ne traverse pas les routeurs",
+   "L'imprimante bloque ce bureau",
+   "imprimante.local est un nom public",
+   "L'autre sous-réseau utilise IPv6"
+  ],
+  "answer": 0,
+  "explain": "Les noms en .local sont résolus par mDNS, envoyé à 224.0.0.251, une adresse que les routeurs ne font jamais suivre. L'imprimante n'est donc trouvée par son nom que dans son propre réseau. Ajoute-la par son adresse IP, ou demande à l'équipe réseau un relais mDNS entre les deux réseaux."
+ },
+ {
+  "id": "fundamentals-1-15",
+  "level": 1,
+  "q": "Laquelle de ces adresses est un groupe multicast ?",
+  "choices": [
+   "224.0.0.251",
+   "192.168.1.255",
+   "127.0.0.1",
+   "10.0.0.1"
+  ],
+  "answer": 0,
+  "explain": "Les adresses multicast vont de 224.0.0.0 à 239.255.255.255 (224.0.0.0/4) ; 224.0.0.251 est le groupe que mDNS utilise. 192.168.1.255 est l'adresse de broadcast d'un réseau /24, 127.0.0.1 la machine elle-même, 10.0.0.1 une adresse privée ordinaire."
+ },
+ {
+  "id": "fundamentals-1-16",
+  "level": 1,
+  "q": "Une page de téléchargement affiche un SHA-256 à côté du fichier. Le tien correspond. Qu'est-ce que ça prouve ?",
+  "choices": [
+   "Le fichier est arrivé intact",
+   "Le fichier n'a pas de virus",
+   "Le fichier vient de l'éditeur",
+   "Le fichier est chiffré"
+  ],
+  "answer": 0,
+  "explain": "Un hash est une empreinte : les mêmes octets donnent toujours la même, et un seul bit changé en donne une complètement différente. Une correspondance prouve que ta copie est celle que la page décrit. Elle ne dit rien de qui l'a faite : quelqu'un qui a modifié le fichier peut aussi modifier la page. C'est le rôle des signatures."
+ },
+ {
+  "id": "fundamentals-1-17",
+  "level": 1,
+  "q": "Tu veux envoyer à Sam un fichier que seul Sam peut ouvrir. Quelle clé le ferme ?",
+  "choices": [
+   "La clé publique de Sam",
+   "Ta clé privée",
+   "La clé privée de Sam",
+   "Ta clé publique"
+  ],
+  "answer": 0,
+  "explain": "Ce qu'une clé publique ferme, seule la clé privée qui va avec l'ouvre. Sam donne sa clé publique à tout le monde (vérifie son empreinte avec Sam) ; sa clé privée ne quitte jamais Sam. Ta propre clé privée sert à signer, pas à fermer un fichier pour quelqu'un d'autre."
+ },
+ {
+  "id": "fundamentals-1-18",
+  "level": 1,
+  "q": "Ton système vérifie la signature d'une mise à jour avant de l'installer. Que t'apprend une bonne signature ?",
+  "choices": [
+   "Il vient du propriétaire de la clé, intact",
+   "Que personne d'autre ne peut le lire",
+   "Qu'il n'a pas de bugs",
+   "Que c'est la dernière version"
+  ],
+  "answer": 0,
+  "explain": "Seul celui qui a la clé privée peut signer ; quiconque a la clé publique peut vérifier. Une bonne signature prouve que la mise à jour vient du propriétaire de cette clé et n'a pas changé depuis. Elle ne cache rien : les mises à jour ne sont pas secrètes. Ton système fait confiance à la clé de l'éditeur car elle est venue avec lui. Elle ne prouve pas que le code est bon."
+ },
+ {
+  "id": "fundamentals-1-19",
+  "level": 1,
+  "q": "Pourquoi un serveur web tourne-t-il sous son propre utilisateur, comme www-data, plutôt qu'en root ?",
+  "choices": [
+   "S'il est piraté, les dégâts restent petits",
+   "root est plus lent",
+   "HTTP l'exige",
+   "Pour pouvoir lire les fichiers de tout le monde"
+  ],
+  "answer": 0,
+  "explain": "Un programme a les droits de l'utilisateur sous lequel il tourne. En root, une faille du serveur web donne toute la machine à l'attaquant. En www-data, il n'atteint que ce que www-data peut toucher. Un utilisateur par service garde chaque intrusion petite : c'est le moindre privilège. (Seul un petit processus de départ garde root, pour ouvrir le port 80.)"
+ },
+ {
+  "id": "fundamentals-1-20",
+  "level": 1,
+  "q": "Ouvrir un fichier dit « Permission denied ». Qu'est-ce que ça t'apprend ?",
+  "choices": [
+   "Ton utilisateur n'a pas le droit dessus",
+   "Le fichier est abîmé",
+   "Le disque est plein",
+   "Le fichier n'existe pas"
+  ],
+  "answer": 0,
+  "explain": "Chaque accès est comparé au propriétaire, au groupe et aux droits du fichier. Refusé veut dire que cette vérification a dit non pour ton utilisateur, sur le fichier ou sur un dossier du chemin. Regarde à qui il appartient et quels droits a chaque type de personne avant de sortir sudo. Un fichier absent dit plutôt « No such file or directory »."
+ },
+ {
+  "id": "fundamentals-1-21",
+  "level": 1,
+  "q": "Trois collègues doivent tous modifier le même dossier. Quelle est la façon propre ?",
+  "choices": [
+   "Un groupe avec les trois, qui a l'écriture",
+   "L'ouvrir à tout le monde",
+   "Partager un même compte entre eux",
+   "Tout faire en root"
+  ],
+  "answer": 0,
+  "explain": "Les droits vont à un propriétaire, un groupe et tous les autres. Mets les trois dans un groupe et donne l'écriture à ce groupe : chacun garde son compte, et un nouveau rejoint juste le groupe. Mets aussi le bit setgid sur le dossier (chmod g+s) pour que les nouveaux fichiers prennent le groupe. Ouvrir à tous laisse n'importe qui modifier."
+ },
+ {
+  "id": "fundamentals-1-22",
+  "level": 1,
+  "q": "Tu lances le même script dans deux terminaux. Combien de processus le font tourner ?",
+  "choices": [
+   "Deux, chacun avec son PID",
+   "Un seul, partagé",
+   "Aucun : un script n'est pas un processus",
+   "Autant que le script a de lignes"
+  ],
+  "answer": 0,
+  "explain": "Un programme ou un script sur le disque n'est qu'un fichier. Chaque fois que tu le lances, le système crée un nouveau processus avec sa mémoire et son numéro, le PID. Deux lancements, deux processus : en arrêter un laisse l'autre tourner."
+ },
+ {
+  "id": "fundamentals-1-23",
+  "level": 1,
+  "q": "Qu'est-ce qui distingue un service (un démon) d'une commande que tu tapes ?",
+  "choices": [
+   "Il tourne sans terminal, souvent dès le boot",
+   "Il est toujours écrit en C",
+   "On ne peut pas l'arrêter",
+   "Il ne tourne que quand tu es connecté"
+  ],
+  "answer": 0,
+  "explain": "Une commande que tu tapes appartient à ton terminal et finit en général avec lui. Un service est un processus sans terminal qui attend du travail : un serveur web, SSH, une base de données. Sur la plupart des Linux, systemd le lance au démarrage, peut le relancer s'il plante et garde ses journaux."
+ },
+ {
+  "id": "fundamentals-1-24",
+  "level": 1,
+  "q": "Un programme est bloqué. Que tentes-tu d'abord ?",
+  "choices": [
+   "Lui demander de s'arrêter, forcer seulement si besoin",
+   "Le forcer tout de suite",
+   "Débrancher la machine",
+   "Supprimer son fichier programme"
+  ],
+  "answer": 0,
+  "explain": "Quand on lui demande de s'arrêter, un programme peut finir d'écrire ses fichiers et ranger. Forcé, il s'arrête en plein milieu : fichiers à moitié écrits, fichiers de verrou oubliés. Demande d'abord, attends quelques secondes, et force seulement s'il ne s'arrête pas. La leçon Processus montre comment : kill (TERM, poli), puis kill -9 (KILL, la force)."
+ },
+ {
+  "id": "fundamentals-1-25",
+  "level": 1,
+  "q": "Un script compare chacun des n clients à chacun des n abonnés. Les listes deviennent 10 fois plus longues. Le travail ?",
+  "choices": [
+   "Environ 100 fois plus",
+   "Environ 10 fois plus",
+   "Le même",
+   "Environ 20 fois plus"
+  ],
+  "answer": 0,
+  "explain": "Une boucle dans une boucle fait n × n comparaisons. Dix fois plus de chaque côté donne 10 × 10 = 100 fois plus de travail. C'est pour ça qu'un script rapide sur un échantillon peut prendre des heures sur les vraies données : compte comment le travail grandit avant que les données grandissent."
+ },
+ {
+  "id": "fundamentals-1-26",
+  "level": 1,
+  "q": "Un script tourne en une seconde sur un échantillon de 100 lignes. Le vrai fichier fait un million de lignes. Que vérifies-tu d'abord ?",
+  "choices": [
+   "Comment son travail grandit avec le nombre de lignes",
+   "Si le disque est assez rapide",
+   "Si le fichier est en UTF-8",
+   "Rien : une seconde, c'est rapide"
+  ],
+  "answer": 0,
+  "explain": "La vitesse sur 100 lignes ne dit rien sur un million. Un travail qui grandit comme n devient 10 000 fois plus long ; comme n × n, 100 millions de fois. Cherche une boucle dans une boucle, ou mesure sur 100 puis 200 lignes : temps × 2, ça va, temps × 4, danger."
+ },
+ {
+  "id": "fundamentals-1-27",
+  "level": 1,
+  "q": "Pourquoi trouver un mot dans un dictionnaire papier est rapide, même avec 100 000 mots ?",
+  "choices": [
+   "Trié : chaque coup d'œil élimine la moitié du reste",
+   "On lit chaque page vite",
+   "Les mots sont courts",
+   "La première lettre suffit"
+  ],
+  "answer": 0,
+  "explain": "Comme les mots sont triés, tu ouvres au milieu et tu ne gardes que la moitié où le mot doit être. 100 000 mots demandent environ 17 coups d'œil, un million environ 20 : c'est log n. Les bases de données font pareil avec les index."
+ },
+ {
+  "id": "fundamentals-1-28",
+  "level": 1,
+  "q": "Tu te trompes d'un chiffre en tapant ta carte et le formulaire dit « invalide » tout de suite. Comment le sait-il ?",
+  "choices": [
+   "Le dernier chiffre contrôle les autres",
+   "Il a demandé à ta banque",
+   "Il connaît tous les numéros de carte",
+   "Il a deviné d'après la couleur de la carte"
+  ],
+  "answer": 0,
+  "explain": "Les numéros de carte finissent par un chiffre de contrôle calculé avec la formule de Luhn. Un chiffre faux, ou la plupart des inversions de deux voisins, casse le contrôle : le formulaire le sait sans demander à personne. Il ne peut pas dire quel chiffre est faux : il détecte, il ne corrige pas."
+ },
+ {
+  "id": "fundamentals-1-29",
+  "level": 1,
+  "q": "Un QR code rayé sur une partie se lit encore. Pourquoi ?",
+  "choices": [
+   "Il porte des données en plus qui refont la partie perdue",
+   "Le téléphone devine le lien",
+   "La partie rayée ne contenait rien",
+   "Les QR codes sont stockés en ligne"
+  ],
+  "answer": 0,
+  "explain": "Les QR codes ajoutent des données de correction (codes de Reed-Solomon) calculées à partir du contenu. Selon le niveau choisi, environ 7 % à 30 % peuvent être perdus et refaits. C'est pour ça qu'un logo peut tenir au milieu. Mais raye l'un des trois grands carrés des coins, qui disent au téléphone où est le code, et il peut ne plus se lire."
+ },
+ {
+  "id": "fundamentals-1-30",
+  "level": 1,
+  "q": "Un fichier téléchargé ne correspond pas à sa somme de contrôle publiée. Que fais-tu ?",
+  "choices": [
+   "Le retélécharger : une somme détecte, elle ne répare pas",
+   "Corriger les octets à la main",
+   "L'utiliser quand même s'il s'ouvre",
+   "Changer la somme pour qu'elle corresponde"
+  ],
+  "answer": 0,
+  "explain": "Une somme de contrôle comme SHA-256 trouve que quelque chose a changé, pas quoi. La copie est abîmée ou ce n'est pas le bon fichier : retélécharge-le, de préférence depuis le site officiel. Si ça ne correspond toujours pas, ne l'utilise pas : quelqu'un l'a peut-être modifié."
+ },
+ {
+  "id": "fundamentals-1-31",
+  "level": 1,
+  "q": "Que contient un commit git ?",
+  "choices": [
+   "Un instantané du projet, avec auteur, date et pourquoi",
+   "Seulement les lignes tapées aujourd'hui",
+   "Une sauvegarde de tout ton disque",
+   "La liste de tes branches"
+  ],
+  "answer": 0,
+  "explain": "Un commit enregistre l'état de tout le projet à ce moment, avec qui l'a fait, quand, et un message qui dit pourquoi. Les commits s'enchaînent pour former l'historique. Tu peux revenir à n'importe lequel, en comparer deux, ou trouver celui qui a cassé quelque chose."
+ },
+ {
+  "id": "fundamentals-1-32",
+  "level": 1,
+  "q": "Tu veux essayer une idée risquée sans casser le code qui marche. Qu'utilises-tu dans git ?",
+  "choices": [
+   "Une branche",
+   "Une copie du dossier nommée _old",
+   "Un nouveau dépôt",
+   "Un commit sans message"
+  ],
+  "answer": 0,
+  "explain": "Une branche est une ligne de travail à côté de la principale : tes commits vont dessus et main ne bouge pas. Si l'idée marche, tu la fusionnes ; sinon, tu supprimes la branche et main ne l'a jamais vue. Copier des dossiers à la main, c'est justement ce que git t'évite."
+ },
+ {
+  "id": "fundamentals-1-33",
+  "level": 1,
+  "q": "Tu as commité un mot de passe, puis tu l'as supprimé au commit suivant. Est-ce sûr maintenant ?",
+  "choices": [
+   "Non : il reste dans l'historique ; change le mot de passe",
+   "Oui, le fichier ne l'a plus",
+   "Oui, si personne n'a poussé depuis une heure",
+   "Oui, git cache les lignes supprimées"
+  ],
+  "answer": 0,
+  "explain": "git garde chaque commit : l'ancienne version avec le mot de passe est toujours là pour quiconque a le dépôt. Considère le secret comme fuité : change-le d'abord. Puis garde les secrets hors du dépôt pour de bon, par exemple dans un fichier que git ignore. Ignorer un fichier déjà commité ne change rien : git rm --cached arrête de le suivre."
+ },
+ {
+  "id": "fundamentals-1-34",
+  "level": 1,
+  "q": "Tu veux chaque ligne d'un journal qui contient une date, quelle qu'elle soit. Qu'est-ce qui convient ?",
+  "choices": [
+   "Une expression régulière qui décrit la forme d'une date",
+   "Chercher la date du jour",
+   "Lire le journal à l'œil",
+   "Trier le journal"
+  ],
+  "answer": 0,
+  "explain": "Tu ne connais pas le texte exact, seulement sa forme : quatre chiffres, un tiret, deux chiffres, un tiret, deux chiffres. Une expression régulière décrit cette forme, et grep -E trouve chaque ligne qui correspond. Une recherche de texte simple ne trouve qu'une date exacte."
+ },
+ {
+  "id": "fundamentals-1-35",
+  "level": 1,
+  "q": "Tu cherches 1.5 dans des prix avec une regex. Des lignes avec 105 sortent aussi. Pourquoi ?",
+  "choices": [
+   "Dans une regex, . veut dire n'importe quel caractère",
+   "grep ignore les points",
+   "105 et 1.5 sont le même nombre",
+   "Le fichier est cassé"
+  ],
+  "answer": 0,
+  "explain": "Quelques caractères sont spéciaux dans une regex, et le point correspond à n'importe quel caractère : 1.5 trouve aussi 105 ou 1x5. Pour un texte exact, cherche du texte simple (grep -F '1.5') ou protège le point entre apostrophes (grep '1\\.5')."
+ },
+ {
+  "id": "fundamentals-1-36",
+  "level": 1,
+  "q": "Tu veux un champ d'un fichier JSON. Regex ou outil JSON ?",
+  "choices": [
+   "Un outil JSON comme jq : une regex casse sur l'imbrication",
+   "Une regex : c'est toujours plus rapide",
+   "Une regex, si le fichier est petit",
+   "Aucun : l'ouvrir et copier à la main"
+  ],
+  "answer": 0,
+  "explain": "Le JSON peut s'imbriquer, s'étaler sur des lignes, protéger des guillemets et changer d'ordre : une regex qui marche aujourd'hui casse sur le fichier suivant. Un analyseur comprend le format : jq, ou le module json de Python. Garde les regex pour des formes dans des lignes simples."
+ },
+ {
+  "id": "fundamentals-1-37",
+  "level": 1,
+  "q": "Deux programmes ajoutent des lignes au même CSV en même temps et elles se mélangent. Qu'apporte une base de données ?",
+  "choices": [
+   "Des écritures sûres de plusieurs programmes, une à la fois",
+   "Des colonnes plus jolies",
+   "Un fichier plus petit",
+   "Rien : c'est pareil"
+  ],
+  "answer": 0,
+  "explain": "Un fichier texte n'a aucune règle pour deux écrivains : leurs lignes peuvent s'entremêler ou se couper. Une base de données prend les écritures une à une, les vérifie et garde chaque changement entier. Pour un seul programme qui écrit peu, un CSV suffit."
+ },
+ {
+  "id": "fundamentals-1-38",
+  "level": 1,
+  "q": "Dans une table de clients, qu'est-ce qu'une ligne ?",
+  "choices": [
+   "Un client",
+   "Un détail, comme tous les e-mails",
+   "Toute la table",
+   "La liste des colonnes"
+  ],
+  "answer": 0,
+  "explain": "Comme dans un tableur : chaque ligne est une chose, ici un client, et chaque colonne un détail sur elle (nom, e-mail, ville). Une colonne contient le même détail pour chaque client."
+ },
+ {
+  "id": "fundamentals-1-39",
+  "level": 1,
+  "q": "Une appli de téléphone garde ses données dans un fichier à l'intérieur de l'appli, sans serveur. Qu'utilise-t-elle sans doute ?",
+  "choices": [
+   "SQLite",
+   "PostgreSQL",
+   "Un CSV par ligne",
+   "Une feuille Excel"
+  ],
+  "answer": 0,
+  "explain": "SQLite est une base de données dans un seul fichier, qui tourne dans le programme lui-même : téléphones, navigateurs et beaucoup de petits outils l'utilisent. PostgreSQL et MySQL sont des serveurs que plusieurs programmes joignent par le réseau, pour des données que plusieurs machines partagent, comme celles d'un gros site."
+ },
+ {
+  "id": "fundamentals-1-40",
+  "level": 1,
+  "q": "Que fait un compilateur comme gcc ?",
+  "choices": [
+   "Il traduit une fois le code source en programme pour le CPU",
+   "Il exécute ton code ligne par ligne, à chaque fois",
+   "Il vérifie l'orthographe des commentaires",
+   "Il télécharge des bibliothèques"
+  ],
+  "answer": 0,
+  "explain": "Un processeur ne comprend que le code machine. Un compilateur lit ton code source et écrit un fichier programme en code machine, une fois ; ensuite ce fichier tourne tout seul. Un interpréteur, comme python3, lit plutôt ton code et l'exécute à chaque fois."
+ },
+ {
+  "id": "fundamentals-1-41",
+  "level": 1,
+  "q": "Un script Python écrit mal un nom de variable (totl au lieu de total) dans une branche rare. Quand le découvriras-tu ?",
+  "choices": [
+   "Seulement quand cette ligne tournera",
+   "En enregistrant le fichier",
+   "À l'installation de Python",
+   "Jamais : Python corrige les fautes"
+  ],
+  "answer": 0,
+  "explain": "Avant de démarrer, Python vérifie la grammaire de tout le fichier : une erreur de syntaxe l'arrête tout de suite. Mais un nom n'est cherché que quand sa ligne tourne : mal écrit dans une branche jamais lancée, il reste caché et peut exploser des mois plus tard. Teste chaque branche ; en C ou en Rust, le compilateur aurait refusé."
+ },
+ {
+  "id": "fundamentals-1-42",
+  "level": 1,
+  "q": "Tu as compilé un programme C sous Linux x86_64. Ce fichier tournera-t-il sur un Mac à puce arm64 ?",
+  "choices": [
+   "Non : reconstruis-le pour ce système",
+   "Oui, le code machine est le même partout",
+   "Oui, si tu le renommes",
+   "Seulement avec sudo"
+  ],
+  "answer": 0,
+  "explain": "Un programme compilé contient du code machine pour un type de processeur et un système. Un Mac à puce arm64 a besoin d'un programme construit pour macOS sur arm64 : recompile le source là-bas. Un script Python, lui, tourne partout où python3 et les bibliothèques qu'il utilise sont installés."
+ },
+ {
+  "id": "fundamentals-2-01",
+  "level": 2,
+  "q": "Pourquoi apprendre les couches OSI si Internet tourne sur TCP/IP ?",
+  "choices": [
+   "Pour ranger une panne selon où elle se produit",
+   "Parce que les routeurs utilisent les 7 couches",
+   "Parce que ça ne sert qu'aux examens",
+   "Parce que TCP/IP a 7 couches aussi"
+  ],
+  "answer": 0,
+  "explain": "OSI est un modèle pour raisonner : physique, liaison, réseau, transport, application. TCP/IP fusionne certaines couches (5 et 6 sont floues), mais l'ordre reste vrai : chaque couche a besoin de celle du dessous. Dire « couche 4 » ou « c'est le DNS » transforme « le réseau ne marche pas » en un endroit où chercher."
+ },
+ {
+  "id": "fundamentals-2-02",
+  "level": 2,
+  "q": "Une connexion TCP échoue tout de suite avec « Connection refused ». Qu'est-ce que ça t'apprend ?",
+  "choices": [
+   "La machine a répondu : aucun programme n'écoute ce port",
+   "Un pare-feu l'a jetée sans rien dire",
+   "Le nom ne se résout pas",
+   "Le câble est débranché"
+  ],
+  "answer": 0,
+  "explain": "Refusé est une réponse : la machine est là et joignable, et son système a répondu que rien n'écoute là (rarement, un pare-feu réglé pour rejeter, pas jeter). Un pare-feu qui jette les paquets donne plutôt un délai dépassé, après une longue attente. Donc refusé t'envoie vers le service (tourne-t-il, sur quelle adresse et quel port ?), pas vers le réseau."
+ },
+ {
+  "id": "fundamentals-2-03",
+  "level": 2,
+  "q": "Un script stocke un mot de passe « chiffré » en base64. Est-il protégé ?",
+  "choices": [
+   "Non : base64 est un encodage, tout le monde le décode",
+   "Oui, base64 est un chiffrement solide",
+   "Oui, si le fichier finit en .b64",
+   "Seulement si le mot de passe est long"
+  ],
+  "answer": 0,
+  "explain": "base64 ne fait que réécrire des octets en lettres pour qu'ils passent dans du texte : base64 -d les rend, sans clé. Ce n'est ni un chiffrement ni un hash. Garde le secret hors du script : un coffre à secrets, un fichier que seul l'utilisateur du service peut lire (mode 600), ou LoadCredential= de systemd. Pas Environment= : n'importe quel utilisateur peut le lire."
+ },
+ {
+  "id": "fundamentals-2-04",
+  "level": 2,
+  "q": "Une installation échoue sans root. Quelle est la bonne habitude ?",
+  "choices": [
+   "sudo pour cette seule commande",
+   "Se connecter en root pour la journée",
+   "Donner tous les droits à ton utilisateur",
+   "Ouvrir le dossier à tout le monde"
+  ],
+  "answer": 0,
+  "explain": "sudo lance une commande en root puis tu redeviens toi-même, et le système note qui a lancé quoi. Rester root toute la journée transforme chaque faute de frappe en catastrophe possible, pour toute la machine. Moindre privilège : root seulement pour la commande qui en a besoin."
+ },
+ {
+  "id": "fundamentals-2-05",
+  "level": 2,
+  "q": "Tu fermes ton terminal : ton script s'arrête, mais le serveur web continue. Pourquoi ?",
+  "choices": [
+   "Le script dépendait de ton terminal ; pas le serveur",
+   "Le serveur est plus rapide",
+   "Les scripts ne peuvent pas tourner longtemps",
+   "Le serveur web tourne sous ton nom"
+  ],
+  "answer": 0,
+  "explain": "Fermer le terminal envoie un signal de raccrochage à tout ce qui a été lancé depuis lui, et ton script s'arrête dessus. Le serveur web a été lancé par systemd, pas par toi, et n'a pas de terminal à perdre. C'est pour ça qu'un travail qui dure doit être un service."
+ },
+ {
+  "id": "fundamentals-2-06",
+  "level": 2,
+  "q": "Un script prend 1 s sur 1 000 lignes et 4 s sur 2 000. Comment grandit son travail ?",
+  "choices": [
+   "Comme n × n : cherche une boucle dans une boucle",
+   "Comme n : ça va",
+   "Il ne grandit pas",
+   "Comme log n"
+  ],
+  "answer": 0,
+  "explain": "Deux fois plus de données et quatre fois plus de temps, c'est le signe de n × n : à 20 000 lignes, compte environ 400 s. Un travail qui grandit comme n ne ferait que doubler. Cherche une boucle dans une boucle, ou une commande qui relit tout un fichier pour chaque ligne."
+ },
+ {
+  "id": "fundamentals-2-07",
+  "level": 2,
+  "q": "Pourquoi le chiffre de contrôle d'une carte ne peut-il pas corriger la faute qu'il a trouvée ?",
+  "choices": [
+   "Un seul chiffre dit qu'il y a une erreur, pas où",
+   "Les banques l'interdisent",
+   "Il pourrait, mais les formulaires s'en passent",
+   "Il ne marche que sur le premier chiffre"
+  ],
+  "answer": 0,
+  "explain": "Un seul chiffre de contrôle porte juste de quoi remarquer un changement. Pour trouver où est l'erreur, et donc la corriger, un code a besoin de plus de données en plus, comme la partie correction d'un QR code. Détecter suffit ici : tu peux simplement retaper le numéro."
+ },
+ {
+  "id": "fundamentals-2-08",
+  "level": 2,
+  "q": "Pourquoi un message de commit dit pourquoi, pas seulement quoi ?",
+  "choices": [
+   "Le diff montre quoi ; seul le message garde le pourquoi",
+   "git refuse les messages courts",
+   "Ça rend le commit plus petit",
+   "Pour que la branche ait un nom"
+  ],
+  "answer": 0,
+  "explain": "N'importe qui voit ce qui a changé en comparant les versions. Pourquoi ça a changé ne vit que dans le message : le bug corrigé, la décision derrière. Des mois plus tard, c'est ce qui te dit si une ligne bizarre peut être enlevée sans risque."
+ },
+ {
+  "id": "fundamentals-2-09",
+  "level": 2,
+  "q": "Une IA te donne une regex pour tes journaux. Comment lui faire confiance ?",
+  "choices": [
+   "La tester sur des lignes qui doivent passer, et d'autres non",
+   "Si elle est longue, elle est juste",
+   "La lancer une fois en production",
+   "Demander à l'IA si elle est sûre"
+  ],
+  "answer": 0,
+  "explain": "Une regex peut trouver trop ou trop peu, et les deux ont l'air bien au premier coup d'œil. Rassemble quelques vraies lignes qui doivent correspondre et quelques-unes qui ne doivent pas, et vérifie chacune. Garde-les : elles deviennent un test quand la regex change."
+ },
+ {
+  "id": "fundamentals-2-10",
+  "level": 2,
+  "q": "Un virement débite un compte, puis le serveur plante avant de créditer l'autre. Qu'est-ce qui évite un virement à moitié fait ?",
+  "choices": [
+   "Une transaction : tous ses changements, ou aucun",
+   "Une sauvegarde chaque nuit",
+   "Un serveur plus rapide",
+   "Écrire dans un CSV"
+  ],
+  "answer": 0,
+  "explain": "Une transaction regroupe le débit et le crédit : la base applique les deux, ou, après un plantage, aucun. Personne ne voit jamais de l'argent sorti d'un compte et arrivé nulle part. Une sauvegarde de nuit perdrait la journée et ne réparerait pas le changement à moitié fait."
+ },
+ {
+  "id": "fundamentals-2-11",
+  "level": 2,
+  "q": "Sur un nouveau serveur, python3 app.py dit « python3: command not found ». Pourquoi ?",
+  "choices": [
+   "Un script a besoin de son interpréteur installé là",
+   "Le script a une faute de frappe",
+   "Python ne tourne que sur les portables",
+   "Le serveur n'a plus de disque"
+  ],
+  "answer": 0,
+  "explain": "Un script Python n'est pas un programme à lui seul : python3 le lit et l'exécute. Installe python3 sur ce serveur, et les bibliothèques dont le script a besoin (dans un venv). Un programme compilé n'aurait pas besoin d'interpréteur, mais il doit être construit pour le système de ce serveur."
+ }
+]

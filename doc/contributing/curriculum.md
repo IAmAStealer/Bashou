@@ -196,6 +196,28 @@ input. Rules: [bash-style.md](bash-style.md).
 1. `pipeline` — stages, needs, rules, secrets · Indent Imp, Stage Specter, Needs Newt, Secret Sprite,
    Manual Mole
 
+### Fundamentals
+
+What each tool is for and when to use it, before the commands: the concept lessons a path needs open
+before its practical ones (owner, 2026-11-02 and 2026-11-11). Ticking a skill pulls in the ones its
+lessons need; ticking Fundamentals alone shows them all. No fights: they pass with right answers to
+their own questions (`answered ID 3`), from the `fundamentals` adventure topic (Layer Lich).
+
+1. `fund_regex` — searching by shape, where regexes live, when a parser fits better
+2. `fund_users` — accounts, groups, root and sudo, least privilege
+3. `fund_processes` — programs vs processes, signals, services
+4. `fund_addresses` — MAC, IP, port, name: who each one finds
+5. `fund_complexity` — counting work: n, n × n, log n, measure then double
+6. `fund_codes` — check digits, checksums, QR codes: detect or correct
+7. `fund_git` — versions, commits, branches, shared repositories, no secrets
+8. `fund_code` — compiled vs interpreted, when errors show, what you ship
+9. `fund_databases` — why not a text file, tables, SQL, SQLite vs a server
+10. `fund_crypto` — hashes, symmetric keys, key pairs, signatures
+11. `fund_osi` — layers, from cable to application
+12. `fund_tcp_udp` — TCP vs UDP, ports, which protocol uses which
+13. `fund_arp` — from an IP to a MAC on the local network
+14. `fund_multicast` — unicast, broadcast, multicast
+
 ### AI tools
 
 No fights (owner): these lessons pass with right answers to their own questions (`answered ID N`), in

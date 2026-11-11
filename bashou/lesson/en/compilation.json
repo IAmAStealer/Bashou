@@ -5,7 +5,8 @@
  "after": [
   "computer",
   "scripts",
-  "logic"
+  "logic",
+  "fund_code"
  ],
  "masters": [
   "won semicolon_slug | tool gcc 3",
@@ -26,27 +27,6 @@
  "title": "Compilation: from source code to a program",
  "summary": "What gcc does with your .c file, how to read its errors, and why ./ runs the result.",
  "pages": [
-  {
-   "scheme": [
-    " hello.c              gcc             hello",
-    " ┌──────────────┐               ┌──────────────┐",
-    " │ int main()   │──────────────▶│ 01001000 …   │",
-    " │ { … }        │   compile     │ machine code │",
-    " └──────────────┘               └──────────────┘",
-    "  you can read it                the CPU runs it"
-   ],
-   "point": 2,
-   "mark": [
-    "compile"
-   ],
-   "text": [
-    "A CPU only understands machine code: numbers that stand for its tiny instructions.",
-    "",
-    "- You write source code, text a person can read.",
-    "- A compiler, like gcc, translates it once into a program the CPU can run.",
-    "- Python works differently: python3 reads your script and runs it on the spot, each time."
-   ]
-  },
   {
    "scheme": [
     " hello.c",

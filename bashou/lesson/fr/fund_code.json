@@ -1,0 +1,86 @@
+{
+ "title": "Du code au programme qui tourne",
+ "summary": "Un processeur n'exécute que du code machine. Les langages compilés traduisent une fois, les interprétés lisent ton code à chaque fois : ce que ça change pour les erreurs et pour ce qu'on installe.",
+ "pages": [
+  {
+   "scheme": [
+    " hello.c              gcc             hello",
+    " ┌──────────────┐               ┌──────────────┐",
+    " │ int main()   │──────────────▶│ 01001000 …   │",
+    " │ { … }        │   compiler    │ code machine │",
+    " └──────────────┘               └──────────────┘",
+    "  tu peux le lire              le CPU l'exécute"
+   ],
+   "point": 2,
+   "mark": [
+    "compiler"
+   ],
+   "text": [
+    "Un processeur ne comprend que le code machine : des nombres qui représentent ses toutes petites instructions.",
+    "",
+    "- Tu écris du code source, du texte qu'une personne peut lire.",
+    "- Un compilateur (gcc pour le C, rustc via cargo pour le Rust) le traduit une fois en un fichier programme que le processeur peut lancer."
+   ]
+  },
+  {
+   "scheme": [
+    " hello.py ──python3──▶ tourne, à chaque fois",
+    "   l'interpréteur le lit sur le moment",
+    "",
+    " hello.c ──gcc, une fois──▶ hello ──▶ tourne",
+    "   seul, autant de fois que tu veux"
+   ],
+   "point": 0,
+   "mark": [
+    "python3"
+   ],
+   "text": [
+    "Python et bash marchent autrement : un interpréteur lit ton code et l'exécute sur le moment, à chaque fois.",
+    "",
+    "- Rien à construire, rapide à changer et à réessayer.",
+    "- Mais l'interpréteur doit être installé partout où le script tourne."
+   ]
+  },
+  {
+   "scheme": [
+    " un nom mal écrit dans une branche rare",
+    "",
+    " C, Rust      le compilateur refuse de compiler :",
+    "              tu la vois avant de lancer",
+    " Python, bash trouvée seulement quand la ligne",
+    "              tourne, peut-être des mois après"
+   ],
+   "point": 4,
+   "mark": [
+    "quand la ligne"
+   ],
+   "text": [
+    "Ça change le moment où tu rencontres tes erreurs.",
+    "",
+    "- Un compilateur lit tout le fichier d'abord et attrape beaucoup d'erreurs avant que rien ne tourne : lis ses messages, ils donnent le fichier et la ligne.",
+    "- Python vérifie la grammaire de tout le fichier avant de démarrer, mais ne cherche un nom que quand sa ligne tourne.",
+    "- Aucun n'attrape une logique fausse : teste ton programme dans tous les langages, et chaque branche d'un script."
+   ]
+  },
+  {
+   "scheme": [
+    " tu livres             il lui faut",
+    " un programme C, Rust   le même CPU et système",
+    "                       (Linux x86_64, macOS arm64)",
+    " un script Python       python3, ses bibliothèques",
+    "                       (dans un venv créé là-bas)"
+   ],
+   "point": 1,
+   "mark": [
+    "le même CPU et système"
+   ],
+   "text": [
+    "Ça change aussi ce que tu remets aux autres.",
+    "",
+    "- Un programme compilé est construit pour un type de machine, et souvent pour les bibliothèques de ce système : reconstruis-le pour un autre.",
+    "- Un script tourne partout où son interpréteur et ses bibliothèques sont.",
+    "- Colle et petits outils : souvent Python ou bash. Outils rapides qui tournent longtemps : souvent C, Rust ou Go."
+   ]
+  }
+ ]
+}

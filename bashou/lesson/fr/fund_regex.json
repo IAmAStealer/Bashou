@@ -1,0 +1,64 @@
+{
+ "title": "Expressions régulières : à quoi elles servent",
+ "summary": "Chercher par la forme quand on ne connaît pas le texte exact : dates, adresses, lignes d'erreur. Où on s'en sert, et quand s'en passer.",
+ "pages": [
+  {
+   "scheme": [
+    " une date :  2026-11-11",
+    " la forme :  4 chiffres-2 chiffres-2 chiffres",
+    " une regex : [0-9]{4}-[0-9]{2}-[0-9]{2}",
+    " chercher :  grep -E 'cette regex' app.log"
+   ],
+   "point": 2,
+   "mark": [
+    "[0-9]{4}-[0-9]{2}-[0-9]{2}"
+   ],
+   "text": [
+    "Une expression régulière (regex) décrit la forme d'un texte, pas un mot exact.",
+    "",
+    "- Sors-en une quand tu sais à quoi ressemble le texte, pas ce qu'il dit : une date, une adresse IP, une ligne qui commence par ERROR.",
+    "- Le parcours Bash enseigne la syntaxe : [0-9] est un chiffre, {4} quatre fois (avec grep -E)."
+   ]
+  },
+  {
+   "scheme": [
+    " grep, sed, awk       chercher, modifier",
+    " éditeurs, IDE        chercher et remplacer",
+    " Python, JavaScript   vérifier une saisie,",
+    "                      extraire un morceau",
+    " fail2ban, journaux   trouver les lignes qui",
+    "                      comptent"
+   ],
+   "point": 0,
+   "mark": [
+    "grep, sed, awk"
+   ],
+   "text": [
+    "Les regex sont partout où l'on cherche du texte.",
+    "",
+    "- La même idée marche dans tous ces outils, avec de petites différences entre dialectes (basique, étendu, façon Perl).",
+    "- Apprends la partie commune une fois ; regarde l'aide de l'outil pour ses extras."
+   ]
+  },
+  {
+   "scheme": [
+    " ✘ un texte exact avec des points   1.5 trouve 105",
+    "   ✔ recherche simple : grep -F '1.5'",
+    " ✘ JSON, HTML, CSV         ✔ un vrai analyseur",
+    "                           (jq, Python)",
+    " ✔ une forme dans des lignes simples"
+   ],
+   "point": 0,
+   "mark": [
+    "1.5 trouve 105"
+   ],
+   "text": [
+    "Une regex n'est pas toujours le bon outil.",
+    "",
+    "- Certains caractères sont spéciaux : . veut dire n'importe quel caractère. Pour un texte exact, cherche du texte simple.",
+    "- JSON et HTML s'imbriquent, et le CSV cache des virgules entre guillemets : prends un analyseur (jq, les modules json ou csv de Python). Une regex casse au premier fichier inhabituel.",
+    "- Une regex venue d'une IA ou du web : teste-la sur des lignes qui doivent correspondre et d'autres qui ne doivent pas."
+   ]
+  }
+ ]
+}

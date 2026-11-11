@@ -1,0 +1,89 @@
+{
+ "id": "fund_arp",
+ "order": 468,
+ "skill": [
+  "fundamentals",
+  "network"
+ ],
+ "after": [
+  "fund_osi"
+ ],
+ "opens": "read",
+ "masters": [
+  "answered fund_arp 3"
+ ],
+ "questions": [
+  "fundamentals-1-07",
+  "fundamentals-1-08",
+  "fundamentals-1-09"
+ ],
+ "recall": [
+  "fundamentals-1-07",
+  "fundamentals-1-08"
+ ],
+ "title": "ARP and ping: the neighbours",
+ "summary": "An IP address names a machine anywhere; a MAC address names the next box on the cable. ARP links the two, ping checks the machine answers.",
+ "pages": [
+  {
+   "scheme": [
+    " you ── switch ── printer 192.168.1.20",
+    "",
+    " IP  192.168.1.20        which machine",
+    " MAC 00:00:5e:00:53:07   which network card",
+    "",
+    " ARP: who has 192.168.1.20?",
+    "      → 192.168.1.20 is at 00:00:5e:00:53:07"
+   ],
+   "point": 6,
+   "mark": [
+    "00:00:5e:00:53:07"
+   ],
+   "text": [
+    "On a local network, data travels in frames addressed to a network card, by its MAC address.",
+    "",
+    "- ARP asks the whole local network \"who has this IP?\" and the owner answers with its MAC.",
+    "- Your machine keeps the answers for a while: ip neigh shows them (arp -a on a Mac).",
+    "- IPv6 does the same job with another protocol, neighbour discovery (NDP)."
+   ]
+  },
+  {
+   "scheme": [
+    " you ── router 192.168.1.1 ── … ── 203.0.113.10",
+    "",
+    " frame to:   the router's MAC",
+    " packet to:  203.0.113.10"
+   ],
+   "point": 2,
+   "mark": [
+    "the router's MAC"
+   ],
+   "text": [
+    "A far machine is not your neighbour: you never learn its MAC.",
+    "",
+    "- The frame goes to your gateway's MAC (the router); the IP packet inside keeps the far address.",
+    "- Each router on the way unpacks it and sends it to its own next neighbour.",
+    "- So if ARP for the gateway fails, nothing outside your network works."
+   ]
+  },
+  {
+   "scheme": [
+    " $ ping -c 3 192.168.1.20",
+    " 64 bytes from 192.168.1.20: icmp_seq=1 ttl=64",
+    "  time=1.2 ms",
+    "",
+    " ping   ICMP, no port: is the machine there?",
+    " arping ARP: is it on my network? (Linux)"
+   ],
+   "point": 1,
+   "mark": [
+    "time=1.2 ms"
+   ],
+   "text": [
+    "ping sends an ICMP echo request and waits for the echo reply: it tests the machine, not a service (ICMP has no port).",
+    "",
+    "- No reply may be a firewall that drops ICMP, not a dead machine.",
+    "- On your own network, a machine that drops ping still answers ARP: sudo arping -c 3 192.168.1.20 shows it's there (Debian: apt install iputils-arping)."
+   ]
+  }
+ ]
+}

@@ -3,7 +3,8 @@
  "order": 440,
  "skill": "linux",
  "after": [
-  "permissions"
+  "permissions",
+  "fund_crypto"
  ],
  "masters": [
   "won forger_ferret | tool gpg 3 | tool ssh-keygen 3",
@@ -26,24 +27,6 @@
  "title": "Public and private keys",
  "summary": "Two halves of one key: lock for someone, and prove who signed a file.",
  "pages": [
-  {
-   "scheme": [
-    " your key pair",
-    " ├── public key     give it to anyone",
-    " └── private key    only you have it",
-    "                    (protected by your passphrase)"
-   ],
-   "point": 2,
-   "mark": [
-    "private key"
-   ],
-   "text": [
-    "gpg -c locks a file with a passphrase you must share. Key pairs avoid that.",
-    "",
-    "- The two halves are made together and work together.",
-    "- You can't compute the private key from the public one."
-   ]
-  },
   {
    "scheme": [
     " Ada ── Sam's public key ──▶ file.gpg",

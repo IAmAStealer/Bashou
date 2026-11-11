@@ -1,0 +1,65 @@
+{
+ "title": "Multicast : un émetteur, un groupe d'auditeurs",
+ "summary": "L'unicast parle à une machine, le broadcast à toutes les machines proches, le multicast à celles qui ont rejoint un groupe. Pourquoi une imprimante apparaît dans une pièce et pas dans la suivante.",
+ "pages": [
+  {
+   "scheme": [
+    " unicast    ●──▶○              une machine",
+    " broadcast  ●──▶○ ○ ○ ○        tout le monde ici",
+    " multicast  ●──▶○ · ○ ·        ceux du groupe",
+    "",
+    " adresses multicast : 224.0.0.0/4, ff00::/8"
+   ],
+   "point": 2,
+   "mark": [
+    "multicast"
+   ],
+   "text": [
+    "La plupart du trafic est en unicast : un émetteur, un destinataire.",
+    "",
+    "- Le broadcast touche toutes les machines du réseau local (IPv4 seulement ; ARP s'en sert).",
+    "- Le multicast envoie une fois vers une adresse de groupe ; seules les machines qui ont rejoint le groupe écoutent. IPv6 n'a pas de broadcast : il utilise le multicast à la place."
+   ]
+  },
+  {
+   "scheme": [
+    " mDNS  224.0.0.251:5353   imprimante.local,",
+    "                           écrans partagés",
+    " VRRP  224.0.0.18         deux routeurs pour",
+    "                           une adresse",
+    " IPTV  239.x.x.x          un flux télé,",
+    "                           beaucoup de foyers"
+   ],
+   "point": 0,
+   "mark": [
+    "mDNS"
+   ],
+   "text": [
+    "Tu utilises le multicast sans le savoir.",
+    "",
+    "- mDNS permet aux machines de se trouver par leur nom (imprimante.local) sans serveur DNS : chacune répond aux questions sur son propre nom.",
+    "- VRRP permet à un routeur de secours de reprendre l'adresse de la passerelle quand le principal tombe.",
+    "- Un opérateur envoie une chaîne une seule fois ; ses routeurs la copient seulement vers les foyers qui la regardent."
+   ]
+  },
+  {
+   "scheme": [
+    " bureau A 192.168.1.0/24    bureau B 10.0.2.0/24",
+    "   portable ✔ imprimante     portable ✘",
+    "      │                          │",
+    "      └──────── routeur ─────────┘",
+    "      224.0.0.251 reste de son côté"
+   ],
+   "point": 4,
+   "mark": [
+    "reste de son côté"
+   ],
+   "text": [
+    "Les adresses de 224.0.0.0/24 sont locales au lien : les routeurs ne les font jamais suivre.",
+    "",
+    "- Donc mDNS ne marche qu'à l'intérieur d'un réseau. Une imprimante trouvée par son nom dans un bureau est invisible depuis un autre sous-réseau.",
+    "- Ce n'est pas une panne : ajoute l'imprimante par son adresse IP, ou demande à l'équipe réseau un relais mDNS (un réflecteur)."
+   ]
+  }
+ ]
+}

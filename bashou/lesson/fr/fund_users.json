@@ -1,0 +1,85 @@
+{
+ "title": "Utilisateurs et droits : qui peut faire quoi",
+ "summary": "Chaque fichier et chaque programme qui tourne appartient à un utilisateur. Les droits décident qui lit, modifie ou lance quoi, et pourquoi rien ne doit tourner en root par habitude.",
+ "pages": [
+  {
+   "scheme": [
+    " root     (uid 0)     peut tout faire",
+    " sam      (uid 1000)  tes fichiers, tes processus",
+    " www-data (uid 33)    le serveur web (Debian ;",
+    "                      apache sur Rocky)"
+   ],
+   "point": 0,
+   "mark": [
+    "root"
+   ],
+   "text": [
+    "Chaque fichier et chaque programme qui tourne appartient à un utilisateur : une personne, ou un service.",
+    "",
+    "- root est l'administrateur : aucune vérification de droits ne l'arrête.",
+    "- Les services ont leurs propres utilisateurs : un serveur web cassé ne peut pas toucher à tes fichiers."
+   ]
+  },
+  {
+   "scheme": [
+    " groupe devs : sam, alex",
+    "",
+    " plan.txt   propriétaire sam   groupe devs",
+    "   sam      lire, écrire",
+    "   devs     lire",
+    "   autres   rien"
+   ],
+   "point": 4,
+   "mark": [
+    "devs     lire"
+   ],
+   "text": [
+    "Un groupe est une équipe d'utilisateurs. Un fichier appartient à un utilisateur et à un groupe.",
+    "",
+    "- Les droits sont donnés trois fois : au propriétaire, au groupe, à tous les autres.",
+    "- Donne les droits à une équipe, pas à chaque personne : un nouveau rejoint le groupe et les a tous."
+   ]
+  },
+  {
+   "scheme": [
+    " lire       voir ce qu'il contient",
+    " écrire     le modifier",
+    " exécuter   le lancer comme programme",
+    " exécuter (dossier)  y entrer",
+    "",
+    " kim ouvre plan.txt",
+    "   ni sam, ni dans devs : autres → rien",
+    "   Permission denied"
+   ],
+   "point": 6,
+   "mark": [
+    "Permission denied"
+   ],
+   "text": [
+    "Trois droits : lire, écrire, exécuter. Le système les vérifie à chaque ouverture du fichier.",
+    "",
+    "- « Permission denied » veut dire que cette vérification a dit non, sur le fichier ou un dossier du chemin : le fichier va bien, ton utilisateur n'a pas le droit.",
+    "- Le parcours Linux montre comment les lire et les changer (ls -l, chmod)."
+   ]
+  },
+  {
+   "scheme": [
+    " ✘ tout en root           une erreur casse tout",
+    " ✘ ouvert à tous          n'importe qui le modifie",
+    " ✔ sudo pour une commande root seulement si besoin",
+    " ✔ un compte par service une intrusion limitée",
+    " ✔ droits à un groupe     pas à tout le monde"
+   ],
+   "point": 2,
+   "mark": [
+    "sudo"
+   ],
+   "text": [
+    "Le moindre privilège : donne à chaque utilisateur et programme seulement les droits dont il a besoin.",
+    "",
+    "- sudo lance une commande en root, puis tu redeviens toi-même.",
+    "- Ouvrir un fichier à tout le monde pour faire taire une erreur échange un petit problème contre une faille."
+   ]
+  }
+ ]
+}

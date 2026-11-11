@@ -1,0 +1,91 @@
+{
+ "title": "git : à quoi ça sert",
+ "summary": "Chaque version commitée d'un projet gardée, avec qui a changé quoi et pourquoi. Commits, branches et dépôts partagés, avant toute commande.",
+ "pages": [
+  {
+   "scheme": [
+    " rapport_final.txt",
+    " rapport_final_v2.txt",
+    " rapport_final_v2_VRAI.txt",
+    "   lequel ? qui a changé quoi ? pourquoi ?",
+    "",
+    " git : un dossier, chaque version commitée"
+   ],
+   "point": 5,
+   "mark": [
+    "chaque version commitée"
+   ],
+   "text": [
+    "git garde l'historique d'un dossier : chaque version que tu commites, qui l'a faite et pourquoi.",
+    "",
+    "- Code, configuration, documentation : tout texte qui change avec le temps.",
+    "- Tu peux revenir à n'importe quelle version, en comparer deux, et trouver le changement qui a cassé quelque chose."
+   ]
+  },
+  {
+   "scheme": [
+    " a1 ◀─ b2 ◀─ c3",
+    " │     │     └ « Passe le port à 8080 »",
+    " │     └ « Corrige une faute dans le titre »",
+    " └ « Ajoute la page de connexion »",
+    "",
+    " chaque commit : un instantané, son auteur,",
+    " sa date, et un message qui dit pourquoi"
+   ],
+   "point": 5,
+   "mark": [
+    "un instantané"
+   ],
+   "text": [
+    "Un commit est un instantané de tout le projet, avec qui l'a fait, quand, et un message.",
+    "",
+    "- Chaque commit pointe vers le précédent : l'historique est une chaîne.",
+    "- Le message dit pourquoi. Des mois plus tard, c'est le seul endroit qui répond à « pourquoi cette ligne est là ? »"
+   ]
+  },
+  {
+   "scheme": [
+    " a1 ◀─ b2 ◀─ c3 ◀─ main",
+    "       ▲",
+    "       └─ d4 ◀─ e5 ◀─ essai-cache",
+    "",
+    " ça marche : on la fusionne dans main",
+    " ça ne marche pas : on supprime la branche"
+   ],
+   "point": 2,
+   "mark": [
+    "essai-cache"
+   ],
+   "text": [
+    "Une branche est une ligne de travail à côté de la principale.",
+    "",
+    "- Essaie une idée dessus sans toucher à ce qui marche.",
+    "- Prête : fusionne-la. Une impasse : supprime la branche, main ne l'a jamais vue."
+   ]
+  },
+  {
+   "scheme": [
+    " ta copie ─push─▶ dépôt partagé",
+    "          ◀─pull─  (GitHub, GitLab…)",
+    "                         ▲   │",
+    "                    push │   ▼ pull",
+    "                   la copie d'Alex",
+    "",
+    " ✘ un mot de passe commité : dans l'historique",
+    "   pour de bon, même supprimé ensuite"
+   ],
+   "point": 6,
+   "mark": [
+    "✘ un mot de passe"
+   ],
+   "text": [
+    "Chacun a tout l'historique ; un dépôt partagé est l'endroit où l'équipe se retrouve.",
+    "",
+    "- push y envoie tes commits ; pull récupère ceux des autres et les fusionne avec les tiens.",
+    "- L'historique garde tout : ne commite jamais un secret. S'il y entre quand même, change-le : le supprimer ensuite ne l'efface pas.",
+    "- Les gros fichiers binaires n'y ont pas leur place non plus : chaque clone en porte toutes les versions.",
+    "- La leçon git montre les commandes, les conflits et comment annuler."
+   ]
+  }
+ ]
+}

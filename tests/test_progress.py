@@ -181,6 +181,8 @@ class ProgressTest(unittest.TestCase):
         self.s["challenges"] += ["mut_marmot", "const_condor", "shadow_shade", "byte_basilisk", "borrow_badger", "vector_viper",
                                  "index_imp", "conflict_chimera", "revert_revenant"]          # the git lesson is for everyone
         self.s["lessons"]["read"] = [le["id"] for le in lesson.shown(self.s, lesson.english())]
+        self.s["lessons"]["right"] = [q for le in lesson.shown(self.s, lesson.english())    # fund_code: answered
+                                      for q in le.get("questions", [])]
         lessons = {"kindling", "page_turner", "mastery", "bookworm", "polymath", "librarian", "lesson_scholar",
                    "torchbearer", "well_read", "alexandria", "avid_reader", "deep_reader", "scroll_keeper", "archivist",
                    "curator", "practitioner", "adept", "expert", "virtuoso", "grandmaster", "renaissance"}

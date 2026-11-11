@@ -1,0 +1,86 @@
+{
+ "id": "fund_addresses",
+ "order": 255,
+ "skill": [
+  "fundamentals",
+  "network",
+  "linux"
+ ],
+ "after": [
+  "computer"
+ ],
+ "opens": "read",
+ "masters": [
+  "answered fund_addresses 3"
+ ],
+ "questions": [
+  "fundamentals-1-01",
+  "fundamentals-1-02",
+  "fundamentals-1-03"
+ ],
+ "recall": [
+  "fundamentals-1-01",
+  "fundamentals-1-02"
+ ],
+ "title": "Addresses, names and ports",
+ "summary": "How one machine finds another: an IP address for the machine, a name people remember, a port for the service.",
+ "pages": [
+  {
+   "scheme": [
+    " example.org ──DNS──▶ 203.0.113.10",
+    "     name                address"
+   ],
+   "point": 0,
+   "mark": [
+    "DNS"
+   ],
+   "text": [
+    "Machines talk with numbers: IP addresses. People remember names. DNS, the Internet's phone book, turns a name into an address.",
+    "",
+    "- Your browser asks DNS for example.org's address, then connects to that address.",
+    "- 203.0.113.10 is an address kept for examples; the real one is elsewhere.",
+    "- A name that doesn't resolve and a machine that doesn't answer are two different problems."
+   ]
+  },
+  {
+   "scheme": [
+    " 203.0.113.10 : 443",
+    " └────┬─────┘   └┬┘",
+    "   the machine   the door (port)",
+    "",
+    " 22 ssh   80 http   443 https   5432 postgres"
+   ],
+   "point": 2,
+   "mark": [
+    "443"
+   ],
+   "text": [
+    "One machine runs many services. The port says which one you want: the address is the building, the port the door.",
+    "",
+    "- A service listens on its port; a client connects to it.",
+    "- Well-known services have usual ports, but any service can be set to listen on another one."
+   ]
+  },
+  {
+   "scheme": [
+    " https://example.org/shop",
+    "   │",
+    "   ├─ name     example.org ─DNS─▶ 203.0.113.10",
+    "   ├─ port     https: 443",
+    "   └─ request  /shop",
+    "",
+    " 203.0.113.10:443 ──▶ the web server"
+   ],
+   "point": 6,
+   "mark": [
+    "203.0.113.10:443"
+   ],
+   "text": [
+    "Put together, a web address holds all three: a name to look up, a port (written, or the usual one for https) and what to ask for.",
+    "",
+    "- When it fails, ask in that order: does the name give an address? Does the address answer? Does the port accept?",
+    "- Each answer points to a different culprit: DNS, the route or a firewall, or the service."
+   ]
+  }
+ ]
+}

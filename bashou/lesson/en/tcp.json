@@ -3,7 +3,8 @@
  "order": 510,
  "skill": "network",
  "after": [
-  "ip_addr"
+  "ip_addr",
+  "fund_tcp_udp"
  ],
  "tools": [
   "ss"

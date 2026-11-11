@@ -1,0 +1,63 @@
+{
+ "title": "Adresses, noms et ports",
+ "summary": "Comment une machine en trouve une autre : une adresse IP pour la machine, un nom que les gens retiennent, un port pour le service.",
+ "pages": [
+  {
+   "scheme": [
+    " example.org ──DNS──▶ 203.0.113.10",
+    "     nom                 adresse"
+   ],
+   "point": 0,
+   "mark": [
+    "DNS"
+   ],
+   "text": [
+    "Les machines se parlent avec des nombres : les adresses IP. Les gens retiennent des noms. Le DNS, l'annuaire d'Internet, transforme un nom en adresse.",
+    "",
+    "- Ton navigateur demande au DNS l'adresse d'example.org, puis se connecte à cette adresse.",
+    "- 203.0.113.10 est une adresse réservée aux exemples ; la vraie est ailleurs.",
+    "- Un nom qui ne se résout pas et une machine qui ne répond pas sont deux problèmes différents."
+   ]
+  },
+  {
+   "scheme": [
+    " 203.0.113.10 : 443",
+    " └────┬─────┘   └┬┘",
+    "   la machine    la porte (port)",
+    "",
+    " 22 ssh   80 http   443 https   5432 postgres"
+   ],
+   "point": 2,
+   "mark": [
+    "443"
+   ],
+   "text": [
+    "Une machine fait tourner plusieurs services. Le port dit lequel tu veux : l'adresse est l'immeuble, le port la porte.",
+    "",
+    "- Un service écoute sur son port ; un client s'y connecte.",
+    "- Les services connus ont des ports habituels, mais on peut régler n'importe quel service sur un autre."
+   ]
+  },
+  {
+   "scheme": [
+    " https://example.org/shop",
+    "   │",
+    "   ├─ nom      example.org ─DNS─▶ 203.0.113.10",
+    "   ├─ port     https : 443",
+    "   └─ demande  /shop",
+    "",
+    " 203.0.113.10:443 ──▶ le serveur web"
+   ],
+   "point": 6,
+   "mark": [
+    "203.0.113.10:443"
+   ],
+   "text": [
+    "Ensemble, une adresse web contient les trois : un nom à chercher, un port (écrit, ou celui habituel de https) et ce qu'on demande.",
+    "",
+    "- Quand ça échoue, demande-toi dans cet ordre : le nom donne-t-il une adresse ? L'adresse répond-elle ? Le port accepte-t-il ?",
+    "- Chaque réponse désigne un coupable différent : le DNS, la route ou un pare-feu, ou le service."
+   ]
+  }
+ ]
+}

@@ -1,170 +1,129 @@
 {
-  "id": "logic_ecc",
-  "order": 265,
-  "skill": "logic",
-  "after": [
-    "logic"
-  ],
-  "masters": [
-    "won bitflip_banshee"
-  ],
-  "questions": [
-    "logic-2-24",
-    "logic-2-25",
-    "logic-2-26",
-    "logic-3-16",
-    "logic-3-17"
-  ],
-  "recall": [
-    "logic-2-24",
-    "logic-2-25",
-    "logic-2-26"
-  ],
-  "fights": [
-    "bitflip_banshee"
-  ],
-  "title": "Codes that fix themselves",
-  "summary": "Bits flip in memory, cables and disks. A parity bit finds a flip, a checksum finds any change, and Hamming codes find which bit flipped and flip it back.",
-  "pages": [
-    {
-      "scheme": [
-        " sent      1 0 1 1 0 0 1",
-        "                 │",
-        "                 ↓ noise, cosmic ray, worn disk",
-        " received  1 0 1 0 0 0 1",
-        "",
-        " no error, no crash: just a wrong bit"
-      ],
-      "point": 3,
-      "mark": [
-        "1 0 1 0"
-      ],
-      "text": [
-        "Memory, cables and disks sometimes flip a bit: a 1 arrives as a 0. Nothing crashes; the data is just wrong.",
-        "",
-        "- Rare for one bit, common for a data centre: in a 2009 Google study, about a third of servers saw at least one memory error in a year, mostly from faulty chips rather than cosmic rays.",
-        "- The cure is redundancy: send a few extra bits computed from the data, and check them on arrival."
-      ]
-    },
-    {
-      "scheme": [
-        "   a  b   a ^ b",
-        "   0  0     0",
-        "   0  1     1",
-        "   1  0     1",
-        "   1  1     0",
-        "",
-        " data 1011     1^0^1^1   = 1   send 1011 1",
-        " got  1011 1   1^0^1^1^1 = 0   fine",
-        " got  1001 1   1^0^0^1^1 = 1   a bit flipped"
-      ],
-      "point": 6,
-      "mark": [
-        "send 1011 1"
-      ],
-      "text": [
-        "XOR, ^ in $(( )), gives 1 when an odd number of its bits are 1. A parity bit is the XOR of the data: with it, the word always holds an even number of 1s.",
-        "",
-        "- On arrival, XOR every bit: 0 means fine, 1 means a bit flipped.",
-        "- It can't tell which bit, and two flips cancel out: 0 again.",
-        "- | is OR, not XOR: 1 | 1 = 1, so it can't count."
-      ]
-    },
-    {
-      "scheme": [
-        " $ sha256sum backup.tar > backup.sha256",
-        " $ sha256sum -c backup.sha256",
-        " backup.tar: OK",
-        "",
-        "   one bit flips on the disk",
-        "                 ↓",
-        " $ sha256sum -c backup.sha256",
-        " backup.tar: FAILED",
-        " sha256sum: WARNING: 1 computed checksum did NOT",
-        "   match"
-      ],
-      "point": 7,
-      "mark": [
-        "FAILED"
-      ],
-      "script": [
-        "sha256sum -c backup.sha256"
-      ],
-      "text": [
-        "A checksum plays the role of parity for a whole file: sha256sum turns it into 64 hex digits, and one flipped bit changes almost all of them.",
-        "",
-        "- It detects, it doesn't repair: on FAILED, download or copy the file again.",
-        "- Downloads publish such a file (Debian's SHA256SUMS). Against tampering, not just noise, it must be signed too: gpg --verify.",
-        "- On macOS, without coreutils: shasum -a 256 -c backup.sha256."
-      ]
-    },
-    {
-      "scheme": [
-        " position   1  2  3  4  5  6  7",
-        " holds      p1 p2 d1 p4 d2 d3 d4",
-        "",
-        " s1 reads   1     3     5     7    001",
-        " s2 reads      2  3        6  7    010",
-        " s4 reads            4  5  6  7    100",
-        "",
-        " 5 = 101: read by s1 and s4"
-      ],
-      "point": 7,
-      "mark": [
-        "101"
-      ],
-      "text": [
-        "Hamming(7,4) sends 4 data bits (d) with 3 parity bits (p), each the XOR of a different group of positions.",
-        "",
-        "- Check k reads the positions whose binary number includes k: 5 is 101 = 4 + 1, so s1 and s4 read it.",
-        "- No two positions are read by the same set of checks: that's what lets the checks point at one."
-      ]
-    },
-    {
-      "scheme": [
-        " sent      0 1 1 0 0 1 1",
-        " got       0 1 1 0 1 1 1",
-        "                   ↑ bit 5 flipped",
-        "",
-        " s1 = b1 ^ b3 ^ b5 ^ b7 = 1",
-        " s2 = b2 ^ b3 ^ b6 ^ b7 = 0",
-        " s4 = b4 ^ b5 ^ b6 ^ b7 = 1",
-        "",
-        " bad = s1 + 2*s2 + 4*s4 = 5",
-        " flip b5 back, keep 3 5 6 7: 1011"
-      ],
-      "point": 8,
-      "mark": [
-        "= 5"
-      ],
-      "text": [
-        "On arrival, compute the three checks again. Read as a binary number s4 s2 s1, they give the position that flipped: 0 means none.",
-        "",
-        "- Flip that bit back, b[bad] ^ 1, then keep positions 3, 5, 6 and 7: the data.",
-        "- One flip is fixed. Two flips point at the wrong bit, and Hamming(7,4) can't tell."
-      ]
-    },
-    {
-      "scheme": [
-        "   code             finds        fixes",
-        "   parity bit       1 flip       no",
-        "   sha256sum        any change   no",
-        "   Hamming(7,4)     1 flip       1 flip",
-        "   ECC RAM, SECDED  2 flips      1 flip",
-        "   RAID 5 (XOR)     a dead disk  rebuilds it",
-        "   QR, CD           many         many"
-      ],
-      "point": 4,
-      "mark": [
-        "ECC RAM, SECDED"
-      ],
-      "text": [
-        "The same idea runs under you every day: extra bits computed from the data, checked on arrival.",
-        "",
-        "- Classic ECC RAM adds 8 check bits to every 64 data bits (Hamming plus one overall parity bit): it fixes one flip and detects two. Servers often use stronger codes that survive a whole dead chip.",
-        "- RAID 5 keeps, in each stripe, one block that is the XOR of the others: when a disk dies, XOR the rest to rebuild it.",
-        "- QR codes and CDs use Reed–Solomon codes: a smudged QR code still reads."
-      ]
-    }
-  ]
+ "id": "logic_ecc",
+ "order": 265,
+ "skill": "logic",
+ "after": [
+  "logic",
+  "fund_codes"
+ ],
+ "masters": [
+  "won bitflip_banshee"
+ ],
+ "questions": [
+  "logic-2-24",
+  "logic-2-25",
+  "logic-2-26",
+  "logic-3-16",
+  "logic-3-17"
+ ],
+ "recall": [
+  "logic-2-24",
+  "logic-2-25",
+  "logic-2-26"
+ ],
+ "fights": [
+  "bitflip_banshee"
+ ],
+ "title": "Codes that fix themselves",
+ "summary": "Bits flip in memory, cables and disks. A parity bit finds a flip, a checksum finds any change, and Hamming codes find which bit flipped and flip it back.",
+ "pages": [
+  {
+   "scheme": [
+    "   a  b   a ^ b",
+    "   0  0     0",
+    "   0  1     1",
+    "   1  0     1",
+    "   1  1     0",
+    "",
+    " data 1011     1^0^1^1   = 1   send 1011 1",
+    " got  1011 1   1^0^1^1^1 = 0   fine",
+    " got  1001 1   1^0^0^1^1 = 1   a bit flipped"
+   ],
+   "point": 6,
+   "mark": [
+    "send 1011 1"
+   ],
+   "text": [
+    "XOR, ^ in $(( )), gives 1 when an odd number of its bits are 1. A parity bit is the XOR of the data: with it, the word always holds an even number of 1s.",
+    "",
+    "- On arrival, XOR every bit: 0 means fine, 1 means a bit flipped.",
+    "- It can't tell which bit, and two flips cancel out: 0 again.",
+    "- | is OR, not XOR: 1 | 1 = 1, so it can't count."
+   ]
+  },
+  {
+   "scheme": [
+    " $ sha256sum backup.tar > backup.sha256",
+    " $ sha256sum -c backup.sha256",
+    " backup.tar: OK",
+    "",
+    "   one bit flips on the disk",
+    "                 ↓",
+    " $ sha256sum -c backup.sha256",
+    " backup.tar: FAILED",
+    " sha256sum: WARNING: 1 computed checksum did NOT",
+    "   match"
+   ],
+   "point": 7,
+   "mark": [
+    "FAILED"
+   ],
+   "script": [
+    "sha256sum -c backup.sha256"
+   ],
+   "text": [
+    "A checksum plays the role of parity for a whole file: sha256sum turns it into 64 hex digits, and one flipped bit changes almost all of them.",
+    "",
+    "- It detects, it doesn't repair: on FAILED, download or copy the file again.",
+    "- Downloads publish such a file (Debian's SHA256SUMS). Against tampering, not just noise, it must be signed too: gpg --verify.",
+    "- On macOS, without coreutils: shasum -a 256 -c backup.sha256."
+   ]
+  },
+  {
+   "scheme": [
+    " position   1  2  3  4  5  6  7",
+    " holds      p1 p2 d1 p4 d2 d3 d4",
+    "",
+    " s1 reads   1     3     5     7    001",
+    " s2 reads      2  3        6  7    010",
+    " s4 reads            4  5  6  7    100",
+    "",
+    " 5 = 101: read by s1 and s4"
+   ],
+   "point": 7,
+   "mark": [
+    "101"
+   ],
+   "text": [
+    "Hamming(7,4) sends 4 data bits (d) with 3 parity bits (p), each the XOR of a different group of positions.",
+    "",
+    "- Check k reads the positions whose binary number includes k: 5 is 101 = 4 + 1, so s1 and s4 read it.",
+    "- No two positions are read by the same set of checks: that's what lets the checks point at one."
+   ]
+  },
+  {
+   "scheme": [
+    " sent      0 1 1 0 0 1 1",
+    " got       0 1 1 0 1 1 1",
+    "                   ↑ bit 5 flipped",
+    "",
+    " s1 = b1 ^ b3 ^ b5 ^ b7 = 1",
+    " s2 = b2 ^ b3 ^ b6 ^ b7 = 0",
+    " s4 = b4 ^ b5 ^ b6 ^ b7 = 1",
+    "",
+    " bad = s1 + 2*s2 + 4*s4 = 5",
+    " flip b5 back, keep 3 5 6 7: 1011"
+   ],
+   "point": 8,
+   "mark": [
+    "= 5"
+   ],
+   "text": [
+    "On arrival, compute the three checks again. Read as a binary number s4 s2 s1, they give the position that flipped: 0 means none.",
+    "",
+    "- Flip that bit back, b[bad] ^ 1, then keep positions 3, 5, 6 and 7: the data.",
+    "- One flip is fixed; two point at the wrong bit. ECC RAM adds one overall parity bit (8 check bits per 64): it fixes one flip and detects two."
+   ]
+  }
+ ]
 }

@@ -1,0 +1,86 @@
+{
+ "id": "fund_processes",
+ "order": 187,
+ "skill": [
+  "fundamentals",
+  "linux"
+ ],
+ "after": [
+  "computer"
+ ],
+ "opens": "read",
+ "masters": [
+  "answered fund_processes 3"
+ ],
+ "questions": [
+  "fundamentals-1-22",
+  "fundamentals-1-23",
+  "fundamentals-1-24",
+  "fundamentals-2-05"
+ ],
+ "recall": [
+  "fundamentals-1-22",
+  "fundamentals-1-23"
+ ],
+ "title": "Processes and services",
+ "summary": "A program on disk does nothing; a running copy of it is a process. Services are processes that run with no terminal, from boot.",
+ "pages": [
+  {
+   "scheme": [
+    " /usr/bin/python3      a program: a file",
+    "   ├─ run ─▶ PID 2301  python3 app.py",
+    "   └─ run ─▶ PID 2350  python3 tool.py",
+    "              two processes, one program"
+   ],
+   "point": 3,
+   "mark": [
+    "two processes"
+   ],
+   "text": [
+    "A program is a file. Start it and the system makes a process: a running copy with its own memory and number, the PID.",
+    "",
+    "- Run it twice, you get two processes. Stopping one leaves the other.",
+    "- Each process runs as a user, with that user's rights."
+   ]
+  },
+  {
+   "scheme": [
+    " your terminal ───▶ ls, nano, a script",
+    "                    stop when you close it",
+    "",
+    " systemd (PID 1) ─▶ sshd, a web server",
+    "                    no terminal, from boot"
+   ],
+   "point": 3,
+   "mark": [
+    "systemd (PID 1)"
+   ],
+   "text": [
+    "What you type runs in your terminal and usually ends with it.",
+    "",
+    "- A service (or daemon) is a process with no terminal: it waits for work, often from boot to shutdown.",
+    "- On most Linux systems, systemd starts services, restarts one that crashes if its unit asks for it (Restart=), and keeps their logs. A Mac uses launchd."
+   ]
+  },
+  {
+   "scheme": [
+    " ask:    please stop    saves, closes its files",
+    " force:  stop now       half-written files",
+    "",
+    " 1. ask, wait a few seconds",
+    " 2. force only if it won't stop"
+   ],
+   "point": 3,
+   "mark": [
+    "1. ask"
+   ],
+   "text": [
+    "To stop a process, ask before forcing.",
+    "",
+    "- Asked, a program can finish writing and clean up. Forced, it stops mid-way: broken files, leftover locks.",
+    "- A service is stopped through its manager (systemctl stop), so it stays stopped and the log says why.",
+    "- The Processes and Services lessons show the commands."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,116 @@
+{
+ "id": "fund_codes",
+ "order": 262,
+ "skill": [
+  "fundamentals",
+  "logic"
+ ],
+ "after": [
+  "computer"
+ ],
+ "opens": "read",
+ "masters": [
+  "answered fund_codes 3"
+ ],
+ "questions": [
+  "fundamentals-1-28",
+  "fundamentals-1-29",
+  "fundamentals-1-30",
+  "fundamentals-2-07"
+ ],
+ "recall": [
+  "fundamentals-1-28",
+  "fundamentals-1-29"
+ ],
+ "title": "Codes that find and fix errors",
+ "summary": "Bits flip and people mistype. A check digit finds a typo on a bank card, a checksum finds a changed file, a QR code rebuilds what's smudged.",
+ "pages": [
+  {
+   "scheme": [
+    " sent      1 0 1 1 0 0 1",
+    "                 │",
+    "                 ↓ noise, cosmic ray, worn disk",
+    " received  1 0 1 0 0 0 1",
+    "",
+    " often no error, no crash: just a wrong bit"
+   ],
+   "point": 3,
+   "mark": [
+    "1 0 1 0"
+   ],
+   "text": [
+    "Memory, cables and disks sometimes flip a bit: a 1 arrives as a 0. Often nothing crashes and nothing warns you: the data is just wrong.",
+    "",
+    "- Rare for one bit, common for a data centre: in a 2009 Google study, about a third of servers saw at least one memory error in a year, mostly from faulty chips rather than cosmic rays.",
+    "- The cure is redundancy: add a little extra data computed from the rest, and check it on arrival."
+   ]
+  },
+  {
+   "scheme": [
+    " 4111 1111 1111 1111   last digit: a check",
+    "                       digit (Luhn)",
+    " typed:",
+    " 4111 1111 1111 1121   one digit wrong",
+    "  → \"invalid card number\"",
+    "    found, not fixed: type it again"
+   ],
+   "point": 4,
+   "mark": [
+    "invalid card number"
+   ],
+   "text": [
+    "A bank card number ends with a check digit computed from the others (the Luhn formula).",
+    "",
+    "- A form spots any single wrong digit, and most swaps of two neighbours, before even asking the bank.",
+    "- It detects, it doesn't correct: it can't say which digit is wrong.",
+    "- Same idea: IBANs, ISBNs, and the checksum next to a download."
+   ]
+  },
+  {
+   "scheme": [
+    " QR code, partly smudged or under a logo",
+    "",
+    "   level   can lose",
+    "   L       about 7%",
+    "   M       about 15%",
+    "   Q       about 25%",
+    "   H       about 30%",
+    "",
+    "   → still reads: the missing part is rebuilt"
+   ],
+   "point": 8,
+   "mark": [
+    "rebuilt"
+   ],
+   "text": [
+    "Some codes go further: they find the error and fix it.",
+    "",
+    "- A QR code carries extra error-correcting data (Reed–Solomon codes): a scratched one still scans.",
+    "- Correcting costs room: the more it can rebuild, the bigger the code for the same text."
+   ]
+  },
+  {
+   "scheme": [
+    " code             finds          fixes",
+    " card digit       one typo       no",
+    " sha256sum        any change     no",
+    " parity bit       one flip       no",
+    " ECC RAM          two flips      one flip",
+    " RAID 5           a dead disk*   rebuilds it",
+    " QR codes, CDs    many           many"
+   ],
+   "point": 4,
+   "mark": [
+    "ECC RAM"
+   ],
+   "text": [
+    "The same idea runs under you every day: extra data computed from the rest, checked on arrival.",
+    "",
+    "- Detecting is enough when you can ask again: download the file again, retype the number.",
+    "- Fixing is for when you can't: memory in use, a disk that died, a smudged code.",
+    "- *The disk itself reports it's dead; RAID only rebuilds it.",
+    "- The Logic path builds parity and a code that fixes one flipped bit."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,110 @@
+{
+ "id": "fund_users",
+ "order": 185,
+ "skill": [
+  "fundamentals",
+  "linux",
+  "debian",
+  "rocky"
+ ],
+ "after": [
+  "files"
+ ],
+ "opens": "read",
+ "masters": [
+  "answered fund_users 3"
+ ],
+ "questions": [
+  "fundamentals-1-19",
+  "fundamentals-1-20",
+  "fundamentals-1-21",
+  "fundamentals-2-04"
+ ],
+ "recall": [
+  "fundamentals-1-19",
+  "fundamentals-1-20"
+ ],
+ "title": "Users and rights: who may do what",
+ "summary": "Every file and every running program belongs to a user. Rights decide who reads, changes or runs what, and why nothing should run as root by habit.",
+ "pages": [
+  {
+   "scheme": [
+    " root     (uid 0)     can do anything",
+    " sam      (uid 1000)  your files, your processes",
+    " www-data (uid 33)    the web server (Debian;",
+    "                      apache on Rocky)"
+   ],
+   "point": 0,
+   "mark": [
+    "root"
+   ],
+   "text": [
+    "Every file and every running program belongs to a user: a person, or a service.",
+    "",
+    "- root is the administrator: no permission check stops it.",
+    "- Services get their own users, so a broken web server can't touch your files."
+   ]
+  },
+  {
+   "scheme": [
+    " group devs: sam, alex",
+    "",
+    " plan.txt   owner sam   group devs",
+    "   sam      read, write",
+    "   devs     read",
+    "   others   nothing"
+   ],
+   "point": 4,
+   "mark": [
+    "devs     read"
+   ],
+   "text": [
+    "A group is a team of users. A file belongs to one user and one group.",
+    "",
+    "- Rights are given three times: to the owner, to the group, to everyone else.",
+    "- Give rights to a team, not to each person: a newcomer joins the group and gets them all."
+   ]
+  },
+  {
+   "scheme": [
+    " read    see what's inside",
+    " write   change it",
+    " run     start it as a program",
+    " run (folder)  enter it",
+    "",
+    " kim opens plan.txt",
+    "   not sam, not in devs: others → nothing",
+    "   Permission denied"
+   ],
+   "point": 6,
+   "mark": [
+    "Permission denied"
+   ],
+   "text": [
+    "Three rights: read, write, run. The system checks them each time a file is opened.",
+    "",
+    "- \"Permission denied\" means this check said no, on the file or a folder on its path: the file is fine, your user lacks the right.",
+    "- The Linux path shows how to read and change them (ls -l, chmod)."
+   ]
+  },
+  {
+   "scheme": [
+    " ✘ everything as root     one mistake breaks all",
+    " ✘ open to everyone       anyone can change it",
+    " ✔ sudo for one command   root only when needed",
+    " ✔ a user per service     a breach stays small",
+    " ✔ rights for a group     not for everyone"
+   ],
+   "point": 2,
+   "mark": [
+    "sudo"
+   ],
+   "text": [
+    "Least privilege: give each user and program only the rights it needs.",
+    "",
+    "- sudo runs one command as root, then you're yourself again.",
+    "- Opening a file to everyone to make an error go away trades a small problem for a security hole."
+   ]
+  }
+ ]
+}

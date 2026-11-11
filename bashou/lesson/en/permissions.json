@@ -3,7 +3,8 @@
  "order": 200,
  "skill": "linux",
  "after": [
-  "users"
+  "users",
+  "fund_users"
  ],
  "masters": [
   "achievement octal | tool chmod 1 | won padlock_pest",

@@ -1,0 +1,74 @@
+{
+ "title": "Bases de données : pourquoi pas un fichier texte ?",
+ "summary": "Ce qu'une base de données apporte qu'un fichier n'a pas : des écritures sûres de plusieurs programmes, des recherches rapides, des changements tout ou rien. Tables, SQL, et lequel choisir.",
+ "pages": [
+  {
+   "scheme": [
+    " clients.csv               une base de données",
+    " deux programmes écrivent  les écritures ne se",
+    "   en même temps : mêlées  mêlent pas, rien perdu",
+    " un parmi un million :     un index le trouve",
+    "   tout relire",
+    " plantage en écrivant :    tout ou rien",
+    "   une demi-ligne          (une transaction)"
+   ],
+   "point": 5,
+   "mark": [
+    "tout ou rien"
+   ],
+   "text": [
+    "Un fichier texte suffit pour de petites données qu'un seul programme écrit. Une base de données sert pour le reste.",
+    "",
+    "- Plusieurs programmes peuvent la lire et l'écrire : les écritures passent une à la fois, aucune n'est mêlée ou à moitié faite.",
+    "- Un index, ajouté sur une colonne, trouve une ligne sans tout relire.",
+    "- Une transaction regroupe des changements : un virement débite et crédite, ou ne fait ni l'un ni l'autre."
+   ]
+  },
+  {
+   "scheme": [
+    " products",
+    " ┌────┬────────┬───────┐",
+    " │ id │ name   │ price │  ◀ colonnes",
+    " ├────┼────────┼───────┤",
+    " │ 1  │ lamp   │ 25    │  ◀ une ligne",
+    " │ 2  │ mug    │ 8     │",
+    " │ 3  │ chair  │ 60    │",
+    " └────┴────────┴───────┘",
+    "",
+    " orders",
+    " id 7   product 1  ──▶ ligne 1 : lamp, 25"
+   ],
+   "point": 4,
+   "mark": [
+    "lamp",
+    "product 1"
+   ],
+   "text": [
+    "Une table, ce sont des lignes et des colonnes, comme un tableur. Chaque ligne est une chose, chaque colonne un détail sur elle.",
+    "",
+    "- Les tables se relient par des id : une ligne de commande garde l'id de son produit au lieu de recopier son nom et son prix."
+   ]
+  },
+  {
+   "scheme": [
+    " SELECT name FROM products WHERE price > 20;",
+    "   dis ce que tu veux, la base trouve comment",
+    "",
+    " SQLite       un fichier, dans le programme :",
+    "              téléphones, navigateurs, outils",
+    " PostgreSQL,  un serveur : plusieurs programmes",
+    " MySQL        et utilisateurs, par le réseau"
+   ],
+   "point": 0,
+   "mark": [
+    "SELECT"
+   ],
+   "text": [
+    "Tu lui parles en SQL : tu décris les lignes que tu veux, pas comment les trouver.",
+    "",
+    "- SQLite convient aux données d'une machine, utilisées par un ou quelques programmes. Un serveur de base de données convient aux données que plusieurs machines partagent par le réseau, comme celles d'un gros site web.",
+    "- Le parcours SQL écrit de vraies requêtes avec sqlite3."
+   ]
+  }
+ ]
+}

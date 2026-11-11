@@ -1,0 +1,93 @@
+{
+ "id": "fund_osi",
+ "order": 466,
+ "skill": [
+  "fundamentals",
+  "network"
+ ],
+ "after": [
+  "fund_addresses"
+ ],
+ "opens": "read",
+ "masters": [
+  "answered fund_osi 3"
+ ],
+ "questions": [
+  "fundamentals-1-04",
+  "fundamentals-1-05",
+  "fundamentals-1-06",
+  "fundamentals-2-01"
+ ],
+ "recall": [
+  "fundamentals-1-04",
+  "fundamentals-1-05"
+ ],
+ "title": "Network layers: where is it broken?",
+ "summary": "\"The network is down\" says nothing. The OSI layers sort a failure by where it happens, from the cable to the application.",
+ "pages": [
+  {
+   "scheme": [
+    " 7 application   HTTP, DNS, SSH",
+    " 6 presentation  ┐ blurry: TLS is",
+    " 5 session       ┘ often put here",
+    " 4 transport     TCP, UDP: ports",
+    " 3 network       IP: addresses, routes",
+    " 2 link          Ethernet, Wi-Fi: MAC",
+    " 1 physical      cable, radio"
+   ],
+   "point": 3,
+   "mark": [
+    "4 transport"
+   ],
+   "text": [
+    "The OSI model cuts a network into 7 layers. Each one relies on the one below and serves the one above.",
+    "",
+    "- It's a way to reason, not the real Internet: that runs on TCP/IP, which merges some layers.",
+    "- Don't learn the names by heart. Learn which layer a symptom points to: that tells you where to look."
+   ]
+  },
+  {
+   "scheme": [
+    " symptom                       layer",
+    " cable out, Wi-Fi off          1, 2",
+    " no address, no route          3",
+    " ping OK, connection refused   4",
+    " IP works, the name fails      DNS (7)",
+    " page loads, error 500         7"
+   ],
+   "point": 3,
+   "mark": [
+    "refused"
+   ],
+   "text": [
+    "Start from the failure and find its layer.",
+    "",
+    "- Refused: the machine answered (layers 1 to 3 work), usually nothing listens on that port, sometimes a firewall rule rejects it.",
+    "- An HTTP 500 means everything below worked: the bug is in the application itself.",
+    "- The name fails but the address works: the network is fine, DNS isn't."
+   ]
+  },
+  {
+   "scheme": [
+    " ping -c 3 203.0.113.10   no answer",
+    "",
+    "   machine off?      maybe",
+    "   ICMP blocked?     maybe: many firewalls",
+    "   route missing?    maybe",
+    "",
+    " curl https://… works: the machine is up"
+   ],
+   "point": 6,
+   "mark": [
+    "works"
+   ],
+   "text": [
+    "A failing test only proves something about its own layer.",
+    "",
+    "- ping uses ICMP. Many firewalls block it: no answer doesn't prove the server is off.",
+    "- A test that succeeds higher up (a page loads) proves every layer below works.",
+    "- The Network path climbs these layers one command at a time: when the network breaks, a ladder."
+   ]
+  }
+ ]
+}

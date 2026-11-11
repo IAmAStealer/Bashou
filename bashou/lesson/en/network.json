@@ -6,7 +6,8 @@
   "network"
  ],
  "after": [
-  "processes"
+  "processes",
+  "fund_addresses"
  ],
  "masters": [
   "achievement headers | tool curl 1 | tool ping 1 | won header_hound",
@@ -28,45 +29,27 @@
  "fights": [
   "header_hound"
  ],
- "title": "Networks: addresses and ports",
- "summary": "IP addresses, names, ports, and what listening on 0.0.0.0 means.",
+ "title": "Networks: your addresses, who listens",
+ "summary": "See your addresses, ask DNS, and what listening on 0.0.0.0 means.",
  "pages": [
   {
    "scheme": [
-    " example.org ──DNS──▶ 203.0.113.10",
-    "     name                address"
-   ],
-   "point": 0,
-   "mark": [
-    "DNS"
-   ],
-   "text": [
-    "Machines talk with numbers, IP addresses. DNS turns names into addresses.",
-    "",
-    "- 203.0.113.10 is an address kept for examples; dig shows the real one.",
-    "",
-    "$ dig +short example.org",
-    "$ ip addr      # your own addresses",
-    "$ ifconfig     # on a Mac",
-    "$ ping -c 3 example.org   # 3 tries; without -c, ping runs until Ctrl-C"
-   ]
-  },
-  {
-   "scheme": [
-    " 203.0.113.10 : 443",
-    " └────┬─────┘   └┬┘",
-    "   the machine   the door (port)",
-    "",
-    " 22 ssh   80 http   443 https   5432 postgres"
+    " $ ip addr            your own addresses",
+    " $ dig +short example.org",
+    " 203.0.113.10         the name's address",
+    " $ ping -c 3 example.org"
    ],
    "point": 2,
    "mark": [
-    "443"
+    "203.0.113.10"
    ],
    "text": [
-    "One machine runs many services. The port says which one you want.",
+    "Addresses, names and ports, on your machine.",
     "",
-    "- A service listens on its port; a client connects to it."
+    "- ip addr lists your own addresses (ifconfig on a Mac).",
+    "- dig asks DNS for a name's address.",
+    "- ping -c 3 sends 3 tries; without -c, ping runs until Ctrl-C.",
+    "- 203.0.113.10 is an example: dig shows you example.org's real addresses."
    ]
   },
   {

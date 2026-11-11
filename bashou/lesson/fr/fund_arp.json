@@ -1,0 +1,67 @@
+{
+ "title": "ARP et ping : les voisins",
+ "summary": "Une adresse IP nomme une machine n'importe où ; une adresse MAC nomme le prochain appareil sur le câble. ARP relie les deux, ping vérifie que la machine répond.",
+ "pages": [
+  {
+   "scheme": [
+    " toi ── switch ── imprimante 192.168.1.20",
+    "",
+    " IP  192.168.1.20        quelle machine",
+    " MAC 00:00:5e:00:53:07   quelle carte réseau",
+    "",
+    " ARP : qui a 192.168.1.20 ?",
+    "      → 192.168.1.20 est à 00:00:5e:00:53:07"
+   ],
+   "point": 6,
+   "mark": [
+    "00:00:5e:00:53:07"
+   ],
+   "text": [
+    "Sur un réseau local, les données voyagent dans des trames adressées à une carte réseau, par son adresse MAC.",
+    "",
+    "- ARP demande à tout le réseau local « qui a cette IP ? » et la propriétaire répond avec sa MAC.",
+    "- Ta machine garde les réponses un moment : ip neigh les montre (arp -a sur Mac).",
+    "- IPv6 fait le même travail avec un autre protocole, la découverte des voisins (NDP)."
+   ]
+  },
+  {
+   "scheme": [
+    " toi ── routeur 192.168.1.1 ── … ── 203.0.113.10",
+    "",
+    " trame vers :   la MAC du routeur",
+    " paquet vers :  203.0.113.10"
+   ],
+   "point": 2,
+   "mark": [
+    "la MAC du routeur"
+   ],
+   "text": [
+    "Une machine lointaine n'est pas ta voisine : tu n'apprends jamais sa MAC.",
+    "",
+    "- La trame va à la MAC de ta passerelle (le routeur) ; le paquet IP dedans garde l'adresse lointaine.",
+    "- Chaque routeur sur le chemin le déballe et l'envoie à son propre voisin suivant.",
+    "- Donc si ARP échoue pour la passerelle, plus rien hors de ton réseau ne marche."
+   ]
+  },
+  {
+   "scheme": [
+    " $ ping -c 3 192.168.1.20",
+    " 64 bytes from 192.168.1.20: icmp_seq=1 ttl=64",
+    "  time=1.2 ms",
+    "",
+    " ping   ICMP, pas de port : la machine est là ?",
+    " arping ARP : est-elle sur mon réseau ? (Linux)"
+   ],
+   "point": 1,
+   "mark": [
+    "time=1.2 ms"
+   ],
+   "text": [
+    "ping envoie une demande d'écho ICMP et attend la réponse : il teste la machine, pas un service (ICMP n'a pas de port).",
+    "",
+    "- Pas de réponse peut venir d'un pare-feu qui jette l'ICMP, pas d'une machine morte.",
+    "- Sur ton propre réseau, une machine qui ignore ping répond quand même à ARP : sudo arping -c 3 192.168.1.20 montre qu'elle est là (Debian : apt install iputils-arping)."
+   ]
+  }
+ ]
+}

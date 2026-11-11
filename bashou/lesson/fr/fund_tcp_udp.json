@@ -1,0 +1,70 @@
+{
+ "title": "TCP et UDP : deux façons d'envoyer",
+ "summary": "TCP ouvre une connexion et s'assure que tout arrive dans l'ordre ; UDP envoie, c'est tout. Savoir lequel un service utilise te dit comment le tester.",
+ "pages": [
+  {
+   "scheme": [
+    " TCP  un appel téléphonique",
+    "      on se connecte, chaque octet arrive,",
+    "      dans l'ordre, ou tu as une erreur",
+    "",
+    " UDP  des cartes postales",
+    "      pas de connexion, envoyé puis oublié :",
+    "      une peut se perdre, arriver en retard"
+   ],
+   "point": 4,
+   "mark": [
+    "UDP"
+   ],
+   "text": [
+    "Les deux transportent des données entre deux ports. Ils ne promettent pas la même chose.",
+    "",
+    "- TCP renvoie ce qui est perdu : pages web, SSH, bases de données, mail.",
+    "- UDP est plus léger et démarre plus vite : requêtes DNS, appels vidéo, jeux, synchro de l'heure. Le programme gère lui-même les pertes, ou redemande.",
+    "- HTTP/3 passe par QUIC, construit sur UDP."
+   ]
+  },
+  {
+   "scheme": [
+    " $ ss -tuln",
+    " Netid  Local Address:Port (coupé)",
+    " udp    0.0.0.0:53",
+    " tcp    0.0.0.0:22",
+    "",
+    " DNS en UDP 53, SSH en TCP 22"
+   ],
+   "point": 2,
+   "mark": [
+    "udp"
+   ],
+   "text": [
+    "Un numéro de port appartient à un protocole : le port TCP 53 et le port UDP 53 sont deux portes différentes.",
+    "",
+    "- ss -tuln liste ce qui écoute : t TCP, u UDP, l en écoute, n chiffres (Linux ; sur Mac : lsof -nP -iTCP -sTCP:LISTEN).",
+    "- Une règle de pare-feu ouvre un port en TCP ou en UDP : ouvre le mauvais et le service reste injoignable.",
+    "- Le DNS passe surtout par UDP 53, et par TCP 53 pour les grosses réponses : ouvre les deux."
+   ]
+  },
+  {
+   "scheme": [
+    " port TCP, rien n'écoute   → refusé, tout de suite",
+    "  (ou un pare-feu qui rejette)",
+    " port TCP, pare-feu jette  → délai dépassé",
+    " port UDP                  → souvent le silence",
+    "",
+    " teste un service UDP avec une vraie question :",
+    " $ dig @192.0.2.53 example.org"
+   ],
+   "point": 5,
+   "mark": [
+    "dig @192.0.2.53"
+   ],
+   "text": [
+    "TCP répond clairement : connecté, refusé ou rien. UDP n'a pas de connexion, donc le silence prouve peu.",
+    "",
+    "- Un port UDP fermé peut renvoyer une erreur ICMP, ou rien du tout si un pare-feu la jette.",
+    "- Alors teste un service UDP en lui posant une vraie question à laquelle il doit répondre : une requête DNS vers ce serveur."
+   ]
+  }
+ ]
+}

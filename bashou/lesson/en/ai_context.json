@@ -1,7 +1,10 @@
 {
  "id": "ai_context",
  "order": 530,
- "skill": "ai",
+ "skill": [
+  "fundamentals",
+  "ai"
+ ],
  "after": [
   "command_line"
  ],

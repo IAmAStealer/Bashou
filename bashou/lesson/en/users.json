@@ -3,7 +3,8 @@
  "order": 190,
  "skill": "linux",
  "after": [
-  "files"
+  "files",
+  "fund_users"
  ],
  "opens": "read",
  "masters": [
@@ -23,7 +24,7 @@
   "group_gremlin"
  ],
  "title": "Users, groups and sudo",
- "summary": "Who you are on the machine, what root is, and what sudo really does.",
+ "summary": "Who you are on the machine, your groups, and what sudo really does.",
  "pages": [
   {
    "scheme": [
@@ -42,22 +43,6 @@
     "",
     "- Groups share rights: every member of devs gets the group's rights on files that belong to devs.",
     "- whoami prints only your name."
-   ]
-  },
-  {
-   "scheme": [
-    " root     (uid 0)     can do anything",
-    " sam      (uid 1000)  your files, your processes",
-    " www-data (uid 33)    runs the web server"
-   ],
-   "point": 0,
-   "mark": [
-    "root"
-   ],
-   "text": [
-    "root is the administrator: no permission check stops it.",
-    "",
-    "- Services get their own users, so a broken web server can't touch your files."
    ]
   },
   {

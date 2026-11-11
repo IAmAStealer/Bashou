@@ -1,0 +1,97 @@
+{
+ "id": "fund_databases",
+ "order": 404,
+ "skill": [
+  "fundamentals",
+  "sql"
+ ],
+ "after": [
+  "files"
+ ],
+ "opens": "read",
+ "masters": [
+  "answered fund_databases 3"
+ ],
+ "questions": [
+  "fundamentals-1-37",
+  "fundamentals-1-38",
+  "fundamentals-1-39",
+  "fundamentals-2-10"
+ ],
+ "recall": [
+  "fundamentals-1-37",
+  "fundamentals-1-38"
+ ],
+ "title": "Databases: why not a text file?",
+ "summary": "What a database gives that a file doesn't: safe writes from many programs, fast lookups, all-or-nothing changes. Tables, SQL, and which kind to pick.",
+ "pages": [
+  {
+   "scheme": [
+    " customers.csv             a database",
+    " two programs write        writes never mix,",
+    "   at once: lines mixed    nothing lost",
+    " one in a million:         an index finds it",
+    "   read them all",
+    " crash mid-write:          all or nothing",
+    "   half a line             (a transaction)"
+   ],
+   "point": 5,
+   "mark": [
+    "all or nothing"
+   ],
+   "text": [
+    "A text file is fine for small data one program writes. A database is for the rest.",
+    "",
+    "- Many programs can read and write it: writes go one at a time, so none gets mixed or half-done.",
+    "- An index, added on a column, finds one row without reading them all.",
+    "- A transaction groups changes: a money transfer debits and credits, or does neither."
+   ]
+  },
+  {
+   "scheme": [
+    " products",
+    " ┌────┬────────┬───────┐",
+    " │ id │ name   │ price │  ◀ columns",
+    " ├────┼────────┼───────┤",
+    " │ 1  │ lamp   │ 25    │  ◀ one row",
+    " │ 2  │ mug    │ 8     │",
+    " │ 3  │ chair  │ 60    │",
+    " └────┴────────┴───────┘",
+    "",
+    " orders",
+    " id 7   product 1  ──▶ row 1: lamp, 25"
+   ],
+   "point": 4,
+   "mark": [
+    "lamp",
+    "product 1"
+   ],
+   "text": [
+    "A table is rows and columns, like a spreadsheet. Each row is one thing, each column one detail about it.",
+    "",
+    "- Tables link through ids: an order row holds the id of its product instead of copying its name and price."
+   ]
+  },
+  {
+   "scheme": [
+    " SELECT name FROM products WHERE price > 20;",
+    "   say what you want, the database finds how",
+    "",
+    " SQLite       one file, inside the program:",
+    "              phones, browsers, small tools",
+    " PostgreSQL,  a server: many programs and",
+    " MySQL        users, over the network"
+   ],
+   "point": 0,
+   "mark": [
+    "SELECT"
+   ],
+   "text": [
+    "You talk to it in SQL: you describe the rows you want, not how to find them.",
+    "",
+    "- SQLite fits data on one machine, used by one program or a few. A database server fits data that many machines share over the network, like a busy website's.",
+    "- The SQL path writes real queries with sqlite3."
+   ]
+  }
+ ]
+}

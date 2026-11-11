@@ -5,7 +5,8 @@
  "after": [
   "scripts",
   "loops",
-  "logic"
+  "logic",
+  "fund_code"
  ],
  "masters": [
   "won colon_cobra | tool python3 3"

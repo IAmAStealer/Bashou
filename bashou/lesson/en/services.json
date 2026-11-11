@@ -5,7 +5,8 @@
  "os": "linux",
  "after": [
   "processes",
-  "streams"
+  "streams",
+  "fund_processes"
  ],
  "masters": [
   "achievement status | tool systemctl 3 | won unit_imp",

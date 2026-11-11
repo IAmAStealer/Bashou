@@ -1,0 +1,87 @@
+{
+ "id": "fund_multicast",
+ "order": 469,
+ "skill": [
+  "fundamentals",
+  "network"
+ ],
+ "after": [
+  "fund_tcp_udp"
+ ],
+ "opens": "read",
+ "masters": [
+  "answered fund_multicast 3"
+ ],
+ "questions": [
+  "fundamentals-1-13",
+  "fundamentals-1-14",
+  "fundamentals-1-15"
+ ],
+ "recall": [
+  "fundamentals-1-13",
+  "fundamentals-1-14"
+ ],
+ "title": "Multicast: one sender, a group of listeners",
+ "summary": "Unicast talks to one machine, broadcast to every machine nearby, multicast to those who joined a group. Why a printer shows up in one room and not the next.",
+ "pages": [
+  {
+   "scheme": [
+    " unicast    ●──▶○              one machine",
+    " broadcast  ●──▶○ ○ ○ ○        everyone here",
+    " multicast  ●──▶○ · ○ ·        those who joined",
+    "",
+    " multicast addresses: 224.0.0.0/4, ff00::/8"
+   ],
+   "point": 2,
+   "mark": [
+    "multicast"
+   ],
+   "text": [
+    "Most traffic is unicast: one sender, one receiver.",
+    "",
+    "- Broadcast reaches every machine of the local network (IPv4 only; ARP uses it).",
+    "- Multicast sends once to a group address; only the machines that joined the group listen. IPv6 has no broadcast: it uses multicast instead."
+   ]
+  },
+  {
+   "scheme": [
+    " mDNS  224.0.0.251:5353   printer.local,",
+    "                           shared screens",
+    " VRRP  224.0.0.18         two routers share",
+    "                           one address",
+    " IPTV  239.x.x.x          one TV stream,",
+    "                           many homes"
+   ],
+   "point": 0,
+   "mark": [
+    "mDNS"
+   ],
+   "text": [
+    "You use multicast without knowing it.",
+    "",
+    "- mDNS lets machines find each other by name (printer.local) with no DNS server: each one answers questions about its own name.",
+    "- VRRP lets a spare router take over the gateway's address when the main one dies.",
+    "- An operator sends a TV channel once; its routers copy it only towards homes watching it."
+   ]
+  },
+  {
+   "scheme": [
+    " office A 192.168.1.0/24    office B 10.0.2.0/24",
+    "   laptop ✔ printer.local     laptop ✘",
+    "      │                          │",
+    "      └──────── router ──────────┘",
+    "      224.0.0.251 stays on its side"
+   ],
+   "point": 4,
+   "mark": [
+    "stays on its side"
+   ],
+   "text": [
+    "Addresses in 224.0.0.0/24 are link-local: routers never forward them.",
+    "",
+    "- So mDNS works inside one network only. A printer found by name in one office is invisible from another subnet.",
+    "- It's not broken: add the printer by its IP address, or ask the network team for an mDNS relay (a reflector)."
+   ]
+  }
+ ]
+}

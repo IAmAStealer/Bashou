@@ -1,0 +1,114 @@
+{
+ "id": "fund_git",
+ "order": 268,
+ "skill": [
+  "fundamentals",
+  "bash"
+ ],
+ "after": [
+  "files"
+ ],
+ "opens": "read",
+ "masters": [
+  "answered fund_git 3"
+ ],
+ "questions": [
+  "fundamentals-1-31",
+  "fundamentals-1-32",
+  "fundamentals-1-33",
+  "fundamentals-2-08"
+ ],
+ "recall": [
+  "fundamentals-1-31",
+  "fundamentals-1-32"
+ ],
+ "title": "git: what it is for",
+ "summary": "Every committed version of a project kept, with who changed what and why. Commits, branches and shared repositories, before any command.",
+ "pages": [
+  {
+   "scheme": [
+    " report_final.txt",
+    " report_final_v2.txt",
+    " report_final_v2_REAL.txt",
+    "   which one? who changed what? why?",
+    "",
+    " git: one folder, every committed version kept"
+   ],
+   "point": 5,
+   "mark": [
+    "every committed version"
+   ],
+   "text": [
+    "git keeps the history of a folder: every version you commit, who made it and why.",
+    "",
+    "- Code, configuration, documentation: any text that changes over time.",
+    "- You can go back to any version, compare two, and find the change that broke something."
+   ]
+  },
+  {
+   "scheme": [
+    " a1 ◀─ b2 ◀─ c3",
+    " │     │     └ \"Change the port to 8080\"",
+    " │     └ \"Fix a typo in the title\"",
+    " └ \"Add the login page\"",
+    "",
+    " each commit: a snapshot, its author,",
+    " its date, and a message saying why"
+   ],
+   "point": 5,
+   "mark": [
+    "a snapshot"
+   ],
+   "text": [
+    "A commit is a snapshot of the whole project, with who made it, when, and a message.",
+    "",
+    "- Each commit points to the one before: the history is a chain.",
+    "- The message says why. Months later, it's the only place that answers \"why is this line here?\""
+   ]
+  },
+  {
+   "scheme": [
+    " a1 ◀─ b2 ◀─ c3 ◀─ main",
+    "       ▲",
+    "       └─ d4 ◀─ e5 ◀─ try-cache",
+    "",
+    " it works: merge it into main",
+    " it doesn't: drop the branch"
+   ],
+   "point": 2,
+   "mark": [
+    "try-cache"
+   ],
+   "text": [
+    "A branch is a line of work beside the main one.",
+    "",
+    "- Try an idea on it without touching what works.",
+    "- Ready: merge it back. A dead end: delete the branch, main never saw it."
+   ]
+  },
+  {
+   "scheme": [
+    " your copy ─push─▶ shared repository",
+    "           ◀─pull─  (GitHub, GitLab…)",
+    "                         ▲   │",
+    "                    push │   ▼ pull",
+    "                     Alex's copy",
+    "",
+    " ✘ a password, committed: in the history",
+    "   for good, even if deleted later"
+   ],
+   "point": 6,
+   "mark": [
+    "✘ a password"
+   ],
+   "text": [
+    "Each person has the whole history; a shared repository is where the team meets.",
+    "",
+    "- push sends your commits there; pull fetches the others' commits and merges them into yours.",
+    "- The history keeps everything: never commit a secret. If one gets in, change it: deleting it later doesn't remove it.",
+    "- Big binary files don't belong there either: every clone carries every version of them.",
+    "- The git lesson shows the commands, conflicts and undo."
+   ]
+  }
+ ]
+}

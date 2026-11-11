@@ -209,6 +209,7 @@ class UnlockTest(unittest.TestCase):
         s = state.default()
         py = BY_ID["py_start"]                                   # after scripts, loops (bash) and logic
         s["achievements"] += ["exit_code", "loop"]              # scripts, loops passed
+        s["lessons"] = {"right": list(BY_ID["fund_code"]["questions"])}  # fund_code passed
         s["skills"] = ["python"]                                 # logic unticked: skipped
         self.assertTrue(lesson.unlocked(s, py))
         s["skills"] = ["python", "logic"]

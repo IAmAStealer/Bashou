@@ -1,0 +1,70 @@
+{
+ "title": "Les couches réseau : où est la panne ?",
+ "summary": "« Le réseau ne marche pas » ne dit rien. Les couches OSI rangent une panne selon l'endroit où elle se produit, du câble à l'application.",
+ "pages": [
+  {
+   "scheme": [
+    " 7 application   HTTP, DNS, SSH",
+    " 6 présentation  ┐ floues : on y met",
+    " 5 session       ┘ souvent TLS",
+    " 4 transport     TCP, UDP : ports",
+    " 3 réseau        IP : adresses, routes",
+    " 2 liaison       Ethernet, Wi-Fi : MAC",
+    " 1 physique      câble, radio"
+   ],
+   "point": 3,
+   "mark": [
+    "4 transport"
+   ],
+   "text": [
+    "Le modèle OSI découpe un réseau en 7 couches. Chacune s'appuie sur celle du dessous et sert celle du dessus.",
+    "",
+    "- C'est une façon de raisonner, pas le vrai Internet : lui tourne sur TCP/IP, qui fusionne certaines couches.",
+    "- N'apprends pas les noms par cœur. Apprends vers quelle couche pointe un symptôme : ça te dit où chercher."
+   ]
+  },
+  {
+   "scheme": [
+    " symptôme                      couche",
+    " câble débranché, Wi-Fi coupé  1, 2",
+    " pas d'adresse, pas de route   3",
+    " ping OK, connexion refusée    4",
+    " l'IP marche, le nom échoue    DNS (7)",
+    " la page charge, erreur 500    7"
+   ],
+   "point": 3,
+   "mark": [
+    "refusée"
+   ],
+   "text": [
+    "Pars de la panne et trouve sa couche.",
+    "",
+    "- Refusée : la machine a répondu (les couches 1 à 3 marchent), en général rien n'écoute sur ce port, parfois une règle de pare-feu le rejette.",
+    "- Un HTTP 500 veut dire que tout le reste a marché : le bug est dans l'application elle-même.",
+    "- Le nom échoue mais l'adresse marche : le réseau va bien, le DNS non."
+   ]
+  },
+  {
+   "scheme": [
+    " ping -c 3 203.0.113.10   pas de réponse",
+    "",
+    "   machine éteinte ?  peut-être",
+    "   ICMP bloqué ?      peut-être : souvent",
+    "   route absente ?    peut-être",
+    "",
+    " curl https://… marche : la machine est là"
+   ],
+   "point": 6,
+   "mark": [
+    "marche"
+   ],
+   "text": [
+    "Un test qui échoue ne prouve quelque chose que pour sa propre couche.",
+    "",
+    "- ping utilise ICMP. Beaucoup de pare-feux le bloquent : pas de réponse ne prouve pas que le serveur est éteint.",
+    "- Un test qui réussit plus haut (une page charge) prouve que toutes les couches du dessous marchent.",
+    "- Le parcours Réseau monte ces couches une commande à la fois : quand le réseau casse, une échelle."
+   ]
+  }
+ ]
+}

@@ -1,26 +1,7 @@
 {
  "title": "SQL : ton premier SELECT",
- "summary": "Des lignes et des colonnes, et comment SELECT, FROM et WHERE choisissent ce que tu veux.",
+ "summary": "Comment SELECT, FROM et WHERE choisissent les lignes et les colonnes que tu veux, et comment sqlite3 ouvre une base.",
  "pages": [
-  {
-   "scheme": [
-    " products",
-    " ┌────┬────────┬───────┐",
-    " │ id │ name   │ price │  ◀ colonnes",
-    " ├────┼────────┼───────┤",
-    " │ 1  │ lamp   │ 25    │  ◀ une ligne",
-    " │ 2  │ mug    │ 8     │",
-    " │ 3  │ chair  │ 60    │",
-    " └────┴────────┴───────┘"
-   ],
-   "point": 4,
-   "mark": [
-    "lamp"
-   ],
-   "text": [
-    "Une table, ce sont des lignes et des colonnes, comme un tableur. Chaque ligne est une chose, chaque colonne un détail sur elle."
-   ]
-  },
   {
    "scheme": [
     " SELECT name, price   quelles colonnes",
@@ -32,7 +13,7 @@
     "WHERE"
    ],
    "text": [
-    "Lis-le comme une phrase. Le résultat est une petite table neuve :",
+    "Lis-le comme une phrase, sur la table products de la leçon sur les bases (lamp 25, mug 8, chair 60). Le résultat est une petite table neuve :",
     "",
     "- lamp 25 et chair 60. Le mug est laissé de côté.",
     "- Le texte va entre apostrophes : WHERE name = 'mug'.",

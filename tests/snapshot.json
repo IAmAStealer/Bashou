@@ -10013,6 +10013,10 @@
    "ai": {
     "en": "AI tools",
     "fr": "Outils d'IA"
+   },
+   "fundamentals": {
+    "en": "Fundamentals",
+    "fr": "Fondamentaux"
    }
   },
   "starters": [
@@ -10643,6 +10647,7 @@
   "From the ashes, a phoenix. From a mistake, a lesson.",
   "From the names {want}, names.sh wrote {got}.",
   "Functions: greet() { echo \"hi $1\"; }",
+  "Fundamentals: what each tool is for, when to use it",
   "Galaxy",
   "Garden",
   "Gary",
@@ -10869,6 +10874,7 @@
   "Last-word Wisp",
   "Late again? I like the quiet.",
   "Latency Kraken",
+  "Layer Lich",
   "Leaf slime",
   "Leak Lurker",
   "Learn",
