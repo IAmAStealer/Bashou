@@ -698,10 +698,11 @@ def parity_why(work):
 
 ALL = [
     Challenge(level=1, id="negation_gnome", threat="Negation Gnome", **LOGIC,
-              task="The Negation Gnome added one character to the party door, door.sh: now {guest} is left "
-                   "outside and {stranger} walks in.\nFix door.sh so the guests of guests.txt get open and "
-                   "everyone else gets closed. Try it with: bash door.sh {guest}. A small test is ready too: "
-                   "bash test_door.sh, add your own case to it. Then: verify",
+              task="The Negation Gnome added one character to the party door, door.sh, and now the door is wrong both"
+                   " ways: {guest}, who is on the guest list, is left outside, and {stranger}, a stranger, walks "
+                   "in.\nGoal: door.sh must print open for a name that is in guests.txt, and closed for any other "
+                   "name.\nTry it: bash door.sh {guest} must print open. The small test checks it for you: bash "
+                   "test_door.sh. Add a line for {stranger} to it. When it's right: verify",
               hints=["Read the if line aloud. grep -q finds the name quietly: it succeeds when the name is on "
                      "the list. The ! in front turns that answer around, so the if now means \"if the name is "
                      "NOT on the list, open\". Then run bash door.sh {guest} and bash door.sh {stranger} to "
@@ -711,9 +712,12 @@ ALL = [
                      "command: sed -i 's/if ! grep/if grep/' door.sh"],
               setup=door_setup, verify=door_verify),
     Challenge(level=1, id="coin_wraith", threat="Coin Wraith", after=("negation_gnome",), **LOGIC,
-              task="The Coin Wraith flipped one word in save.sh: it should save {file} into {folder}/ only when both "
-                   "are there, but now heads or tails, one of them is enough, and cp fails.\nFix the "
-                   "condition. A small test tries the cases for you: bash test_save.sh. Then: verify",
+              task="The Coin Wraith changed one word in save.sh. The script copies {file} into the folder {folder}/, "
+                   "and must do it only when both are there, the file and the folder. Now one of the two is enough, "
+                   "so when the other is missing, cp fails.\nGoal: save.sh prints saved when the file and the folder "
+                   "both exist, and missing as soon as one of them is gone.\nTest: bash test_save.sh tries the cases "
+                   "for you (it hides the folder, then puts it back). Add the case where the file is hidden, as the "
+                   "test asks. When every line says ok: verify",
               hints=["|| means OR: the whole condition is true as soon as ONE side is true. && means AND: both "
                      "sides must be true. Here the script needs the file AND the folder. Try it: move the "
                      "folder away (mv {folder} gone), run bash save.sh, then put it back (mv gone {folder}).",
@@ -721,11 +725,12 @@ ALL = [
                      "{editor}: {editor} save.sh. Or in one command: sed -i 's/||/\\&\\&/' save.sh"],
               setup=save_setup, verify=save_verify),
     Challenge(level=2, id="square_spider", threat="Square Spider", after=("coin_wraith",), **LOGIC,
-              task="The Square Spider spun its web inside common.sh. The script finds the addresses that are in both "
-                   "customers.txt and newsletter.txt, and it's right, but it compares every customer with every "
-                   "subscriber: {n} addresses already take seconds, and the real lists have {big}.\nMake it fast "
-                   "and keep it right: verify runs it on two hidden lists of {big} addresses and gives it {limit} "
-                   "seconds. Measure first: bash test_common.sh. Then: verify",
+              task="The Square Spider spun its web in common.sh. The script prints the addresses that are in both "
+                   "customers.txt and newsletter.txt. Its answer is right, but it's slow: it compares every customer "
+                   "with every subscriber, so {n} addresses already take seconds, and the real lists have "
+                   "{big}.\nGoal: the same output, much faster. verify runs it on two hidden lists of {big} addresses "
+                   "and allows {limit} seconds.\nMeasure first: bash test_common.sh shows the time as the lists grow. "
+                   "Then: verify",
               hints=["Count the work. For each customer, the inner loop reads the whole newsletter: n customers "
                      "make n × n comparisons. 1 000 addresses: a million. 20 000: 400 million. bash test_common.sh "
                      "shows it: each time the lists double, the time is multiplied by 4.",
@@ -741,9 +746,11 @@ ALL = [
                                 "in both lists"),
               verify=scale_verify(*SPIDER), why=scale_why(*SPIDER, slow_lists)),
     Challenge(level=2, id="parse_parrot", threat="Parse Parrot", after=("square_spider",), **LOGIC,
-              task="The Parse Parrot repeats itself: for each order of orders.txt, bill.sh searches prices.txt "
-                   "again, from the top. Make it fast enough for {big} orders and keep it right: verify runs it "
-                   "on hidden files and gives it {limit} seconds. Measure first: bash test_bill.sh. Then: verify",
+              task="The Parse Parrot repeats itself in bill.sh. The script computes the price of each order of "
+                   "orders.txt, but for every order it searches prices.txt again from the first line. Its answer is "
+                   "right, but it's slow.\nGoal: the same output, fast enough for {big} orders. verify runs it on "
+                   "hidden files and allows {limit} seconds.\nMeasure first: bash test_bill.sh times it on more and "
+                   "more lines: divide to see what one line costs. Then: verify",
               hints=["Count what one line costs. For every order, $( ) starts a new process, then grep and cut "
                      "start too, and grep reads prices.txt from the top: {n} orders, thousands of programs, and "
                      "the same file read {n} times. bash test_bill.sh shows it: the time only doubles with the "
@@ -759,11 +766,13 @@ ALL = [
                                  "ana tea 500,bo tea-xl 400,cy cake 900", "s/.*/ana item& 2/", order),
               verify=scale_verify(*PARROT), why=scale_why(*PARROT, slow_orders)),
     Challenge(level=2, id="bitflip_banshee", threat="Bitflip Banshee", after=("coin_wraith",), **LOGIC,
-              task="The Bitflip Banshee flipped at most one bit in each word of words.txt. fix_bits.sh should "
-                   "find that bit and flip it back, but one of its checks reads the wrong position. Find it with "
-                   "the small test: bash test_fix_bits.sh. Fix it; verify then tries every possible word, sent "
-                   "clean and with each of its 7 bits flipped. The fixed output, 4 bits per line, hides a word: "
-                   "two lines make one letter.",
+              task="The Bitflip Banshee damaged words.txt. Each line is a word of 7 bits: 4 data bits plus 3 check "
+                   "bits, which let a program find one wrong bit and fix it. The Banshee flipped at most one bit per "
+                   "word (a 0 became 1, or a 1 became 0).\nGoal: fix_bits.sh prints the 4 data bits that were sent, "
+                   "for every word with at most one flipped bit. One of its three checks, s1, s2 and s4 (one per "
+                   "check bit, named after its position), reads the wrong bit: find it.\nTest: bash test_fix_bits.sh "
+                   "shows a word it gets wrong. verify tries every possible word, clean and with each bit flipped. "
+                   "When it's fixed: verify\nBonus: the repaired output hides a word, two lines of 4 bits per letter.",
               hints=["Each check is an XOR, ^: 1 when an odd number of its bits are 1. Check k covers the "
                      "positions whose binary number includes k: 5 is 101 = 4 + 1, so s1 and s4 read it. So s{k} "
                      "must read positions {positions}. Compare "
@@ -781,15 +790,18 @@ ALL = [
 # The Sage Owl's chest for the Logic path: the same flipped door, no enemy.
 from .trials import trial  # noqa: E402
 
-DOOR_CHEST = trial("trial_logic_door", 1, "A door script hides in this chest: door.sh. It lets strangers in and "
-                   "keeps the guests of guests.txt out. Fix its condition, and try it with the small test: "
-                   "bash test_door.sh. Then: verify",
+DOOR_CHEST = trial("trial_logic_door", 1, "A door script hides in this chest: door.sh. It's backwards: it lets "
+                                          "strangers in and keeps the guests of guests.txt out.\nGoal: door.sh prints "
+                                          "open for a name in guests.txt, and closed for anyone else. Fix its "
+                                          "condition.\nTest: bash test_door.sh. Then: verify",
                    ALL[0].hints, door_setup, door_verify, requires=["bash", "grep"], teaches=["if"])
 # Its chest after the cost lesson: the same nested loops, for who is missing.
-ROLL_CHEST = trial("trial_logic_missing", 2, "A roll-call script hides in this chest: missing.sh prints the "
-                   "addresses of team.txt that aren't in present.txt, with a loop inside a loop. Make it fast "
-                   "enough for two lists of 20 000 addresses (5 seconds) and keep it right: bash test_missing.sh. "
-                   "Then: verify",
+ROLL_CHEST = trial("trial_logic_missing", 2, "A roll-call script hides in this chest: missing.sh prints the addresses"
+                                             " of team.txt that are not in present.txt. Its answer is right, but it's"
+                                             " slow: a loop inside a loop compares every address of team.txt with "
+                                             "every address of present.txt.\nGoal: the same output for two lists of "
+                                             "{big} addresses, in less than {limit} seconds.\nMeasure first: bash "
+                                             "test_missing.sh. Then: verify",
                    ["For each address of team.txt, the inner loop reads all of present.txt: n × n comparisons. "
                     "bash test_missing.sh shows the time multiplied by 4 each time the lists double.",
                     "grep -vFxf present.txt team.txt reads each file once: -f takes what to look for from "
@@ -802,9 +814,11 @@ ROLL_CHEST = trial("trial_logic_missing", 2, "A roll-call script hides in this c
                    scale_verify(*ROLL), requires=["bash", "grep", "sort"], teaches=["comm"],
                    why=scale_why(*ROLL, slow_lists), file="")
 # Its chest after the data lesson: the same search on every line, for a warehouse.
-SHELF_CHEST = trial("trial_logic_shelf", 2, "A picking script hides in this chest: shelf.sh prints the shelf of "
-                    "each order of picks.txt, and searches shelves.txt again for every line. Make it fast enough "
-                    "for {big} orders ({limit} seconds) and keep it right: bash test_shelf.sh. Then: verify",
+SHELF_CHEST = trial("trial_logic_shelf", 2, "A picking script hides in this chest: shelf.sh prints the shelf of each "
+                                            "order of picks.txt. Its answer is right, but it's slow: for every order,"
+                                            " it searches shelves.txt again from the first line.\nGoal: the same "
+                                            "output for {big} orders, in less than {limit} seconds.\nMeasure first: "
+                                            "bash test_shelf.sh. Then: verify",
                     ["For every order, shelf.sh starts grep and cut and reads shelves.txt from the top: {n} orders, "
                      "{n} searches of the same file. bash test_shelf.sh shows what one line costs.",
                      "Read shelves.txt once, into a table: declare -A shelf, then while read -r item n; do "
@@ -817,9 +831,13 @@ SHELF_CHEST = trial("trial_logic_shelf", 2, "A picking script hides in this ches
                     scale_verify(*SHELF_HOW), requires=["bash", "grep"], teaches=["declare"],
                     why=scale_why(*SHELF_HOW, slow_orders), file="")
 # Its chest after the codes lesson: a parity bit, with | where ^ belongs.
-PARITY_CHEST = trial("trial_logic_parity", 2, "A parity checker hides in this chest: parity.sh reads bytes whose "
-                     "last bit makes the number of 1s even, and should say flipped when one bit changed. It says "
-                     "flipped almost always. Try it: bash test_parity.sh. Fix it, then: verify",
+PARITY_CHEST = trial("trial_logic_parity", 2, "A parity checker hides in this chest: parity.sh. Each line it reads is"
+                                              " a byte of 8 bits, and the last bit is chosen so that the number of 1s"
+                                              " is always even. If one bit changes on the way, that number becomes "
+                                              "odd.\nGoal: parity.sh prints flipped when the number of 1s is odd, and "
+                                              "ok when it is even. Now it prints flipped almost every time: the line "
+                                              "that computes p is wrong.\nTest: bash test_parity.sh. Fix it, then: "
+                                              "verify",
                      ["The p= line uses |, an OR: 1 as soon as one bit is 1, so nearly every byte looks flipped. "
                       "Parity needs XOR, ^: 1 ^ 1 = 0, so p ends at 1 only when the number of 1s is odd.",
                       "Change | into ^ on the p= line: {editor} parity.sh ({save_keys}). Or: sed -i "
