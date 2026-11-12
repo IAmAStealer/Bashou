@@ -267,14 +267,27 @@ BOSSES = {
     ]), {"t": (235, 230, 215), "T": (185, 175, 160), "g": (240, 190, 50), "s": (125, 100, 220),
          "S": (80, 60, 165), "h": (170, 155, 245), "y": (240, 190, 50), "w": (255, 255, 255),
          "m": (25, 25, 25), "k": (160, 225, 235), "K": (95, 175, 205)}),
-    "fundamentals": ([                      # the Layer Lich: hooded skull, raised claws, a body of floating layers with its soul glowing between them
-        ".........H.........", "........HlH........", ".......HlhhH.......", "......HlkkkhH......",
-        ".....HlkLsSkhH.....", "s.s..HlLsssShH..s.s", "sSd..HleksekhH..sSd", ".d..HllsSdSShhH..d.",
-        ".lHllhkwdwdwkhhhHh.", ".HlhhhhkkkkkhhhhhH.", ".HHHHHHHHHHHHHHHHH.", ".H...cggggggGc...H.",
-        ".....HlllllhhH.....", ".....HhhhhhhHH.....", ".......cggGc.......", "........HhH........",
-    ], {"H": (52, 20, 48), "l": (176, 88, 150), "h": (118, 50, 104), "k": (18, 12, 28), "L": (245, 238, 215),
-        "s": (222, 210, 182), "S": (160, 145, 118), "d": (95, 80, 65), "e": (150, 255, 225),
-        "w": (240, 232, 205), "g": (130, 240, 215), "G": (70, 170, 160), "c": (45, 110, 115)}),
+    "fundamentals": (                      # the Layer Lich: hooded skull, glowing eyes, staff, raised claw, robe in layers
+        [
+        "cGc.....OOO........",
+        "GgG....ORRrO.......",
+        "cGc...ORrrrdO......",
+        ".Y...ORrkkkrdO.....",
+        ".t..ORkSSssbkdO.s.s",
+        ".t..OrSSsssbbdO.sbs",
+        ".t..OrskesekbdO.bsb",
+        ".t..OrskkskkbdO.Os.",
+        ".t..OrkbsksbkdOOrd.",
+        ".ssRORrkwkwkrrdOrd.",
+        ".tdOddRRrrrrrddOd..",
+        ".t.ORRddrrrddrdO...",
+        ".tORRrrRdddrrrddO..",
+        "..ORRrrrRRrrdrddO..",
+        ".ORRrrrrrrrrdrdddO.",
+        ".OROROrOROrOdOdOdO.",
+    ], {"O": (58, 16, 34), "R": (200, 74, 92), "r": (150, 38, 62), "d": (98, 22, 46), "k": (22, 12, 22),
+        "S": (250, 244, 224), "s": (222, 210, 180), "b": (160, 142, 112), "w": (236, 226, 198), "e": (150, 255, 225),
+        "g": (215, 255, 245), "G": (90, 220, 200), "c": (36, 112, 118), "t": (120, 82, 48), "Y": (226, 176, 60)}),
 }
 
 
