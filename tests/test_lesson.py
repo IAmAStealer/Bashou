@@ -210,7 +210,9 @@ class UnlockTest(unittest.TestCase):
         py = BY_ID["py_start"]                                   # after scripts, loops (bash) and logic
         s["achievements"] += ["exit_code", "loop"]              # scripts, loops passed
         s["lessons"] = {"right": list(BY_ID["fund_code"]["questions"])}  # fund_code passed
-        s["skills"] = ["python"]                                 # logic unticked: skipped
+        s["skills"] = ["python"]                                 # logic, scripts, loops unticked: they hand
+        self.assertEqual([le["id"] for le in lesson.waiting_for(s, py)], ["reading"])
+        s["lessons"]["right"] += BY_ID["reading"]["questions"]   # ... over variables (loop) and reading
         self.assertTrue(lesson.unlocked(s, py))
         s["skills"] = ["python", "logic"]
         self.assertFalse(lesson.unlocked(s, py))

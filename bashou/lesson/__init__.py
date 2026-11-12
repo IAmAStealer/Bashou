@@ -199,11 +199,20 @@ def cleared(s, before, opens):
 
 
 def waiting_for(s, lesson):
-    """The lessons of `after` still to clear. One of a skill you don't learn doesn't count."""
-    lessons = by_id()
-    return [lessons[p] for p in lesson.get("after", [])
-            if not cleared(s, lessons[p], lesson.get("opens"))
-            and (not skills_of(lessons[p]) or any(skills.wanted(s, k) for k in skills_of(lessons[p])))]
+    """The lessons of `after` still to clear. One of a skill you don't learn hands over its own `after`, so
+    the path keeps its order (a Bash-only player's loops wait for quotes, not for scripts)."""
+    lessons, todo, seen, out = by_id(), list(lesson.get("after", [])), set(), []
+    while todo:
+        p = todo.pop(0)
+        if p in seen:
+            continue
+        seen.add(p)
+        before = lessons[p]
+        if skills_of(before) and not any(skills.wanted(s, k) for k in skills_of(before)):
+            todo += before.get("after", [])
+        elif not cleared(s, before, lesson.get("opens")):
+            out.append(before)
+    return out
 
 
 def first_open(s, lesson):

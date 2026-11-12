@@ -83,6 +83,17 @@ class FightThemesTest(unittest.TestCase):
         self.assertTrue(lesson.mastered(s, bash_zsh))
         self.assertFalse(lesson.mastered({**s, "skills": "all"}, bash_zsh))
 
+    def test_an_unticked_lesson_passes_its_wait_on(self):
+        """Regression: a Bash-only player saw substitution and loops open at once, before command_line: they wait
+        for scripts (Script skill), and an unticked lesson didn't count. It now hands over its own `after` (quotes)."""
+        s = {"skills": ["bash"], "challenges": [], "achievements": [], "lessons": {}}
+        by_id = lesson.by_id()
+        for lid in ("substitution", "loops"):
+            with self.subTest(lesson=lid):
+                self.assertIn("quotes", [le["id"] for le in lesson.waiting_for(s, by_id[lid])])
+                self.assertFalse(lesson.unlocked(s, by_id[lid]))
+                self.assertIn("scripts", [le["id"] for le in lesson.waiting_for({**s, "skills": "all"}, by_id[lid])])
+
 
 if __name__ == "__main__":
     unittest.main()
