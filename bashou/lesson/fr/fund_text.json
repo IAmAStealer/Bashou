@@ -1,0 +1,94 @@
+{
+ "title": "Tout est texte : petits outils et pipes",
+ "summary": "Les outils Unix lisent du texte et écrivent du texte : on enchaîne de petits outils qui font chacun un travail pour répondre à des questions qu'aucun outil seul ne règle.",
+ "pages": [
+  {
+   "scheme": [
+    " quelle adresse frappe le plus le serveur ?",
+    "",
+    " access.log ─▶ cut ─▶ sort ─▶ uniq -c ─▶ sort -rn",
+    "               │       │        │          │",
+    "             l'IP  regroupe  compte   la plus",
+    "                                     grosse avant"
+   ],
+   "point": 2,
+   "mark": [
+    "cut",
+    "sort",
+    "uniq -c"
+   ],
+   "text": [
+    "Ton serveur web est lent et tu veux savoir quelle adresse IP envoie le plus de requêtes. Aucune commande n'est faite pour cette question.",
+    "",
+    "Mais quatre petites commandes, l'une après l'autre, y arrivent : une sort l'adresse de chaque ligne, une range les lignes identiques ensemble, une les compte, une trie les comptes.",
+    "",
+    "- Chaque outil fait un petit travail, et le fait bien.",
+    "- Tu construis la réponse en les enchaînant."
+   ]
+  },
+  {
+   "scheme": [
+    " un journal       203.0.113.7 GET /index.html",
+    " ls               notes.txt",
+    " ps               1234 nginx",
+    " une config       port = 8080",
+    "",
+    "        des lignes de texte, partout"
+   ],
+   "point": 5,
+   "mark": [
+    "des lignes de texte"
+   ],
+   "text": [
+    "Pourquoi peut-on les enchaîner ? Parce que sous Unix presque tout est du texte : les journaux, les fichiers de configuration, et ce qu'affichent les commandes.",
+    "",
+    "- Le texte est la langue commune : un outil qui lit des lignes peut lire la sortie de presque n'importe quel autre outil.",
+    "- Un format que seul un programme comprend ne se lit pas comme ça : il te faut ce programme."
+   ]
+  },
+  {
+   "scheme": [
+    " cut -d' ' -f1 access.log | sort",
+    "",
+    " cut ──stdout──▶ pipe ──stdin──▶ sort",
+    "  │",
+    "  └──stderr──▶ ton écran, pas le pipe"
+   ],
+   "point": 2,
+   "mark": [
+    "pipe",
+    "stderr"
+   ],
+   "text": [
+    "Le pipe | relie deux commandes : ce qu'affiche la première (sa sortie standard) devient ce que lit la seconde (son entrée standard).",
+    "",
+    "- Les outils n'ont pas besoin de se connaître : ils lisent et écrivent des lignes, c'est tout.",
+    "- Les messages d'erreur ne passent pas dans le pipe : ils restent affichés à l'écran, sauf si tu les y envoies avec 2>&1."
+   ]
+  },
+  {
+   "scheme": [
+    " data.csv           cut -d, -f2",
+    " Bob,42             42           ✔",
+    " \"Lee, Ann\",37      Ann\"         ✘",
+    "",
+    " la virgule entre guillemets n'est pas un",
+    " séparateur, mais cut ignore les guillemets",
+    "",
+    " JSON, CSV à guillemets ─▶ un outil qui lit",
+    "                           le format : jq, Python"
+   ],
+   "point": 2,
+   "mark": [
+    "✘"
+   ],
+   "text": [
+    "Le texte a un point faible : il est souple. Un outil qui coupe sur les virgules casse le jour où un champ contient une virgule.",
+    "",
+    "- Pour des lignes simples (journaux, listes), petits outils et pipes sont rapides et suffisent.",
+    "- cut -d' ' compte chaque espace : des colonnes alignées avec plusieurs espaces, comme la sortie de ps, donnent des champs vides ; awk '{print $1}' coupe sur les suites d'espaces.",
+    "- Pour des données vraiment structurées, prends un outil qui lit le format : jq pour le JSON, Python pour le CSV."
+   ]
+  }
+ ]
+}

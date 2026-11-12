@@ -687,5 +687,268 @@
   ],
   "answer": 0,
   "explain": "A Python script isn't a program on its own: python3 reads it and runs it. Install python3 on that server, and the libraries the script needs (in a venv). A compiled program wouldn't need an interpreter, but it must be built for that server's system."
+ },
+ {
+  "id": "fundamentals-1-43",
+  "level": 1,
+  "q": "Why can grep read the output of ls, of ps, or a log file, all the same way?",
+  "choices": [
+   "They all write lines of text",
+   "grep knows every program's format",
+   "They were written by the same people",
+   "grep only works on log files"
+  ],
+  "answer": 0,
+  "explain": "On Unix almost everything is text: logs, configuration files, and what commands print. A tool that reads lines can read the output of almost any other tool, which is why small tools chain so well."
+ },
+ {
+  "id": "fundamentals-1-44",
+  "level": 1,
+  "q": "No command tells you which address sends your server the most requests. What's the Unix way to get it?",
+  "choices": [
+   "Install a big log analysis suite first",
+   "Read the log by hand and count",
+   "Chain small tools with pipes: cut, sort, uniq -c, sort",
+   "Ask the server to log less"
+  ],
+  "answer": 2,
+  "explain": "Unix tools each do one small job. One takes the address out of each line, one groups equal lines, one counts them, one sorts the counts: chained with pipes, they answer a question none of them answers alone."
+ },
+ {
+  "id": "fundamentals-1-45",
+  "level": 1,
+  "q": "In cmd1 | cmd2, what goes through the pipe?",
+  "choices": [
+   "Everything cmd1 shows, errors included",
+   "What cmd1 prints on its standard output, as cmd2's input",
+   "A copy of the files cmd1 opened",
+   "Only cmd1's exit code"
+  ],
+  "answer": 1,
+  "explain": "The pipe carries cmd1's standard output into cmd2's standard input. Error messages go to another stream, standard error, so by default they still show on your screen instead of going into cmd2 (2>&1 would send them in too)."
+ },
+ {
+  "id": "fundamentals-2-12",
+  "level": 2,
+  "q": "Your pipe cuts a CSV file on commas. It goes wrong on lines where a field is \"Paris, France\" in quotes. What's the lesson?",
+  "choices": [
+   "Pipes can't handle files over a few lines",
+   "Commas are not allowed in CSV files",
+   "Add more cut commands until it works",
+   "Text is loose: structured data needs a tool for its format"
+  ],
+  "answer": 3,
+  "explain": "Small tools see lines and separators, not the meaning of quotes. For simple lines they are fast and enough; for a format with rules (CSV with quoted fields, JSON), use a tool that reads that format, such as Python's csv module or jq for JSON."
+ },
+ {
+  "id": "fundamentals-1-46",
+  "level": 1,
+  "q": "Every Monday you run the same 10 commands, in order. Why put them in a script?",
+  "choices": [
+   "Scripts run faster than commands typed by hand",
+   "Same steps every time, none forgotten, readable by others",
+   "A script can't make mistakes",
+   "Typed commands are not saved anywhere"
+  ],
+  "answer": 1,
+  "explain": "A script doesn't get tired: it runs the same steps in the same order every time. The steps live in a file, so a teammate can read, review and run them too. It can still contain a mistake, which is why you test it."
+ },
+ {
+  "id": "fundamentals-1-47",
+  "level": 1,
+  "q": "Which job fits bash better than Python?",
+  "choices": [
+   "Archive a folder with tar and copy it away with rsync",
+   "Read a JSON reply and pick out nested fields",
+   "Compute averages over a large CSV file",
+   "A 500-line program with careful error handling"
+  ],
+  "answer": 0,
+  "explain": "Bash is made to run other programs and chain them: tar, rsync, cp. Working on structured data, computing, or a long program with careful error handling is Python's ground."
+ },
+ {
+  "id": "fundamentals-1-48",
+  "level": 1,
+  "q": "Your new script will rename 300 photos. What do you do first?",
+  "choices": [
+   "Run it on all 300 at once: it's faster",
+   "Delete the originals to save room",
+   "Try it on a few copies, printing what it would do",
+   "Nothing: if it runs once, it's right"
+  ],
+  "answer": 2,
+  "explain": "A script repeats a mistake as fast as it repeats good work: a bug hits all 300 files. Try it on a copy or a few files first, and have it show what it would do before it does it."
+ },
+ {
+  "id": "fundamentals-2-13",
+  "level": 2,
+  "q": "Your bash script has grown to 400 lines, with arrays of arrays and JSON parsing. What does Google's shell style guide say to do?",
+  "choices": [
+   "Split it into four 100-line bash files",
+   "Rewrite it in a more structured language, such as Python",
+   "Remove the comments to make it shorter",
+   "Nothing: bash has no size limit"
+  ],
+  "answer": 1,
+  "explain": "Google's shell style guide says that past about 100 lines, or once the control flow stops being simple, a script should be rewritten in a more structured language, early, because scripts grow. Python is the usual pick: it has nested data structures, a JSON parser and exceptions. Bash is great glue, but it has only flat arrays (no arrays of arrays) and no exceptions."
+ },
+ {
+  "id": "fundamentals-1-49",
+  "level": 1,
+  "os": "linux",
+  "q": "Why install nginx with apt or dnf instead of downloading it and copying its files yourself?",
+  "choices": [
+   "It's the only way to run nginx on Linux",
+   "Packages are always the newest version",
+   "Files copied by hand can't be run",
+   "It handles its libraries, its updates and its removal"
+  ],
+  "answer": 3,
+  "explain": "A package manager fetches the libraries a program needs, records every file it puts on the disk, updates everything at once (security fixes included), and removes it cleanly later. Copy files by hand and all of that is your job."
+ },
+ {
+  "id": "fundamentals-1-50",
+  "level": 1,
+  "os": "linux",
+  "q": "How do apt and dnf know a package really comes from the repository?",
+  "choices": [
+   "They check a signature with a key they already trust",
+   "They compare the file size with the website",
+   "The download uses HTTPS, so it must be right",
+   "They don't: they install whatever comes"
+  ],
+  "answer": 0,
+  "explain": "Everything comes signed: Debian signs the repository's list, which holds a checksum of each package; Rocky signs each package. apt and dnf check that signature with a key they already trust and refuse a package that doesn't match. HTTPS alone only protects the trip, not who made the file. That's also why adding a third-party repository means adding its key."
+ },
+ {
+  "id": "fundamentals-1-51",
+  "level": 1,
+  "q": "A README says: curl https://get.example.com | sudo bash. What's the problem?",
+  "choices": [
+   "curl is too slow for big downloads",
+   "bash can't read scripts from a pipe",
+   "It runs a script you haven't read, as root",
+   "Nothing, it's the recommended way on Debian"
+  ],
+  "answer": 2,
+  "explain": "That line runs whatever the server sends, as root, before you can read it. What it installs may never be recorded (no updates, no clean removal), or it may add a repository you didn't choose. Look for your distribution's package first, or add the vendor's repository with its key."
+ },
+ {
+  "id": "fundamentals-2-14",
+  "level": 2,
+  "os": "linux",
+  "q": "An admin moves between a Debian server and a Rocky server. Which pair of package tool and package file matches each?",
+  "choices": [
+   "Debian: dnf and .rpm; Rocky: apt and .deb",
+   "Debian: apt and .deb; Rocky: dnf and .rpm",
+   "Both use apt, only the package files differ",
+   "Both use dnf, only the package files differ"
+  ],
+  "answer": 1,
+  "explain": "Debian and Ubuntu use apt with .deb packages; Rocky, Alma and Red Hat use dnf with .rpm packages. The ideas are the same (signed repositories, dependencies, a local database), the commands and files differ."
+ },
+ {
+  "id": "fundamentals-1-52",
+  "level": 1,
+  "q": "A local variable of a C function: where does it live, and when does it go away?",
+  "choices": [
+   "On the stack, gone when the function returns",
+   "On the heap, until you call free",
+   "On the disk, until the program ends",
+   "In a register, never freed"
+  ],
+  "answer": 0,
+  "explain": "Each function call gets a box on the stack for its local variables. When the function returns, the box is gone by itself: nothing to free. (A local marked static is the exception: it lives as long as the program.) That's also why you must never return the address of a local variable."
+ },
+ {
+  "id": "fundamentals-1-53",
+  "level": 1,
+  "q": "Your program reads a file and keeps every line. You learn how many lines there are only while it runs. Where does that data go?",
+  "choices": [
+   "On the stack, it's faster",
+   "In the program file itself",
+   "In the CPU cache",
+   "On the heap, where the program asks for room as it needs it"
+  ],
+  "answer": 3,
+  "explain": "The stack is small, and a function's box disappears when it returns. Data that is big, or whose size you learn only while running, goes on the heap, and stays there until it's freed."
+ },
+ {
+  "id": "fundamentals-1-54",
+  "level": 1,
+  "q": "Who frees heap memory in C, in Python and in Rust?",
+  "choices": [
+   "The operating system, every second, in all three",
+   "C: you (free); Python: itself; Rust: the value's owner",
+   "Nobody: heap memory is never freed",
+   "C: the compiler; Python: you; Rust: a garbage collector"
+  ],
+  "answer": 1,
+  "explain": "C trusts you to call free, once, at the right time. Python frees a value as soon as nothing uses it (it counts the uses); its garbage collector frees values that only point to each other. Rust frees a value when its one owner goes out of scope, and the compiler refuses code that uses it afterwards. Rust makes leaks rare, not impossible."
+ },
+ {
+  "id": "fundamentals-2-15",
+  "level": 2,
+  "q": "A server's memory grows a little every hour until the system kills it. What's the most likely cause?",
+  "choices": [
+   "The stack is too small",
+   "The server's disk is full",
+   "A leak: memory taken on the heap and never given back",
+   "Too many local variables"
+  ],
+  "answer": 2,
+  "explain": "Stack memory comes back by itself when functions return, so it doesn't grow for days. Memory that grows slowly and never comes back is heap memory nobody frees: a leak. In C, AddressSanitizer (gcc -fsanitize=address) shows where it was taken: by default on Linux, with ASAN_OPTIONS=detect_leaks=1 on a Mac. Valgrind does it too, on Linux only."
+ },
+ {
+  "id": "fundamentals-1-55",
+  "level": 1,
+  "q": "What does CI do when you push?",
+  "choices": [
+   "It deploys your laptop's files to production",
+   "It reviews your code instead of a person",
+   "It merges every branch into main",
+   "A machine builds and tests it, the result is on the commit"
+  ],
+  "answer": 3,
+  "explain": "Continuous integration builds and tests every push automatically, on a fresh machine. The result, pass or fail, shows on the commit and on the pull request or merge request, minutes after the push, while a mistake is still small. People still review the code."
+ },
+ {
+  "id": "fundamentals-1-56",
+  "level": 1,
+  "q": "\"It works on my laptop.\" How does CI help with that?",
+  "choices": [
+   "It starts from a fresh machine: a forgotten dependency fails",
+   "It copies your laptop's setup to everyone",
+   "It runs the program faster",
+   "It hides the errors other people would see"
+  ],
+  "answer": 0,
+  "explain": "Your laptop has years of things installed. A hosted CI job starts from a fresh machine with the same known image every time, then installs what the project declares. A dependency that exists only on your laptop is missing there, so the job fails before a teammate or a server finds out. (A runner your team hosts itself may keep files between jobs: check how it is set up.)"
+ },
+ {
+  "id": "fundamentals-1-57",
+  "level": 1,
+  "q": "Continuous delivery or continuous deployment: what's the difference?",
+  "choices": [
+   "They are two names for the same thing",
+   "Delivery runs the tests, deployment doesn't",
+   "Delivery: a person presses go; deployment: it goes alone",
+   "Deployment is only for mobile apps"
+  ],
+  "answer": 2,
+  "explain": "Both build the release automatically once the tests pass. With continuous delivery, a person decides when it goes to production; with continuous deployment, every passing change goes out by itself."
+ },
+ {
+  "id": "fundamentals-2-16",
+  "level": 2,
+  "q": "Where does a GitLab project's pipeline live, and why does that matter?",
+  "choices": [
+   "On GitLab's servers only, out of the team's hands",
+   "In .gitlab-ci.yml in the repository, reviewed like code",
+   "In each developer's home folder",
+   "In a database nobody can change"
+  ],
+  "answer": 1,
+  "explain": "The pipeline is a YAML file in the repository (.gitlab-ci.yml on GitLab, .github/workflows/ on GitHub). It changes through commits, with a history and a review. The deploy keys are not written in it (they live in the project's CI/CD settings), but its jobs can use them: whoever changes the file can make a job use them. Review a change to it as carefully as a change to the server."
  }
 ]

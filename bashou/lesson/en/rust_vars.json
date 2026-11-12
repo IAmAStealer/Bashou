@@ -4,7 +4,8 @@
  "skill": "rust",
  "after": [
   "stack_heap",
-  "fund_code"
+  "fund_code",
+  "fund_memory"
  ],
  "opens": "mastered",
  "masters": [

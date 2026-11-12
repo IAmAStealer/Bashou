@@ -1,0 +1,112 @@
+{
+ "id": "fund_memory",
+ "order": 325,
+ "skill": [
+  "fundamentals",
+  "c",
+  "rust"
+ ],
+ "after": [
+  "fund_code"
+ ],
+ "opens": "read",
+ "masters": [
+  "answered fund_memory 3"
+ ],
+ "questions": [
+  "fundamentals-1-52",
+  "fundamentals-1-53",
+  "fundamentals-1-54",
+  "fundamentals-2-15"
+ ],
+ "recall": [
+  "fundamentals-1-52",
+  "fundamentals-1-54"
+ ],
+ "title": "Memory: the stack, the heap, and who frees it",
+ "summary": "A program keeps its data in two places. One cleans itself up, the other must be freed by someone: you in C, a garbage collector in Python, the owner in Rust.",
+ "pages": [
+  {
+   "scheme": [
+    " a server that runs for days",
+    "",
+    " day 1   ▓              0.5 GB",
+    " day 3   ▓▓▓▓           2 GB",
+    " day 6   ▓▓▓▓▓▓▓▓       4 GB, killed"
+   ],
+   "point": 4,
+   "mark": [
+    "killed"
+   ],
+   "text": [
+    "A server runs fine, then grows a little every hour until the system kills it for lack of memory. That's a memory leak: memory it took and never gave back.",
+    "",
+    "To see why it happens, you need to know where a program keeps its data. There are two places: the stack and the heap."
+   ]
+  },
+  {
+   "scheme": [
+    " the stack: one box per function call",
+    " ┌───────────────┐",
+    " │ main: n       │",
+    " ├───────────────┤",
+    " │ area: w, h    │  ◀ gone when area returns",
+    " └───────────────┘"
+   ],
+   "point": 4,
+   "mark": [
+    "gone when area returns"
+   ],
+   "text": [
+    "Each function call gets a box on the stack for its local variables. When the function returns, the box is gone, all by itself.",
+    "",
+    "- Fast, and nothing to clean up.",
+    "- But small (a few megabytes: 8 MB by default on Linux, see ulimit -s), and it disappears when the function returns: data that is big, or must outlive the function, doesn't fit."
+   ]
+  },
+  {
+   "scheme": [
+    " stack                   heap",
+    " ┌───────────────┐       ┌───────────────────┐",
+    " │ main: list ───┼──────▶│ 10 000 values,    │",
+    " └───────────────┘       │ until someone     │",
+    "                         │ frees them        │",
+    "                         └───────────────────┘"
+   ],
+   "point": 4,
+   "mark": [
+    "frees them"
+   ],
+   "text": [
+    "Data that is big, or whose size you learn only while running (lines read from a file), goes on the heap. The program asks for room there and keeps its address.",
+    "",
+    "- It stays as long as needed, even after the function that asked for it returns.",
+    "- But someone must give it back: otherwise, it's a leak."
+   ]
+  },
+  {
+   "scheme": [
+    " who frees the heap?",
+    "",
+    " C       you: free(p)",
+    "         forget: leak; twice: anything goes",
+    " Python  when nothing uses it anymore:",
+    "         counts uses, plus a garbage collector",
+    " Rust    the value's owner, when it goes",
+    "         out of scope; use after: refused",
+    "         when you compile"
+   ],
+   "point": 6,
+   "mark": [
+    "the value's owner"
+   ],
+   "text": [
+    "Each language answers that question its own way.",
+    "",
+    "- C trusts you: forget free and memory leaks; free twice or use freed memory and anything can happen: a crash, wrong data, or a security hole.",
+    "- Python counts the uses of each value and frees it when none are left; a garbage collector catches values that only point to each other.",
+    "- Rust drops each value when its one owner goes out of scope, and its compiler refuses code that would use it afterwards. Leaks stay possible, but rare."
+   ]
+  }
+ ]
+}

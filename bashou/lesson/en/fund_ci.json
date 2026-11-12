@@ -1,0 +1,103 @@
+{
+ "id": "fund_ci",
+ "order": 455,
+ "skill": [
+  "fundamentals",
+  "cicd"
+ ],
+ "after": [
+  "files"
+ ],
+ "opens": "read",
+ "masters": [
+  "answered fund_ci 3"
+ ],
+ "questions": [
+  "fundamentals-1-55",
+  "fundamentals-1-56",
+  "fundamentals-1-57",
+  "fundamentals-2-16"
+ ],
+ "recall": [
+  "fundamentals-1-55",
+  "fundamentals-1-56"
+ ],
+ "title": "What CI/CD is for",
+ "summary": "Every push is built and tested on a clean machine, and a release goes out the same way every time: why teams hand these steps to a pipeline.",
+ "pages": [
+  {
+   "scheme": [
+    " Friday, 6 p.m.",
+    "  a push, tests not run    ─▶ main is broken",
+    "  a deploy from a laptop,",
+    "  steps half remembered    ─▶ the site is down"
+   ],
+   "point": 1,
+   "mark": [
+    "main is broken"
+   ],
+   "text": [
+    "Friday evening, a teammate pushes without running the tests: the main branch is broken. Someone deploys by hand from their laptop and forgets a step: the site is down.",
+    "",
+    "Neither is about skill. People forget steps; machines don't."
+   ]
+  },
+  {
+   "scheme": [
+    " push ─▶ build ─▶ test ─▶ ✔ or ✘",
+    " └─────── CI ────────┘    │",
+    "                          ▼",
+    "                 shown on the commit"
+   ],
+   "point": 1,
+   "mark": [
+    "CI"
+   ],
+   "text": [
+    "CI, continuous integration: every push is built and tested by a machine, automatically. The result shows on the commit and on the pull request (GitHub) or merge request (GitLab).",
+    "",
+    "- A mistake shows up minutes after it's pushed, while it's small.",
+    "- On the service's hosted runners, the machine starts clean each time: a forgotten dependency fails there, not only on a teammate's laptop."
+   ]
+  },
+  {
+   "scheme": [
+    " push ─▶ build ─▶ test ─▶ package ─▶ deploy",
+    " └─────── CI ────────┘    └───── CD ──────┘",
+    "",
+    " delivery    ready, a person presses go",
+    " deployment  goes out on its own"
+   ],
+   "point": 1,
+   "mark": [
+    "CD"
+   ],
+   "text": [
+    "CD goes further: once the tests pass, the same pipeline builds the release and puts it out, the same way every time.",
+    "",
+    "- Continuous delivery: every passing change is ready to release; a person presses the button.",
+    "- Continuous deployment: it goes to production on its own."
+   ]
+  },
+  {
+   "scheme": [
+    " the pipeline is a file in the repository",
+    "  GitHub   .github/workflows/*.yml",
+    "  GitLab   .gitlab-ci.yml",
+    "",
+    " reviewed like code: it can use the keys",
+    " that deploy to production"
+   ],
+   "point": 4,
+   "mark": [
+    "it can use the keys"
+   ],
+   "text": [
+    "The pipeline itself is code: a YAML file in the repository, with a history, reviewed before it changes.",
+    "",
+    "- It can use secrets, such as the key that deploys to production. They are stored in the service's settings, never written in the file, but whoever edits the file can make a job use them.",
+    "- So a change to the pipeline is as sensitive as a change to the production server: review it the same way."
+   ]
+  }
+ ]
+}

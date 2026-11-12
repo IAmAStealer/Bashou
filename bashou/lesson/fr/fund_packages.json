@@ -1,0 +1,90 @@
+{
+ "title": "À quoi sert un gestionnaire de paquets",
+ "summary": "Installer un logiciel à la main te laisse seul avec ses bibliothèques, ses mises à jour et sa désinstallation. Un gestionnaire de paquets suit tout ça, depuis des dépôts qu'il peut vérifier.",
+ "pages": [
+  {
+   "scheme": [
+    " à la main : télécharger, déballer, copier",
+    "   de quelles bibliothèques a-t-il besoin ?",
+    "   qui le met à jour quand une faille sort ?",
+    "   quels fichiers effacer pour l'enlever ?",
+    "",
+    " sudo apt install nginx    (Debian, Ubuntu)",
+    " sudo dnf install nginx    (Rocky, Red Hat)"
+   ],
+   "point": 5,
+   "mark": [
+    "sudo apt install nginx",
+    "sudo dnf install nginx"
+   ],
+   "text": [
+    "Il te faut le serveur web nginx sur un serveur. Tu pourrais le télécharger sur un site, le déballer et copier ses fichiers au bon endroit.",
+    "",
+    "Puis viennent les trois questions à gauche.",
+    "",
+    "Un gestionnaire de paquets y répond pour toi."
+   ]
+  },
+  {
+   "scheme": [
+    " apt install nginx",
+    "   │",
+    "   ▼  dépôt : une liste de paquets",
+    " nginx + les bibliothèques qu'il demande",
+    "   │",
+    "   ▼  la base locale note",
+    " chaque fichier, et à quel paquet il est"
+   ],
+   "point": 6,
+   "mark": [
+    "à quel paquet il est"
+   ],
+   "text": [
+    "Un paquet, c'est un programme avec une étiquette : ses fichiers, sa version, et les paquets dont il a besoin (ses dépendances).",
+    "",
+    "- apt ou dnf le va chercher dans un dépôt, avec ses dépendances.",
+    "- Il note chaque fichier installé, pour les enlever plus tard (apt remove garde les réglages, apt purge non).",
+    "- apt update puis apt upgrade, ou dnf upgrade, met tout à jour d'un coup, correctifs de sécurité compris."
+   ]
+  },
+  {
+   "scheme": [
+    " paquets ──signés par la distribution──▶ apt, dnf",
+    "                                         │",
+    "                 la signature est bonne ?",
+    "                   oui : installer",
+    "                   non : refuser"
+   ],
+   "point": 2,
+   "mark": [
+    "la signature est bonne ?"
+   ],
+   "text": [
+    "Pourquoi faire confiance à ce qui arrive ? Tout est signé par la distribution : Debian signe la liste du dépôt, qui contient l'empreinte de chaque paquet ; Rocky signe chaque paquet.",
+    "",
+    "- apt et dnf vérifient cette signature avec une clé en laquelle ils ont déjà confiance.",
+    "- Ils refusent un paquet qui ne correspond pas."
+   ]
+  },
+  {
+   "scheme": [
+    " ✘ curl https://get.example.com | sudo bash",
+    "     lance en root un script non lu",
+    "     peut contourner apt/dnf : ni mises à jour,",
+    "     ni retrait",
+    " ✔ d'abord la distribution (+ backports, EPEL)",
+    " ✔ sinon un éditeur de confiance : son dépôt,"
+   ],
+   "point": 0,
+   "mark": [
+    "✘"
+   ],
+   "text": [
+    "Certains README disent : envoie ce téléchargement dans sudo bash. Ça lance un script venu d'internet en root avant que tu puisses le lire. Il peut poser des fichiers dont le gestionnaire de paquets n'entend jamais parler, ou ajouter un dépôt et une clé que tu n'as pas choisis.",
+    "",
+    "- Cherche d'abord dans ta distribution, puis dans ses extras officiels : backports sur Debian, EPEL sur Rocky.",
+    "- Sinon, ajoute le dépôt de l'éditeur avec sa clé de signature. Seulement pour un éditeur de confiance : chaque mise à jour qu'il envoie s'installe en root."
+   ]
+  }
+ ]
+}

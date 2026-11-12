@@ -1,0 +1,105 @@
+{
+ "id": "fund_automation",
+ "order": 235,
+ "skill": [
+  "fundamentals",
+  "script",
+  "python"
+ ],
+ "after": [
+  "variables"
+ ],
+ "opens": "read",
+ "masters": [
+  "answered fund_automation 3"
+ ],
+ "questions": [
+  "fundamentals-1-46",
+  "fundamentals-1-47",
+  "fundamentals-1-48",
+  "fundamentals-2-13"
+ ],
+ "recall": [
+  "fundamentals-1-46",
+  "fundamentals-1-47"
+ ],
+ "title": "When to write a script, and in what",
+ "summary": "A script repeats the same steps every time, without forgetting one. When it's worth writing, and when bash or Python fits the job better.",
+ "pages": [
+  {
+   "scheme": [
+    " by hand       300 × look, type, check",
+    "               slow, and one typo somewhere",
+    "",
+    " a script      write it once, try it on 3,",
+    "               run it on 300"
+   ],
+   "point": 3,
+   "mark": [
+    "write it once"
+   ],
+   "text": [
+    "You must rename 300 photos with their date. By hand, it takes an afternoon, and somewhere you will make a typo.",
+    "",
+    "A script is a file of commands that the computer runs for you, in order, the same way every time.",
+    "",
+    "- A good rule: if you did it twice by hand and you'll do it again, write a script.",
+    "- A one-time job of three commands doesn't need one."
+   ]
+  },
+  {
+   "text": [
+    "What you get: the steps live in a file instead of in your memory.",
+    "",
+    "- Nobody skips step 7 on a tired Friday.",
+    "- A teammate can read it, review it in git, and run it too.",
+    "- A timer can run it at 3 a.m. while you sleep.",
+    "",
+    "What it costs: time to write and test it, and to fix it when the world around it changes."
+   ]
+  },
+  {
+   "scheme": [
+    " the job                          pick",
+    " run commands, move files,",
+    " glue programs together           bash",
+    "",
+    " JSON or CSV, calculations,",
+    " real error handling, long code   Python"
+   ],
+   "point": 2,
+   "mark": [
+    "bash"
+   ],
+   "text": [
+    "Which language? Pick the one that fits the job.",
+    "",
+    "- Bash is made to run other programs: copy, archive, call tar or rsync, chain commands.",
+    "- Python is made to work on data: read JSON, compute, handle each error properly.",
+    "- Google's shell style guide says it plainly: past about 100 lines, or once the logic stops being simple, rewrite the script in a more structured language, early, because scripts grow. Python is the usual pick."
+   ]
+  },
+  {
+   "scheme": [
+    " a script repeats mistakes as fast as",
+    " it repeats good work",
+    "",
+    "  1. try it on a copy, or on 3 files",
+    "  2. make it print what it would do",
+    "  3. make it stop at the first error",
+    "  4. then run it for real"
+   ],
+   "point": 4,
+   "mark": [
+    "print what it would do"
+   ],
+   "text": [
+    "One warning before you write your first one: a script does exactly what it says, very fast. A mistake in it hits all 300 files, not one.",
+    "",
+    "- Try it on a copy, or on a few files, first.",
+    "- Make it show what it would do before it does it.",
+    "- Make it stop at the first error instead of going on."
+   ]
+  }
+ ]
+}

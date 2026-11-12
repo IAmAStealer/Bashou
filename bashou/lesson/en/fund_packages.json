@@ -1,0 +1,114 @@
+{
+ "id": "fund_packages",
+ "order": 275,
+ "skill": [
+  "fundamentals",
+  "debian",
+  "rocky"
+ ],
+ "after": [
+  "computer"
+ ],
+ "opens": "read",
+ "masters": [
+  "answered fund_packages 3"
+ ],
+ "questions": [
+  "fundamentals-1-49",
+  "fundamentals-1-50",
+  "fundamentals-1-51",
+  "fundamentals-2-14"
+ ],
+ "recall": [
+  "fundamentals-1-49",
+  "fundamentals-1-50"
+ ],
+ "title": "What a package manager is for",
+ "summary": "Installing software by hand leaves you alone with its libraries, its updates and its removal. A package manager tracks all of that, from repositories it can check.",
+ "pages": [
+  {
+   "scheme": [
+    " by hand: download, unpack, copy",
+    "   which libraries does it need?",
+    "   who updates it when a flaw is found?",
+    "   which files to delete to remove it?",
+    "",
+    " sudo apt install nginx    (Debian, Ubuntu)",
+    " sudo dnf install nginx    (Rocky, Red Hat)"
+   ],
+   "point": 5,
+   "mark": [
+    "sudo apt install nginx",
+    "sudo dnf install nginx"
+   ],
+   "text": [
+    "You need the nginx web server on a server. You could download it from a website, unpack it and copy its files into place.",
+    "",
+    "Then come the three questions on the left.",
+    "",
+    "A package manager answers them for you."
+   ]
+  },
+  {
+   "scheme": [
+    " apt install nginx",
+    "   │",
+    "   ▼  repository: a list of packages",
+    " nginx + the libraries it needs",
+    "   │",
+    "   ▼  the local database records",
+    " every file, and which package owns it"
+   ],
+   "point": 6,
+   "mark": [
+    "which package owns it"
+   ],
+   "text": [
+    "A package is a program with a label: its files, its version, and the packages it needs (its dependencies).",
+    "",
+    "- apt or dnf fetches it from a repository, with its dependencies.",
+    "- It records every file it installs, to remove them later (apt remove keeps settings files, apt purge doesn't).",
+    "- apt update then apt upgrade, or dnf upgrade, updates every package at once, security fixes included."
+   ]
+  },
+  {
+   "scheme": [
+    " packages ──signed by the distro──▶ apt, dnf",
+    "                                    │",
+    "                     signature checks out?",
+    "                       yes: install",
+    "                       no:  refuse"
+   ],
+   "point": 2,
+   "mark": [
+    "signature checks out?"
+   ],
+   "text": [
+    "Why trust what comes down? Everything is signed by the distribution: Debian signs the repository's list, which holds a checksum of every package; Rocky signs each package.",
+    "",
+    "- apt and dnf check that signature with a key they already trust.",
+    "- They refuse a package that doesn't match."
+   ]
+  },
+  {
+   "scheme": [
+    " ✘ curl https://get.example.com | sudo bash",
+    "     runs a script you haven't read, as root",
+    "     may bypass apt/dnf: no updates, no removal",
+    "",
+    " ✔ the distribution first (+ backports, EPEL)",
+    " ✔ else a vendor you trust: its repo, its key"
+   ],
+   "point": 0,
+   "mark": [
+    "✘"
+   ],
+   "text": [
+    "Some READMEs say: pipe this download into sudo bash. That runs a script from the internet as root before you can read it. It may copy files the package manager never hears of, or add a repository and a key you never chose.",
+    "",
+    "- Look in your distribution first, then in its official extras: backports on Debian, EPEL on Rocky.",
+    "- Else, add the vendor's repository with its signing key. Only for a vendor you trust: every update it ships runs as root."
+   ]
+  }
+ ]
+}

@@ -27,6 +27,12 @@ PLAN = {
     "fund_databases": ({"sql"}, {"sql_select"}),
     "fund_code": ({"c", "rust", "python"}, {"compilation", "py_start", "rust_vars"}),
     "ai_context": ({"ai"}, {"ai_plan"}),
+    # Owner, 2026-11-12: the five proposals of the 2026-11-11 audit, before closing Bashou until the Rust rewrite.
+    "fund_text": ({"bash"}, {"streams", "pipes"}),
+    "fund_automation": ({"script", "python"}, {"scripts", "py_start"}),
+    "fund_packages": ({"debian", "rocky"}, {"packages"}),
+    "fund_memory": ({"c", "rust"}, {"stack_heap", "rust_vars"}),
+    "fund_ci": ({"cicd"}, {"pipeline"}),
 }
 
 COMMON = {le["id"] for le in LESSONS if not lesson.skills_of(le)}

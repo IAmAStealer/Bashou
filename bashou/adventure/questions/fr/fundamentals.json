@@ -687,5 +687,268 @@
   ],
   "answer": 0,
   "explain": "Un script Python n'est pas un programme à lui seul : python3 le lit et l'exécute. Installe python3 sur ce serveur, et les bibliothèques dont le script a besoin (dans un venv). Un programme compilé n'aurait pas besoin d'interpréteur, mais il doit être construit pour le système de ce serveur."
+ },
+ {
+  "id": "fundamentals-1-43",
+  "level": 1,
+  "q": "Pourquoi grep peut-il lire la sortie de ls, de ps, ou un journal, de la même façon ?",
+  "choices": [
+   "Ils écrivent tous des lignes de texte",
+   "grep connaît le format de chaque programme",
+   "Ils ont été écrits par les mêmes personnes",
+   "grep ne marche que sur les journaux"
+  ],
+  "answer": 0,
+  "explain": "Sous Unix presque tout est du texte : les journaux, les fichiers de configuration, et ce qu'affichent les commandes. Un outil qui lit des lignes peut lire la sortie de presque n'importe quel autre outil : c'est pour ça que les petits outils s'enchaînent si bien."
+ },
+ {
+  "id": "fundamentals-1-44",
+  "level": 1,
+  "q": "Aucune commande ne te dit quelle adresse envoie le plus de requêtes à ton serveur. Quelle est la façon Unix de le savoir ?",
+  "choices": [
+   "Installer d'abord une grosse suite d'analyse de journaux",
+   "Lire le journal à la main et compter",
+   "Enchaîner de petits outils : cut, sort, uniq -c, sort",
+   "Demander au serveur d'écrire moins"
+  ],
+  "answer": 2,
+  "explain": "Les outils Unix font chacun un petit travail. L'un sort l'adresse de chaque ligne, l'un regroupe les lignes identiques, l'un les compte, l'un trie les comptes : enchaînés avec des pipes, ils répondent à une question qu'aucun ne règle seul."
+ },
+ {
+  "id": "fundamentals-1-45",
+  "level": 1,
+  "q": "Dans cmd1 | cmd2, qu'est-ce qui passe dans le pipe ?",
+  "choices": [
+   "Tout ce que cmd1 affiche, erreurs comprises",
+   "La sortie standard de cmd1, comme entrée de cmd2",
+   "Une copie des fichiers que cmd1 a ouverts",
+   "Seulement le code de retour de cmd1"
+  ],
+  "answer": 1,
+  "explain": "Le pipe porte la sortie standard de cmd1 vers l'entrée standard de cmd2. Les messages d'erreur partent dans un autre flux, la sortie d'erreur : ils restent donc affichés à l'écran par défaut au lieu d'aller dans cmd2 (2>&1 les y enverrait aussi)."
+ },
+ {
+  "id": "fundamentals-2-12",
+  "level": 2,
+  "q": "Ton pipe coupe un fichier CSV sur les virgules. Ça déraille sur les lignes où un champ vaut \"Paris, France\" entre guillemets. Quelle leçon en tirer ?",
+  "choices": [
+   "Les pipes ne gèrent pas les longs fichiers",
+   "Les virgules sont interdites dans un CSV",
+   "Ajouter des cut jusqu'à ce que ça marche",
+   "Le texte est souple : données structurées, outil du format"
+  ],
+  "answer": 3,
+  "explain": "Les petits outils voient des lignes et des séparateurs, pas le sens des guillemets. Pour des lignes simples ils sont rapides et suffisent ; pour un format avec des règles (CSV avec des champs entre guillemets, JSON), prends un outil qui lit ce format, comme le module csv de Python ou jq pour le JSON."
+ },
+ {
+  "id": "fundamentals-1-46",
+  "level": 1,
+  "q": "Chaque lundi tu lances les 10 mêmes commandes, dans l'ordre. Pourquoi les mettre dans un script ?",
+  "choices": [
+   "Un script va plus vite que des commandes tapées",
+   "Mêmes étapes, aucune oubliée, lisibles par tous",
+   "Un script ne peut pas se tromper",
+   "Les commandes tapées ne sont enregistrées nulle part"
+  ],
+  "answer": 1,
+  "explain": "Un script ne fatigue pas : il refait les mêmes étapes dans le même ordre à chaque fois. Les étapes vivent dans un fichier : un collègue peut les lire, les relire et les lancer aussi. Il peut quand même contenir une erreur, c'est pour ça qu'on le teste."
+ },
+ {
+  "id": "fundamentals-1-47",
+  "level": 1,
+  "q": "Quel travail convient mieux à bash qu'à Python ?",
+  "choices": [
+   "Archiver un dossier avec tar, l'envoyer ailleurs avec rsync",
+   "Lire une réponse JSON et en sortir des champs imbriqués",
+   "Calculer des moyennes sur un gros fichier CSV",
+   "Un programme de 500 lignes aux erreurs bien gérées"
+  ],
+  "answer": 0,
+  "explain": "Bash est fait pour lancer d'autres programmes et les enchaîner : tar, rsync, cp. Travailler sur des données structurées, calculer, ou un long programme avec une gestion d'erreurs soignée, c'est le terrain de Python."
+ },
+ {
+  "id": "fundamentals-1-48",
+  "level": 1,
+  "q": "Ton nouveau script va renommer 300 photos. Que fais-tu d'abord ?",
+  "choices": [
+   "Le lancer sur les 300 d'un coup : c'est plus rapide",
+   "Effacer les originaux pour gagner de la place",
+   "L'essayer sur des copies en affichant ce qu'il ferait",
+   "Rien : s'il tourne une fois, il est juste"
+  ],
+  "answer": 2,
+  "explain": "Un script répète une erreur aussi vite que le bon travail : un bug touche les 300 fichiers. Essaie-le d'abord sur une copie ou quelques fichiers, et fais-lui montrer ce qu'il ferait avant de le faire."
+ },
+ {
+  "id": "fundamentals-2-13",
+  "level": 2,
+  "q": "Ton script bash a grossi jusqu'à 400 lignes, avec des tableaux de tableaux et du JSON à décoder. Que dit de faire le guide de style shell de Google ?",
+  "choices": [
+   "Le couper en quatre fichiers bash de 100 lignes",
+   "Le réécrire dans un langage plus structuré, comme Python",
+   "Enlever les commentaires pour le raccourcir",
+   "Rien : bash n'a pas de limite de taille"
+  ],
+  "answer": 1,
+  "explain": "Le guide shell de Google dit qu'au-delà d'environ 100 lignes, ou dès que la logique n'est plus simple, il faut réécrire le script dans un langage plus structuré, tôt, car les scripts grossissent. Python est le choix habituel : structures imbriquées, lecteur de JSON, exceptions. Bash relie bien les outils, mais n'a que des tableaux simples et pas d'exceptions."
+ },
+ {
+  "id": "fundamentals-1-49",
+  "level": 1,
+  "os": "linux",
+  "q": "Pourquoi installer nginx avec apt ou dnf plutôt que le télécharger et copier ses fichiers toi-même ?",
+  "choices": [
+   "C'est la seule façon de lancer nginx sous Linux",
+   "Les paquets sont toujours la version la plus récente",
+   "Des fichiers copiés à la main ne peuvent pas être lancés",
+   "Il gère ses bibliothèques, ses mises à jour, son retrait"
+  ],
+  "answer": 3,
+  "explain": "Un gestionnaire de paquets va chercher les bibliothèques dont un programme a besoin, note chaque fichier qu'il pose sur le disque, met tout à jour d'un coup (correctifs de sécurité compris), et l'enlève proprement plus tard. Copie les fichiers à la main, et tout ça devient ton travail."
+ },
+ {
+  "id": "fundamentals-1-50",
+  "level": 1,
+  "os": "linux",
+  "q": "Comment apt et dnf savent-ils qu'un paquet vient vraiment du dépôt ?",
+  "choices": [
+   "Ils vérifient une signature avec une clé déjà connue",
+   "Ils comparent la taille du fichier avec le site",
+   "Le téléchargement passe en HTTPS, donc c'est bon",
+   "Ils ne vérifient pas : ils installent ce qui arrive"
+  ],
+  "answer": 0,
+  "explain": "Tout arrive signé : Debian signe la liste du dépôt, qui contient l'empreinte de chaque paquet ; Rocky signe chaque paquet. apt et dnf vérifient cette signature avec une clé en laquelle ils ont déjà confiance, et refusent un paquet qui ne correspond pas. HTTPS seul ne protège que le trajet, pas l'auteur du fichier. C'est aussi pour ça qu'ajouter un dépôt tiers, c'est ajouter sa clé."
+ },
+ {
+  "id": "fundamentals-1-51",
+  "level": 1,
+  "q": "Un README dit : curl https://get.example.com | sudo bash. Quel est le problème ?",
+  "choices": [
+   "curl est trop lent pour les gros téléchargements",
+   "bash ne sait pas lire un script depuis un pipe",
+   "Ça lance en root un script non lu",
+   "Aucun, c'est la méthode conseillée sur Debian"
+  ],
+  "answer": 2,
+  "explain": "Cette ligne lance ce que le serveur envoie, en root, avant que tu puisses le lire. Ce qu'il installe peut n'être noté nulle part (pas de mises à jour, pas de désinstallation propre), ou il peut ajouter un dépôt que tu n'as pas choisi. Cherche d'abord le paquet de ta distribution, ou ajoute le dépôt de l'éditeur avec sa clé."
+ },
+ {
+  "id": "fundamentals-2-14",
+  "level": 2,
+  "os": "linux",
+  "q": "Un admin passe d'un serveur Debian à un serveur Rocky. Quelle paire outil de paquets et fichier de paquet va avec chacun ?",
+  "choices": [
+   "Debian : dnf et .rpm ; Rocky : apt et .deb",
+   "Debian : apt et .deb ; Rocky : dnf et .rpm",
+   "Les deux ont apt, seuls les fichiers de paquets changent",
+   "Les deux ont dnf, seuls les fichiers de paquets changent"
+  ],
+  "answer": 1,
+  "explain": "Debian et Ubuntu utilisent apt avec des paquets .deb ; Rocky, Alma et Red Hat utilisent dnf avec des paquets .rpm. Les idées sont les mêmes (dépôts signés, dépendances, une base locale), les commandes et les fichiers changent."
+ },
+ {
+  "id": "fundamentals-1-52",
+  "level": 1,
+  "q": "Une variable locale d'une fonction C : où vit-elle, et quand disparaît-elle ?",
+  "choices": [
+   "Sur la pile, elle disparaît au retour de la fonction",
+   "Sur le tas, jusqu'à ce que tu appelles free",
+   "Sur le disque, jusqu'à la fin du programme",
+   "Dans un registre, jamais libérée"
+  ],
+  "answer": 0,
+  "explain": "Chaque appel de fonction reçoit une case sur la pile pour ses variables locales. Au retour de la fonction, la case disparaît toute seule : rien à libérer. (Une variable locale marquée static fait exception : elle vit aussi longtemps que le programme.) C'est aussi pour ça qu'il ne faut jamais renvoyer l'adresse d'une variable locale."
+ },
+ {
+  "id": "fundamentals-1-53",
+  "level": 1,
+  "q": "Ton programme lit un fichier et garde chaque ligne. Tu n'apprends combien il y en a qu'en tournant. Où vont ces données ?",
+  "choices": [
+   "Sur la pile, c'est plus rapide",
+   "Dans le fichier du programme lui-même",
+   "Dans le cache du processeur",
+   "Sur le tas, où le programme demande la place qu'il lui faut"
+  ],
+  "answer": 3,
+  "explain": "La pile est petite, et la case d'une fonction disparaît à son retour. Les données grosses, ou dont on n'apprend la taille qu'en tournant, vont sur le tas, et y restent jusqu'à ce qu'on les libère."
+ },
+ {
+  "id": "fundamentals-1-54",
+  "level": 1,
+  "q": "Qui libère la mémoire du tas en C, en Python et en Rust ?",
+  "choices": [
+   "Le système d'exploitation, chaque seconde, dans les trois",
+   "C : toi (free) ; Python : lui-même ; Rust : le propriétaire",
+   "Personne : la mémoire du tas n'est jamais libérée",
+   "C : le compilo ; Python : toi ; Rust : un ramasse-miettes"
+  ],
+  "answer": 1,
+  "explain": "Le C compte sur toi pour appeler free, une fois, au bon moment. Python libère une valeur dès que plus rien ne l'utilise (il compte les usages) ; son ramasse-miettes libère les valeurs qui ne pointent que les unes vers les autres. Rust la libère quand son propriétaire sort de sa portée, et refuse à la compilation de l'utiliser après. Les fuites y sont rares."
+ },
+ {
+  "id": "fundamentals-2-15",
+  "level": 2,
+  "q": "La mémoire d'un serveur grossit un peu chaque heure jusqu'à ce que le système le tue. Quelle est la cause la plus probable ?",
+  "choices": [
+   "La pile est trop petite",
+   "Le disque du serveur est plein",
+   "Une fuite : de la mémoire prise sur le tas et jamais rendue",
+   "Trop de variables locales"
+  ],
+  "answer": 2,
+  "explain": "La mémoire de la pile revient toute seule au retour des fonctions : elle ne grossit pas pendant des jours. Une mémoire qui monte doucement et ne revient jamais, c'est du tas que personne ne libère : une fuite. En C, AddressSanitizer (gcc -fsanitize=address) montre où elle a été prise : par défaut sous Linux, avec ASAN_OPTIONS=detect_leaks=1 sur Mac. Valgrind le fait aussi, sous Linux seulement."
+ },
+ {
+  "id": "fundamentals-1-55",
+  "level": 1,
+  "q": "Que fait la CI quand tu pousses ?",
+  "choices": [
+   "Elle déploie les fichiers de ton portable en production",
+   "Elle relit ton code à la place d'une personne",
+   "Elle fusionne toutes les branches dans main",
+   "Une machine le construit et le teste, résultat sur le commit"
+  ],
+  "answer": 3,
+  "explain": "L'intégration continue construit et teste chaque push automatiquement, sur une machine neuve. Le résultat, réussi ou raté, s'affiche sur le commit et la pull request ou merge request, quelques minutes après le push, tant qu'une erreur est encore petite. Des personnes relisent toujours le code."
+ },
+ {
+  "id": "fundamentals-1-56",
+  "level": 1,
+  "q": "« Ça marche sur mon portable. » En quoi la CI aide-t-elle ?",
+  "choices": [
+   "Machine neuve à chaque fois : une dépendance oubliée échoue",
+   "Elle copie ton portable chez tout le monde",
+   "Elle fait tourner le programme plus vite",
+   "Elle cache les erreurs que les autres verraient"
+  ],
+  "answer": 0,
+  "explain": "Ton portable a des années d'outils installés. Un job de CI hébergé part d'une machine neuve, avec la même image à chaque fois, puis installe ce que le projet déclare. Une dépendance qui n'existe que sur ton portable y manque : le job échoue avant qu'un collègue s'en aperçoive. (Un runner hébergé par ton équipe peut garder des fichiers entre deux jobs.)"
+ },
+ {
+  "id": "fundamentals-1-57",
+  "level": 1,
+  "q": "Livraison continue ou déploiement continu : quelle différence ?",
+  "choices": [
+   "Ce sont deux noms pour la même chose",
+   "La livraison lance les tests, le déploiement non",
+   "Livraison : quelqu'un appuie ; déploiement : ça part seul",
+   "Le déploiement ne concerne que les applis mobiles"
+  ],
+  "answer": 2,
+  "explain": "Les deux construisent la version automatiquement une fois les tests passés. En livraison continue, une personne décide quand elle part en production ; en déploiement continu, chaque changement qui passe part tout seul."
+ },
+ {
+  "id": "fundamentals-2-16",
+  "level": 2,
+  "q": "Où vit le pipeline d'un projet GitLab, et pourquoi c'est important ?",
+  "choices": [
+   "Seulement chez GitLab, hors de portée de l'équipe",
+   "Dans .gitlab-ci.yml du dépôt, relu comme du code",
+   "Dans le dossier personnel de chaque développeur",
+   "Dans une base de données que personne ne peut changer"
+  ],
+  "answer": 1,
+  "explain": "Le pipeline est un fichier YAML du dépôt (.gitlab-ci.yml sur GitLab, .github/workflows/ sur GitHub). Il change par des commits, relus. Les clés de déploiement n'y sont pas écrites (elles sont dans les réglages CI/CD du projet), mais qui modifie le fichier peut les faire utiliser par un job. Relis-le aussi soigneusement qu'un changement du serveur."
  }
 ]

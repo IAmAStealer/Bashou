@@ -3,7 +3,8 @@
  "order": 110,
  "skill": "bash",
  "after": [
-  "reading"
+  "reading",
+  "fund_text"
  ],
  "opens": "read",
  "masters": [

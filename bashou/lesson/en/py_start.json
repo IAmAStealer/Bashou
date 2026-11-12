@@ -6,7 +6,8 @@
   "scripts",
   "loops",
   "logic",
-  "fund_code"
+  "fund_code",
+  "fund_automation"
  ],
  "masters": [
   "won colon_cobra | tool python3 3"

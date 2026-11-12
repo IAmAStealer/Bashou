@@ -203,20 +203,25 @@ before its practical ones (owner, 2026-11-02 and 2026-11-11). Ticking a skill pu
 lessons need; ticking Fundamentals alone shows them all. No fights: they pass with right answers to
 their own questions (`answered ID 3`), from the `fundamentals` adventure topic (Layer Lich).
 
-1. `fund_regex` — searching by shape, where regexes live, when a parser fits better
-2. `fund_users` — accounts, groups, root and sudo, least privilege
-3. `fund_processes` — programs vs processes, signals, services
-4. `fund_addresses` — MAC, IP, port, name: who each one finds
-5. `fund_complexity` — counting work: n, n × n, log n, measure then double
-6. `fund_codes` — check digits, checksums, QR codes: detect or correct
-7. `fund_git` — versions, commits, branches, shared repositories, no secrets
-8. `fund_code` — compiled vs interpreted, when errors show, what you ship
-9. `fund_databases` — why not a text file, tables, SQL, SQLite vs a server
-10. `fund_crypto` — hashes, symmetric keys, key pairs, signatures
-11. `fund_osi` — layers, from cable to application
-12. `fund_tcp_udp` — TCP vs UDP, ports, which protocol uses which
-13. `fund_arp` — from an IP to a MAC on the local network
-14. `fund_multicast` — unicast, broadcast, multicast
+1. `fund_text` — everything is text, small tools chained with pipes, when text is too loose
+2. `fund_regex` — searching by shape, where regexes live, when a parser fits better
+3. `fund_users` — accounts, groups, root and sudo, least privilege
+4. `fund_processes` — programs vs processes, signals, services
+5. `fund_automation` — when a script is worth writing, bash or Python, try it before running it
+6. `fund_addresses` — MAC, IP, port, name: who each one finds
+7. `fund_complexity` — counting work: n, n × n, log n, measure then double
+8. `fund_codes` — check digits, checksums, QR codes: detect or correct
+9. `fund_git` — versions, commits, branches, shared repositories, no secrets
+10. `fund_packages` — why a package manager, signed repositories, apt vs dnf, no curl | sudo bash
+11. `fund_code` — compiled vs interpreted, when errors show, what you ship
+12. `fund_memory` — stack and heap, who frees memory in C, Python and Rust, leaks
+13. `fund_databases` — why not a text file, tables, SQL, SQLite vs a server
+14. `fund_crypto` — hashes, symmetric keys, key pairs, signatures
+15. `fund_ci` — CI on every push, delivery vs deployment, the pipeline is reviewed code
+16. `fund_osi` — layers, from cable to application
+17. `fund_tcp_udp` — TCP vs UDP, ports, which protocol uses which
+18. `fund_arp` — from an IP to a MAC on the local network
+19. `fund_multicast` — unicast, broadcast, multicast
 
 ### AI tools
 

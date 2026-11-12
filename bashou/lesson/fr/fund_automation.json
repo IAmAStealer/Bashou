@@ -1,0 +1,81 @@
+{
+ "title": "Quand écrire un script, et en quoi",
+ "summary": "Un script refait les mêmes étapes à chaque fois, sans en oublier. Quand il vaut la peine d'être écrit, et quand bash ou Python convient mieux.",
+ "pages": [
+  {
+   "scheme": [
+    " à la main     300 × regarder, taper, vérifier",
+    "               lent, et une faute quelque part",
+    "",
+    " un script     l'écrire une fois, l'essayer",
+    "               sur 3, le lancer sur 300"
+   ],
+   "point": 3,
+   "mark": [
+    "l'écrire une fois"
+   ],
+   "text": [
+    "Tu dois renommer 300 photos avec leur date. À la main, ça prend un après-midi, et quelque part tu feras une faute de frappe.",
+    "",
+    "Un script est un fichier de commandes que l'ordinateur lance pour toi, dans l'ordre, de la même façon à chaque fois.",
+    "",
+    "- Une bonne règle : si tu l'as fait deux fois à la main et tu vas le refaire, écris un script.",
+    "- Un travail unique de trois commandes n'en a pas besoin."
+   ]
+  },
+  {
+   "text": [
+    "Ce que tu y gagnes : les étapes vivent dans un fichier plutôt que dans ta mémoire.",
+    "",
+    "- Personne ne saute l'étape 7 un vendredi soir fatigué.",
+    "- Un collègue peut le lire, le relire dans git, et le lancer aussi.",
+    "- Un minuteur peut le lancer à 3 h du matin pendant que tu dors.",
+    "",
+    "Ce que ça coûte : du temps pour l'écrire et le tester, et pour le réparer quand le monde autour change."
+   ]
+  },
+  {
+   "scheme": [
+    " le travail                        choix",
+    " lancer des commandes, déplacer",
+    " des fichiers, relier des outils   bash",
+    "",
+    " JSON ou CSV, calculs, vraie",
+    " gestion d'erreurs, code long      Python"
+   ],
+   "point": 2,
+   "mark": [
+    "bash"
+   ],
+   "text": [
+    "Quel langage ? Celui qui va avec le travail.",
+    "",
+    "- Bash est fait pour lancer d'autres programmes : copier, archiver, appeler tar ou rsync, enchaîner des commandes.",
+    "- Python est fait pour travailler sur des données : lire du JSON, calculer, traiter chaque erreur proprement.",
+    "- Le guide de style shell de Google le dit clairement : au-delà d'environ 100 lignes, ou dès que la logique n'est plus simple, réécris le script dans un langage plus structuré, tôt, car les scripts grossissent. Python est le choix habituel."
+   ]
+  },
+  {
+   "scheme": [
+    " un script répète les erreurs aussi vite",
+    " que le bon travail",
+    "",
+    "  1. l'essayer sur une copie, ou sur 3 fichiers",
+    "  2. lui faire afficher ce qu'il ferait",
+    "  3. le faire s'arrêter à la première erreur",
+    "  4. puis le lancer pour de vrai"
+   ],
+   "point": 4,
+   "mark": [
+    "afficher ce qu'il ferait"
+   ],
+   "text": [
+    "Un avertissement avant ton premier script : il fait exactement ce qui est écrit, très vite. Une erreur dedans touche les 300 fichiers, pas un seul.",
+    "",
+    "- Essaie-le d'abord sur une copie, ou sur quelques fichiers.",
+    "- Fais-lui montrer ce qu'il ferait avant de le faire.",
+    "- Fais-le s'arrêter à la première erreur plutôt que de continuer."
+   ]
+  }
+ ]
+}

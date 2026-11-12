@@ -3,7 +3,8 @@
  "order": 240,
  "skill": "script",
  "after": [
-  "quotes"
+  "quotes",
+  "fund_automation"
  ],
  "tools": [
   "bash"

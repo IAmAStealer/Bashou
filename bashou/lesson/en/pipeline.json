@@ -5,7 +5,8 @@
  "after": [
   "git",
   "scripts",
-  "pass"
+  "pass",
+  "fund_ci"
  ],
  "masters": [
   "won stage_specter",

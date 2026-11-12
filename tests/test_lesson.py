@@ -185,6 +185,7 @@ class UnlockTest(unittest.TestCase):
     def test_next_step_until_mastered(self):
         s = state.default()
         heap = BY_ID["stack_heap"]
+        s["lessons"]["right"] = list(BY_ID["fund_memory"]["questions"])   # fund_memory passed
         self.assertEqual(lesson.status(s, heap), "locked")
         s["challenges"].append("linker_lynx")                   # gcc_use passed: not enough for a hard one
         self.assertEqual(lesson.status(s, heap), "locked")
@@ -197,8 +198,9 @@ class UnlockTest(unittest.TestCase):
 
     def test_every_lesson_before_must_be_passed(self):
         s = state.default()
-        pipes = BY_ID["pipes"]                                   # after streams and grep
+        pipes = BY_ID["pipes"]                                   # after streams, grep and fund_text
         s["achievements"].append("merge")                        # streams passed
+        s["lessons"]["right"] = list(BY_ID["fund_text"]["questions"])     # fund_text passed
         self.assertFalse(lesson.unlocked(s, pipes))
         self.assertIn(f"“{BY_ID['grep']['title']}”", reader.how_to_unlock(s, pipes))
         self.assertNotIn(BY_ID["streams"]["title"], reader.how_to_unlock(s, pipes))
@@ -209,7 +211,8 @@ class UnlockTest(unittest.TestCase):
         s = state.default()
         py = BY_ID["py_start"]                                   # after scripts, loops (bash) and logic
         s["achievements"] += ["exit_code", "loop"]              # scripts, loops passed
-        s["lessons"] = {"right": list(BY_ID["fund_code"]["questions"])}  # fund_code passed
+        s["lessons"] = {"right": list(BY_ID["fund_code"]["questions"])      # fund_code and
+                                 + BY_ID["fund_automation"]["questions"]}  # fund_automation passed
         s["skills"] = ["python"]                                 # logic, scripts, loops unticked: they hand
         self.assertEqual([le["id"] for le in lesson.waiting_for(s, py)], ["reading"])
         s["lessons"]["right"] += BY_ID["reading"]["questions"]   # ... over variables (loop) and reading
@@ -292,7 +295,7 @@ class ReaderTest(unittest.TestCase):
             lib.key("quit")
         self.assertIn("Reading isn't enough to open “Quotes”", lib.message)
         self.assertIn("practice this one first", lib.message)
-        self.assertIn("earn 21 achievements in all", lib.message)
+        self.assertIn("earn 24 achievements in all", lib.message)
         screen = " ".join(render.strip(t) for r, c, t in lib.list_screen(100, 40))
         self.assertIn("practice this one first", screen)                # the long message isn't cut
 

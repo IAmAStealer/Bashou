@@ -1,0 +1,88 @@
+{
+ "title": "La mémoire : la pile, le tas, et qui libère",
+ "summary": "Un programme range ses données à deux endroits. L'un se vide tout seul, l'autre doit être libéré par quelqu'un : toi en C, un ramasse-miettes en Python, le propriétaire en Rust.",
+ "pages": [
+  {
+   "scheme": [
+    " un serveur qui tourne des jours",
+    "",
+    " jour 1   ▓              0,5 Go",
+    " jour 3   ▓▓▓▓           2 Go",
+    " jour 6   ▓▓▓▓▓▓▓▓       4 Go, tué"
+   ],
+   "point": 4,
+   "mark": [
+    "tué"
+   ],
+   "text": [
+    "Un serveur marche bien, puis grossit un peu chaque heure jusqu'à ce que le système le tue faute de mémoire. C'est une fuite de mémoire : de la mémoire prise et jamais rendue.",
+    "",
+    "Pour comprendre pourquoi, il faut savoir où un programme range ses données. Il y a deux endroits : la pile et le tas."
+   ]
+  },
+  {
+   "scheme": [
+    " la pile : une case par appel de fonction",
+    " ┌───────────────┐",
+    " │ main : n      │",
+    " ├───────────────┤",
+    " │ aire : l, h   │  ◀ disparaît au retour",
+    " └───────────────┘"
+   ],
+   "point": 4,
+   "mark": [
+    "disparaît au retour"
+   ],
+   "text": [
+    "Chaque appel de fonction reçoit une case sur la pile pour ses variables locales. Quand la fonction se termine, la case disparaît, toute seule.",
+    "",
+    "- Rapide, et rien à nettoyer.",
+    "- Mais petite (quelques mégaoctets : 8 Mo par défaut sous Linux, voir ulimit -s), et elle disparaît au retour de la fonction : des données grosses, ou qui doivent survivre à la fonction, n'y tiennent pas."
+   ]
+  },
+  {
+   "scheme": [
+    " pile                    tas",
+    " ┌───────────────┐       ┌───────────────────┐",
+    " │ main : liste ─┼──────▶│ 10 000 valeurs,   │",
+    " └───────────────┘       │ jusqu'à ce que    │",
+    "                         │ quelqu'un libère  │",
+    "                         └───────────────────┘"
+   ],
+   "point": 4,
+   "mark": [
+    "quelqu'un libère"
+   ],
+   "text": [
+    "Les données grosses, ou dont on n'apprend la taille qu'en tournant (des lignes lues dans un fichier), vont sur le tas. Le programme y demande de la place et garde son adresse.",
+    "",
+    "- Elles restent tant qu'il faut, même après la fin de la fonction qui les a demandées.",
+    "- Mais quelqu'un doit les rendre : sinon, c'est une fuite."
+   ]
+  },
+  {
+   "scheme": [
+    " qui libère le tas ?",
+    "",
+    " C       toi : free(p)",
+    "         oublié : fuite ; deux fois : indéfini",
+    " Python  quand plus rien ne s'en sert :",
+    "         compte d'usages, plus un ramasse-miettes",
+    " Rust    le propriétaire de la valeur,",
+    "         quand il sort de sa portée ; usage",
+    "         après : refusé à la compilation"
+   ],
+   "point": 6,
+   "mark": [
+    "le propriétaire de la valeur"
+   ],
+   "text": [
+    "Chaque langage répond à sa façon.",
+    "",
+    "- Le C te fait confiance : oublie free et ça fuit ; libère deux fois ou utilise de la mémoire libérée, et tout peut arriver : plantage, données fausses, faille.",
+    "- Python compte les usages d'une valeur et la libère à zéro ; un ramasse-miettes rattrape les valeurs qui pointent l'une vers l'autre.",
+    "- Rust libère une valeur quand son propriétaire sort de sa portée, et refuse de compiler un usage après. Les fuites restent possibles, mais rares."
+   ]
+  }
+ ]
+}

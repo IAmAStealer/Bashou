@@ -1,0 +1,117 @@
+{
+ "id": "fund_text",
+ "order": 105,
+ "skill": [
+  "fundamentals",
+  "bash"
+ ],
+ "after": [
+  "reading"
+ ],
+ "opens": "read",
+ "masters": [
+  "answered fund_text 3"
+ ],
+ "questions": [
+  "fundamentals-1-43",
+  "fundamentals-1-44",
+  "fundamentals-1-45",
+  "fundamentals-2-12"
+ ],
+ "recall": [
+  "fundamentals-1-43",
+  "fundamentals-1-44"
+ ],
+ "title": "Everything is text: small tools and pipes",
+ "summary": "Unix tools read text and write text, so small tools that each do one job can be chained to answer questions no single tool answers.",
+ "pages": [
+  {
+   "scheme": [
+    " which address hits the server most?",
+    "",
+    " access.log ─▶ cut ─▶ sort ─▶ uniq -c ─▶ sort -rn",
+    "               │       │        │          │",
+    "            the IP  group   count      biggest",
+    "                    them    them       first"
+   ],
+   "point": 2,
+   "mark": [
+    "cut",
+    "sort",
+    "uniq -c"
+   ],
+   "text": [
+    "Your web server is slow and you want to know which IP address sends the most requests. No single command was made for that question.",
+    "",
+    "But four small commands, one after the other, do: one takes the address out of each line, one puts equal lines together, one counts them, one sorts the counts.",
+    "",
+    "- Each tool does one small job, and does it well.",
+    "- You build the answer by chaining them."
+   ]
+  },
+  {
+   "scheme": [
+    " a log file      203.0.113.7 GET /index.html",
+    " ls              notes.txt",
+    " ps              1234 nginx",
+    " a config file   port = 8080",
+    "",
+    "        lines of text, all of them"
+   ],
+   "point": 5,
+   "mark": [
+    "lines of text"
+   ],
+   "text": [
+    "Why can they be chained? Because on Unix almost everything is text: logs, configuration files, and what commands print.",
+    "",
+    "- Text is the common language: a tool that reads lines can read the output of almost any other tool.",
+    "- A format only one program understands can't be read this way: you need that program."
+   ]
+  },
+  {
+   "scheme": [
+    " cut -d' ' -f1 access.log | sort",
+    "",
+    " cut ──stdout──▶ pipe ──stdin──▶ sort",
+    "  │",
+    "  └──stderr──▶ your screen, not the pipe"
+   ],
+   "point": 2,
+   "mark": [
+    "pipe",
+    "stderr"
+   ],
+   "text": [
+    "The pipe | joins two commands: what the first one prints (its standard output) becomes what the second one reads (its standard input).",
+    "",
+    "- The tools don't need to know each other: they just read and write lines.",
+    "- Error messages don't go through the pipe: they still show on your screen, unless you send them into it with 2>&1."
+   ]
+  },
+  {
+   "scheme": [
+    " data.csv           cut -d, -f2",
+    " Bob,42             42           ✔",
+    " \"Lee, Ann\",37      Ann\"         ✘",
+    "",
+    " the comma inside the quotes is not a",
+    " separator, but cut doesn't know quotes",
+    "",
+    " JSON, CSV with quotes ─▶ a tool that reads",
+    "                          the format: jq, Python"
+   ],
+   "point": 2,
+   "mark": [
+    "✘"
+   ],
+   "text": [
+    "Text has a weak side: it's loose. A tool that cuts on commas breaks the day a field contains a comma.",
+    "",
+    "- For simple lines (logs, lists), small tools and pipes are fast and enough.",
+    "- cut -d' ' counts every single space: columns lined up with several spaces, like ps output, give empty fields; awk '{print $1}' splits on runs of spaces.",
+    "- For data with a real structure, use a tool that reads the format: jq for JSON, Python for CSV."
+   ]
+  }
+ ]
+}

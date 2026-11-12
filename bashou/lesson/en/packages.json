@@ -7,7 +7,8 @@
   "rocky"
  ],
  "after": [
-  "users"
+  "users",
+  "fund_packages"
  ],
  "masters": [
   "won version_vole | won release_raven | tool apt 3 | tool dnf 3 | tool dpkg 3 | tool rpm 3",

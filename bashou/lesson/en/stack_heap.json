@@ -3,7 +3,8 @@
  "order": 330,
  "skill": "c",
  "after": [
-  "gcc_use"
+  "gcc_use",
+  "fund_memory"
  ],
  "opens": "mastered",
  "masters": [

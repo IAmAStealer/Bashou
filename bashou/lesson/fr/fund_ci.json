@@ -1,0 +1,80 @@
+{
+ "title": "À quoi sert la CI/CD",
+ "summary": "Chaque push est construit et testé sur une machine propre, et une version sort de la même façon à chaque fois : pourquoi les équipes confient ces étapes à un pipeline.",
+ "pages": [
+  {
+   "scheme": [
+    " vendredi, 18 h",
+    "  un push, tests pas lancés  ─▶ main cassée",
+    "  déploiement à la main,",
+    "  étapes oubliées            ─▶ site en panne"
+   ],
+   "point": 1,
+   "mark": [
+    "main cassée"
+   ],
+   "text": [
+    "Vendredi soir, un collègue pousse sans lancer les tests : la branche principale est cassée. Quelqu'un déploie à la main depuis son portable et oublie une étape : le site est en panne.",
+    "",
+    "Ce n'est pas une question de talent. Les gens oublient des étapes ; les machines, non."
+   ]
+  },
+  {
+   "scheme": [
+    " push ─▶ build ─▶ test ─▶ ✔ ou ✘",
+    " └─────── CI ────────┘    │",
+    "                          ▼",
+    "                 affiché sur le commit"
+   ],
+   "point": 1,
+   "mark": [
+    "CI"
+   ],
+   "text": [
+    "La CI, intégration continue : chaque push est construit et testé par une machine, automatiquement. Le résultat s'affiche sur le commit et sur la pull request (GitHub) ou la merge request (GitLab).",
+    "",
+    "- Une erreur se voit quelques minutes après le push, tant qu'elle est petite.",
+    "- Sur les runners hébergés par le service, la machine repart de zéro à chaque fois : une dépendance oubliée échoue là-bas, pas seulement sur le portable d'un collègue."
+   ]
+  },
+  {
+   "scheme": [
+    " push ─▶ build ─▶ test ─▶ paquet ─▶ déploiement",
+    " └─────── CI ────────┘    └─────── CD ────────┘",
+    "",
+    " livraison    prête, quelqu'un appuie",
+    " déploiement  part toute seule"
+   ],
+   "point": 1,
+   "mark": [
+    "CD"
+   ],
+   "text": [
+    "La CD va plus loin : une fois les tests passés, le même pipeline construit la version et la met en ligne, de la même façon à chaque fois.",
+    "",
+    "- Livraison continue : chaque changement qui passe est prêt à sortir ; une personne appuie sur le bouton.",
+    "- Déploiement continu : il part en production tout seul."
+   ]
+  },
+  {
+   "scheme": [
+    " le pipeline est un fichier du dépôt",
+    "  GitHub   .github/workflows/*.yml",
+    "  GitLab   .gitlab-ci.yml",
+    "",
+    " relu comme du code : il peut se servir des clés",
+    " qui déploient en production"
+   ],
+   "point": 4,
+   "mark": [
+    "il peut se servir des clés"
+   ],
+   "text": [
+    "Le pipeline lui-même est du code : un fichier YAML dans le dépôt, avec un historique, relu avant de changer.",
+    "",
+    "- Il peut se servir de secrets, comme la clé qui déploie en production. Ils sont rangés dans les réglages du service, jamais écrits dans le fichier, mais qui modifie le fichier peut faire utiliser ces secrets par un job.",
+    "- Un changement du pipeline est donc aussi sensible qu'un changement du serveur de production : relis-le de la même façon."
+   ]
+  }
+ ]
+}
