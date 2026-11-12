@@ -3,6 +3,19 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.13.0 — 2026-11-12
+
+### Changes
+
+- New Fundamentals skill: 19 short lessons on the ideas under the commands, before the commands themselves: everything is text, regular expressions, users and rights, processes, when to write a script and in what, addresses and ports, complexity, error-correcting codes, git, package managers, from code to a running program, the stack and the heap, databases, hashes and signatures, CI/CD, network layers, TCP and UDP, ARP and ping, and multicast. They come with 73 adventure questions and a new boss, the Layer Lich. Ticking a skill opens the fundamentals its lessons need first; ticking Fundamentals alone shows them all.
+- The first lesson of each tool now opens with what the tool is for and a real situation, before any syntax.
+- A lesson no longer waits for a lesson or a fight of a skill you didn't pick: it waits for what that lesson waits for, so every path you chose opens in order and can be mastered (a Bash-only player meets loops after quotes).
+- The logic fights and chests now explain their task in three steps: what is wrong, the goal (the exact words the script must print), and how to test it.
+
+### Breaking changes
+
+- Breaking change: a pony read the new lesson on the stack and the heap, decided it was a stack of hay and is now asleep on top of it in the next field. Bring it home with `bashou pony hoof`.
+
 ## v0.12.3 — 2026-11-10
 
 ### Changes
