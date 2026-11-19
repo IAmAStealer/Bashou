@@ -1,0 +1,19 @@
+Date: Thu, 19 Nov 2026 19:45:05 +0000
+Label: Bashou
+Origin: Bashou
+MD5Sum:
+ 58a6d94571a37289ef3fdfd3d9db227f              850 Packages
+ 0e819cd38cf8a8b54e7fdb3d4b1d181f              590 Packages.gz
+ 51cb10bb57a5fadd1dbc59656ffcb260               67 Release
+SHA1:
+ 1f3661ea92395d5ae8347b2912335a3f0014bfea              850 Packages
+ ca1e65542448b6234c664abfed502a0d3da02f6a              590 Packages.gz
+ 7bb843e970be33a5792c30ac28228f062f4bf391               67 Release
+SHA256:
+ f5eb1b15622fb57af7fc5931892b8c6d9be520680d5b2f8eba6bf4661b33d060              850 Packages
+ 403c1f6ae1fb6f6eaf8e43fde7d4e60162e5d853ab59b5ab3a08d1b5a7a4c514              590 Packages.gz
+ 917c6904fdc3a32197487c253d2c31cdc38dd8060c225438b83b2a47f2294f84               67 Release
+SHA512:
+ d385b0ee9e5cf5381965607c804e2a6fd8c17c9c24687fbd50f2d0f48699e58194715a5cbd3e48592a06ce297f20ef052d7818b69e05a13a625c5892972813f6              850 Packages
+ bb3ff333d17305629234bf25dd0ca3e6758a88013da91dd4fe152860d7faebc881c3d61845a66bf37279038e96073883f8e7a74711f958b93d67b33774d4d642              590 Packages.gz
+ 12dc0ee686261cf2ee7a02dbce6a2a998f3fe25d839f0e7c2d3fe2c41210a9cabde5e84b8af4ec964ca3581673568a2d21b8ab7e523c501cb6c0e021534892af               67 Release
