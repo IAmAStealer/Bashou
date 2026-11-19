@@ -3,6 +3,16 @@
 Every release has a section here, written for players. CI refuses to tag a release without one
 (`python3 tools/changelog.py v1.2.3` prints the section it will publish).
 
+## v0.13.1 — 2026-11-19
+
+### Changes
+
+- The jealous pony now comes when you run `cowsay` by its full path, like `/usr/games/cowsay hello` (where Debian installs it, often outside your PATH), or as `cowthink`.
+
+### Breaking changes
+
+- Breaking change: a pony went looking for the cow in /usr/games, found the games instead and has not been seen since. Bring it home with `bashou pony hoof`.
+
 ## v0.13.0 — 2026-11-12
 
 ### Changes
