@@ -176,6 +176,22 @@ class JokeTest(unittest.TestCase):
                 self.assertIn("joins your herd", said[0])
                 self.assertNotIn("bashou pony", said[0])
 
+    def test_cowsay_by_its_path_or_as_cowthink(self):
+        """Player report, 2026-11-19: on Debian cowsay lives in /usr/games, which is not always in PATH,
+        so players type the full path."""
+        for line in ("/usr/games/cowsay hi", "echo hi | /usr/games/cowsay", "/usr/bin/cowsay -f tux hi",
+                     "/opt/homebrew/bin/cowsay hi", "./cowsay hi", "\\cowsay hi", "echo `cowsay hi`",
+                     "cowthink hi", "/usr/games/cowthink hi"):
+            with self.subTest(line):
+                s, _said = self.joke(line)
+                self.assertEqual(s["ponies"], ["pony_jealous"])
+
+    def test_cowsay_files_are_not_the_joke(self):
+        for line in ("ls /usr/share/cowsay/cows", "cat /usr/share/cowsay/cows/tux.cow", "cd ~/src/cowsay"):
+            with self.subTest(line):
+                s, said = self.joke(line)
+                self.assertEqual((said, s["ponies"]), ([], []))
+
     def test_near_misses_bring_nothing(self):
         for line in ("make lovely", "make love-letter", "man women", "man woman-ish", "make me a sandwich",
                      "echo :wq", "vim :wq", "apt moon", "mycowsay", "git commit -m 'apt moo'"):

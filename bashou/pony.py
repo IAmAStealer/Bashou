@@ -34,7 +34,8 @@ PONIES = {                       # digest of the word -> the pony it brings
 # Terminal jokes the pet notices: the pony comes right away. Failures count too: `make love` and `:wq`
 # always fail, that's the joke.
 JOKES = [
-    ("pony_jealous", re.compile(r"(^|[\s|;&(])cowsay\b")),
+    # Debian installs cowsay in /usr/games, often out of PATH: the full path counts, a folder named cowsay doesn't.
+    ("pony_jealous", re.compile(r"(^|[\s|;&(`])\\?((~|\.{1,2})?/([\w.+-]+/)*(bin|games)/|\./)?cow(say|think)\b(?!/)")),
     ("pony_moo", re.compile(r"(^|[\s;&(])apt(-get)?\s+moo\b")),
     ("pony_heart", re.compile(r"(^|[\s;&(])make\s+love\s*$")),
     ("pony_library", re.compile(r"(^|[\s;&(])man\s+woman\s*$")),
