@@ -807,6 +807,17 @@ class ShellTest(unittest.TestCase):
         self.sh.send("whih\n", 0)
         self.assertTrue(self.sh.expect(b"`which`", start))
 
+    def test_cowsay_brings_the_jealous_pony(self):
+        """Issue #13 (0.13.0, zsh 5.8 on Rocky): `cowsay bashou pony` showed the cow and no pony. From the
+        typed line to the save, in the real shell (CI runs this in Rocky's zsh)."""
+        start = len(self.sh.out)
+        self.sh.send('cowsay() { echo "moo $*"; }\n', 0)       # a cowsay that works, as the player had
+        self.assertTrue(self.sh.expect(b"$ ", start))
+        start = len(self.sh.out)
+        self.sh.send("cowsay bashou pony\n", 0)
+        self.assertTrue(self.sh.expect(b"jealous of the cow", start), self.sh.out[start:][-800:])
+        self.assertIn("pony_jealous", json.loads((self.sh.data / "state.json").read_text())["ponies"])
+
     def test_quitting_keeps_bashs_exit_status(self):
         """The terminal said "exited with code 2": bash exits with the last command's status, Bashou
         (its exit trap, its prompt hook) must not change it."""

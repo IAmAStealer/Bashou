@@ -5,6 +5,7 @@ the real package: every command runs from /usr/bin/bashou, and /etc/profile.d/ba
 that loads an old copy to the package, in the shells the system reads profile.d from.
 """
 
+import json
 import os
 import re
 import subprocess
@@ -99,6 +100,26 @@ class InstalledZshTest(unittest.TestCase):
         found, shell, pid = self.zsh(["zsh", "-i"], "", before="/usr/bin/bashou on")
         self.assertEqual((found, shell), (str(PACKAGE), "zsh"))
         self.assertTrue(pid)
+
+
+    def test_cowsay_brings_the_jealous_pony(self):
+        """Issue #13: 0.13.0 installed with dnf, zsh 5.8: `cowsay bashou pony` brought no pony."""
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp) / "home"
+            home.mkdir()
+            (home / ".zshrc").write_text("PS1='$ '\ncowsay() { echo \"moo $*\"; }\n")
+            env = {"HOME": str(home), "ZDOTDIR": str(home), "PYTHONPATH": "", "BASHOU_PACKAGE_LOADER": "",
+                   "BASHOU_KEEP_CLONE": "", "BASHOU_SHELL": ""}
+            subprocess.run(["zsh", "-c", "/usr/bin/bashou on"], env={**os.environ, **env}, capture_output=True)
+            sh = Shell(tmp, ["zsh", "-i"], env=env, shell="zsh")
+            try:
+                self.assertTrue(sh.expect(b"38;2;216;200;160"), sh.out[-500:])     # the pet is drawn
+                start = len(sh.out)
+                sh.send("cowsay bashou pony\n", 0)
+                self.assertTrue(sh.expect(b"jealous of the cow", start), sh.out[start:][-800:])
+                self.assertIn("pony_jealous", json.loads((sh.data / "state.json").read_text())["ponies"])
+            finally:
+                sh.close()
 
 
 if __name__ == "__main__":
